@@ -70,8 +70,8 @@ const HireYourself = () => {
             
             <div className="premium-card overflow-hidden">
               <img 
-                src="/lovable-uploads/ee28fb16-2345-4e1b-a162-97d7223536c1.png" 
-                alt="Successful entrepreneur with food truck" 
+                src="/lovable-uploads/6dbaa8ab-9c93-4c2a-b08e-63196b35ecab.png" 
+                alt="Successful entrepreneur celebrating with keys to success" 
                 className="w-full h-80 object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>
@@ -245,8 +245,8 @@ const HireYourself = () => {
 
             <div className="premium-card overflow-hidden">
               <img 
-                src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
-                alt="Professional business woman in suit" 
+                src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
+                alt="Professional entrepreneur planning business strategy" 
                 className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>

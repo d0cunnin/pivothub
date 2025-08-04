@@ -49,8 +49,8 @@ export default function About() {
             <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <div className="premium-card overflow-hidden">
                 <img 
-                  src="/lovable-uploads/6dbaa8ab-9c93-4c2a-b08e-63196b35ecab.png" 
-                  alt="Successful professional celebrating achievement" 
+                  src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
+                  alt="Professional team collaboration and success" 
                   className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
@@ -106,8 +106,8 @@ export default function About() {
           <div className="grid md:grid-cols-2 gap-8 mb-16">
             <div className="premium-card text-center overflow-hidden group">
               <img 
-                src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
-                alt="Professional team member" 
+                src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
+                alt="Professional businesswoman representing leadership" 
                 className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="p-6">
@@ -118,8 +118,8 @@ export default function About() {
 
             <div className="premium-card text-center overflow-hidden group">
               <img 
-                src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
-                alt="Professional working on business plan" 
+                src="/lovable-uploads/ee28fb16-2345-4e1b-a162-97d7223536c1.png" 
+                alt="Successful entrepreneur with innovative business" 
                 className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="p-6">

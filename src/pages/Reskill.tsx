@@ -48,31 +48,29 @@ const Reskill = () => {
         <div className="floating-orb top-1/2 right-1/3 w-48 h-48 bg-secondary/3 animate-float" style={{ animationDelay: '1.5s' }}></div>
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
-              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
-                Find Your Perfect Learning Path
-              </h2>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="premium-card overflow-hidden">
+              <img 
+                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                alt="Professional development and skill building" 
+                className="w-full h-80 object-cover transition-transform duration-500 hover:scale-105"
+              />
             </div>
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Take our skills assessment to get personalized course recommendations
-            </p>
-          </div>
-          
-          <Card className="premium-card max-w-4xl mx-auto p-12 group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
-            <div className="text-center">
-              <div className="w-24 h-24 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl flex items-center justify-center mx-auto mb-8 group-hover:shadow-glow transition-elegant">
-                <Target className="h-12 w-12 text-primary" />
+            
+            <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+                <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
+                  Find Your Perfect Learning Path
+                </h2>
               </div>
-              <h3 className="text-3xl font-bold mb-6 text-foreground group-hover:text-primary transition-colors">Skills Assessment</h3>
-              <p className="text-muted-foreground mb-8 text-lg leading-relaxed max-w-2xl mx-auto">
-                Answer a few questions about your background and goals to receive a customized learning roadmap
+              <p className="text-xl md:text-2xl text-foreground/80 leading-relaxed animate-fade-in mb-8" style={{ animationDelay: '0.2s' }}>
+                Take our skills assessment to get personalized course recommendations
               </p>
               <Button variant="default" size="lg" className="transition-elegant hover:scale-105 px-12 py-6 text-lg">
                 Take Assessment
               </Button>
             </div>
-          </Card>
+          </div>
         </div>
         
         <div className="section-divider absolute bottom-0 left-0"></div>

@@ -66,8 +66,8 @@ const Index = () => {
             <div className="animate-fade-in">
               <div className="premium-card overflow-hidden">
                 <img 
-                  src="/lovable-uploads/6dbaa8ab-9c93-4c2a-b08e-63196b35ecab.png" 
-                  alt="Professional celebrating success with keys" 
+                  src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
+                  alt="Professional woman working on career development" 
                   className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
@@ -158,8 +158,8 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center mt-16">
             <div className="premium-card overflow-hidden">
               <img 
-                src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
-                alt="Professional team collaboration meeting" 
+                src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
+                alt="Happy professional working at computer" 
                 className="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
               />
             </div>
