@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Reskill from "./pages/Reskill";
 import HireYourself from "./pages/HireYourself";
 import About from "./pages/About";
+import GrantWriting from "./pages/GrantWriting";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/reskill" element={<Reskill />} />
           <Route path="/hireyourself" element={<HireYourself />} />
+          <Route path="/grantwriting" element={<GrantWriting />} />
           <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
