@@ -47,6 +47,65 @@ const HireYourself = () => {
         <div className="absolute bottom-0 left-0 w-full h-4 bg-gradient-to-r from-secondary via-accent to-primary opacity-80"></div>
       </section>
 
+      {/* Quick Start */}
+      <section className="py-24 bg-gradient-to-br from-muted/30 to-muted/60 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-card"></div>
+        
+        {/* Decorative background shapes */}
+        <div className="absolute top-20 left-20 w-40 h-40 bg-accent/5 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-20 right-20 w-56 h-56 bg-primary/8 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-secondary/6 rounded-full blur-xl"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-accent/10 to-primary/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Quick Start Your Business
+              </h2>
+            </div>
+            <p className="text-lg text-foreground max-w-3xl mx-auto">
+              Follow our proven 4-step process to launch your business in weeks, not months
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                step: "1",
+                title: "Validate Idea",
+                description: "Use our tools to research and validate your business concept"
+              },
+              {
+                step: "2", 
+                title: "Plan & Strategy",
+                description: "Create your business plan and marketing strategy"
+              },
+              {
+                step: "3",
+                title: "Legal & Branding",
+                description: "Set up your business legally and create your brand identity"
+              },
+              {
+                step: "4",
+                title: "Launch & Scale",
+                description: "Go to market and grow your business with ongoing support"
+              }
+            ].map((item, index) => (
+              <Card key={index} className="p-6 text-center border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
+                  {item.step}
+                </div>
+                <h3 className="text-lg font-bold mb-2 text-foreground">{item.title}</h3>
+                <p className="text-muted-foreground text-sm">{item.description}</p>
+              </Card>
+            ))}
+          </div>
+        </div>
+        
+        {/* Colorful bottom divider */}
+        <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-r from-primary via-accent via-secondary to-primary opacity-40"></div>
+      </section>
+
       {/* Business Tools */}
       <section className="py-24 bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-hero"></div>
@@ -127,65 +186,6 @@ const HireYourself = () => {
         
         {/* Bottom decorative strip */}
         <div className="absolute bottom-0 left-0 w-full h-3 bg-gradient-to-r from-accent via-primary to-secondary opacity-60"></div>
-      </section>
-
-      {/* Quick Start */}
-      <section className="py-24 bg-gradient-to-br from-muted/30 to-muted/60 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-card"></div>
-        
-        {/* Decorative background shapes */}
-        <div className="absolute top-20 left-20 w-40 h-40 bg-accent/5 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-20 right-20 w-56 h-56 bg-primary/8 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-secondary/6 rounded-full blur-xl"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-block p-6 bg-gradient-to-r from-accent/10 to-primary/10 rounded-2xl mb-4 shadow-soft">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Quick Start Your Business
-              </h2>
-            </div>
-            <p className="text-lg text-foreground max-w-3xl mx-auto">
-              Follow our proven 4-step process to launch your business in weeks, not months
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                step: "1",
-                title: "Validate Idea",
-                description: "Use our tools to research and validate your business concept"
-              },
-              {
-                step: "2", 
-                title: "Plan & Strategy",
-                description: "Create your business plan and marketing strategy"
-              },
-              {
-                step: "3",
-                title: "Legal & Branding",
-                description: "Set up your business legally and create your brand identity"
-              },
-              {
-                step: "4",
-                title: "Launch & Scale",
-                description: "Go to market and grow your business with ongoing support"
-              }
-            ].map((item, index) => (
-              <Card key={index} className="p-6 text-center border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
-                  {item.step}
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-foreground">{item.title}</h3>
-                <p className="text-muted-foreground text-sm">{item.description}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-        
-        {/* Colorful bottom divider */}
-        <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-r from-primary via-accent via-secondary to-primary opacity-40"></div>
       </section>
 
       {/* Success Stories Preview */}
