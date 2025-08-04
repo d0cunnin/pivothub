@@ -1,10 +1,11 @@
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { PathSelection } from "@/components/PathSelection";
+import { OurStorySection } from "@/components/OurStorySection";
 import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb } from "lucide-react";
 
 const Index = () => {
@@ -64,40 +65,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-24 px-4 bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="container mx-auto animate-fade-in">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-block p-6 bg-gradient-to-r from-secondary/10 to-accent/10 rounded-2xl mb-8 shadow-soft">
-              <h2 className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Our Story</h2>
-            </div>
-            <div className="text-lg text-foreground space-y-6 leading-relaxed text-left max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              <p>
-                CareerLaunch was born out of necessity during a critical period in our economy. Between January and July 2025, 
-                hundreds of thousands of people found themselves unemployed or underemployed, facing an unprecedented challenge 
-                in securing meaningful work.
-              </p>
-              <p>
-                As we witnessed this crisis unfold, it became clear that traditional approaches to career development were 
-                no longer sufficient. The accelerated pace of technological advancement was reshaping entire industries, 
-                creating both challenges and opportunities for the workforce.
-              </p>
-              <p>
-                We realized that people needed more than just job search assistance – they needed comprehensive tools to either 
-                upskill for the evolving job market or forge their own path through entrepreneurship. CareerLaunch was created 
-                to provide exactly that: a platform where individuals can either reskill to become more marketable for employment 
-                or launch their own businesses with the tools and guidance they need to succeed.
-              </p>
-              <p>
-                Today, we're proud to be part of the solution, helping thousands of people transform their careers and 
-                build sustainable futures in our rapidly changing economy.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <OurStorySection />
 
       {/* Certifications Section */}
       <section id="certifications" className="py-24 px-4 bg-gradient-to-br from-muted/20 to-muted/50 relative overflow-hidden">

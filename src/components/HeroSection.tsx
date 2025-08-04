@@ -28,7 +28,7 @@ export const HeroSection = () => {
           
           <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl">
             Whether you're looking to reskill for better opportunities or launch your own business, 
-            we provide the tools and guidance to transform your career.
+            we provide the tools and guidance to relaunch your career and create positive economic impact.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
