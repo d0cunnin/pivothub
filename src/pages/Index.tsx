@@ -15,17 +15,23 @@ const Index = () => {
       <PathSelection />
       
       {/* Career Guidance Section */}
-      <section id="career-guidance" className="py-16 px-4 bg-muted/50">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">Career Guidance & Support</h2>
+      <section id="career-guidance" className="py-24 px-4 bg-gradient-to-br from-muted/30 to-muted/60 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-hero"></div>
+        <div className="container mx-auto animate-fade-in">
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Career Guidance & Support
+              </h2>
+            </div>
             <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
               Navigate your career transformation with expert guidance and personalized support every step of the way
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-0 shadow-soft">
+          <div className="grid md:grid-cols-3 gap-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <Users className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>AI Career Coach</CardTitle>
@@ -35,7 +41,7 @@ const Index = () => {
               </CardHeader>
             </Card>
             
-            <Card className="border-0 shadow-soft">
+            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <Target className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Career Assessment</CardTitle>
@@ -45,7 +51,7 @@ const Index = () => {
               </CardHeader>
             </Card>
             
-            <Card className="border-0 shadow-soft">
+            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <TrendingUp className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Progress Tracking</CardTitle>
@@ -59,11 +65,15 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 px-4 bg-background">
-        <div className="container mx-auto">
+      <section id="about" className="py-24 px-4 bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+        <div className="container mx-auto animate-fade-in">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6 bg-gradient-hero bg-clip-text text-transparent">Our Story</h2>
-            <div className="text-lg text-foreground space-y-6 leading-relaxed text-left max-w-4xl mx-auto">
+            <div className="inline-block p-6 bg-gradient-to-r from-secondary/10 to-accent/10 rounded-2xl mb-8 shadow-soft">
+              <h2 className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Our Story</h2>
+            </div>
+            <div className="text-lg text-foreground space-y-6 leading-relaxed text-left max-w-4xl mx-auto animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <p>
                 CareerLaunch was born out of necessity during a critical period in our economy. Between January and July 2025, 
                 hundreds of thousands of people found themselves unemployed or underemployed, facing an unprecedented challenge 
@@ -90,17 +100,21 @@ const Index = () => {
       </section>
 
       {/* Certifications Section */}
-      <section id="certifications" className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
+      <section id="certifications" className="py-24 px-4 bg-gradient-to-br from-muted/20 to-muted/50 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-card"></div>
+        <div className="container mx-auto animate-fade-in">
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-accent/10 to-primary/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
+            </div>
             <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
               Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-300">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/90 backdrop-blur-sm">
               <CardHeader>
                 <BookOpen className="h-10 w-10 text-primary mb-3" />
                 <CardTitle className="flex items-center gap-2">
@@ -122,7 +136,7 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-300">
+            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/90 backdrop-blur-sm">
               <CardHeader>
                 <Lightbulb className="h-10 w-10 text-primary mb-3" />
                 <CardTitle className="flex items-center gap-2">
@@ -144,7 +158,7 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-300">
+            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/90 backdrop-blur-sm">
               <CardHeader>
                 <Award className="h-10 w-10 text-primary mb-3" />
                 <CardTitle>Micro-Credentials</CardTitle>
@@ -164,8 +178,8 @@ const Index = () => {
             </Card>
           </div>
           
-          <div className="text-center mt-12">
-            <Button size="lg" className="bg-gradient-hero hover:opacity-90">
+          <div className="text-center mt-16 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <Button size="lg" className="bg-gradient-hero hover:opacity-90 shadow-glow transition-all duration-300 hover-scale">
               Explore All Certifications
             </Button>
           </div>
