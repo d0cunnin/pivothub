@@ -2,7 +2,15 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Rocket, Lightbulb, FileText, Search, DollarSign, MessageSquare, Presentation } from "lucide-react";
+import { Rocket, Lightbulb, FileText, Search, DollarSign, MessageSquare, Presentation, Palette, User, Scale, CheckSquare, Share2, TrendingUp } from "lucide-react";
+import { BusinessIdeaGenerator } from "@/components/BusinessIdeaGenerator";
+import { NameChecker } from "@/components/NameChecker";
+import { LogoGenerator } from "@/components/LogoGenerator";
+import { BiographyGenerator } from "@/components/BiographyGenerator";
+import { LegalDocsGenerator } from "@/components/LegalDocsGenerator";
+import { StartupChecklist } from "@/components/StartupChecklist";
+import { SocialMediaGenerator } from "@/components/SocialMediaGenerator";
+import { MarketingStrategyGenerator } from "@/components/MarketingStrategyGenerator";
 
 const HireYourself = () => {
   return (
@@ -36,56 +44,30 @@ const HireYourself = () => {
             Complete Business Toolkit
           </h2>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-            {[
-              {
-                icon: <Lightbulb className="h-8 w-8" />,
-                title: "Business Idea Generator",
-                description: "AI-powered suggestions based on your skills and market trends",
-                action: "Generate Ideas"
-              },
-              {
-                icon: <Search className="h-8 w-8" />,
-                title: "Market Research",
-                description: "Analyze your competition and validate your business concept",
-                action: "Start Research"
-              },
-              {
-                icon: <FileText className="h-8 w-8" />,
-                title: "Business Plan Creator",
-                description: "Step-by-step guidance to create a professional business plan",
-                action: "Create Plan"
-              },
-              {
-                icon: <Presentation className="h-8 w-8" />,
-                title: "Pitch Deck Builder",
-                description: "Design compelling presentations for investors and partners",
-                action: "Build Deck"
-              },
-              {
-                icon: <DollarSign className="h-8 w-8" />,
-                title: "Grant Finder",
-                description: "Search and apply for grants and funding opportunities",
-                action: "Find Grants"
-              },
-              {
-                icon: <MessageSquare className="h-8 w-8" />,
-                title: "Business Mentor Bot",
-                description: "24/7 AI guidance for all your business questions",
-                action: "Chat Now"
-              }
-            ].map((tool, index) => (
-              <Card key={index} className="group p-6 hover:shadow-strong transition-all duration-300">
-                <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center mb-4 text-secondary group-hover:bg-secondary/20 transition-colors">
-                  {tool.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-2 text-foreground">{tool.title}</h3>
-                <p className="text-muted-foreground mb-4">{tool.description}</p>
-                <Button variant="ghost" size="sm" className="group-hover:text-secondary">
-                  {tool.action} →
-                </Button>
-              </Card>
-            ))}
+          <div className="space-y-12 max-w-6xl mx-auto">
+            {/* Business Idea Generator */}
+            <BusinessIdeaGenerator />
+            
+            {/* Name Checker */}
+            <NameChecker />
+            
+            {/* Logo Generator */}
+            <LogoGenerator />
+            
+            {/* Biography Generator */}
+            <BiographyGenerator />
+            
+            {/* Legal Docs Generator */}
+            <LegalDocsGenerator />
+            
+            {/* Startup Checklist */}
+            <StartupChecklist />
+            
+            {/* Social Media Generator */}
+            <SocialMediaGenerator />
+            
+            {/* Marketing Strategy Generator */}
+            <MarketingStrategyGenerator />
           </div>
         </div>
       </section>
