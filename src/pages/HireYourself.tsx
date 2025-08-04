@@ -11,6 +11,7 @@ import { LegalDocsGenerator } from "@/components/LegalDocsGenerator";
 import { StartupChecklist } from "@/components/StartupChecklist";
 import { SocialMediaGenerator } from "@/components/SocialMediaGenerator";
 import { MarketingStrategyGenerator } from "@/components/MarketingStrategyGenerator";
+import { BusinessMentorChatbot } from "@/components/BusinessMentorChatbot";
 
 const HireYourself = () => {
   return (
@@ -196,6 +197,7 @@ const HireYourself = () => {
       </section>
 
       <Footer />
+      <BusinessMentorChatbot />
     </div>
   );
 };
