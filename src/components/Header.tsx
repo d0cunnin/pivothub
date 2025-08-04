@@ -17,6 +17,9 @@ export const Header = () => {
           </div>
           
           <nav className="hidden md:flex space-x-8">
+            <a href="#home" className="text-foreground hover:text-primary transition-colors">
+              Home
+            </a>
             <a href="#choose-path" className="text-foreground hover:text-primary transition-colors">
               Paths
             </a>
@@ -49,6 +52,9 @@ export const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
+              <a href="#home" className="text-foreground hover:text-primary transition-colors">
+                Home
+              </a>
               <a href="#choose-path" className="text-foreground hover:text-primary transition-colors">
                 Paths
               </a>

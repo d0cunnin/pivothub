@@ -9,7 +9,7 @@ import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb } from "lucide-re
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div id="home" className="min-h-screen bg-background">
       <Header />
       <HeroSection />
       <PathSelection />
@@ -19,7 +19,7 @@ const Index = () => {
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Career Guidance & Support</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
               Navigate your career transformation with expert guidance and personalized support every step of the way
             </p>
           </div>
@@ -29,7 +29,7 @@ const Index = () => {
               <CardHeader>
                 <Users className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>1-on-1 Mentorship</CardTitle>
-                <CardDescription>
+                <CardDescription className="text-foreground text-left">
                   Connect with industry experts who provide personalized guidance for your career journey
                 </CardDescription>
               </CardHeader>
@@ -39,7 +39,7 @@ const Index = () => {
               <CardHeader>
                 <Target className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Career Assessment</CardTitle>
-                <CardDescription>
+                <CardDescription className="text-foreground text-left">
                   Discover your strengths and identify the best path forward with our comprehensive assessment tools
                 </CardDescription>
               </CardHeader>
@@ -49,7 +49,7 @@ const Index = () => {
               <CardHeader>
                 <TrendingUp className="h-12 w-12 text-primary mb-4" />
                 <CardTitle>Progress Tracking</CardTitle>
-                <CardDescription>
+                <CardDescription className="text-foreground text-left">
                   Monitor your skill development and career advancement with detailed analytics and milestones
                 </CardDescription>
               </CardHeader>
@@ -63,7 +63,7 @@ const Index = () => {
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">Our Story</h2>
-            <div className="text-lg text-muted-foreground space-y-6 leading-relaxed">
+            <div className="text-lg text-foreground space-y-6 leading-relaxed text-left max-w-4xl mx-auto">
               <p>
                 CareerLaunch was born out of necessity during a critical period in our economy. Between January and July 2025, 
                 hundreds of thousands of people found themselves unemployed or underemployed, facing an unprecedented challenge 
@@ -93,9 +93,9 @@ const Index = () => {
       <section id="certifications" className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Professional Certifications</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Gain industry-recognized credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
+            <h2 className="text-3xl font-bold mb-4">Certifications</h2>
+            <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
+              Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
             </p>
           </div>
           
@@ -107,12 +107,12 @@ const Index = () => {
                   Tech Certifications
                   <Badge variant="secondary">Popular</Badge>
                 </CardTitle>
-                <CardDescription>
-                  Master in-demand technical skills with industry-standard certifications
+                <CardDescription className="text-foreground text-left">
+                  Master in-demand technical skills with certifications
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <ul className="space-y-2 text-sm text-foreground text-left">
                   <li>• Cloud Computing (AWS, Azure, GCP)</li>
                   <li>• Data Science & Analytics</li>
                   <li>• Cybersecurity</li>
@@ -129,12 +129,12 @@ const Index = () => {
                   Entrepreneurship
                   <Badge variant="secondary">Trending</Badge>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-foreground text-left">
                   Build essential business skills for launching and scaling your venture
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <ul className="space-y-2 text-sm text-foreground text-left">
                   <li>• Business Strategy & Planning</li>
                   <li>• Digital Marketing</li>
                   <li>• Financial Management</li>
@@ -148,12 +148,12 @@ const Index = () => {
               <CardHeader>
                 <Award className="h-10 w-10 text-primary mb-3" />
                 <CardTitle>Micro-Credentials</CardTitle>
-                <CardDescription>
+                <CardDescription className="text-foreground text-left">
                   Quick, focused learning paths for specific skills and competencies
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <ul className="space-y-2 text-sm text-foreground text-left">
                   <li>• Project Management</li>
                   <li>• UX/UI Design</li>
                   <li>• Social Media Strategy</li>
