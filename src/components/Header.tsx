@@ -37,6 +37,12 @@ export const Header = () => {
             >
               HireYourself
             </Link>
+            <Link 
+              to="/about" 
+              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
+            >
+              About
+            </Link>
           </nav>
 
           <div className="hidden md:flex space-x-3">
@@ -77,6 +83,13 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 HireYourself
+              </Link>
+              <Link 
+                to="/about" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
               </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 <Button variant="ghost">Sign In</Button>

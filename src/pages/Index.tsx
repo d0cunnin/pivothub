@@ -1,7 +1,6 @@
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { PathSelection } from "@/components/PathSelection";
-import { OurStorySection } from "@/components/OurStorySection";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -64,8 +63,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      <OurStorySection />
 
       {/* Certifications Section */}
       <section id="certifications" className="py-24 px-4 bg-gradient-to-br from-muted/20 to-muted/50 relative overflow-hidden">
