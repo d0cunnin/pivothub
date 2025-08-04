@@ -43,8 +43,7 @@ const HireYourself = () => {
           </div>
         </div>
         
-        {/* Bottom decorative strip */}
-        <div className="absolute bottom-0 left-0 w-full h-4 bg-gradient-to-r from-secondary via-accent to-primary opacity-80"></div>
+        <div className="absolute bottom-0 left-0 w-full h-4 bg-blue-500/80"></div>
       </section>
 
       {/* Quick Start */}
@@ -102,8 +101,7 @@ const HireYourself = () => {
           </div>
         </div>
         
-        {/* Colorful bottom divider */}
-        <div className="absolute bottom-0 left-0 w-full h-6 bg-gradient-to-r from-primary via-accent via-secondary to-primary opacity-40"></div>
+        <div className="absolute bottom-0 left-0 w-full h-6 bg-blue-600/60"></div>
       </section>
 
       {/* Business Tools */}
@@ -138,43 +136,43 @@ const HireYourself = () => {
             {/* Business Idea Generator with decorative divider */}
             <div className="animate-fade-in relative" style={{ animationDelay: '0.1s' }}>
               <BusinessIdeaGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
             </div>
             
             {/* Name Checker */}
             <div className="animate-fade-in relative" style={{ animationDelay: '0.2s' }}>
               <NameChecker />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
             </div>
             
             {/* Logo Generator */}
             <div className="animate-fade-in relative" style={{ animationDelay: '0.3s' }}>
               <LogoGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent"></div>
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
             </div>
             
             {/* Biography Generator */}
             <div className="animate-fade-in relative" style={{ animationDelay: '0.4s' }}>
               <BiographyGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
             </div>
             
             {/* Legal Docs Generator */}
             <div className="animate-fade-in relative" style={{ animationDelay: '0.5s' }}>
               <LegalDocsGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-secondary to-transparent"></div>
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
             </div>
             
             {/* Startup Checklist */}
             <div className="animate-fade-in relative" style={{ animationDelay: '0.6s' }}>
               <StartupChecklist />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-accent to-transparent"></div>
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
             </div>
             
             {/* Social Media Generator */}
             <div className="animate-fade-in relative" style={{ animationDelay: '0.7s' }}>
               <SocialMediaGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
             </div>
             
             {/* Marketing Strategy Generator */}
@@ -185,7 +183,7 @@ const HireYourself = () => {
         </div>
         
         {/* Bottom decorative strip */}
-        <div className="absolute bottom-0 left-0 w-full h-3 bg-gradient-to-r from-accent via-primary to-secondary opacity-60"></div>
+        <div className="absolute bottom-0 left-0 w-full h-3 bg-blue-500/60"></div>
       </section>
 
       {/* Success Stories Preview */}
@@ -242,7 +240,7 @@ const HireYourself = () => {
         </div>
         
         {/* Final decorative strip */}
-        <div className="absolute bottom-0 left-0 w-full h-4 bg-gradient-to-r from-secondary via-primary via-accent to-secondary opacity-50"></div>
+        <div className="absolute bottom-0 left-0 w-full h-4 bg-blue-500/50"></div>
       </section>
 
       <Footer />

@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GraduationCap, BookOpen, Award, Target, Users, TrendingUp } from "lucide-react";
+import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 
 const Reskill = () => {
   return (
@@ -166,6 +167,7 @@ const Reskill = () => {
       </section>
 
       <Footer />
+      <CareerAdvisorChatbot />
     </div>
   );
 };
