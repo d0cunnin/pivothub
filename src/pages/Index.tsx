@@ -18,7 +18,7 @@ const Index = () => {
       <section id="career-guidance" className="py-16 px-4 bg-muted/50">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Career Guidance & Support</h2>
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">Career Guidance & Support</h2>
             <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
               Navigate your career transformation with expert guidance and personalized support every step of the way
             </p>
@@ -28,9 +28,9 @@ const Index = () => {
             <Card className="border-0 shadow-soft">
               <CardHeader>
                 <Users className="h-12 w-12 text-primary mb-4" />
-                <CardTitle>1-on-1 Mentorship</CardTitle>
+                <CardTitle>AI Career Coach</CardTitle>
                 <CardDescription className="text-foreground text-left">
-                  Connect with industry experts who provide personalized guidance for your career journey
+                  Get personalized career guidance 24/7 with our intelligent chatbot that understands your goals and challenges
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -62,7 +62,7 @@ const Index = () => {
       <section id="about" className="py-16 px-4 bg-background">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">Our Story</h2>
+            <h2 className="text-4xl font-bold mb-6 bg-gradient-hero bg-clip-text text-transparent">Our Story</h2>
             <div className="text-lg text-foreground space-y-6 leading-relaxed text-left max-w-4xl mx-auto">
               <p>
                 CareerLaunch was born out of necessity during a critical period in our economy. Between January and July 2025, 
@@ -93,7 +93,7 @@ const Index = () => {
       <section id="certifications" className="py-16 px-4 bg-muted/30">
         <div className="container mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Certifications</h2>
+            <h2 className="text-4xl font-bold mb-4 bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
             <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
               Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
             </p>
