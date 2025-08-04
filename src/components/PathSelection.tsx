@@ -7,15 +7,18 @@ import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
 
 export const PathSelection = () => {
   return (
-    <section className="py-20 bg-gradient-card">
+    <section id="choose-path" className="py-20 bg-gradient-card">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
             Choose Your Path to Success
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Whether you want to enhance your skills for better employment or launch your own business, 
-            we have the tools and resources to help you succeed.
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+            In today's rapidly evolving economy, career success requires adaptability and strategic thinking. 
+            Whether you're seeking to enhance your marketability through cutting-edge skills or ready to forge 
+            your own entrepreneurial path, our comprehensive platform provides the tools, resources, and expert 
+            guidance you need to thrive. Choose your journey and unlock opportunities that align with your goals, 
+            strengths, and vision for the future.
           </p>
         </div>
 

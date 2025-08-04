@@ -17,14 +17,14 @@ export const Header = () => {
           </div>
           
           <nav className="hidden md:flex space-x-8">
-            <a href="#reskill" className="text-foreground hover:text-primary transition-colors">
-              Reskill
+            <a href="#choose-path" className="text-foreground hover:text-primary transition-colors">
+              Paths
             </a>
-            <a href="#hireyourself" className="text-foreground hover:text-primary transition-colors">
-              HireYourself
+            <a href="#career-guidance" className="text-foreground hover:text-primary transition-colors">
+              Career Guidance
             </a>
-            <a href="#blog" className="text-foreground hover:text-primary transition-colors">
-              Blog
+            <a href="#certifications" className="text-foreground hover:text-primary transition-colors">
+              Certifications
             </a>
             <a href="#about" className="text-foreground hover:text-primary transition-colors">
               About
@@ -49,14 +49,14 @@ export const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden mt-4 py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
-              <a href="#reskill" className="text-foreground hover:text-primary transition-colors">
-                Reskill
+              <a href="#choose-path" className="text-foreground hover:text-primary transition-colors">
+                Paths
               </a>
-              <a href="#hireyourself" className="text-foreground hover:text-primary transition-colors">
-                HireYourself
+              <a href="#career-guidance" className="text-foreground hover:text-primary transition-colors">
+                Career Guidance
               </a>
-              <a href="#blog" className="text-foreground hover:text-primary transition-colors">
-                Blog
+              <a href="#certifications" className="text-foreground hover:text-primary transition-colors">
+                Certifications
               </a>
               <a href="#about" className="text-foreground hover:text-primary transition-colors">
                 About
