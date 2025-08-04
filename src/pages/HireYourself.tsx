@@ -18,19 +18,20 @@ const HireYourself = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero">
+      <section className="py-20 bg-gradient-hero relative">
+        <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-accent"></div>
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="w-20 h-20 bg-secondary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Rocket className="h-10 w-10 text-secondary" />
+          <div className="text-center max-w-4xl mx-auto animate-fade-in">
+            <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Rocket className="h-10 w-10 text-white" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-foreground">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
               HireYourself
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-xl text-white/80 mb-8">
               Launch your business with confidence. Get everything you need from idea to execution.
             </p>
-            <Button variant="secondary" size="lg" className="shadow-glow">
+            <Button variant="secondary" size="lg" className="shadow-glow hover-scale">
               Start Your Business Journey
             </Button>
           </div>
@@ -38,48 +39,75 @@ const HireYourself = () => {
       </section>
 
       {/* Business Tools */}
-      <section className="py-16">
+      <section className="py-24 bg-gradient-to-br from-background to-muted/20 relative">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-hero"></div>
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-foreground">
-            Complete Business Toolkit
-          </h2>
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Complete Business Toolkit
+              </h2>
+            </div>
+            <p className="text-lg text-foreground max-w-3xl mx-auto">
+              Everything you need to transform your idea into a thriving business
+            </p>
+          </div>
           
-          <div className="space-y-12 max-w-6xl mx-auto">
+          <div className="space-y-16 max-w-6xl mx-auto">
             {/* Business Idea Generator */}
-            <BusinessIdeaGenerator />
+            <div className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              <BusinessIdeaGenerator />
+            </div>
             
             {/* Name Checker */}
-            <NameChecker />
+            <div className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <NameChecker />
+            </div>
             
             {/* Logo Generator */}
-            <LogoGenerator />
+            <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              <LogoGenerator />
+            </div>
             
             {/* Biography Generator */}
-            <BiographyGenerator />
+            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <BiographyGenerator />
+            </div>
             
             {/* Legal Docs Generator */}
-            <LegalDocsGenerator />
+            <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
+              <LegalDocsGenerator />
+            </div>
             
             {/* Startup Checklist */}
-            <StartupChecklist />
+            <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              <StartupChecklist />
+            </div>
             
             {/* Social Media Generator */}
-            <SocialMediaGenerator />
+            <div className="animate-fade-in" style={{ animationDelay: '0.7s' }}>
+              <SocialMediaGenerator />
+            </div>
             
             {/* Marketing Strategy Generator */}
-            <MarketingStrategyGenerator />
+            <div className="animate-fade-in" style={{ animationDelay: '0.8s' }}>
+              <MarketingStrategyGenerator />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Quick Start */}
-      <section className="py-16 bg-gradient-card">
+      <section className="py-24 bg-gradient-to-br from-muted/30 to-muted/60 relative">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-card"></div>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-              Quick Start Your Business
-            </h2>
-            <p className="text-lg text-muted-foreground">
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-accent/10 to-primary/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Quick Start Your Business
+              </h2>
+            </div>
+            <p className="text-lg text-foreground max-w-3xl mx-auto">
               Follow our proven 4-step process to launch your business in weeks, not months
             </p>
           </div>
@@ -107,8 +135,8 @@ const HireYourself = () => {
                 description: "Go to market and grow your business with ongoing support"
               }
             ].map((item, index) => (
-              <Card key={index} className="p-6 text-center">
-                <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg">
+              <Card key={index} className="p-6 text-center border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
                   {item.step}
                 </div>
                 <h3 className="text-lg font-bold mb-2 text-foreground">{item.title}</h3>
@@ -120,13 +148,16 @@ const HireYourself = () => {
       </section>
 
       {/* Success Stories Preview */}
-      <section className="py-16">
+      <section className="py-24 bg-gradient-to-br from-background to-muted/20 relative">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-              Success Stories
-            </h2>
-            <p className="text-lg text-muted-foreground">
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-secondary/10 to-accent/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Success Stories
+              </h2>
+            </div>
+            <p className="text-lg text-foreground max-w-3xl mx-auto">
               See how others have transformed their lives through entrepreneurship
             </p>
           </div>
@@ -149,9 +180,11 @@ const HireYourself = () => {
                 result: "Built 6-figure business while working part-time"
               }
             ].map((story, index) => (
-              <Card key={index} className="p-6">
+              <Card key={index} className="p-6 border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-secondary/10 rounded-full mx-auto mb-4"></div>
+                  <div className="w-16 h-16 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-hero rounded-full"></div>
+                  </div>
                   <h3 className="text-lg font-bold mb-1 text-foreground">{story.name}</h3>
                   <p className="text-muted-foreground text-sm mb-2">{story.business}</p>
                   <p className="text-secondary font-medium">{story.result}</p>
