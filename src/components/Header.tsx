@@ -40,7 +40,7 @@ export const Header = () => {
           </nav>
 
           <div className="hidden md:flex space-x-3">
-            <Button variant="outline">Sign In</Button>
+            <Button variant="ghost">Sign In</Button>
             <Button variant="hero">Get Started</Button>
           </div>
 
@@ -79,7 +79,7 @@ export const Header = () => {
                 HireYourself
               </Link>
               <div className="flex flex-col space-y-2 pt-4">
-                <Button variant="outline">Sign In</Button>
+                <Button variant="ghost">Sign In</Button>
                 <Button variant="hero">Get Started</Button>
               </div>
             </nav>

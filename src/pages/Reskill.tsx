@@ -54,7 +54,7 @@ const Reskill = () => {
               <p className="text-muted-foreground mb-6">
                 Answer a few questions about your background and goals to receive a customized learning roadmap
               </p>
-              <Button variant="outline" size="lg" className="hover-scale">
+              <Button variant="default" size="lg" className="hover-scale">
                 Take Assessment
               </Button>
             </div>
@@ -156,7 +156,7 @@ const Reskill = () => {
                 <p className="text-muted-foreground mb-6">
                   See what your completed certification will look like
                 </p>
-                <Button variant="outline" className="hover-scale">
+                <Button variant="default" className="hover-scale">
                   View Sample
                 </Button>
               </div>

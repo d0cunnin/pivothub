@@ -118,7 +118,7 @@ export const PathSelection = () => {
 
               <Link to="/hireyourself">
                 <Button 
-                  variant="secondary" 
+                  variant="hero" 
                   size="lg" 
                   className="w-full group-hover:shadow-glow transition-all duration-300"
                 >

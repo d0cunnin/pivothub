@@ -87,7 +87,7 @@ const Index = () => {
                 <BookOpen className="h-10 w-10 text-primary mb-3" />
                 <CardTitle className="flex items-center gap-2">
                   Tech Certifications
-                  <Badge variant="secondary">Popular</Badge>
+                  <Badge variant="default">Popular</Badge>
                 </CardTitle>
                 <CardDescription className="text-foreground text-left">
                   Master in-demand technical skills with certifications
@@ -109,7 +109,7 @@ const Index = () => {
                 <Lightbulb className="h-10 w-10 text-primary mb-3" />
                 <CardTitle className="flex items-center gap-2">
                   Entrepreneurship
-                  <Badge variant="secondary">Trending</Badge>
+                  <Badge variant="default">Trending</Badge>
                 </CardTitle>
                 <CardDescription className="text-foreground text-left">
                   Build essential business skills for launching and scaling your venture

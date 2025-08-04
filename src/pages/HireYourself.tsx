@@ -37,7 +37,7 @@ const HireYourself = () => {
             <p className="text-xl text-white/80 mb-8">
               Launch your business with confidence. Get everything you need from idea to execution.
             </p>
-            <Button variant="secondary" size="lg" className="shadow-glow hover-scale">
+            <Button variant="hero" size="lg" className="shadow-glow hover-scale">
               Start Your Business Journey
             </Button>
           </div>
