@@ -133,6 +133,48 @@ All colors MUST be HSL.
 }
 
 @layer components {
+  /* Professional spacing system - tight but readable */
+  .section-spacing {
+    @apply py-16 md:py-20;
+  }
+  
+  .section-spacing-sm {
+    @apply py-12 md:py-16;
+  }
+  
+  .section-spacing-lg {
+    @apply py-20 md:py-24;
+  }
+  
+  .content-spacing {
+    @apply space-y-6 md:space-y-8;
+  }
+  
+  .content-spacing-sm {
+    @apply space-y-4 md:space-y-6;
+  }
+  
+  .grid-spacing {
+    @apply gap-6 md:gap-8;
+  }
+  
+  .grid-spacing-sm {
+    @apply gap-4 md:gap-6;
+  }
+  
+  /* Clean container system */
+  .page-container {
+    @apply container mx-auto px-4 md:px-6 lg:px-8;
+  }
+  
+  .content-width {
+    @apply max-w-6xl mx-auto;
+  }
+  
+  .content-width-sm {
+    @apply max-w-4xl mx-auto;
+  }
+  
   /* Premium section transitions */
   .section-transition {
     @apply relative;
@@ -147,10 +189,20 @@ All colors MUST be HSL.
     @apply w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent;
   }
   
+  /* Professional card system */
   .premium-card {
     @apply bg-card/80 backdrop-blur-sm border-0 shadow-elegant hover:shadow-strong transition-all duration-500;
   }
   
+  .card-padding {
+    @apply p-6 md:p-8;
+  }
+  
+  .card-padding-sm {
+    @apply p-4 md:p-6;
+  }
+  
+  /* Hero sections */
   .hero-glow {
     @apply relative overflow-hidden;
   }
@@ -160,11 +212,107 @@ All colors MUST be HSL.
     @apply absolute inset-0 bg-gradient-mesh opacity-100;
   }
   
+  /* Consistent form styling */
+  .form-section {
+    @apply space-y-6;
+  }
+  
+  .form-row {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+  }
+  
+  .form-group {
+    @apply space-y-2;
+  }
+  
+  /* Ambient elements */
   .floating-orb {
     @apply absolute rounded-full blur-xl opacity-60 animate-pulse;
+  }
+  
+  .floating-orb-1 {
+    @apply top-20 right-20 w-32 h-32 bg-primary/5 animate-float;
+  }
+  
+  .floating-orb-2 {
+    @apply bottom-20 left-20 w-40 h-40 bg-secondary/5 animate-float;
+    animation-delay: 2s;
+  }
+  
+  .floating-orb-3 {
+    @apply top-1/2 left-1/3 w-24 h-24 bg-accent/5 animate-float;
+    animation-delay: 4s;
   }
   
   .text-shimmer {
     @apply bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-pulse;
   }
 }
+
+@layer utilities {
+  /* Clean, professional animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  
+  .animate-fade-in-scale {
+    animation: fadeInScale 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+  
+  .transition-elegant {
+    transition: var(--transition-elegant);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }

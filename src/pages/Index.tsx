@@ -15,61 +15,61 @@ const Index = () => {
       <PathSelection />
       
       {/* Career Guidance Section */}
-      <section id="career-guidance" className="py-24 px-4 bg-gradient-to-br from-muted/30 to-muted/60 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-hero"></div>
-        <div className="container mx-auto animate-fade-in">
-          <div className="text-center mb-16">
-            <div className="inline-block p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-4 shadow-soft">
-              <h2 className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Career Guidance & Support
-              </h2>
+      <section className="section-spacing bg-gradient-section-1 relative">
+        <div className="page-container">
+          <div className="content-width">
+            <div className="text-center content-spacing mb-12 animate-fade-in">
+              <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
+                <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Career Guidance & Support
+                </h2>
+              </div>
+              <p className="text-lg text-muted-foreground content-width-sm">
+                Navigate your career transformation with expert guidance and personalized support every step of the way
+              </p>
             </div>
-            <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
-              Navigate your career transformation with expert guidance and personalized support every step of the way
-            </p>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-            <div className="grid md:grid-cols-1 gap-8">
-              <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm">
-                <CardHeader>
-                  <Users className="h-12 w-12 text-primary mb-4" />
-                  <CardTitle>AI Career Coach</CardTitle>
-                  <CardDescription className="text-foreground text-left">
-                    Get personalized career guidance 24/7 with our intelligent chatbot that understands your goals and challenges
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              
-              <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm">
-                <CardHeader>
-                  <Target className="h-12 w-12 text-primary mb-4" />
-                  <CardTitle>Career Assessment</CardTitle>
-                  <CardDescription className="text-foreground text-left">
-                    Discover your strengths and identify the best path forward with our comprehensive assessment tools
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              
-              <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm">
-                <CardHeader>
-                  <TrendingUp className="h-12 w-12 text-primary mb-4" />
-                  <CardTitle>Progress Tracking</CardTitle>
-                  <CardDescription className="text-foreground text-left">
-                    Monitor your skill development and career advancement with detailed analytics and milestones
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </div>
+            
+            <div className="grid lg:grid-cols-2 grid-spacing items-center">
+              <div className="content-spacing">
+                <Card className="premium-card card-padding hover-scale">
+                  <CardHeader className="p-0 pb-4">
+                    <Users className="h-10 w-10 text-primary mb-3" />
+                    <CardTitle className="text-xl">AI Career Coach</CardTitle>
+                    <CardDescription className="text-muted-foreground">
+                      Get personalized career guidance 24/7 with our intelligent chatbot that understands your goals and challenges
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+                
+                <Card className="premium-card card-padding hover-scale">
+                  <CardHeader className="p-0 pb-4">
+                    <Target className="h-10 w-10 text-primary mb-3" />
+                    <CardTitle className="text-xl">Career Assessment</CardTitle>
+                    <CardDescription className="text-muted-foreground">
+                      Discover your strengths and identify the best path forward with our comprehensive assessment tools
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+                
+                <Card className="premium-card card-padding hover-scale">
+                  <CardHeader className="p-0 pb-4">
+                    <TrendingUp className="h-10 w-10 text-primary mb-3" />
+                    <CardTitle className="text-xl">Progress Tracking</CardTitle>
+                    <CardDescription className="text-muted-foreground">
+                      Monitor your skill development and career advancement with detailed analytics and milestones
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              </div>
 
-            <div className="animate-fade-in">
-              <div className="premium-card overflow-hidden">
-                <img 
-                  src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
-                  alt="Professional woman working on career development" 
-                  className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
-                />
+              <div className="animate-fade-in">
+                <div className="premium-card overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
+                    alt="Professional woman working on career development" 
+                    className="w-full h-80 object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -77,41 +77,40 @@ const Index = () => {
       </section>
 
       {/* Certifications Section */}
-      <section id="certifications" className="py-24 px-4 bg-gradient-to-br from-muted/20 to-muted/50 relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-card"></div>
-        <div className="container mx-auto animate-fade-in">
-          <div className="text-center mb-16">
-            <div className="inline-block p-6 bg-gradient-to-r from-accent/10 to-primary/10 rounded-2xl mb-4 shadow-soft">
-              <h2 className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
+      <section className="section-spacing bg-gradient-section-2 relative">
+        <div className="page-container">
+          <div className="content-width">
+            <div className="text-center content-spacing mb-12 animate-fade-in">
+              <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
+                <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
+              </div>
+              <p className="text-lg text-muted-foreground content-width-sm">
+                Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
+              </p>
             </div>
-            <p className="text-lg text-foreground max-w-3xl mx-auto text-left">
-              Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/90 backdrop-blur-sm">
-              <CardHeader>
-                <BookOpen className="h-10 w-10 text-primary mb-3" />
-                <CardTitle className="flex items-center gap-2">
-                  Tech Certifications
-                  <Badge variant="default">Popular</Badge>
-                </CardTitle>
-                <CardDescription className="text-foreground text-left">
-                  Master in-demand technical skills with certifications
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-foreground text-left">
-                  <li>• Cloud Computing (AWS, Azure, GCP)</li>
-                  <li>• Data Science & Analytics</li>
-                  <li>• Cybersecurity</li>
-                  <li>• Web Development</li>
-                  <li>• AI & Machine Learning</li>
-                </ul>
-              </CardContent>
-            </Card>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-spacing-sm animate-fade-in mb-12">
+              <Card className="premium-card card-padding hover-scale">
+                <CardHeader className="p-0 pb-4">
+                  <BookOpen className="h-8 w-8 text-primary mb-2" />
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    Tech Certifications
+                    <Badge variant="default">Popular</Badge>
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Master in-demand technical skills with certifications
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Cloud Computing (AWS, Azure, GCP)</li>
+                    <li>• Data Science & Analytics</li>
+                    <li>• Cybersecurity</li>
+                    <li>• Web Development</li>
+                    <li>• AI & Machine Learning</li>
+                  </ul>
+                </CardContent>
+              </Card>
             
             <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/90 backdrop-blur-sm">
               <CardHeader>
@@ -176,6 +175,7 @@ const Index = () => {
             <Button size="lg" className="bg-gradient-hero hover:opacity-90 shadow-glow transition-all duration-300 hover-scale">
               Explore All Certifications
             </Button>
+          </div>
           </div>
         </div>
       </section>
