@@ -1,43 +1,4 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RunwareService } from "@/lib/runware";
-import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
-
 export const OurStorySection = () => {
-  const [apiKey, setApiKey] = useState("");
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const generateStoryImage = async () => {
-    if (!apiKey.trim()) {
-      toast.error("Please enter your Runware API key");
-      return;
-    }
-
-    setIsGenerating(true);
-    try {
-      const runware = new RunwareService(apiKey);
-      const result = await runware.generateImage({
-        positivePrompt: "A diverse group of happy smiling professional adults celebrating success, business people of different ethnicities laughing and high-fiving in a modern office setting, bright natural lighting, professional photography style, uplifting and inspiring atmosphere",
-        model: "runware:100@1",
-        numberResults: 1,
-        outputFormat: "WEBP",
-        width: 800,
-        height: 600
-      });
-      
-      setGeneratedImage(result.imageURL);
-      toast.success("Image generated successfully!");
-    } catch (error) {
-      console.error("Error generating image:", error);
-      toast.error("Failed to generate image. Please check your API key and try again.");
-    } finally {
-      setIsGenerating(false);
-    }
-  };
 
   return (
     <section id="about" className="py-24 px-4 bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
@@ -78,72 +39,14 @@ export const OurStorySection = () => {
               </div>
             </div>
 
-            {/* Image Generation Section */}
+            {/* Image Section */}
             <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
               <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-6 shadow-soft">
-                {!generatedImage ? (
-                  <div className="space-y-4">
-                    <div className="text-center mb-4">
-                      <h3 className="text-xl font-semibold mb-2">Add Your Story Image</h3>
-                      <p className="text-sm text-muted-foreground">
-                        Generate an inspiring image of successful professionals to accompany our story
-                      </p>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <Label htmlFor="apiKey">Runware API Key</Label>
-                      <Input
-                        id="apiKey"
-                        type="password"
-                        placeholder="Enter your Runware API key"
-                        value={apiKey}
-                        onChange={(e) => setApiKey(e.target.value)}
-                        className="w-full"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Get your API key from{" "}
-                        <a 
-                          href="https://runware.ai/" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline"
-                        >
-                          runware.ai
-                        </a>
-                      </p>
-                    </div>
-                    
-                    <Button 
-                      onClick={generateStoryImage}
-                      disabled={isGenerating || !apiKey.trim()}
-                      className="w-full"
-                    >
-                      {isGenerating ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Generating Image...
-                        </>
-                      ) : (
-                        "Generate Story Image"
-                      )}
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <img 
-                      src={generatedImage} 
-                      alt="Happy successful professionals celebrating" 
-                      className="w-full h-auto rounded-lg shadow-soft"
-                    />
-                    <Button 
-                      onClick={() => setGeneratedImage(null)}
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Generate New Image
-                    </Button>
-                  </div>
-                )}
+                <img 
+                  src="/lovable-uploads/55e6a726-43cb-426b-924c-84bf4a8ebab7.png" 
+                  alt="Happy successful professionals celebrating together" 
+                  className="w-full h-auto rounded-lg shadow-soft"
+                />
               </div>
             </div>
           </div>
