@@ -26,48 +26,48 @@ const HireYourself = () => {
         <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
         <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
         
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center max-w-4xl mx-auto animate-fade-in">
-            <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-glow">
-              <Rocket className="h-10 w-10 text-white" />
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
+              <Rocket className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-white leading-tight animate-slide-up">
               HireYourself
             </h1>
-            <p className="text-xl text-white/80 mb-8">
+            <p className="text-2xl md:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Launch your business with confidence. Get everything you need from idea to execution.
             </p>
-            <Button variant="hero" size="lg" className="shadow-glow hover-scale">
-              Start Your Business Journey
-            </Button>
+            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <Button variant="hero" size="lg" className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg">
+                Start Your Business Journey
+              </Button>
+            </div>
           </div>
         </div>
         
-        <div className="absolute bottom-0 left-0 w-full h-4 bg-blue-500/80"></div>
+        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Quick Start */}
-      <section className="py-24 bg-gradient-to-br from-muted/30 to-muted/60 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-card"></div>
+      <section className="section-transition py-32 bg-gradient-section-1 relative overflow-hidden">
+        {/* Sophisticated ambient lighting */}
+        <div className="floating-orb top-24 left-24 w-64 h-64 bg-accent/3 animate-float"></div>
+        <div className="floating-orb bottom-24 right-24 w-80 h-80 bg-primary/4 animate-float" style={{ animationDelay: '3s' }}></div>
+        <div className="floating-orb top-1/2 right-1/3 w-48 h-48 bg-secondary/3 animate-float" style={{ animationDelay: '1.5s' }}></div>
         
-        {/* Decorative background shapes */}
-        <div className="absolute top-20 left-20 w-40 h-40 bg-accent/5 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-20 right-20 w-56 h-56 bg-primary/8 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 right-1/4 w-28 h-28 bg-secondary/6 rounded-full blur-xl"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-block p-6 bg-gradient-to-r from-accent/10 to-primary/10 rounded-2xl mb-4 shadow-soft">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
                 Quick Start Your Business
               </h2>
             </div>
-            <p className="text-lg text-foreground max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Follow our proven 4-step process to launch your business in weeks, not months
             </p>
           </div>
           
-          <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-10 max-w-7xl mx-auto">
             {[
               {
                 step: "1",
@@ -90,124 +90,112 @@ const HireYourself = () => {
                 description: "Go to market and grow your business with ongoing support"
               }
             ].map((item, index) => (
-              <Card key={index} className="p-6 text-center border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="w-12 h-12 bg-gradient-hero rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
+              <Card key={index} className="premium-card p-8 text-center group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
+                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-xl shadow-glow group-hover:shadow-strong transition-elegant">
                   {item.step}
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-foreground">{item.title}</h3>
-                <p className="text-muted-foreground text-sm">{item.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">{item.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{item.description}</p>
               </Card>
             ))}
           </div>
         </div>
         
-        <div className="absolute bottom-0 left-0 w-full h-6 bg-blue-600/60"></div>
+        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Business Tools */}
-      <section className="py-24 bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-hero"></div>
+      <section className="section-transition py-32 bg-gradient-section-2 relative overflow-hidden">
+        {/* Ambient background elements */}
+        <div className="floating-orb top-1/4 left-0 w-96 h-96 bg-primary/2 animate-float"></div>
+        <div className="floating-orb bottom-1/4 right-0 w-72 h-72 bg-secondary/4 animate-float" style={{ animationDelay: '2.5s' }}></div>
+        <div className="floating-orb top-1/2 left-1/3 w-56 h-56 bg-accent/3 animate-float" style={{ animationDelay: '1s' }}></div>
         
-        {/* Decorative background elements */}
-        <div className="absolute top-1/4 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-0 w-48 h-48 bg-secondary/10 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 left-1/3 w-32 h-32 bg-accent/8 rounded-full blur-xl"></div>
-        
-        {/* Diagonal stripes */}
-        <div className="absolute top-0 right-0 w-full h-full opacity-5">
-          <div className="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-primary to-secondary transform rotate-12 origin-top"></div>
-          <div className="absolute top-0 right-8 w-1 h-full bg-gradient-to-b from-accent to-primary transform rotate-12 origin-top"></div>
-          <div className="absolute top-0 right-16 w-1 h-full bg-gradient-to-b from-secondary to-accent transform rotate-12 origin-top"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-block p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-4 shadow-soft">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
                 Complete Business Toolkit
               </h2>
             </div>
-            <p className="text-lg text-foreground max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Everything you need to transform your idea into a thriving business
             </p>
           </div>
           
-          <div className="space-y-20 max-w-6xl mx-auto">
-            {/* Business Idea Generator with decorative divider */}
-            <div className="animate-fade-in relative" style={{ animationDelay: '0.1s' }}>
+          <div className="space-y-32 max-w-7xl mx-auto">
+            {/* Business Idea Generator */}
+            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.1s' }}>
               <BusinessIdeaGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
+              <div className="section-divider mt-16"></div>
             </div>
             
             {/* Name Checker */}
-            <div className="animate-fade-in relative" style={{ animationDelay: '0.2s' }}>
+            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.2s' }}>
               <NameChecker />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
+              <div className="section-divider mt-16"></div>
             </div>
             
             {/* Logo Generator */}
-            <div className="animate-fade-in relative" style={{ animationDelay: '0.3s' }}>
+            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.3s' }}>
               <LogoGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
+              <div className="section-divider mt-16"></div>
             </div>
             
             {/* Biography Generator */}
-            <div className="animate-fade-in relative" style={{ animationDelay: '0.4s' }}>
+            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.4s' }}>
               <BiographyGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
+              <div className="section-divider mt-16"></div>
             </div>
             
             {/* Legal Docs Generator */}
-            <div className="animate-fade-in relative" style={{ animationDelay: '0.5s' }}>
+            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.5s' }}>
               <LegalDocsGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
+              <div className="section-divider mt-16"></div>
             </div>
             
             {/* Startup Checklist */}
-            <div className="animate-fade-in relative" style={{ animationDelay: '0.6s' }}>
+            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.6s' }}>
               <StartupChecklist />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
+              <div className="section-divider mt-16"></div>
             </div>
             
             {/* Social Media Generator */}
-            <div className="animate-fade-in relative" style={{ animationDelay: '0.7s' }}>
+            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.7s' }}>
               <SocialMediaGenerator />
-              <div className="absolute -bottom-10 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-blue-500/60"></div>
+              <div className="section-divider mt-16"></div>
             </div>
             
             {/* Marketing Strategy Generator */}
-            <div className="animate-fade-in" style={{ animationDelay: '0.8s' }}>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
               <MarketingStrategyGenerator />
             </div>
           </div>
         </div>
         
-        {/* Bottom decorative strip */}
-        <div className="absolute bottom-0 left-0 w-full h-3 bg-blue-500/60"></div>
+        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Success Stories Preview */}
-      <section className="py-24 bg-gradient-to-br from-background to-muted/20 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+      <section className="section-transition py-32 bg-gradient-section-3 relative overflow-hidden">
+        {/* Elegant ambient elements */}
+        <div className="floating-orb top-20 right-20 w-56 h-56 bg-accent/4 animate-float"></div>
+        <div className="floating-orb bottom-20 left-20 w-64 h-64 bg-secondary/3 animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="floating-orb top-1/3 left-1/3 w-40 h-40 bg-primary/5 animate-float" style={{ animationDelay: '4s' }}></div>
         
-        {/* Background decorative elements */}
-        <div className="absolute top-16 right-16 w-36 h-36 bg-accent/8 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-16 left-16 w-44 h-44 bg-secondary/6 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 left-1/3 w-20 h-20 bg-primary/10 rounded-full blur-lg"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-block p-6 bg-gradient-to-r from-secondary/10 to-accent/10 rounded-2xl mb-4 shadow-soft">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
                 Success Stories
               </h2>
             </div>
-            <p className="text-lg text-foreground max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               See how others have transformed their lives through entrepreneurship
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
             {[
               {
                 name: "Sarah Chen",
@@ -225,40 +213,38 @@ const HireYourself = () => {
                 result: "Built 6-figure business while working part-time"
               }
             ].map((story, index) => (
-              <Card key={index} className="p-6 border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/80 backdrop-blur-sm animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+              <Card key={index} className="premium-card p-8 group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <div className="w-12 h-12 bg-gradient-hero rounded-full"></div>
+                  <div className="w-20 h-20 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:shadow-glow transition-elegant">
+                    <div className="w-14 h-14 bg-gradient-hero rounded-xl shadow-soft"></div>
                   </div>
-                  <h3 className="text-lg font-bold mb-1 text-foreground">{story.name}</h3>
-                  <p className="text-muted-foreground text-sm mb-2">{story.business}</p>
-                  <p className="text-secondary font-medium">{story.result}</p>
+                  <h3 className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{story.name}</h3>
+                  <p className="text-muted-foreground mb-3 text-sm">{story.business}</p>
+                  <p className="text-secondary font-semibold text-lg">{story.result}</p>
                 </div>
               </Card>
             ))}
           </div>
         </div>
         
-        {/* Final decorative strip */}
-        <div className="absolute bottom-0 left-0 w-full h-4 bg-blue-500/50"></div>
+        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Business Mentor AI Section */}
-      <section className="py-24 bg-gradient-to-br from-muted/20 to-muted/40 relative">
-        <div className="absolute top-0 left-0 w-full h-2 bg-blue-600"></div>
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-block p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-4 shadow-soft">
-              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+      <section className="section-transition py-32 bg-gradient-section-1 relative">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
                 Get Expert Business Advice
               </h2>
             </div>
-            <p className="text-lg text-foreground max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Chat with our AI Business Mentor for personalized guidance on your entrepreneurial journey
             </p>
           </div>
           
-          <div className="animate-fade-in">
+          <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
             <BusinessMentorChatbot />
           </div>
         </div>
