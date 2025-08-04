@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GraduationCap, Rocket, ArrowRight, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import reskillIcon from "@/assets/reskill-icon.jpg";
 import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
 
@@ -59,14 +60,16 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Button 
-                variant="default" 
-                size="lg" 
-                className="w-full group-hover:shadow-glow transition-all duration-300"
-              >
-                Start Reskilling
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link to="/reskill">
+                <Button 
+                  variant="default" 
+                  size="lg" 
+                  className="w-full group-hover:shadow-glow transition-all duration-300"
+                >
+                  Start Reskilling
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
           </Card>
 
@@ -110,14 +113,16 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Button 
-                variant="secondary" 
-                size="lg" 
-                className="w-full group-hover:shadow-glow transition-all duration-300"
-              >
-                Start Your Business
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link to="/hireyourself">
+                <Button 
+                  variant="secondary" 
+                  size="lg" 
+                  className="w-full group-hover:shadow-glow transition-all duration-300"
+                >
+                  Start Your Business
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
           </Card>
         </div>
