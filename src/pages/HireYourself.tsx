@@ -243,8 +243,28 @@ const HireYourself = () => {
         <div className="absolute bottom-0 left-0 w-full h-4 bg-blue-500/50"></div>
       </section>
 
+      {/* Business Mentor AI Section */}
+      <section className="py-24 bg-gradient-to-br from-muted/20 to-muted/40 relative">
+        <div className="absolute top-0 left-0 w-full h-2 bg-blue-600"></div>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Get Expert Business Advice
+              </h2>
+            </div>
+            <p className="text-lg text-foreground max-w-3xl mx-auto">
+              Chat with our AI Business Mentor for personalized guidance on your entrepreneurial journey
+            </p>
+          </div>
+          
+          <div className="animate-fade-in">
+            <BusinessMentorChatbot />
+          </div>
+        </div>
+      </section>
+
       <Footer />
-      <BusinessMentorChatbot />
     </div>
   );
 };

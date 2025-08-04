@@ -166,8 +166,28 @@ const Reskill = () => {
         </div>
       </section>
 
+      {/* Career Advisor AI Section */}
+      <section className="py-24 bg-gradient-to-br from-muted/20 to-muted/40 relative">
+        <div className="absolute top-0 left-0 w-full h-2 bg-blue-600"></div>
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <div className="inline-block p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-4 shadow-soft">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Get Personalized Career Guidance
+              </h2>
+            </div>
+            <p className="text-lg text-foreground max-w-3xl mx-auto">
+              Chat with our AI Career Advisor for expert guidance on your career transition and reskilling journey
+            </p>
+          </div>
+          
+          <div className="animate-fade-in">
+            <CareerAdvisorChatbot />
+          </div>
+        </div>
+      </section>
+
       <Footer />
-      <CareerAdvisorChatbot />
     </div>
   );
 };

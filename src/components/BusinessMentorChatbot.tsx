@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageCircle, Send, Bot, User, Lightbulb } from "lucide-react";
+import { Send, Bot, User, Lightbulb } from "lucide-react";
 
 interface Message {
   id: string;
@@ -13,7 +13,6 @@ interface Message {
 }
 
 export const BusinessMentorChatbot = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -93,119 +92,103 @@ export const BusinessMentorChatbot = () => {
   ];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      {!isOpen ? (
-        <Button
-          onClick={() => setIsOpen(true)}
-          className="w-16 h-16 rounded-full shadow-glow hover-scale bg-gradient-hero"
-          size="icon"
-        >
-          <MessageCircle className="h-6 w-6 text-white" />
-        </Button>
-      ) : (
-        <Card className="w-96 h-[500px] shadow-strong border-0 bg-card/95 backdrop-blur-sm">
-          {/* Header */}
-          <div className="p-4 border-b bg-gradient-hero text-white rounded-t-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Bot className="h-5 w-5" />
-                <h3 className="font-semibold">Business Mentor AI</h3>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-white/20"
+    <div className="w-full max-w-4xl mx-auto">
+      <Card className="shadow-strong border-0 bg-card/95 backdrop-blur-sm">
+        {/* Header */}
+        <div className="p-6 border-b bg-gradient-hero text-white rounded-t-lg">
+          <div className="flex items-center space-x-3">
+            <Bot className="h-6 w-6" />
+            <div>
+              <h3 className="text-xl font-bold">Business Mentor AI</h3>
+              <p className="text-white/80 text-sm">Get expert advice for your entrepreneurial journey</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <ScrollArea className="h-[400px] p-6">
+          <div className="space-y-4">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}
               >
-                ×
-              </Button>
-            </div>
-          </div>
-
-          {/* Messages */}
-          <ScrollArea className="flex-1 p-4 h-[320px]">
-            <div className="space-y-4">
-              {messages.map((message) => (
                 <div
-                  key={message.id}
-                  className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}
+                  className={`max-w-[80%] p-4 rounded-lg ${
+                    message.isBot
+                      ? "bg-muted text-foreground"
+                      : "bg-primary text-primary-foreground"
+                  }`}
                 >
-                  <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
-                      message.isBot
-                        ? "bg-muted text-foreground"
-                        : "bg-primary text-primary-foreground"
-                    }`}
-                  >
-                    <div className="flex items-start space-x-2">
-                      {message.isBot && <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />}
-                      <p className="text-sm">{message.text}</p>
-                      {!message.isBot && <User className="h-4 w-4 mt-0.5 flex-shrink-0" />}
+                  <div className="flex items-start space-x-3">
+                    {message.isBot && <Bot className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                    <p className="text-sm leading-relaxed">{message.text}</p>
+                    {!message.isBot && <User className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-muted p-4 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <Bot className="h-5 w-5" />
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
+                      <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+
+        {/* Quick Questions */}
+        {messages.length === 1 && (
+          <div className="px-6 py-4 border-t bg-muted/30">
+            <div className="flex items-center space-x-2 mb-3">
+              <Lightbulb className="h-5 w-5 text-primary" />
+              <span className="text-sm text-muted-foreground font-medium">Quick questions to get started:</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {quickQuestions.map((question, index) => (
+                <Button
+                  key={index}
+                  variant="ghost"
+                  size="sm"
+                  className="h-auto p-3 justify-start text-left whitespace-normal hover:bg-primary/10"
+                  onClick={() => {
+                    setInputMessage(question);
+                    handleSendMessage();
+                  }}
+                >
+                  {question}
+                </Button>
               ))}
-              
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-muted p-3 rounded-lg">
-                    <div className="flex items-center space-x-2">
-                      <Bot className="h-4 w-4" />
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
-                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </ScrollArea>
-
-          {/* Quick Questions */}
-          {messages.length === 1 && (
-            <div className="p-3 border-t">
-              <div className="flex items-center space-x-1 mb-2">
-                <Lightbulb className="h-4 w-4 text-primary" />
-                <span className="text-xs text-muted-foreground font-medium">Quick questions:</span>
-              </div>
-              <div className="grid grid-cols-1 gap-1">
-                {quickQuestions.map((question, index) => (
-                  <Button
-                    key={index}
-                    variant="ghost"
-                    size="sm"
-                    className="text-xs h-auto p-2 justify-start text-left whitespace-normal"
-                    onClick={() => {
-                      setInputMessage(question);
-                      handleSendMessage();
-                    }}
-                  >
-                    {question}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Input */}
-          <div className="p-4 border-t">
-            <div className="flex space-x-2">
-              <Input
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                placeholder="Ask your business question..."
-                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                className="text-sm"
-              />
-              <Button onClick={handleSendMessage} size="sm" className="px-3">
-                <Send className="h-4 w-4" />
-              </Button>
             </div>
           </div>
-        </Card>
-      )}
+        )}
+
+        {/* Input */}
+        <div className="p-6 border-t">
+          <div className="flex space-x-3">
+            <Input
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Ask your business question..."
+              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              className="flex-1"
+            />
+            <Button onClick={handleSendMessage} size="default" className="px-6">
+              <Send className="h-4 w-4 mr-2" />
+              Send
+            </Button>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 };
