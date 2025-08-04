@@ -56,15 +56,25 @@ const HireYourself = () => {
         <div className="floating-orb top-1/2 right-1/3 w-48 h-48 bg-secondary/3 animate-float" style={{ animationDelay: '1.5s' }}></div>
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
-              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
-                Quick Start Your Business
-              </h2>
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+            <div className="animate-fade-in">
+              <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+                <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
+                  Quick Start Your Business
+                </h2>
+              </div>
+              <p className="text-xl md:text-2xl text-foreground/80 leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Follow our proven 4-step process to launch your business in weeks, not months
+              </p>
             </div>
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Follow our proven 4-step process to launch your business in weeks, not months
-            </p>
+            
+            <div className="premium-card overflow-hidden">
+              <img 
+                src="/lovable-uploads/ee28fb16-2345-4e1b-a162-97d7223536c1.png" 
+                alt="Successful entrepreneur with food truck" 
+                className="w-full h-80 object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </div>
           </div>
           
           <div className="grid md:grid-cols-4 gap-10 max-w-7xl mx-auto">
@@ -195,35 +205,51 @@ const HireYourself = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            {[
-              {
-                name: "Sarah Chen",
-                business: "Digital Marketing Agency",
-                result: "$50K revenue in first year"
-              },
-              {
-                name: "Marcus Johnson", 
-                business: "E-commerce Store",
-                result: "Replaced full-time salary in 8 months"
-              },
-              {
-                name: "Lisa Rodriguez",
-                business: "Consulting Practice",
-                result: "Built 6-figure business while working part-time"
-              }
-            ].map((story, index) => (
-              <Card key={index} className="premium-card p-8 group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
-                <div className="text-center">
-                  <div className="w-20 h-20 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:shadow-glow transition-elegant">
-                    <div className="w-14 h-14 bg-gradient-hero rounded-xl shadow-soft"></div>
+          
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid md:grid-cols-2 gap-8">
+              {[
+                {
+                  name: "Sarah Chen",
+                  business: "Digital Marketing Agency",
+                  result: "$50K revenue in first year"
+                },
+                {
+                  name: "Marcus Johnson", 
+                  business: "E-commerce Store",
+                  result: "Replaced full-time salary in 8 months"
+                },
+                {
+                  name: "Lisa Rodriguez",
+                  business: "Consulting Practice",
+                  result: "Built 6-figure business while working part-time"
+                },
+                {
+                  name: "David Kim",
+                  business: "Tech Startup",
+                  result: "Secured Series A funding in 18 months"
+                }
+              ].map((story, index) => (
+                <Card key={index} className="premium-card p-6 group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:shadow-glow transition-elegant">
+                      <div className="w-10 h-10 bg-gradient-hero rounded-xl shadow-soft"></div>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{story.name}</h3>
+                    <p className="text-muted-foreground mb-2 text-sm">{story.business}</p>
+                    <p className="text-secondary font-semibold text-sm">{story.result}</p>
                   </div>
-                  <h3 className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{story.name}</h3>
-                  <p className="text-muted-foreground mb-3 text-sm">{story.business}</p>
-                  <p className="text-secondary font-semibold text-lg">{story.result}</p>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))}
+            </div>
+
+            <div className="premium-card overflow-hidden">
+              <img 
+                src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
+                alt="Professional business woman in suit" 
+                className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
+              />
+            </div>
           </div>
         </div>
         

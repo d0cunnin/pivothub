@@ -62,8 +62,8 @@ export default function About() {
             <div className="animate-fade-in lg:order-1 order-2">
               <div className="premium-card overflow-hidden">
                 <img 
-                  src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
-                  alt="Professional working on laptop in modern office" 
+                  src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                  alt="Professional handshake partnership" 
                   className="w-full h-96 object-cover transition-transform duration-500 hover:scale-105"
                 />
               </div>
@@ -103,73 +103,39 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
             <div className="premium-card text-center overflow-hidden group">
               <img 
-                src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
+                src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
                 alt="Professional team member" 
                 className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-foreground mb-2">Career Development</h3>
-                <p className="text-muted-foreground">Empowering professionals to reach their full potential</p>
+                <h3 className="text-xl font-semibold text-foreground mb-2">Happy at Work</h3>
+                <p className="text-muted-foreground">Creating positive work environments where professionals thrive</p>
               </div>
             </div>
 
             <div className="premium-card text-center overflow-hidden group">
               <img 
-                src="/lovable-uploads/8d6ceafa-b82d-4c50-a345-214b613d62c1.png" 
-                alt="Technology professional coding" 
+                src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
+                alt="Professional working on business plan" 
                 className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-foreground mb-2">Technical Excellence</h3>
-                <p className="text-muted-foreground">Building cutting-edge solutions for modern challenges</p>
-              </div>
-            </div>
-
-            <div className="premium-card text-center overflow-hidden group">
-              <img 
-                src="/lovable-uploads/ee28fb16-2345-4e1b-a162-97d7223536c1.png" 
-                alt="Entrepreneur with food truck business" 
-                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-foreground mb-2">Entrepreneurship</h3>
-                <p className="text-muted-foreground">Supporting innovative business ventures and startups</p>
+                <h3 className="text-xl font-semibold text-foreground mb-2">Strategic Planning</h3>
+                <p className="text-muted-foreground">Developing comprehensive strategies for career and business success</p>
               </div>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="premium-card overflow-hidden">
-              <img 
-                src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
-                alt="Professional team meeting" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-2xl font-semibold text-foreground mb-4">Collaborative Approach</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  We believe in the power of collaboration and teamwork to solve complex challenges 
-                  and create meaningful impact in people's careers.
-                </p>
-              </div>
-            </div>
-
-            <div className="premium-card overflow-hidden">
-              <img 
-                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
-                alt="Professional handshake" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-2xl font-semibold text-foreground mb-4">Building Relationships</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  Strong partnerships and meaningful connections form the foundation of successful 
-                  career transitions and business growth.
-                </p>
-              </div>
+          <div className="premium-card overflow-hidden">
+            <div className="p-8 text-center">
+              <h3 className="text-3xl font-semibold text-foreground mb-6">Building Relationships</h3>
+              <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+                Strong partnerships and meaningful connections form the foundation of successful 
+                career transitions and business growth. We believe in the power of community and collaboration.
+              </p>
             </div>
           </div>
         </div>
