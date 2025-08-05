@@ -17,6 +17,8 @@ export const NameChecker = () => {
   const [results, setResults] = useState<NameCheckResult[]>([]);
 
   const checkNameAvailability = () => {
+    if (!businessName.trim()) return;
+    
     setIsChecking(true);
     
     // Simulate API calls to check various platforms
@@ -56,73 +58,74 @@ export const NameChecker = () => {
           Check if your business name is available across domains and social platforms
         </p>
       </div>
-            <div className="space-y-6 mb-8">
-              <div className="space-y-2">
-                <Label htmlFor="businessName">Business Name</Label>
-                <Input
-                  id="businessName"
-                  placeholder="Enter your business name"
-                  value={businessName}
-                  onChange={(e) => setBusinessName(e.target.value)}
-                  className="text-lg"
-                />
-              </div>
+      
+      <div className="space-y-6 mb-8">
+        <div className="space-y-2">
+          <Label htmlFor="businessName">Business Name</Label>
+          <Input
+            id="businessName"
+            placeholder="Enter your business name"
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+            className="text-lg"
+          />
+        </div>
 
-              <Button
-                onClick={checkNameAvailability}
-                disabled={isChecking || !businessName.trim()}
-                variant="hero"
-                size="lg"
-                className="w-full"
-              >
-                {isChecking ? (
-                  <>
-                    <AlertCircle className="mr-2 h-5 w-5 animate-pulse" />
-                    Checking Availability...
-                  </>
-                ) : (
-                  <>
-                    <Search className="mr-2 h-5 w-5" />
-                    Check Name Availability
-                  </>
-                )}
-              </Button>
-            </div>
+        <Button
+          onClick={checkNameAvailability}
+          disabled={isChecking || !businessName.trim()}
+          variant="hero"
+          size="lg"
+          className="w-full"
+        >
+          {isChecking ? (
+            <>
+              <AlertCircle className="mr-2 h-5 w-5 animate-pulse" />
+              Checking Availability...
+            </>
+          ) : (
+            <>
+              <Search className="mr-2 h-5 w-5" />
+              Check Name Availability
+            </>
+          )}
+        </Button>
+      </div>
 
-            {results.length > 0 && (
-              <div>
-                <h3 className="text-xl font-semibold mb-6 text-foreground">
-                  Availability Results for "{businessName}":
-                </h3>
-                <div className="grid gap-4">
-                  {results.map((result, index) => (
-                    <Card key={index} className={`p-4 border-l-4 ${getStatusColor(result.available)}`}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="font-semibold text-foreground">{result.platform}</div>
-                          <div className="text-muted-foreground">{result.domain}</div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {getStatusIcon(result.available)}
-                          <span className={`font-medium ${
-                            result.available ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {result.available ? 'Available' : 'Taken'}
-                          </span>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
+      {results.length > 0 && (
+        <div>
+          <h3 className="text-xl font-semibold mb-6 text-foreground">
+            Availability Results for "{businessName}":
+          </h3>
+          <div className="grid gap-4">
+            {results.map((result, index) => (
+              <Card key={index} className={`p-4 border-l-4 ${getStatusColor(result.available)}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="font-semibold text-foreground">{result.platform}</div>
+                    <div className="text-muted-foreground">{result.domain}</div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {getStatusIcon(result.available)}
+                    <span className={`font-medium ${
+                      result.available ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {result.available ? 'Available' : 'Taken'}
+                    </span>
+                  </div>
                 </div>
-                
-                <div className="mt-6 p-4 bg-muted rounded-lg">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Note:</strong> This is a simulated check for demonstration. 
-                    In a live application, this would query actual domain registrars and social media APIs.
-                  </p>
-                </div>
-              </div>
-            )}
+              </Card>
+            ))}
+          </div>
+          
+          <div className="mt-6 p-4 bg-muted rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              <strong>Note:</strong> This is a simulated check for demonstration. 
+              In a live application, this would query actual domain registrars and social media APIs.
+            </p>
+          </div>
+        </div>
+      )}
     </Card>
   );
 };

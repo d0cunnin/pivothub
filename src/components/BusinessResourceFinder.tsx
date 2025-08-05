@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -25,66 +25,66 @@ export const BusinessResourceFinder = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [resources, setResources] = useState<BusinessResource[]>([]);
 
-  const searchResources = async () => {
-    if (!zipCode) return;
+  const searchResources = () => {
+    if (!zipCode.trim()) return;
     
     setIsSearching(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
     
-    const mockResources: BusinessResource[] = [
-      {
-        id: "1",
-        name: "Small Business Development Center",
-        type: "Business Support",
-        description: "Free business consulting and low-cost training for small businesses",
-        address: "123 Business Ave, Suite 100",
-        phone: "(555) 123-4567",
-        website: "www.sbdc-local.org",
-        hours: "Mon-Fri 9AM-5PM",
-        rating: 4.8,
-        services: ["Business Planning", "Financial Consulting", "Marketing Help", "Legal Guidance"]
-      },
-      {
-        id: "2",
-        name: "Community Investment Fund",
-        type: "Funding",
-        description: "Local investment fund supporting startups and small businesses",
-        address: "456 Finance St, Floor 3",
-        phone: "(555) 234-5678",
-        website: "www.communityinvest.org",
-        hours: "Mon-Fri 8AM-6PM",
-        rating: 4.5,
-        services: ["Microloans", "Seed Funding", "Business Grants", "Investment Matching"]
-      },
-      {
-        id: "3",
-        name: "Innovation Hub Coworking",
-        type: "Workspace",
-        description: "Collaborative workspace with networking and mentorship opportunities",
-        address: "789 Innovation Blvd",
-        phone: "(555) 345-6789",
-        website: "www.innovationhub.com",
-        hours: "24/7 Access",
-        rating: 4.7,
-        services: ["Hot Desks", "Private Offices", "Meeting Rooms", "Networking Events"]
-      },
-      {
-        id: "4",
-        name: "Tech Startup Accelerator",
-        type: "Accelerator",
-        description: "3-month program for early-stage tech startups with funding",
-        address: "321 Startup Way",
-        phone: "(555) 456-7890",
-        website: "www.techaccelerator.com",
-        hours: "By Appointment",
-        rating: 4.9,
-        services: ["Mentorship", "Seed Capital", "Demo Day", "Office Space"]
-      }
-    ];
-    
-    setResources(mockResources);
-    setIsSearching(false);
+    setTimeout(() => {
+      const mockResources: BusinessResource[] = [
+        {
+          id: "1",
+          name: "Small Business Development Center",
+          type: "Business Support",
+          description: "Free business consulting and low-cost training for small businesses",
+          address: "123 Business Ave, Suite 100",
+          phone: "(555) 123-4567",
+          website: "www.sbdc-local.org",
+          hours: "Mon-Fri 9AM-5PM",
+          rating: 4.8,
+          services: ["Business Planning", "Financial Consulting", "Marketing Help", "Legal Guidance"]
+        },
+        {
+          id: "2",
+          name: "Community Investment Fund",
+          type: "Funding",
+          description: "Local investment fund supporting startups and small businesses",
+          address: "456 Finance St, Floor 3",
+          phone: "(555) 234-5678",
+          website: "www.communityinvest.org",
+          hours: "Mon-Fri 8AM-6PM",
+          rating: 4.5,
+          services: ["Microloans", "Seed Funding", "Business Grants", "Investment Matching"]
+        },
+        {
+          id: "3",
+          name: "Innovation Hub Coworking",
+          type: "Workspace",
+          description: "Collaborative workspace with networking and mentorship opportunities",
+          address: "789 Innovation Blvd",
+          phone: "(555) 345-6789",
+          website: "www.innovationhub.com",
+          hours: "24/7 Access",
+          rating: 4.7,
+          services: ["Hot Desks", "Private Offices", "Meeting Rooms", "Networking Events"]
+        },
+        {
+          id: "4",
+          name: "Tech Startup Accelerator",
+          type: "Accelerator",
+          description: "3-month program for early-stage tech startups with funding",
+          address: "321 Startup Way",
+          phone: "(555) 456-7890",
+          website: "www.techaccelerator.com",
+          hours: "By Appointment",
+          rating: 4.9,
+          services: ["Mentorship", "Seed Capital", "Demo Day", "Office Space"]
+        }
+      ];
+      
+      setResources(mockResources);
+      setIsSearching(false);
+    }, 2000);
   };
 
   return (
@@ -96,6 +96,7 @@ export const BusinessResourceFinder = () => {
       <p className="text-muted-foreground mb-6">
         Find local business support programs, funding sources, and opportunities by ZIP code
       </p>
+      
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -128,7 +129,7 @@ export const BusinessResourceFinder = () => {
         
         <Button
           onClick={searchResources}
-          disabled={isSearching || !zipCode}
+          disabled={isSearching || !zipCode.trim()}
           variant="hero"
           size="lg"
           className="w-full"

@@ -17,9 +17,9 @@ export const LegalDocsGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [documents, setDocuments] = useState<LegalDocument[]>([]);
 
-  const generateDocuments = async () => {
+  const generateDocuments = () => {
     setIsGenerating(true);
-    // Simulate API call
+    
     setTimeout(() => {
       let mockDocuments: LegalDocument[] = [];
       
@@ -45,6 +45,13 @@ export const LegalDocsGenerator = () => {
           { name: "EIN Application (Form SS-4)", description: "Federal tax identification number (optional for sole props)", required: false, timeline: "Week 1" },
           { name: "Business License", description: "General business operating license", required: true, timeline: "Week 1-2" },
           { name: "Professional Licenses", description: "Industry-specific licenses if required", required: false, timeline: "Varies" }
+        ];
+      } else if (businessStructure === 'partnership') {
+        mockDocuments = [
+          { name: "Partnership Agreement", description: "Legal document defining partnership terms", required: true, timeline: "Week 1" },
+          { name: "EIN Application (Form SS-4)", description: "Federal tax identification number", required: true, timeline: "Week 1" },
+          { name: "Business License", description: "General business operating license", required: true, timeline: "Week 2" },
+          { name: "State Registration", description: "Register partnership with state if required", required: false, timeline: "Week 2-3" }
         ];
       }
 
@@ -107,7 +114,13 @@ export const LegalDocsGenerator = () => {
           </Select>
         </div>
 
-        <Button type="submit" disabled={isGenerating || !businessStructure || !state} variant="hero" size="lg" className="w-full">
+        <Button 
+          type="submit" 
+          disabled={isGenerating || !businessStructure || !state} 
+          variant="hero" 
+          size="lg" 
+          className="w-full"
+        >
           {isGenerating ? "Generating Document List..." : "Generate Required Documents"}
         </Button>
       </form>

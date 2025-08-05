@@ -20,9 +20,9 @@ export const StartupChecklist = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
 
-  const generateChecklist = async () => {
+  const generateChecklist = () => {
     setIsGenerating(true);
-    // Simulate API call
+    
     setTimeout(() => {
       const baseChecklist: ChecklistItem[] = [
         { id: '1', task: 'Validate business idea and market research', category: 'Planning', timeline: 'Week 1', completed: false, priority: 'high' },
@@ -134,7 +134,13 @@ export const StartupChecklist = () => {
           </Select>
         </div>
 
-        <Button type="submit" disabled={isGenerating || !businessStructure || !state} variant="hero" size="lg" className="w-full">
+        <Button 
+          type="submit" 
+          disabled={isGenerating || !businessStructure || !state} 
+          variant="hero" 
+          size="lg" 
+          className="w-full"
+        >
           {isGenerating ? "Generating Checklist..." : "Generate Startup Checklist"}
         </Button>
       </form>
