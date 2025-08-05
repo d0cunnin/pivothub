@@ -263,6 +263,12 @@ All colors MUST be HSL.
 }
 
 @layer utilities {
+  /* Button gradient enforcement for consistent hero styling */
+  .btn-hero, [data-variant="hero"], button[class*="hero"] {
+    background: var(--gradient-hero) !important;
+    color: white !important;
+  }
+
   /* Clean, professional animations */
   .animate-fade-in {
     animation: fadeIn 0.6s ease-out forwards;
