@@ -1,8 +1,5 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import aboutTeamImage from "@/assets/about-team-collaboration.jpg";
-import aboutMentorshipImage from "@/assets/about-mentorship.jpg";
-import aboutLeadershipImage from "@/assets/about-leadership.jpg";
 
 export default function About() {
   return (
@@ -45,7 +42,7 @@ export default function About() {
             <div className="lg:ml-4">
               <div className="relative">
                 <img 
-                  src={aboutTeamImage}
+                  src="/lovable-uploads/55e6a726-43cb-426b-924c-84bf4a8ebab7.png"
                   alt="Professional team collaboration and success" 
                   className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 />
@@ -57,7 +54,7 @@ export default function About() {
             <div className="lg:mr-4 order-2 lg:order-1">
               <div className="relative">
                 <img 
-                  src={aboutMentorshipImage}
+                  src="/lovable-uploads/6dbaa8ab-9c93-4c2a-b08e-63196b35ecab.png"
                   alt="Professional mentorship and partnership" 
                   className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 />
@@ -99,7 +96,7 @@ export default function About() {
             </div>
             <div className="lg:ml-4">
               <img 
-                src={aboutLeadershipImage}
+                src="/lovable-uploads/8d6ceafa-b82d-4c50-a345-214b613d62c1.png"
                 alt="Professional leadership fostering workplace happiness" 
                 className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
               />
