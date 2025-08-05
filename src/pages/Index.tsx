@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { PathSelection } from "@/components/PathSelection";
 import { Footer } from "@/components/Footer";
+import collaborativeLearningImage from "@/assets/collaborative-learning.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -171,8 +172,8 @@ const Index = () => {
             </div>
             <div className="lg:ml-4 self-center">
               <img 
-                src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
-                alt="Professionals collaborating and learning together" 
+                src={collaborativeLearningImage}
+                alt="Professionals collaborating and learning together"
                 className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
