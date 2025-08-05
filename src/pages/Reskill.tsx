@@ -48,7 +48,7 @@ const Reskill = () => {
               <img 
                 src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
                 alt="Professional development and skill building" 
-                className="w-full aspect-auto object-contain transition-transform duration-500 hover:scale-105"
+                className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
               />
             </div>
             
