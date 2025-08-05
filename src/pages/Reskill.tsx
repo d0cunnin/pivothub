@@ -230,7 +230,7 @@ const Reskill = () => {
             <div className="animate-fade-in-scale space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Earn Credentials That Matter
+                  Learn Skills that Count
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed">
