@@ -13,7 +13,7 @@ export const PathSelection = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
             Choose Your Path to Success
           </h2>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed text-left">
             In today's rapidly evolving economy, career success requires adaptability and strategic thinking. 
             Whether you're seeking to enhance your marketability through cutting-edge skills or ready to forge 
             your own entrepreneurial path, our comprehensive platform provides the tools, resources, and expert 
