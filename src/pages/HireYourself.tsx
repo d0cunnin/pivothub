@@ -198,9 +198,9 @@ const HireYourself = () => {
               </div>
             </div>
             
-            {/* Row 7: Business Resource Finder (centered) */}
-            <div className="grid lg:grid-cols-2 gap-8">
-              <div className="animate-fade-in-scale lg:col-span-2 max-w-2xl mx-auto" style={{ animationDelay: '1.2s' }}>
+            {/* Row 7: Business Resource Finder (full width) */}
+            <div className="grid lg:grid-cols-1 gap-8">
+              <div className="animate-fade-in-scale" style={{ animationDelay: '1.2s' }}>
                 <BusinessResourceFinder />
               </div>
             </div>

@@ -181,7 +181,9 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
         <Button 
           onClick={generateBusinessPlan}
           disabled={isGenerating}
+          size="lg"
           className="w-full"
+          variant="default"
         >
           {isGenerating ? "Generating Business Plan..." : "Generate Business Plan"}
         </Button>

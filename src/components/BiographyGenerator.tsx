@@ -87,7 +87,7 @@ export const BiographyGenerator = () => {
           />
         </div>
 
-        <Button type="submit" disabled={isGenerating} className="w-full">
+        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="default">
           {isGenerating ? "Generating Content..." : "Generate Biography & Statements"}
         </Button>
       </form>

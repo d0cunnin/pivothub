@@ -187,7 +187,9 @@ export const PitchDeckGenerator = () => {
         <Button 
           onClick={generatePitchDeck}
           disabled={isGenerating}
+          size="lg"
           className="w-full"
+          variant="default"
         >
           {isGenerating ? "Generating Pitch Deck..." : "Generate Pitch Deck"}
         </Button>

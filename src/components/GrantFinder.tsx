@@ -123,7 +123,9 @@ export const GrantFinder = () => {
         <Button 
           onClick={searchGrants}
           disabled={isSearching}
+          size="lg"
           className="w-full"
+          variant="default"
         >
           {isSearching ? "Searching Grants..." : "Find Grants"}
         </Button>

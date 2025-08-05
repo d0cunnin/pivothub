@@ -166,7 +166,7 @@ export const MarketingStrategyGenerator = () => {
           />
         </div>
 
-        <Button type="submit" disabled={isGenerating} className="w-full">
+        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="default">
           {isGenerating ? "Generating Strategy..." : "Generate Marketing Strategy"}
         </Button>
       </form>
