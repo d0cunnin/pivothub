@@ -67,7 +67,7 @@ const Index = () => {
                   <img 
                     src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
                     alt="Professional woman working on career development" 
-                    className="w-full h-80 object-cover transition-transform duration-500 hover:scale-105"
+                    className="w-full aspect-auto object-contain transition-transform duration-500 hover:scale-105"
                   />
                 </div>
               </div>
@@ -159,7 +159,7 @@ const Index = () => {
               <img 
                 src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
                 alt="Happy professional working at computer" 
-                className="w-full h-64 object-cover transition-transform duration-500 hover:scale-105"
+                className="w-full aspect-auto object-contain transition-transform duration-500 hover:scale-105"
               />
             </div>
             <div className="space-y-6">

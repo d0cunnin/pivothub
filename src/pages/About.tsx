@@ -47,7 +47,7 @@ export default function About() {
                   <img 
                     src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
                     alt="Professional team collaboration and success" 
-                    className="w-full h-80 object-cover transition-transform duration-500 hover:scale-105"
+                    className="w-full aspect-auto object-contain transition-transform duration-500 hover:scale-105"
                   />
                 </div>
               </div>
@@ -59,7 +59,7 @@ export default function About() {
                   <img 
                     src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
                     alt="Professional handshake partnership" 
-                    className="w-full h-80 object-cover transition-transform duration-500 hover:scale-105"
+                    className="w-full aspect-auto object-contain transition-transform duration-500 hover:scale-105"
                   />
                 </div>
               </div>
@@ -101,7 +101,7 @@ export default function About() {
                 <img 
                   src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
                   alt="Professional businesswoman representing leadership" 
-                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105 rounded-lg mb-4"
+                  className="w-full aspect-auto object-contain transition-transform duration-500 group-hover:scale-105 rounded-lg mb-4"
                 />
                 <h3 className="text-lg font-semibold text-foreground mb-2">Happy at Work</h3>
                 <p className="text-muted-foreground text-sm">Creating positive work environments where professionals thrive</p>
@@ -111,7 +111,7 @@ export default function About() {
                 <img 
                   src="/lovable-uploads/ee28fb16-2345-4e1b-a162-97d7223536c1.png" 
                   alt="Successful entrepreneur with innovative business" 
-                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105 rounded-lg mb-4"
+                  className="w-full aspect-auto object-contain transition-transform duration-500 group-hover:scale-105 rounded-lg mb-4"
                 />
                 <h3 className="text-lg font-semibold text-foreground mb-2">Strategic Planning</h3>
                 <p className="text-muted-foreground text-sm">Developing comprehensive strategies for career and business success</p>
