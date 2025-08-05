@@ -18,6 +18,7 @@ import { PitchDeckGenerator } from "@/components/PitchDeckGenerator";
 import { BusinessResourceFinder } from "@/components/BusinessResourceFinder";
 
 const HireYourself = () => {
+  console.log("HireYourself component rendering...");
   return (
     <div className="min-h-screen bg-background">
       <Header />
