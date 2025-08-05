@@ -117,7 +117,7 @@ const Reskill = () => {
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed">
-                Access over 350+ courses across the most sought-after skill categories. Our curriculum is designed by industry experts and updated regularly to reflect the latest market demands and emerging technologies.
+                Our skills training is designed to help you build confidence, sharpen your abilities, and take action toward your goals. Each offering focuses on practical, relevant knowledge you can apply immediately—whether you're launching a business, changing careers, or growing in your current role.
               </p>
               
               {/* Learning Features List */}
