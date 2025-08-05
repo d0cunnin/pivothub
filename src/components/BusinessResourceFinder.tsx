@@ -131,6 +131,7 @@ export const BusinessResourceFinder = () => {
         <Button 
           onClick={searchResources}
           disabled={isSearching || !zipCode}
+          size="lg"
           className="w-full"
         >
           {isSearching ? "Searching Resources..." : "Find Resources"}

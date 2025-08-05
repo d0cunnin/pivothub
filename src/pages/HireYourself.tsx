@@ -138,20 +138,20 @@ const HireYourself = () => {
           </div>
           
           <div className="grid gap-10">
-            {/* Row 1: Name Checker & Biography Generator */}
+            {/* Row 1: Business Idea Generator & Name Checker */}
             <div className="grid lg:grid-cols-2 gap-8">
               <div className="animate-fade-in-scale">
-                <NameChecker />
+                <BusinessIdeaGenerator />
               </div>
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-                <BiographyGenerator />
+                <NameChecker />
               </div>
             </div>
             
-            {/* Row 2: Business Idea Generator & Logo Generator */}
+            {/* Row 2: Biography Generator & Logo Generator */}
             <div className="grid lg:grid-cols-2 gap-8">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-                <BusinessIdeaGenerator />
+                <BiographyGenerator />
               </div>
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
                 <LogoGenerator />
