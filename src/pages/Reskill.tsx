@@ -23,10 +23,10 @@ const Reskill = () => {
             <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
               <GraduationCap className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-white leading-tight animate-slide-up">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Reskill for Success
             </h1>
-            <p className="text-2xl md:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Transform your career with industry-recognized certifications and cutting-edge skills training
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -99,7 +99,7 @@ const Reskill = () => {
       </section>
 
       {/* Career Advisor AI */}
-      <section className="section-spacing-sm bg-gradient-section-3 relative overflow-hidden">
+      <section className="py-12 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
           <CareerAdvisorChatbot />
         </div>
@@ -306,31 +306,6 @@ const Reskill = () => {
                 </Button>
               </div>
             </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Career Advisor AI Section */}
-      <section className="section-transition py-32 bg-gradient-section-1 relative overflow-hidden">
-        {/* Elegant ambient elements */}
-        <div className="floating-orb top-20 right-20 w-56 h-56 bg-accent/4 animate-float"></div>
-        <div className="floating-orb bottom-20 left-20 w-64 h-64 bg-secondary/3 animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="floating-orb top-1/3 left-1/3 w-40 h-40 bg-primary/5 animate-float" style={{ animationDelay: '4s' }}></div>
-        
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-20">
-            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
-              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
-                Get Personalized Career Guidance
-              </h2>
-            </div>
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Chat with our AI Career Advisor for expert guidance on your career transition and reskilling journey
-            </p>
-          </div>
-          
-          <div className="animate-fade-in-scale">
-            <CareerAdvisorChatbot />
           </div>
         </div>
       </section>
