@@ -73,11 +73,15 @@ export const NameChecker = () => {
         </div>
 
         <Button
-          onClick={checkNameAvailability}
+          onClick={() => {
+            console.log("Button clicked - handler triggered!");
+            checkNameAvailability();
+          }}
           disabled={isChecking || !businessName.trim()}
           variant="hero"
           size="lg"
-          className="w-full"
+          className="w-full relative z-50"
+          style={{ pointerEvents: 'auto' }}
         >
           {isChecking ? (
             <>
