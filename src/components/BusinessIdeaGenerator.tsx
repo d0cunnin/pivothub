@@ -12,21 +12,45 @@ export const BusinessIdeaGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [ideas, setIdeas] = useState<string[]>([]);
 
-  const generateIdeas = () => {
+  const generateIdeas = async () => {
     setIsGenerating(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch('/functions/v1/generate-business-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'business-ideas',
+          data: { skills, interests, budget }
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      // Parse the AI response to extract business ideas
+      const ideaLines = result.content.split('\n').filter((line: string) => 
+        line.trim() && (line.includes('.') || line.includes(':'))
+      );
+      
+      setIdeas(ideaLines.slice(0, 5));
+    } catch (error) {
+      console.error('Error generating ideas:', error);
+      // Fallback to mock data if API fails
       const sampleIdeas = [
         "Online consulting service leveraging your professional expertise",
-        "E-commerce store selling products related to your interests",
-        "Digital course creation and online education platform", 
-        "Freelance service marketplace for your specific skills",
-        "Local service business addressing community needs"
+        "E-commerce store selling products related to your interests", 
+        "Digital course creation and online education platform"
       ];
       setIdeas(sampleIdeas);
+    } finally {
       setIsGenerating(false);
-    }, 2000);
+    }
   };
 
   return (

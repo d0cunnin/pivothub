@@ -10,6 +10,7 @@ interface LogoConcept {
   colors: string;
   fonts: string;
   concept: string;
+  imageURL?: string;
 }
 
 export const LogoGenerator = () => {
@@ -21,31 +22,51 @@ export const LogoGenerator = () => {
 
   const generateLogoConcepts = async () => {
     setIsGenerating(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    try {
+      const response = await fetch('/functions/v1/generate-logo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          businessName,
+          industry,
+          style
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      // Convert API response to LogoConcept format
+      const logosConcepts: LogoConcept[] = data.logos.map((logo: any, index: number) => ({
+        style: logo.style,
+        colors: "AI Generated Colors",
+        fonts: "AI Generated Typography", 
+        concept: logo.concept,
+        imageURL: logo.imageURL
+      }));
+
+      setConcepts(logosConcepts);
+    } catch (error) {
+      console.error('Error generating logos:', error);
+      // Fallback to mock data if API fails
       const mockConcepts: LogoConcept[] = [
         {
           style: "Modern Minimalist",
-          colors: "Deep Blue (#1e40af) & White",
+          colors: "Deep Blue (#1e40af) & White", 
           fonts: "Inter, Clean Sans-serif",
           concept: "Clean geometric icon with business initials, emphasizing professionalism and trust"
-        },
-        {
-          style: "Creative Badge",
-          colors: "Forest Green (#059669) & Gold (#f59e0b)",
-          fonts: "Montserrat, Bold Typography",
-          concept: "Circular badge design with industry symbol, conveying expertise and reliability"
-        },
-        {
-          style: "Tech-Forward",
-          colors: "Electric Blue (#0ea5e9) & Charcoal (#374151)",
-          fonts: "Roboto, Modern Geometric",
-          concept: "Abstract tech-inspired icon with dynamic lines, suggesting innovation and growth"
         }
       ];
       setConcepts(mockConcepts);
+    } finally {
       setIsGenerating(false);
-    }, 2000);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
