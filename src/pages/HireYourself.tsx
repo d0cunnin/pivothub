@@ -245,58 +245,48 @@ const HireYourself = () => {
           </div>
           
           
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="grid md:grid-cols-2 gap-6">
-              {[
-                {
-                  name: "Sarah Chen",
-                  business: "Digital Marketing Agency",
-                  result: "$50K revenue in first year",
-                  image: "/lovable-uploads/d4fd30c6-edb3-46e3-825a-996fe8d56933.png"
-                },
-                {
-                  name: "Marcus Johnson", 
-                  business: "E-commerce Store",
-                  result: "Replaced full-time salary in 8 months",
-                  image: "/lovable-uploads/c092a2c3-3bb8-4c05-8364-539309ef079c.png"
-                },
-                {
-                  name: "Lisa Rodriguez",
-                  business: "Consulting Practice",
-                  result: "Built 6-figure business while working part-time",
-                  image: "/lovable-uploads/e2d88637-eb38-414f-88a9-64e130ef90f8.png"
-                },
-                {
-                  name: "David Kim",
-                  business: "Tech Startup",
-                  result: "Secured Series A funding in 18 months",
-                  image: "/lovable-uploads/6c437a8b-65d7-4a74-92f8-893a974d4f08.png"
-                }
-              ].map((story, index) => (
-                <Card key={index} className="premium-card p-6 group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
-                  <div className="text-center">
-                    <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-2xl group-hover:shadow-glow transition-elegant">
-                      <img 
-                        src={story.image} 
-                        alt={`${story.name} - Success Story`}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{story.name}</h3>
-                    <p className="text-muted-foreground mb-2 text-sm">{story.business}</p>
-                    <p className="text-secondary font-semibold text-sm">{story.result}</p>
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {[
+              {
+                name: "Sarah Chen",
+                business: "Physician-Entrepreneur",
+                result: "$50K revenue in first year",
+                image: "/lovable-uploads/d4fd30c6-edb3-46e3-825a-996fe8d56933.png"
+              },
+              {
+                name: "Marcus Johnson", 
+                business: "E-commerce Store",
+                result: "Replaced full-time salary in 8 months",
+                image: "/lovable-uploads/c092a2c3-3bb8-4c05-8364-539309ef079c.png"
+              },
+              {
+                name: "Lisa Rodriguez",
+                business: "Food Truck Owner",
+                result: "Built 6-figure business while working part-time",
+                image: "/lovable-uploads/e2d88637-eb38-414f-88a9-64e130ef90f8.png"
+              },
+              {
+                name: "David Kim",
+                business: "Tech Startup",
+                result: "Secured Series A funding in 18 months",
+                image: "/lovable-uploads/6c437a8b-65d7-4a74-92f8-893a974d4f08.png"
+              }
+            ].map((story, index) => (
+              <Card key={index} className="premium-card p-6 group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
+                <div className="text-center">
+                  <div className="w-20 h-20 mx-auto mb-4 overflow-hidden rounded-2xl group-hover:shadow-glow transition-elegant">
+                    <img 
+                      src={story.image} 
+                      alt={`${story.name} - Success Story`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
                   </div>
-                </Card>
-              ))}
-            </div>
-
-            <div className="lg:ml-4 self-center">
-              <img 
-                src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
-                alt="Professional entrepreneur planning business strategy" 
-                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-              />
-            </div>
+                  <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{story.name}</h3>
+                  <p className="text-muted-foreground mb-2 text-sm">{story.business}</p>
+                  <p className="text-secondary font-semibold text-sm">{story.result}</p>
+                </div>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
