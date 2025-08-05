@@ -76,8 +76,7 @@ export const NameChecker = () => {
                 onClick={checkNameAvailability}
                 disabled={isChecking || !businessName.trim()}
                 size="lg"
-                className="w-full"
-                variant="hero"
+                className="w-full bg-gradient-hero text-white shadow-strong hover:shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1"
               >
                 {isChecking ? (
                   <>

@@ -132,8 +132,7 @@ export const BusinessResourceFinder = () => {
           onClick={searchResources}
           disabled={isSearching || !zipCode}
           size="lg"
-          className="w-full"
-          variant="hero"
+          className="w-full bg-gradient-hero text-white shadow-strong hover:shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1"
         >
           {isSearching ? "Searching Resources..." : "Find Resources"}
         </Button>
