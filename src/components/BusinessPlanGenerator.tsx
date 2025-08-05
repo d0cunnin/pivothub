@@ -94,7 +94,7 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
   };
 
   return (
-    <Card className="p-8 shadow-soft">
+    <Card className="p-8">
       <div className="flex items-center gap-2 mb-6">
         <FileText className="h-6 w-6 text-primary" />
         <h3 className="text-2xl font-bold text-foreground">Business Plan Generator</h3>

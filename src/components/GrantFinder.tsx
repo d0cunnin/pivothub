@@ -67,7 +67,7 @@ export const GrantFinder = () => {
   };
 
   return (
-    <Card className="p-8 shadow-soft">
+    <Card className="p-8">
       <div className="flex items-center gap-2 mb-6">
         <Search className="h-6 w-6 text-primary" />
         <h3 className="text-2xl font-bold text-foreground">Grant Finder Tool</h3>
