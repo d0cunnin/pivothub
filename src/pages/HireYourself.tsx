@@ -12,6 +12,10 @@ import { StartupChecklist } from "@/components/StartupChecklist";
 import { SocialMediaGenerator } from "@/components/SocialMediaGenerator";
 import { MarketingStrategyGenerator } from "@/components/MarketingStrategyGenerator";
 import { BusinessMentorChatbot } from "@/components/BusinessMentorChatbot";
+import { GrantFinder } from "@/components/GrantFinder";
+import { BusinessPlanGenerator } from "@/components/BusinessPlanGenerator";
+import { PitchDeckGenerator } from "@/components/PitchDeckGenerator";
+import { BusinessResourceFinder } from "@/components/BusinessResourceFinder";
 
 const HireYourself = () => {
   return (
@@ -132,51 +136,65 @@ const HireYourself = () => {
             </div>
           </div>
           
-          <div className="space-y-16">
-            {/* Business Idea Generator */}
-            <div className="animate-fade-in-scale">
-              <BusinessIdeaGenerator />
+          <div className="grid gap-12">
+            {/* Row 1: Business Planning Tools */}
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="animate-fade-in-scale">
+                <BusinessIdeaGenerator />
+              </div>
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
+                <BusinessPlanGenerator />
+              </div>
             </div>
             
-            {/* Name Checker */}
-            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.2s' }}>
-              <NameChecker />
-              <div className="section-divider mt-16"></div>
+            {/* Row 2: Validation & Research Tools */}
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
+                <NameChecker />
+              </div>
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
+                <GrantFinder />
+              </div>
             </div>
             
-            {/* Logo Generator */}
-            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.3s' }}>
-              <LogoGenerator />
-              <div className="section-divider mt-16"></div>
+            {/* Row 3: Branding & Content Tools */}
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
+                <LogoGenerator />
+              </div>
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.5s' }}>
+                <PitchDeckGenerator />
+              </div>
             </div>
             
-            {/* Biography Generator */}
-            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.4s' }}>
-              <BiographyGenerator />
-              <div className="section-divider mt-16"></div>
+            {/* Row 4: Content & Documentation */}
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.6s' }}>
+                <BiographyGenerator />
+              </div>
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.7s' }}>
+                <LegalDocsGenerator />
+              </div>
             </div>
             
-            {/* Legal Docs Generator */}
-            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.5s' }}>
-              <LegalDocsGenerator />
-              <div className="section-divider mt-16"></div>
+            {/* Row 5: Marketing & Operations */}
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
+                <SocialMediaGenerator />
+              </div>
+              <div className="animate-fade-in-scale" style={{ animationDelay: '0.9s' }}>
+                <MarketingStrategyGenerator />
+              </div>
             </div>
             
-            {/* Startup Checklist */}
-            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.6s' }}>
-              <StartupChecklist />
-              <div className="section-divider mt-16"></div>
-            </div>
-            
-            {/* Social Media Generator */}
-            <div className="animate-fade-in-scale relative" style={{ animationDelay: '0.7s' }}>
-              <SocialMediaGenerator />
-              <div className="section-divider mt-16"></div>
-            </div>
-            
-            {/* Marketing Strategy Generator */}
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
-              <MarketingStrategyGenerator />
+            {/* Row 6: Resources & Planning */}
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="animate-fade-in-scale" style={{ animationDelay: '1.0s' }}>
+                <BusinessResourceFinder />
+              </div>
+              <div className="animate-fade-in-scale" style={{ animationDelay: '1.1s' }}>
+                <StartupChecklist />
+              </div>
             </div>
           </div>
         </div>

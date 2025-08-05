@@ -164,17 +164,33 @@ ${formData.contactPhone || '(555) 123-4567'}
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-4">
-              AI Grant Writing Assistant
+      
+      {/* Hero Section */}
+      <section className="relative py-32 bg-gradient-hero hero-glow overflow-hidden">
+        {/* Sophisticated floating orbs */}
+        <div className="floating-orb top-16 right-16 w-40 h-40 bg-primary/8 animate-float"></div>
+        <div className="floating-orb bottom-24 left-16 w-32 h-32 bg-secondary/10 animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="floating-orb top-1/3 right-1/3 w-24 h-24 bg-accent/12 animate-float" style={{ animationDelay: '4s' }}></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
+              <FileText className="h-12 w-12 text-white" />
+            </div>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-white leading-tight animate-slide-up">
+              Grant Writing Assistant
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-2xl md:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Generate professional grant proposals and letters of intent with AI assistance
             </p>
           </div>
+        </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
+      </section>
+      
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-6xl mx-auto">
 
           {/* Main Content Grid */}
           <div className="grid lg:grid-cols-5 gap-8">
@@ -490,9 +506,9 @@ ${formData.contactPhone || '(555) 123-4567'}
                   </Tabs>
                 </CardContent>
               </Card>
-            )}
-             </div>
-           </div>
+             )}
+            </div>
+          </div>
         </div>
       </div>
       <Footer />

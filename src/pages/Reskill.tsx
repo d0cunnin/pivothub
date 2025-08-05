@@ -94,7 +94,7 @@ const Reskill = () => {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: <BookOpen className="h-8 w-8" />,
@@ -119,12 +119,12 @@ const Reskill = () => {
                 <div className="w-12 h-12 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center mb-4 text-primary group-hover:shadow-glow transition-elegant">
                   {category.icon}
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{category.title}</h3>
-                <p className="text-muted-foreground mb-4 text-sm">{category.description}</p>
+                <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">{category.title}</h3>
+                <p className="text-muted-foreground mb-4">{category.description}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-accent font-semibold bg-accent/10 px-2 py-1 rounded-full">{category.courses}</span>
-                  <Button variant="ghost" size="sm" className="transition-elegant hover:scale-105 text-primary hover:text-primary text-sm">
-                    Explore →
+                  <span className="text-sm text-accent font-semibold bg-accent/10 px-3 py-1 rounded-full">{category.courses}</span>
+                  <Button className="transition-elegant hover:scale-105">
+                    Explore
                   </Button>
                 </div>
               </Card>

@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Users } from "lucide-react";
 
 export default function About() {
   return (
@@ -7,17 +8,27 @@ export default function About() {
       <Header />
       
       {/* Hero Section */}
-      <section className="section-spacing bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="page-container">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="section-header mb-6">Our Story</h1>
-            <p className="section-description">
-              Empowering individuals to relaunch their careers and build sustainable futures in a rapidly changing world.
+      <section className="relative py-32 bg-gradient-hero hero-glow overflow-hidden">
+        {/* Sophisticated floating orbs */}
+        <div className="floating-orb top-16 right-16 w-40 h-40 bg-primary/8 animate-float"></div>
+        <div className="floating-orb bottom-24 left-16 w-32 h-32 bg-secondary/10 animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="floating-orb top-1/3 right-1/3 w-24 h-24 bg-accent/12 animate-float" style={{ animationDelay: '4s' }}></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
+              <Users className="h-12 w-12 text-white" />
+            </div>
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-white leading-tight animate-slide-up">
+              About Our Mission
+            </h1>
+            <p className="text-2xl md:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Empowering careers and transforming lives through innovation, mentorship, and opportunity
             </p>
           </div>
-          <div className="floating-orb top-20 left-10"></div>
-          <div className="floating-orb bottom-20 right-10 animation-delay-2s"></div>
         </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Story Content */}
