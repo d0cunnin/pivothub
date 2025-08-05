@@ -128,11 +128,12 @@ export const BusinessResourceFinder = () => {
           </div>
         </div>
         
-        <Button 
+        <Button
           onClick={searchResources}
           disabled={isSearching || !zipCode}
+          variant="hero"
           size="lg"
-          className="w-full bg-gradient-hero text-white shadow-strong hover:shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1"
+          className="w-full"
         >
           {isSearching ? "Searching Resources..." : "Find Resources"}
         </Button>

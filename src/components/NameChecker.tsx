@@ -72,11 +72,12 @@ export const NameChecker = () => {
                 />
               </div>
 
-              <Button 
+              <Button
                 onClick={checkNameAvailability}
                 disabled={isChecking || !businessName.trim()}
+                variant="hero"
                 size="lg"
-                className="w-full bg-gradient-hero text-white shadow-strong hover:shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1"
+                className="w-full"
               >
                 {isChecking ? (
                   <>
