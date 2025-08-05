@@ -137,9 +137,9 @@ const HireYourself = () => {
             </div>
           </div>
           
-          <div className="grid gap-10">
+          <div className="grid gap-8">
             {/* Row 1: Business Idea Generator & Name Checker */}
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale">
                 <BusinessIdeaGenerator />
               </div>
@@ -149,7 +149,7 @@ const HireYourself = () => {
             </div>
             
             {/* Row 2: Biography Generator & Logo Generator */}
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
                 <BiographyGenerator />
               </div>
@@ -159,7 +159,7 @@ const HireYourself = () => {
             </div>
             
             {/* Row 3: Startup Checklist & Document Generator */}
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
                 <StartupChecklist />
               </div>
@@ -169,7 +169,7 @@ const HireYourself = () => {
             </div>
             
             {/* Row 4: Business Mentor & Business Plan Generator */}
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.6s' }}>
                 <BusinessMentorChatbot />
               </div>
@@ -179,7 +179,7 @@ const HireYourself = () => {
             </div>
             
             {/* Row 5: Pitch Deck & Marketing Strategy */}
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
                 <PitchDeckGenerator />
               </div>
@@ -189,7 +189,7 @@ const HireYourself = () => {
             </div>
             
             {/* Row 6: Social Media & Grant Finder */}
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '1.0s' }}>
                 <SocialMediaGenerator />
               </div>
@@ -199,7 +199,7 @@ const HireYourself = () => {
             </div>
             
             {/* Row 7: Business Resource Finder (full width) */}
-            <div className="grid lg:grid-cols-1 gap-8">
+            <div className="grid lg:grid-cols-1 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '1.2s' }}>
                 <BusinessResourceFinder />
               </div>
@@ -231,7 +231,7 @@ const HireYourself = () => {
           
           
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-6">
               {[
                 {
                   name: "Sarah Chen",

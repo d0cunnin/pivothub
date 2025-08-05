@@ -11,12 +11,12 @@ const Reskill = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-hero hero-glow overflow-hidden">
-        {/* Sophisticated floating orbs */}
-        <div className="floating-orb top-16 right-16 w-40 h-40 bg-primary/8 animate-float"></div>
-        <div className="floating-orb bottom-24 left-16 w-32 h-32 bg-secondary/10 animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="floating-orb top-1/3 right-1/3 w-24 h-24 bg-accent/12 animate-float" style={{ animationDelay: '4s' }}></div>
-        <div className="floating-orb bottom-1/3 left-1/4 w-20 h-20 bg-primary/15 animate-float" style={{ animationDelay: '1s' }}></div>
+      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
@@ -30,7 +30,7 @@ const Reskill = () => {
               Transform your career with industry-recognized certifications and cutting-edge skills training
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Button size="lg" className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg">
+              <Button variant="hero" size="lg" className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg">
                 Start Learning Today
               </Button>
             </div>
@@ -43,16 +43,8 @@ const Reskill = () => {
       {/* Skills Assessment */}
       <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="lg:mr-4 self-center">
-              <img 
-                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
-                alt="Professional development and skill building" 
-                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-              />
-            </div>
-            
-            <div className="animate-fade-in space-y-4 lg:ml-4">
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-10">
+            <div className="animate-fade-in space-y-4 lg:mr-4">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Find Your Perfect Learning Path
@@ -64,6 +56,14 @@ const Reskill = () => {
               <Button variant="default" size="lg" className="transition-elegant hover:scale-105 px-8 py-3">
                 Take Assessment
               </Button>
+            </div>
+            
+            <div className="lg:ml-4 self-center">
+              <img 
+                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                alt="Professional development and skill building" 
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+              />
             </div>
           </div>
         </div>
@@ -94,7 +94,7 @@ const Reskill = () => {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6">
             {[
               {
                 icon: <BookOpen className="h-8 w-8" />,
@@ -182,15 +182,20 @@ const Reskill = () => {
       </section>
 
       {/* Career Advisor AI Section */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative">
-        <div className="page-container">
-          <div className="text-center mb-10">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+      <section className="section-transition py-32 bg-gradient-section-1 relative overflow-hidden">
+        {/* Elegant ambient elements */}
+        <div className="floating-orb top-20 right-20 w-56 h-56 bg-accent/4 animate-float"></div>
+        <div className="floating-orb bottom-20 left-20 w-64 h-64 bg-secondary/3 animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="floating-orb top-1/3 left-1/3 w-40 h-40 bg-primary/5 animate-float" style={{ animationDelay: '4s' }}></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
                 Get Personalized Career Guidance
               </h2>
             </div>
-            <p className="text-lg text-foreground/80 mt-4">
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Chat with our AI Career Advisor for expert guidance on your career transition and reskilling journey
             </p>
           </div>
