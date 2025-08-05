@@ -203,8 +203,30 @@ const HireYourself = () => {
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
+      {/* Business Mentor AI Section */}
+      <section className="section-transition py-32 bg-gradient-section-3 relative">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
+              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
+                Get Expert Business Advice
+              </h2>
+            </div>
+            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Chat with our AI Business Mentor for personalized guidance on your entrepreneurial journey
+            </p>
+          </div>
+          
+          <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
+            <BusinessMentorChatbot />
+          </div>
+        </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
+      </section>
+
       {/* Success Stories Preview */}
-      <section className="section-transition py-32 bg-gradient-section-3 relative overflow-hidden">
+      <section className="section-transition py-32 bg-gradient-section-1 relative overflow-hidden">
         {/* Elegant ambient elements */}
         <div className="floating-orb top-20 right-20 w-56 h-56 bg-accent/4 animate-float"></div>
         <div className="floating-orb bottom-20 left-20 w-64 h-64 bg-secondary/3 animate-float" style={{ animationDelay: '2s' }}></div>
@@ -269,29 +291,8 @@ const HireYourself = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
-      {/* Business Mentor AI Section */}
-      <section className="section-transition py-32 bg-gradient-section-1 relative">
-        <div className="container mx-auto px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <div className="inline-block p-8 bg-gradient-card rounded-3xl mb-6 shadow-elegant backdrop-blur-sm animate-fade-in-scale">
-              <h2 className="text-5xl md:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent leading-tight">
-                Get Expert Business Advice
-              </h2>
-            </div>
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Chat with our AI Business Mentor for personalized guidance on your entrepreneurial journey
-            </p>
-          </div>
-          
-          <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
-            <BusinessMentorChatbot />
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>
