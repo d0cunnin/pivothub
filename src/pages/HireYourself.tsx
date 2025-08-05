@@ -126,6 +126,26 @@ const HireYourself = () => {
               <p className="section-description">
                 Everything you need to launch and grow your business, from idea validation to legal documentation
               </p>
+              
+              {/* Tools List */}
+              <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10">
+                <h4 className="font-semibold text-foreground mb-3 text-sm">Available Tools:</h4>
+                <div className="grid grid-cols-2 gap-1 text-xs text-muted-foreground">
+                  <span>• Business Idea Generator</span>
+                  <span>• Name & Domain Checker</span>
+                  <span>• Biography Generator</span>
+                  <span>• Logo Designer</span>
+                  <span>• Startup Checklist</span>
+                  <span>• Legal Documents</span>
+                  <span>• Business Mentor AI</span>
+                  <span>• Business Plan Creator</span>
+                  <span>• Pitch Deck Builder</span>
+                  <span>• Marketing Strategy</span>
+                  <span>• Social Media Content</span>
+                  <span>• Grant Finder</span>
+                  <span>• Resource Library</span>
+                </div>
+              </div>
             </div>
             
             <div className="animate-fade-in lg:ml-4 self-center">
@@ -137,59 +157,56 @@ const HireYourself = () => {
             </div>
           </div>
           
-          <div className="grid gap-8">
-            {/* Row 1: Business Idea Generator & Name Checker */}
+          {/* Tetris-style Tool Layout */}
+          <div className="space-y-6">
+            {/* Row 1: Business Idea Generator (full width) */}
+            <div className="animate-fade-in-scale">
+              <BusinessIdeaGenerator />
+            </div>
+            
+            {/* Row 2: Name Checker & Biography Generator */}
             <div className="grid lg:grid-cols-2 gap-6">
-              <div className="animate-fade-in-scale">
-                <BusinessIdeaGenerator />
-              </div>
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
                 <NameChecker />
               </div>
-            </div>
-            
-            {/* Row 2: Biography Generator & Logo Generator */}
-            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
                 <BiographyGenerator />
               </div>
+            </div>
+            
+            {/* Row 3: Logo Generator & Startup Checklist & Business Mentor (1+1+1) */}
+            <div className="grid lg:grid-cols-3 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
                 <LogoGenerator />
               </div>
-            </div>
-            
-            {/* Row 3: Startup Checklist & Document Generator */}
-            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
                 <StartupChecklist />
               </div>
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.5s' }}>
-                <LegalDocsGenerator />
+                <BusinessMentorChatbot />
               </div>
             </div>
             
-            {/* Row 4: Business Mentor & Business Plan Generator */}
+            {/* Row 4: Legal Docs & Business Plan Generator */}
             <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.6s' }}>
-                <BusinessMentorChatbot />
+                <LegalDocsGenerator />
               </div>
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.7s' }}>
                 <BusinessPlanGenerator />
               </div>
             </div>
             
-            {/* Row 5: Pitch Deck & Marketing Strategy */}
-            <div className="grid lg:grid-cols-2 gap-6">
-              <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
-                <PitchDeckGenerator />
-              </div>
+            {/* Row 5: Pitch Deck (full width) */}
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
+              <PitchDeckGenerator />
+            </div>
+            
+            {/* Row 6: Marketing Strategy & Social Media & Grant Finder */}
+            <div className="grid lg:grid-cols-3 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '0.9s' }}>
                 <MarketingStrategyGenerator />
               </div>
-            </div>
-            
-            {/* Row 6: Social Media & Grant Finder */}
-            <div className="grid lg:grid-cols-2 gap-6">
               <div className="animate-fade-in-scale" style={{ animationDelay: '1.0s' }}>
                 <SocialMediaGenerator />
               </div>
@@ -199,10 +216,8 @@ const HireYourself = () => {
             </div>
             
             {/* Row 7: Business Resource Finder (full width) */}
-            <div className="grid lg:grid-cols-1 gap-6">
-              <div className="animate-fade-in-scale" style={{ animationDelay: '1.2s' }}>
-                <BusinessResourceFinder />
-              </div>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '1.2s' }}>
+              <BusinessResourceFinder />
             </div>
           </div>
         </div>

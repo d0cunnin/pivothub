@@ -54,7 +54,7 @@ export const LogoGenerator = () => {
   };
 
   return (
-    <Card className="p-6 h-full flex flex-col">
+    <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <Palette className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Logo Concept Generator</h3>
@@ -62,7 +62,7 @@ export const LogoGenerator = () => {
       
       <p className="text-sm text-muted-foreground mb-6">Generate custom logo designs for your business. Describe your vision and get multiple professional logo concepts to choose from.</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4 mb-6 flex-1">
+      <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
           <label className="block text-sm font-medium mb-2 text-foreground">Business Name</label>
           <Input
@@ -110,35 +110,31 @@ export const LogoGenerator = () => {
           </Select>
         </div>
 
-        <div className="flex-1 flex items-end">
-          <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
-            {isGenerating ? "Generating Concepts..." : "Generate Logo Concepts"}
-          </Button>
-        </div>
+        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
+          {isGenerating ? "Generating Concepts..." : "Generate Logo Concepts"}
+        </Button>
       </form>
 
       {concepts.length > 0 && (
-        <div className="space-y-4 mt-auto">
+        <div className="space-y-4">
           <h4 className="font-semibold text-foreground">Logo Concepts</h4>
-          <div className="space-y-3">
-            {concepts.map((concept, index) => (
-              <Card key={index} className="p-4 border-l-4 border-secondary">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center mt-1">
-                    <Type className="h-4 w-4 text-secondary" />
-                  </div>
-                  <div className="flex-1">
-                    <h5 className="font-medium text-foreground mb-1">{concept.style}</h5>
-                    <p className="text-sm text-muted-foreground mb-2">{concept.concept}</p>
-                    <div className="text-xs space-y-1">
-                      <p><span className="font-medium">Colors:</span> {concept.colors}</p>
-                      <p><span className="font-medium">Typography:</span> {concept.fonts}</p>
-                    </div>
+          {concepts.map((concept, index) => (
+            <Card key={index} className="p-4 border-l-4 border-secondary">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center mt-1">
+                  <Type className="h-4 w-4 text-secondary" />
+                </div>
+                <div className="flex-1">
+                  <h5 className="font-medium text-foreground mb-1">{concept.style}</h5>
+                  <p className="text-sm text-muted-foreground mb-2">{concept.concept}</p>
+                  <div className="text-xs space-y-1">
+                    <p><span className="font-medium">Colors:</span> {concept.colors}</p>
+                    <p><span className="font-medium">Typography:</span> {concept.fonts}</p>
                   </div>
                 </div>
-              </Card>
-            ))}
-          </div>
+              </div>
+            </Card>
+          ))}
         </div>
       )}
     </Card>
