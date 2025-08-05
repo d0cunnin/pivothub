@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 
 interface NameCheckResult {
@@ -13,19 +14,32 @@ interface NameCheckResult {
 
 export const NameChecker = () => {
   const [businessName, setBusinessName] = useState("");
+  const [state, setState] = useState("");
   const [isChecking, setIsChecking] = useState(false);
   const [results, setResults] = useState<NameCheckResult[]>([]);
 
+  const states = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
+    "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+    "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+    "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico",
+    "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+    "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+    "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+  ];
+
   const checkNameAvailability = () => {
     console.log("NameChecker button clicked!");
-    if (!businessName.trim()) return;
+    if (!businessName.trim() || !state) return;
     
     setIsChecking(true);
     
-    // Simulate API calls to check various platforms
+    // Simulate API calls to check various platforms and state records
     setTimeout(() => {
       const mockResults: NameCheckResult[] = [
         { domain: `${businessName.toLowerCase().replace(/\s+/g, '')}.com`, available: Math.random() > 0.5, platform: "Domain" },
+        { domain: `${businessName} (${state})`, available: Math.random() > 0.5, platform: "State Business Registry" },
+        { domain: `${businessName} LLC (${state})`, available: Math.random() > 0.5, platform: "State LLC Registry" },
         { domain: `@${businessName.toLowerCase().replace(/\s+/g, '')}`, available: Math.random() > 0.5, platform: "Instagram" },
         { domain: `@${businessName.toLowerCase().replace(/\s+/g, '')}`, available: Math.random() > 0.5, platform: "Twitter" },
         { domain: businessName, available: Math.random() > 0.5, platform: "Facebook" },
@@ -56,33 +70,54 @@ export const NameChecker = () => {
           </h2>
         </div>
         <p className="text-xl text-muted-foreground">
-          Check if your business name is available across domains and social platforms
+          Check if your business name is available across domains, social platforms, and state records
         </p>
       </div>
       
       <div className="space-y-6 mb-8">
-        <div className="space-y-2">
-          <Label htmlFor="businessName">Business Name *</Label>
-          <Input
-            id="businessName"
-            placeholder="e.g., TechCorp Solutions"
-            value={businessName}
-            onChange={(e) => setBusinessName(e.target.value)}
-            className="text-lg"
-            autoFocus
-          />
-          {!businessName.trim() && (
-            <p className="text-sm text-muted-foreground">Enter a business name to check availability</p>
-          )}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="businessName">Business Name *</Label>
+            <Input
+              id="businessName"
+              placeholder="e.g., TechCorp Solutions"
+              value={businessName}
+              onChange={(e) => setBusinessName(e.target.value)}
+              className="text-lg"
+              autoFocus
+            />
+            {!businessName.trim() && (
+              <p className="text-sm text-muted-foreground">Enter a business name to check availability</p>
+            )}
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="state">State *</Label>
+            <Select value={state} onValueChange={setState}>
+              <SelectTrigger className="text-lg">
+                <SelectValue placeholder="Choose your state" />
+              </SelectTrigger>
+              <SelectContent className="max-h-48 bg-background border shadow-lg z-50">
+                {states.map((stateName) => (
+                  <SelectItem key={stateName} value={stateName.toLowerCase().replace(' ', '-')}>
+                    {stateName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {!state && (
+              <p className="text-sm text-muted-foreground">Select your state for business registry checks</p>
+            )}
+          </div>
         </div>
 
         <Button
           onClick={checkNameAvailability}
-          disabled={isChecking || !businessName.trim()}
+          disabled={isChecking || !businessName.trim() || !state}
           variant="hero"
           size="lg"
           className="w-full"
-          title={!businessName.trim() ? "Please enter a business name to check availability" : ""}
+          title={(!businessName.trim() || !state) ? "Please enter a business name and select a state to check availability" : ""}
         >
           {isChecking ? (
             <>
@@ -101,7 +136,7 @@ export const NameChecker = () => {
       {results.length > 0 && (
         <div>
           <h3 className="text-xl font-semibold mb-6 text-foreground">
-            Availability Results for "{businessName}":
+            Availability Results for "{businessName}" in {states.find(s => s.toLowerCase().replace(' ', '-') === state) || state}:
           </h3>
           <div className="grid gap-4">
             {results.map((result, index) => (
@@ -127,7 +162,7 @@ export const NameChecker = () => {
           <div className="mt-6 p-4 bg-muted rounded-lg">
             <p className="text-sm text-muted-foreground">
               <strong>Note:</strong> This is a simulated check for demonstration. 
-              In a live application, this would query actual domain registrars and social media APIs.
+              In a live application, this would query actual domain registrars, social media APIs, and state business registries.
             </p>
           </div>
         </div>
