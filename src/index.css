@@ -29,7 +29,7 @@ All colors MUST be HSL.
     --secondary-glow: 155 55% 35%;
 
     --muted: 210 15% 95%;
-    --muted-foreground: 215 15% 45%;
+    --muted-foreground: 0 0% 0%;
 
     /* Success accent - brighter green */
     --accent: 155 65% 40%;
