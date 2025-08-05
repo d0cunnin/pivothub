@@ -16,6 +16,10 @@ export const BiographyGenerator = () => {
   const [background, setBackground] = useState('');
   const [businessType, setBusinessType] = useState('');
   const [goals, setGoals] = useState('');
+  const [dateOfFormation, setDateOfFormation] = useState('');
+  const [productsServices, setProductsServices] = useState('');
+  const [traction, setTraction] = useState('');
+  const [achievements, setAchievements] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [content, setContent] = useState<BiographyContent | null>(null);
 
@@ -24,9 +28,9 @@ export const BiographyGenerator = () => {
     // Simulate API call
     setTimeout(() => {
       const mockContent: BiographyContent = {
-        founderBio: `${founderName} is a passionate entrepreneur with a background in ${background}. With years of experience and a deep understanding of market needs, ${founderName} founded this ${businessType} to make a meaningful impact in the industry. Their commitment to excellence and innovation drives the company's success and growth.`,
-        vision: `To become the leading ${businessType} that transforms how people interact with our industry, creating lasting positive change and setting new standards for quality and service excellence.`,
-        mission: `Our mission is to ${goals.toLowerCase()} while maintaining the highest standards of integrity, innovation, and customer satisfaction. We are committed to building long-term relationships with our clients and contributing positively to our community.`
+        founderBio: `${founderName} is a passionate entrepreneur with a background in ${background}. ${dateOfFormation ? `Founded in ${new Date(dateOfFormation).getFullYear()}, ` : ''}With years of experience and a deep understanding of market needs, ${founderName} founded this ${businessType} to make a meaningful impact in the industry.${achievements ? ` Notable achievements include ${achievements}.` : ''} Their commitment to excellence and innovation drives the company's success and growth.`,
+        vision: `To become the leading ${businessType} that transforms how people interact with our industry, creating lasting positive change and setting new standards for quality and service excellence.${traction ? ` Building on our current success of ${traction}, we aim to expand our impact significantly.` : ''}`,
+        mission: `Our mission is to ${goals.toLowerCase()} while maintaining the highest standards of integrity, innovation, and customer satisfaction.${productsServices ? ` Through our ${productsServices}, we are committed to` : ' We are committed to'} building long-term relationships with our clients and contributing positively to our community.`
       };
       setContent(mockContent);
       setIsGenerating(false);
@@ -42,12 +46,12 @@ export const BiographyGenerator = () => {
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <User className="h-5 w-5 text-secondary" />
-        <h3 className="text-xl font-bold text-foreground">Biography & Statements Generator</h3>
+        <h3 className="text-xl font-bold text-foreground">Business Biography and Statement</h3>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Founder Name</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Founder Name *</label>
           <Input
             value={founderName}
             onChange={(e) => setFounderName(e.target.value)}
@@ -57,7 +61,7 @@ export const BiographyGenerator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Professional Background</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Professional Background *</label>
           <Input
             value={background}
             onChange={(e) => setBackground(e.target.value)}
@@ -67,7 +71,7 @@ export const BiographyGenerator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Type</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Type *</label>
           <Input
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value)}
@@ -77,7 +81,7 @@ export const BiographyGenerator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Goals</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Goals *</label>
           <Textarea
             value={goals}
             onChange={(e) => setGoals(e.target.value)}
@@ -87,8 +91,48 @@ export const BiographyGenerator = () => {
           />
         </div>
 
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Date of Formation (if applicable)</label>
+          <Input
+            type="date"
+            value={dateOfFormation}
+            onChange={(e) => setDateOfFormation(e.target.value)}
+            placeholder="Select formation date"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Products/Services Offered (if applicable)</label>
+          <Textarea
+            value={productsServices}
+            onChange={(e) => setProductsServices(e.target.value)}
+            placeholder="Describe your main products or services"
+            rows={3}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Traction (if applicable)</label>
+          <Textarea
+            value={traction}
+            onChange={(e) => setTraction(e.target.value)}
+            placeholder="e.g., number of customers, revenue milestones, partnerships"
+            rows={2}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Achievements (if applicable)</label>
+          <Textarea
+            value={achievements}
+            onChange={(e) => setAchievements(e.target.value)}
+            placeholder="e.g., awards, recognition, significant milestones"
+            rows={2}
+          />
+        </div>
+
         <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
-          {isGenerating ? "Generating Content..." : "Generate Biography & Statements"}
+          {isGenerating ? "Generating Content..." : "Generate Business Biography & Statement"}
         </Button>
       </form>
 
