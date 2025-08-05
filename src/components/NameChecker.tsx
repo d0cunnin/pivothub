@@ -62,26 +62,27 @@ export const NameChecker = () => {
       
       <div className="space-y-6 mb-8">
         <div className="space-y-2">
-          <Label htmlFor="businessName">Business Name</Label>
+          <Label htmlFor="businessName">Business Name *</Label>
           <Input
             id="businessName"
-            placeholder="Enter your business name"
+            placeholder="e.g., TechCorp Solutions"
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
             className="text-lg"
+            autoFocus
           />
+          {!businessName.trim() && (
+            <p className="text-sm text-muted-foreground">Enter a business name to check availability</p>
+          )}
         </div>
 
         <Button
-          onClick={() => {
-            console.log("Button clicked - handler triggered!");
-            checkNameAvailability();
-          }}
+          onClick={checkNameAvailability}
           disabled={isChecking || !businessName.trim()}
           variant="hero"
           size="lg"
-          className="w-full relative z-50"
-          style={{ pointerEvents: 'auto' }}
+          className="w-full"
+          title={!businessName.trim() ? "Please enter a business name to check availability" : ""}
         >
           {isChecking ? (
             <>

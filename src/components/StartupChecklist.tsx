@@ -105,10 +105,10 @@ export const StartupChecklist = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Structure</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Structure *</label>
           <Select value={businessStructure} onValueChange={setBusinessStructure}>
             <SelectTrigger>
-              <SelectValue placeholder="Select business structure" />
+              <SelectValue placeholder="Choose your business structure" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="sole-proprietorship">Sole Proprietorship</SelectItem>
@@ -120,10 +120,10 @@ export const StartupChecklist = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">State</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">State *</label>
           <Select value={state} onValueChange={setState}>
             <SelectTrigger>
-              <SelectValue placeholder="Select state" />
+              <SelectValue placeholder="Choose your state" />
             </SelectTrigger>
             <SelectContent className="max-h-48">
               {states.map((stateName) => (
@@ -141,6 +141,7 @@ export const StartupChecklist = () => {
           variant="hero" 
           size="lg" 
           className="w-full"
+          title={!businessStructure || !state ? "Please select both business structure and state to generate checklist" : ""}
         >
           {isGenerating ? "Generating Checklist..." : "Generate Startup Checklist"}
         </Button>

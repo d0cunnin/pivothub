@@ -101,14 +101,18 @@ export const BusinessResourceFinder = () => {
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="zipCode">ZIP Code</Label>
+            <Label htmlFor="zipCode">ZIP Code *</Label>
             <Input
               id="zipCode"
-              placeholder="Enter your ZIP code"
+              placeholder="e.g., 10001"
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
               maxLength={5}
+              pattern="[0-9]{5}"
             />
+            {!zipCode.trim() && (
+              <p className="text-sm text-muted-foreground">Enter your ZIP code to find local resources</p>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="resourceType">Resource Type</Label>
@@ -134,6 +138,7 @@ export const BusinessResourceFinder = () => {
           variant="hero"
           size="lg"
           className="w-full"
+          title={!zipCode.trim() ? "Please enter a ZIP code to search for resources" : ""}
         >
           {isSearching ? "Searching Resources..." : "Find Resources"}
         </Button>
