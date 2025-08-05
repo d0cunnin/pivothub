@@ -7,7 +7,7 @@ import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
 
 export const PathSelection = () => {
   return (
-    <section id="choose-path" className="py-20 bg-gradient-card">
+    <section id="choose-path" className="pt-20 pb-12 bg-gradient-card">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
@@ -34,17 +34,17 @@ export const PathSelection = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-foreground">Reskill</h3>
-                  <p className="text-muted-foreground">Enhance Your Marketability</p>
+                  <p className="text-muted-foreground text-left">Enhance Your Marketability</p>
                 </div>
               </div>
 
               <img 
                 src={reskillIcon} 
                 alt="Reskill" 
-                className="w-full h-48 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-500"
+                className="w-full aspect-auto object-contain rounded-lg mb-6 group-hover:scale-105 transition-transform duration-500"
               />
 
-              <p className="text-foreground mb-6 leading-relaxed">
+              <p className="text-foreground mb-6 leading-relaxed text-left">
                 Learn in-demand skills through online certifications and training programs. 
                 Build a portfolio that makes you irresistible to employers.
               </p>
@@ -87,17 +87,17 @@ export const PathSelection = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-foreground">HireYourself</h3>
-                  <p className="text-muted-foreground">Launch Your Business</p>
+                  <p className="text-muted-foreground text-left">Launch Your Business</p>
                 </div>
               </div>
 
               <img 
                 src={hireyourselfIcon} 
                 alt="HireYourself" 
-                className="w-full h-48 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-500"
+                className="w-full aspect-auto object-contain rounded-lg mb-6 group-hover:scale-105 transition-transform duration-500"
               />
 
-              <p className="text-foreground mb-6 leading-relaxed">
+              <p className="text-foreground mb-6 leading-relaxed text-left">
                 Get everything you need to start and grow your business. From idea validation 
                 to funding opportunities, we've got you covered.
               </p>
