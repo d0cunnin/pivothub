@@ -76,12 +76,12 @@ const Reskill = () => {
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
             <div className="animate-fade-in space-y-4">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                <h2 className="section-header">
                   Popular Learning Categories
                 </h2>
               </div>
-              <p className="text-lg text-foreground/80">
-                Discover the skills that are in highest demand across industries
+              <p className="section-description">
+                Explore in-demand skills and certifications that will accelerate your career growth
               </p>
             </div>
             

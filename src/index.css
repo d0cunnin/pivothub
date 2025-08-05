@@ -133,25 +133,25 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  /* Professional spacing system - tight but readable */
+  /* Professional spacing system - reduced and standardized */
   .section-spacing {
-    @apply py-16 md:py-20;
+    @apply py-12 md:py-16 lg:py-20;
   }
   
   .section-spacing-sm {
-    @apply py-12 md:py-16;
+    @apply py-8 md:py-12 lg:py-16;
   }
   
   .section-spacing-lg {
-    @apply py-20 md:py-24;
+    @apply py-16 md:py-20 lg:py-24;
   }
   
   .content-spacing {
-    @apply space-y-6 md:space-y-8;
+    @apply mb-6 md:mb-8;
   }
   
   .content-spacing-sm {
-    @apply space-y-4 md:space-y-6;
+    @apply mb-4 md:mb-6;
   }
   
   .grid-spacing {
@@ -160,6 +160,19 @@ All colors MUST be HSL.
   
   .grid-spacing-sm {
     @apply gap-4 md:gap-6;
+  }
+
+  /* Global typography utilities */
+  .section-header {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4;
+  }
+
+  .section-body-text {
+    @apply text-base md:text-lg text-foreground leading-relaxed text-left;
+  }
+
+  .section-description {
+    @apply text-base md:text-lg text-muted-foreground leading-relaxed text-left;
   }
   
   /* Clean container system */

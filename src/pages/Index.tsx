@@ -19,14 +19,12 @@ const Index = () => {
         <div className="page-container">
           <div className="content-width">
             {/* Header with Image */}
-            <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+            <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
               <div className="animate-fade-in space-y-4">
-                <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                    Career Guidance & Support
-                  </h2>
-                </div>
-                <p className="text-lg text-muted-foreground">
+                <h2 className="section-header">
+                  Career Guidance & Support
+                </h2>
+                <p className="section-description">
                   Navigate your career transformation with expert guidance and personalized support every step of the way
                 </p>
               </div>
@@ -81,12 +79,10 @@ const Index = () => {
         <div className="page-container">
           <div className="content-width">
             {/* Header with Image */}
-            <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+            <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
               <div className="animate-fade-in space-y-4">
-                <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
-                </div>
-                <p className="text-lg text-muted-foreground">
+                <h2 className="section-header">Certifications</h2>
+                <p className="section-description">
                   Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
                 </p>
               </div>
@@ -100,7 +96,7 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-spacing-sm animate-fade-in mb-12">
+            <div className="grid md:grid-cols-3 gap-6 animate-fade-in mb-8">
               <Card className="premium-card card-padding hover-scale">
                 <CardHeader className="p-0 pb-4">
                   <BookOpen className="h-8 w-8 text-primary mb-2" />
@@ -108,12 +104,12 @@ const Index = () => {
                     Tech Certifications
                     <Badge variant="default">Popular</Badge>
                   </CardTitle>
-                  <CardDescription className="text-muted-foreground">
+                  <CardDescription className="text-muted-foreground text-left">
                     Master in-demand technical skills with certifications
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ul className="space-y-1 text-sm text-muted-foreground">
+                  <ul className="space-y-1 text-sm text-muted-foreground text-left">
                     <li>• Cloud Computing (AWS, Azure, GCP)</li>
                     <li>• Data Science & Analytics</li>
                     <li>• Cybersecurity</li>
@@ -123,19 +119,19 @@ const Index = () => {
                 </CardContent>
               </Card>
             
-            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/90 backdrop-blur-sm">
-              <CardHeader>
-                <Lightbulb className="h-10 w-10 text-primary mb-3" />
-                <CardTitle className="flex items-center gap-2">
+            <Card className="premium-card card-padding hover-scale">
+              <CardHeader className="p-0 pb-4">
+                <Lightbulb className="h-8 w-8 text-primary mb-2" />
+                <CardTitle className="flex items-center gap-2 text-lg">
                   Entrepreneurship
                   <Badge variant="default">Trending</Badge>
                 </CardTitle>
-                <CardDescription className="text-foreground text-left">
+                <CardDescription className="text-muted-foreground text-left">
                   Build essential business skills for launching and scaling your venture
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-foreground text-left">
+              <CardContent className="p-0">
+                <ul className="space-y-1 text-sm text-muted-foreground text-left">
                   <li>• Business Strategy & Planning</li>
                   <li>• Digital Marketing</li>
                   <li>• Financial Management</li>
@@ -145,16 +141,16 @@ const Index = () => {
               </CardContent>
             </Card>
             
-            <Card className="border-0 shadow-soft hover:shadow-strong transition-all duration-500 hover-scale bg-card/90 backdrop-blur-sm">
-              <CardHeader>
-                <Award className="h-10 w-10 text-primary mb-3" />
-                <CardTitle>Micro-Credentials</CardTitle>
-                <CardDescription className="text-foreground text-left">
+            <Card className="premium-card card-padding hover-scale">
+              <CardHeader className="p-0 pb-4">
+                <Award className="h-8 w-8 text-primary mb-2" />
+                <CardTitle className="text-lg">Micro-Credentials</CardTitle>
+                <CardDescription className="text-muted-foreground text-left">
                   Quick, focused learning paths for specific skills and competencies
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 text-sm text-foreground text-left">
+              <CardContent className="p-0">
+                <ul className="space-y-1 text-sm text-muted-foreground text-left">
                   <li>• Project Management</li>
                   <li>• UX/UI Design</li>
                   <li>• Social Media Strategy</li>
@@ -165,10 +161,10 @@ const Index = () => {
             </Card>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-8 items-center mt-16">
-            <div className="space-y-6 lg:mr-4">
-              <h3 className="text-3xl font-bold text-foreground">Collaborative Learning</h3>
-              <p className="text-lg text-muted-foreground">
+          <div className="grid lg:grid-cols-2 gap-8 items-center mt-12">
+            <div className="space-y-4 lg:mr-4">
+              <h3 className="section-header">Collaborative Learning</h3>
+              <p className="section-description">
                 Join a community of learners and professionals working together to achieve their career goals 
                 through collaborative learning and peer support.
               </p>
@@ -182,7 +178,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="text-center mt-16 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <Button size="lg" className="bg-gradient-hero hover:opacity-90 shadow-glow transition-all duration-300 hover-scale">
               Explore All Certifications
             </Button>

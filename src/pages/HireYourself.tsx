@@ -114,12 +114,12 @@ const HireYourself = () => {
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
             <div className="animate-fade-in space-y-4">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                <h2 className="section-header">
                   Complete Business Toolkit
                 </h2>
               </div>
-              <p className="text-lg text-foreground/80">
-                Everything you need to transform your idea into a thriving business
+              <p className="section-description">
+                Everything you need to launch and grow your business, from idea validation to legal documentation
               </p>
             </div>
             
