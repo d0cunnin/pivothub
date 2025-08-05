@@ -21,6 +21,7 @@ export const StartupChecklist = () => {
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
 
   const generateChecklist = () => {
+    console.log("StartupChecklist button clicked!");
     setIsGenerating(true);
     
     setTimeout(() => {

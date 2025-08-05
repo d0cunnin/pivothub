@@ -18,6 +18,7 @@ export const LegalDocsGenerator = () => {
   const [documents, setDocuments] = useState<LegalDocument[]>([]);
 
   const generateDocuments = () => {
+    console.log("LegalDocsGenerator button clicked!");
     setIsGenerating(true);
     
     setTimeout(() => {

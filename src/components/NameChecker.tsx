@@ -17,6 +17,7 @@ export const NameChecker = () => {
   const [results, setResults] = useState<NameCheckResult[]>([]);
 
   const checkNameAvailability = () => {
+    console.log("NameChecker button clicked!");
     if (!businessName.trim()) return;
     
     setIsChecking(true);

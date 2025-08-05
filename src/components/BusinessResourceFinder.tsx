@@ -26,6 +26,7 @@ export const BusinessResourceFinder = () => {
   const [resources, setResources] = useState<BusinessResource[]>([]);
 
   const searchResources = () => {
+    console.log("BusinessResourceFinder button clicked!");
     if (!zipCode.trim()) return;
     
     setIsSearching(true);
