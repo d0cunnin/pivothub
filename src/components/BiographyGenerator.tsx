@@ -48,6 +48,8 @@ export const BiographyGenerator = () => {
         <User className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Business Biography and Statement</h3>
       </div>
+      
+      <p className="text-sm text-muted-foreground mb-6">Create professional founder biography, mission and vision statements. Perfect for websites, investor materials, and marketing content.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

@@ -40,8 +40,11 @@ export const BusinessIdeaGenerator = () => {
                 Business Idea Generator
               </h2>
             </div>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-muted-foreground mb-4">
               Let AI help you discover business opportunities based on your skills and interests
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Answer a few questions about your background and interests. Get 3 personalized business ideas with detailed descriptions and next steps.
             </p>
           </div>
 

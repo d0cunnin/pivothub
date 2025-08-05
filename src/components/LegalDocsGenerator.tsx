@@ -82,6 +82,8 @@ export const LegalDocsGenerator = () => {
         <Scale className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Legal Documents Generator</h3>
       </div>
+      
+      <p className="text-sm text-muted-foreground mb-6">Generate a list of required legal documents for your business structure and state. Know exactly what paperwork you need to file.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

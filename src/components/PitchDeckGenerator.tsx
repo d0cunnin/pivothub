@@ -102,9 +102,10 @@ export const PitchDeckGenerator = () => {
         <Presentation className="h-6 w-6 text-primary" />
         <h3 className="text-2xl font-bold text-foreground">Pitch Deck Generator</h3>
       </div>
-      <p className="text-muted-foreground mb-6">
+      <p className="text-muted-foreground mb-2">
         Create a compelling investor pitch deck for your startup
       </p>
+      <p className="text-sm text-muted-foreground mb-6">Create a professional investor pitch deck with all essential slides. Perfect for fundraising meetings and investor presentations.</p>
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">

@@ -69,8 +69,11 @@ export const NameChecker = () => {
             Business Name Checker
           </h2>
         </div>
-        <p className="text-xl text-muted-foreground">
+        <p className="text-xl text-muted-foreground mb-4">
           Check if your business name is available across domains, social platforms, and state records
+        </p>
+        <p className="text-sm text-muted-foreground mb-8">
+          Enter your business name and state to instantly check availability across multiple platforms. Results show you what"s available and what"s taken.
         </p>
       </div>
       

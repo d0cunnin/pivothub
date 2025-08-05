@@ -100,6 +100,8 @@ export const MarketingStrategyGenerator = () => {
         <TrendingUp className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Marketing Strategy Generator</h3>
       </div>
+      
+      <p className="text-sm text-muted-foreground mb-6">Generate a comprehensive marketing strategy for your business. Get specific tactics, channels, and budget recommendations to reach your audience.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

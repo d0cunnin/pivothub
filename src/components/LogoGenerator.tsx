@@ -59,6 +59,8 @@ export const LogoGenerator = () => {
         <Palette className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Logo Concept Generator</h3>
       </div>
+      
+      <p className="text-sm text-muted-foreground mb-6">Generate custom logo designs for your business. Describe your vision and get multiple professional logo concepts to choose from.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

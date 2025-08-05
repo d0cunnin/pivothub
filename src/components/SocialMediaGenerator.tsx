@@ -83,6 +83,8 @@ export const SocialMediaGenerator = () => {
         <Share2 className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Social Media Content Generator</h3>
       </div>
+      
+      <p className="text-sm text-muted-foreground mb-6">Generate engaging social media content for your business. Get platform-specific posts, captions, and hashtags to boost your online presence.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

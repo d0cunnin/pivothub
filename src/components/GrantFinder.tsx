@@ -72,9 +72,10 @@ export const GrantFinder = () => {
         <Search className="h-6 w-6 text-primary" />
         <h3 className="text-2xl font-bold text-foreground">Grant Finder Tool</h3>
       </div>
-      <p className="text-muted-foreground mb-6">
+      <p className="text-muted-foreground mb-2">
         Discover relevant grants based on your business criteria and location
       </p>
+      <p className="text-sm text-muted-foreground mb-6">Find grants and funding opportunities for your business. Search by industry and location to discover financial support options.</p>
       <div className="space-y-6">
         <div className="grid md:grid-cols-3 gap-4">
           <div className="space-y-2">

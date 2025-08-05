@@ -102,6 +102,8 @@ export const StartupChecklist = () => {
         <CheckSquare className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Startup Checklist</h3>
       </div>
+      
+      <p className="text-sm text-muted-foreground mb-6">Get a personalized startup checklist based on your business structure and state. Track your progress and never miss important steps.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

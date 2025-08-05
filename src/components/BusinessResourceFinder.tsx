@@ -94,9 +94,10 @@ export const BusinessResourceFinder = () => {
         <MapPin className="h-6 w-6 text-primary" />
         <h3 className="text-xl font-bold text-foreground">Business Resource Finder</h3>
       </div>
-      <p className="text-muted-foreground mb-6">
+      <p className="text-muted-foreground mb-2">
         Find local business support programs, funding sources, and opportunities by ZIP code
       </p>
+      <p className="text-sm text-muted-foreground mb-6">Find local business resources in your area. Discover incubators, co-working spaces, networking events, and support organizations near you.</p>
       
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">

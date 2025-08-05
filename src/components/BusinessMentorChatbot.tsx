@@ -100,7 +100,7 @@ export const BusinessMentorChatbot = () => {
             <Bot className="h-6 w-6" />
             <div>
               <h3 className="text-xl font-bold">Business Mentor AI</h3>
-              <p className="text-white/80 text-sm">Get expert advice for your entrepreneurial journey</p>
+              <p className="text-white/80 text-sm">Get instant advice from our AI business mentor. Ask questions about strategy, operations, marketing, and get expert guidance 24/7.</p>
             </div>
           </div>
         </div>
