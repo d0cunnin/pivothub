@@ -234,54 +234,56 @@ const Reskill = () => {
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed">
-                Our industry-recognized certifications are developed in partnership with leading technology companies and validated by hiring managers. Each certificate represents verified skills that employers actively seek when making hiring and promotion decisions.
+                Our skills training is designed to help you build confidence, sharpen your abilities, and take action toward your goals. Each offering focuses on practical, relevant knowledge you can apply immediately—whether you're launching a business, changing careers, or growing in your current role.
               </p>
               <div className="bg-gradient-card/50 p-6 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-4">Certification Benefits:</h4>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
-                        <Award className="h-4 w-4 text-white" />
-                      </div>
-                      <span className="text-foreground font-medium">Industry Recognition</span>
+                <h4 className="font-semibold text-foreground mb-4">Benefits:</h4>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                      <Award className="h-4 w-4 text-white" />
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
-                        <Award className="h-4 w-4 text-white" />
-                      </div>
-                      <span className="text-foreground font-medium">Higher Salary Potential</span>
-                    </div>
+                    <span className="text-foreground font-medium">Learn real-world skills you can apply immediately</span>
                   </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
-                        <Award className="h-4 w-4 text-white" />
-                      </div>
-                      <span className="text-foreground font-medium">Career Advancement</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                      <Award className="h-4 w-4 text-white" />
                     </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
-                        <Award className="h-4 w-4 text-white" />
-                      </div>
-                      <span className="text-foreground font-medium">Professional Credibility</span>
+                    <span className="text-foreground font-medium">Increase your earning potential</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                      <Award className="h-4 w-4 text-white" />
                     </div>
+                    <span className="text-foreground font-medium">Open doors to new career or business opportunities</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                      <Award className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="text-foreground font-medium">Build confidence and professional credibility</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                      <Award className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="text-foreground font-medium">Stand out in today's competitive job market</span>
                   </div>
                 </div>
               </div>
               <div className="space-y-3">
-                <h4 className="font-semibold text-foreground">Popular Certifications:</h4>
+                <h4 className="font-semibold text-foreground">What's Popular:</h4>
                 {[
-                  "Google Career Certificates - Digital Marketing & Data Analytics",
-                  "Microsoft Azure Fundamentals & Associate Certifications",
-                  "Amazon AWS Cloud Practitioner & Solutions Architect",
-                  "HubSpot Marketing & Sales Certification Programs"
-                ].map((cert, index) => (
+                  "AI Basics",
+                  "AI for Business",
+                  "Digital Marketing & Analytics",
+                  "Personal Branding & Online Presence"
+                ].map((skill, index) => (
                   <div key={index} className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
                       <Award className="h-4 w-4 text-white" />
                     </div>
-                    <span className="text-foreground font-medium">{cert}</span>
+                    <span className="text-foreground font-medium">{skill}</span>
                   </div>
                 ))}
               </div>
