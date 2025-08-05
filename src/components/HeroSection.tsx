@@ -4,7 +4,7 @@ import heroImage from "@/assets/hero-image.jpg";
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center">
+    <section className="relative min-h-[85vh] lg:min-h-[80vh] flex items-center">
       {/* Background Image with Overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -14,7 +14,7 @@ export const HeroSection = () => {
       </div>
       
       {/* Content */}
-      <div className="relative container mx-auto px-4 py-20">
+      <div className="relative container mx-auto px-4 py-12 md:py-16">
         <div className="max-w-3xl text-white">
           <div className="flex items-center space-x-2 mb-6">
             <Zap className="h-6 w-6 text-accent" />
@@ -26,12 +26,12 @@ export const HeroSection = () => {
             <span className="text-accent"> Potential</span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl">
+          <p className="text-xl md:text-2xl mb-6 text-white/90 max-w-2xl">
             Whether you're looking to reskill for better opportunities or launch your own business, 
             we provide the tools and guidance to relaunch your career and create positive economic impact.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <Button 
               size="lg" 
               variant="hero"
