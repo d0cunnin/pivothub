@@ -88,17 +88,15 @@ export const BusinessResourceFinder = () => {
   };
 
   return (
-    <Card className="premium-card">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-2xl">
-          <MapPin className="h-6 w-6 text-primary" />
-          Business Resource Finder
-        </CardTitle>
-        <CardDescription>
-          Find local business support programs, funding sources, and opportunities by ZIP code
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Card className="p-8 shadow-soft">
+      <div className="flex items-center gap-2 mb-6">
+        <MapPin className="h-6 w-6 text-primary" />
+        <h3 className="text-xl font-bold text-foreground">Business Resource Finder</h3>
+      </div>
+      <p className="text-muted-foreground mb-6">
+        Find local business support programs, funding sources, and opportunities by ZIP code
+      </p>
+      <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="zipCode">ZIP Code</Label>
@@ -137,67 +135,67 @@ export const BusinessResourceFinder = () => {
         >
           {isSearching ? "Searching Resources..." : "Find Resources"}
         </Button>
+      </div>
 
-        {resources.length > 0 && (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Local Business Resources</h3>
-            {resources.map((resource) => (
-              <Card key={resource.id} className="border">
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h4 className="font-semibold text-foreground">{resource.name}</h4>
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                        {resource.type}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm">{resource.rating}</span>
-                    </div>
+      {resources.length > 0 && (
+        <div className="space-y-4 mt-6">
+          <h3 className="text-lg font-semibold">Local Business Resources</h3>
+          {resources.map((resource) => (
+            <Card key={resource.id} className="border">
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h4 className="font-semibold text-foreground">{resource.name}</h4>
+                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                      {resource.type}
+                    </span>
                   </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-3">{resource.description}</p>
-                  
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-3 w-3" />
-                      <span>{resource.address}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-3 w-3" />
-                      <span>{resource.phone}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-3 w-3" />
-                      <span>{resource.hours}</span>
-                    </div>
+                  <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <span className="text-sm">{resource.rating}</span>
                   </div>
-                  
-                  <div className="flex flex-wrap gap-1 mt-3 mb-3">
-                    {resource.services.map((service, index) => (
-                      <span key={index} className="text-xs bg-muted px-2 py-1 rounded">
-                        {service}
-                      </span>
-                    ))}
+                </div>
+                
+                <p className="text-sm text-muted-foreground mb-3">{resource.description}</p>
+                
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-3 w-3" />
+                    <span>{resource.address}</span>
                   </div>
-                  
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      <ExternalLink className="h-3 w-3 mr-1" />
-                      Visit Website
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Phone className="h-3 w-3 mr-1" />
-                      Call
-                    </Button>
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-3 w-3" />
+                    <span>{resource.phone}</span>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </CardContent>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-3 w-3" />
+                    <span>{resource.hours}</span>
+                  </div>
+                </div>
+                
+                <div className="flex flex-wrap gap-1 mt-3 mb-3">
+                  {resource.services.map((service, index) => (
+                    <span key={index} className="text-xs bg-muted px-2 py-1 rounded">
+                      {service}
+                    </span>
+                  ))}
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="flex-1">
+                    <ExternalLink className="h-3 w-3 mr-1" />
+                    Visit Website
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Phone className="h-3 w-3 mr-1" />
+                    Call
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </Card>
   );
 };
