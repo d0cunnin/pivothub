@@ -26,8 +26,8 @@ export default function About() {
       <section className="section-spacing relative">
         <div className="page-container">
           <div className="content-width content-spacing">
-            <div className="grid lg:grid-cols-2 grid-spacing items-center">
-              <div className="animate-fade-in content-spacing-sm">
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <div className="animate-fade-in content-spacing-sm lg:mr-4">
                 <div className="text-base leading-relaxed space-y-4">
                   <p className="text-foreground">
                     ReLaunch was born out of necessity during a critical period in our economy. Between January and July 2025, 
@@ -42,29 +42,25 @@ export default function About() {
                 </div>
               </div>
 
-              <div className="animate-fade-in">
-                <div className="premium-card overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
-                    alt="Professional team collaboration and success" 
-                    className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
+              <div className="animate-fade-in lg:ml-4 self-center">
+                <img 
+                  src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
+                  alt="Professional team collaboration and success" 
+                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                />
               </div>
             </div>
 
-            <div className="grid lg:grid-cols-2 grid-spacing items-center">
-              <div className="animate-fade-in lg:order-1 order-2">
-                <div className="premium-card overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
-                    alt="Professional handshake partnership" 
-                    className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <div className="animate-fade-in lg:order-1 order-2 lg:mr-4 self-center">
+                <img 
+                  src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                  alt="Professional handshake partnership" 
+                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                />
               </div>
 
-              <div className="animate-fade-in lg:order-2 order-1 content-spacing-sm">
+              <div className="animate-fade-in lg:order-2 order-1 content-spacing-sm lg:ml-4">
                 <div className="text-base leading-relaxed space-y-4">
                   <p className="text-foreground">
                     We realized that people needed more than just job search assistance. They needed comprehensive tools to either 
@@ -96,22 +92,22 @@ export default function About() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 grid-spacing-sm mb-8">
-              <div className="premium-card text-center overflow-hidden group card-padding">
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="premium-card text-center group card-padding bg-gradient-subtle border border-white/5">
                 <img 
                   src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
                   alt="Professional businesswoman representing leadership" 
-                  className="w-full max-w-64 max-h-32 object-contain transition-transform duration-500 group-hover:scale-105 rounded-lg mb-4"
+                  className="w-full h-auto max-w-48 aspect-square object-cover rounded-xl shadow-soft transition-all duration-500 group-hover:scale-105 mb-4 mx-auto border border-white/10"
                 />
                 <h3 className="text-lg font-semibold text-foreground mb-2">Happy at Work</h3>
                 <p className="text-muted-foreground text-sm">Creating positive work environments where professionals thrive</p>
               </div>
 
-              <div className="premium-card text-center overflow-hidden group card-padding">
+              <div className="premium-card text-center group card-padding bg-gradient-subtle border border-white/5">
                 <img 
                   src="/lovable-uploads/ee28fb16-2345-4e1b-a162-97d7223536c1.png" 
                   alt="Successful entrepreneur with innovative business" 
-                  className="w-full max-w-64 max-h-32 object-contain transition-transform duration-500 group-hover:scale-105 rounded-lg mb-4"
+                  className="w-full h-auto max-w-48 aspect-square object-cover rounded-xl shadow-soft transition-all duration-500 group-hover:scale-105 mb-4 mx-auto border border-white/10"
                 />
                 <h3 className="text-lg font-semibold text-foreground mb-2">Strategic Planning</h3>
                 <p className="text-muted-foreground text-sm">Developing comprehensive strategies for career and business success</p>

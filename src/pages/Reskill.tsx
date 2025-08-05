@@ -44,15 +44,15 @@ const Reskill = () => {
       <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="premium-card overflow-hidden">
+            <div className="lg:mr-4 self-center">
               <img 
                 src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
                 alt="Professional development and skill building" 
-                className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
             
-            <div className="animate-fade-in space-y-4">
+            <div className="animate-fade-in space-y-4 lg:ml-4">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Find Your Perfect Learning Path

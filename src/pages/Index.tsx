@@ -29,7 +29,7 @@ const Index = () => {
               </p>
             </div>
             
-            <div className="grid lg:grid-cols-2 grid-spacing items-center">
+            <div className="grid lg:grid-cols-2 gap-8 items-start">
               <div className="content-spacing">
                 <Card className="premium-card card-padding hover-scale">
                   <CardHeader className="p-0 pb-4">
@@ -62,14 +62,12 @@ const Index = () => {
                 </Card>
               </div>
 
-              <div className="animate-fade-in">
-                <div className="premium-card overflow-hidden">
-                  <img 
-                    src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
-                    alt="Professional woman working on career development" 
-                    className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
+              <div className="animate-fade-in lg:ml-4 self-center">
+                <img 
+                  src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
+                  alt="Professional woman working on career development" 
+                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                />
               </div>
             </div>
           </div>
@@ -154,15 +152,15 @@ const Index = () => {
             </Card>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-12 items-center mt-16">
-            <div className="premium-card overflow-hidden">
+          <div className="grid lg:grid-cols-2 gap-8 items-center mt-16">
+            <div className="lg:mr-4">
               <img 
                 src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
                 alt="Happy professional working at computer" 
-                className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
-            <div className="space-y-6">
+            <div className="space-y-6 lg:ml-4">
               <h3 className="text-3xl font-bold text-foreground">Collaborative Learning</h3>
               <p className="text-lg text-muted-foreground">
                 Join a community of learners and professionals working together to achieve their career goals 

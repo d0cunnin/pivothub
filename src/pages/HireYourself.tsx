@@ -52,7 +52,7 @@ const HireYourself = () => {
       <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-10">
-            <div className="animate-fade-in space-y-4">
+            <div className="animate-fade-in space-y-4 lg:mr-4">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Quick Start Your Business
@@ -63,11 +63,11 @@ const HireYourself = () => {
               </p>
             </div>
             
-            <div className="premium-card overflow-hidden">
+            <div className="lg:ml-4 self-center">
               <img 
                 src="/lovable-uploads/6dbaa8ab-9c93-4c2a-b08e-63196b35ecab.png" 
                 alt="Successful entrepreneur celebrating with keys to success" 
-                className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
           </div>
@@ -230,11 +230,11 @@ const HireYourself = () => {
               ))}
             </div>
 
-            <div className="premium-card overflow-hidden">
+            <div className="lg:ml-4 self-center">
               <img 
                 src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
                 alt="Professional entrepreneur planning business strategy" 
-                className="w-full max-w-80 max-h-48 object-contain transition-transform duration-500 hover:scale-105"
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
           </div>
