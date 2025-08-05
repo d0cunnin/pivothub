@@ -264,7 +264,7 @@ All colors MUST be HSL.
 
 @layer utilities {
   /* Button gradient enforcement for consistent hero styling */
-  .btn-hero, [data-variant="hero"], button[class*="hero"] {
+  .bg-gradient-hero {
     background: var(--gradient-hero) !important;
     color: white !important;
   }
