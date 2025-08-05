@@ -21,7 +21,7 @@ interface BusinessResource {
 
 export const BusinessResourceFinder = () => {
   const [zipCode, setZipCode] = useState("");
-  const [resourceType, setResourceType] = useState("");
+  const [resourceType, setResourceType] = useState("all");
   const [isSearching, setIsSearching] = useState(false);
   const [resources, setResources] = useState<BusinessResource[]>([]);
 
@@ -117,7 +117,7 @@ export const BusinessResourceFinder = () => {
                 <SelectValue placeholder="All types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="funding">Funding</SelectItem>
                 <SelectItem value="support">Business Support</SelectItem>
                 <SelectItem value="workspace">Workspace</SelectItem>
