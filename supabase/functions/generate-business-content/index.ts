@@ -28,7 +28,7 @@ Skills: ${data.skills}
 Interests: ${data.interests}
 Budget: ${data.budget}
 
-Provide specific, actionable business ideas that match their background.`
+Provide specific, actionable business ideas that match their background. Format as a numbered list.`
         break
 
       case 'business-plan':
@@ -37,26 +37,26 @@ Business Name: ${data.businessName}
 Industry: ${data.industry}
 Business Type: ${data.businessType}
 Target Market: ${data.targetMarket}
-Value Proposition: ${data.valueProposition}
+Value Proposition: ${data.uniqueValue}
 Startup Costs: ${data.startupCosts}
-Revenue Model: ${data.revenueModel}
+Business Model: ${data.businessModel}
 
-Include: Executive Summary, Market Analysis, Business Model, Marketing Strategy, Financial Projections, Implementation Timeline.`
+Include: Executive Summary, Business Description, Market Analysis, Marketing Strategy, Financial Projections, Implementation Plan, Risk Analysis, and Conclusion.`
         break
 
       case 'marketing-strategy':
-        prompt = `Create a phased marketing strategy for:
+        prompt = `Create a 3-phase marketing strategy for:
 Business Type: ${data.businessType}
 Target Market: ${data.targetMarket}
 Budget: ${data.budget}
 Goals: ${data.goals}
 Current Stage: ${data.currentStage}
 
-Provide 3 phases with specific tactics, timelines, budgets, and success metrics.`
+Provide 3 phases with specific tactics, timelines, budgets, and success metrics. Format with clear sections for each phase.`
         break
 
       case 'pitch-deck':
-        prompt = `Create pitch deck slides for:
+        prompt = `Create 10-12 pitch deck slides for:
 Company: ${data.companyName}
 Problem: ${data.problem}
 Solution: ${data.solution}
@@ -68,7 +68,34 @@ Use of Funds: ${data.useOfFunds}
 Team: ${data.teamBackground}
 Traction: ${data.traction}
 
-Generate 10-12 slide titles with detailed content for each slide.`
+Generate slide titles with detailed content for each. Format as: "Slide Title\nSlide content here"`
+        break
+
+      case 'biography':
+        prompt = `Create a professional founder biography, vision statement, and mission statement for:
+Founder: ${data.founderName}
+Background: ${data.background}
+Business Type: ${data.businessType}
+Goals: ${data.goals}
+Founded: ${data.dateOfFormation}
+Products/Services: ${data.productsServices}
+Traction: ${data.traction}
+Achievements: ${data.achievements}
+
+Format as three sections separated by double line breaks:
+1. Founder Biography
+2. Vision Statement  
+3. Mission Statement`
+        break
+
+      case 'social-media':
+        prompt = `Generate 6 social media content ideas for:
+Business Type: ${data.businessType}
+Target Audience: ${data.targetAudience}
+Products/Services: ${data.products}
+Brand Tone: ${data.brandTone}
+
+Create content for different platforms (Instagram, LinkedIn, Twitter, Facebook) with captions, hashtags, and optimal posting times.`
         break
 
       default:

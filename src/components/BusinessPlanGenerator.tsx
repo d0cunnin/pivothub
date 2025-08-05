@@ -42,10 +42,30 @@ export const BusinessPlanGenerator = () => {
 
   const generateBusinessPlan = async () => {
     setIsGenerating(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 3000));
     
-    const plan = `
+    try {
+      const response = await fetch('/functions/v1/generate-business-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'business-plan',
+          data: formData
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      setGeneratedPlan(result.content);
+    } catch (error) {
+      console.error('Error generating business plan:', error);
+      // Fallback to mock data if API fails
+      const plan = `
 BUSINESS PLAN: ${formData.businessName || "Your Business"}
 
 EXECUTIVE SUMMARY
@@ -75,12 +95,12 @@ We have identified key risks and developed mitigation strategies to ensure busin
 
 CONCLUSION
 ${formData.businessName || "This business"} represents a compelling opportunity in the ${formData.industry || "market"} with strong potential for growth and profitability.
-    `;
-    
-    setGeneratedPlan(plan);
-    setIsGenerating(false);
+      `;
+      setGeneratedPlan(plan);
+    } finally {
+      setIsGenerating(false);
+    }
   };
-
   const downloadPlan = () => {
     const blob = new Blob([generatedPlan], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);

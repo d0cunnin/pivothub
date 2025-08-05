@@ -46,54 +46,76 @@ export const PitchDeckGenerator = () => {
 
   const generatePitchDeck = async () => {
     setIsGenerating(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 3000));
     
-    const generatedSlides: Slide[] = [
-      {
-        title: "Company Overview",
-        content: `${formData.companyName || "Your Company"}\n\nTransforming the way people ${formData.solution || "solve problems"} through innovative technology and exceptional service.`
-      },
-      {
-        title: "The Problem",
-        content: formData.problem || "Current solutions are inadequate, expensive, or difficult to use. Customers need a better way to achieve their goals efficiently and cost-effectively."
-      },
-      {
-        title: "Our Solution",
-        content: formData.solution || "We provide an innovative platform that simplifies complex processes, reduces costs, and delivers exceptional user experience."
-      },
-      {
-        title: "Market Opportunity",
-        content: `Market Size: ${formData.marketSize || "$10B+ addressable market"}\n\nRapid growth expected due to digital transformation trends and increasing demand for efficient solutions.`
-      },
-      {
-        title: "Business Model",
-        content: formData.businessModel || "Subscription-based SaaS model with multiple pricing tiers\n• Basic: $29/month\n• Professional: $99/month\n• Enterprise: Custom pricing"
-      },
-      {
-        title: "Competition",
-        content: formData.competition || "While competitors exist, we differentiate through:\n• Superior user experience\n• Advanced features\n• Competitive pricing\n• Exceptional customer support"
-      },
-      {
-        title: "Traction",
-        content: formData.traction || "• 500+ early users\n• $50K monthly recurring revenue\n• 95% customer satisfaction\n• Growing at 20% month-over-month"
-      },
-      {
-        title: "Team",
-        content: formData.teamBackground || "Experienced team with proven track record:\n• CEO: 10+ years industry experience\n• CTO: Former tech lead at Fortune 500\n• CMO: Marketing expert with startup exits"
-      },
-      {
-        title: "Funding Request",
-        content: `Seeking: $${formData.fundingAmount || "500,000"}\n\nUse of Funds:\n${formData.useOfFunds || "• 40% Product development\n• 30% Marketing & sales\n• 20% Team expansion\n• 10% Operations"}`
-      },
-      {
-        title: "Next Steps",
-        content: "Ready to scale and capture market opportunity\n\n• Expand team\n• Accelerate growth\n• Launch new features\n• Enter new markets\n\nLet's discuss how we can work together!"
+    try {
+      const response = await fetch('/functions/v1/generate-business-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'pitch-deck',
+          data: formData
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.error) {
+        throw new Error(result.error);
       }
-    ];
-    
-    setSlides(generatedSlides);
-    setIsGenerating(false);
+
+      // Parse AI response into slide format  
+      const slideContent = result.content.split('\n\n').filter((section: string) => section.trim());
+      const generatedSlides: Slide[] = slideContent.map((section: string, index: number) => {
+        const lines = section.split('\n');
+        const title = lines[0].replace(/^\d+\.\s*/, '').replace(/^#+\s*/, '').trim();
+        const content = lines.slice(1).join('\n').trim();
+        
+        return {
+          title: title || `Slide ${index + 1}`,
+          content: content || section
+        };
+      }).slice(0, 12); // Limit to 12 slides
+
+      setSlides(generatedSlides);
+    } catch (error) {
+      console.error('Error generating pitch deck:', error);
+      // Fallback to mock data
+      const generatedSlides: Slide[] = [
+        {
+          title: "Company Overview",
+          content: `${formData.companyName || "Your Company"}\n\nTransforming the way people ${formData.solution || "solve problems"} through innovative technology and exceptional service.`
+        },
+        {
+          title: "The Problem",
+          content: formData.problem || "Current solutions are inadequate, expensive, or difficult to use. Customers need a better way to achieve their goals efficiently and cost-effectively."
+        },
+        {
+          title: "Our Solution",
+          content: formData.solution || "We provide an innovative platform that simplifies complex processes, reduces costs, and delivers exceptional user experience."
+        },
+        {
+          title: "Market Opportunity",
+          content: `Market Size: ${formData.marketSize || "$10B+ addressable market"}\n\nRapid growth expected due to digital transformation trends and increasing demand for efficient solutions.`
+        },
+        {
+          title: "Business Model",
+          content: formData.businessModel || "Subscription-based SaaS model with multiple pricing tiers\n• Basic: $29/month\n• Professional: $99/month\n• Enterprise: Custom pricing"
+        },
+        {
+          title: "Competition",
+          content: formData.competition || "While competitors exist, we differentiate through:\n• Superior user experience\n• Advanced features\n• Competitive pricing\n• Exceptional customer support"
+        },
+        {
+          title: "Traction",
+          content: formData.traction || "• 500+ early users\n• $50K monthly recurring revenue\n• 95% customer satisfaction\n• Growing at 20% month-over-month"
+        }
+      ];
+      setSlides(generatedSlides);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (

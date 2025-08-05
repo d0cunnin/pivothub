@@ -25,16 +25,55 @@ export const BiographyGenerator = () => {
 
   const generateContent = async () => {
     setIsGenerating(true);
-    // Simulate API call
-    setTimeout(() => {
+    
+    try {
+      const response = await fetch('/functions/v1/generate-business-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'biography',
+          data: { 
+            founderName, 
+            background, 
+            businessType, 
+            goals, 
+            dateOfFormation, 
+            productsServices, 
+            traction, 
+            achievements 
+          }
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      // Parse AI response into biography sections
+      const sections = result.content.split('\n\n');
+      const mockContent: BiographyContent = {
+        founderBio: sections[0] || `${founderName} is a passionate entrepreneur with extensive experience in ${background}.`,
+        vision: sections[1] || `To become the leading ${businessType} that transforms the industry.`,
+        mission: sections[2] || `Our mission is to ${goals.toLowerCase()} while maintaining excellence.`
+      };
+      
+      setContent(mockContent);
+    } catch (error) {
+      console.error('Error generating biography:', error);
+      // Fallback to mock data
       const mockContent: BiographyContent = {
         founderBio: `${founderName} is a passionate entrepreneur with a background in ${background}. ${dateOfFormation ? `Founded in ${new Date(dateOfFormation).getFullYear()}, ` : ''}With years of experience and a deep understanding of market needs, ${founderName} founded this ${businessType} to make a meaningful impact in the industry.${achievements ? ` Notable achievements include ${achievements}.` : ''} Their commitment to excellence and innovation drives the company's success and growth.`,
         vision: `To become the leading ${businessType} that transforms how people interact with our industry, creating lasting positive change and setting new standards for quality and service excellence.${traction ? ` Building on our current success of ${traction}, we aim to expand our impact significantly.` : ''}`,
         mission: `Our mission is to ${goals.toLowerCase()} while maintaining the highest standards of integrity, innovation, and customer satisfaction.${productsServices ? ` Through our ${productsServices}, we are committed to` : ' We are committed to'} building long-term relationships with our clients and contributing positively to our community.`
       };
       setContent(mockContent);
+    } finally {
       setIsGenerating(false);
-    }, 2000);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
