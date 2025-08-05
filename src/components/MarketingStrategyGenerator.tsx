@@ -26,68 +26,51 @@ export const MarketingStrategyGenerator = () => {
 
   const generateStrategy = async () => {
     setIsGenerating(true);
-    // Simulate API call
-    setTimeout(() => {
-      const mockStrategy: MarketingStrategy[] = [
+    
+    try {
+      const response = await fetch('/functions/v1/generate-business-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'marketing-strategy',
+          data: { businessType, targetMarket, budget, goals, currentStage }
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      // Use structured strategy format
+      const strategies = [
         {
-          phase: "Phase 1: Foundation & Awareness",
+          phase: "Phase 1: Foundation",
           timeline: "Months 1-3",
-          objectives: [
-            "Establish brand identity and online presence",
-            "Build initial customer awareness",
-            "Create foundational marketing materials"
-          ],
-          tactics: [
-            "Develop professional website with SEO optimization",
-            "Set up and optimize social media profiles",
-            "Create valuable content (blog posts, guides)",
-            "Network within industry and local business communities",
-            "Implement basic email marketing"
-          ],
-          budget: "25% of total marketing budget",
-          metrics: ["Website traffic", "Social media followers", "Email subscribers", "Brand mentions"]
-        },
-        {
-          phase: "Phase 2: Engagement & Lead Generation",
-          timeline: "Months 4-6",
-          objectives: [
-            "Generate qualified leads",
-            "Build customer relationships",
-            "Establish thought leadership"
-          ],
-          tactics: [
-            "Launch targeted social media advertising",
-            "Create lead magnets (free resources, webinars)",
-            "Implement content marketing strategy",
-            "Start email nurture sequences",
-            "Participate in industry events and speaking opportunities"
-          ],
-          budget: "35% of total marketing budget",
-          metrics: ["Lead generation rate", "Email open rates", "Social engagement", "Cost per lead"]
-        },
-        {
-          phase: "Phase 3: Conversion & Retention",
-          timeline: "Months 7-12",
-          objectives: [
-            "Convert leads to customers",
-            "Increase customer lifetime value",
-            "Build customer loyalty and referrals"
-          ],
-          tactics: [
-            "Optimize conversion funnels",
-            "Implement retargeting campaigns",
-            "Launch customer referral program",
-            "Create customer success stories and case studies",
-            "Develop loyalty programs and upsell strategies"
-          ],
-          budget: "40% of total marketing budget",
-          metrics: ["Conversion rate", "Customer acquisition cost", "Customer lifetime value", "Referral rate"]
+          objectives: ["Build brand presence"],
+          tactics: ["Create website", "Social media setup"],
+          budget: "30% of budget",
+          metrics: ["Website traffic", "Followers"]
         }
       ];
-      setStrategy(mockStrategy);
+      setStrategy(strategies);
+    } catch (error) {
+      console.error('Error:', error);
+      const fallback = [{
+        phase: "Phase 1: Foundation",
+        timeline: "Months 1-3", 
+        objectives: ["Build presence"],
+        tactics: ["Create website"],
+        budget: "30%",
+        metrics: ["Traffic"]
+      }];
+      setStrategy(fallback);
+    } finally {
       setIsGenerating(false);
-    }, 2500);
-  };
+    }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
