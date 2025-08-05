@@ -72,15 +72,26 @@ const Reskill = () => {
       {/* Learning Categories */}
       <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
-          <div className="text-center mb-10">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Popular Learning Categories
-              </h2>
+          {/* Header with Learning Image */}
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+            <div className="animate-fade-in space-y-4">
+              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Popular Learning Categories
+                </h2>
+              </div>
+              <p className="text-lg text-foreground/80">
+                Discover the skills that are in highest demand across industries
+              </p>
             </div>
-            <p className="text-lg text-foreground/80 mt-4">
-              Discover the skills that are in highest demand across industries
-            </p>
+            
+            <div className="animate-fade-in lg:ml-4 self-center">
+              <img 
+                src="/lovable-uploads/55e6a726-43cb-426b-924c-84bf4a8ebab7.png" 
+                alt="Popular learning categories and skill development" 
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+              />
+            </div>
           </div>
           
           <div className="grid md:grid-cols-3 gap-6">

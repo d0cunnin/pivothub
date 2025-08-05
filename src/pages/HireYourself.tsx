@@ -110,15 +110,26 @@ const HireYourself = () => {
       {/* Business Tools */}
       <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
-          <div className="text-center mb-10">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Complete Business Toolkit
-              </h2>
+          {/* Header with Business Image */}
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+            <div className="animate-fade-in space-y-4">
+              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Complete Business Toolkit
+                </h2>
+              </div>
+              <p className="text-lg text-foreground/80">
+                Everything you need to transform your idea into a thriving business
+              </p>
             </div>
-            <p className="text-lg text-foreground/80 mt-4">
-              Everything you need to transform your idea into a thriving business
-            </p>
+            
+            <div className="animate-fade-in lg:ml-4 self-center">
+              <img 
+                src="/lovable-uploads/8d6ceafa-b82d-4c50-a345-214b613d62c1.png" 
+                alt="Complete business toolkit and resources" 
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+              />
+            </div>
           </div>
           
           <div className="space-y-16">

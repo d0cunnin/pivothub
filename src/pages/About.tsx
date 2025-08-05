@@ -82,14 +82,25 @@ export default function About() {
         <div className="floating-orb floating-orb-3"></div>
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center content-spacing mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Our Mission in Action
-              </h2>
-              <p className="text-lg text-muted-foreground content-width-sm">
-                Today, we're proud to be part of the solution, helping thousands of people relaunch their vocations 
-                and build sustainable futures that create positive economic impact.
-              </p>
+            {/* Header with Mission Image */}
+            <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+              <div className="animate-fade-in space-y-4">
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Our Mission in Action
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Today, we're proud to be part of the solution, helping thousands of people relaunch their vocations 
+                  and build sustainable futures that create positive economic impact.
+                </p>
+              </div>
+              
+              <div className="animate-fade-in lg:ml-4 self-center">
+                <img 
+                  src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
+                  alt="Professional leadership and mission success" 
+                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                />
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6 mb-8">

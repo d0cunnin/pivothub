@@ -18,50 +18,19 @@ const Index = () => {
       <section className="section-spacing bg-gradient-section-1 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center content-spacing mb-12 animate-fade-in">
-              <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Career Guidance & Support
-                </h2>
+            {/* Header with Image */}
+            <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+              <div className="animate-fade-in space-y-4">
+                <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
+                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                    Career Guidance & Support
+                  </h2>
+                </div>
+                <p className="text-lg text-muted-foreground">
+                  Navigate your career transformation with expert guidance and personalized support every step of the way
+                </p>
               </div>
-              <p className="text-lg text-muted-foreground content-width-sm">
-                Navigate your career transformation with expert guidance and personalized support every step of the way
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-2 gap-8 items-start">
-              <div className="content-spacing">
-                <Card className="premium-card card-padding hover-scale">
-                  <CardHeader className="p-0 pb-4">
-                    <Users className="h-10 w-10 text-primary mb-3" />
-                    <CardTitle className="text-xl">AI Career Coach</CardTitle>
-                    <CardDescription className="text-muted-foreground">
-                      Get personalized career guidance 24/7 with our intelligent chatbot that understands your goals and challenges
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                
-                <Card className="premium-card card-padding hover-scale">
-                  <CardHeader className="p-0 pb-4">
-                    <Target className="h-10 w-10 text-primary mb-3" />
-                    <CardTitle className="text-xl">Career Assessment</CardTitle>
-                    <CardDescription className="text-muted-foreground">
-                      Discover your strengths and identify the best path forward with our comprehensive assessment tools
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                
-                <Card className="premium-card card-padding hover-scale">
-                  <CardHeader className="p-0 pb-4">
-                    <TrendingUp className="h-10 w-10 text-primary mb-3" />
-                    <CardTitle className="text-xl">Progress Tracking</CardTitle>
-                    <CardDescription className="text-muted-foreground">
-                      Monitor your skill development and career advancement with detailed analytics and milestones
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </div>
-
+              
               <div className="animate-fade-in lg:ml-4 self-center">
                 <img 
                   src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
@@ -69,6 +38,39 @@ const Index = () => {
                   className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
                 />
               </div>
+            </div>
+            
+            {/* Career Features Grid */}
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="premium-card card-padding hover-scale">
+                <CardHeader className="p-0 pb-4">
+                  <Users className="h-10 w-10 text-primary mb-3" />
+                  <CardTitle className="text-xl">AI Career Coach</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Get personalized career guidance 24/7 with our intelligent chatbot that understands your goals and challenges
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              
+              <Card className="premium-card card-padding hover-scale">
+                <CardHeader className="p-0 pb-4">
+                  <Target className="h-10 w-10 text-primary mb-3" />
+                  <CardTitle className="text-xl">Career Assessment</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Discover your strengths and identify the best path forward with our comprehensive assessment tools
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+              
+              <Card className="premium-card card-padding hover-scale">
+                <CardHeader className="p-0 pb-4">
+                  <TrendingUp className="h-10 w-10 text-primary mb-3" />
+                  <CardTitle className="text-xl">Progress Tracking</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Monitor your skill development and career advancement with detailed analytics and milestones
+                  </CardDescription>
+                </CardHeader>
+              </Card>
             </div>
           </div>
         </div>
@@ -78,13 +80,24 @@ const Index = () => {
       <section className="section-spacing bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center content-spacing mb-12 animate-fade-in">
-              <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
+            {/* Header with Image */}
+            <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
+              <div className="animate-fade-in space-y-4">
+                <div className="inline-block card-padding bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
+                  <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">Certifications</h2>
+                </div>
+                <p className="text-lg text-muted-foreground">
+                  Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
+                </p>
               </div>
-              <p className="text-lg text-muted-foreground content-width-sm">
-                Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
-              </p>
+              
+              <div className="animate-fade-in lg:ml-4 self-center">
+                <img 
+                  src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
+                  alt="Professional certifications and skill development" 
+                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                />
+              </div>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-spacing-sm animate-fade-in mb-12">
@@ -153,19 +166,19 @@ const Index = () => {
           </div>
           
           <div className="grid lg:grid-cols-2 gap-8 items-center mt-16">
-            <div className="lg:mr-4">
-              <img 
-                src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
-                alt="Happy professional working at computer" 
-                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-              />
-            </div>
-            <div className="space-y-6 lg:ml-4">
+            <div className="space-y-6 lg:mr-4">
               <h3 className="text-3xl font-bold text-foreground">Collaborative Learning</h3>
               <p className="text-lg text-muted-foreground">
                 Join a community of learners and professionals working together to achieve their career goals 
                 through collaborative learning and peer support.
               </p>
+            </div>
+            <div className="lg:ml-4 self-center">
+              <img 
+                src="/lovable-uploads/93826e68-3e48-4081-ab4a-ba232392d1a6.png" 
+                alt="Professionals collaborating and learning together" 
+                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+              />
             </div>
           </div>
           
