@@ -44,22 +44,18 @@ export const NameChecker = () => {
   };
 
   return (
-    <section className="py-16 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <Search className="h-8 w-8 text-primary" />
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                Business Name Checker
-              </h2>
-            </div>
-            <p className="text-xl text-muted-foreground">
-              Check if your business name is available across domains and social platforms
-            </p>
-          </div>
-
-          <Card className="p-8 shadow-soft">
+    <Card className="p-8 shadow-soft">
+      <div className="text-center mb-12">
+        <div className="flex items-center justify-center space-x-2 mb-4">
+          <Search className="h-8 w-8 text-primary" />
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+            Business Name Checker
+          </h2>
+        </div>
+        <p className="text-xl text-muted-foreground">
+          Check if your business name is available across domains and social platforms
+        </p>
+      </div>
             <div className="space-y-6 mb-8">
               <div className="space-y-2">
                 <Label htmlFor="businessName">Business Name</Label>
@@ -127,9 +123,6 @@ export const NameChecker = () => {
                 </div>
               </div>
             )}
-          </Card>
-        </div>
-      </div>
-    </section>
+    </Card>
   );
 };

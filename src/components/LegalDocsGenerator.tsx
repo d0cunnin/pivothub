@@ -69,7 +69,7 @@ export const LegalDocsGenerator = () => {
   ];
 
   return (
-    <Card className="p-6">
+    <Card className="p-8 shadow-soft">
       <div className="flex items-center gap-2 mb-6">
         <Scale className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Legal Documents Generator</h3>

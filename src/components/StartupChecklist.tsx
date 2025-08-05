@@ -96,7 +96,7 @@ export const StartupChecklist = () => {
   ];
 
   return (
-    <Card className="p-6">
+    <Card className="p-8 shadow-soft">
       <div className="flex items-center gap-2 mb-6">
         <CheckSquare className="h-5 w-5 text-secondary" />
         <h3 className="text-xl font-bold text-foreground">Startup Checklist</h3>
