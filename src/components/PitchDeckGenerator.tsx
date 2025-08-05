@@ -97,17 +97,15 @@ export const PitchDeckGenerator = () => {
   };
 
   return (
-    <Card className="premium-card">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-2xl">
-          <Presentation className="h-6 w-6 text-primary" />
-          Pitch Deck Generator
-        </CardTitle>
-        <CardDescription>
-          Create a compelling investor pitch deck for your startup
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Card className="p-8 shadow-soft">
+      <div className="flex items-center gap-2 mb-6">
+        <Presentation className="h-6 w-6 text-primary" />
+        <h3 className="text-2xl font-bold text-foreground">Pitch Deck Generator</h3>
+      </div>
+      <p className="text-muted-foreground mb-6">
+        Create a compelling investor pitch deck for your startup
+      </p>
+      <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="companyName">Company Name</Label>
@@ -223,7 +221,7 @@ export const PitchDeckGenerator = () => {
             </div>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };

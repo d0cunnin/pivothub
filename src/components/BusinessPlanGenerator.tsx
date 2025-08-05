@@ -94,17 +94,15 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
   };
 
   return (
-    <Card className="premium-card">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-2xl">
-          <FileText className="h-6 w-6 text-primary" />
-          Business Plan Generator
-        </CardTitle>
-        <CardDescription>
-          Create a comprehensive business plan tailored to your venture
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Card className="p-8 shadow-soft">
+      <div className="flex items-center gap-2 mb-6">
+        <FileText className="h-6 w-6 text-primary" />
+        <h3 className="text-2xl font-bold text-foreground">Business Plan Generator</h3>
+      </div>
+      <p className="text-muted-foreground mb-6">
+        Create a comprehensive business plan tailored to your venture
+      </p>
+      <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="businessName">Business Name</Label>
@@ -202,7 +200,7 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
             </div>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };

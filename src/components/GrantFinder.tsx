@@ -67,17 +67,15 @@ export const GrantFinder = () => {
   };
 
   return (
-    <Card className="premium-card">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-2xl">
-          <Search className="h-6 w-6 text-primary" />
-          Grant Finder Tool
-        </CardTitle>
-        <CardDescription>
-          Discover relevant grants based on your business criteria and location
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Card className="p-8 shadow-soft">
+      <div className="flex items-center gap-2 mb-6">
+        <Search className="h-6 w-6 text-primary" />
+        <h3 className="text-2xl font-bold text-foreground">Grant Finder Tool</h3>
+      </div>
+      <p className="text-muted-foreground mb-6">
+        Discover relevant grants based on your business criteria and location
+      </p>
+      <div className="space-y-6">
         <div className="grid md:grid-cols-3 gap-4">
           <div className="space-y-2">
             <Label htmlFor="search">Business Type/Keywords</Label>
@@ -167,7 +165,7 @@ export const GrantFinder = () => {
             ))}
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };
