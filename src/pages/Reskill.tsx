@@ -43,26 +43,55 @@ const Reskill = () => {
       {/* Skills Assessment */}
       <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
-          <div className="grid lg:grid-cols-2 gap-8 items-center mb-10">
-            <div className="animate-fade-in space-y-4 lg:mr-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
+            <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Find Your Perfect Learning Path
                 </h2>
               </div>
-              <p className="text-lg text-foreground/80">
-                Take our skills assessment to get personalized course recommendations
+              <p className="text-lg text-foreground leading-relaxed">
+                Our comprehensive skills assessment analyzes your current expertise, career goals, and industry trends to create a personalized learning roadmap. Get matched with the exact courses, certifications, and training programs that will maximize your career growth potential.
               </p>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Skill Gap Analysis</h4>
+                    <p className="text-muted-foreground text-sm">Identify exactly which skills you need to advance in your field</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Personalized Recommendations</h4>
+                    <p className="text-muted-foreground text-sm">Get course suggestions tailored to your learning style and schedule</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Career Impact Forecast</h4>
+                    <p className="text-muted-foreground text-sm">See potential salary increases and job opportunities</p>
+                  </div>
+                </div>
+              </div>
               <Button variant="default" size="lg" className="transition-elegant hover:scale-105 px-8 py-3">
-                Take Assessment
+                Take Free Assessment
               </Button>
             </div>
             
-            <div className="lg:ml-4 self-center">
+            <div className="flex justify-center lg:justify-end">
               <img 
                 src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
                 alt="Professional development and skill building" 
-                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
           </div>
@@ -73,23 +102,44 @@ const Reskill = () => {
       <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
           {/* Header with Learning Image */}
-          <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
-            <div className="animate-fade-in space-y-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="section-header">
-                  Popular Learning Categories
+                  Master In-Demand Skills
                 </h2>
               </div>
-              <p className="section-description">
-                Explore in-demand skills and certifications that will accelerate your career growth
+              <p className="text-lg text-foreground leading-relaxed">
+                Access over 350+ courses across the most sought-after skill categories. Our curriculum is designed by industry experts and updated regularly to reflect the latest market demands and emerging technologies.
               </p>
+              <div className="bg-gradient-card/50 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                <h4 className="font-semibold text-foreground mb-3">Why Our Courses Stand Out:</h4>
+                <ul className="space-y-2 text-muted-foreground">
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Hands-on projects with real-world applications</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Industry-recognized certifications upon completion</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Flexible learning with lifetime access</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-primary rounded-full"></div>
+                    <span>Expert mentorship and career guidance</span>
+                  </li>
+                </ul>
+              </div>
             </div>
             
-            <div className="animate-fade-in lg:ml-4 self-center">
+            <div className="flex justify-center lg:justify-end">
               <img 
                 src="/lovable-uploads/55e6a726-43cb-426b-924c-84bf4a8ebab7.png" 
                 alt="Popular learning categories and skill development" 
-                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
           </div>
@@ -99,32 +149,45 @@ const Reskill = () => {
               {
                 icon: <BookOpen className="h-8 w-8" />,
                 title: "Technology & Programming",
-                description: "Learn coding, web development, data science, and more",
-                courses: "150+ courses"
+                description: "Master coding, web development, AI/ML, cloud computing, and cybersecurity. Build applications, automate processes, and become proficient in the most valuable technical skills of the digital age.",
+                courses: "150+ courses",
+                highlights: ["Python, JavaScript, React", "AWS, Azure, Google Cloud", "Data Science & AI", "Cybersecurity Fundamentals"]
               },
               {
                 icon: <TrendingUp className="h-8 w-8" />,
                 title: "Digital Marketing",
-                description: "Master social media, SEO, content marketing, and analytics",
-                courses: "80+ courses"
+                description: "Learn to drive growth through SEO, social media marketing, content creation, email campaigns, and data analytics. Master the art of reaching and converting customers in the digital landscape.",
+                courses: "80+ courses",
+                highlights: ["Google Ads & Analytics", "Social Media Strategy", "Content Marketing", "Email Automation"]
               },
               {
                 icon: <Users className="h-8 w-8" />,
                 title: "Business & Management",
-                description: "Develop leadership, project management, and communication skills",
-                courses: "120+ courses"
+                description: "Develop leadership, project management, communication, and strategic thinking skills. Learn to manage teams, drive organizational change, and excel in business operations.",
+                courses: "120+ courses",
+                highlights: ["Leadership & Management", "Project Management (PMP)", "Business Strategy", "Communication Skills"]
               }
             ].map((category, index) => (
-              <Card key={index} className="premium-card p-6 group cursor-pointer transition-elegant hover:scale-105">
+              <Card key={index} className="premium-card p-6 group cursor-pointer transition-elegant hover:scale-105 h-full">
                 <div className="w-12 h-12 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center mb-4 text-primary group-hover:shadow-glow transition-elegant">
                   {category.icon}
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">{category.title}</h3>
-                <p className="text-muted-foreground mb-4">{category.description}</p>
-                <div className="flex justify-between items-center">
+                <p className="text-muted-foreground mb-4 leading-relaxed">{category.description}</p>
+                <div className="space-y-3 mb-6">
+                  <h5 className="font-semibold text-foreground text-sm">Key Skills Include:</h5>
+                  <div className="flex flex-wrap gap-2">
+                    {category.highlights.map((skill, skillIndex) => (
+                      <span key={skillIndex} className="text-xs bg-accent/10 text-accent px-2 py-1 rounded-full">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center mt-auto">
                   <span className="text-sm text-accent font-semibold bg-accent/10 px-3 py-1 rounded-full">{category.courses}</span>
                   <Button className="transition-elegant hover:scale-105">
-                    Explore
+                    Start Learning
                   </Button>
                 </div>
               </Card>
@@ -136,23 +199,56 @@ const Reskill = () => {
       {/* Certification Preview */}
       <section className="section-spacing-sm bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="animate-fade-in-scale space-y-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="animate-fade-in-scale space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Industry-Recognized Certifications
+                  Earn Credentials That Matter
                 </h2>
               </div>
-              <p className="text-lg text-muted-foreground">
-                Earn certificates that employers actually value. Our partnerships with leading companies 
-                ensure your credentials open doors to new opportunities.
+              <p className="text-lg text-foreground leading-relaxed">
+                Our industry-recognized certifications are developed in partnership with leading technology companies and validated by hiring managers. Each certificate represents verified skills that employers actively seek when making hiring and promotion decisions.
               </p>
+              <div className="bg-gradient-card/50 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                <h4 className="font-semibold text-foreground mb-4">Certification Benefits:</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                        <Award className="h-4 w-4 text-white" />
+                      </div>
+                      <span className="text-foreground font-medium">Industry Recognition</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                        <Award className="h-4 w-4 text-white" />
+                      </div>
+                      <span className="text-foreground font-medium">Higher Salary Potential</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                        <Award className="h-4 w-4 text-white" />
+                      </div>
+                      <span className="text-foreground font-medium">Career Advancement</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
+                        <Award className="h-4 w-4 text-white" />
+                      </div>
+                      <span className="text-foreground font-medium">Professional Credibility</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="space-y-3">
+                <h4 className="font-semibold text-foreground">Popular Certifications:</h4>
                 {[
-                  "Google Career Certificates",
-                  "Microsoft Azure Fundamentals",
-                  "Amazon AWS Cloud Practitioner",
-                  "HubSpot Marketing Certification"
+                  "Google Career Certificates - Digital Marketing & Data Analytics",
+                  "Microsoft Azure Fundamentals & Associate Certifications",
+                  "Amazon AWS Cloud Practitioner & Solutions Architect",
+                  "HubSpot Marketing & Sales Certification Programs"
                 ].map((cert, index) => (
                   <div key={index} className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center shadow-glow">
@@ -168,12 +264,18 @@ const Reskill = () => {
                 <div className="w-16 h-16 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:shadow-glow transition-elegant">
                   <Award className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">Sample Certificate</h3>
-                <p className="text-muted-foreground mb-6">
-                  See what your completed certification will look like
+                <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">Professional Certificate</h3>
+                <div className="bg-gradient-card/30 p-4 rounded-lg mb-6 border border-white/10">
+                  <div className="text-sm text-muted-foreground mb-2">Certificate of Completion</div>
+                  <div className="font-bold text-lg text-foreground">Advanced Web Development</div>
+                  <div className="text-sm text-muted-foreground mt-1">Issued by TechSkills Academy</div>
+                  <div className="text-xs text-accent mt-2">Verification ID: #WD2024-001</div>
+                </div>
+                <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                  Preview what your completed certification will look like. Each certificate includes verification codes and LinkedIn integration.
                 </p>
                 <Button variant="default" className="transition-elegant hover:scale-105 px-8 py-3">
-                  View Sample
+                  View Sample Certificate
                 </Button>
               </div>
             </Card>
