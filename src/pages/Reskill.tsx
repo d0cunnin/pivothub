@@ -98,66 +98,10 @@ const Reskill = () => {
         </div>
       </section>
 
-      {/* Success Stories & Learning Outcomes */}
+      {/* Career Advisor AI */}
       <section className="section-spacing-sm bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-            <div className="animate-fade-in space-y-6">
-              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Real Career Transformations
-                </h2>
-              </div>
-              <p className="text-lg text-foreground leading-relaxed">
-                See how our learners have advanced their careers, increased their salaries, and transformed their professional lives through strategic reskilling.
-              </p>
-              
-              <div className="space-y-4">
-                {[
-                  {
-                    name: "Jessica Martinez",
-                    role: "Marketing Coordinator → Digital Marketing Manager",
-                    result: "45% salary increase in 8 months",
-                    skill: "Google Analytics & SEO Certification"
-                  },
-                  {
-                    name: "Ahmed Hassan", 
-                    role: "Customer Service → Full Stack Developer",
-                    result: "Career pivot with $25K salary boost",
-                    skill: "Python & React Development"
-                  },
-                  {
-                    name: "Sarah Kim",
-                    role: "Sales Associate → Data Analyst",
-                    result: "Landed dream job at tech company",
-                    skill: "Data Science & Tableau"
-                  }
-                ].map((story, index) => (
-                  <div key={index} className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-10 h-10 bg-gradient-hero rounded-xl flex items-center justify-center">
-                        <div className="w-6 h-6 bg-white rounded-lg"></div>
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-foreground text-sm">{story.name}</h4>
-                        <p className="text-xs text-muted-foreground mb-1">{story.role}</p>
-                        <p className="text-xs text-accent font-semibold">{story.result}</p>
-                        <p className="text-xs text-muted-foreground mt-1">Completed: {story.skill}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="flex justify-center lg:justify-end">
-              <img 
-                src="/lovable-uploads/a0a1a53e-8956-475c-97cd-acc5f732b5bc.png" 
-                alt="Career transformation and professional growth" 
-                className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
-              />
-            </div>
-          </div>
+          <CareerAdvisorChatbot />
         </div>
       </section>
 
