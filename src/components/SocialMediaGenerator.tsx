@@ -132,7 +132,7 @@ export const SocialMediaGenerator = () => {
           </Select>
         </div>
 
-        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="default">
+        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
           {isGenerating ? "Generating Content Ideas..." : "Generate Social Media Content"}
         </Button>
       </form>

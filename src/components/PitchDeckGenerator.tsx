@@ -189,7 +189,7 @@ export const PitchDeckGenerator = () => {
           disabled={isGenerating}
           size="lg"
           className="w-full"
-          variant="default"
+          variant="hero"
         >
           {isGenerating ? "Generating Pitch Deck..." : "Generate Pitch Deck"}
         </Button>

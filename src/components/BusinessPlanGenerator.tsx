@@ -183,7 +183,7 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
           disabled={isGenerating}
           size="lg"
           className="w-full"
-          variant="default"
+          variant="hero"
         >
           {isGenerating ? "Generating Business Plan..." : "Generate Business Plan"}
         </Button>

@@ -133,7 +133,7 @@ export const BusinessResourceFinder = () => {
           disabled={isSearching || !zipCode}
           size="lg"
           className="w-full"
-          variant="default"
+          variant="hero"
         >
           {isSearching ? "Searching Resources..." : "Find Resources"}
         </Button>

@@ -81,7 +81,7 @@ export const BusinessIdeaGenerator = () => {
               disabled={isGenerating}
               size="lg"
               className="w-full"
-              variant="default"
+              variant="hero"
             >
               {isGenerating ? (
                 <>

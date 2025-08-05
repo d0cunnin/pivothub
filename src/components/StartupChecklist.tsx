@@ -134,7 +134,7 @@ export const StartupChecklist = () => {
           </Select>
         </div>
 
-        <Button type="submit" disabled={isGenerating || !businessStructure || !state} size="lg" className="w-full" variant="default">
+        <Button type="submit" disabled={isGenerating || !businessStructure || !state} size="lg" className="w-full" variant="hero">
           {isGenerating ? "Generating Checklist..." : "Generate Startup Checklist"}
         </Button>
       </form>

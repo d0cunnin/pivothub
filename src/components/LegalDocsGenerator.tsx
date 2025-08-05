@@ -107,7 +107,7 @@ export const LegalDocsGenerator = () => {
           </Select>
         </div>
 
-        <Button type="submit" disabled={isGenerating || !businessStructure || !state} size="lg" className="w-full" variant="default">
+        <Button type="submit" disabled={isGenerating || !businessStructure || !state} size="lg" className="w-full" variant="hero">
           {isGenerating ? "Generating Document List..." : "Generate Required Documents"}
         </Button>
       </form>

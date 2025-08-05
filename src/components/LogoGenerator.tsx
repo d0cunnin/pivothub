@@ -108,7 +108,7 @@ export const LogoGenerator = () => {
           </Select>
         </div>
 
-        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="default">
+        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
           {isGenerating ? "Generating Concepts..." : "Generate Logo Concepts"}
         </Button>
       </form>

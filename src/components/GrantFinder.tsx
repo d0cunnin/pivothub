@@ -125,7 +125,7 @@ export const GrantFinder = () => {
           disabled={isSearching}
           size="lg"
           className="w-full"
-          variant="default"
+          variant="hero"
         >
           {isSearching ? "Searching Grants..." : "Find Grants"}
         </Button>

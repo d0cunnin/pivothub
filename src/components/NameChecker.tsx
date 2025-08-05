@@ -77,7 +77,7 @@ export const NameChecker = () => {
                 disabled={isChecking || !businessName.trim()}
                 size="lg"
                 className="w-full"
-                variant="default"
+                variant="hero"
               >
                 {isChecking ? (
                   <>
