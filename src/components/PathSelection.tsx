@@ -41,7 +41,7 @@ export const PathSelection = () => {
               <img 
                 src={reskillIcon} 
                 alt="Reskill" 
-                className="w-full aspect-auto object-contain rounded-lg mb-6 group-hover:scale-105 transition-transform duration-500"
+                className="w-64 h-40 object-cover rounded-lg mb-6 mx-auto group-hover:scale-105 transition-transform duration-500"
               />
 
               <p className="text-foreground mb-6 leading-relaxed text-left">
@@ -94,7 +94,7 @@ export const PathSelection = () => {
               <img 
                 src={hireyourselfIcon} 
                 alt="HireYourself" 
-                className="w-full aspect-auto object-contain rounded-lg mb-6 group-hover:scale-105 transition-transform duration-500"
+                className="w-64 h-40 object-cover rounded-lg mb-6 mx-auto group-hover:scale-105 transition-transform duration-500"
               />
 
               <p className="text-foreground mb-6 leading-relaxed text-left">
