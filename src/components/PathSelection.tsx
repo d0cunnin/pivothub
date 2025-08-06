@@ -141,7 +141,7 @@ export const PathSelection = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-foreground">Job Prep</h3>
-                  <p className="text-muted-foreground text-left">Ace Your Next Interview</p>
+                  <p className="text-muted-foreground text-left">Prepare for Your Next Big Opportunity</p>
                 </div>
               </div>
 
