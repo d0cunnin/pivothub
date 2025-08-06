@@ -1,11 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Briefcase, Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/');
+    setTimeout(() => {
+      const pathSelection = document.getElementById('choose-path');
+      if (pathSelection) {
+        pathSelection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
 
   return (
     <header className="bg-card shadow-soft border-b">
@@ -53,7 +64,7 @@ export const Header = () => {
 
           <div className="hidden md:flex space-x-3">
             <Button variant="ghost">Sign In</Button>
-            <Button variant="hero">Get Started</Button>
+            <Button variant="hero" onClick={handleGetStarted}>Get Started</Button>
           </div>
 
           <Button
@@ -106,7 +117,7 @@ export const Header = () => {
               </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 <Button variant="ghost">Sign In</Button>
-                <Button variant="hero">Get Started</Button>
+                <Button variant="hero" onClick={handleGetStarted}>Get Started</Button>
               </div>
             </nav>
           </div>

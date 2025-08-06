@@ -8,7 +8,7 @@ export default function About() {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-hero hero-glow overflow-hidden">
+      <section className="relative py-20 bg-gradient-hero hero-glow overflow-hidden">
         {/* Sophisticated floating orbs */}
         <div className="floating-orb top-16 right-16 w-40 h-40 bg-primary/8 animate-float"></div>
         <div className="floating-orb bottom-24 left-16 w-32 h-32 bg-secondary/10 animate-float" style={{ animationDelay: '2s' }}></div>
@@ -19,10 +19,10 @@ export default function About() {
             <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
               <Users className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-white leading-tight animate-slide-up">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               About Our Mission
             </h1>
-            <p className="text-2xl md:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Empowering careers and transforming lives through innovation, mentorship, and opportunity
             </p>
           </div>
@@ -100,15 +100,15 @@ export default function About() {
 
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
-              <h3 className="section-header">Happy at Work</h3>
+              <h3 className="section-header">Find Your Career Path</h3>
               <p className="section-body-text">
-                Creating environments where professionals find fulfillment, purpose, and growth opportunities in their daily work experience. We believe that when people are engaged and satisfied in their roles, both individuals and organizations thrive.
+                Discover your ideal career direction with personalized guidance and assessment tools. Whether you're looking to reskill for new opportunities or launch your own business, we help you identify the path that aligns with your goals, skills, and aspirations.
               </p>
             </div>
             <div className="lg:ml-4">
               <img 
                 src="/lovable-uploads/8d6ceafa-b82d-4c50-a345-214b613d62c1.png"
-                alt="Professional leadership fostering workplace happiness" 
+                alt="Professional guidance for career path discovery" 
                 className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
               />
             </div>
