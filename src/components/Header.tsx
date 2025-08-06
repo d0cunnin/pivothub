@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Briefcase, Menu, X } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Briefcase, Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -42,24 +43,39 @@ export const Header = () => {
             >
               About
             </Link>
-            <Link 
-              to="/assessments" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/assessments' ? 'text-primary font-medium' : ''}`}
-            >
-              Assessments
-            </Link>
-            <Link 
-              to="/jobprep" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/jobprep' ? 'text-primary font-medium' : ''}`}
-            >
-              Job Prep
-            </Link>
-            <Link 
-              to="/certifications" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/certifications' ? 'text-primary font-medium' : ''}`}
-            >
-              Certifications
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 ${['/reskill', '/assessments', '/jobprep', '/certifications'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                >
+                  <span>ReSkill</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
+                <DropdownMenuItem asChild>
+                  <Link to="/reskill" className="flex w-full cursor-pointer">
+                    Overview
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/assessments" className="flex w-full cursor-pointer">
+                    Assessments
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/jobprep" className="flex w-full cursor-pointer">
+                    Job Prep Tools
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/certifications" className="flex w-full cursor-pointer">
+                    Certifications
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link 
               to="/hireyourself" 
               className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/hireyourself' ? 'text-primary font-medium' : ''}`}
@@ -106,27 +122,41 @@ export const Header = () => {
               >
                 About
               </Link>
-              <Link 
-                to="/assessments" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/assessments' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Assessments
-              </Link>
-              <Link 
-                to="/jobprep" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/jobprep' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Job Prep
-              </Link>
-              <Link 
-                to="/certifications" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/certifications' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Certifications
-              </Link>
+              <div className="space-y-2">
+                <div className={`font-medium ${['/reskill', '/assessments', '/jobprep', '/certifications'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}>
+                  ReSkill
+                </div>
+                <div className="pl-4 space-y-2">
+                  <Link 
+                    to="/reskill" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/reskill' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Overview
+                  </Link>
+                  <Link 
+                    to="/assessments" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/assessments' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Assessments
+                  </Link>
+                  <Link 
+                    to="/jobprep" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/jobprep' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Job Prep Tools
+                  </Link>
+                  <Link 
+                    to="/certifications" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/certifications' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Certifications
+                  </Link>
+                </div>
+              </div>
               <Link 
                 to="/hireyourself" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/hireyourself' ? 'text-primary font-medium' : ''}`}
