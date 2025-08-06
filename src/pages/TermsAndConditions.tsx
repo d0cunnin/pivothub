@@ -34,71 +34,73 @@ const TermsAndConditions = () => {
             </CardHeader>
             <CardContent className="space-y-8 prose prose-gray max-w-none">
               <div>
-                <h3 className="text-xl font-semibold mb-4">1. Acceptance of Terms</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  By accessing and using ReLaunch's services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                  Welcome to the website operated by Bold AI Solutions ("Company," "we," "our," or "us"). By accessing or using this website and its tools, you agree to be bound by the following Terms and Conditions. If you do not agree with these terms, please do not use this site.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">2. Service Description</h3>
+                <h3 className="text-xl font-semibold mb-4">1. Disclaimer of Liability</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  ReLaunch provides career development services including skills assessments, training recommendations, business planning tools, and grant writing assistance. Our services are designed to help individuals enhance their career prospects and explore entrepreneurial opportunities.
+                  Bold AI Solutions provides access to artificial intelligence (AI)-powered tools and platforms for informational, educational, and professional development purposes. We act solely as an intermediary, connecting users with generative AI technologies.
                 </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold mb-4">3. User Responsibilities</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  We do not guarantee the accuracy, legality, completeness, or usefulness of any AI-generated content, and we make no warranties, expressed or implied, as to the outcomes or decisions based on such content.
+                </p>
                 <p className="text-muted-foreground leading-relaxed mb-2">
-                  Users are responsible for:
+                  By using this website, you acknowledge and agree that:
                 </p>
                 <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                  <li>Providing accurate and complete information</li>
-                  <li>Maintaining the confidentiality of their account credentials</li>
-                  <li>Using the service in compliance with all applicable laws</li>
-                  <li>Not engaging in any fraudulent or harmful activities</li>
+                  <li>You are solely responsible for how you use the tools and any resulting content.</li>
+                  <li>Bold AI Solutions shall not be held liable for any decisions, losses, damages, or legal outcomes (including but not limited to employment, financial, reputational, or emotional consequences) resulting from the use of this platform.</li>
+                  <li>You use the AI tools and their outputs entirely at your own risk.</li>
                 </ul>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">4. Privacy Policy</h3>
+                <h3 className="text-xl font-semibold mb-4">2. Copyright and Intellectual Property</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  We respect your privacy and are committed to protecting your personal information. Any data collected is used solely for the purpose of providing our services and improving user experience. We do not sell or share personal information with third parties without explicit consent.
+                  AI-generated content, including but not limited to text and images, may not be original and could unintentionally resemble or replicate existing copyrighted materials.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-2">
+                  By using this site, you understand and agree that:
+                </p>
+                <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+                  <li>Bold AI Solutions assumes no responsibility or liability for any potential copyright, intellectual property, or legal disputes that may arise from AI-generated content.</li>
+                  <li>You are solely responsible for ensuring that any content you publish or distribute complies with applicable copyright and intellectual property laws.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold mb-4">3. No Professional Advice</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  The outputs of any AI tools available on this site do not constitute professional, legal, business, or career advice. Users should consult with appropriate professionals before making decisions based on the information generated by this platform.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">5. Intellectual Property</h3>
+                <h3 className="text-xl font-semibold mb-4">4. Consent and Use</h3>
+                <p className="text-muted-foreground leading-relaxed mb-2">
+                  By accessing or using this website, you confirm that you:
+                </p>
+                <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+                  <li>Are at least 18 years old or have the permission of a parent or legal guardian.</li>
+                  <li>Agree to these Terms and Conditions and any future updates.</li>
+                  <li>Assume full responsibility for how you use any content or tools on this platform.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold mb-4">5. Jurisdiction</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  All content, features, and functionality of ReLaunch are owned by us and are protected by international copyright, trademark, and other intellectual property laws. Users may not reproduce, distribute, or create derivative works without written permission.
+                  These terms shall be governed by and construed in accordance with the laws of the State of Michigan, without regard to conflict of law principles. Any legal action or proceeding arising from your use of the website shall be brought exclusively in a court located in Michigan.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">6. Service Availability</h3>
+                <h3 className="text-xl font-semibold mb-4">6. Changes to Terms</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  While we strive to provide continuous service, we do not guarantee that our services will be available at all times. We reserve the right to modify, suspend, or discontinue services with or without notice.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold mb-4">7. Limitation of Liability</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  ReLaunch provides educational and informational services. We make no guarantees regarding career outcomes or business success. Users are responsible for their own decisions and actions based on the information and tools provided.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold mb-4">8. Modifications to Terms</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  We reserve the right to modify these terms at any time. Users will be notified of significant changes, and continued use of the service constitutes acceptance of the modified terms.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xl font-semibold mb-4">9. Contact Information</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  If you have any questions about these Terms and Conditions, please contact us through our contact page or email us at legal@relaunch.com.
+                  We reserve the right to modify these Terms and Conditions at any time. Continued use of the website after any such changes shall constitute your consent to the updated terms.
                 </p>
               </div>
 

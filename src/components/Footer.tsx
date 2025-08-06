@@ -50,7 +50,7 @@ export const Footer = () => {
               <li><a href="https://discord.gg/hbT6yvDg" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Community</a></li>
               <li><Link to="/blog" className="hover:text-accent transition-colors">Blog</Link></li>
               <li><Link to="/terms" className="hover:text-accent transition-colors">Terms & Conditions</Link></li>
-              <li><span className="hover:text-accent transition-colors cursor-pointer">Privacy Policy</span></li>
+              <li><Link to="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>
