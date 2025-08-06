@@ -49,13 +49,19 @@ serve(async (req) => {
 
     // Define pricing based on tier
     const pricing = {
-      premium: { amount: 799, name: "Premium Plan" }, // $7.99
-      pro: { amount: 1599, name: "Pro Plan" }         // $15.99
+      basic: { amount: 799, name: "Basic Plan" },     // $7.99
+      pro: { amount: 1499, name: "Pro Plan" },        // $14.99
+      "ebook-career": { amount: 299, name: "Career Transformation Guide" },
+      "ebook-business": { amount: 299, name: "Business Startup Handbook" },
+      "ebook-skills": { amount: 299, name: "Skills Development Mastery" }
     };
 
     const selectedPlan = pricing[tier as keyof typeof pricing];
     if (!selectedPlan) throw new Error("Invalid subscription tier");
 
+    // Determine if it's an e-book or subscription
+    const isEbook = tier.includes('ebook');
+    
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -65,14 +71,14 @@ serve(async (req) => {
             currency: "usd",
             product_data: { name: selectedPlan.name },
             unit_amount: selectedPlan.amount,
-            recurring: { interval: "month" },
+            ...(isEbook ? {} : { recurring: { interval: "month" } }),
           },
           quantity: 1,
         },
       ],
-      mode: "subscription",
-      success_url: `${req.headers.get("origin")}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/`,
+      mode: isEbook ? "payment" : "subscription",
+      success_url: `${req.headers.get("origin")}/pricing?success=true`,
+      cancel_url: `${req.headers.get("origin")}/pricing?canceled=true`,
     });
 
     logStep("Checkout session created", { sessionId: session.id });

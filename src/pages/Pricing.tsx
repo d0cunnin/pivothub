@@ -63,8 +63,8 @@ const Pricing = () => {
       ctaAction: () => window.location.href = "/auth"
     },
     {
-      name: "Premium",
-      price: "$9.99",
+      name: "Basic",
+      price: "$7.99",
       period: "month",
       description: "Everything you need to succeed",
       features: [
@@ -76,17 +76,17 @@ const Pricing = () => {
         "Progress tracking"
       ],
       popular: true,
-      current: subscriptionTier === "Premium",
-      ctaText: subscriptionTier === "Premium" ? "Current Plan" : "Upgrade to Premium",
-      ctaAction: () => handleSubscribe("premium-monthly")
+      current: subscriptionTier === "Basic",
+      ctaText: subscriptionTier === "Basic" ? "Current Plan" : "Upgrade to Basic",
+      ctaAction: () => handleSubscribe("basic-monthly")
     },
     {
       name: "Pro",
-      price: "$19.99",
+      price: "$14.99",
       period: "month",
       description: "For power users and teams",
       features: [
-        "Everything in Premium",
+        "Everything in Basic",
         "Team collaboration",
         "Custom branding",
         "API access",
@@ -181,6 +181,82 @@ const Pricing = () => {
         </div>
       </section>
 
+      {/* PDF E-books Section */}
+      <section className="section-spacing-sm">
+        <div className="page-container">
+          <div className="content-width">
+            <div className="text-center mb-12">
+              <h2 className="section-header">PDF E-book Downloads</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Get comprehensive guides and resources in downloadable PDF format.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <Card className="premium-card card-padding-lg">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-xl">Career Transformation Guide</CardTitle>
+                  <div className="mt-4">
+                    <span className="text-3xl font-bold text-primary">$2.99</span>
+                  </div>
+                  <CardDescription className="mt-2">Complete roadmap to career success</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                    onClick={() => handleSubscribe("ebook-career")}
+                  >
+                    Download PDF
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              <Card className="premium-card card-padding-lg">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-xl">Business Startup Handbook</CardTitle>
+                  <div className="mt-4">
+                    <span className="text-3xl font-bold text-primary">$2.99</span>
+                  </div>
+                  <CardDescription className="mt-2">Essential guide for entrepreneurs</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                    onClick={() => handleSubscribe("ebook-business")}
+                  >
+                    Download PDF
+                  </Button>
+                </CardContent>
+              </Card>
+              
+              <Card className="premium-card card-padding-lg">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-xl">Skills Development Mastery</CardTitle>
+                  <div className="mt-4">
+                    <span className="text-3xl font-bold text-primary">$2.99</span>
+                  </div>
+                  <CardDescription className="mt-2">Master new skills efficiently</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                    onClick={() => handleSubscribe("ebook-skills")}
+                  >
+                    Download PDF
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="section-spacing-sm bg-gradient-section-1">
         <div className="page-container">
@@ -222,7 +298,7 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Do you offer refunds?</h3>
                   <p className="text-muted-foreground text-sm">
-                    We offer a 30-day money-back guarantee for all paid plans. Contact support for assistance.
+                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final.
                   </p>
                 </div>
                 
