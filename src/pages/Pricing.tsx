@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { CheckoutModal } from "@/components/CheckoutModal";
 import { Check, Star, Zap, Crown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,17 +13,21 @@ import { useToast } from "@/hooks/use-toast";
 const Pricing = () => {
   const { user, subscribed, subscriptionTier } = useAuth();
   const { toast } = useToast();
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [checkoutModal, setCheckoutModal] = useState<{
+    open: boolean;
+    planName: string;
+    price: string;
+    priceId: string;
+    isEbook?: boolean;
+  }>({
+    open: false,
+    planName: '',
+    price: '',
+    priceId: '',
+    isEbook: false
+  });
 
   const handleSubscribe = async (priceId: string) => {
-    if (!termsAccepted) {
-      toast({
-        title: "Terms Required",
-        description: "Please acknowledge the terms and conditions before proceeding.",
-        variant: "destructive",
-      });
-      return;
-    }
     if (!user) {
       toast({
         title: "Sign In Required",
@@ -53,6 +57,16 @@ const Pricing = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const openCheckoutModal = (planName: string, price: string, priceId: string, isEbook = false) => {
+    setCheckoutModal({
+      open: true,
+      planName,
+      price,
+      priceId,
+      isEbook
+    });
   };
 
   const plans = [
@@ -88,7 +102,7 @@ const Pricing = () => {
       popular: true,
       current: subscriptionTier === "Basic",
       ctaText: subscriptionTier === "Basic" ? "Current Plan" : "Upgrade to Basic",
-      ctaAction: () => handleSubscribe("basic-monthly")
+      ctaAction: () => openCheckoutModal("Basic Plan", "$7.99", "basic-monthly")
     },
     {
       name: "Pro",
@@ -107,7 +121,7 @@ const Pricing = () => {
       popular: false,
       current: subscriptionTier === "Pro",
       ctaText: subscriptionTier === "Pro" ? "Current Plan" : "Upgrade to Pro",
-      ctaAction: () => handleSubscribe("pro-monthly")
+      ctaAction: () => openCheckoutModal("Pro Plan", "$14.99", "pro-monthly")
     }
   ];
 
@@ -191,33 +205,6 @@ const Pricing = () => {
         </div>
       </section>
 
-      {/* Terms and Conditions Checkbox */}
-      <section className="py-8">
-        <div className="page-container">
-          <div className="content-width max-w-2xl mx-auto">
-            <div className="flex items-start space-x-3 p-6 bg-card rounded-lg border">
-              <Checkbox 
-                id="terms" 
-                checked={termsAccepted}
-                onCheckedChange={(checked) => setTermsAccepted(checked === true)}
-                className="mt-1"
-              />
-              <label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
-                I acknowledge that I have read and agree to the{" "}
-                <a href="/terms-and-conditions" className="text-primary hover:underline">
-                  Terms and Conditions
-                </a>{" "}
-                and{" "}
-                <a href="/privacy-policy" className="text-primary hover:underline">
-                  Privacy Policy
-                </a>
-                . I understand that due to the nature of digital services, no refunds are offered and all sales are final.
-              </label>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* PDF E-books Section */}
       <section className="py-8">
         <div className="page-container">
@@ -243,7 +230,7 @@ const Pricing = () => {
                     className="w-full"
                     variant="outline"
                     size="lg"
-                    onClick={() => handleSubscribe("ebook-career")}
+                    onClick={() => openCheckoutModal("Career Transformation Guide", "$2.99", "ebook-career", true)}
                   >
                     Download PDF
                   </Button>
@@ -263,7 +250,7 @@ const Pricing = () => {
                     className="w-full"
                     variant="outline"
                     size="lg"
-                    onClick={() => handleSubscribe("ebook-business")}
+                    onClick={() => openCheckoutModal("Business Startup Handbook", "$2.99", "ebook-business", true)}
                   >
                     Download PDF
                   </Button>
@@ -283,7 +270,7 @@ const Pricing = () => {
                     className="w-full"
                     variant="outline"
                     size="lg"
-                    onClick={() => handleSubscribe("ebook-skills")}
+                    onClick={() => openCheckoutModal("Skills Development Mastery", "$2.99", "ebook-skills", true)}
                   >
                     Download PDF
                   </Button>
@@ -293,6 +280,16 @@ const Pricing = () => {
           </div>
         </div>
       </section>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        open={checkoutModal.open}
+        onOpenChange={(open) => setCheckoutModal(prev => ({ ...prev, open }))}
+        onConfirm={() => handleSubscribe(checkoutModal.priceId)}
+        planName={checkoutModal.planName}
+        price={checkoutModal.price}
+        isEbook={checkoutModal.isEbook}
+      />
 
       {/* FAQ Section */}
       <section className="section-spacing-sm bg-gradient-section-1">
