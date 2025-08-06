@@ -87,6 +87,12 @@ export const Header = () => {
             >
               Grant Writing
             </Link>
+            <Link 
+              to="/contact" 
+              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/contact' ? 'text-primary font-medium' : ''}`}
+            >
+              Contact
+            </Link>
           </nav>
 
           <div className="hidden md:flex space-x-3">
@@ -169,6 +175,13 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Grant Writing
+              </Link>
+              <Link 
+                to="/contact" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/contact' ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
               </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 <Button variant="ghost">Sign In</Button>
