@@ -53,7 +53,12 @@ const HireYourself = () => {
               Launch your business with confidence. Get everything you need from idea to execution.
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Button variant="hero" size="lg" className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg">
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg"
+                onClick={() => document.getElementById('business-tools')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 Start Your Business Journey
               </Button>
             </div>
@@ -123,7 +128,7 @@ const HireYourself = () => {
       </section>
 
       {/* Complete Business Toolkit */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section id="business-tools" className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
           {/* Header with Business Image */}
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
