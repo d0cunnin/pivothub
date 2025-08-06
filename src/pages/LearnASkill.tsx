@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Award, Star, CheckCircle, TrendingUp, Users, Clock } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
-const Certifications = () => {
+const LearnASkill = () => {
   const certificationCategories = [
     {
       title: "Technology & IT",
@@ -98,10 +98,10 @@ const Certifications = () => {
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
-      {/* Certification Benefits */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      {/* Benefits Section */}
+      <section className="py-12 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
-          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
+          <div className="text-center max-w-4xl mx-auto mb-8 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 The Power of Continuous Learning
@@ -109,7 +109,7 @@ const Certifications = () => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
             <Card className="p-6 bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
               <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4">
                 <Star className="h-6 w-6 text-white" />
@@ -143,10 +143,10 @@ const Certifications = () => {
         </div>
       </section>
 
-      {/* Certification Categories */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      {/* Skills Categories */}
+      <section className="py-12 bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
-          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
+          <div className="text-center max-w-4xl mx-auto mb-8 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 Learn a New Skill
@@ -157,7 +157,7 @@ const Certifications = () => {
             </p>
           </div>
 
-          <div className="space-y-8">
+          <div className="space-y-6">
             {certificationCategories.map((category, index) => (
               <Card key={index} className="p-8 bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
                 <div className="mb-6">
@@ -192,16 +192,16 @@ const Certifications = () => {
       </section>
 
       {/* Call to Action */}
-      <section className="section-spacing-sm bg-gradient-section-3 relative overflow-hidden">
+      <section className="py-12 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Ready to Get Certified?
+                Ready to Start Learning?
               </h2>
             </div>
-            <p className="text-lg text-foreground leading-relaxed mb-8">
-              Start your certification journey today and take the next step in your professional development.
+            <p className="text-lg text-foreground leading-relaxed mb-6">
+              Begin your learning journey today and take the next step in your professional development.
             </p>
             <div className="space-y-4">
               <Button size="lg" variant="hero" className="mr-4">
@@ -220,4 +220,4 @@ const Certifications = () => {
   );
 };
 
-export default Certifications;
+export default LearnASkill;

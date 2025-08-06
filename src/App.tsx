@@ -13,7 +13,7 @@ import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import Assessments from "./pages/Assessments";
 import JobPrep from "./pages/JobPrep";
-import Certifications from "./pages/Certifications";
+import LearnASkill from "./pages/LearnASkill";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +28,7 @@ const App = () => (
           <Route path="/reskill" element={<Reskill />} />
           <Route path="/assessments" element={<Assessments />} />
           <Route path="/jobprep" element={<JobPrep />} />
-          <Route path="/certifications" element={<Certifications />} />
+          <Route path="/certifications" element={<LearnASkill />} />
           <Route path="/hireyourself" element={<HireYourself />} />
           <Route path="/grantwriting" element={<GrantWriting />} />
           <Route path="/about" element={<About />} />
