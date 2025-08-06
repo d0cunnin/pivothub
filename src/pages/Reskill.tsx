@@ -7,6 +7,7 @@ import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
+import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Reskill = () => {
@@ -149,6 +150,47 @@ const Reskill = () => {
           </div>
           
           <CareerAdvisorChatbot />
+        </div>
+      </section>
+
+      {/* Interview Questions Coach */}
+      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Interview Questions Coach
+              </h2>
+            </div>
+            <p className="text-lg text-foreground leading-relaxed mb-4">
+              Master your interview skills with AI-powered coaching. Practice with customized questions, get expert feedback, and build confidence for your next interview.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 text-center">
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <Target className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">Personalized Questions</h4>
+                <p className="text-sm text-muted-foreground">Get questions tailored to your role, industry, and experience level</p>
+              </div>
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <BookOpen className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">STAR Method Coaching</h4>
+                <p className="text-sm text-muted-foreground">Learn to structure answers using Situation, Task, Action, Result</p>
+              </div>
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <Users className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">Mock Interviews</h4>
+                <p className="text-sm text-muted-foreground">Practice timed interviews with comprehensive performance reports</p>
+              </div>
+            </div>
+          </div>
+          
+          <InterviewQuestionsCoach />
         </div>
       </section>
 
