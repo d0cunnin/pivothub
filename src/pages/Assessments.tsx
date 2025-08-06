@@ -64,22 +64,22 @@ const Assessments = () => {
                   Find Your Perfect Learning Path
                 </h2>
               </div>
-              <p className="text-lg text-foreground leading-relaxed mb-6">
+              <p className="text-lg text-foreground leading-relaxed mb-3">
                 These assessments are here to help you discover a career path that truly fits you and your future.
                 You'll get clear insight into:
               </p>
-              <div className="space-y-3 mb-6">
-                <p className="text-foreground leading-relaxed">
+              <div className="space-y-2 mb-3">
+                <p className="text-foreground">
                   <span className="font-semibold">Your interests</span>, so you can focus on careers that keep you excited and inspired
                 </p>
-                <p className="text-foreground leading-relaxed">
+                <p className="text-foreground">
                   <span className="font-semibold">Your personality</span>, to find the types of jobs and work environments where you can shine
                 </p>
-                <p className="text-foreground leading-relaxed">
+                <p className="text-foreground">
                   <span className="font-semibold">Your strengths and skills</span>, to see how well your abilities match the roles you're aiming for
                 </p>
               </div>
-              <p className="text-lg text-foreground leading-relaxed italic">
+              <p className="text-foreground italic">
                 Each assessment is a step toward greater confidence, clarity, and success in your journey. You were made for more—and this is the beginning of discovering what that "more" looks like.
               </p>
               <div className="space-y-4">
