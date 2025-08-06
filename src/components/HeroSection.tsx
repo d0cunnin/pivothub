@@ -54,15 +54,15 @@ export const HeroSection = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-accent">50K+</div>
+              <div className="text-3xl font-bold text-accent">5K+</div>
               <div className="text-white/80">People Empowered</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-accent">500+</div>
+              <div className="text-3xl font-bold text-accent">225+</div>
               <div className="text-white/80">Certifications</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-accent">1000+</div>
+              <div className="text-3xl font-bold text-accent">430+</div>
               <div className="text-white/80">Businesses Launched</div>
             </div>
           </div>
