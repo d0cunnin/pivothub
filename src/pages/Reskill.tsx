@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import { GraduationCap, BookOpen, Award, Target, Users, TrendingUp } from "lucide-react";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { CareerAssessment } from "@/components/CareerAssessment";
+import { SkillsAssessment } from "@/components/SkillsAssessment";
+import { PersonalityAssessment } from "@/components/PersonalityAssessment";
 
 const Reskill = () => {
   return (
@@ -30,10 +32,12 @@ const Reskill = () => {
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Transform your career with industry-recognized certifications and cutting-edge skills training
             </p>
-            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Button variant="hero" size="lg" className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg">
-                Start Learning Today
-              </Button>
+            <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
+              <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <CareerAssessment />
+                <SkillsAssessment />
+                <PersonalityAssessment />
+              </div>
             </div>
           </div>
         </div>
