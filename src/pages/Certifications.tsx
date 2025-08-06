@@ -79,17 +79,17 @@ const Certifications = () => {
               <Award className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Learn New Skills
+              Why Learn a New Skill?
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Earn industry-recognized certifications that open doors to better career opportunities and higher salaries
+              In today's rapidly evolving job market, continuous learning isn't just an advantage—it's essential for career growth and personal fulfillment
             </p>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <Button size="lg" variant="hero" className="mr-4">
-                Browse All Certifications
+                Start Learning Today
               </Button>
               <Button size="lg" variant="outline" className="bg-white/10 text-white border-white hover:bg-white hover:text-primary backdrop-blur-sm">
-                Take Skills Assessment
+                Explore Skills Assessment
               </Button>
             </div>
           </div>
@@ -104,7 +104,7 @@ const Certifications = () => {
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Why Choose Our Certifications?
+                The Power of Continuous Learning
               </h2>
             </div>
           </div>
@@ -114,9 +114,9 @@ const Certifications = () => {
               <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4">
                 <Star className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Industry Recognition</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Stay Competitive</h3>
               <p className="text-muted-foreground">
-                Our certifications are recognized by leading employers and industry associations, ensuring your credentials carry real weight in the job market.
+                New skills keep you relevant in an ever-changing market. Stand out from the competition by mastering in-demand technologies and methodologies.
               </p>
             </Card>
 
@@ -124,9 +124,9 @@ const Certifications = () => {
               <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4">
                 <TrendingUp className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Career Advancement</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Increase Your Value</h3>
               <p className="text-muted-foreground">
-                Studies show certified professionals earn 15-25% more than their non-certified peers and have better promotion opportunities.
+                Skilled professionals earn significantly more and have better job security. Invest in yourself and unlock new income potential.
               </p>
             </Card>
 
@@ -134,9 +134,9 @@ const Certifications = () => {
               <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4">
                 <Users className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Expert Support</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-3">Personal Growth</h3>
               <p className="text-muted-foreground">
-                Get guidance from industry experts and mentors throughout your certification journey, with personalized learning paths.
+                Learning new skills builds confidence, expands your network, and opens doors to opportunities you never thought possible.
               </p>
             </Card>
           </div>
@@ -153,7 +153,7 @@ const Certifications = () => {
               </h2>
             </div>
             <p className="text-lg text-foreground leading-relaxed">
-              Choose from our comprehensive range of certification programs designed to meet industry demands and your career goals.
+              Explore our comprehensive learning paths designed to help you master the skills that matter most in today's job market.
             </p>
           </div>
 
