@@ -28,7 +28,7 @@ const App = () => (
           <Route path="/reskill" element={<Reskill />} />
           <Route path="/assessments" element={<Assessments />} />
           <Route path="/jobprep" element={<JobPrep />} />
-          <Route path="/certifications" element={<LearnASkill />} />
+          <Route path="/learn-a-skill" element={<LearnASkill />} />
           <Route path="/hireyourself" element={<HireYourself />} />
           <Route path="/grantwriting" element={<GrantWriting />} />
           <Route path="/about" element={<About />} />

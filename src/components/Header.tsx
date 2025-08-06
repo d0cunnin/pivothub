@@ -45,13 +45,12 @@ export const Header = () => {
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 px-4 py-2 h-auto ${['/reskill', '/assessments', '/jobprep', '/certifications'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                <div 
+                  className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 cursor-pointer ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                 >
                   <span>ReSkill</span>
                   <ChevronDown className="h-4 w-4" />
-                </Button>
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
                 <DropdownMenuItem asChild>
@@ -70,8 +69,8 @@ export const Header = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/certifications" className="flex w-full cursor-pointer">
-                    Certifications
+                  <Link to="/learn-a-skill" className="flex w-full cursor-pointer">
+                    Learn a Skill
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -123,7 +122,7 @@ export const Header = () => {
                 About
               </Link>
               <div className="space-y-2">
-                <div className={`font-medium ${['/reskill', '/assessments', '/jobprep', '/certifications'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}>
+                <div className={`font-medium ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}>
                   ReSkill
                 </div>
                 <div className="pl-4 space-y-2">
@@ -149,11 +148,11 @@ export const Header = () => {
                     Job Prep Tools
                   </Link>
                   <Link 
-                    to="/certifications" 
-                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/certifications' ? 'text-primary font-medium' : ''}`}
+                    to="/learn-a-skill" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/learn-a-skill' ? 'text-primary font-medium' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Certifications
+                    Learn a Skill
                   </Link>
                 </div>
               </div>
