@@ -49,6 +49,8 @@ export const Footer = () => {
               <li><Link to="/contact" className="hover:text-accent transition-colors">Contact Us</Link></li>
               <li><a href="https://discord.gg/hbT6yvDg" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Community</a></li>
               <li><Link to="/blog" className="hover:text-accent transition-colors">Blog</Link></li>
+              <li><Link to="/terms" className="hover:text-accent transition-colors">Terms & Conditions</Link></li>
+              <li><span className="hover:text-accent transition-colors cursor-pointer">Privacy Policy</span></li>
             </ul>
           </div>
         </div>
