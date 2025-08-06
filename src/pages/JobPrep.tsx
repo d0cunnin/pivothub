@@ -54,7 +54,7 @@ const JobPrep = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2"
+                  className="bg-white/10 text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2 backdrop-blur-sm"
                   onClick={() => document.getElementById('interview-coach')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <MessageSquare className="h-5 w-5" />
@@ -63,7 +63,7 @@ const JobPrep = () => {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2"
+                  className="bg-white/10 text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2 backdrop-blur-sm"
                   onClick={() => document.getElementById('resume-coach')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Briefcase className="h-5 w-5" />
