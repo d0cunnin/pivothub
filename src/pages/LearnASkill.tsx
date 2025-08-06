@@ -144,9 +144,9 @@ const LearnASkill = () => {
       </section>
 
       {/* Skills Categories */}
-      <section className="pt-4 pb-8 bg-gradient-section-2 relative overflow-hidden">
+      <section className="pt-1 pb-8 bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
-          <div className="text-center max-w-4xl mx-auto mb-6 animate-fade-in">
+          <div className="text-center max-w-4xl mx-auto mb-4 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 Learn a New Skill
