@@ -16,40 +16,44 @@ const Index = () => {
       <PathSelection />
       
       {/* Platform Explanation */}
-      <section className="section-spacing bg-gradient-section-1 relative">
+      <section className="section-spacing-sm bg-gradient-section-1 relative">
         <div className="page-container">
-          <div className="content-width text-center space-y-6">
-            <h2 className="section-header">
+          <div className="content-width text-center">
+            <div className="space-y-4 max-w-4xl mx-auto">
+              <h2 className="section-header">
               Rediscover Your Strengths, Build Your Future
             </h2>
-            <p className="section-description max-w-3xl mx-auto">
+            <p className="section-description">
               Our platform is designed to help you rediscover your strengths, explore new career paths, 
               and access powerful tools to build your future. Start with our comprehensive assessments 
               to gain clarity on your direction, then leverage our business and grant writing tools to 
               take action toward your goals.
             </p>
+            </div>
           </div>
         </div>
       </section>
       
       {/* Assessment Tools Section */}
-      <section className="section-spacing bg-gradient-section-2 relative">
+      <section className="section-spacing-sm bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center space-y-6 mb-12">
-              <h2 className="section-header">
+            <div className="text-center mb-10">
+              <div className="space-y-4 max-w-3xl mx-auto">
+                <h2 className="section-header">
                 Start Your Journey with Self-Discovery
               </h2>
-              <p className="section-description max-w-2xl mx-auto">
+              <p className="section-description">
                 Take our comprehensive assessments to understand your skills, interests, and personality. 
                 These insights will guide your career decisions and help you choose the right path forward.
               </p>
+              </div>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8">
-              <Card className="premium-card card-padding hover-scale text-center">
-                <CardHeader className="p-0 pb-6">
-                  <Brain className="h-12 w-12 text-primary mb-4 mx-auto" />
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="premium-card card-padding-sm hover-scale text-center">
+                <CardHeader className="p-0 pb-4">
+                  <Brain className="h-10 w-10 text-primary mb-3 mx-auto" />
                   <CardTitle className="text-xl">Skills Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Evaluate your current abilities across 8 key areas including math, communication, technology, and more.
@@ -62,9 +66,9 @@ const Index = () => {
                 </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding hover-scale text-center">
-                <CardHeader className="p-0 pb-6">
-                  <Heart className="h-12 w-12 text-primary mb-4 mx-auto" />
+              <Card className="premium-card card-padding-sm hover-scale text-center">
+                <CardHeader className="p-0 pb-4">
+                  <Heart className="h-10 w-10 text-primary mb-3 mx-auto" />
                   <CardTitle className="text-xl">Interest Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Discover what truly motivates you and explore career paths that align with your passions.
@@ -77,9 +81,9 @@ const Index = () => {
                 </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding hover-scale text-center">
-                <CardHeader className="p-0 pb-6">
-                  <Users className="h-12 w-12 text-primary mb-4 mx-auto" />
+              <Card className="premium-card card-padding-sm hover-scale text-center">
+                <CardHeader className="p-0 pb-4">
+                  <Users className="h-10 w-10 text-primary mb-3 mx-auto" />
                   <CardTitle className="text-xl">Personality Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Understand your work style, communication preferences, and ideal work environments.
@@ -97,31 +101,33 @@ const Index = () => {
       </section>
 
       {/* Tools & Resources Section */}
-      <section className="section-spacing bg-gradient-section-1 relative">
+      <section className="section-spacing-sm bg-gradient-section-1 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center space-y-6 mb-12">
-              <h2 className="section-header">
+            <div className="text-center mb-10">
+              <div className="space-y-4 max-w-3xl mx-auto">
+                <h2 className="section-header">
                 Tools to Build Your Future
               </h2>
-              <p className="section-description max-w-2xl mx-auto">
+              <p className="section-description">
                 Access powerful tools designed to help you secure funding, develop business ideas, 
                 and turn your career goals into actionable plans.
               </p>
+              </div>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card className="premium-card card-padding hover-scale">
-                <CardHeader className="p-0 pb-6">
-                  <FileText className="h-12 w-12 text-primary mb-4" />
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="premium-card card-padding-sm hover-scale">
+                <CardHeader className="p-0 pb-4">
+                  <FileText className="h-10 w-10 text-primary mb-3" />
                   <CardTitle className="text-2xl">Grant Writing Generator</CardTitle>
-                  <CardDescription className="text-muted-foreground mb-6">
+                  <CardDescription className="text-muted-foreground mb-4">
                     Professional grant writing assistance to help you secure funding for education, 
                     training, or business ventures. Generate compelling proposals with AI-powered guidance.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Button size="lg" className="w-full mb-4">
+                  <Button size="lg" className="w-full mb-3">
                     Start Grant Writing
                   </Button>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
@@ -133,17 +139,17 @@ const Index = () => {
                 </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding hover-scale">
-                <CardHeader className="p-0 pb-6">
-                  <Briefcase className="h-12 w-12 text-primary mb-4" />
+              <Card className="premium-card card-padding-sm hover-scale">
+                <CardHeader className="p-0 pb-4">
+                  <Briefcase className="h-10 w-10 text-primary mb-3" />
                   <CardTitle className="text-2xl">Business & Entrepreneurship Tools</CardTitle>
-                  <CardDescription className="text-muted-foreground mb-6">
+                  <CardDescription className="text-muted-foreground mb-4">
                     Complete suite of business development tools including idea generation, 
                     business plans, pitch decks, and marketing strategies.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Button size="lg" className="w-full mb-4">
+                  <Button size="lg" className="w-full mb-3">
                     Explore Business Tools
                   </Button>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
@@ -160,18 +166,20 @@ const Index = () => {
       </section>
 
       {/* Future Development Section */}
-      <section className="section-spacing bg-gradient-section-2 relative">
+      <section className="section-spacing-sm bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center space-y-6">
+            <div className="text-center">
+              <div className="space-y-4 max-w-4xl mx-auto">
               <h2 className="section-header">
                 Get ReSkilled - Coming Soon
               </h2>
-              <p className="section-description max-w-3xl mx-auto">
+              <p className="section-description">
                 We're developing comprehensive certification programs and collaborative learning experiences. 
                 Stay tuned for exciting updates as we prepare to launch our full education platform.
               </p>
-              <div className="grid lg:grid-cols-2 gap-8 items-center mt-12">
+              </div>
+              <div className="grid lg:grid-cols-2 gap-8 items-center mt-10">
                 <div className="space-y-4 lg:mr-4">
                   <h3 className="text-2xl font-semibold text-foreground">Under Development</h3>
                   <p className="text-muted-foreground">
