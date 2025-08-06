@@ -13,9 +13,9 @@ serve(async (req) => {
   try {
     const { type, data } = await req.json()
     
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
+    const openaiApiKey = Deno.env.get('relaunch_openai_key')
     if (!openaiApiKey) {
-      throw new Error('OPENAI_API_KEY not found in environment variables')
+      throw new Error('relaunch_openai_key not found in environment variables')
     }
 
     let prompt = ''

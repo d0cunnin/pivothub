@@ -1,1 +1,4 @@
 project_id = "fkvjsgqjgissolpdqbdh"
+
+[functions.generate-business-content]
+verify_jwt = false
