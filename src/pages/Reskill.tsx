@@ -7,6 +7,7 @@ import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
+import heroImage from "@/assets/hero-image.jpg";
 
 const Reskill = () => {
   return (
@@ -15,6 +16,14 @@ const Reskill = () => {
       
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
+        </div>
+        
         {/* Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
         <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>

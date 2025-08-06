@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Users } from "lucide-react";
+import heroImage from "@/assets/hero-image.jpg";
 
 export default function About() {
   return (
@@ -9,6 +10,14 @@ export default function About() {
       
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-hero hero-glow overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
+        </div>
+        
         {/* Sophisticated floating orbs */}
         <div className="floating-orb top-16 right-16 w-40 h-40 bg-primary/8 animate-float"></div>
         <div className="floating-orb bottom-24 left-16 w-32 h-32 bg-secondary/10 animate-float" style={{ animationDelay: '2s' }}></div>
