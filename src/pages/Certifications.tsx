@@ -149,7 +149,7 @@ const Certifications = () => {
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Certification Programs
+                Learn a New Skill
               </h2>
             </div>
             <p className="text-lg text-foreground leading-relaxed">
