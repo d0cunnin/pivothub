@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GraduationCap, BookOpen, Award, Target, Users, TrendingUp } from "lucide-react";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
+import { SkillsAssessment } from "@/components/SkillsAssessment";
 
 const Reskill = () => {
   return (
@@ -82,9 +83,7 @@ const Reskill = () => {
                   </div>
                 </div>
               </div>
-              <Button variant="default" size="lg" className="transition-elegant hover:scale-105 px-8 py-3">
-                Take Free Assessment
-              </Button>
+              <SkillsAssessment />
             </div>
             
             <div className="flex justify-center lg:justify-end">
