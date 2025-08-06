@@ -11,6 +11,9 @@ import GrantWriting from "./pages/GrantWriting";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
+import Assessments from "./pages/Assessments";
+import JobPrep from "./pages/JobPrep";
+import Certifications from "./pages/Certifications";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +26,9 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/reskill" element={<Reskill />} />
+          <Route path="/assessments" element={<Assessments />} />
+          <Route path="/jobprep" element={<JobPrep />} />
+          <Route path="/certifications" element={<Certifications />} />
           <Route path="/hireyourself" element={<HireYourself />} />
           <Route path="/grantwriting" element={<GrantWriting />} />
           <Route path="/about" element={<About />} />
