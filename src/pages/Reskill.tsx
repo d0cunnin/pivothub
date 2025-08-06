@@ -113,29 +113,47 @@ const Reskill = () => {
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="section-header">
-                  Master In-Demand Skills
+                  Get ReSkilled
                 </h2>
               </div>
-              <p className="text-lg text-foreground leading-relaxed">
-                Our skills training is designed to help you build confidence, sharpen your abilities, and take action toward your goals. Each offering focuses on practical, relevant knowledge you can apply immediately—whether you're launching a business, changing careers, or growing in your current role.
+              <p className="text-lg text-foreground leading-relaxed mb-6">
+                Whether you're re-entering the workforce, changing careers, or building new skills, our training programs are designed to help you succeed in today's evolving job market.
               </p>
               
-              {/* Learning Features List */}
-              <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-3 text-sm">Learning Features:</h4>
-                <div className="grid grid-cols-2 gap-1 text-xs text-muted-foreground">
-                  <span>• Skills Assessment</span>
-                  <span>• Personalized Learning Paths</span>
-                  <span>• Industry Certifications</span>
-                  <span>• Hands-on Projects</span>
-                  <span>• Expert Mentorship</span>
-                  <span>• Career Guidance</span>
-                  <span>• Flexible Scheduling</span>
-                  <span>• Progress Tracking</span>
-                  <span>• Job Market Insights</span>
-                  <span>• Salary Forecasting</span>
-                  <span>• Portfolio Building</span>
-                  <span>• Lifetime Access</span>
+              {/* ReSkilled Benefits List */}
+              <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                <h4 className="font-semibold text-foreground mb-4">Get ReSkilled Benefits:</h4>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                    <span className="text-foreground">Refresh your skills to stay competitive in today's job market</span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                    <span className="text-foreground">Learn practical, real-world knowledge you can use immediately</span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                    <span className="text-foreground">Gain confidence to pursue new career paths or opportunities</span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                    <span className="text-foreground">Adapt quickly to changing workplace demands</span>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                    <span className="text-foreground">Build a foundation for lifelong learning and growth</span>
+                  </div>
                 </div>
               </div>
               
