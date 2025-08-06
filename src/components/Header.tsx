@@ -56,11 +56,6 @@ export const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
                 <DropdownMenuItem asChild>
-                  <Link to="/reskill" className="flex w-full cursor-pointer">
-                    Overview
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
                   <Link to="/assessments" className="flex w-full cursor-pointer">
                     Assessments
                   </Link>
@@ -82,12 +77,6 @@ export const Header = () => {
               className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/hireyourself' ? 'text-primary font-medium' : ''}`}
             >
               HireYourself
-            </Link>
-            <Link 
-              to="/grantwriting" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
-            >
-              Grant Writing
             </Link>
             <Link 
               to="/contact" 
@@ -173,13 +162,6 @@ export const Header = () => {
                 </div>
                 <div className="pl-4 space-y-2">
                   <Link 
-                    to="/reskill" 
-                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/reskill' ? 'text-primary font-medium' : ''}`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Overview
-                  </Link>
-                  <Link 
                     to="/assessments" 
                     className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/assessments' ? 'text-primary font-medium' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
@@ -208,13 +190,6 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 HireYourself
-              </Link>
-              <Link 
-                to="/grantwriting" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Grant Writing
               </Link>
               <Link 
                 to="/contact" 
