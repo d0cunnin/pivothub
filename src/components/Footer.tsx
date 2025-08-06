@@ -1,4 +1,5 @@
 import { Briefcase, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
@@ -8,7 +9,7 @@ export const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <Briefcase className="h-8 w-8" />
-              <h3 className="text-2xl font-bold">CareerLaunch</h3>
+              <h3 className="text-2xl font-bold">ReLaunch</h3>
             </div>
             <p className="text-primary-foreground/80">
               Empowering individuals to transform their careers through reskilling and entrepreneurship.
@@ -24,27 +25,27 @@ export const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Reskill</h4>
             <ul className="space-y-2 text-primary-foreground/80">
-              <li><a href="#" className="hover:text-accent transition-colors">Certifications</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Skills Assessment</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Learning Paths</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Career Guidance</a></li>
+              <li><Link to="/reskill" className="hover:text-accent transition-colors">Skills Assessment</Link></li>
+              <li><Link to="/reskill" className="hover:text-accent transition-colors">Career Assessment</Link></li>
+              <li><Link to="/reskill" className="hover:text-accent transition-colors">Personality Test</Link></li>
+              <li><Link to="/reskill" className="hover:text-accent transition-colors">Career Guidance</Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="font-semibold mb-4">HireYourself</h4>
             <ul className="space-y-2 text-primary-foreground/80">
-              <li><a href="#" className="hover:text-accent transition-colors">Business Planning</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Market Research</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Grant Writing</a></li>
-              <li><a href="#" className="hover:text-accent transition-colors">Pitch Decks</a></li>
+              <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Business Planning</Link></li>
+              <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Business Ideas</Link></li>
+              <li><Link to="/grantwriting" className="hover:text-accent transition-colors">Grant Writing</Link></li>
+              <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Pitch Decks</Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-primary-foreground/80">
-              <li><a href="#" className="hover:text-accent transition-colors">Help Center</a></li>
+              <li><Link to="/about" className="hover:text-accent transition-colors">About Us</Link></li>
               <li><a href="#" className="hover:text-accent transition-colors">Contact Us</a></li>
               <li><a href="#" className="hover:text-accent transition-colors">Community</a></li>
               <li><a href="#" className="hover:text-accent transition-colors">Blog</a></li>
@@ -53,7 +54,7 @@ export const Footer = () => {
         </div>
         
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-primary-foreground/60">
-          <p>&copy; 2024 CareerLaunch. All rights reserved. Empowering careers, enabling dreams.</p>
+          <p>&copy; 2024 ReLaunch. All rights reserved. Empowering careers, enabling dreams.</p>
         </div>
       </div>
     </footer>
