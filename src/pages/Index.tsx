@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb, Brain, Heart, FileText, Briefcase } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -129,9 +130,11 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Button size="lg" className="w-full mb-3">
-                    Start Grant Writing
-                  </Button>
+                  <Link to="/grantwriting">
+                    <Button size="lg" className="w-full mb-3">
+                      Start Grant Writing
+                    </Button>
+                  </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li>• Education & training grants</li>
                     <li>• Small business funding</li>
@@ -151,9 +154,11 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Button size="lg" className="w-full mb-3">
-                    Explore Business Tools
-                  </Button>
+                  <Link to="/hireyourself">
+                    <Button size="lg" className="w-full mb-3">
+                      Explore Business Tools
+                    </Button>
+                  </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li>• Business idea generator</li>
                     <li>• Business plan creator</li>
