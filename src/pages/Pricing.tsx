@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Check, Star, Zap, Crown } from "lucide-react";
@@ -12,8 +13,17 @@ import { useToast } from "@/hooks/use-toast";
 const Pricing = () => {
   const { user, subscribed, subscriptionTier } = useAuth();
   const { toast } = useToast();
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleSubscribe = async (priceId: string) => {
+    if (!termsAccepted) {
+      toast({
+        title: "Terms Required",
+        description: "Please acknowledge the terms and conditions before proceeding.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!user) {
       toast({
         title: "Sign In Required",
@@ -181,8 +191,35 @@ const Pricing = () => {
         </div>
       </section>
 
+      {/* Terms and Conditions Checkbox */}
+      <section className="py-8">
+        <div className="page-container">
+          <div className="content-width max-w-2xl mx-auto">
+            <div className="flex items-start space-x-3 p-6 bg-card rounded-lg border">
+              <Checkbox 
+                id="terms" 
+                checked={termsAccepted}
+                onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                className="mt-1"
+              />
+              <label htmlFor="terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
+                I acknowledge that I have read and agree to the{" "}
+                <a href="/terms-and-conditions" className="text-primary hover:underline">
+                  Terms and Conditions
+                </a>{" "}
+                and{" "}
+                <a href="/privacy-policy" className="text-primary hover:underline">
+                  Privacy Policy
+                </a>
+                . I understand that due to the nature of digital services, no refunds are offered and all sales are final.
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PDF E-books Section */}
-      <section className="section-spacing-sm">
+      <section className="py-8">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center mb-12">
