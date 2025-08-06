@@ -2,12 +2,13 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { GraduationCap, BookOpen, Award, Target, Users, TrendingUp } from "lucide-react";
+import { GraduationCap, BookOpen, Award, Target, Users, TrendingUp, FileText, Edit3 } from "lucide-react";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
 import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
+import { ResumeCoachLetter } from "@/components/ResumeCoachLetter";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Reskill = () => {
@@ -191,6 +192,47 @@ const Reskill = () => {
           </div>
           
           <InterviewQuestionsCoach />
+        </div>
+      </section>
+
+      {/* Resume & Cover Letter Coach */}
+      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Resume & Cover Letter Coach
+              </h2>
+            </div>
+            <p className="text-lg text-foreground leading-relaxed mb-4">
+              Transform your resume from generic job duties into powerful, results-oriented statements that get noticed by hiring managers.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 text-center">
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <TrendingUp className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">Results-Oriented</h4>
+                <p className="text-sm text-muted-foreground">Transform duties into quantifiable achievements with metrics</p>
+              </div>
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <FileText className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">Professional Analysis</h4>
+                <p className="text-sm text-muted-foreground">Get detailed feedback on language, formatting, and content</p>
+              </div>
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <Edit3 className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">Custom Cover Letters</h4>
+                <p className="text-sm text-muted-foreground">Generate tailored cover letters for specific job applications</p>
+              </div>
+            </div>
+          </div>
+          
+          <ResumeCoachLetter />
         </div>
       </section>
 
