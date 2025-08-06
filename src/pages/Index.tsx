@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { PathSelection } from "@/components/PathSelection";
 import { Footer } from "@/components/Footer";
-import { AuthGuard } from "@/components/AuthGuard";
+
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import collaborativeLearningImage from "@/assets/collaborative-learning.jpg";
@@ -77,17 +77,11 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <AuthGuard requireAuth={true} fallback={
-                    <Button size="lg" className="w-full" onClick={() => setShowAuthModal(true)}>
-                      Sign Up to Gain Access
+                  <Link to="/assessments">
+                    <Button size="lg" className="w-full">
+                      Take Skills Assessment
                     </Button>
-                  }>
-                    <Link to="/assessments">
-                      <Button size="lg" className="w-full">
-                        Take Skills Assessment
-                      </Button>
-                    </Link>
-                  </AuthGuard>
+                  </Link>
                 </CardContent>
               </Card>
               
@@ -100,17 +94,11 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <AuthGuard requireAuth={true} fallback={
-                    <Button size="lg" className="w-full" onClick={() => setShowAuthModal(true)}>
-                      Sign Up to Gain Access
+                  <Link to="/assessments">
+                    <Button size="lg" className="w-full">
+                      Explore Your Interests
                     </Button>
-                  }>
-                    <Link to="/assessments">
-                      <Button size="lg" className="w-full">
-                        Explore Your Interests
-                      </Button>
-                    </Link>
-                  </AuthGuard>
+                  </Link>
                 </CardContent>
               </Card>
               
@@ -123,17 +111,11 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <AuthGuard requireAuth={true} fallback={
-                    <Button size="lg" className="w-full" onClick={() => setShowAuthModal(true)}>
-                      Sign Up to Gain Access
+                  <Link to="/assessments">
+                    <Button size="lg" className="w-full">
+                      Assess Your Personality
                     </Button>
-                  }>
-                    <Link to="/assessments">
-                      <Button size="lg" className="w-full">
-                        Assess Your Personality
-                      </Button>
-                    </Link>
-                  </AuthGuard>
+                  </Link>
                 </CardContent>
               </Card>
             </div>
@@ -168,17 +150,11 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <AuthGuard requireAuth={true} fallback={
-                    <Button size="lg" className="w-full mb-3" onClick={() => setShowAuthModal(true)}>
-                      Sign Up to Gain Access
+                  <Link to="/hireyourself">
+                    <Button size="lg" className="w-full mb-3">
+                      Start Grant Writing
                     </Button>
-                  }>
-                    <Link to="/grantwriting">
-                      <Button size="lg" className="w-full mb-3">
-                        Start Grant Writing
-                      </Button>
-                    </Link>
-                  </AuthGuard>
+                  </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li>• Education & training grants</li>
                     <li>• Small business funding</li>
@@ -198,17 +174,11 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <AuthGuard requireAuth={true} fallback={
-                    <Button size="lg" className="w-full mb-3" onClick={() => setShowAuthModal(true)}>
-                      Sign Up to Gain Access
+                  <Link to="/hireyourself">
+                    <Button size="lg" className="w-full mb-3">
+                      Explore Business Tools
                     </Button>
-                  }>
-                    <Link to="/hireyourself">
-                      <Button size="lg" className="w-full mb-3">
-                        Explore Business Tools
-                      </Button>
-                    </Link>
-                  </AuthGuard>
+                  </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li>• Business idea generator</li>
                     <li>• Business plan creator</li>

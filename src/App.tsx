@@ -4,12 +4,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { UsageProvider } from "@/contexts/UsageContext";
 import Index from "./pages/Index";
 import Reskill from "./pages/Reskill";
 import HireYourself from "./pages/HireYourself";
 import About from "./pages/About";
 import Downloads from "./pages/Downloads";
-import GrantWriting from "./pages/GrantWriting";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
@@ -26,10 +26,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+      <UsageProvider>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
@@ -40,7 +41,6 @@ const App = () => (
             <Route path="/jobprep" element={<JobPrep />} />
             <Route path="/learn-a-skill" element={<LearnASkill />} />
             <Route path="/hireyourself" element={<HireYourself />} />
-            <Route path="/grantwriting" element={<GrantWriting />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
@@ -50,7 +50,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </UsageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

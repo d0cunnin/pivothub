@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { AuthGuard } from "@/components/AuthGuard";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Target, BookOpen, Users, TrendingUp, Brain } from "lucide-react";
@@ -13,7 +13,6 @@ const Assessments = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <AuthGuard>
       
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
@@ -162,7 +161,6 @@ const Assessments = () => {
       </section>
 
       <Footer />
-      </AuthGuard>
     </div>
   );
 };
