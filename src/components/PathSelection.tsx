@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { GraduationCap, Rocket, ArrowRight, CheckCircle } from "lucide-react";
+import { GraduationCap, Rocket, Briefcase, ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import reskillIcon from "@/assets/reskill-icon.jpg";
 import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
+import jobprepIcon from "@/assets/jobprep-icon.jpg";
 
 export const PathSelection = () => {
   return (
@@ -22,7 +23,7 @@ export const PathSelection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Reskill Path */}
           <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20 transition-all duration-500"></div>
@@ -123,6 +124,59 @@ export const PathSelection = () => {
                   className="w-full group-hover:shadow-glow transition-all duration-300"
                 >
                   Start Your Business
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+          </Card>
+
+          {/* Job Prep Path */}
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent/10 group-hover:from-accent/10 group-hover:to-accent/20 transition-all duration-500"></div>
+            
+            <div className="relative p-8">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mr-4">
+                  <Briefcase className="h-8 w-8 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-foreground">Job Prep</h3>
+                  <p className="text-muted-foreground text-left">Ace Your Next Interview</p>
+                </div>
+              </div>
+
+              <img 
+                src={jobprepIcon} 
+                alt="Job Prep" 
+                className="w-64 h-40 object-cover rounded-lg mb-6 mx-auto group-hover:scale-105 transition-transform duration-500"
+              />
+
+              <p className="text-foreground mb-6 leading-relaxed text-left">
+                Master the art of job interviews and applications. Get personalized coaching, 
+                practice questions, and professional resume feedback.
+              </p>
+
+              <div className="space-y-3 mb-8">
+                {[
+                  "AI-powered interview coaching",
+                  "Personalized career advice",
+                  "Resume & cover letter review",
+                  "Mock interview practice"
+                ].map((feature, index) => (
+                  <div key={index} className="flex items-center space-x-3">
+                    <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
+                    <span className="text-foreground">{feature}</span>
+                  </div>
+                ))}
+              </div>
+
+              <Link to="/jobprep">
+                <Button 
+                  variant="default" 
+                  size="lg" 
+                  className="w-full group-hover:shadow-glow transition-all duration-300"
+                >
+                  Start Job Prep
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
