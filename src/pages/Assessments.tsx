@@ -95,7 +95,6 @@ const Assessments = () => {
                   </div>
                 </div>
               </div>
-              <CareerAssessment />
             </div>
             
             <div className="flex justify-center lg:justify-end">
