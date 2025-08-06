@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, GraduationCap, User } from "lucide-react";
+import { Send, GraduationCap, User, AlertCircle, RotateCcw } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
@@ -13,55 +14,61 @@ interface Message {
 }
 
 export const CareerAdvisorChatbot = () => {
+  const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and reskilling journey. What career challenge can I help you with today?",
+      text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and reskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
       isBot: true,
       timestamp: new Date(),
     },
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const careerAdvice = {
-    "career change": "Career changes can be exciting and challenging! Start by identifying your transferable skills and what you're passionate about. Consider informational interviews and shadowing professionals in your target field.",
-    "skills": "Focus on both hard and soft skills. Technical skills get you noticed, but soft skills help you succeed. Consider online courses, bootcamps, or formal education depending on your timeline and budget.",
-    "resume": "Tailor your resume for each application. Highlight transferable skills and quantify your achievements. Consider creating a skills-based resume if you're changing industries significantly.",
-    "interview": "Practice common questions and prepare specific examples using the STAR method (Situation, Task, Action, Result). Research the company thoroughly and prepare thoughtful questions.",
-    "networking": "Start with your existing network and expand gradually. LinkedIn is powerful for professional networking. Attend industry events, join professional associations, and consider mentorship opportunities.",
-    "salary": "Research salary ranges for your target role using sites like Glassdoor and PayScale. Consider the total compensation package, not just base salary. Don't be afraid to negotiate respectfully.",
-    "remote work": "Remote work requires strong communication and self-discipline. Highlight your remote work skills and create a professional home office setup. Many companies now offer hybrid or fully remote positions.",
-    "age": "Age discrimination exists, but focus on what you can control. Highlight your experience, adaptability, and fresh perspectives. Consider modern skills training and update your professional image.",
+  const getAIResponse = async (userMessage: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/supabase/functions/v1/career-advisor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          conversationHistory: messages.slice(1) // Exclude the initial greeting
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to get AI response');
+      }
+
+      return data.response;
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      throw error;
+    }
   };
 
-  const getCareerAdvice = (userMessage: string): string => {
-    const lowercaseMessage = userMessage.toLowerCase();
+  const getFallbackResponse = (userMessage: string): string => {
+    const lowerMessage = userMessage.toLowerCase();
     
-    for (const [keyword, advice] of Object.entries(careerAdvice)) {
-      if (lowercaseMessage.includes(keyword)) {
-        return advice;
-      }
+    if (lowerMessage.includes('career') || lowerMessage.includes('job')) {
+      return "I understand you're asking about career guidance. While I'm temporarily having connection issues, I recommend starting with a self-assessment of your skills and interests. What specific career area would you like to explore?";
     }
     
-    // Default responses for common patterns
-    if (lowercaseMessage.includes("how") || lowercaseMessage.includes("what")) {
-      return "That's a great question! Career transitions are unique to each person. The key is to start with self-assessment - understanding your values, interests, and skills. What specific area would you like to explore further?";
+    if (lowerMessage.includes('skill')) {
+      return "Skills development is crucial for career growth. Focus on both technical skills relevant to your target field and soft skills like communication and problem-solving. What skills are you most interested in developing?";
     }
     
-    if (lowercaseMessage.includes("help") || lowercaseMessage.includes("stuck")) {
-      return "Feeling stuck is normal during career transitions. Let's break this down step by step. What's the main challenge you're facing right now - is it finding direction, developing skills, or landing opportunities?";
-    }
-    
-    if (lowercaseMessage.includes("scared") || lowercaseMessage.includes("afraid")) {
-      return "It's completely normal to feel nervous about career changes. Remember that small, consistent steps lead to big changes. What's one small action you could take this week to move forward?";
-    }
-    
-    return "That's an interesting point! Career development is a journey, not a destination. The key is continuous learning and adapting. Can you tell me more about your specific situation or goals?";
+    return "I apologize for the technical difficulty. In the meantime, consider these key career development areas: skills assessment, industry research, networking, and creating a strong professional profile. What aspect would you like to discuss further?";
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || isTyping) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -70,29 +77,64 @@ export const CareerAdvisorChatbot = () => {
       timestamp: new Date(),
     };
 
+    const currentInput = inputMessage;
     setMessages(prev => [...prev, userMessage]);
     setInputMessage("");
     setIsTyping(true);
+    setError(null);
 
-    // Simulate typing delay
-    setTimeout(() => {
+    try {
+      const aiResponse = await getAIResponse(currentInput);
+      
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: getCareerAdvice(inputMessage),
+        text: aiResponse,
         isBot: true,
         timestamp: new Date(),
       };
       
       setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      setError("I'm having trouble connecting right now. Here's some general guidance:");
+      
+      const fallbackResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: getFallbackResponse(currentInput),
+        isBot: true,
+        timestamp: new Date(),
+      };
+      
+      setMessages(prev => [...prev, fallbackResponse]);
+      
+      toast({
+        title: "Connection Issue",
+        description: "I'm having trouble accessing my full capabilities. You're receiving basic guidance for now.",
+        variant: "destructive",
+      });
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
+  };
+
+  const resetConversation = () => {
+    setMessages([
+      {
+        id: "1",
+        text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and reskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
+        isBot: true,
+        timestamp: new Date(),
+      },
+    ]);
+    setError(null);
+    setInputMessage("");
   };
 
   const quickQuestions = [
     "How do I change careers successfully?",
-    "What skills should I focus on learning?",
-    "How do I network effectively?",
-    "How can I stand out to employers?",
+    "What skills should I focus on for my target industry?",
+    "How do I network effectively in my field?",
+    "What should I include in my resume for a career change?",
   ];
 
   return (
@@ -100,12 +142,23 @@ export const CareerAdvisorChatbot = () => {
       <Card className="shadow-strong border-0 bg-card/95 backdrop-blur-sm">
         {/* Header */}
         <div className="p-6 border-b bg-gradient-hero text-white rounded-t-lg">
-          <div className="flex items-center space-x-3">
-            <GraduationCap className="h-6 w-6" />
-            <div>
-              <h3 className="text-xl font-bold">Career Advisor AI</h3>
-              <p className="text-white/80 text-sm">Get personalized guidance for your career transition</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <GraduationCap className="h-6 w-6" />
+              <div>
+                <h3 className="text-xl font-bold">Career Advisor AI</h3>
+                <p className="text-white/80 text-sm">Get personalized guidance for your career transition</p>
+              </div>
             </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={resetConversation}
+              className="text-white hover:bg-white/20"
+              title="Start new conversation"
+            >
+              <RotateCcw className="h-4 w-4" />
+            </Button>
           </div>
         </div>
 
@@ -176,6 +229,16 @@ export const CareerAdvisorChatbot = () => {
           </div>
         )}
 
+        {/* Error Display */}
+        {error && (
+          <div className="px-6 py-3 border-t bg-destructive/10">
+            <div className="flex items-center space-x-2 text-destructive">
+              <AlertCircle className="h-4 w-4" />
+              <span className="text-sm">{error}</span>
+            </div>
+          </div>
+        )}
+
         {/* Input */}
         <div className="p-6 border-t">
           <div className="flex space-x-3">
@@ -183,12 +246,18 @@ export const CareerAdvisorChatbot = () => {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder="Ask your career question..."
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              onKeyPress={(e) => e.key === "Enter" && !isTyping && handleSendMessage()}
               className="flex-1"
+              disabled={isTyping}
             />
-            <Button onClick={handleSendMessage} size="default" className="px-6">
+            <Button 
+              onClick={handleSendMessage} 
+              size="default" 
+              className="px-6"
+              disabled={isTyping || !inputMessage.trim()}
+            >
               <Send className="h-4 w-4 mr-2" />
-              Send
+              {isTyping ? "Thinking..." : "Send"}
             </Button>
           </div>
         </div>
