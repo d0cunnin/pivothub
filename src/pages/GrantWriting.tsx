@@ -166,7 +166,7 @@ ${formData.contactPhone || '(555) 123-4567'}
       <Header />
       
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-hero hero-glow overflow-hidden">
+      <section className="py-20 bg-gradient-hero hero-glow overflow-hidden">
         {/* Sophisticated floating orbs */}
         <div className="floating-orb top-16 right-16 w-40 h-40 bg-primary/8 animate-float"></div>
         <div className="floating-orb bottom-24 left-16 w-32 h-32 bg-secondary/10 animate-float" style={{ animationDelay: '2s' }}></div>
