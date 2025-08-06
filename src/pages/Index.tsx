@@ -17,7 +17,7 @@ const Index = () => {
       <PathSelection />
       
       {/* Platform Explanation */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative">
+      <section className="section-spacing-xs bg-gradient-section-1 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">
@@ -38,7 +38,7 @@ const Index = () => {
       </section>
       
       {/* Assessment Tools Section */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative">
+      <section className="section-spacing-xs bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">
@@ -104,7 +104,7 @@ const Index = () => {
       </section>
 
       {/* Tools & Resources Section */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative">
+      <section className="section-spacing-xs bg-gradient-section-1 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">
@@ -173,7 +173,7 @@ const Index = () => {
       </section>
 
       {/* Future Development Section */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative">
+      <section className="section-spacing-xs bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">

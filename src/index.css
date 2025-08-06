@@ -142,6 +142,10 @@ All colors MUST be HSL.
     @apply py-8 md:py-12 lg:py-16;
   }
   
+  .section-spacing-xs {
+    @apply py-6 md:py-8 lg:py-12;
+  }
+  
   .section-spacing-lg {
     @apply py-16 md:py-20 lg:py-24;
   }
