@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GraduationCap, BookOpen, Award, Target, Users, TrendingUp } from "lucide-react";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
-import { SkillsAssessment } from "@/components/SkillsAssessment";
+import { CareerAssessment } from "@/components/CareerAssessment";
 
 const Reskill = () => {
   return (
@@ -83,7 +83,7 @@ const Reskill = () => {
                   </div>
                 </div>
               </div>
-              <SkillsAssessment />
+              <CareerAssessment />
             </div>
             
             <div className="flex justify-center lg:justify-end">
