@@ -1,7 +1,8 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare, Brain, Briefcase } from "lucide-react";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
 import { ResumeCoachLetter } from "@/components/ResumeCoachLetter";
@@ -39,6 +40,37 @@ const JobPrep = () => {
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Master your job search with AI-powered coaching, interview preparation, and professional document optimization
             </p>
+            <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
+              <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <Button 
+                  size="lg" 
+                  variant="hero" 
+                  className="flex items-center space-x-2"
+                  onClick={() => document.getElementById('career-advisor')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  <Brain className="h-5 w-5" />
+                  <span>Career Advisor</span>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2"
+                  onClick={() => document.getElementById('interview-coach')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  <MessageSquare className="h-5 w-5" />
+                  <span>Interview Coach</span>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2"
+                  onClick={() => document.getElementById('resume-coach')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  <Briefcase className="h-5 w-5" />
+                  <span>Resume Coach</span>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -46,7 +78,7 @@ const JobPrep = () => {
       </section>
 
       {/* Career Advisor AI */}
-      <section className="py-16 bg-gradient-section-3 relative overflow-hidden">
+      <section id="career-advisor" className="py-16 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
           {/* Header Section */}
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
@@ -88,7 +120,7 @@ const JobPrep = () => {
       </section>
 
       {/* Interview Questions Coach */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      <section id="interview-coach" className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
@@ -129,7 +161,7 @@ const JobPrep = () => {
       </section>
 
       {/* Resume & Cover Letter Coach */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section id="resume-coach" className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
