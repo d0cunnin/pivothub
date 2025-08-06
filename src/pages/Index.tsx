@@ -18,17 +18,19 @@ const Index = () => {
       {/* Platform Explanation */}
       <section className="section-spacing-sm bg-gradient-section-1 relative">
         <div className="page-container">
-          <div className="content-width text-center">
-            <div className="space-y-4 max-w-4xl mx-auto">
-              <h2 className="section-header">
+          <div className="content-width">
+            <div className="text-center">
+              <h2 className="section-header mb-4">
               Rediscover Your Strengths, Build Your Future
             </h2>
-            <p className="section-description">
-              Our platform is designed to help you rediscover your strengths, explore new career paths, 
-              and access powerful tools to build your future. Start with our comprehensive assessments 
-              to gain clarity on your direction, then leverage our business and grant writing tools to 
-              take action toward your goals.
-            </p>
+            </div>
+            <div className="max-w-4xl mx-auto">
+              <p className="section-description">
+                Our platform is designed to help you rediscover your strengths, explore new career paths, 
+                and access powerful tools to build your future. Start with our comprehensive assessments 
+                to gain clarity on your direction, then leverage our business and grant writing tools to 
+                take action toward your goals.
+              </p>
             </div>
           </div>
         </div>
@@ -38,16 +40,16 @@ const Index = () => {
       <section className="section-spacing-sm bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center mb-10">
-              <div className="space-y-4 max-w-3xl mx-auto">
-                <h2 className="section-header">
+            <div className="text-center">
+              <h2 className="section-header mb-4">
                 Start Your Journey with Self-Discovery
               </h2>
+            </div>
+            <div className="max-w-3xl mx-auto mb-10">
               <p className="section-description">
                 Take our comprehensive assessments to understand your skills, interests, and personality. 
                 These insights will guide your career decisions and help you choose the right path forward.
               </p>
-              </div>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
@@ -104,16 +106,16 @@ const Index = () => {
       <section className="section-spacing-sm bg-gradient-section-1 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center mb-10">
-              <div className="space-y-4 max-w-3xl mx-auto">
-                <h2 className="section-header">
+            <div className="text-center">
+              <h2 className="section-header mb-4">
                 Tools to Build Your Future
               </h2>
+            </div>
+            <div className="max-w-3xl mx-auto mb-10">
               <p className="section-description">
                 Access powerful tools designed to help you secure funding, develop business ideas, 
                 and turn your career goals into actionable plans.
               </p>
-              </div>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
@@ -170,36 +172,36 @@ const Index = () => {
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">
-              <div className="space-y-4 max-w-4xl mx-auto">
-              <h2 className="section-header">
+              <h2 className="section-header mb-4">
                 Get ReSkilled - Coming Soon
               </h2>
+            </div>
+            <div className="max-w-4xl mx-auto">
               <p className="section-description">
                 We're developing comprehensive certification programs and collaborative learning experiences. 
                 Stay tuned for exciting updates as we prepare to launch our full education platform.
               </p>
+            </div>
+            <div className="grid lg:grid-cols-2 gap-8 items-center mt-10">
+              <div className="space-y-4 lg:mr-4">
+                <h3 className="text-2xl font-semibold text-foreground">Under Development</h3>
+                <p className="text-muted-foreground">
+                  Join our community of learners and professionals working together to achieve their career goals 
+                  through collaborative learning and peer support.
+                </p>
+                <ul className="space-y-2 text-muted-foreground text-left">
+                  <li>• Tech certification programs</li>
+                  <li>• Entrepreneurship courses</li>
+                  <li>• Micro-credentials</li>
+                  <li>• Collaborative learning platform</li>
+                </ul>
               </div>
-              <div className="grid lg:grid-cols-2 gap-8 items-center mt-10">
-                <div className="space-y-4 lg:mr-4">
-                  <h3 className="text-2xl font-semibold text-foreground">Under Development</h3>
-                  <p className="text-muted-foreground">
-                    Join our community of learners and professionals working together to achieve their career goals 
-                    through collaborative learning and peer support.
-                  </p>
-                  <ul className="space-y-2 text-muted-foreground text-left">
-                    <li>• Tech certification programs</li>
-                    <li>• Entrepreneurship courses</li>
-                    <li>• Micro-credentials</li>
-                    <li>• Collaborative learning platform</li>
-                  </ul>
-                </div>
-                <div className="lg:ml-4 self-center">
-                  <img 
-                    src={collaborativeLearningImage}
-                    alt="Professionals collaborating and learning together"
-                    className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-                  />
-                </div>
+              <div className="lg:ml-4 self-center">
+                <img 
+                  src={collaborativeLearningImage}
+                  alt="Professionals collaborating and learning together"
+                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                />
               </div>
             </div>
           </div>
