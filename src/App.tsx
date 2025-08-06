@@ -18,6 +18,7 @@ import LearnASkill from "./pages/LearnASkill";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Auth from "./pages/Auth";
+import Pricing from "./pages/Pricing";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/pricing" element={<Pricing />} />
             <Route path="/reskill" element={<Reskill />} />
             <Route path="/assessments" element={<Assessments />} />
             <Route path="/jobprep" element={<JobPrep />} />

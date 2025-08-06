@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { AuthGuard } from '@/components/AuthGuard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -165,6 +166,7 @@ ${formData.contactPhone || '(555) 123-4567'}
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <AuthGuard>
       
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero hero-glow overflow-hidden">
@@ -521,6 +523,7 @@ ${formData.contactPhone || '(555) 123-4567'}
         </div>
       </div>
       <Footer />
+      </AuthGuard>
     </div>
   );
 };

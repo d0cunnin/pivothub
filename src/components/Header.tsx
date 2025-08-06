@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Briefcase, Menu, X, ChevronDown } from "lucide-react";
+import { Briefcase, Menu, X, ChevronDown, User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   const handleGetStarted = () => {
     navigate('/');
@@ -93,11 +95,43 @@ export const Header = () => {
             >
               Contact
             </Link>
+            <Link 
+              to="/pricing" 
+              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
+            >
+              Pricing
+            </Link>
           </nav>
 
           <div className="hidden md:flex space-x-3">
-            <Button variant="ghost">Sign In</Button>
-            <Button variant="hero" onClick={handleGetStarted}>Get Started</Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2">
+                    <User className="h-4 w-4" />
+                    <span>{user.email?.split('@')[0]}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem asChild>
+                    <Link to="/pricing" className="flex w-full cursor-pointer">
+                      Manage Subscription
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut} className="text-red-600 cursor-pointer">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button variant="ghost">Sign In</Button>
+                </Link>
+                <Button variant="hero" onClick={handleGetStarted}>Get Started</Button>
+              </>
+            )}
           </div>
 
           <Button
@@ -183,9 +217,34 @@ export const Header = () => {
               >
                 Contact
               </Link>
+              <Link 
+                to="/pricing" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Pricing
+              </Link>
               <div className="flex flex-col space-y-2 pt-4">
-                <Button variant="ghost">Sign In</Button>
-                <Button variant="hero" onClick={handleGetStarted}>Get Started</Button>
+                {user ? (
+                  <>
+                    <div className="text-sm text-muted-foreground">
+                      Signed in as {user.email?.split('@')[0]}
+                    </div>
+                    <Link to="/pricing">
+                      <Button variant="ghost" className="w-full">Manage Subscription</Button>
+                    </Link>
+                    <Button variant="outline" onClick={signOut} className="w-full">
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/auth">
+                      <Button variant="ghost" className="w-full">Sign In</Button>
+                    </Link>
+                    <Button variant="hero" onClick={handleGetStarted} className="w-full">Get Started</Button>
+                  </>
+                )}
               </div>
             </nav>
           </div>

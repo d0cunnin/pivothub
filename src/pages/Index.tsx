@@ -2,6 +2,9 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { PathSelection } from "@/components/PathSelection";
 import { Footer } from "@/components/Footer";
+import { AuthGuard } from "@/components/AuthGuard";
+import { useAuth } from "@/contexts/AuthContext";
+import { useState } from "react";
 import collaborativeLearningImage from "@/assets/collaborative-learning.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +13,17 @@ import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb, Brain, Heart, Fi
 import { Link } from "react-router-dom";
 
 const Index = () => {
+  const { user } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleToolAccess = (requiresAuth: boolean, action: () => void) => {
+    if (requiresAuth && !user) {
+      setShowAuthModal(true);
+      return;
+    }
+    action();
+  };
+
   return (
     <div id="home" className="min-h-screen bg-background">
       <Header />
@@ -63,9 +77,17 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Button size="lg" className="w-full">
-                    Take Skills Assessment
-                  </Button>
+                  <AuthGuard requireAuth={true} fallback={
+                    <Button size="lg" className="w-full" onClick={() => setShowAuthModal(true)}>
+                      Sign Up to Gain Access
+                    </Button>
+                  }>
+                    <Link to="/assessments">
+                      <Button size="lg" className="w-full">
+                        Take Skills Assessment
+                      </Button>
+                    </Link>
+                  </AuthGuard>
                 </CardContent>
               </Card>
               
@@ -78,9 +100,17 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Button size="lg" className="w-full">
-                    Explore Your Interests
-                  </Button>
+                  <AuthGuard requireAuth={true} fallback={
+                    <Button size="lg" className="w-full" onClick={() => setShowAuthModal(true)}>
+                      Sign Up to Gain Access
+                    </Button>
+                  }>
+                    <Link to="/assessments">
+                      <Button size="lg" className="w-full">
+                        Explore Your Interests
+                      </Button>
+                    </Link>
+                  </AuthGuard>
                 </CardContent>
               </Card>
               
@@ -93,9 +123,17 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Button size="lg" className="w-full">
-                    Assess Your Personality
-                  </Button>
+                  <AuthGuard requireAuth={true} fallback={
+                    <Button size="lg" className="w-full" onClick={() => setShowAuthModal(true)}>
+                      Sign Up to Gain Access
+                    </Button>
+                  }>
+                    <Link to="/assessments">
+                      <Button size="lg" className="w-full">
+                        Assess Your Personality
+                      </Button>
+                    </Link>
+                  </AuthGuard>
                 </CardContent>
               </Card>
             </div>
@@ -130,11 +168,17 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/grantwriting">
-                    <Button size="lg" className="w-full mb-3">
-                      Start Grant Writing
+                  <AuthGuard requireAuth={true} fallback={
+                    <Button size="lg" className="w-full mb-3" onClick={() => setShowAuthModal(true)}>
+                      Sign Up to Gain Access
                     </Button>
-                  </Link>
+                  }>
+                    <Link to="/grantwriting">
+                      <Button size="lg" className="w-full mb-3">
+                        Start Grant Writing
+                      </Button>
+                    </Link>
+                  </AuthGuard>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li>• Education & training grants</li>
                     <li>• Small business funding</li>
@@ -154,11 +198,17 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/hireyourself">
-                    <Button size="lg" className="w-full mb-3">
-                      Explore Business Tools
+                  <AuthGuard requireAuth={true} fallback={
+                    <Button size="lg" className="w-full mb-3" onClick={() => setShowAuthModal(true)}>
+                      Sign Up to Gain Access
                     </Button>
-                  </Link>
+                  }>
+                    <Link to="/hireyourself">
+                      <Button size="lg" className="w-full mb-3">
+                        Explore Business Tools
+                      </Button>
+                    </Link>
+                  </AuthGuard>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li>• Business idea generator</li>
                     <li>• Business plan creator</li>
@@ -214,6 +264,16 @@ const Index = () => {
       </section>
 
       <Footer />
+      
+      {/* Success Modal */}
+      {user && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <div className="bg-green-500 text-white p-4 rounded-lg shadow-lg animate-fade-in">
+            <h3 className="font-semibold">You're In!</h3>
+            <p className="text-sm">Welcome! You now have full access to explore and use all available tools.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
