@@ -102,8 +102,43 @@ const Reskill = () => {
       </section>
 
       {/* Career Advisor AI */}
-      <section className="py-12 bg-gradient-section-3 relative overflow-hidden">
+      <section className="py-16 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
+          {/* Header Section */}
+          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Get Personalized Career Guidance
+              </h2>
+            </div>
+            <p className="text-lg text-foreground leading-relaxed mb-4">
+              Meet your AI Career Advisor - a smart assistant powered by advanced AI to provide personalized guidance for your professional journey. Whether you're planning a career change, seeking new skills, or navigating workplace challenges, get expert advice tailored to your unique situation.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 text-center">
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <Target className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">Tailored Advice</h4>
+                <p className="text-sm text-muted-foreground">Get responses specific to your industry, experience level, and career goals</p>
+              </div>
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <BookOpen className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">Expert Knowledge</h4>
+                <p className="text-sm text-muted-foreground">Access insights from career professionals across all industries and roles</p>
+              </div>
+              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
+                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
+                  <Users className="h-4 w-4 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-1">24/7 Available</h4>
+                <p className="text-sm text-muted-foreground">Get immediate support whenever you need career guidance or advice</p>
+              </div>
+            </div>
+          </div>
+          
           <CareerAdvisorChatbot />
         </div>
       </section>

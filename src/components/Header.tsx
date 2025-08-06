@@ -37,6 +37,12 @@ export const Header = () => {
               Home
             </Link>
             <Link 
+              to="/about" 
+              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
+            >
+              About
+            </Link>
+            <Link 
               to="/reskill" 
               className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/reskill' ? 'text-primary font-medium' : ''}`}
             >
@@ -53,12 +59,6 @@ export const Header = () => {
               className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
             >
               Grant Writing
-            </Link>
-            <Link 
-              to="/about" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
-            >
-              About
             </Link>
           </nav>
 
@@ -88,6 +88,13 @@ export const Header = () => {
                 Home
               </Link>
               <Link 
+                to="/about" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link 
                 to="/reskill" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/reskill' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
@@ -107,13 +114,6 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Grant Writing
-              </Link>
-              <Link 
-                to="/about" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                About
               </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 <Button variant="ghost">Sign In</Button>
