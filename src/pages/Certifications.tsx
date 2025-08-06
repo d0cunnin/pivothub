@@ -79,7 +79,7 @@ const Certifications = () => {
               <Award className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Professional Certifications
+              Learn New Skills
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Earn industry-recognized certifications that open doors to better career opportunities and higher salaries
@@ -88,7 +88,7 @@ const Certifications = () => {
               <Button size="lg" variant="hero" className="mr-4">
                 Browse All Certifications
               </Button>
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
+              <Button size="lg" variant="outline" className="bg-white/10 text-white border-white hover:bg-white hover:text-primary backdrop-blur-sm">
                 Take Skills Assessment
               </Button>
             </div>

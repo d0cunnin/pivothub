@@ -47,7 +47,7 @@ export const Header = () => {
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
-                  className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 ${['/reskill', '/assessments', '/jobprep', '/certifications'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                  className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 px-4 py-2 h-auto ${['/reskill', '/assessments', '/jobprep', '/certifications'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                 >
                   <span>ReSkill</span>
                   <ChevronDown className="h-4 w-4" />
