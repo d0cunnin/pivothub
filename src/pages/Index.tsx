@@ -6,7 +6,7 @@ import collaborativeLearningImage from "@/assets/collaborative-learning.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb } from "lucide-react";
+import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb, Brain, Heart, FileText, Briefcase } from "lucide-react";
 
 const Index = () => {
   return (
@@ -15,175 +15,185 @@ const Index = () => {
       <HeroSection />
       <PathSelection />
       
-      {/* Career Guidance Section */}
+      {/* Platform Explanation */}
       <section className="section-spacing bg-gradient-section-1 relative">
         <div className="page-container">
+          <div className="content-width text-center space-y-6">
+            <h2 className="section-header">
+              Rediscover Your Strengths, Build Your Future
+            </h2>
+            <p className="section-description max-w-3xl mx-auto">
+              Our platform is designed to help you rediscover your strengths, explore new career paths, 
+              and access powerful tools to build your future. Start with our comprehensive assessments 
+              to gain clarity on your direction, then leverage our business and grant writing tools to 
+              take action toward your goals.
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      {/* Assessment Tools Section */}
+      <section className="section-spacing bg-gradient-section-2 relative">
+        <div className="page-container">
           <div className="content-width">
-            {/* Header with Image */}
-            <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
-              <div className="animate-fade-in space-y-4">
-                <h2 className="section-header">
-                  Career Guidance & Support
-                </h2>
-                <p className="section-description">
-                  Navigate your career transformation with expert guidance and personalized support every step of the way
-                </p>
-              </div>
-              
-              <div className="animate-fade-in lg:ml-4 self-center">
-                <img 
-                  src="/lovable-uploads/f9137c05-8e7a-4c37-9120-0f7468d79afa.png" 
-                  alt="Professional woman working on career development" 
-                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-                />
-              </div>
+            <div className="text-center space-y-6 mb-12">
+              <h2 className="section-header">
+                Start Your Journey with Self-Discovery
+              </h2>
+              <p className="section-description max-w-2xl mx-auto">
+                Take our comprehensive assessments to understand your skills, interests, and personality. 
+                These insights will guide your career decisions and help you choose the right path forward.
+              </p>
             </div>
             
-            {/* Career Features Grid */}
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="premium-card card-padding hover-scale">
-                <CardHeader className="p-0 pb-4">
-                  <Users className="h-10 w-10 text-primary mb-3" />
-                  <CardTitle className="text-xl">AI Career Coach</CardTitle>
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="premium-card card-padding hover-scale text-center">
+                <CardHeader className="p-0 pb-6">
+                  <Brain className="h-12 w-12 text-primary mb-4 mx-auto" />
+                  <CardTitle className="text-xl">Skills Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
-                    Get personalized career guidance 24/7 with our intelligent chatbot that understands your goals and challenges
+                    Evaluate your current abilities across 8 key areas including math, communication, technology, and more.
                   </CardDescription>
                 </CardHeader>
+                <CardContent className="p-0">
+                  <Button size="lg" className="w-full">
+                    Take Skills Assessment
+                  </Button>
+                </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding hover-scale">
-                <CardHeader className="p-0 pb-4">
-                  <Target className="h-10 w-10 text-primary mb-3" />
-                  <CardTitle className="text-xl">Career Assessment</CardTitle>
+              <Card className="premium-card card-padding hover-scale text-center">
+                <CardHeader className="p-0 pb-6">
+                  <Heart className="h-12 w-12 text-primary mb-4 mx-auto" />
+                  <CardTitle className="text-xl">Interest Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
-                    Discover your strengths and identify the best path forward with our comprehensive assessment tools
+                    Discover what truly motivates you and explore career paths that align with your passions.
                   </CardDescription>
                 </CardHeader>
+                <CardContent className="p-0">
+                  <Button size="lg" className="w-full">
+                    Explore Your Interests
+                  </Button>
+                </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding hover-scale">
-                <CardHeader className="p-0 pb-4">
-                  <TrendingUp className="h-10 w-10 text-primary mb-3" />
-                  <CardTitle className="text-xl">Progress Tracking</CardTitle>
+              <Card className="premium-card card-padding hover-scale text-center">
+                <CardHeader className="p-0 pb-6">
+                  <Users className="h-12 w-12 text-primary mb-4 mx-auto" />
+                  <CardTitle className="text-xl">Personality Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
-                    Monitor your skill development and career advancement with detailed analytics and milestones
+                    Understand your work style, communication preferences, and ideal work environments.
                   </CardDescription>
                 </CardHeader>
+                <CardContent className="p-0">
+                  <Button size="lg" className="w-full">
+                    Assess Your Personality
+                  </Button>
+                </CardContent>
               </Card>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Certifications Section */}
-      <section className="section-spacing bg-gradient-section-2 relative">
+      {/* Tools & Resources Section */}
+      <section className="section-spacing bg-gradient-section-1 relative">
         <div className="page-container">
           <div className="content-width">
-            {/* Header with Image */}
-            <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
-              <div className="animate-fade-in space-y-4">
-                <h2 className="section-header">Certifications</h2>
-                <p className="section-description">
-                  Gain credentials in high-demand tech and entrepreneurship skills to accelerate your career growth
-                </p>
-              </div>
-              
-              <div className="animate-fade-in lg:ml-4 self-center">
-                <img 
-                  src="/lovable-uploads/01e0edd3-5dc1-45ef-986a-d0f9404e0159.png" 
-                  alt="Professional certifications and skill development" 
-                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-                />
-              </div>
+            <div className="text-center space-y-6 mb-12">
+              <h2 className="section-header">
+                Tools to Build Your Future
+              </h2>
+              <p className="section-description max-w-2xl mx-auto">
+                Access powerful tools designed to help you secure funding, develop business ideas, 
+                and turn your career goals into actionable plans.
+              </p>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-6 animate-fade-in mb-8">
+            <div className="grid md:grid-cols-2 gap-8">
               <Card className="premium-card card-padding hover-scale">
-                <CardHeader className="p-0 pb-4">
-                  <BookOpen className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    Tech Certifications
-                    <Badge variant="default">Popular</Badge>
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground text-left">
-                    Master in-demand technical skills with certifications
+                <CardHeader className="p-0 pb-6">
+                  <FileText className="h-12 w-12 text-primary mb-4" />
+                  <CardTitle className="text-2xl">Grant Writing Generator</CardTitle>
+                  <CardDescription className="text-muted-foreground mb-6">
+                    Professional grant writing assistance to help you secure funding for education, 
+                    training, or business ventures. Generate compelling proposals with AI-powered guidance.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <ul className="space-y-1 text-sm text-muted-foreground text-left">
-                    <li>• Cloud Computing (AWS, Azure, GCP)</li>
-                    <li>• Data Science & Analytics</li>
-                    <li>• Cybersecurity</li>
-                    <li>• Web Development</li>
-                    <li>• AI & Machine Learning</li>
+                  <Button size="lg" className="w-full mb-4">
+                    Start Grant Writing
+                  </Button>
+                  <ul className="space-y-2 text-sm text-muted-foreground text-left">
+                    <li>• Education & training grants</li>
+                    <li>• Small business funding</li>
+                    <li>• Research & development grants</li>
+                    <li>• Professional templates</li>
                   </ul>
                 </CardContent>
               </Card>
-            
-            <Card className="premium-card card-padding hover-scale">
-              <CardHeader className="p-0 pb-4">
-                <Lightbulb className="h-8 w-8 text-primary mb-2" />
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  Entrepreneurship
-                  <Badge variant="default">Trending</Badge>
-                </CardTitle>
-                <CardDescription className="text-muted-foreground text-left">
-                  Build essential business skills for launching and scaling your venture
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-0">
-                <ul className="space-y-1 text-sm text-muted-foreground text-left">
-                  <li>• Business Strategy & Planning</li>
-                  <li>• Digital Marketing</li>
-                  <li>• Financial Management</li>
-                  <li>• Leadership & Team Building</li>
-                  <li>• Product Development</li>
-                </ul>
-              </CardContent>
-            </Card>
-            
-            <Card className="premium-card card-padding hover-scale">
-              <CardHeader className="p-0 pb-4">
-                <Award className="h-8 w-8 text-primary mb-2" />
-                <CardTitle className="text-lg">Micro-Credentials</CardTitle>
-                <CardDescription className="text-muted-foreground text-left">
-                  Quick, focused learning paths for specific skills and competencies
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-0">
-                <ul className="space-y-1 text-sm text-muted-foreground text-left">
-                  <li>• Project Management</li>
-                  <li>• UX/UI Design</li>
-                  <li>• Social Media Strategy</li>
-                  <li>• Sales & Communication</li>
-                  <li>• Remote Work Skills</li>
-                </ul>
-              </CardContent>
-            </Card>
+              
+              <Card className="premium-card card-padding hover-scale">
+                <CardHeader className="p-0 pb-6">
+                  <Briefcase className="h-12 w-12 text-primary mb-4" />
+                  <CardTitle className="text-2xl">Business & Entrepreneurship Tools</CardTitle>
+                  <CardDescription className="text-muted-foreground mb-6">
+                    Complete suite of business development tools including idea generation, 
+                    business plans, pitch decks, and marketing strategies.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <Button size="lg" className="w-full mb-4">
+                    Explore Business Tools
+                  </Button>
+                  <ul className="space-y-2 text-sm text-muted-foreground text-left">
+                    <li>• Business idea generator</li>
+                    <li>• Business plan creator</li>
+                    <li>• Pitch deck builder</li>
+                    <li>• Marketing strategy planner</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-          
-          <div className="grid lg:grid-cols-2 gap-8 items-center mt-12">
-            <div className="space-y-4 lg:mr-4">
-              <h3 className="section-header">Collaborative Learning</h3>
-              <p className="section-description">
-                Join a community of learners and professionals working together to achieve their career goals 
-                through collaborative learning and peer support.
+        </div>
+      </section>
+
+      {/* Future Development Section */}
+      <section className="section-spacing bg-gradient-section-2 relative">
+        <div className="page-container">
+          <div className="content-width">
+            <div className="text-center space-y-6">
+              <h2 className="section-header">
+                Get ReSkilled - Coming Soon
+              </h2>
+              <p className="section-description max-w-3xl mx-auto">
+                We're developing comprehensive certification programs and collaborative learning experiences. 
+                Stay tuned for exciting updates as we prepare to launch our full education platform.
               </p>
+              <div className="grid lg:grid-cols-2 gap-8 items-center mt-12">
+                <div className="space-y-4 lg:mr-4">
+                  <h3 className="text-2xl font-semibold text-foreground">Under Development</h3>
+                  <p className="text-muted-foreground">
+                    Join our community of learners and professionals working together to achieve their career goals 
+                    through collaborative learning and peer support.
+                  </p>
+                  <ul className="space-y-2 text-muted-foreground text-left">
+                    <li>• Tech certification programs</li>
+                    <li>• Entrepreneurship courses</li>
+                    <li>• Micro-credentials</li>
+                    <li>• Collaborative learning platform</li>
+                  </ul>
+                </div>
+                <div className="lg:ml-4 self-center">
+                  <img 
+                    src={collaborativeLearningImage}
+                    alt="Professionals collaborating and learning together"
+                    className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
+                  />
+                </div>
+              </div>
             </div>
-            <div className="lg:ml-4 self-center">
-              <img 
-                src={collaborativeLearningImage}
-                alt="Professionals collaborating and learning together"
-                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-              />
-            </div>
-          </div>
-          
-          <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-            <Button size="lg" className="bg-gradient-hero hover:opacity-90 shadow-glow transition-all duration-300 hover-scale">
-              Explore All Certifications
-            </Button>
-          </div>
           </div>
         </div>
       </section>
