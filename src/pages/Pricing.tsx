@@ -132,10 +132,10 @@ const Pricing = () => {
       <section className="section-spacing-sm bg-gradient-hero">
         <div className="page-container">
           <div className="content-width text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Choose Your Plan
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
               Unlock your potential with the right plan for your journey. Start free and upgrade as you grow.
             </p>
           </div>
@@ -200,82 +200,6 @@ const Pricing = () => {
                   </CardContent>
                 </Card>
               ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PDF E-books Section */}
-      <section className="py-8">
-        <div className="page-container">
-          <div className="content-width">
-            <div className="text-center mb-12">
-              <h2 className="section-header">PDF E-book Downloads</h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Get comprehensive guides and resources in downloadable PDF format.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <Card className="premium-card card-padding-lg">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-xl">Career Transformation Guide</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-3xl font-bold text-primary">$2.99</span>
-                  </div>
-                  <CardDescription className="mt-2">Complete roadmap to career success</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                    onClick={() => openCheckoutModal("Career Transformation Guide", "$2.99", "ebook-career", true)}
-                  >
-                    Download PDF
-                  </Button>
-                </CardContent>
-              </Card>
-              
-              <Card className="premium-card card-padding-lg">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-xl">Business Startup Handbook</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-3xl font-bold text-primary">$2.99</span>
-                  </div>
-                  <CardDescription className="mt-2">Essential guide for entrepreneurs</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                    onClick={() => openCheckoutModal("Business Startup Handbook", "$2.99", "ebook-business", true)}
-                  >
-                    Download PDF
-                  </Button>
-                </CardContent>
-              </Card>
-              
-              <Card className="premium-card card-padding-lg">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-xl">Skills Development Mastery</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-3xl font-bold text-primary">$2.99</span>
-                  </div>
-                  <CardDescription className="mt-2">Master new skills efficiently</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                    onClick={() => openCheckoutModal("Skills Development Mastery", "$2.99", "ebook-skills", true)}
-                  >
-                    Download PDF
-                  </Button>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>
