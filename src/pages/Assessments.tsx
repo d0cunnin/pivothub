@@ -15,7 +15,7 @@ const Assessments = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <section className="py-16 bg-gradient-hero relative overflow-hidden">
         {/* Background Image with Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -38,54 +38,106 @@ const Assessments = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Career Assessments
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-lg md:text-xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Discover your strengths, skills, and perfect career path with our comprehensive assessment tools
             </p>
-            <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
-              <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                <CareerAssessment />
-                <SkillsAssessment />
-                <PersonalityAssessment />
-              </div>
-            </div>
           </div>
         </div>
         
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
-      {/* Skills Assessment */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
-        <div className="page-container">
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
+      {/* Assessment Tools - Featured Section */}
+      <section className="py-16 bg-gradient-section-1 relative overflow-hidden">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">
+              Take Your Assessment Today
+            </h2>
+            <p className="text-lg text-foreground leading-relaxed mb-8">
+              Choose from our comprehensive assessment suite to discover your perfect career path
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <Card className="p-8 bg-gradient-card/40 backdrop-blur-sm border border-white/20 hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Target className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Career Assessment</h3>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Discover your ideal career path based on your interests, values, and goals. Get personalized recommendations for roles that align with your aspirations.
+              </p>
+              <div className="mt-auto">
+                <CareerAssessment />
+              </div>
+            </Card>
+
+            <Card className="p-8 bg-gradient-card/40 backdrop-blur-sm border border-white/20 hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <BookOpen className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Skills Assessment</h3>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Evaluate your current skill level and identify areas for improvement. Get a detailed roadmap for skill development and certification.
+              </p>
+              <div className="mt-auto">
+                <SkillsAssessment />
+              </div>
+            </Card>
+
+            <Card className="p-8 bg-gradient-card/40 backdrop-blur-sm border border-white/20 hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Brain className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-4">Personality Assessment</h3>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Understand your personality traits and work style preferences. Learn how to leverage your natural strengths in your career.
+              </p>
+              <div className="mt-auto">
+                <PersonalityAssessment />
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-16 bg-gradient-section-2 relative overflow-hidden">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Find Your Perfect Learning Path
                 </h2>
               </div>
-              <p className="text-lg text-foreground leading-relaxed mb-3">
+              <p className="text-lg text-foreground leading-relaxed mb-6">
                 These assessments are here to help you discover a career path that truly fits you and your future.
                 You'll get clear insight into:
               </p>
-              <div className="space-y-2 mb-3">
-                <p className="text-foreground">
-                  <span className="font-semibold">Your interests</span>, so you can focus on careers that keep you excited and inspired
+              <div className="space-y-3 mb-6">
+                <p className="text-foreground flex items-start">
+                  <span className="w-2 h-2 bg-gradient-hero rounded-full mt-3 mr-3 flex-shrink-0"></span>
+                  <span><span className="font-semibold">Your interests</span>, so you can focus on careers that keep you excited and inspired</span>
                 </p>
-                <p className="text-foreground">
-                  <span className="font-semibold">Your personality</span>, to find the types of jobs and work environments where you can shine
+                <p className="text-foreground flex items-start">
+                  <span className="w-2 h-2 bg-gradient-hero rounded-full mt-3 mr-3 flex-shrink-0"></span>
+                  <span><span className="font-semibold">Your personality</span>, to find the types of jobs and work environments where you can shine</span>
                 </p>
-                <p className="text-foreground">
-                  <span className="font-semibold">Your strengths and skills</span>, to see how well your abilities match the roles you're aiming for
+                <p className="text-foreground flex items-start">
+                  <span className="w-2 h-2 bg-gradient-hero rounded-full mt-3 mr-3 flex-shrink-0"></span>
+                  <span><span className="font-semibold">Your strengths and skills</span>, to see how well your abilities match the roles you're aiming for</span>
                 </p>
               </div>
-              <p className="text-foreground italic">
+              <p className="text-foreground italic text-lg">
                 Each assessment is a step toward greater confidence, clarity, and success in your journey. You were made for more—and this is the beginning of discovering what that "more" looks like.
               </p>
-              <div className="space-y-4">
+              
+              <div className="space-y-4 mt-8">
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <TrendingUp className="h-3 w-3 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Skill Gap Analysis</h4>
@@ -94,7 +146,7 @@ const Assessments = () => {
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <Target className="h-3 w-3 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Personalized Recommendations</h4>
@@ -103,7 +155,7 @@ const Assessments = () => {
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <Users className="h-3 w-3 text-white" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Career Impact Forecast</h4>
@@ -120,57 +172,6 @@ const Assessments = () => {
                 className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Assessment Types */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
-        <div className="page-container">
-          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Comprehensive Assessment Suite
-              </h2>
-            </div>
-            <p className="text-lg text-foreground leading-relaxed mb-8">
-              Take advantage of our multi-faceted assessment approach to get a complete picture of your professional profile and potential.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <Card className="p-6 bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4">
-                <Target className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Career Assessment</h3>
-              <p className="text-muted-foreground mb-4">
-                Discover your ideal career path based on your interests, values, and goals. Get personalized recommendations for roles that align with your aspirations.
-              </p>
-              <CareerAssessment />
-            </Card>
-
-            <Card className="p-6 bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Skills Assessment</h3>
-              <p className="text-muted-foreground mb-4">
-                Evaluate your current skill level and identify areas for improvement. Get a detailed roadmap for skill development and certification.
-              </p>
-              <SkillsAssessment />
-            </Card>
-
-            <Card className="p-6 bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-4">
-                <Brain className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-3">Personality Assessment</h3>
-              <p className="text-muted-foreground mb-4">
-                Understand your personality traits and work style preferences. Learn how to leverage your natural strengths in your career.
-              </p>
-              <PersonalityAssessment />
-            </Card>
           </div>
         </div>
       </section>
