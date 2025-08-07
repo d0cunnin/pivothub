@@ -54,11 +54,8 @@ const Assessments = () => {
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">
               Take Your Assessment Today
             </h2>
-            <p className="text-lg text-foreground leading-relaxed mb-6">
-              Discover what's next with our three powerful assessments designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills all to help you find the best career or business path that fits who you are and where you want to go.
-            </p>
             <p className="text-lg text-foreground leading-relaxed mb-8">
-              Choose from our comprehensive assessment suite to discover your perfect career path
+              Discover what's next with our three powerful assessments designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills all to help you find the best career or business path that fits who you are and where you want to go.
             </p>
           </div>
 

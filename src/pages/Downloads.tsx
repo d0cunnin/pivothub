@@ -137,15 +137,15 @@ const Downloads = () => {
             <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {downloads.map((download, index) => (
                 <Card key={download.title} className="premium-card card-padding-lg">
-                  <CardHeader className="text-center">
-                    <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-lg w-fit">
+                  <CardHeader className="text-left">
+                    <div className="mb-4 p-3 bg-primary/10 rounded-lg w-fit">
                       {download.icon}
                     </div>
                     <CardTitle className="text-xl">{download.title}</CardTitle>
                     <div className="mt-4">
                       <span className="text-3xl font-bold text-primary">{download.price}</span>
                     </div>
-                    <CardDescription className="mt-2">{download.description}</CardDescription>
+                    <CardDescription className="mt-2 text-left">{download.description}</CardDescription>
                   </CardHeader>
                   
                   <CardContent className="space-y-6">
@@ -153,20 +153,22 @@ const Downloads = () => {
                       {download.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-center">
                           <Download className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                          <span className="text-sm">{feature}</span>
+                          <span className="text-sm text-left">{feature}</span>
                         </li>
                       ))}
                     </ul>
                     
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      size="lg"
-                      onClick={() => openCheckoutModal(download.title, download.price, download.priceId)}
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Download PDF
-                    </Button>
+                    <div className="pt-4">
+                      <Button
+                        className="w-full"
+                        variant="outline"
+                        size="lg"
+                        onClick={() => openCheckoutModal(download.title, download.price, download.priceId)}
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download PDF
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}

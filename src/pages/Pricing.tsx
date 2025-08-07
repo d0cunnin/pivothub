@@ -166,7 +166,7 @@ const Pricing = () => {
                     </Badge>
                   )}
                   
-                  <CardHeader className="text-center">
+                  <CardHeader className="text-left">
                     <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
                     <div className="mt-4">
                       <span className="text-4xl font-bold text-primary">{plan.price}</span>
@@ -174,7 +174,7 @@ const Pricing = () => {
                         <span className="text-muted-foreground">/{plan.period}</span>
                       )}
                     </div>
-                    <CardDescription className="mt-2">{plan.description}</CardDescription>
+                    <CardDescription className="mt-2 text-left">{plan.description}</CardDescription>
                   </CardHeader>
                   
                   <CardContent className="space-y-6">
@@ -182,21 +182,23 @@ const Pricing = () => {
                       {plan.features.map((feature, featureIndex) => (
                         <li key={featureIndex} className="flex items-center">
                           <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                          <span className="text-sm">{feature}</span>
+                          <span className="text-sm text-left">{feature}</span>
                         </li>
                       ))}
                     </ul>
                     
-                    <Button
-                      className="w-full"
-                      variant={plan.popular ? "default" : "outline"}
-                      size="lg"
-                      onClick={plan.ctaAction}
-                      disabled={plan.current}
-                    >
-                      {plan.current && <Crown className="h-4 w-4 mr-2" />}
-                      {plan.ctaText}
-                    </Button>
+                    <div className="pt-4">
+                      <Button
+                        className="w-full"
+                        variant={plan.popular ? "default" : "outline"}
+                        size="lg"
+                        onClick={plan.ctaAction}
+                        disabled={plan.current}
+                      >
+                        {plan.current && <Crown className="h-4 w-4 mr-2" />}
+                        {plan.ctaText}
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
