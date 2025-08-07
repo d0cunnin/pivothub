@@ -87,9 +87,18 @@ const JobPrep = () => {
                 Get Personalized Career Guidance
               </h2>
             </div>
-            <p className="text-lg text-foreground leading-relaxed mb-4">
-              Meet your AI Career Advisor - a smart assistant powered by advanced AI to provide personalized guidance for your professional journey. Whether you're planning a career change, seeking new skills, or navigating workplace challenges, get expert advice tailored to your unique situation.
-            </p>
+            <div className="text-left max-w-4xl mx-auto mb-6">
+              <p className="text-lg text-foreground leading-relaxed mb-4">
+                Meet your AI Career Advisor - a smart assistant powered by advanced AI to provide personalized guidance for your professional journey. Whether you're planning a career change, seeking new skills, or navigating workplace challenges, get expert advice tailored to your unique situation.
+              </p>
+              
+              <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-6">
+                <h4 className="font-semibold text-foreground mb-3 text-sm">Available Tools:</h4>
+                <div className="text-sm text-muted-foreground">
+                  <span>• Career Advisor AI Chatbot</span>
+                </div>
+              </div>
+            </div>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
@@ -128,9 +137,18 @@ const JobPrep = () => {
                 Interview Questions Coach
               </h2>
             </div>
-            <p className="text-lg text-foreground leading-relaxed mb-4">
-              Master your interview skills with AI-powered coaching. Practice with customized questions, get expert feedback, and build confidence for your next interview.
-            </p>
+            <div className="text-left max-w-4xl mx-auto mb-6">
+              <p className="text-lg text-foreground leading-relaxed mb-4">
+                Master your interview skills with AI-powered coaching. Practice with customized questions, get expert feedback, and build confidence for your next interview.
+              </p>
+              
+              <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-6">
+                <h4 className="font-semibold text-foreground mb-3 text-sm">Available Tools:</h4>
+                <div className="text-sm text-muted-foreground">
+                  <span>• Interview Questions Coach</span>
+                </div>
+              </div>
+            </div>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
@@ -169,9 +187,18 @@ const JobPrep = () => {
                 Resume & Cover Letter Coach
               </h2>
             </div>
-            <p className="text-lg text-foreground leading-relaxed mb-4">
-              Transform your resume from generic job duties into powerful, results-oriented statements that get noticed by hiring managers.
-            </p>
+            <div className="text-left max-w-4xl mx-auto mb-6">
+              <p className="text-lg text-foreground leading-relaxed mb-4">
+                Transform your resume from generic job duties into powerful, results-oriented statements that get noticed by hiring managers.
+              </p>
+              
+              <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-6">
+                <h4 className="font-semibold text-foreground mb-3 text-sm">Available Tools:</h4>
+                <div className="text-sm text-muted-foreground">
+                  <span>• Resume & Cover Letter Coach</span>
+                </div>
+              </div>
+            </div>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
