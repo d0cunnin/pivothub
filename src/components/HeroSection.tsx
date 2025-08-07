@@ -16,10 +16,6 @@ export const HeroSection = () => {
       {/* Content */}
       <div className="relative container mx-auto px-4 py-12 md:py-16">
         <div className="max-w-3xl text-white">
-          <div className="flex items-center space-x-2 mb-6">
-            <Zap className="h-6 w-6 text-accent" />
-            <span className="text-accent font-semibold">Transform Your Career</span>
-          </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Transform Your Future. 
@@ -41,7 +37,7 @@ export const HeroSection = () => {
             </Button>
             <Button 
               size="lg" 
-              variant="default"
+              variant="hero"
               className="text-base px-6 py-3"
               onClick={() => window.location.href = '/job-prep'}
             >
@@ -49,7 +45,7 @@ export const HeroSection = () => {
             </Button>
             <Button 
               size="lg" 
-              variant="default"
+              variant="hero"
               className="text-base px-6 py-3"
               onClick={() => window.location.href = '/learn-a-skill'}
             >
@@ -57,7 +53,7 @@ export const HeroSection = () => {
             </Button>
             <Button 
               size="lg" 
-              variant="default"
+              variant="hero"
               className="text-base px-6 py-3"
               onClick={() => window.location.href = '/hire-yourself'}
             >
@@ -65,27 +61,12 @@ export const HeroSection = () => {
             </Button>
             <Button 
               size="lg" 
-              variant="default"
+              variant="hero"
               className="text-base px-6 py-3"
               onClick={() => window.location.href = '/grant-writing'}
             >
               Grant Writing
             </Button>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-accent">5K+</div>
-              <div className="text-white/80">People Empowered</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent">225+</div>
-              <div className="text-white/80">Certifications</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent">430+</div>
-              <div className="text-white/80">Businesses Launched</div>
-            </div>
           </div>
         </div>
       </div>
