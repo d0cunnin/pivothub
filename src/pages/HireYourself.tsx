@@ -173,85 +173,58 @@ const HireYourself = () => {
           </div>
           
           
-          {/* Business Tools - Reorganized by Purpose and Complexity */}
-          <div className="space-y-8">
-            {/* Foundation Tools - Core Business Development (2-column) */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-foreground/90 text-center mb-6">Foundation Tools</h3>
-              <div className="grid lg:grid-cols-2 gap-6">
-                <div className="animate-fade-in-scale">
-                  <BusinessIdeaGenerator />
-                </div>
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-                  <BusinessPlanGenerator />
-                </div>
-              </div>
+          {/* Business Tools - Single Row Layout */}
+          <div className="space-y-6">
+            <div className="animate-fade-in-scale">
+              <BusinessIdeaGenerator />
             </div>
             
-            {/* Quick Setup Tools - Essential Setup Tasks (3-column) */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-foreground/90 text-center mb-6">Quick Setup Tools</h3>
-              <div className="grid lg:grid-cols-3 gap-6">
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-                  <NameChecker />
-                </div>
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
-                  <LogoGenerator />
-                </div>
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
-                  <StartupChecklist />
-                </div>
-              </div>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
+              <BusinessPlanGenerator />
             </div>
             
-            {/* Legal & Documentation - Full Width for Form Layout */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-foreground/90 text-center mb-6">Legal & Documentation</h3>
-              <div className="animate-fade-in-scale" style={{ animationDelay: '0.5s' }}>
-                <LegalDocsGenerator />
-              </div>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
+              <NameChecker />
             </div>
             
-            {/* Marketing & Content Creation (3-column) */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-foreground/90 text-center mb-6">Marketing & Content</h3>
-              <div className="grid lg:grid-cols-3 gap-6">
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.6s' }}>
-                  <BiographyGenerator />
-                </div>
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.7s' }}>
-                  <MarketingStrategyGenerator />
-                </div>
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
-                  <SocialMediaGenerator />
-                </div>
-              </div>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
+              <LogoGenerator />
             </div>
             
-            {/* Advanced Tools - Complex Interactive Tools (2-column) */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-foreground/90 text-center mb-6">Advanced Tools</h3>
-              <div className="grid lg:grid-cols-2 gap-6">
-                <div className="animate-fade-in-scale" style={{ animationDelay: '0.9s' }}>
-                  <PitchDeckGenerator />
-                </div>
-                <div className="animate-fade-in-scale" style={{ animationDelay: '1.0s' }}>
-                  <BusinessMentorChatbot />
-                </div>
-              </div>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
+              <StartupChecklist />
             </div>
             
-            {/* Resources & Funding - Search and Discovery Tools (2-column) */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-foreground/90 text-center mb-6">Resources & Funding</h3>
-              <div className="grid lg:grid-cols-2 gap-6">
-                <div className="animate-fade-in-scale" style={{ animationDelay: '1.1s' }}>
-                  <GrantFinder />
-                </div>
-                <div className="animate-fade-in-scale" style={{ animationDelay: '1.2s' }}>
-                  <BusinessResourceFinder />
-                </div>
-              </div>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.5s' }}>
+              <LegalDocsGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.6s' }}>
+              <BiographyGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.7s' }}>
+              <MarketingStrategyGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
+              <SocialMediaGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.9s' }}>
+              <PitchDeckGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '1.0s' }}>
+              <BusinessMentorChatbot />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '1.1s' }}>
+              <GrantFinder />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '1.2s' }}>
+              <BusinessResourceFinder />
             </div>
           </div>
         </div>
