@@ -22,33 +22,54 @@ export const HeroSection = () => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Unlock Your 
-            <span className="text-accent"> Potential</span>
+            Transform Your Future. 
+            <span className="text-accent">Relaunch with Purpose.</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-6 text-white/90 max-w-2xl">
-            Whether you're looking to reskill for better opportunities or launch your own business, 
-            we provide the tools and guidance to relaunch your career and create positive economic impact.
+            Whether you're building a business or pivoting into a new career, Relaunch gives you the tools, training, and support to step into your next chapter with clarity, confidence, and impact.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
             <Button 
               size="lg" 
               variant="hero"
-              className="text-lg px-8 py-6"
-              onClick={() => document.getElementById('choose-path')?.scrollIntoView({ behavior: 'smooth' })}
+              className="text-base px-6 py-3"
+              onClick={() => window.location.href = '/assessments'}
             >
-              Start Your Journey
-              <ArrowRight className="ml-2 h-5 w-5" />
+              Assessments
             </Button>
             <Button 
               size="lg" 
               variant="default"
-              className="text-lg px-8 py-6"
-              onClick={() => document.getElementById('choose-path')?.scrollIntoView({ behavior: 'smooth' })}
+              className="text-base px-6 py-3"
+              onClick={() => window.location.href = '/job-prep'}
             >
-              <Target className="mr-2 h-5 w-5" />
-              Explore Paths
+              Career Prep
+            </Button>
+            <Button 
+              size="lg" 
+              variant="default"
+              className="text-base px-6 py-3"
+              onClick={() => window.location.href = '/learn-a-skill'}
+            >
+              Learn a Skill
+            </Button>
+            <Button 
+              size="lg" 
+              variant="default"
+              className="text-base px-6 py-3"
+              onClick={() => window.location.href = '/hire-yourself'}
+            >
+              Business Solutions
+            </Button>
+            <Button 
+              size="lg" 
+              variant="default"
+              className="text-base px-6 py-3"
+              onClick={() => window.location.href = '/grant-writing'}
+            >
+              Grant Writing
             </Button>
           </div>
           
