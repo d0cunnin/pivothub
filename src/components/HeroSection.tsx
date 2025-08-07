@@ -26,7 +26,7 @@ export const HeroSection = () => {
             Whether you're building a business or pivoting into a new career, Relaunch gives you the tools, training, and support to step into your next chapter with clarity, confidence, and impact.
           </p>
           
-          <div className="flex flex-row gap-3 mb-8 justify-center sm:justify-start overflow-x-auto">
+          <div className="flex flex-row gap-3 mb-8 justify-center sm:justify-start">
             <Button 
               size="lg" 
               variant="heroWhite"
