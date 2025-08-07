@@ -94,8 +94,10 @@ const JobPrep = () => {
               
               <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-6">
                 <h4 className="font-semibold text-foreground mb-3 text-sm">Available Tools:</h4>
-                <div className="text-sm text-muted-foreground">
-                  <span>• Career Advisor AI Chatbot</span>
+                <div className="text-sm text-muted-foreground space-y-1">
+                  <div>• Career Advisor AI Chatbot</div>
+                  <div>• Interview Questions Coach</div>
+                  <div>• Resume & Cover Letter Coach</div>
                 </div>
               </div>
             </div>
