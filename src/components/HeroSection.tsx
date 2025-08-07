@@ -26,43 +26,43 @@ export const HeroSection = () => {
             Whether you're building a business or pivoting into a new career, Relaunch gives you the tools, training, and support to step into your next chapter with clarity, confidence, and impact.
           </p>
           
-          <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
+          <div className="flex flex-row gap-3 mb-8 justify-center sm:justify-start overflow-x-auto">
             <Button 
               size="lg" 
-              variant="hero"
-              className="text-base px-6 py-3"
+              variant="heroWhite"
+              className="text-base px-6 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/assessments'}
             >
               Assessments
             </Button>
             <Button 
               size="lg" 
-              variant="hero"
-              className="text-base px-6 py-3"
+              variant="heroWhite"
+              className="text-base px-6 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/job-prep'}
             >
               Career Prep
             </Button>
             <Button 
               size="lg" 
-              variant="hero"
-              className="text-base px-6 py-3"
+              variant="heroWhite"
+              className="text-base px-6 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/learn-a-skill'}
             >
               Learn a Skill
             </Button>
             <Button 
               size="lg" 
-              variant="hero"
-              className="text-base px-6 py-3"
+              variant="heroWhite"
+              className="text-base px-6 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/hire-yourself'}
             >
               Business Solutions
             </Button>
             <Button 
               size="lg" 
-              variant="hero"
-              className="text-base px-6 py-3"
+              variant="heroWhite"
+              className="text-base px-6 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/grant-writing'}
             >
               Grant Writing
