@@ -79,24 +79,24 @@ export const CareerAdvisorChatbot = () => {
     return "I apologize for the technical difficulty. In the meantime, consider these key career development areas: skills assessment, industry research, networking, and creating a strong professional profile. What aspect would you like to discuss further?";
   };
 
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim() || isTyping) return;
+  const handleSendMessage = async (messageOverride?: string) => {
+    const messageText = messageOverride || inputMessage;
+    if (!messageText.trim() || isTyping) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputMessage,
+      text: messageText,
       isBot: false,
       timestamp: new Date(),
     };
 
-    const currentInput = inputMessage;
     setMessages(prev => [...prev, userMessage]);
     setInputMessage("");
     setIsTyping(true);
     setError(null);
 
     try {
-      const aiResponse = await getAIResponse(currentInput);
+      const aiResponse = await getAIResponse(messageText);
       
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -112,7 +112,7 @@ export const CareerAdvisorChatbot = () => {
       
       const fallbackResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: getFallbackResponse(currentInput),
+        text: getFallbackResponse(messageText),
         isBot: true,
         timestamp: new Date(),
       };
@@ -229,10 +229,7 @@ export const CareerAdvisorChatbot = () => {
                   variant="ghost"
                   size="sm"
                   className="h-auto p-3 justify-start text-left whitespace-normal hover:bg-primary/10"
-                  onClick={() => {
-                    setInputMessage(question);
-                    handleSendMessage();
-                  }}
+                  onClick={() => handleSendMessage(question)}
                 >
                   {question}
                 </Button>
@@ -263,7 +260,7 @@ export const CareerAdvisorChatbot = () => {
               disabled={isTyping}
             />
             <Button 
-              onClick={handleSendMessage} 
+              onClick={() => handleSendMessage()} 
               size="default" 
               className="px-6"
               disabled={isTyping || !inputMessage.trim()}
