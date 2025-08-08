@@ -44,7 +44,7 @@ const Reskill = () => {
               Reskill for Success
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Transform your career with industry-recognized certifications and cutting-edge skills training
+              Whether you're re-entering the workforce, changing careers, or building new skills, discover your path to success in today's evolving job market
             </p>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
@@ -70,7 +70,7 @@ const Reskill = () => {
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed">
-                Our comprehensive skills assessment analyzes your current expertise, career goals, and industry trends to create a personalized learning roadmap. Get matched with the exact courses, certifications, and training programs that will maximize your career growth potential.
+                Discover what's next with our comprehensive assessments designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills to find the best career path that fits who you are and where you want to go.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
@@ -251,42 +251,42 @@ const Reskill = () => {
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed mb-6">
-                Whether you're re-entering the workforce, changing careers, or building new skills, our training programs are designed to help you succeed in today's evolving job market.
+                In today's rapidly evolving job market, continuous learning isn't just an advantage—it's essential for career growth and personal fulfillment. Whether you're re-entering the workforce, changing careers, or building new skills, our programs help you stay competitive and unlock new opportunities.
               </p>
               
               {/* ReSkilled Benefits List */}
               <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-4">Get ReSkilled Benefits:</h4>
+                <h4 className="font-semibold text-foreground mb-4">The Power of ReSkilling:</h4>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Refresh your skills to stay competitive in today's job market</span>
+                    <span className="text-foreground">Stay competitive and relevant in an ever-changing market</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Learn practical, real-world knowledge you can use immediately</span>
+                    <span className="text-foreground">Increase your value with skills that command higher salaries</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Gain confidence to pursue new career paths or opportunities</span>
+                    <span className="text-foreground">Build confidence and expand your network through learning</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Adapt quickly to changing workplace demands</span>
+                    <span className="text-foreground">Master job search skills with AI-powered coaching and optimization</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Build a foundation for lifelong learning and growth</span>
+                    <span className="text-foreground">Learn practical, real-world knowledge you can apply immediately</span>
                   </div>
                 </div>
               </div>
