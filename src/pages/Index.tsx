@@ -5,7 +5,6 @@ import { Footer } from "@/components/Footer";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
-import collaborativeLearningImage from "@/assets/collaborative-learning.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -281,8 +280,8 @@ const Index = () => {
               
               <div className="lg:ml-4 self-center">
                 <img 
-                  src={collaborativeLearningImage}
-                  alt="Professionals learning and developing new skills"
+                  src="/lovable-uploads/0d4bb1f8-8ebd-4643-bbf3-fac154a86fe3.png"
+                  alt="Professional team collaborating in a modern conference room with presentation screen"
                   className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
                 />
               </div>
