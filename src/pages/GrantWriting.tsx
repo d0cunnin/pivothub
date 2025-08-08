@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FileText, Send, Download } from 'lucide-react';
+import { FileText, Send, Download, Search, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import heroImage from "@/assets/hero-image.jpg";
 
@@ -33,7 +33,25 @@ interface GrantFormData {
   otherDetails: string;
 }
 
+interface GrantSearchData {
+  businessType: string;
+  industry: string;
+  location: string;
+  fundingAmount: string;
+  businessStage: string;
+}
+
+interface Grant {
+  name: string;
+  description: string;
+  amount: string;
+  deadline: string;
+  eligibility: string;
+  link: string;
+}
+
 const GrantWriting = () => {
+  const [activeTab, setActiveTab] = useState('generator');
   const [formData, setFormData] = useState<GrantFormData>({
     organizationName: '',
     projectTitle: '',
@@ -59,8 +77,23 @@ const GrantWriting = () => {
   const [generatedProposal, setGeneratedProposal] = useState('');
   const [generatedLOI, setGeneratedLOI] = useState('');
 
+  // Grant search state
+  const [searchData, setSearchData] = useState<GrantSearchData>({
+    businessType: '',
+    industry: '',
+    location: '',
+    fundingAmount: '',
+    businessStage: '',
+  });
+  const [isSearching, setIsSearching] = useState(false);
+  const [foundGrants, setFoundGrants] = useState<Grant[]>([]);
+
   const handleInputChange = (field: keyof GrantFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSearchChange = (field: keyof GrantSearchData, value: string) => {
+    setSearchData(prev => ({ ...prev, [field]: value }));
   };
 
   const generateGrantDocuments = async () => {
@@ -94,6 +127,38 @@ const GrantWriting = () => {
       toast.error('Failed to generate grant content. Please try again.');
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const searchGrants = async () => {
+    if (!searchData.businessType || !searchData.industry) {
+      toast.error('Please fill in Business Type and Industry');
+      return;
+    }
+
+    setIsSearching(true);
+    
+    try {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/grant-finder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(searchData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to search grants');
+      }
+
+      const grants = await response.json();
+      setFoundGrants(grants);
+      toast.success(`Found ${grants.length} potential grant opportunities!`);
+    } catch (error) {
+      console.error('Error searching grants:', error);
+      toast.error('Failed to search grants. Please try again.');
+    } finally {
+      setIsSearching(false);
     }
   };
 
@@ -181,13 +246,23 @@ const GrantWriting = () => {
                     <li>• Export to multiple formats</li>
                   </ul>
                 </CardContent>
+                <div className="px-6 pb-6">
+                  <Button 
+                    onClick={() => setActiveTab('generator')}
+                    className="w-full"
+                    variant="default"
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Start Writing Grant
+                  </Button>
+                </div>
               </Card>
               
               <Card className="premium-card">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
-                      <Download className="h-5 w-5 text-white" />
+                      <Search className="h-5 w-5 text-white" />
                     </div>
                     <CardTitle className="text-xl">Grant Research Assistant</CardTitle>
                   </div>
@@ -203,327 +278,518 @@ const GrantWriting = () => {
                     <li>• Application requirements</li>
                   </ul>
                 </CardContent>
+                <div className="px-6 pb-6">
+                  <Button 
+                    onClick={() => setActiveTab('research')}
+                    className="w-full"
+                    variant="default"
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Find Grants
+                  </Button>
+                </div>
               </Card>
             </div>
           </section>
 
-          {/* Main Content Grid */}
-          <div className="grid lg:grid-cols-5 gap-8">
-            {/* Form Section */}
-            <div className="lg:col-span-3">
-              <Card className="h-fit">
-                <CardHeader className="pb-6">
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    <FileText className="h-5 w-5" />
-                    Grant Information
-                  </CardTitle>
-                  <CardDescription>
-                    Fill in the details below to generate your grant proposal and letter of intent
-                  </CardDescription>
-                </CardHeader>
-                 <CardContent className="space-y-6">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="organizationName">Organization Name *</Label>
-                    <Input
-                      id="organizationName"
-                      value={formData.organizationName}
-                      onChange={(e) => handleInputChange('organizationName', e.target.value)}
-                      placeholder="Your Organization Name"
-                      className="h-10"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="grantAmountRequested">Grant Amount Requested</Label>
-                    <Input
-                      id="grantAmountRequested"
-                      value={formData.grantAmountRequested}
-                      onChange={(e) => handleInputChange('grantAmountRequested', e.target.value)}
-                      placeholder="50000"
-                      type="number"
-                      className="h-10"
-                    />
-                  </div>
+          {/* Main Content with Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="generator" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
+                Grant Proposal Generator
+              </TabsTrigger>
+              <TabsTrigger value="research" className="flex items-center gap-2">
+                <Search className="h-4 w-4" />
+                Grant Research Assistant
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="generator">
+              <div className="grid lg:grid-cols-5 gap-8">
+                {/* Form Section */}
+                <div className="lg:col-span-3">
+                  <Card className="h-fit">
+                    <CardHeader className="pb-6">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <FileText className="h-5 w-5" />
+                        Grant Information
+                      </CardTitle>
+                      <CardDescription>
+                        Fill in the details below to generate your grant proposal and letter of intent
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="organizationName">Organization Name *</Label>
+                          <Input
+                            id="organizationName"
+                            value={formData.organizationName}
+                            onChange={(e) => handleInputChange('organizationName', e.target.value)}
+                            placeholder="Your Organization Name"
+                            className="h-10"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="grantAmountRequested">Grant Amount Requested</Label>
+                          <Input
+                            id="grantAmountRequested"
+                            value={formData.grantAmountRequested}
+                            onChange={(e) => handleInputChange('grantAmountRequested', e.target.value)}
+                            placeholder="50000"
+                            type="number"
+                            className="h-10"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="projectTitle">Project Title *</Label>
+                        <Input
+                          id="projectTitle"
+                          value={formData.projectTitle}
+                          onChange={(e) => handleInputChange('projectTitle', e.target.value)}
+                          placeholder="Your Project Title"
+                          className="h-10"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="projectDescription">Project Description / Summary *</Label>
+                        <Textarea
+                          id="projectDescription"
+                          value={formData.projectDescription}
+                          onChange={(e) => handleInputChange('projectDescription', e.target.value)}
+                          placeholder="Brief description of your project..."
+                          rows={3}
+                          className="resize-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="purposeOfFunds">Purpose of Funds</Label>
+                        <Select onValueChange={(value) => handleInputChange('purposeOfFunds', value)}>
+                          <SelectTrigger className="h-10">
+                            <SelectValue placeholder="Select purpose of funds" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="program">Program Development</SelectItem>
+                            <SelectItem value="renovation">Renovation/Construction</SelectItem>
+                            <SelectItem value="staffing">Staffing/Personnel</SelectItem>
+                            <SelectItem value="equipment">Equipment/Technology</SelectItem>
+                            <SelectItem value="operational">Operational Expenses</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="targetPopulation">Target Population</Label>
+                          <Textarea
+                            id="targetPopulation"
+                            value={formData.targetPopulation}
+                            onChange={(e) => handleInputChange('targetPopulation', e.target.value)}
+                            placeholder="Who will benefit from this project?"
+                            rows={2}
+                            className="resize-none"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="projectGoals">Project Goals & Objectives</Label>
+                          <Textarea
+                            id="projectGoals"
+                            value={formData.projectGoals}
+                            onChange={(e) => handleInputChange('projectGoals', e.target.value)}
+                            placeholder="What are the main goals and objectives?"
+                            rows={2}
+                            className="resize-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="projectTimeline">Project Timeline</Label>
+                          <Textarea
+                            id="projectTimeline"
+                            value={formData.projectTimeline}
+                            onChange={(e) => handleInputChange('projectTimeline', e.target.value)}
+                            placeholder="Timeline for project implementation..."
+                            rows={2}
+                            className="resize-none"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="communityImpact">Community Impact</Label>
+                          <Textarea
+                            id="communityImpact"
+                            value={formData.communityImpact}
+                            onChange={(e) => handleInputChange('communityImpact', e.target.value)}
+                            placeholder="How will this project impact the community?"
+                            rows={2}
+                            className="resize-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="sustainabilityPlan">Sustainability Plan</Label>
+                        <Textarea
+                          id="sustainabilityPlan"
+                          value={formData.sustainabilityPlan}
+                          onChange={(e) => handleInputChange('sustainabilityPlan', e.target.value)}
+                          placeholder="How will the project continue after grant funds?"
+                          rows={2}
+                          className="resize-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="organizationBackground">Organization Background</Label>
+                        <Textarea
+                          id="organizationBackground"
+                          value={formData.organizationBackground}
+                          onChange={(e) => handleInputChange('organizationBackground', e.target.value)}
+                          placeholder="Brief history and mission of your organization..."
+                          rows={2}
+                          className="resize-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="contactPersonName">Contact Person Name</Label>
+                          <Input
+                            id="contactPersonName"
+                            value={formData.contactPersonName}
+                            onChange={(e) => handleInputChange('contactPersonName', e.target.value)}
+                            placeholder="Contact Name"
+                            className="h-10"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="contactTitle">Contact Title</Label>
+                          <Input
+                            id="contactTitle"
+                            value={formData.contactTitle}
+                            onChange={(e) => handleInputChange('contactTitle', e.target.value)}
+                            placeholder="Job Title"
+                            className="h-10"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="contactEmail">Contact Email</Label>
+                          <Input
+                            id="contactEmail"
+                            value={formData.contactEmail}
+                            onChange={(e) => handleInputChange('contactEmail', e.target.value)}
+                            placeholder="email@organization.org"
+                            type="email"
+                            className="h-10"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="contactPhone">Contact Phone</Label>
+                          <Input
+                            id="contactPhone"
+                            value={formData.contactPhone}
+                            onChange={(e) => handleInputChange('contactPhone', e.target.value)}
+                            placeholder="(555) 123-4567"
+                            type="tel"
+                            className="h-10"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="grantRequirements">Grant Requirements & Details</Label>
+                        <Textarea
+                          id="grantRequirements"
+                          value={formData.grantRequirements}
+                          onChange={(e) => handleInputChange('grantRequirements', e.target.value)}
+                          placeholder="Funding guidelines, eligibility criteria, restrictions, formatting requirements..."
+                          rows={2}
+                          className="resize-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="additionalInformation">Additional Information</Label>
+                        <Textarea
+                          id="additionalInformation"
+                          value={formData.additionalInformation}
+                          onChange={(e) => handleInputChange('additionalInformation', e.target.value)}
+                          placeholder="Any additional requirements or information..."
+                          rows={2}
+                          className="resize-none"
+                        />
+                      </div>
+
+                      <Button 
+                        onClick={generateGrantDocuments} 
+                        disabled={isGenerating}
+                        className="w-full h-11"
+                        size="lg"
+                      >
+                        {isGenerating ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Generating Documents...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4 mr-2" />
+                            Generate Grant Documents
+                          </>
+                        )}
+                      </Button>
+                    </CardContent>
+                  </Card>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="projectTitle">Project Title *</Label>
-                  <Input
-                    id="projectTitle"
-                    value={formData.projectTitle}
-                    onChange={(e) => handleInputChange('projectTitle', e.target.value)}
-                    placeholder="Your Project Title"
-                    className="h-10"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="projectDescription">Project Description / Summary *</Label>
-                  <Textarea
-                    id="projectDescription"
-                    value={formData.projectDescription}
-                    onChange={(e) => handleInputChange('projectDescription', e.target.value)}
-                    placeholder="Brief description of your project..."
-                    rows={3}
-                    className="resize-none"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="purposeOfFunds">Purpose of Funds</Label>
-                  <Select onValueChange={(value) => handleInputChange('purposeOfFunds', value)}>
-                    <SelectTrigger className="h-10">
-                      <SelectValue placeholder="Select purpose of funds" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="program">Program Development</SelectItem>
-                      <SelectItem value="renovation">Renovation/Construction</SelectItem>
-                      <SelectItem value="staffing">Staffing/Personnel</SelectItem>
-                      <SelectItem value="equipment">Equipment/Technology</SelectItem>
-                      <SelectItem value="operational">Operational Expenses</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="targetPopulation">Target Population</Label>
-                    <Textarea
-                      id="targetPopulation"
-                      value={formData.targetPopulation}
-                      onChange={(e) => handleInputChange('targetPopulation', e.target.value)}
-                      placeholder="Who will benefit from this project?"
-                      rows={2}
-                      className="resize-none"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="projectGoals">Project Goals & Objectives</Label>
-                    <Textarea
-                      id="projectGoals"
-                      value={formData.projectGoals}
-                      onChange={(e) => handleInputChange('projectGoals', e.target.value)}
-                      placeholder="What are the main goals and objectives?"
-                      rows={2}
-                      className="resize-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="projectTimeline">Project Timeline</Label>
-                    <Textarea
-                      id="projectTimeline"
-                      value={formData.projectTimeline}
-                      onChange={(e) => handleInputChange('projectTimeline', e.target.value)}
-                      placeholder="Timeline for project implementation..."
-                      rows={2}
-                      className="resize-none"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="communityImpact">Community Impact</Label>
-                    <Textarea
-                      id="communityImpact"
-                      value={formData.communityImpact}
-                      onChange={(e) => handleInputChange('communityImpact', e.target.value)}
-                      placeholder="How will this project impact the community?"
-                      rows={2}
-                      className="resize-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="sustainabilityPlan">Sustainability Plan</Label>
-                  <Textarea
-                    id="sustainabilityPlan"
-                    value={formData.sustainabilityPlan}
-                    onChange={(e) => handleInputChange('sustainabilityPlan', e.target.value)}
-                    placeholder="How will the project continue after grant funds?"
-                    rows={2}
-                    className="resize-none"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="organizationBackground">Organization Background</Label>
-                  <Textarea
-                    id="organizationBackground"
-                    value={formData.organizationBackground}
-                    onChange={(e) => handleInputChange('organizationBackground', e.target.value)}
-                    placeholder="Brief history and mission of your organization..."
-                    rows={2}
-                    className="resize-none"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="contactPersonName">Contact Person Name</Label>
-                    <Input
-                      id="contactPersonName"
-                      value={formData.contactPersonName}
-                      onChange={(e) => handleInputChange('contactPersonName', e.target.value)}
-                      placeholder="Contact Name"
-                      className="h-10"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="contactTitle">Contact Title</Label>
-                    <Input
-                      id="contactTitle"
-                      value={formData.contactTitle}
-                      onChange={(e) => handleInputChange('contactTitle', e.target.value)}
-                      placeholder="Job Title"
-                      className="h-10"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="contactEmail">Contact Email</Label>
-                    <Input
-                      id="contactEmail"
-                      value={formData.contactEmail}
-                      onChange={(e) => handleInputChange('contactEmail', e.target.value)}
-                      placeholder="email@organization.org"
-                      type="email"
-                      className="h-10"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="contactPhone">Contact Phone</Label>
-                    <Input
-                      id="contactPhone"
-                      value={formData.contactPhone}
-                      onChange={(e) => handleInputChange('contactPhone', e.target.value)}
-                      placeholder="(555) 123-4567"
-                      type="tel"
-                      className="h-10"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="grantRequirements">Grant Requirements & Details</Label>
-                  <Textarea
-                    id="grantRequirements"
-                    value={formData.grantRequirements}
-                    onChange={(e) => handleInputChange('grantRequirements', e.target.value)}
-                    placeholder="Funding guidelines, eligibility criteria, restrictions, formatting requirements..."
-                    rows={2}
-                    className="resize-none"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="additionalInformation">Additional Information</Label>
-                  <Textarea
-                    id="additionalInformation"
-                    value={formData.additionalInformation}
-                    onChange={(e) => handleInputChange('additionalInformation', e.target.value)}
-                    placeholder="Any additional requirements or information..."
-                    rows={2}
-                    className="resize-none"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="otherDetails">Other Details</Label>
-                  <Textarea
-                    id="otherDetails"
-                    value={formData.otherDetails}
-                    onChange={(e) => handleInputChange('otherDetails', e.target.value)}
-                    placeholder="Any other details not covered above..."
-                    rows={2}
-                    className="resize-none"
-                  />
-                </div>
-
-                <Button 
-                  onClick={generateGrantDocuments} 
-                  disabled={isGenerating}
-                  className="w-full h-11"
-                  size="lg"
-                >
-                  {isGenerating ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Generating Documents...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4 mr-2" />
-                      Generate Grant Documents
-                    </>
+                {/* Results Section */}
+                <div className="lg:col-span-2">
+                  {(generatedProposal || generatedLOI) && (
+                    <Card className="h-fit sticky top-8">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="text-xl">Generated Documents</CardTitle>
+                        <CardDescription>
+                          Your AI-generated grant proposal and letter of intent
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <Tabs defaultValue="proposal" className="w-full">
+                          <TabsList className="grid w-full grid-cols-2 mb-4">
+                            <TabsTrigger value="proposal">Grant Proposal</TabsTrigger>
+                            <TabsTrigger value="loi">Letter of Intent</TabsTrigger>
+                          </TabsList>
+                          
+                          <TabsContent value="proposal" className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <h3 className="font-semibold">Grant Proposal</h3>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => downloadDocument(generatedProposal, 'grant-proposal.txt')}
+                                className="h-8"
+                              >
+                                <Download className="h-3 w-3 mr-1" />
+                                Download
+                              </Button>
+                            </div>
+                            <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
+                              <pre className="whitespace-pre-wrap text-sm text-muted-foreground">{generatedProposal}</pre>
+                            </div>
+                          </TabsContent>
+                          
+                          <TabsContent value="loi" className="space-y-4">
+                            <div className="flex justify-between items-center">
+                              <h3 className="font-semibold">Letter of Intent</h3>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => downloadDocument(generatedLOI, 'letter-of-intent.txt')}
+                                className="h-8"
+                              >
+                                <Download className="h-3 w-3 mr-1" />
+                                Download
+                              </Button>
+                            </div>
+                            <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
+                              <pre className="whitespace-pre-wrap text-sm text-muted-foreground">{generatedLOI}</pre>
+                            </div>
+                          </TabsContent>
+                        </Tabs>
+                      </CardContent>
+                    </Card>
                   )}
-                </Button>
-                 </CardContent>
-               </Card>
-             </div>
+                </div>
+              </div>
+            </TabsContent>
 
-          {/* Results Section */}
-          <div className="lg:col-span-2">
-            {(generatedProposal || generatedLOI) && (
-              <Card className="h-fit sticky top-8">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-xl">Generated Documents</CardTitle>
-                  <CardDescription>
-                    Your AI-generated grant proposal and letter of intent
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Tabs defaultValue="proposal" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 mb-4">
-                      <TabsTrigger value="proposal">Grant Proposal</TabsTrigger>
-                      <TabsTrigger value="loi">Letter of Intent</TabsTrigger>
-                    </TabsList>
-                    
-                    <TabsContent value="proposal" className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <h3 className="font-semibold">Grant Proposal</h3>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => downloadDocument(generatedProposal, 'grant-proposal.txt')}
-                          className="h-8"
-                        >
-                          <Download className="h-3 w-3 mr-1" />
-                          Download
-                        </Button>
+            <TabsContent value="research">
+              <div className="grid lg:grid-cols-5 gap-8">
+                {/* Search Form Section */}
+                <div className="lg:col-span-3">
+                  <Card className="h-fit">
+                    <CardHeader className="pb-6">
+                      <CardTitle className="flex items-center gap-2 text-xl">
+                        <Search className="h-5 w-5" />
+                        Grant Search Criteria
+                      </CardTitle>
+                      <CardDescription>
+                        Enter your business details to find relevant grant opportunities
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="businessType">Business Type *</Label>
+                          <Select onValueChange={(value) => handleSearchChange('businessType', value)}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Select business type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="nonprofit">Nonprofit Organization</SelectItem>
+                              <SelectItem value="startup">Startup</SelectItem>
+                              <SelectItem value="small-business">Small Business</SelectItem>
+                              <SelectItem value="tech">Technology Company</SelectItem>
+                              <SelectItem value="research">Research Institution</SelectItem>
+                              <SelectItem value="educational">Educational Institution</SelectItem>
+                              <SelectItem value="healthcare">Healthcare Organization</SelectItem>
+                              <SelectItem value="agricultural">Agricultural Business</SelectItem>
+                              <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="industry">Industry *</Label>
+                          <Select onValueChange={(value) => handleSearchChange('industry', value)}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Select industry" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="technology">Technology</SelectItem>
+                              <SelectItem value="healthcare">Healthcare</SelectItem>
+                              <SelectItem value="education">Education</SelectItem>
+                              <SelectItem value="environment">Environment</SelectItem>
+                              <SelectItem value="arts">Arts & Culture</SelectItem>
+                              <SelectItem value="community">Community Development</SelectItem>
+                              <SelectItem value="research">Research & Development</SelectItem>
+                              <SelectItem value="agriculture">Agriculture</SelectItem>
+                              <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                              <SelectItem value="renewable-energy">Renewable Energy</SelectItem>
+                              <SelectItem value="social-services">Social Services</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
-                      <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
-                        <pre className="whitespace-pre-wrap text-sm text-muted-foreground">{generatedProposal}</pre>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="location">Location</Label>
+                          <Input
+                            id="location"
+                            value={searchData.location}
+                            onChange={(e) => handleSearchChange('location', e.target.value)}
+                            placeholder="City, State, Country"
+                            className="h-10"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="fundingAmount">Funding Amount Range</Label>
+                          <Select onValueChange={(value) => handleSearchChange('fundingAmount', value)}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Select funding range" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="0-10k">$0 - $10,000</SelectItem>
+                              <SelectItem value="10k-50k">$10,000 - $50,000</SelectItem>
+                              <SelectItem value="50k-100k">$50,000 - $100,000</SelectItem>
+                              <SelectItem value="100k-500k">$100,000 - $500,000</SelectItem>
+                              <SelectItem value="500k-1m">$500,000 - $1,000,000</SelectItem>
+                              <SelectItem value="1m+">$1,000,000+</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
-                    </TabsContent>
-                    
-                    <TabsContent value="loi" className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <h3 className="font-semibold">Letter of Intent</h3>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => downloadDocument(generatedLOI, 'letter-of-intent.txt')}
-                          className="h-8"
-                        >
-                          <Download className="h-3 w-3 mr-1" />
-                          Download
-                        </Button>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="businessStage">Business Stage</Label>
+                        <Select onValueChange={(value) => handleSearchChange('businessStage', value)}>
+                          <SelectTrigger className="h-10">
+                            <SelectValue placeholder="Select business stage" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="idea">Idea Stage</SelectItem>
+                            <SelectItem value="startup">Startup</SelectItem>
+                            <SelectItem value="early-stage">Early Stage</SelectItem>
+                            <SelectItem value="growth">Growth Stage</SelectItem>
+                            <SelectItem value="established">Established</SelectItem>
+                            <SelectItem value="expansion">Expansion</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
-                      <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
-                        <pre className="whitespace-pre-wrap text-sm text-muted-foreground">{generatedLOI}</pre>
+
+                      <Button 
+                        onClick={searchGrants} 
+                        disabled={isSearching}
+                        className="w-full h-11"
+                        size="lg"
+                      >
+                        {isSearching ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Searching Grants...
+                          </>
+                        ) : (
+                          <>
+                            <Search className="h-4 w-4 mr-2" />
+                            Find Grant Opportunities
+                          </>
+                        )}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Results Section */}
+                <div className="lg:col-span-2">
+                  {foundGrants.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-xl font-semibold">Found Grants</h3>
+                        <span className="bg-primary text-primary-foreground px-2 py-1 rounded-full text-sm">
+                          {foundGrants.length}
+                        </span>
                       </div>
-                    </TabsContent>
-                  </Tabs>
-                </CardContent>
-              </Card>
-             )}
-            </div>
-          </div>
+                      
+                      <div className="space-y-4 max-h-96 overflow-y-auto">
+                        {foundGrants.map((grant, index) => (
+                          <Card key={index} className="border">
+                            <CardHeader className="pb-3">
+                              <CardTitle className="text-lg">{grant.name}</CardTitle>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span className="font-medium text-primary">{grant.amount}</span>
+                                <span>{grant.deadline}</span>
+                              </div>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-muted-foreground mb-3">{grant.description}</p>
+                              <div className="space-y-2">
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground">Eligibility:</span>
+                                  <p className="text-sm">{grant.eligibility}</p>
+                                </div>
+                                {grant.link && (
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={() => window.open(grant.link, '_blank')}
+                                    className="w-full"
+                                  >
+                                    <ArrowRight className="h-3 w-3 mr-1" />
+                                    View Grant Details
+                                  </Button>
+                                )}
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
       <Footer />
