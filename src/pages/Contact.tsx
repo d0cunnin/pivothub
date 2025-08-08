@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import heroImage from "@/assets/hero-image.jpg";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -40,16 +41,39 @@ const Contact = () => {
       
       <main className="pt-20">
         {/* Hero Section */}
-        <section className="bg-primary py-16">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Get in Touch
-            </h1>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              Have questions about our career development or business launch programs? 
-              We're here to help you on your journey to success.
-            </p>
+        <section className="py-20 bg-gradient-hero relative overflow-hidden">
+          {/* Background Image with Overlay */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${heroImage})` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
           </div>
+          
+          {/* Decorative Elements */}
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+          <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+          <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
+          
+          <div className="container mx-auto px-6 lg:px-8 relative z-10">
+            <div className="text-center max-w-5xl mx-auto">
+              <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
+                <Mail className="h-12 w-12 text-white" />
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
+                Get in Touch
+              </h1>
+              <div className="text-left max-w-4xl mx-auto">
+                <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                  Have questions about our career development or business launch programs? 
+                  We're here to help you on your journey to success.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="section-divider absolute bottom-0 left-0"></div>
         </section>
 
         {/* Contact Form & Info Section */}

@@ -42,16 +42,18 @@ const HireYourself = () => {
         <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-left max-w-5xl mx-auto">
-            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
               <Rocket className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
               HireYourself
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Launch your business with confidence. Get everything you need from idea to execution.
-            </p>
+            <div className="text-left max-w-4xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Launch your business with confidence. Get everything you need from idea to execution.
+              </p>
+            </div>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Button 
                 variant="hero" 

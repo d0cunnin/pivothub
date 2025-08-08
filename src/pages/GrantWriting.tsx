@@ -135,12 +135,14 @@ const GrantWriting = () => {
             <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
               <FileText className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
               Grant Writing Assistant
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Generate professional grant proposals and letters of intent with AI assistance
-            </p>
+            <div className="text-left max-w-4xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Generate professional grant proposals and letters of intent with AI assistance
+              </p>
+            </div>
           </div>
         </div>
         
@@ -149,6 +151,63 @@ const GrantWriting = () => {
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
+          {/* Grant Writing Tools Section */}
+          <section className="mb-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">
+                Grant Writing & Research Tools
+              </h2>
+              <p className="text-lg text-foreground leading-relaxed max-w-3xl mx-auto">
+                Professional grant writing tools to help you secure funding for your projects and organizations
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <Card className="premium-card">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
+                      <FileText className="h-5 w-5 text-white" />
+                    </div>
+                    <CardTitle className="text-xl">AI Grant Proposal Generator</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Generate comprehensive grant proposals with AI assistance based on your project details
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>• Professional grant proposal formatting</li>
+                    <li>• Customized content for your organization</li>
+                    <li>• Letter of intent generation</li>
+                    <li>• Export to multiple formats</li>
+                  </ul>
+                </CardContent>
+              </Card>
+              
+              <Card className="premium-card">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-gradient-hero rounded-lg flex items-center justify-center">
+                      <Download className="h-5 w-5 text-white" />
+                    </div>
+                    <CardTitle className="text-xl">Grant Research Assistant</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Find relevant grant opportunities and funding sources for your specific needs
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li>• Database of funding opportunities</li>
+                    <li>• Eligibility matching</li>
+                    <li>• Deadline tracking</li>
+                    <li>• Application requirements</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
 
           {/* Main Content Grid */}
           <div className="grid lg:grid-cols-5 gap-8">
