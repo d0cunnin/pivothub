@@ -10,47 +10,44 @@ import heroImage from "@/assets/hero-image.jpg";
 const LearnASkill = () => {
   const certificationCategories = [
     {
-      title: "Technology & IT",
-      description: "Stay ahead in the digital transformation with cutting-edge tech certifications",
+      title: "AI & Technology for Everyday People",
+      description: "Master AI tools and concepts without tech overwhelm - designed specifically for non-technical people",
       certifications: [
-        { name: "Cloud Computing (AWS, Azure, Google Cloud)", level: "Beginner to Expert", duration: "3-6 months" },
-        { name: "Cybersecurity Fundamentals", level: "Intermediate", duration: "4 months" },
-        { name: "Data Science & Analytics", level: "Beginner to Advanced", duration: "6 months" },
-        { name: "Web Development (Full Stack)", level: "Beginner", duration: "8 months" },
-        { name: "AI & Machine Learning", level: "Intermediate", duration: "6 months" }
+        { name: "What Exactly Is AI, and Why Should I Care?", level: "Beginner", duration: "20 min" },
+        { name: "How AI Can Make Life Easier", level: "Beginner", duration: "22 min" },
+        { name: "Let AI Help You Get More Done", level: "Beginner", duration: "25 min" },
+        { name: "Using AI to Boost Your Confidence at Work", level: "Beginner", duration: "28 min" },
+        { name: "How AI Can Be Your Personal Helper", level: "Beginner", duration: "24 min" },
+        { name: "Let AI Work With You Like a Smart Employee", level: "Beginner", duration: "26 min" },
+        { name: "What AI Means for the Future", level: "Beginner", duration: "30 min" },
+        { name: "Creating with AI: Writing, Ideas, Videos", level: "Beginner", duration: "32 min" },
+        { name: "The Story of AI: Where It Started and Going", level: "Beginner", duration: "18 min" },
+        { name: "Staying Relevant in a Tech-Heavy World", level: "Beginner", duration: "28 min" },
+        { name: "Future-Proof Skills You Can Learn Now", level: "Beginner", duration: "25 min" }
       ]
     },
     {
-      title: "Business & Management",
-      description: "Develop leadership skills and business acumen for career advancement",
+      title: "Business Building for Beginners and Solopreneurs",
+      description: "Start and grow your business with confidence - no MBA required, just practical steps that work",
       certifications: [
-        { name: "Project Management (PMP)", level: "Intermediate", duration: "4 months" },
-        { name: "Digital Marketing", level: "Beginner to Advanced", duration: "3 months" },
-        { name: "Business Analysis", level: "Intermediate", duration: "5 months" },
-        { name: "Leadership & Team Management", level: "All Levels", duration: "3 months" },
-        { name: "Financial Planning & Analysis", level: "Intermediate", duration: "4 months" }
+        { name: "Build a Beautiful Brand on a Shoestring Budget", level: "Beginner", duration: "25 min" },
+        { name: "Get Noticed: Make Your Business Stand Out", level: "Beginner", duration: "28 min" },
+        { name: "Money Matters: Bookkeeping and Budgeting", level: "Beginner", duration: "30 min" },
+        { name: "Your Big Idea Deserves a Big Pitch", level: "Beginner", duration: "32 min" },
+        { name: "Make a Business Plan That Actually Works", level: "Beginner", duration: "35 min" },
+        { name: "Running a Business Solo with AI", level: "Beginner", duration: "28 min" },
+        { name: "Smart Tools and AI Hacks to Save Time", level: "Beginner", duration: "26 min" },
+        { name: "Start an AI-Powered Business", level: "Beginner", duration: "30 min" }
       ]
     },
     {
-      title: "Healthcare & Life Sciences",
-      description: "Advance your healthcare career with specialized certifications",
+      title: "Intro to Web & Software Development",
+      description: "Learn the fundamentals of web and software development - perfect for beginners wanting to understand the tech world",
       certifications: [
-        { name: "Healthcare Administration", level: "Intermediate", duration: "6 months" },
-        { name: "Medical Coding & Billing", level: "Beginner", duration: "4 months" },
-        { name: "Public Health Fundamentals", level: "Beginner", duration: "3 months" },
-        { name: "Mental Health First Aid", level: "All Levels", duration: "2 months" },
-        { name: "Healthcare Data Analytics", level: "Intermediate", duration: "5 months" }
-      ]
-    },
-    {
-      title: "Trade & Technical Skills",
-      description: "Master hands-on skills for growing industries",
-      certifications: [
-        { name: "Electrical Systems", level: "Beginner to Advanced", duration: "6 months" },
-        { name: "HVAC Technology", level: "Beginner", duration: "5 months" },
-        { name: "Automotive Technology", level: "Intermediate", duration: "8 months" },
-        { name: "Renewable Energy Systems", level: "Intermediate", duration: "4 months" },
-        { name: "Advanced Manufacturing", level: "Intermediate", duration: "6 months" }
+        { name: "What is Front-End Development?", level: "Beginner", duration: "30 min" },
+        { name: "What is Back-End Development?", level: "Beginner", duration: "35 min" },
+        { name: "What is Full-Stack Development?", level: "Beginner", duration: "40 min" },
+        { name: "Programming Languages 101 — What They Are & What They're For", level: "Beginner", duration: "45 min" }
       ]
     }
   ];

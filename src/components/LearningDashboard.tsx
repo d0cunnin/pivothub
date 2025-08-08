@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TrendingUp, Award, BookOpen, Clock, Target, Filter } from 'lucide-react';
 import { InteractiveLearningModule } from './InteractiveLearningModule';
+import { CoursePreview } from './CoursePreview';
 
 // Real course content - AI & Technology and Business Building
 const learningModules = [
@@ -1096,6 +1097,367 @@ The future belongs to businesses that combine human insight with AI efficiency.`
         ]
       }
     ]
+  },
+  {
+    id: 'web-development',
+    title: 'Intro to Web & Software Development',
+    description: 'Learn the fundamentals of web and software development - perfect for beginners wanting to understand the tech world',
+    duration: '4-6 weeks',
+    level: 'Beginner',
+    skills: ['HTML/CSS Basics', 'JavaScript Fundamentals', 'Development Concepts', 'Programming Logic'],
+    certificate: 'Web Development Fundamentals Certificate',
+    lessons: [
+      {
+        id: 'frontend-dev',
+        title: 'What is Front-End Development?',
+        description: 'Learn what front-end development is and what front-end developers do every day',
+        duration: '30 min',
+        completed: false,
+        content: `Understanding Front-End Development
+
+Front-end development is like being the architect and interior designer of the digital world - you create what people see and interact with on websites and apps.
+
+What Front-End Developers Do:
+• Design and build the visual parts of websites and applications
+• Make sure everything looks good and works smoothly for users
+• Turn creative designs into functional, interactive experiences
+• Ensure websites work on different devices (phones, tablets, computers)
+• Focus on user experience and making things easy to use
+
+Key Technologies:
+• HTML (HyperText Markup Language): The structure and content
+• CSS (Cascading Style Sheets): The styling and appearance
+• JavaScript: The interactivity and dynamic behavior
+• Various frameworks and libraries to speed up development
+
+Think of it like building a house:
+• HTML is the foundation and frame
+• CSS is the paint, decorations, and styling
+• JavaScript is the electricity that makes things work
+
+Daily Tasks:
+• Converting design mockups into working web pages
+• Making websites responsive (work on all screen sizes)
+• Testing across different browsers and devices
+• Collaborating with designers and back-end developers
+• Optimizing for speed and performance
+• Debugging and fixing visual or interaction issues
+
+Career Opportunities:
+Front-end developers are in high demand because every business needs a web presence. You could work at:
+• Tech companies and startups
+• Digital agencies
+• Large corporations
+• As a freelancer or consultant
+• Remote work opportunities are abundant
+
+Skills You'll Develop:
+• Technical skills in HTML, CSS, and JavaScript
+• Problem-solving and logical thinking
+• Attention to detail and design sense
+• Communication and teamwork
+• Continuous learning (technology evolves fast!)
+
+Getting Started:
+No computer science degree required! Many successful front-end developers are self-taught or completed coding bootcamps. The key is consistent practice and building projects.`,
+        quiz: [
+          {
+            id: 'fe1',
+            question: 'What is front-end development primarily concerned with?',
+            options: [
+              'Server management and databases',
+              'What users see and interact with on websites',
+              'Network security and protocols',
+              'Mobile app store optimization'
+            ],
+            correctAnswer: 1
+          }
+        ]
+      },
+      {
+        id: 'backend-dev',
+        title: 'What is Back-End Development?',
+        description: 'Discover the server-side world and what back-end developers build behind the scenes',
+        duration: '35 min',
+        completed: false,
+        content: `Understanding Back-End Development
+
+If front-end is what users see, back-end is the engine that makes everything work behind the scenes. Back-end developers are like the architects of the digital infrastructure.
+
+What Back-End Developers Do:
+• Build and maintain the server-side logic that powers websites and apps
+• Create and manage databases that store all the information
+• Develop APIs (Application Programming Interfaces) that connect different systems
+• Ensure data security and user authentication
+• Handle the complex business logic and calculations
+• Optimize performance and scalability
+
+Key Technologies:
+• Programming languages: Python, Java, JavaScript (Node.js), PHP, Ruby, C#
+• Databases: MySQL, PostgreSQL, MongoDB, Redis
+• Server technologies: AWS, Google Cloud, Microsoft Azure
+• Frameworks: Express.js, Django, Spring, Laravel
+• Version control: Git and GitHub
+
+Think of a restaurant analogy:
+• Front-end is the dining room where customers eat
+• Back-end is the kitchen where food is prepared
+• APIs are the waiters carrying orders back and forth
+• Databases are the pantry storing all ingredients
+
+Daily Tasks:
+• Writing server-side code and business logic
+• Designing and managing database structures
+• Creating APIs for front-end and mobile apps to use
+• Implementing security measures and user authentication
+• Optimizing database queries and server performance
+• Debugging and troubleshooting server issues
+• Collaborating with front-end developers and stakeholders
+
+Career Opportunities:
+Back-end developers are essential for any digital product. Career paths include:
+• Software engineer at tech companies
+• Systems architect for large-scale applications
+• DevOps engineer focusing on deployment and infrastructure
+• Database administrator
+• Cloud solutions architect
+• Freelance API developer
+
+Skills You'll Develop:
+• Strong problem-solving and logical thinking
+• Understanding of system architecture and design patterns
+• Database design and optimization
+• Security best practices
+• Performance optimization
+• Working with cloud services and deployment
+
+Why Back-End Matters:
+Without back-end development:
+• No user accounts or login systems
+• No data storage or retrieval
+• No e-commerce transactions
+• No real-time features like chat or notifications
+• No complex calculations or business logic
+
+Getting Started:
+Back-end development requires learning programming languages and understanding how systems work together. Start with one language and build simple projects, then gradually learn about databases and server deployment.`,
+        quiz: [
+          {
+            id: 'be1',
+            question: 'What is the primary responsibility of back-end development?',
+            options: [
+              'Creating visual designs and layouts',
+              'Managing server-side logic and databases',
+              'Writing marketing copy for websites',
+              'Designing user interfaces'
+            ],
+            correctAnswer: 1
+          }
+        ]
+      },
+      {
+        id: 'fullstack-dev',
+        title: 'What is Full-Stack Development?',
+        description: 'Learn about being a versatile developer who works on both front-end and back-end',
+        duration: '40 min',
+        completed: false,
+        content: `Understanding Full-Stack Development
+
+A full-stack developer is like a Swiss Army knife of web development - capable of working on both the front-end (what users see) and back-end (server-side logic) of applications.
+
+What Full-Stack Developers Do:
+• Build complete web applications from start to finish
+• Work on user interfaces, server logic, and databases
+• Bridge the gap between design and functionality
+• Handle the entire development process for smaller projects
+• Collaborate effectively with specialized front-end and back-end teams
+• Make architectural decisions for web applications
+
+The Full Stack Includes:
+• Front-end technologies (HTML, CSS, JavaScript, React, Vue, Angular)
+• Back-end technologies (Node.js, Python, Java, databases)
+• DevOps and deployment (servers, cloud platforms, CI/CD)
+• Version control and project management tools
+• Understanding of the entire web development ecosystem
+
+Advantages of Being Full-Stack:
+• Versatility and flexibility in job opportunities
+• Better understanding of how all pieces fit together
+• Ability to work on complete projects independently
+• Higher demand in startups and smaller companies
+• Better communication between front-end and back-end teams
+• More comprehensive problem-solving abilities
+
+Career Paths:
+• Full-stack developer at startups or agencies
+• Technical lead overseeing entire projects
+• Solo freelancer building complete applications
+• Consultant helping businesses with end-to-end solutions
+• Entrepreneur building your own digital products
+• Team lead bridging different development teams
+
+Common Full-Stack Combinations:
+• MEAN Stack: MongoDB, Express.js, Angular, Node.js
+• MERN Stack: MongoDB, Express.js, React, Node.js
+• LAMP Stack: Linux, Apache, MySQL, PHP
+• Django + React: Python Django backend with React frontend
+• Ruby on Rails + Vue.js: Full-stack Ruby solution with Vue frontend
+
+Daily Responsibilities:
+• Planning application architecture and database design
+• Building user interfaces and user experience flows
+• Developing server-side APIs and business logic
+• Integrating front-end with back-end services
+• Testing across the entire application stack
+• Deploying and maintaining applications in production
+• Troubleshooting issues across different layers
+
+Skills You'll Develop:
+• Broad technical knowledge across multiple technologies
+• System thinking and architecture design
+• Project management and planning abilities
+• Problem-solving across different technical domains
+• Communication skills to work with diverse teams
+• Ability to learn new technologies quickly
+
+Challenges:
+• Keeping up with rapidly changing technologies in multiple areas
+• Depth vs. breadth trade-off (knowing many things well vs. specializing)
+• Higher learning curve initially
+• Need to stay current with trends in multiple technology stacks
+
+Getting Started:
+1. Choose one full-stack combination (like MERN or Django + React)
+2. Build a simple project using all parts of the stack
+3. Focus on understanding how front-end and back-end communicate
+4. Practice deploying complete applications
+5. Gradually expand your knowledge to other technologies
+
+Remember: You don't need to be an expert in everything immediately. Full-stack is about understanding how all pieces work together and being able to contribute meaningfully to all parts of a project.`,
+        quiz: [
+          {
+            id: 'fs1',
+            question: 'What makes a full-stack developer different from specialized developers?',
+            options: [
+              'They only work on mobile apps',
+              'They work on both front-end and back-end of applications',
+              'They only focus on database management',
+              'They specialize in just one programming language'
+            ],
+            correctAnswer: 1
+          }
+        ]
+      },
+      {
+        id: 'programming-languages',
+        title: 'Programming Languages 101 — What They Are & What They\'re For',
+        description: 'Get a beginner-friendly overview of popular programming languages and their uses',
+        duration: '45 min',
+        completed: false,
+        content: `Programming Languages: Your Digital Communication Tools
+
+Programming languages are like different human languages - each has its own vocabulary, grammar, and is better suited for certain types of communication. Let's explore the most popular ones and what they're used for.
+
+What Are Programming Languages?
+Programming languages are sets of instructions that tell computers what to do. Just like you might choose Spanish to communicate in Mexico or French in France, you choose different programming languages for different types of projects.
+
+Popular Programming Languages and Their Uses:
+
+**JavaScript - The Language of the Web**
+• What it's for: Making websites interactive and building web applications
+• Where you'll see it: Every website you visit uses JavaScript
+• Beginner-friendly: Yes! Great starting language
+• Career opportunities: Web development, mobile apps (React Native), even server development
+• Think of it as: The Swiss Army knife of programming
+
+**Python - The Friendly Giant**
+• What it's for: Data science, artificial intelligence, web development, automation
+• Where you'll see it: Netflix recommendations, Instagram backend, scientific research
+• Beginner-friendly: Extremely! Reads almost like English
+• Career opportunities: AI/ML engineer, data scientist, web developer, automation specialist
+• Think of it as: The friendly, versatile tool that can do almost anything
+
+**Java - The Enterprise Workhorse**
+• What it's for: Large business applications, Android apps, web backends
+• Where you'll see it: Banking systems, large corporate applications, Android phones
+• Beginner-friendly: Moderate learning curve
+• Career opportunities: Enterprise developer, Android developer, backend engineer
+• Think of it as: The reliable, professional suit of programming languages
+
+**HTML & CSS - The Building Blocks of the Web**
+• What they're for: HTML structures web content, CSS makes it look beautiful
+• Where you'll see them: Every website you visit
+• Beginner-friendly: Very! Not technically programming languages but essential
+• Career opportunities: Front-end developer, web designer, UI developer
+• Think of them as: HTML is the skeleton, CSS is the skin and clothing
+
+**C# - Microsoft's Professional Language**
+• What it's for: Business applications, games (Unity), web development
+• Where you'll see it: Windows applications, video games, enterprise software
+• Beginner-friendly: Moderate, similar to Java
+• Career opportunities: Game developer, enterprise developer, Windows app developer
+• Think of it as: The professional tool for Microsoft-focused development
+
+**Swift - Apple's Language**
+• What it's for: iOS and macOS applications
+• Where you'll see it: iPhone apps, Mac applications
+• Beginner-friendly: Moderate
+• Career opportunities: iOS developer, Mac app developer
+• Think of it as: The key to the Apple ecosystem
+
+**SQL - The Database Communicator**
+• What it's for: Managing and retrieving data from databases
+• Where you'll see it: Behind every app that stores user information
+• Beginner-friendly: Yes! Very logical and straightforward
+• Career opportunities: Data analyst, database administrator, backend developer
+• Think of it as: The librarian that organizes and finds information
+
+**PHP - The Web Backend Classic**
+• What it's for: Server-side web development
+• Where you'll see it: WordPress, Facebook (originally), many websites
+• Beginner-friendly: Yes, especially for web development
+• Career opportunities: Web developer, WordPress developer, backend engineer
+• Think of it as: The reliable engine that powers many websites
+
+How to Choose Your First Language:
+
+**Want to build websites?** Start with HTML, CSS, and JavaScript
+**Interested in mobile apps?** Try Swift (iOS) or learn JavaScript for React Native
+**Fascinated by data and AI?** Python is your best friend
+**Want to work at big companies?** Java or C# are excellent choices
+**Love games?** C# with Unity or learn JavaScript for web games
+**Curious about everything?** Python or JavaScript are great starting points
+
+Learning Tips:
+• Don't try to learn multiple languages at once - master one first
+• Practice by building real projects, not just tutorials
+• Join communities and forums for your chosen language
+• Remember: the first language is the hardest; subsequent ones are easier
+• Focus on problem-solving skills, not just syntax
+
+The Truth About Programming Languages:
+• Most concepts transfer between languages
+• Companies often care more about problem-solving ability than specific language knowledge
+• You'll likely learn multiple languages throughout your career
+• The "best" language depends on what you want to build
+• All popular languages have good career opportunities
+
+Remember: Programming languages are just tools. A carpenter can build a house with different types of hammers, and you can solve problems with different programming languages. The key is learning to think like a programmer, not memorizing every language syntax.`,
+        quiz: [
+          {
+            id: 'pl1',
+            question: 'What should be the primary factor when choosing your first programming language?',
+            options: [
+              'Which language pays the most money',
+              'Which language is the newest',
+              'What type of projects you want to build',
+              'Which language has the most complex syntax'
+            ],
+            correctAnswer: 2
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -1104,9 +1466,18 @@ export const LearningDashboard: React.FC = () => {
   const [filterLevel, setFilterLevel] = useState<string>('all');
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [moduleProgress, setModuleProgress] = useState<Record<string, number>>({});
+  const [registeredCourses, setRegisteredCourses] = useState<Set<string>>(new Set());
 
   const handleProgressUpdate = (moduleId: string, progress: number) => {
     setModuleProgress(prev => ({ ...prev, [moduleId]: progress }));
+  };
+
+  const handleRegister = (courseId: string) => {
+    setRegisteredCourses(prev => new Set([...prev, courseId]));
+  };
+
+  const handleStartCourse = (courseId: string) => {
+    setSelectedModule(courseId);
   };
 
   const filteredModules = learningModules.filter(module => {
@@ -1202,68 +1573,16 @@ export const LearningDashboard: React.FC = () => {
         {filteredModules.map((module) => {
           const progress = moduleProgress[module.id] || 0;
           const isCompleted = progress === 100;
+          const isRegistered = registeredCourses.has(module.id);
           
           return (
-            <Card key={module.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg">{module.title}</CardTitle>
-                    <CardDescription className="mt-2">{module.description}</CardDescription>
-                  </div>
-                  {isCompleted && (
-                    <Badge className="bg-gradient-primary text-white">
-                      <Award className="h-3 w-3 mr-1" />
-                      Done
-                    </Badge>
-                  )}
-                </div>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">
-                    <Clock className="h-3 w-3 mr-1" />
-                    {module.duration}
-                  </Badge>
-                  <Badge variant="outline">{module.level}</Badge>
-                </div>
-
-                {progress > 0 && (
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Progress</span>
-                      <span>{Math.round(progress)}%</span>
-                    </div>
-                    <Progress value={progress} className="h-2" />
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <h4 className="text-sm font-medium">Skills:</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {module.skills.slice(0, 3).map((skill, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {skill}
-                      </Badge>
-                    ))}
-                    {module.skills.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{module.skills.length - 3}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-
-                <Button 
-                  className="w-full bg-gradient-primary"
-                  onClick={() => setSelectedModule(module.id)}
-                >
-                  {progress > 0 && progress < 100 ? 'Continue Learning' : 
-                   isCompleted ? 'Review Course' : 'Start Course'}
-                </Button>
-              </CardContent>
-            </Card>
+            <CoursePreview
+              key={module.id}
+              course={module}
+              onRegister={handleRegister}
+              isRegistered={isRegistered}
+              onStartCourse={handleStartCourse}
+            />
           );
         })}
       </div>
