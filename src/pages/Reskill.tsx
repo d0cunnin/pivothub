@@ -11,7 +11,7 @@ import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { EnhancedInterviewCoach } from "@/components/EnhancedInterviewCoach";
 import { EnhancedResumeCoach } from "@/components/EnhancedResumeCoach";
 import { EnhancedReskillDashboard } from "@/components/EnhancedReskillDashboard";
-import { Award, BookOpen, Users, TrendingUp, Target, Star, CheckCircle, ArrowRight, Brain, Lightbulb, Zap, GraduationCap, FileText, Edit3 } from "lucide-react";
+import { Award, BookOpen, Users, TrendingUp, Target, Star, CheckCircle, ArrowRight, Brain, Lightbulb, Zap, GraduationCap, FileText, Edit3, Briefcase, MessageSquare } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Reskill = () => {
@@ -48,9 +48,36 @@ const Reskill = () => {
             </p>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                <CareerAssessment />
-                <SkillsAssessment />
-                <PersonalityAssessment />
+                <Button 
+                  size="lg" 
+                  variant="hero" 
+                  className="flex items-center space-x-2"
+                  onClick={() => window.location.href = '/assessments'}
+                  aria-label="Go to Career Assessments"
+                >
+                  <Brain className="h-5 w-5" />
+                  <span>Assessment</span>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="bg-white/10 text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2 backdrop-blur-sm"
+                  onClick={() => window.location.href = '/job-prep'}
+                  aria-label="Go to Job Preparation Tools"
+                >
+                  <Briefcase className="h-5 w-5" />
+                  <span>Job Prep</span>
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="bg-white/10 text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2 backdrop-blur-sm"
+                  onClick={() => window.location.href = '/learn-a-skill'}
+                  aria-label="Go to Learn a Skill"
+                >
+                  <Award className="h-5 w-5" />
+                  <span>Learn a Skill</span>
+                </Button>
               </div>
             </div>
           </div>
@@ -59,49 +86,60 @@ const Reskill = () => {
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
-      {/* Skills Assessment */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      {/* Assessment Panel */}
+      <section className="py-16 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Discover Career Clarity
+                  Career Assessments
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed">
-                Start with an in-depth assessment to understand your strengths and opportunities for growth—know where you are and where you're headed. Our comprehensive diagnostic tools provide personalized feedback and actionable insights for your career journey.
+                Discover your strengths, skills, and perfect career path with our comprehensive assessment tools.
+              </p>
+              <p className="text-foreground leading-relaxed">
+                Discover what's next with our three powerful assessments designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills all to help you find the best career or business path that fits who you are and where you want to go.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <Target className="h-3 w-3 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Interactive Assessments</h4>
-                    <p className="text-muted-foreground text-sm">Comprehensive evaluations of your interests, skills, and personality traits</p>
+                    <h4 className="font-semibold text-foreground mb-1">Career Assessment</h4>
+                    <p className="text-muted-foreground text-sm">Discover your ideal career path based on your interests, values, and goals</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <BookOpen className="h-3 w-3 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Personalized Insights</h4>
-                    <p className="text-muted-foreground text-sm">Get detailed feedback and next-step recommendations tailored to your goals</p>
+                    <h4 className="font-semibold text-foreground mb-1">Skills Assessment</h4>
+                    <p className="text-muted-foreground text-sm">Evaluate your current skill level and identify areas for improvement</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <Brain className="h-3 w-3 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Career Path Mapping</h4>
-                    <p className="text-muted-foreground text-sm">Visualize potential career routes and skill development opportunities</p>
+                    <h4 className="font-semibold text-foreground mb-1">Personality Assessment</h4>
+                    <p className="text-muted-foreground text-sm">Understand your personality traits and work style preferences</p>
                   </div>
                 </div>
               </div>
-              <CareerAssessment />
+              <Button 
+                size="lg" 
+                variant="default"
+                onClick={() => window.location.href = '/assessments'}
+                className="mt-6"
+                aria-label="Go to Career Assessments page"
+              >
+                Go to Assessment
+              </Button>
             </div>
             
             <div className="flex justify-center lg:justify-end">
@@ -115,133 +153,130 @@ const Reskill = () => {
         </div>
       </section>
 
-      {/* Career Advisor AI */}
+      {/* Job Prep Panel */}
       <section className="py-16 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
-          {/* Header Section */}
-          <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Prepare for Opportunity
-              </h2>
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
+            <div className="flex justify-center lg:justify-start">
+              <img 
+                src="/lovable-uploads/06f5d335-a58d-4bad-877d-fa273f7f5dea.png" 
+                alt="Job preparation and career coaching" 
+                className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
+              />
             </div>
-            <p className="text-lg text-foreground leading-relaxed mb-4">
-              Build momentum with tailored job-prep tools—mock interviews, resume refreshers, and career coaching designed for success. Master your job search with AI-powered coaching and real-world simulations.
-            </p>
-            <div className="grid md:grid-cols-3 gap-4 text-center">
-              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <Target className="h-4 w-4 text-white" />
-                </div>
-                <h4 className="font-semibold text-foreground mb-1">Career Coaching</h4>
-                <p className="text-sm text-muted-foreground">Get personalized guidance for your professional journey and career decisions</p>
+            <div className="animate-fade-in space-y-6">
+              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Job Preparation Tools
+                </h2>
               </div>
-              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <BookOpen className="h-4 w-4 text-white" />
+              <p className="text-lg text-foreground leading-relaxed">
+                Master your job search with AI-powered coaching, interview preparation, and professional document optimization.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <Brain className="h-3 w-3 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Career Advisor AI</h4>
+                    <p className="text-muted-foreground text-sm">Get personalized guidance for your professional journey</p>
+                  </div>
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Interview Practice</h4>
-                <p className="text-sm text-muted-foreground">Master interview skills with customized questions and STAR method coaching</p>
-              </div>
-              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <Users className="h-4 w-4 text-white" />
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <MessageSquare className="h-3 w-3 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Interview Questions Coach</h4>
+                    <p className="text-muted-foreground text-sm">Practice with customized questions and expert feedback</p>
+                  </div>
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Resume Optimization</h4>
-                <p className="text-sm text-muted-foreground">Transform your resume into results-oriented statements that get noticed</p>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <FileText className="h-3 w-3 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Resume & Cover Letter Coach</h4>
+                    <p className="text-muted-foreground text-sm">Transform your resume into powerful, results-oriented statements</p>
+                  </div>
+                </div>
               </div>
+              <Button 
+                size="lg" 
+                variant="default"
+                onClick={() => window.location.href = '/job-prep'}
+                className="mt-6"
+                aria-label="Go to Job Preparation Tools page"
+              >
+                Go to Job Prep
+              </Button>
             </div>
           </div>
-          
-          <CareerAdvisorChatbot />
         </div>
       </section>
 
-      {/* Learning Categories */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      {/* Learn a Skill Panel */}
+      <section className="py-16 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
-          {/* Header with Learning Image */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="section-header">
-                  Skill Up Strategically
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Why Learn a New Skill?
                 </h2>
               </div>
-              <p className="text-lg text-foreground leading-relaxed mb-6">
-                Learn exactly what matters—structured micro-courses, real-world projects, and flexible pacing to help you build new competencies seamlessly. Master in-demand skills through hands-on practice and pathways to certification.
+              <p className="text-lg text-foreground leading-relaxed">
+                In today's rapidly evolving job market, continuous learning isn't just an advantage—it's essential for career growth and personal fulfillment.
               </p>
-              
-              {/* ReSkilled Benefits List */}
-              <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-4">Strategic Learning Benefits:</h4>
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    </div>
-                    <span className="text-foreground">Structured microlearning modules that fit your schedule</span>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <Star className="h-3 w-3 text-white" />
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    </div>
-                    <span className="text-foreground">Hands-on practice opportunities with real-world applications</span>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Stay Competitive</h4>
+                    <p className="text-muted-foreground text-sm">New skills keep you relevant in an ever-changing market</p>
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    </div>
-                    <span className="text-foreground">Flexible pacing to build competencies at your own speed</span>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <TrendingUp className="h-3 w-3 text-white" />
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    </div>
-                    <span className="text-foreground">Clear pathways to mastery and professional certification</span>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Increase Your Value</h4>
+                    <p className="text-muted-foreground text-sm">Skilled professionals earn significantly more and have better job security</p>
                   </div>
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    </div>
-                    <span className="text-foreground">Interactive learning with immediate feedback and progress tracking</span>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
+                    <Users className="h-3 w-3 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Personal Growth</h4>
+                    <p className="text-muted-foreground text-sm">Learning new skills builds confidence, expands your network</p>
                   </div>
                 </div>
               </div>
-              
-              <div className="bg-gradient-card/50 p-6 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-3">What Makes Our Learning Approach Effective:</h4>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Microlearning modules designed for busy professionals</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Interactive exercises with immediate practical application</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Flexible scheduling with lifetime access to materials</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Progress tracking and competency-based advancement</span>
-                  </li>
-                </ul>
-              </div>
+              <Button 
+                size="lg" 
+                variant="default"
+                onClick={() => window.location.href = '/learn-a-skill'}
+                className="mt-6"
+                aria-label="Go to Learn a Skill page"
+              >
+                Go to Learn a Skill
+              </Button>
             </div>
             
             <div className="flex justify-center lg:justify-end">
               <img 
-                src="/lovable-uploads/06f5d335-a58d-4bad-877d-fa273f7f5dea.png" 
-                alt="Diverse professionals from healthcare, construction, and other careers showcasing reskilling opportunities" 
+                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                alt="Skill development and learning opportunities" 
                 className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
           </div>
-          
-          <EnhancedReskillDashboard />
         </div>
       </section>
 
@@ -284,16 +319,34 @@ const Reskill = () => {
             
             <div className="space-y-4">
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                <CareerAssessment />
+                <Button 
+                  size="lg" 
+                  variant="hero"
+                  onClick={() => window.location.href = '/assessments'}
+                  aria-label="Start with Career Assessment"
+                >
+                  Start Assessment
+                </Button>
                 <Button 
                   size="lg" 
                   variant="outline" 
                   className="bg-white/10 text-white border-white hover:bg-white hover:text-primary backdrop-blur-sm"
+                  onClick={() => window.location.href = '/job-prep'}
+                  aria-label="Explore Job Preparation Tools"
                 >
-                  Explore All Tools
+                  Explore Job Prep
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="bg-white/10 text-white border-white hover:bg-white hover:text-primary backdrop-blur-sm"
+                  onClick={() => window.location.href = '/learn-a-skill'}
+                  aria-label="Start Learning New Skills"
+                >
+                  Start Learning
                 </Button>
               </div>
-              <p className="text-sm text-white/80 italic">
+              <p className="text-sm text-white/80 italic text-center">
                 Join thousands who have transformed their careers with confidence and clarity
               </p>
             </div>
