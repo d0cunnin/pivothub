@@ -29,7 +29,7 @@ export const CareerAdvisorChatbot = () => {
 
   const getAIResponse = async (userMessage: string): Promise<string> => {
     try {
-      const response = await fetch('/functions/v1/career-advisor', {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/career-advisor', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
