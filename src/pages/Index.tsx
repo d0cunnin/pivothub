@@ -217,15 +217,15 @@ const Index = () => {
                 </p>
                 
                 <div className="grid md:grid-cols-3 gap-4">
-                  <Card className="premium-card card-padding-xs hover-scale">
-                    <CardHeader className="p-0 pb-3">
-                      <Brain className="h-8 w-8 text-primary mb-2" />
+                  <Card className="premium-card card-padding-sm hover-scale">
+                    <CardHeader className="p-0 pb-4">
+                      <Brain className="h-8 w-8 text-primary mb-3" />
                       <CardTitle className="text-lg">Assessments</CardTitle>
                       <CardDescription className="text-sm">
                         Discover your skills, interests, and personality to guide your career path.
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-0 pt-2">
+                    <CardContent className="p-0 pt-3">
                       <Link to="/assessments">
                         <Button size="sm" className="w-full">
                           Take Assessments
@@ -234,15 +234,15 @@ const Index = () => {
                     </CardContent>
                   </Card>
                   
-                  <Card className="premium-card card-padding-xs hover-scale">
-                    <CardHeader className="p-0 pb-3">
-                      <Briefcase className="h-8 w-8 text-primary mb-2" />
+                  <Card className="premium-card card-padding-sm hover-scale">
+                    <CardHeader className="p-0 pb-4">
+                      <Briefcase className="h-8 w-8 text-primary mb-3" />
                       <CardTitle className="text-lg">Job Prep</CardTitle>
                       <CardDescription className="text-sm">
                         Get ready for your dream job with interview coaching and resume optimization.
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-0 pt-2">
+                    <CardContent className="p-0 pt-3">
                       <Link to="/job-prep">
                         <Button size="sm" className="w-full">
                           Prepare for Jobs
@@ -251,15 +251,15 @@ const Index = () => {
                     </CardContent>
                   </Card>
                   
-                  <Card className="premium-card card-padding-xs hover-scale">
-                    <CardHeader className="p-0 pb-3">
-                      <BookOpen className="h-8 w-8 text-primary mb-2" />
+                  <Card className="premium-card card-padding-sm hover-scale">
+                    <CardHeader className="p-0 pb-4">
+                      <BookOpen className="h-8 w-8 text-primary mb-3" />
                       <CardTitle className="text-lg">Learn a Skill</CardTitle>
                       <CardDescription className="text-sm">
                         Develop new competencies with industry-recognized courses and certifications.
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="p-0 pt-2">
+                    <CardContent className="p-0 pt-3">
                       <Link to="/learn-a-skill">
                         <Button size="sm" className="w-full">
                           Start Learning
