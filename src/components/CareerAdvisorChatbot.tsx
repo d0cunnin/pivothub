@@ -29,6 +29,8 @@ export const CareerAdvisorChatbot = () => {
 
   const getAIResponse = async (userMessage: string): Promise<string> => {
     try {
+      console.log('🚀 Sending request to career advisor:', { message: userMessage });
+      
       const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/career-advisor', {
         method: 'POST',
         headers: {
@@ -40,15 +42,25 @@ export const CareerAdvisorChatbot = () => {
         }),
       });
 
+      console.log('📡 Response status:', response.status, response.statusText);
+      
       const data = await response.json();
+      console.log('📦 Response data:', data);
       
       if (!response.ok) {
+        console.error('❌ Response not ok:', data);
         throw new Error(data.error || 'Failed to get AI response');
       }
 
+      if (!data.response) {
+        console.error('❌ No response field in data:', data);
+        throw new Error('Invalid response format from server');
+      }
+
+      console.log('✅ Got AI response:', data.response);
       return data.response;
     } catch (error) {
-      console.error('Error getting AI response:', error);
+      console.error('💥 Error getting AI response:', error);
       throw error;
     }
   };
