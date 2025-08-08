@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { CheckCircle, Play, BookOpen, Award, Clock, Star, Download, Code, FileText, CheckSquare, Lightbulb } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLearningProgress } from '@/hooks/useLearningProgress';
 
 interface LearningModule {
   id: string;
@@ -60,38 +61,33 @@ interface DownloadableResource {
 
 interface InteractiveLearningModuleProps {
   module: LearningModule;
-  onProgressUpdate?: (moduleId: string, progress: number) => void;
 }
 
 export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps> = ({
-  module,
-  onProgressUpdate
+  module
 }) => {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({});
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
-  const [activityResponses, setActivityResponses] = useState<Record<string, string>>({});
-  const [completedActivities, setCompletedActivities] = useState<Set<string>>(new Set());
+  const { progress, completeLesson, saveActivitySubmission, saveQuizResult } = useLearningProgress();
 
-  const progress = (completedLessons.size / module.lessons.length) * 100;
+  // Get completed lessons for this module from progress hook
+  const completedLessons = new Set(progress.completedLessons[module.id] || []);
+  const moduleProgress = (completedLessons.size / module.lessons.length) * 100;
 
   const handleStartLesson = (lesson: Lesson) => {
     setCurrentLesson(lesson);
   };
 
-  const handleCompleteLesson = (lessonId: string) => {
-    const newCompletedLessons = new Set(completedLessons);
-    newCompletedLessons.add(lessonId);
-    setCompletedLessons(newCompletedLessons);
-    
-    const newProgress = (newCompletedLessons.size / module.lessons.length) * 100;
-    onProgressUpdate?.(module.id, newProgress);
-    
-    setCurrentLesson(null);
-    toast.success('Lesson completed! Great job!');
-    
-    if (newProgress === 100) {
-      toast.success(`🎉 Congratulations! You've completed ${module.title} and earned your certificate!`);
+  const handleCompleteLesson = async (lessonId: string) => {
+    const success = await completeLesson(module.id, lessonId);
+    if (success) {
+      setCurrentLesson(null);
+      toast.success('Lesson completed! Great job!');
+      
+      const newProgress = ((completedLessons.size + 1) / module.lessons.length) * 100;
+      if (newProgress === 100) {
+        toast.success(`🎉 Congratulations! You've completed ${module.title} and earned your certificate!`);
+      }
     }
   };
 
@@ -105,15 +101,19 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
     return lesson.quiz.every(q => quizAnswers[q.id] === q.correctAnswer);
   };
 
-  const handleActivityResponse = (activityId: string, response: string) => {
-    setActivityResponses(prev => ({ ...prev, [activityId]: response }));
+  const handleActivityResponse = async (activityId: string, response: string) => {
+    if (currentLesson && response.trim()) {
+      await saveActivitySubmission(module.id, currentLesson.id, activityId, response);
+    }
   };
 
-  const handleCompleteActivity = (activityId: string) => {
-    const newCompletedActivities = new Set(completedActivities);
-    newCompletedActivities.add(activityId);
-    setCompletedActivities(newCompletedActivities);
-    toast.success('Activity completed!');
+  const handleCompleteActivity = async (activityId: string, response: string) => {
+    if (currentLesson && response.trim()) {
+      const success = await saveActivitySubmission(module.id, currentLesson.id, activityId, response);
+      if (success) {
+        toast.success('Activity completed!');
+      }
+    }
   };
 
   const handleDownloadResource = (resource: DownloadableResource) => {
@@ -160,7 +160,7 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
                 {module.description}
               </CardDescription>
             </div>
-            {progress === 100 && (
+            {moduleProgress === 100 && (
               <Badge className="bg-gradient-primary text-white">
                 <Award className="h-4 w-4 mr-1" />
                 Completed
@@ -183,9 +183,9 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>Progress</span>
-              <span>{Math.round(progress)}%</span>
+              <span>{Math.round(moduleProgress)}%</span>
             </div>
-            <Progress value={progress} className="h-3" />
+            <Progress value={moduleProgress} className="h-3" />
           </div>
 
           <div className="space-y-2">
@@ -252,28 +252,32 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
                           <div className="mt-4 space-y-3">
                             <h5 className="font-medium text-sm">Your Response:</h5>
                             {activity.submissionType === 'text' && (
-                              <Textarea
-                                placeholder="Type your response here..."
-                                value={activityResponses[activity.id] || ''}
-                                onChange={(e) => handleActivityResponse(activity.id, e.target.value)}
-                                className="min-h-24"
-                              />
+                            <Textarea
+                              placeholder="Type your response here..."
+                              defaultValue={progress.activitySubmissions[`${module.id}-${currentLesson.id}`]?.[activity.id] || ''}
+                              onChange={(e) => handleActivityResponse(activity.id, e.target.value)}
+                              className="min-h-24"
+                            />
                             )}
                             {activity.submissionType === 'code' && (
-                              <Textarea
-                                placeholder="Paste your code here..."
-                                value={activityResponses[activity.id] || activity.template || ''}
-                                onChange={(e) => handleActivityResponse(activity.id, e.target.value)}
-                                className="font-mono text-sm min-h-32"
-                              />
+                            <Textarea
+                              placeholder="Paste your code here..."
+                              defaultValue={progress.activitySubmissions[`${module.id}-${currentLesson.id}`]?.[activity.id] || activity.template || ''}
+                              onChange={(e) => handleActivityResponse(activity.id, e.target.value)}
+                              className="font-mono text-sm min-h-32"
+                            />
                             )}
                             <Button
-                              onClick={() => handleCompleteActivity(activity.id)}
-                              disabled={completedActivities.has(activity.id) || !activityResponses[activity.id]?.trim()}
-                              variant={completedActivities.has(activity.id) ? "outline" : "default"}
+                              onClick={(e) => {
+                                const textarea = e.currentTarget.parentElement?.querySelector('textarea') as HTMLTextAreaElement;
+                                if (textarea?.value?.trim()) {
+                                  handleCompleteActivity(activity.id, textarea.value);
+                                }
+                              }}
+                              variant="default"
                               size="sm"
                             >
-                              {completedActivities.has(activity.id) ? 'Completed ✓' : 'Submit Activity'}
+                              Submit Activity
                             </Button>
                           </div>
                         )}
@@ -421,7 +425,7 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
       )}
 
       {/* Certificate Section */}
-      {progress === 100 && (
+      {moduleProgress === 100 && (
         <Card className="bg-gradient-primary text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

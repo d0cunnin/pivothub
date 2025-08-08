@@ -5,9 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { TrendingUp, Award, BookOpen, Clock, Target, Filter } from 'lucide-react';
+import { TrendingUp, Award, BookOpen, Clock, Target, Filter, LogIn } from 'lucide-react';
 import { InteractiveLearningModule } from './InteractiveLearningModule';
 import { CoursePreview } from './CoursePreview';
+import { useLearningProgress } from '@/hooks/useLearningProgress';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Real course content - AI & Technology and Business Building
 const learningModules = [
@@ -1894,7 +1896,6 @@ export const LearningDashboard: React.FC = () => {
         
         <InteractiveLearningModule 
           module={currentModule} 
-          onProgressUpdate={handleProgressUpdate}
         />
       </div>
     );
