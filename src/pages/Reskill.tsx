@@ -1,14 +1,17 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { GraduationCap, BookOpen, Award, Target, Users, TrendingUp, FileText, Edit3 } from "lucide-react";
-import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
-import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
-import { ResumeCoachLetter } from "@/components/ResumeCoachLetter";
+import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
+import { EnhancedInterviewCoach } from "@/components/EnhancedInterviewCoach";
+import { EnhancedResumeCoach } from "@/components/EnhancedResumeCoach";
+import { EnhancedReskillDashboard } from "@/components/EnhancedReskillDashboard";
+import { Award, BookOpen, Users, TrendingUp, Target, Star, CheckCircle, ArrowRight, Brain, Lightbulb, Zap, GraduationCap, FileText, Edit3 } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Reskill = () => {
@@ -191,7 +194,7 @@ const Reskill = () => {
             </div>
           </div>
           
-          <InterviewQuestionsCoach />
+          <EnhancedInterviewCoach />
         </div>
       </section>
 
@@ -232,7 +235,7 @@ const Reskill = () => {
             </div>
           </div>
           
-          <ResumeCoachLetter />
+          <EnhancedResumeCoach />
         </div>
       </section>
 
