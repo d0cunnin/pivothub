@@ -572,6 +572,8 @@ export const SkillsAssessment = () => {
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [results, setResults] = useState<SkillResults>({});
+  const [aiAssessment, setAiAssessment] = useState<any>(null);
   const [showResults, setShowResults] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
@@ -586,11 +588,10 @@ export const SkillsAssessment = () => {
     setSelectedAnswer(answer);
   };
 
-  const handleNext = () => {
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: selectedAnswer
-    }));
+  const handleNext = async () => {
+    const questionId = currentQuestion.id;
+    const updatedAnswers = { ...answers, [questionId]: selectedAnswer };
+    setAnswers(updatedAnswers);
     setSelectedAnswer("");
 
     if (currentQuestionIndex < currentCategory.questions.length - 1) {
@@ -599,6 +600,9 @@ export const SkillsAssessment = () => {
       setCurrentCategoryIndex(prev => prev + 1);
       setCurrentQuestionIndex(0);
     } else {
+      // Calculate results when assessment is complete
+      const finalResults = await calculateResults();
+      setResults(finalResults);
       setShowResults(true);
     }
   };
@@ -616,12 +620,67 @@ export const SkillsAssessment = () => {
     setCurrentCategoryIndex(0);
     setCurrentQuestionIndex(0);
     setAnswers({});
+    setResults({});
+    setAiAssessment(null);
     setShowResults(false);
     setSelectedAnswer("");
     setIsOpen(false);
   };
 
-  const calculateResults = (): SkillResults => {
+  const calculateResults = async (): Promise<SkillResults> => {
+    try {
+      // Call the AI skills assessment API
+      const response = await fetch('/functions/v1/skills-assessment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          responses: answers,
+          targetField: 'General' // Could be enhanced with user's target field
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.assessment) {
+        // Store AI assessment for detailed insights
+        setAiAssessment(data.assessment);
+        
+        // Transform AI response to match existing interface
+        const results: SkillResults = {};
+        
+        skillCategories.forEach(category => {
+          let correctAnswers = 0;
+          category.questions.forEach(question => {
+            const userAnswer = answers[question.id];
+            if (userAnswer === question.correctAnswer) {
+              correctAnswers++;
+            }
+          });
+          
+          let level: "Strong" | "Moderate" | "Needs improvement";
+          if (correctAnswers >= 8) {
+            level = "Strong";
+          } else if (correctAnswers >= 5) {
+            level = "Moderate";
+          } else {
+            level = "Needs improvement";
+          }
+          
+          results[category.id] = {
+            score: correctAnswers,
+            level
+          };
+        });
+        
+        return results;
+      }
+    } catch (error) {
+      console.error('Error getting AI skills assessment:', error);
+    }
+
+    // Fallback to original calculation
     const results: SkillResults = {};
     
     skillCategories.forEach(category => {
@@ -651,7 +710,6 @@ export const SkillsAssessment = () => {
     return results;
   };
 
-  const results = showResults ? calculateResults() : {};
   const topSkills = Object.entries(results)
     .sort(([,a], [,b]) => b.score - a.score)
     .slice(0, 3);
@@ -763,10 +821,72 @@ export const SkillsAssessment = () => {
             </div>
 
             <Card className="p-6 bg-gradient-card border border-white/10">
+              <h4 className="text-lg font-bold mb-3">AI-Powered Career Insights:</h4>
+              {aiAssessment ? (
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="font-semibold text-primary mb-2">Your Skill Strengths:</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {aiAssessment.strengths.map((strength: string, index: number) => (
+                        <span key={index} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                          {strength}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-semibold text-orange-600 mb-2">Areas to Develop:</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {aiAssessment.gaps.map((gap: string, index: number) => (
+                        <span key={index} className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm">
+                          {gap}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h5 className="font-semibold text-blue-600 mb-2">Learning Priorities:</h5>
+                    <ul className="list-disc list-inside space-y-1 text-sm">
+                      {aiAssessment.priorities.map((priority: string, index: number) => (
+                        <li key={index} className="text-muted-foreground">{priority}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h5 className="font-semibold text-purple-600 mb-2">Career Readiness Score:</h5>
+                    <div className="flex items-center gap-3">
+                      <Progress value={aiAssessment.readinessScore} className="flex-1" />
+                      <span className="font-bold text-lg">{aiAssessment.readinessScore}%</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h5 className="font-semibold text-blue-900 mb-2">Recommended Next Steps:</h5>
+                    <p className="text-blue-800 text-sm mb-3">{aiAssessment.summary}</p>
+                    <div className="text-sm text-blue-700">
+                      <strong>Timeline:</strong> {aiAssessment.timeline}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                  <p className="text-muted-foreground">Analyzing your skills for career insights...</p>
+                </div>
+              )}
+            </Card>
+
+            <Card className="p-6 bg-gradient-card border border-white/10">
               <h4 className="text-lg font-bold mb-3">All Skills Overview:</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {skillCategories.map(category => {
                   const result = results[category.id];
+                  if (!result) return null;
                   return (
                     <div key={category.id} className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
                       <div className="flex items-center gap-2">
@@ -788,14 +908,34 @@ export const SkillsAssessment = () => {
               </div>
             </Card>
 
+            {aiAssessment?.resources && (
+              <Card className="p-6 bg-green-50 border border-green-200">
+                <h4 className="text-lg font-bold mb-3 text-green-900">Recommended Learning Resources:</h4>
+                <div className="space-y-3">
+                  {aiAssessment.resources.slice(0, 3).map((resource: any, index: number) => (
+                    <div key={index} className="bg-white p-3 rounded-lg border border-green-100">
+                      <div className="flex justify-between items-start mb-2">
+                        <h5 className="font-semibold text-green-800">{resource.skill}</h5>
+                        <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">
+                          {resource.type}
+                        </span>
+                      </div>
+                      <p className="text-green-700 text-sm mb-2">{resource.resource}</p>
+                      <p className="text-green-600 text-xs">⏱️ {resource.timeline}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+
             <Card className="p-6 bg-blue-50 border border-blue-200">
-              <h4 className="text-lg font-bold mb-2 text-blue-900">Next Steps:</h4>
+              <h4 className="text-lg font-bold mb-2 text-blue-900">Career Development Path:</h4>
               <p className="text-sm text-blue-800 mb-3">
-                Based on your strongest skills, consider exploring career paths in these areas. 
-                We recommend taking our Interest & Curiosity Assessment for a complete career profile.
+                Based on your skill profile, focus on developing your strongest areas while addressing key gaps. 
+                {aiAssessment ? aiAssessment.summary : "Consider taking our Career and Personality Assessments for a complete career roadmap."}
               </p>
               <div className="text-xs text-blue-700">
-                <strong>Career Training Suggestions:</strong> Focus on strengthening your top skills and improving areas marked "Needs improvement" for the best career advancement opportunities.
+                <strong>Pro Tip:</strong> Employers value both technical skills and soft skills. Your assessment shows areas where targeted learning can significantly boost your career prospects.
               </div>
             </Card>
 
