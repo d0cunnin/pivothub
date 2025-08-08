@@ -47,6 +47,13 @@ interface CoverLetterData {
   companyName: string;
   jobDescription: string;
   generatedLetter: string;
+  // New fields to prevent hallucinations
+  yourName: string;
+  relevantExperience: string;
+  keyAchievements: string;
+  whyCompany: string;
+  relevantSkills: string;
+  yearsExperience: string;
 }
 
 export const ResumeCoachLetter = () => {
@@ -57,7 +64,13 @@ export const ResumeCoachLetter = () => {
     jobTitle: '',
     companyName: '',
     jobDescription: '',
-    generatedLetter: ''
+    generatedLetter: '',
+    yourName: '',
+    relevantExperience: '',
+    keyAchievements: '',
+    whyCompany: '',
+    relevantSkills: '',
+    yearsExperience: ''
   });
   const [loading, setLoading] = useState(false);
   const [showImproved, setShowImproved] = useState(false);
@@ -165,30 +178,58 @@ export const ResumeCoachLetter = () => {
       return;
     }
 
+    if (!coverLetterData.yourName) {
+      toast.error('Please provide your name');
+      return;
+    }
+
     setLoading(true);
     try {
-      // Simulate AI generation - in real implementation, this would call your AI service
-      const mockLetter = `Dear Hiring Manager,
+      // Generate cover letter using only provided information
+      let letter = `Dear Hiring Manager,\n\n`;
+      
+      // Opening paragraph
+      letter += `I am writing to express my interest in the ${coverLetterData.jobTitle} position at ${coverLetterData.companyName}.`;
+      
+      if (coverLetterData.yearsExperience) {
+        letter += ` With ${coverLetterData.yearsExperience} of experience, I am excited about the opportunity to contribute to your team.`;
+      } else {
+        letter += ` I am excited about the opportunity to contribute to your team.`;
+      }
+      
+      letter += `\n\n`;
 
-I am writing to express my strong interest in the ${coverLetterData.jobTitle} position at ${coverLetterData.companyName}. With my proven track record of driving measurable results and leading successful initiatives, I am confident I would be a valuable addition to your team.
+      // Experience and achievements paragraph
+      if (coverLetterData.relevantExperience || coverLetterData.keyAchievements) {
+        if (coverLetterData.relevantExperience) {
+          letter += `${coverLetterData.relevantExperience}`;
+          if (coverLetterData.keyAchievements) {
+            letter += ` ${coverLetterData.keyAchievements}`;
+          }
+          letter += `\n\n`;
+        } else if (coverLetterData.keyAchievements) {
+          letter += `${coverLetterData.keyAchievements}\n\n`;
+        }
+      }
 
-In my previous role, I successfully managed 5 social media accounts, increasing engagement by 45% and follower growth by 2,300 over 6 months. This experience has equipped me with the strategic thinking and execution skills that directly align with ${coverLetterData.companyName}'s commitment to innovation and growth.
+      // Skills paragraph
+      if (coverLetterData.relevantSkills) {
+        letter += `My key skills include: ${coverLetterData.relevantSkills}\n\n`;
+      }
 
-My ability to collaborate with cross-functional teams of up to 8 members has consistently resulted in on-time project delivery and a 15% increase in client satisfaction. I am particularly drawn to ${coverLetterData.companyName} because of your reputation for excellence and your focus on data-driven decision making.
+      // Why company paragraph
+      if (coverLetterData.whyCompany) {
+        letter += `${coverLetterData.whyCompany}\n\n`;
+      } else {
+        letter += `I am particularly interested in ${coverLetterData.companyName} and would welcome the opportunity to discuss how I can contribute to your team's success.\n\n`;
+      }
 
-Key qualifications I bring include:
-• 5+ years of experience driving 40% revenue growth through digital campaigns
-• Proven ability to exceed client expectations by 25%
-• Expertise in performance analytics and strategic planning
-• Strong leadership skills with a track record of team success
+      // Closing
+      letter += `Thank you for your consideration. I look forward to hearing from you.\n\n`;
+      letter += `Sincerely,\n${coverLetterData.yourName}`;
 
-I would welcome the opportunity to discuss how my experience and passion for results can contribute to ${coverLetterData.companyName}'s continued success. Thank you for your consideration.
-
-Sincerely,
-[Your Name]`;
-
-      setCoverLetterData(prev => ({ ...prev, generatedLetter: mockLetter }));
-      toast.success('Cover letter generated successfully');
+      setCoverLetterData(prev => ({ ...prev, generatedLetter: letter }));
+      toast.success('Cover letter generated successfully using your information');
     } catch (error) {
       toast.error('Failed to generate cover letter. Please try again.');
     } finally {
@@ -540,13 +581,34 @@ Sincerely,
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold mb-4">Generate Custom Cover Letter</h3>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted-foreground mb-4">
                   Create a personalized cover letter based on your improved resume and the specific job you're applying for.
                 </p>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-start space-x-3">
+                    <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-medium text-blue-900 mb-2">Why We Need Your Specific Details</h4>
+                      <p className="text-sm text-blue-800">
+                        To avoid generating fake achievements or experiences you don't have, we need you to provide your actual background. 
+                        The AI will only use the information you provide - no made-up metrics or accomplishments will be added.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Your Name *</label>
+                    <Input
+                      placeholder="Your full name"
+                      value={coverLetterData.yourName}
+                      onChange={(e) => setCoverLetterData(prev => ({ ...prev, yourName: e.target.value }))}
+                    />
+                  </div>
+
                   <div>
                     <label className="text-sm font-medium mb-2 block">Job Title *</label>
                     <Input
@@ -564,9 +626,16 @@ Sincerely,
                       onChange={(e) => setCoverLetterData(prev => ({ ...prev, companyName: e.target.value }))}
                     />
                   </div>
-                </div>
 
-                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Years of Experience</label>
+                    <Input
+                      placeholder="e.g., 5+ years, 2 years"
+                      value={coverLetterData.yearsExperience}
+                      onChange={(e) => setCoverLetterData(prev => ({ ...prev, yearsExperience: e.target.value }))}
+                    />
+                  </div>
+
                   <div>
                     <label className="text-sm font-medium mb-2 block">Job Description (Optional)</label>
                     <Textarea
@@ -577,11 +646,53 @@ Sincerely,
                     />
                   </div>
                 </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Relevant Experience</label>
+                    <Textarea
+                      placeholder="Describe your relevant work experience, roles, and responsibilities that relate to this position..."
+                      value={coverLetterData.relevantExperience}
+                      onChange={(e) => setCoverLetterData(prev => ({ ...prev, relevantExperience: e.target.value }))}
+                      rows={4}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Key Achievements</label>
+                    <Textarea
+                      placeholder="List your specific achievements, metrics, and accomplishments. Use exact numbers and results..."
+                      value={coverLetterData.keyAchievements}
+                      onChange={(e) => setCoverLetterData(prev => ({ ...prev, keyAchievements: e.target.value }))}
+                      rows={4}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Relevant Skills</label>
+                    <Textarea
+                      placeholder="List your key skills, technologies, certifications that match the job requirements..."
+                      value={coverLetterData.relevantSkills}
+                      onChange={(e) => setCoverLetterData(prev => ({ ...prev, relevantSkills: e.target.value }))}
+                      rows={3}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Why This Company?</label>
+                    <Textarea
+                      placeholder="Explain why you're interested in this company specifically. Research the company and mention specific reasons..."
+                      value={coverLetterData.whyCompany}
+                      onChange={(e) => setCoverLetterData(prev => ({ ...prev, whyCompany: e.target.value }))}
+                      rows={3}
+                    />
+                  </div>
+                </div>
               </div>
 
               <Button 
                 onClick={generateCoverLetter} 
-                disabled={loading || !coverLetterData.jobTitle || !coverLetterData.companyName}
+                disabled={loading || !coverLetterData.jobTitle || !coverLetterData.companyName || !coverLetterData.yourName}
                 className="w-full"
               >
                 {loading ? 'Generating Cover Letter...' : 'Generate Cover Letter'}
