@@ -40,12 +40,14 @@ const Reskill = () => {
             <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
               <GraduationCap className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
               Reskill with Confidence: From Preparation to Performance
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Transform your career journey with comprehensive assessments, targeted job preparation, and strategic skill-building designed for real-world success
-            </p>
+            <div className="text-left max-w-4xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Transform your career journey with comprehensive assessments, targeted job preparation, and strategic skill-building designed for real-world success
+              </p>
+            </div>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
                 <Button 
@@ -87,7 +89,7 @@ const Reskill = () => {
       </section>
 
       {/* Assessment Panel */}
-      <section className="py-16 bg-gradient-section-1 relative overflow-hidden">
+      <section className="py-12 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
             <div className="animate-fade-in space-y-6">
@@ -154,7 +156,7 @@ const Reskill = () => {
       </section>
 
       {/* Job Prep Panel */}
-      <section className="py-16 bg-gradient-section-3 relative overflow-hidden">
+      <section className="py-12 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
             <div className="flex justify-center lg:justify-start">
@@ -217,7 +219,7 @@ const Reskill = () => {
       </section>
 
       {/* Learn a Skill Panel */}
-      <section className="py-16 bg-gradient-section-1 relative overflow-hidden">
+      <section className="py-12 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
             <div className="animate-fade-in space-y-6">
@@ -281,39 +283,41 @@ const Reskill = () => {
       </section>
 
       {/* Your Path Forward - Call to Action */}
-      <section className="py-16 bg-gradient-hero relative overflow-hidden">
+      <section className="py-12 bg-gradient-hero relative overflow-hidden">
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent text-center">
                 Your Path Forward
               </h2>
             </div>
-            <p className="text-lg text-foreground leading-relaxed mb-8">
-              Take the next step—identify your goals, prep for interviews, level up your skills, and launch your next career journey. Your transformation starts with a single assessment, grows through targeted preparation, and succeeds with strategic skill development.
-            </p>
+            <div className="text-left max-w-4xl mx-auto mb-8">
+              <p className="text-lg text-white leading-relaxed mb-8">
+                Take the next step—identify your goals, prep for interviews, level up your skills, and launch your next career journey. Your transformation starts with a single assessment, grows through targeted preparation, and succeeds with strategic skill development.
+              </p>
+            </div>
             
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
                 <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Brain className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-2">1. Assess</h4>
-                <p className="text-sm text-muted-foreground">Discover your strengths and career opportunities with comprehensive assessments</p>
+                <h4 className="font-semibold text-white mb-2">1. Assess</h4>
+                <p className="text-sm text-white/80">Discover your strengths and career opportunities with comprehensive assessments</p>
               </div>
               <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
                 <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Target className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-2">2. Prepare</h4>
-                <p className="text-sm text-muted-foreground">Master interviews and optimize your resume with AI-powered coaching</p>
+                <h4 className="font-semibold text-white mb-2">2. Prepare</h4>
+                <p className="text-sm text-white/80">Master interviews and optimize your resume with AI-powered coaching</p>
               </div>
               <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
                 <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Award className="h-6 w-6 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-2">3. Excel</h4>
-                <p className="text-sm text-muted-foreground">Build strategic skills through microlearning and earn professional certifications</p>
+                <h4 className="font-semibold text-white mb-2">3. Excel</h4>
+                <p className="text-sm text-white/80">Build strategic skills through microlearning and earn professional certifications</p>
               </div>
             </div>
             
