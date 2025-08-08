@@ -75,47 +75,33 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
-      // Simulate API call - in real implementation, this would call your AI service
-      const mockQuestions: Question[] = [
-        {
-          id: '1',
-          text: `Tell me about a time when you had to overcome a significant challenge in your ${jobTitle} role.`,
-          type: 'behavioral',
-          difficulty: level
+      const response = await fetch('/functions/v1/interview-questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          id: '2',
-          text: `What technical skills do you consider most important for a ${jobTitle} position?`,
-          type: 'technical',
-          difficulty: level
-        },
-        {
-          id: '3',
-          text: `If you were faced with a tight deadline and limited resources, how would you prioritize your tasks?`,
-          type: 'situational',
-          difficulty: level
-        },
-        {
-          id: '4',
-          text: `Describe a situation where you had to work with a difficult team member. How did you handle it?`,
-          type: 'behavioral',
-          difficulty: level
-        },
-        {
-          id: '5',
-          text: `What would you do if you discovered a major error in a project just before the deadline?`,
-          type: 'situational',
-          difficulty: level
-        }
-      ];
+        body: JSON.stringify({
+          jobTitle,
+          industry,
+          level,
+          questionTypes,
+          jobDescription
+        }),
+      });
 
-      // Filter questions based on selected types
-      const filteredQuestions = mockQuestions.filter(q => questionTypes.includes(q.type));
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate questions');
+      }
+
+      const filteredQuestions = data.questions.filter((q: Question) => questionTypes.includes(q.type));
       setQuestions(filteredQuestions);
       setCurrentQuestionIndex(0);
       setActiveTab('practice');
       toast.success(`Generated ${filteredQuestions.length} interview questions`);
     } catch (error) {
+      console.error('Error generating questions:', error);
       toast.error('Failed to generate questions. Please try again.');
     } finally {
       setLoading(false);

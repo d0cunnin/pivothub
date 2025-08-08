@@ -13,9 +13,9 @@ serve(async (req) => {
   try {
     const { businessName, industry, style } = await req.json()
     
-    const runwareApiKey = Deno.env.get('RUNWARE_API_KEY')
+    const runwareApiKey = Deno.env.get('relaunch-runwarekey-correct')
     if (!runwareApiKey) {
-      throw new Error('RUNWARE_API_KEY not found in environment variables')
+      throw new Error('relaunch-runwarekey-correct not found in environment variables')
     }
 
     // Create a descriptive prompt for logo generation

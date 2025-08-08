@@ -24,8 +24,30 @@ export const SocialMediaGenerator = () => {
 
   const generateContent = async () => {
     setIsGenerating(true);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch('/functions/v1/social-media-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          businessType,
+          targetAudience,
+          products,
+          tone
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate content');
+      }
+
+      setContentIdeas(data.contentIdeas);
+    } catch (error) {
+      console.error('Error generating content:', error);
+      // Fallback to mock data on error
       const mockContent: SocialMediaContent[] = [
         {
           platform: "Instagram",
@@ -40,32 +62,12 @@ export const SocialMediaGenerator = () => {
           content: "Share your expert opinion on industry trends. Position yourself as a thought leader by discussing challenges and opportunities in your field.",
           hashtags: ["#IndustryInsights", "#BusinessTips", "#Leadership", "#Innovation", "#ProfessionalGrowth"],
           bestTime: "8-10 AM or 12-2 PM"
-        },
-        {
-          platform: "Facebook",
-          contentType: "Customer Success Story",
-          content: "Highlight how your product/service made a difference for a customer. Use their testimonial and show before/after results when possible.",
-          hashtags: ["#CustomerSuccess", "#Testimonial", "#HappyCustomers", "#Results", "#CommunityLove"],
-          bestTime: "1-4 PM or 6-9 PM"
-        },
-        {
-          platform: "Twitter/X",
-          contentType: "Quick Tips",
-          content: "Share actionable tips related to your industry. Make them concise and valuable - something your audience can implement immediately.",
-          hashtags: ["#MondayMotivation", "#BusinessTips", "#Productivity", "#Success", "#Entrepreneur"],
-          bestTime: "9 AM or 7-9 PM"
-        },
-        {
-          platform: "TikTok",
-          contentType: "Educational Content",
-          content: "Create short, engaging videos explaining complex concepts in simple terms. Use trending sounds and keep it under 60 seconds.",
-          hashtags: ["#LearnOnTikTok", "#BusinessHacks", "#Education", "#LifeHacks", "#SmallBizTips"],
-          bestTime: "6-10 AM or 7-9 PM"
         }
       ];
       setContentIdeas(mockContent);
+    } finally {
       setIsGenerating(false);
-    }, 2000);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {

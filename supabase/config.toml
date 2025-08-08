@@ -2,3 +2,24 @@ project_id = "fkvjsgqjgissolpdqbdh"
 
 [functions.generate-business-content]
 verify_jwt = false
+
+[functions.career-advisor]
+verify_jwt = false
+
+[functions.generate-logo]
+verify_jwt = false
+
+[functions.interview-questions]
+verify_jwt = false
+
+[functions.social-media-content]
+verify_jwt = false
+
+[functions.skills-assessment]
+verify_jwt = false
+
+[functions.career-assessment]
+verify_jwt = false
+
+[functions.personality-assessment]
+verify_jwt = false
