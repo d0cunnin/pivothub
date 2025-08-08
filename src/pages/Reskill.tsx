@@ -159,13 +159,6 @@ const Reskill = () => {
       <section className="py-12 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-10">
-            <div className="flex justify-center lg:justify-start">
-              <img 
-                src="/lovable-uploads/06f5d335-a58d-4bad-877d-fa273f7f5dea.png" 
-                alt="Job preparation and career coaching" 
-                className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
-              />
-            </div>
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
@@ -213,6 +206,14 @@ const Reskill = () => {
               >
                 Go to Job Prep
               </Button>
+            </div>
+            
+            <div className="flex justify-center lg:justify-end">
+              <img 
+                src="/lovable-uploads/06f5d335-a58d-4bad-877d-fa273f7f5dea.png" 
+                alt="Job preparation and career coaching" 
+                className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
+              />
             </div>
           </div>
         </div>
