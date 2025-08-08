@@ -40,6 +40,39 @@ What You'll Learn in This Lesson:
 Key Takeaway: AI isn't magic or rocket science - it's a powerful tool that can make your life easier, more productive, and more enjoyable. Think of it as having a really smart assistant who never gets tired and is always ready to help.
 
 By the end of this lesson, you'll understand exactly what AI is and why it's worth learning about - even if you consider yourself "not a tech person."`,
+        activities: [
+          {
+            id: 'ai-audit-activity',
+            title: 'Personal AI Audit',
+            type: 'reflection' as const,
+            description: 'Discover how much AI you\'re already using in your daily life',
+            instructions: [
+              'Look at your smartphone and list 5 apps you use regularly',
+              'For each app, identify which features might use AI (suggestions, recommendations, voice recognition, etc.)',
+              'Think about other AI tools you encounter: GPS navigation, streaming recommendations, online shopping suggestions',
+              'Reflect on how these AI features have changed your behavior or made tasks easier'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'ai-glossary',
+            title: 'AI Terms Glossary',
+            type: 'cheatsheet' as const,
+            description: 'Quick reference guide to essential AI terminology',
+            fileUrl: '#',
+            fileName: 'AI-Glossary-Cheatsheet.pdf'
+          },
+          {
+            id: 'ai-timeline',
+            title: 'History of AI Timeline',
+            type: 'pdf' as const,
+            description: 'Visual timeline of key AI milestones from 1950 to today',
+            fileUrl: '#',
+            fileName: 'AI-Timeline.pdf'
+          }
+        ],
         quiz: [
           {
             id: 'q1',
@@ -79,6 +112,39 @@ Everyday Examples:
 • Shopping apps that help you find what you're looking for
 
 The best part? You're probably already using AI and didn't even know it. This lesson shows you how to recognize AI in your daily life and start using it more intentionally.`,
+        activities: [
+          {
+            id: 'ai-tools-exploration',
+            title: 'AI Tools Scavenger Hunt',
+            type: 'exercise' as const,
+            description: 'Find and test 3 AI tools you can use immediately',
+            instructions: [
+              'Visit three different AI tools: ChatGPT, Grammarly, and your phone\'s voice assistant',
+              'For each tool, complete a simple task (ask a question, check grammar, set a reminder)',
+              'Rate each tool\'s usefulness for your daily life (1-5 stars)',
+              'Write down one specific way you could use each tool this week'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'ai-tools-starter-pack',
+            title: 'AI Tools Starter Pack',
+            type: 'workbook' as const,
+            description: '10 beginner-friendly AI tools with step-by-step setup guides',
+            fileUrl: '#',
+            fileName: 'AI-Tools-Starter-Pack.pdf'
+          },
+          {
+            id: 'ai-benefits-checklist',
+            title: 'AI Benefits Checklist',
+            type: 'template' as const,
+            description: 'Track how AI improves different areas of your life',
+            fileUrl: '#',
+            fileName: 'AI-Benefits-Tracker.xlsx'
+          }
+        ],
         quiz: [
           {
             id: 'q2',
