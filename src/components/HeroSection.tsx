@@ -63,7 +63,7 @@ export const HeroSection = () => {
               size="lg" 
               variant="heroWhite"
               className="text-base px-6 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/grant-writing'}
+              onClick={() => window.location.href = '/grantwriting'}
             >
               Grant Writing
             </Button>

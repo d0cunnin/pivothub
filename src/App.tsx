@@ -20,6 +20,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Auth from "./pages/Auth";
 import Pricing from "./pages/Pricing";
+import GrantWriting from "./pages/GrantWriting";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/jobprep" element={<JobPrep />} />
             <Route path="/learn-a-skill" element={<LearnASkill />} />
             <Route path="/hireyourself" element={<HireYourself />} />
+            <Route path="/grantwriting" element={<GrantWriting />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
