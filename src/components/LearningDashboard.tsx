@@ -1102,9 +1102,9 @@ The future belongs to businesses that combine human insight with AI efficiency.`
     id: 'web-development',
     title: 'Intro to Web & Software Development',
     description: 'Learn the fundamentals of web and software development - perfect for beginners wanting to understand the tech world',
-    duration: '4-6 weeks',
+    duration: '6-8 weeks',
     level: 'Beginner',
-    skills: ['HTML/CSS Basics', 'JavaScript Fundamentals', 'Development Concepts', 'Programming Logic'],
+    skills: ['HTML/CSS Basics', 'JavaScript Fundamentals', 'Development Concepts', 'Programming Logic', 'Vibe Coding', 'AI Agents'],
     certificate: 'Web Development Fundamentals Certificate',
     lessons: [
       {
@@ -1452,6 +1452,326 @@ Remember: Programming languages are just tools. A carpenter can build a house wi
               'Which language is the newest',
               'What type of projects you want to build',
               'Which language has the most complex syntax'
+            ],
+            correctAnswer: 2
+          }
+        ]
+      },
+      {
+        id: 'vibe-coding',
+        title: 'What is Vibe Coding?',
+        description: 'Discover the intuitive approach to coding that focuses on creativity, flow, and building with AI assistance',
+        duration: '35 min',
+        completed: false,
+        content: `Vibe Coding: The Creative Flow Approach to Development
+
+Vibe coding isn't just a development method - it's a mindset that combines creativity, intuition, and modern AI tools to create software in a more natural, flowing way.
+
+What is Vibe Coding?
+Vibe coding is an approach to programming that emphasizes:
+• Following your creative intuition and flow state
+• Using AI as a collaborative partner, not just a tool
+• Building iteratively based on what feels right
+• Prioritizing user experience and emotional connection
+• Embracing experimentation and rapid prototyping
+• Creating code that's both functional and expressive
+
+Core Principles of Vibe Coding:
+
+**1. Flow Over Structure**
+• Work when you're in the zone, not just on schedule
+• Let your creativity guide the development process
+• Build what excites you and feels meaningful
+• Trust your instincts about user experience
+• Allow the project to evolve organically
+
+**2. AI as Creative Partner**
+• Use AI to handle boilerplate and repetitive tasks
+• Collaborate with AI for brainstorming and problem-solving
+• Let AI help you explore different approaches quickly
+• Focus your energy on the creative and strategic decisions
+• Use AI to learn new technologies faster
+
+**3. User-Centric Development**
+• Build for how people actually think and feel
+• Prioritize intuitive interfaces over complex features
+• Test early and often with real users
+• Make decisions based on user delight, not just functionality
+• Create experiences that people want to use
+
+**4. Rapid Experimentation**
+• Build quick prototypes to test ideas
+• Fail fast and iterate quickly
+• Use modern tools that speed up development
+• Don't get stuck in analysis paralysis
+• Ship early versions and improve based on feedback
+
+Modern Tools for Vibe Coding:
+
+**AI Development Assistants:**
+• GitHub Copilot for code suggestions
+• ChatGPT for problem-solving and learning
+• Claude for code review and architecture discussions
+• Replit AI for quick prototyping
+• Cursor for AI-powered code editing
+
+**Rapid Development Frameworks:**
+• Next.js for full-stack React applications
+• Svelte/SvelteKit for lightweight, fast apps
+• Tailwind CSS for rapid styling
+• Supabase for instant backend and database
+• Vercel/Netlify for one-click deployment
+
+**No-Code/Low-Code Tools:**
+• Webflow for visual web development
+• Framer for interactive prototypes
+• Notion for database-driven applications
+• Zapier for workflow automation
+• Bubble for complete app development
+
+The Vibe Coding Workflow:
+
+**1. Vibe Check**
+• What problem am I solving?
+• Who am I building this for?
+• What would make this delightful to use?
+• What's my vision for the end result?
+
+**2. Quick Exploration**
+• Build a minimal prototype quickly
+• Use AI to explore different approaches
+• Test the core concept with real users
+• Get feedback on the basic idea
+
+**3. Iterative Building**
+• Add one feature at a time
+• Test each addition with users
+• Use AI to help implement new features
+• Keep the overall vision in mind
+
+**4. Polish and Ship**
+• Focus on the details that matter to users
+• Use AI to help optimize performance
+• Launch when it's good enough to be useful
+• Continue improving based on real usage
+
+Benefits of Vibe Coding:
+• Faster development cycles
+• More creative and user-friendly results
+• Less burnout and more enjoyment
+• Better alignment between vision and execution
+• Leverages modern AI tools effectively
+• Encourages continuous learning and growth
+
+When to Use Vibe Coding:
+• Startup and MVP development
+• Creative projects and experiments
+• User-facing applications
+• Rapid prototyping phases
+• Solo development or small teams
+• Projects where user experience is crucial
+
+Remember: Vibe coding isn't about being unprofessional or skipping best practices. It's about being more intentional, creative, and user-focused in how you approach development. The "vibe" is about creating software that people love to use.`,
+        quiz: [
+          {
+            id: 'vc1',
+            question: 'What is the core philosophy of vibe coding?',
+            options: [
+              'Following strict development methodologies',
+              'Combining creativity, intuition, and AI collaboration for user-focused development',
+              'Writing as much code as possible without AI help',
+              'Focusing only on technical performance'
+            ],
+            correctAnswer: 1
+          }
+        ]
+      },
+      {
+        id: 'ai-agents',
+        title: 'Building AI Agents',
+        description: 'Learn what AI agents are and how to create intelligent assistants for yourself, your business, or clients',
+        duration: '50 min',
+        completed: false,
+        content: `Building AI Agents: Your Digital Workforce
+
+AI agents are autonomous software programs that can perceive their environment, make decisions, and take actions to achieve specific goals. Think of them as digital employees that work 24/7.
+
+What Are AI Agents?
+AI agents are intelligent systems that can:
+• Understand and respond to natural language
+• Make decisions based on given parameters
+• Perform tasks automatically without constant supervision
+• Learn from interactions and improve over time
+• Integrate with various tools and platforms
+• Handle complex, multi-step workflows
+
+Types of AI Agents:
+
+**1. Conversational Agents (Chatbots)**
+• Customer service representatives
+• Personal assistants for scheduling and reminders
+• Educational tutors and coaches
+• Sales and lead qualification bots
+• Support agents for troubleshooting
+
+**2. Task Automation Agents**
+• Email management and response agents
+• Social media content creators and schedulers
+• Data analysis and reporting agents
+• Inventory management systems
+• Financial transaction processors
+
+**3. Research and Analysis Agents**
+• Market research assistants
+• Competitive analysis tools
+• Content research and summarization
+• Trend monitoring and alerts
+• Lead generation and qualification
+
+**4. Creative Agents**
+• Content writing assistants
+• Design and image generation tools
+• Video editing and production aids
+• Music composition helpers
+• Marketing campaign creators
+
+Building Your First AI Agent:
+
+**Step 1: Define the Purpose**
+• What specific problem will this agent solve?
+• Who is the target user?
+• What tasks should it perform?
+• How will success be measured?
+• What are the constraints and limitations?
+
+**Step 2: Choose Your Platform**
+Popular platforms for building AI agents:
+• **OpenAI API**: Most versatile, great for custom solutions
+• **Anthropic Claude**: Excellent for reasoning and analysis
+• **Google Dialogflow**: Good for conversational agents
+• **Microsoft Bot Framework**: Enterprise-focused solutions
+• **Rasa**: Open-source conversational AI
+• **LangChain**: For complex agent workflows
+• **AutoGPT**: For autonomous task completion
+
+**Step 3: Design the Agent's Personality**
+• Define the tone and communication style
+• Create consistent responses and behaviors
+• Set boundaries for what the agent can/cannot do
+• Develop fallback responses for unclear requests
+• Ensure brand alignment and professional standards
+
+**Step 4: Build the Core Functionality**
+• Set up the AI model and training data
+• Create intent recognition and response systems
+• Integrate with necessary tools and databases
+• Implement safety and error handling
+• Test with real user scenarios
+
+**Step 5: Deploy and Monitor**
+• Choose deployment platform (web, mobile, Slack, etc.)
+• Set up monitoring and analytics
+• Create feedback loops for improvement
+• Plan for scaling and maintenance
+• Document usage and best practices
+
+AI Agent Use Cases:
+
+**For Personal Use:**
+• Personal productivity assistant
+• Learning and study companion
+• Health and fitness tracker
+• Financial planning advisor
+• Travel planning agent
+
+**For Business:**
+• Customer support automation
+• Sales lead qualification
+• Employee onboarding assistant
+• Invoice and expense processing
+• Social media management
+
+**For Clients/Services:**
+• Custom chatbots for websites
+• Industry-specific assistants (legal, medical, real estate)
+• Educational tutoring systems
+• E-commerce recommendation engines
+• Content moderation agents
+
+Technical Implementation Example:
+
+\`\`\`python
+# Simple AI Agent using OpenAI API
+import openai
+from datetime import datetime
+
+class PersonalAssistant:
+    def __init__(self, api_key):
+        self.client = openai.OpenAI(api_key=api_key)
+        self.conversation_history = []
+    
+    def respond(self, user_input):
+        # Add context and personality
+        system_prompt = \"\"\"
+        You are a helpful personal assistant. Be friendly, 
+        professional, and provide actionable advice.
+        \"\"\"
+        
+        # Get AI response
+        response = self.client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_input}
+            ]
+        )
+        
+        return response.choices[0].message.content
+\`\`\`
+
+Advanced Features to Consider:
+• Memory and context retention
+• Integration with calendars, emails, databases
+• Multi-modal capabilities (text, voice, image)
+• Workflow automation and task chaining
+• Learning from user feedback
+• Multi-language support
+
+Business Opportunities:
+• Freelance AI agent development
+• SaaS products with built-in agents
+• Consulting on AI implementation
+• Agency services for custom agents
+• Training and education services
+• White-label agent solutions
+
+Best Practices:
+• Start simple and iterate
+• Always include human oversight options
+• Be transparent about AI limitations
+• Protect user privacy and data
+• Test thoroughly before deployment
+• Plan for maintenance and updates
+• Monitor performance and user satisfaction
+
+Getting Started Today:
+1. Choose a simple use case (like a FAQ chatbot)
+2. Sign up for an AI platform (OpenAI, Anthropic, etc.)
+3. Build a basic prototype
+4. Test with friends or colleagues
+5. Iterate based on feedback
+6. Gradually add more sophisticated features
+
+Remember: The best AI agents solve real problems for real people. Focus on creating value, not just showcasing technology. Start with simple automation and gradually build more complex capabilities as you learn what users actually need.`,
+        quiz: [
+          {
+            id: 'ai1',
+            question: 'What is the most important first step when building an AI agent?',
+            options: [
+              'Choosing the most advanced AI model',
+              'Learning complex programming languages',
+              'Clearly defining the problem the agent will solve',
+              'Building the most features possible'
             ],
             correctAnswer: 2
           }

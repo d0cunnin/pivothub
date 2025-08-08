@@ -47,7 +47,9 @@ const LearnASkill = () => {
         { name: "What is Front-End Development?", level: "Beginner", duration: "30 min" },
         { name: "What is Back-End Development?", level: "Beginner", duration: "35 min" },
         { name: "What is Full-Stack Development?", level: "Beginner", duration: "40 min" },
-        { name: "Programming Languages 101 — What They Are & What They're For", level: "Beginner", duration: "45 min" }
+        { name: "Programming Languages 101 — What They Are & What They're For", level: "Beginner", duration: "45 min" },
+        { name: "What is Vibe Coding?", level: "Beginner", duration: "35 min" },
+        { name: "Building AI Agents", level: "Beginner", duration: "50 min" }
       ]
     }
   ];
