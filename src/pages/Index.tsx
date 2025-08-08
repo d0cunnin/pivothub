@@ -77,7 +77,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/assessments">
+                  <Link to="/assessments#take-your-assessment-today">
                     <Button size="lg" className="w-full">
                       Take Skills Assessment
                     </Button>
@@ -94,7 +94,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/assessments">
+                  <Link to="/assessments#take-your-assessment-today">
                     <Button size="lg" className="w-full">
                       Explore Your Interests
                     </Button>
@@ -111,7 +111,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/assessments">
+                  <Link to="/assessments#take-your-assessment-today">
                     <Button size="lg" className="w-full">
                       Assess Your Personality
                     </Button>
