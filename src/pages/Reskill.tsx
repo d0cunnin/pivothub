@@ -99,10 +99,24 @@ const Reskill = () => {
             </div>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="animate-fade-in space-y-4 text-center lg:text-left">
+            <div className="animate-fade-in space-y-4">
               <p className="text-lg text-foreground leading-relaxed">
                 Discover your strengths, skills, and perfect career path with our comprehensive assessment tools. Explore your personality, uncover your interests, and identify your skills to help you find the best career path that fits who you are.
               </p>
+              <ul className="space-y-2 text-foreground">
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Career Assessment - discover your ideal career path</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Skills Assessment - evaluate your current abilities</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Personality Assessment - understand your work style</span>
+                </li>
+              </ul>
               <div className="flex justify-center lg:justify-start">
                 <Button 
                   variant="default"
@@ -137,10 +151,24 @@ const Reskill = () => {
             </div>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="animate-fade-in space-y-4 text-center lg:text-left">
+            <div className="animate-fade-in space-y-4">
               <p className="text-lg text-foreground leading-relaxed">
                 Master your job search with AI-powered coaching, interview preparation, and professional document optimization. Get personalized guidance and practice with customized questions and expert feedback.
               </p>
+              <ul className="space-y-2 text-foreground">
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Career Advisor AI - get personalized guidance</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Interview Questions Coach - practice with expert feedback</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Resume & Cover Letter Coach - optimize your documents</span>
+                </li>
+              </ul>
               <div className="flex justify-center lg:justify-start">
                 <Button 
                   variant="default"
@@ -175,10 +203,24 @@ const Reskill = () => {
             </div>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="animate-fade-in space-y-4 text-center lg:text-left">
+            <div className="animate-fade-in space-y-4">
               <p className="text-lg text-foreground leading-relaxed">
                 In today's rapidly evolving job market, continuous learning isn't just an advantage—it's essential for career growth and personal fulfillment. Stay competitive and increase your value with strategic skill development.
               </p>
+              <ul className="space-y-2 text-foreground">
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Stay competitive in an ever-changing market</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Increase your value and earning potential</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Personal growth and expanded network</span>
+                </li>
+              </ul>
               <div className="flex justify-center lg:justify-start">
                 <Button 
                   variant="default"
