@@ -38,3 +38,6 @@ verify_jwt = false
 
 [functions.interview-feedback]
 verify_jwt = false
+
+[functions.generate-grant-content]
+verify_jwt = false

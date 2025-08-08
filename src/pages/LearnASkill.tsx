@@ -2,7 +2,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Award, Star, CheckCircle, TrendingUp, Users, Clock } from "lucide-react";
+import { LearningDashboard } from "@/components/LearningDashboard";
 import heroImage from "@/assets/hero-image.jpg";
 
 const LearnASkill = () => {
@@ -143,51 +145,68 @@ const LearnASkill = () => {
         </div>
       </section>
 
-      {/* Skills Categories */}
-      <section className="pt-1 pb-8 bg-gradient-section-2 relative overflow-hidden">
+      {/* Interactive Learning Section */}
+      <section className="py-12 bg-background">
         <div className="page-container">
-          <div className="text-center max-w-4xl mx-auto mb-4 animate-fade-in">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Learn a New Skill
-              </h2>
-            </div>
-            <p className="text-lg text-foreground leading-relaxed">
-              Explore our comprehensive learning paths designed to help you master the skills that matter most in today's job market.
+          <div className="text-center max-w-4xl mx-auto mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Interactive Learning Experience
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Take courses with hands-on projects, quizzes, and earn certificates as you progress
             </p>
           </div>
 
-          <div className="space-y-6">
-            {certificationCategories.map((category, index) => (
-              <Card key={index} className="p-8 bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
-                <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-foreground mb-2">{category.title}</h3>
-                  <p className="text-muted-foreground">{category.description}</p>
-                </div>
-                
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {category.certifications.map((cert, certIndex) => (
-                    <div key={certIndex} className="p-4 bg-gradient-card/50 rounded-lg border border-white/5">
-                      <div className="flex items-start justify-between mb-2">
-                        <h4 className="font-semibold text-foreground text-sm leading-tight">{cert.name}</h4>
-                        <CheckCircle className="h-4 w-4 text-primary flex-shrink-0 ml-2" />
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Star className="h-3 w-3 mr-1" />
-                          <span>{cert.level}</span>
-                        </div>
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3 mr-1" />
-                          <span>{cert.duration}</span>
-                        </div>
-                      </div>
+          <Tabs defaultValue="courses" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="courses" className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                Interactive Courses
+              </TabsTrigger>
+              <TabsTrigger value="overview" className="flex items-center gap-2">
+                <Star className="h-4 w-4" />
+                Skill Categories
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="courses">
+              <LearningDashboard />
+            </TabsContent>
+            
+            <TabsContent value="overview">
+              <div className="space-y-6">
+                {certificationCategories.map((category, index) => (
+                  <Card key={index} className="p-8 bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
+                    <div className="mb-6">
+                      <h3 className="text-2xl font-bold text-foreground mb-2">{category.title}</h3>
+                      <p className="text-muted-foreground">{category.description}</p>
                     </div>
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </div>
+                    
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {category.certifications.map((cert, certIndex) => (
+                        <div key={certIndex} className="p-4 bg-gradient-card/50 rounded-lg border border-white/5">
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="font-semibold text-foreground text-sm leading-tight">{cert.name}</h4>
+                            <CheckCircle className="h-4 w-4 text-primary flex-shrink-0 ml-2" />
+                          </div>
+                          <div className="space-y-1">
+                            <div className="flex items-center text-xs text-muted-foreground">
+                              <Star className="h-3 w-3 mr-1" />
+                              <span>{cert.level}</span>
+                            </div>
+                            <div className="flex items-center text-xs text-muted-foreground">
+                              <Clock className="h-3 w-3 mr-1" />
+                              <span>{cert.duration}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </section>
 

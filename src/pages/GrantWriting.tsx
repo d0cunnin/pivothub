@@ -72,83 +72,30 @@ const GrantWriting = () => {
 
     setIsGenerating(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    try {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/generate-grant-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    const mockProposal = `
-GRANT PROPOSAL
+      if (!response.ok) {
+        throw new Error('Failed to generate grant content');
+      }
 
-Organization: ${formData.organizationName}
-Project Title: ${formData.projectTitle}
-
-EXECUTIVE SUMMARY
-${formData.projectDescription}
-
-PROJECT DESCRIPTION
-${formData.organizationBackground || 'Our organization has been serving the community with dedication and excellence.'} This project, "${formData.projectTitle}", aims to ${formData.projectGoals || 'achieve significant positive impact in our community'}.
-
-TARGET POPULATION
-${formData.targetPopulation || 'Community members who will benefit from this initiative'}
-
-GOALS AND OBJECTIVES
-${formData.projectGoals || 'To create meaningful change and sustainable impact through innovative programming and community engagement.'}
-
-TIMELINE
-${formData.projectTimeline || 'This project will be implemented over 12 months with specific milestones and deliverables.'}
-
-BUDGET AND FUNDING REQUEST
-We respectfully request $${formData.grantAmountRequested || '50,000'} to support this initiative. Funds will be allocated for ${formData.purposeOfFunds || 'program implementation, staffing, and essential resources'}.
-
-COMMUNITY IMPACT
-${formData.communityImpact || 'This project will create lasting positive change, benefiting hundreds of community members and establishing a foundation for continued growth.'}
-
-SUSTAINABILITY
-${formData.sustainabilityPlan || 'We have developed a comprehensive sustainability plan that includes ongoing fundraising, partnerships, and community support to ensure project continuity beyond the grant period.'}
-
-CONTACT INFORMATION
-${formData.contactPersonName || 'Project Director'}
-${formData.contactTitle || 'Executive Director'}
-Email: ${formData.contactEmail || 'contact@organization.org'}
-Phone: ${formData.contactPhone || '(555) 123-4567'}
-
-${formData.additionalInformation ? `ADDITIONAL INFORMATION\n${formData.additionalInformation}` : ''}
-    `.trim();
-
-    const mockLOI = `
-LETTER OF INTENT
-
-${new Date().toLocaleDateString()}
-
-Dear Grant Review Committee,
-
-${formData.organizationName} is pleased to submit this Letter of Intent for the "${formData.projectTitle}" project. We are requesting $${formData.grantAmountRequested || '50,000'} to support this important initiative.
-
-PROJECT OVERVIEW
-${formData.projectDescription}
-
-OUR ORGANIZATION
-${formData.organizationBackground || 'Our organization has been a trusted community partner, dedicated to creating positive change and supporting those in need.'}
-
-PROJECT IMPACT
-This project will directly benefit ${formData.targetPopulation || 'community members'} and create lasting positive change through ${formData.communityImpact || 'innovative programming and sustainable solutions'}.
-
-We believe this project aligns perfectly with your foundation's mission and funding priorities. We would welcome the opportunity to submit a full proposal and discuss how this project can advance our shared goals.
-
-Thank you for your consideration.
-
-Sincerely,
-
-${formData.contactPersonName || 'Project Director'}
-${formData.contactTitle || 'Executive Director'}
-${formData.organizationName}
-${formData.contactEmail || 'contact@organization.org'}
-${formData.contactPhone || '(555) 123-4567'}
-    `.trim();
-
-    setGeneratedProposal(mockProposal);
-    setGeneratedLOI(mockLOI);
-    setIsGenerating(false);
-    toast.success('Grant documents generated successfully!');
+      const { proposal, letterOfIntent } = await response.json();
+      
+      setGeneratedProposal(proposal);
+      setGeneratedLOI(letterOfIntent);
+      toast.success('AI-powered grant documents generated successfully!');
+    } catch (error) {
+      console.error('Error generating grant content:', error);
+      toast.error('Failed to generate grant content. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const downloadDocument = (content: string, filename: string) => {
