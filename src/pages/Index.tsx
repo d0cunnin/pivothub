@@ -211,51 +211,61 @@ const Index = () => {
             
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <div className="space-y-6 lg:mr-4">
-                <h3 className="text-2xl font-semibold text-foreground">Available Now</h3>
                 <p className="text-muted-foreground">
                   Access our complete suite of career development tools and training programs designed 
                   to help you stay competitive in today's evolving job market.
                 </p>
                 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid md:grid-cols-3 gap-4">
                   <Card className="premium-card card-padding-xs hover-scale">
                     <CardHeader className="p-0 pb-3">
                       <Brain className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle className="text-lg">Skills Assessment</CardTitle>
+                      <CardTitle className="text-lg">Assessments</CardTitle>
                       <CardDescription className="text-sm">
-                        Discover your skill gaps and get personalized learning recommendations.
+                        Discover your skills, interests, and personality to guide your career path.
                       </CardDescription>
                     </CardHeader>
+                    <CardContent className="p-0 pt-2">
+                      <Link to="/assessments">
+                        <Button size="sm" className="w-full">
+                          Take Assessments
+                        </Button>
+                      </Link>
+                    </CardContent>
                   </Card>
                   
                   <Card className="premium-card card-padding-xs hover-scale">
                     <CardHeader className="p-0 pb-3">
-                      <Users className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle className="text-lg">AI Career Advisor</CardTitle>
+                      <Briefcase className="h-8 w-8 text-primary mb-2" />
+                      <CardTitle className="text-lg">Job Prep</CardTitle>
                       <CardDescription className="text-sm">
-                        Get personalized career guidance and professional development advice.
+                        Get ready for your dream job with interview coaching and resume optimization.
                       </CardDescription>
                     </CardHeader>
+                    <CardContent className="p-0 pt-2">
+                      <Link to="/job-prep">
+                        <Button size="sm" className="w-full">
+                          Prepare for Jobs
+                        </Button>
+                      </Link>
+                    </CardContent>
                   </Card>
                   
                   <Card className="premium-card card-padding-xs hover-scale">
                     <CardHeader className="p-0 pb-3">
-                      <Target className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle className="text-lg">Interview Coach</CardTitle>
+                      <BookOpen className="h-8 w-8 text-primary mb-2" />
+                      <CardTitle className="text-lg">Learn a Skill</CardTitle>
                       <CardDescription className="text-sm">
-                        Practice interviews with AI feedback and personalized coaching.
+                        Develop new competencies with industry-recognized courses and certifications.
                       </CardDescription>
                     </CardHeader>
-                  </Card>
-                  
-                  <Card className="premium-card card-padding-xs hover-scale">
-                    <CardHeader className="p-0 pb-3">
-                      <FileText className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle className="text-lg">Resume Coach</CardTitle>
-                      <CardDescription className="text-sm">
-                        Transform your resume with professional feedback and optimization.
-                      </CardDescription>
-                    </CardHeader>
+                    <CardContent className="p-0 pt-2">
+                      <Link to="/learn-a-skill">
+                        <Button size="sm" className="w-full">
+                          Start Learning
+                        </Button>
+                      </Link>
+                    </CardContent>
                   </Card>
                 </div>
                 
