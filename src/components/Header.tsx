@@ -32,7 +32,7 @@ export const Header = () => {
             </h1>
           </Link>
           
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 ml-12">
             <Link 
               to="/" 
               className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/' ? 'text-primary font-medium' : ''}`}
