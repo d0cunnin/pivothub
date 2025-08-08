@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { AuthGuard } from '@/components/AuthGuard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -113,7 +112,6 @@ const GrantWriting = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <AuthGuard>
       
       {/* Hero Section */}
       <section className="py-20 bg-gradient-hero hero-glow overflow-hidden">
@@ -529,7 +527,6 @@ const GrantWriting = () => {
         </div>
       </div>
       <Footer />
-      </AuthGuard>
     </div>
   );
 };
