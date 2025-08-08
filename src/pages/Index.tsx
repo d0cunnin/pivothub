@@ -9,7 +9,7 @@ import collaborativeLearningImage from "@/assets/collaborative-learning.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb, Brain, Heart, FileText, Briefcase } from "lucide-react";
+import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb, Brain, Heart, FileText, Briefcase, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -192,39 +192,87 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Future Development Section */}
+      {/* Reskill Section */}
       <section className="section-spacing-xs bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">
               <h2 className="section-header mb-4">
-                Get ReSkilled - Coming Soon
+                Get ReSkilled for Success
               </h2>
             </div>
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto mb-10">
               <p className="section-description">
-                We're developing comprehensive certification programs and collaborative learning experiences. 
-                Stay tuned for exciting updates as we prepare to launch our full education platform.
+                Transform your career with industry-recognized certifications, personalized learning paths, 
+                and cutting-edge skills training. Our comprehensive reskilling platform includes AI-powered 
+                career guidance, interview coaching, and resume optimization.
               </p>
             </div>
-            <div className="grid lg:grid-cols-2 gap-8 items-center mt-10">
-              <div className="space-y-4 lg:mr-4">
-                <h3 className="text-2xl font-semibold text-foreground">Under Development</h3>
+            
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <div className="space-y-6 lg:mr-4">
+                <h3 className="text-2xl font-semibold text-foreground">Available Now</h3>
                 <p className="text-muted-foreground">
-                  Join our community of learners and professionals working together to achieve their career goals 
-                  through collaborative learning and peer support.
+                  Access our complete suite of career development tools and training programs designed 
+                  to help you stay competitive in today's evolving job market.
                 </p>
-                <ul className="space-y-2 text-muted-foreground text-left">
-                  <li>• Tech certification programs</li>
-                  <li>• Entrepreneurship courses</li>
-                  <li>• Micro-credentials</li>
-                  <li>• Collaborative learning platform</li>
-                </ul>
+                
+                <div className="grid md:grid-cols-2 gap-4">
+                  <Card className="premium-card card-padding-xs hover-scale">
+                    <CardHeader className="p-0 pb-3">
+                      <Brain className="h-8 w-8 text-primary mb-2" />
+                      <CardTitle className="text-lg">Skills Assessment</CardTitle>
+                      <CardDescription className="text-sm">
+                        Discover your skill gaps and get personalized learning recommendations.
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                  
+                  <Card className="premium-card card-padding-xs hover-scale">
+                    <CardHeader className="p-0 pb-3">
+                      <Users className="h-8 w-8 text-primary mb-2" />
+                      <CardTitle className="text-lg">AI Career Advisor</CardTitle>
+                      <CardDescription className="text-sm">
+                        Get personalized career guidance and professional development advice.
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                  
+                  <Card className="premium-card card-padding-xs hover-scale">
+                    <CardHeader className="p-0 pb-3">
+                      <Target className="h-8 w-8 text-primary mb-2" />
+                      <CardTitle className="text-lg">Interview Coach</CardTitle>
+                      <CardDescription className="text-sm">
+                        Practice interviews with AI feedback and personalized coaching.
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                  
+                  <Card className="premium-card card-padding-xs hover-scale">
+                    <CardHeader className="p-0 pb-3">
+                      <FileText className="h-8 w-8 text-primary mb-2" />
+                      <CardTitle className="text-lg">Resume Coach</CardTitle>
+                      <CardDescription className="text-sm">
+                        Transform your resume with professional feedback and optimization.
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </div>
+                
+                <div className="pt-4">
+                  <Link to="/reskill">
+                    <Button size="lg" className="w-full md:w-auto">
+                      Start Your Reskilling Journey
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
+              
               <div className="lg:ml-4 self-center">
                 <img 
                   src={collaborativeLearningImage}
-                  alt="Professionals collaborating and learning together"
+                  alt="Professionals learning and developing new skills"
                   className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
                 />
               </div>
