@@ -75,7 +75,7 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/functions/v1/interview-questions', {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/interview-questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('/functions/v1/interview-feedback', {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/interview-feedback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
