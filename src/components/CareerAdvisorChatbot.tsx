@@ -52,13 +52,31 @@ export const CareerAdvisorChatbot = () => {
         throw new Error(data.error || 'Failed to get AI response');
       }
 
-      if (!data.response) {
-        console.error('❌ No response field in data:', data);
-        throw new Error('Invalid response format from server');
+      // Enhanced response validation
+      const rawResponse = data.response;
+      console.log('🔍 Raw response details:', {
+        exists: rawResponse !== undefined && rawResponse !== null,
+        type: typeof rawResponse,
+        length: rawResponse?.length || 0,
+        trimmedLength: rawResponse?.trim()?.length || 0,
+        value: rawResponse,
+        isEmpty: !rawResponse,
+        isWhitespace: rawResponse && !rawResponse.trim()
+      });
+
+      if (!rawResponse || typeof rawResponse !== 'string' || !rawResponse.trim()) {
+        console.error('❌ Invalid response content:', {
+          rawResponse,
+          type: typeof rawResponse,
+          length: rawResponse?.length,
+          trimmed: rawResponse?.trim()
+        });
+        throw new Error('AI returned empty or invalid response');
       }
 
-      console.log('✅ Got AI response:', data.response);
-      return data.response;
+      const cleanResponse = rawResponse.trim();
+      console.log('✅ Valid AI response:', { length: cleanResponse.length, content: cleanResponse });
+      return cleanResponse;
     } catch (error) {
       console.error('💥 Error getting AI response:', error);
       throw error;
@@ -97,15 +115,33 @@ export const CareerAdvisorChatbot = () => {
 
     try {
       const aiResponse = await getAIResponse(messageText);
+      console.log('🎯 AI Response received:', { 
+        response: aiResponse, 
+        length: aiResponse?.length,
+        type: typeof aiResponse 
+      });
+      
+      // Enhanced bot response validation
+      const responseText = aiResponse || "I apologize, but I didn't generate a proper response. Could you please try asking again?";
       
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: aiResponse,
+        text: responseText,
         isBot: true,
         timestamp: new Date(),
       };
       
-      setMessages(prev => [...prev, botResponse]);
+      console.log('💬 Adding bot message to state:', botResponse);
+      
+      setMessages(prev => {
+        const newMessages = [...prev, botResponse];
+        console.log('📝 Updated messages array:', {
+          totalMessages: newMessages.length,
+          lastMessage: newMessages[newMessages.length - 1],
+          allMessages: newMessages.map(m => ({ id: m.id, isBot: m.isBot, textLength: m.text.length }))
+        });
+        return newMessages;
+      });
     } catch (error) {
       console.error('Error getting AI response:', error);
       setError("I'm having trouble connecting right now. Here's some general guidance:");
@@ -177,26 +213,44 @@ export const CareerAdvisorChatbot = () => {
         {/* Messages */}
         <ScrollArea className="h-[400px] p-6">
           <div className="space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}
-              >
+            {messages.map((message) => {
+              // Debug logging for each rendered message
+              console.log('🎨 Rendering message:', {
+                id: message.id,
+                isBot: message.isBot,
+                textLength: message.text.length,
+                text: message.text.substring(0, 50) + (message.text.length > 50 ? '...' : '')
+              });
+              
+              return (
                 <div
-                  className={`max-w-[80%] p-4 rounded-lg ${
-                    message.isBot
-                      ? "bg-muted text-foreground"
-                      : "bg-primary text-primary-foreground"
-                  }`}
+                  key={message.id}
+                  className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}
                 >
-                  <div className="flex items-start space-x-3">
-                    {message.isBot && <GraduationCap className="h-5 w-5 mt-0.5 flex-shrink-0" />}
-                    <p className="text-sm leading-relaxed">{message.text}</p>
-                    {!message.isBot && <User className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                  <div
+                    className={`max-w-[80%] p-4 rounded-lg ${
+                      message.isBot
+                        ? "bg-muted text-foreground"
+                        : "bg-primary text-primary-foreground"
+                    }`}
+                  >
+                    <div className="flex items-start space-x-3">
+                      {message.isBot && <GraduationCap className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                      <p className="text-sm leading-relaxed">
+                        {message.text || "[Empty message - please report this bug]"}
+                        {/* Temporary debug indicator */}
+                        {message.isBot && (
+                          <span className="ml-2 text-xs opacity-50">
+                            [Bot:{message.text.length}chars]
+                          </span>
+                        )}
+                      </p>
+                      {!message.isBot && <User className="h-5 w-5 mt-0.5 flex-shrink-0" />}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             
             {isTyping && (
               <div className="flex justify-start">
