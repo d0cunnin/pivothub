@@ -92,23 +92,27 @@ const Reskill = () => {
       <section className="py-8 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              Career Assessments
-            </h2>
+            <div className="inline-block p-4 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm border border-white/20">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Career Assessments
+              </h2>
+            </div>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="animate-fade-in space-y-4">
+            <div className="animate-fade-in space-y-4 text-center lg:text-left">
               <p className="text-lg text-foreground leading-relaxed">
                 Discover your strengths, skills, and perfect career path with our comprehensive assessment tools. Explore your personality, uncover your interests, and identify your skills to help you find the best career path that fits who you are.
               </p>
-              <Button 
-                variant="outline"
-                onClick={() => window.location.href = '/assessments'}
-                className="text-primary hover:bg-primary hover:text-white"
-                aria-label="Learn more about Career Assessments"
-              >
-                Learn More
-              </Button>
+              <div className="flex justify-center lg:justify-start">
+                <Button 
+                  variant="default"
+                  onClick={() => window.location.href = '/assessments'}
+                  className="shadow-lg hover:shadow-xl transition-all duration-300"
+                  aria-label="Learn more about Career Assessments"
+                >
+                  Learn More
+                </Button>
+              </div>
             </div>
             
             <div className="flex justify-center lg:justify-end">
@@ -126,23 +130,27 @@ const Reskill = () => {
       <section className="py-8 bg-gradient-section-3 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              Job Preparation Tools
-            </h2>
+            <div className="inline-block p-4 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm border border-white/20">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Job Preparation Tools
+              </h2>
+            </div>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="animate-fade-in space-y-4">
+            <div className="animate-fade-in space-y-4 text-center lg:text-left">
               <p className="text-lg text-foreground leading-relaxed">
                 Master your job search with AI-powered coaching, interview preparation, and professional document optimization. Get personalized guidance and practice with customized questions and expert feedback.
               </p>
-              <Button 
-                variant="outline"
-                onClick={() => window.location.href = '/job-prep'}
-                className="text-primary hover:bg-primary hover:text-white"
-                aria-label="Learn more about Job Preparation Tools"
-              >
-                Learn More
-              </Button>
+              <div className="flex justify-center lg:justify-start">
+                <Button 
+                  variant="default"
+                  onClick={() => window.location.href = '/job-prep'}
+                  className="shadow-lg hover:shadow-xl transition-all duration-300"
+                  aria-label="Learn more about Job Preparation Tools"
+                >
+                  Learn More
+                </Button>
+              </div>
             </div>
             
             <div className="flex justify-center lg:justify-end">
@@ -160,23 +168,27 @@ const Reskill = () => {
       <section className="py-8 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              Learn a New Skill
-            </h2>
+            <div className="inline-block p-4 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm border border-white/20">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Learn a New Skill
+              </h2>
+            </div>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="animate-fade-in space-y-4">
+            <div className="animate-fade-in space-y-4 text-center lg:text-left">
               <p className="text-lg text-foreground leading-relaxed">
                 In today's rapidly evolving job market, continuous learning isn't just an advantage—it's essential for career growth and personal fulfillment. Stay competitive and increase your value with strategic skill development.
               </p>
-              <Button 
-                variant="outline"
-                onClick={() => window.location.href = '/learn-a-skill'}
-                className="text-primary hover:bg-primary hover:text-white"
-                aria-label="Learn more about Learning New Skills"
-              >
-                Learn More
-              </Button>
+              <div className="flex justify-center lg:justify-start">
+                <Button 
+                  variant="default"
+                  onClick={() => window.location.href = '/learn-a-skill'}
+                  className="shadow-lg hover:shadow-xl transition-all duration-300"
+                  aria-label="Learn more about Learning New Skills"
+                >
+                  Learn More
+                </Button>
+              </div>
             </div>
             
             <div className="flex justify-center lg:justify-end">
