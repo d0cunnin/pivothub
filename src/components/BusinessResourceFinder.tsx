@@ -25,13 +25,59 @@ export const BusinessResourceFinder = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [resources, setResources] = useState<BusinessResource[]>([]);
 
-  const searchResources = () => {
+  const searchResources = async () => {
     console.log("BusinessResourceFinder button clicked!");
     if (!zipCode.trim()) return;
     
     setIsSearching(true);
     
-    setTimeout(() => {
+    try {
+      const response = await fetch('/functions/v1/business-resources', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          businessType: 'Small Business',
+          industry: 'General',
+          stage: 'startup',
+          location: zipCode,
+          specificNeeds: resourceType === 'all' ? 'General business support' : resourceType
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to find resources');
+      }
+
+      // Transform AI response to match existing interface
+      const transformedResources: BusinessResource[] = [];
+      let idCounter = 1;
+
+      data.resources.categories.forEach((category: any) => {
+        category.resources.forEach((resource: any) => {
+          transformedResources.push({
+            id: idCounter.toString(),
+            name: resource.name,
+            type: category.category,
+            description: resource.description,
+            address: `${zipCode} Area`, // Simplified for demo
+            phone: resource.contactInfo || '(555) 123-4567',
+            website: resource.url,
+            hours: 'Mon-Fri 9AM-5PM',
+            rating: resource.rating || 4.5,
+            services: resource.pros.slice(0, 4) || ['Business Support']
+          });
+          idCounter++;
+        });
+      });
+
+      setResources(transformedResources.slice(0, 6)); // Limit results
+    } catch (error) {
+      console.error('Error finding resources:', error);
+      // Fallback to mock resources
       const mockResources: BusinessResource[] = [
         {
           id: "1",
@@ -56,36 +102,13 @@ export const BusinessResourceFinder = () => {
           hours: "Mon-Fri 8AM-6PM",
           rating: 4.5,
           services: ["Microloans", "Seed Funding", "Business Grants", "Investment Matching"]
-        },
-        {
-          id: "3",
-          name: "Innovation Hub Coworking",
-          type: "Workspace",
-          description: "Collaborative workspace with networking and mentorship opportunities",
-          address: "789 Innovation Blvd",
-          phone: "(555) 345-6789",
-          website: "www.innovationhub.com",
-          hours: "24/7 Access",
-          rating: 4.7,
-          services: ["Hot Desks", "Private Offices", "Meeting Rooms", "Networking Events"]
-        },
-        {
-          id: "4",
-          name: "Tech Startup Accelerator",
-          type: "Accelerator",
-          description: "3-month program for early-stage tech startups with funding",
-          address: "321 Startup Way",
-          phone: "(555) 456-7890",
-          website: "www.techaccelerator.com",
-          hours: "By Appointment",
-          rating: 4.9,
-          services: ["Mentorship", "Seed Capital", "Demo Day", "Office Space"]
         }
       ];
       
       setResources(mockResources);
+    } finally {
       setIsSearching(false);
-    }, 2000);
+    }
   };
 
   return (

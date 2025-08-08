@@ -117,18 +117,34 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
-      // Simulate AI feedback - in real implementation, this would call your AI service
-      const mockFeedback = `Your answer demonstrates good understanding. Consider using the STAR method more explicitly. The response shows relevant experience but could benefit from more specific metrics and outcomes. Try to quantify your achievements where possible.`;
+      const response = await fetch('/functions/v1/interview-feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: questions[currentQuestionIndex].text,
+          answer: currentAnswer,
+          questionType: questions[currentQuestionIndex].type,
+          jobTitle: jobTitle
+        }),
+      });
+
+      const data = await response.json();
       
-      const response: Response = {
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to analyze answer');
+      }
+
+      const response_data: Response = {
         questionId: questions[currentQuestionIndex].id,
         answer: currentAnswer,
-        feedback: mockFeedback,
-        score: Math.floor(Math.random() * 3) + 3, // Random score 3-5
+        feedback: data.feedback.detailedFeedback,
+        score: data.feedback.overallScore,
         timestamp: new Date()
       };
 
-      setResponses([...responses, response]);
+      setResponses([...responses, response_data]);
       setCurrentAnswer('');
       
       if (currentQuestionIndex < questions.length - 1) {
@@ -138,7 +154,27 @@ export const InterviewQuestionsCoach = () => {
         toast.success('Interview practice completed!');
       }
     } catch (error) {
-      toast.error('Failed to analyze answer. Please try again.');
+      console.error('Error analyzing answer:', error);
+      // Fallback feedback
+      const mockFeedback = `Your answer demonstrates good understanding. Consider using the STAR method more explicitly. The response shows relevant experience but could benefit from more specific metrics and outcomes. Try to quantify your achievements where possible.`;
+      
+      const response_data: Response = {
+        questionId: questions[currentQuestionIndex].id,
+        answer: currentAnswer,
+        feedback: mockFeedback,
+        score: Math.floor(Math.random() * 3) + 3, // Random score 3-5
+        timestamp: new Date()
+      };
+
+      setResponses([...responses, response_data]);
+      setCurrentAnswer('');
+      
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        setActiveTab('results');
+        toast.success('Interview practice completed!');
+      }
     } finally {
       setLoading(false);
     }

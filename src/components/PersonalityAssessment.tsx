@@ -173,7 +173,48 @@ export const PersonalityAssessment = () => {
     }
   };
 
-  const calculateResults = () => {
+  const calculateResults = async () => {
+    try {
+      // Call the AI personality assessment API
+      const response = await fetch('/functions/v1/personality-assessment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          responses: answers
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.personality) {
+        // Transform AI response to match existing interface
+        const interpretedResults = data.personality.keyTraits.map((trait: any, index: number) => ({
+          trait: trait.trait,
+          score: trait.score,
+          level: trait.score >= 4.0 ? "Strong" : trait.score >= 3.0 ? "Moderate" : "Developing",
+          interpretation: trait.description
+        }));
+
+        setResults({
+          traitScores: interpretedResults,
+          topStrengths: interpretedResults
+            .filter((r: any) => r.level === "Strong")
+            .sort((a: any, b: any) => b.score - a.score)
+            .slice(0, 3),
+          personalityType: data.personality.personalityType,
+          careerFit: data.personality.careerFit,
+          summary: data.personality.summary
+        });
+        setShowResults(true);
+        return;
+      }
+    } catch (error) {
+      console.error('Error getting AI personality assessment:', error);
+    }
+
+    // Fallback to original calculation
     const traitScores = Array(10).fill(0);
     
     for (let i = 0; i < answers.length; i++) {

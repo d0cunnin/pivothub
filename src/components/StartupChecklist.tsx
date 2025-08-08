@@ -20,11 +20,56 @@ export const StartupChecklist = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
 
-  const generateChecklist = () => {
+  const generateChecklist = async () => {
     console.log("StartupChecklist button clicked!");
+    if (!businessStructure || !state) return;
+    
     setIsGenerating(true);
     
-    setTimeout(() => {
+    try {
+      const response = await fetch('/functions/v1/startup-checklist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          businessType: businessStructure.replace('-', ' '),
+          industry: 'General', // Could add industry field later
+          location: state.replace('-', ' '),
+          fundingGoal: '$50,000', // Could add funding field later
+          timeline: '3-6 months',
+          hasCofounder: false // Could add cofounder field later
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate checklist');
+      }
+
+      // Transform AI response to match existing interface
+      const transformedChecklist: ChecklistItem[] = [];
+      let idCounter = 1;
+
+      data.checklist.phases.forEach((phase: any) => {
+        phase.tasks.forEach((task: any) => {
+          transformedChecklist.push({
+            id: idCounter.toString(),
+            task: task.title,
+            category: task.category || phase.phase,
+            timeline: task.estimatedTime || phase.estimatedDuration,
+            completed: false,
+            priority: task.priority === 'High' ? 'high' : task.priority === 'Medium' ? 'medium' : 'low'
+          });
+          idCounter++;
+        });
+      });
+
+      setChecklist(transformedChecklist.sort((a, b) => a.timeline.localeCompare(b.timeline)));
+    } catch (error) {
+      console.error('Error generating checklist:', error);
+      // Fallback to basic checklist
       const baseChecklist: ChecklistItem[] = [
         { id: '1', task: 'Validate business idea and market research', category: 'Planning', timeline: 'Week 1', completed: false, priority: 'high' },
         { id: '2', task: 'Write business plan', category: 'Planning', timeline: 'Week 1-2', completed: false, priority: 'high' },
@@ -35,30 +80,25 @@ export const StartupChecklist = () => {
         { id: '7', task: 'Open business bank account', category: 'Finance', timeline: 'Week 4', completed: false, priority: 'high' },
         { id: '8', task: 'Get business insurance', category: 'Legal', timeline: 'Week 4-5', completed: false, priority: 'medium' },
         { id: '9', task: 'Obtain necessary licenses and permits', category: 'Legal', timeline: 'Week 4-6', completed: false, priority: 'high' },
-        { id: '10', task: 'Set up accounting system', category: 'Finance', timeline: 'Week 5', completed: false, priority: 'medium' },
-        { id: '11', task: 'Design logo and brand identity', category: 'Marketing', timeline: 'Week 5-6', completed: false, priority: 'medium' },
-        { id: '12', task: 'Build website and online presence', category: 'Marketing', timeline: 'Week 6-8', completed: false, priority: 'medium' },
-        { id: '13', task: 'Set up business location/workspace', category: 'Operations', timeline: 'Week 6-8', completed: false, priority: 'medium' },
-        { id: '14', task: 'Develop marketing strategy', category: 'Marketing', timeline: 'Week 7-8', completed: false, priority: 'medium' },
-        { id: '15', task: 'Launch business and start operations', category: 'Operations', timeline: 'Week 8-10', completed: false, priority: 'high' }
+        { id: '10', task: 'Set up accounting system', category: 'Finance', timeline: 'Week 5', completed: false, priority: 'medium' }
       ];
 
       // Add structure-specific items
       if (businessStructure === 'corporation') {
         baseChecklist.push(
-          { id: '16', task: 'Draft corporate bylaws', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
-          { id: '17', task: 'Issue stock certificates', category: 'Legal', timeline: 'Week 4', completed: false, priority: 'medium' },
-          { id: '18', task: 'Hold first board meeting', category: 'Legal', timeline: 'Week 4', completed: false, priority: 'medium' }
+          { id: '11', task: 'Draft corporate bylaws', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
+          { id: '12', task: 'Issue stock certificates', category: 'Legal', timeline: 'Week 4', completed: false, priority: 'medium' }
         );
       } else if (businessStructure === 'llc') {
         baseChecklist.push(
-          { id: '16', task: 'Create operating agreement', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' }
+          { id: '11', task: 'Create operating agreement', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' }
         );
       }
 
       setChecklist(baseChecklist.sort((a, b) => a.timeline.localeCompare(b.timeline)));
+    } finally {
       setIsGenerating(false);
-    }, 1500);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {

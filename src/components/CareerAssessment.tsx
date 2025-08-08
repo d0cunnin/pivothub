@@ -252,6 +252,7 @@ export const CareerAssessment = () => {
   const [currentStatement, setCurrentStatement] = useState(0);
   const [responses, setResponses] = useState<Record<string, number[]>>({});
   const [currentResponse, setCurrentResponse] = useState<number>(0);
+  const [results, setResults] = useState<AssessmentResults>({});
   const [showResults, setShowResults] = useState(false);
 
   const totalQuestions = careerAreas.length * 10;
@@ -262,7 +263,7 @@ export const CareerAssessment = () => {
     setCurrentResponse(parseInt(value));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     const areaId = careerAreas[currentArea].id;
     const updatedResponses = { ...responses };
     
@@ -279,6 +280,8 @@ export const CareerAssessment = () => {
       setCurrentArea(prev => prev + 1);
       setCurrentStatement(0);
     } else {
+      // Calculate results when assessment is complete
+      await calculateResults();
       setShowResults(true);
     }
   };
@@ -293,7 +296,41 @@ export const CareerAssessment = () => {
     setCurrentResponse(0);
   };
 
-  const calculateResults = (): AssessmentResults => {
+  const calculateResults = async (): Promise<AssessmentResults> => {
+    try {
+      // Call the AI assessment API
+      const response = await fetch('/functions/v1/career-assessment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          responses: responses
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.analysis) {
+        // Transform AI response to match existing interface
+        const results: AssessmentResults = {};
+        
+        data.analysis.recommendations.forEach((rec: any, index: number) => {
+          const areaId = `area_${index}`;
+          results[areaId] = {
+            score: rec.fitScore || 50,
+            percentage: rec.fitScore || 50,
+            level: rec.fitScore >= 80 ? "Strong interest" : rec.fitScore >= 60 ? "Moderate interest" : "Low interest"
+          };
+        });
+
+        return results;
+      }
+    } catch (error) {
+      console.error('Error getting AI career assessment:', error);
+    }
+
+    // Fallback to original calculation
     const results: AssessmentResults = {};
     
     careerAreas.forEach(area => {
@@ -324,7 +361,6 @@ export const CareerAssessment = () => {
     setIsOpen(false);
   };
 
-  const results = showResults ? calculateResults() : {};
   const sortedResults = Object.entries(results).sort(([,a], [,b]) => b.percentage - a.percentage);
   const topThree = sortedResults.slice(0, 3);
 

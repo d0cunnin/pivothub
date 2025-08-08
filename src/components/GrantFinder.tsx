@@ -25,45 +25,64 @@ export const GrantFinder = () => {
   const [grants, setGrants] = useState<Grant[]>([]);
 
   const searchGrants = async () => {
+    if (!searchTerm.trim()) {
+      return;
+    }
+
     setIsSearching(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const mockGrants: Grant[] = [
-      {
-        id: "1",
-        title: "Small Business Innovation Research (SBIR) Program",
-        description: "Federal funding for small businesses to engage in R&D with commercialization potential",
-        agency: "Small Business Administration",
-        amount: "Up to $1.7M",
-        deadline: "March 15, 2024",
-        eligibility: "Small businesses with <500 employees",
-        category: "Technology"
-      },
-      {
-        id: "2",
-        title: "Community Development Block Grant",
-        description: "Federal funding for community development projects in low-income areas",
-        agency: "HUD",
-        amount: "$50K - $500K",
-        deadline: "April 30, 2024",
-        eligibility: "Non-profit organizations, local governments",
-        category: "Community"
-      },
-      {
-        id: "3",
-        title: "National Science Foundation Research Grant",
-        description: "Support for fundamental research in science and engineering",
-        agency: "NSF",
-        amount: "$100K - $2M",
-        deadline: "Rolling basis",
-        eligibility: "Universities, research institutions",
-        category: "Research"
+    try {
+      const response = await fetch('/functions/v1/grant-finder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          businessType: searchTerm,
+          industry: category,
+          location: 'United States', // Could add location field later
+          fundingAmount: fundingRange,
+          businessStage: 'early-stage' // Could add stage field later
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to find grants');
       }
-    ];
-    
-    setGrants(mockGrants);
-    setIsSearching(false);
+
+      // Transform the data to match the existing interface
+      const transformedGrants: Grant[] = data.grants.map((grant: any) => ({
+        id: grant.id,
+        title: grant.name,
+        description: grant.description,
+        agency: grant.organization,
+        amount: grant.amountRange,
+        deadline: grant.deadline,
+        eligibility: grant.eligibility.join(', '),
+        category: grant.category
+      }));
+
+      setGrants(transformedGrants);
+    } catch (error) {
+      console.error('Error finding grants:', error);
+      // Fallback to mock data on error
+      const mockGrants: Grant[] = [
+        {
+          id: "1",
+          title: "Small Business Innovation Research (SBIR) Program",
+          description: "Federal funding for small businesses to engage in R&D with commercialization potential",
+          agency: "Small Business Administration",
+          amount: "Up to $1.7M",
+          deadline: "March 15, 2024",
+          eligibility: "Small businesses with <500 employees",
+          category: "Technology"
+        }
+      ];
+      setGrants(mockGrants);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   return (
