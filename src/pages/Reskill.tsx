@@ -41,10 +41,10 @@ const Reskill = () => {
               <GraduationCap className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Reskill for Success
+              Reskill with Confidence: From Preparation to Performance
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Whether you're re-entering the workforce, changing careers, or building new skills, discover your path to success in today's evolving job market
+              Transform your career journey with comprehensive assessments, targeted job preparation, and strategic skill-building designed for real-world success
             </p>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
@@ -66,11 +66,11 @@ const Reskill = () => {
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Find Your Perfect Learning Path
+                  Discover Career Clarity
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed">
-                Discover what's next with our comprehensive assessments designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills to find the best career path that fits who you are and where you want to go.
+                Start with an in-depth assessment to understand your strengths and opportunities for growth—know where you are and where you're headed. Our comprehensive diagnostic tools provide personalized feedback and actionable insights for your career journey.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
@@ -78,8 +78,8 @@ const Reskill = () => {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Skill Gap Analysis</h4>
-                    <p className="text-muted-foreground text-sm">Identify exactly which skills you need to advance in your field</p>
+                    <h4 className="font-semibold text-foreground mb-1">Interactive Assessments</h4>
+                    <p className="text-muted-foreground text-sm">Comprehensive evaluations of your interests, skills, and personality traits</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -87,8 +87,8 @@ const Reskill = () => {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Personalized Recommendations</h4>
-                    <p className="text-muted-foreground text-sm">Get course suggestions tailored to your learning style and schedule</p>
+                    <h4 className="font-semibold text-foreground mb-1">Personalized Insights</h4>
+                    <p className="text-muted-foreground text-sm">Get detailed feedback and next-step recommendations tailored to your goals</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -96,8 +96,8 @@ const Reskill = () => {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Career Impact Forecast</h4>
-                    <p className="text-muted-foreground text-sm">See potential salary increases and job opportunities</p>
+                    <h4 className="font-semibold text-foreground mb-1">Career Path Mapping</h4>
+                    <p className="text-muted-foreground text-sm">Visualize potential career routes and skill development opportunities</p>
                   </div>
                 </div>
               </div>
@@ -122,33 +122,33 @@ const Reskill = () => {
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Get Personalized Career Guidance
+                Prepare for Opportunity
               </h2>
             </div>
             <p className="text-lg text-foreground leading-relaxed mb-4">
-              Meet your AI Career Advisor - a smart assistant powered by advanced AI to provide personalized guidance for your professional journey. Whether you're planning a career change, seeking new skills, or navigating workplace challenges, get expert advice tailored to your unique situation.
+              Build momentum with tailored job-prep tools—mock interviews, resume refreshers, and career coaching designed for success. Master your job search with AI-powered coaching and real-world simulations.
             </p>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <Target className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Tailored Advice</h4>
-                <p className="text-sm text-muted-foreground">Get responses specific to your industry, experience level, and career goals</p>
+                <h4 className="font-semibold text-foreground mb-1">Career Coaching</h4>
+                <p className="text-sm text-muted-foreground">Get personalized guidance for your professional journey and career decisions</p>
               </div>
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <BookOpen className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Expert Knowledge</h4>
-                <p className="text-sm text-muted-foreground">Access insights from career professionals across all industries and roles</p>
+                <h4 className="font-semibold text-foreground mb-1">Interview Practice</h4>
+                <p className="text-sm text-muted-foreground">Master interview skills with customized questions and STAR method coaching</p>
               </div>
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <Users className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">24/7 Available</h4>
-                <p className="text-sm text-muted-foreground">Get immediate support whenever you need career guidance or advice</p>
+                <h4 className="font-semibold text-foreground mb-1">Resume Optimization</h4>
+                <p className="text-sm text-muted-foreground">Transform your resume into results-oriented statements that get noticed</p>
               </div>
             </div>
           </div>
@@ -163,19 +163,19 @@ const Reskill = () => {
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Interview Questions Coach
+                Interview Preparation & Resume Excellence
               </h2>
             </div>
             <p className="text-lg text-foreground leading-relaxed mb-4">
-              Master your interview skills with AI-powered coaching. Practice with customized questions, get expert feedback, and build confidence for your next interview.
+              Perfect your interview performance and resume impact with AI-powered coaching, personalized feedback, and real-world simulations that build confidence and competence.
             </p>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <Target className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Personalized Questions</h4>
-                <p className="text-sm text-muted-foreground">Get questions tailored to your role, industry, and experience level</p>
+                <h4 className="font-semibold text-foreground mb-1">Mock Interviews</h4>
+                <p className="text-sm text-muted-foreground">Practice with realistic scenarios and comprehensive performance feedback</p>
               </div>
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
@@ -204,11 +204,11 @@ const Reskill = () => {
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Resume & Cover Letter Coach
+                Resume & Professional Documents
               </h2>
             </div>
             <p className="text-lg text-foreground leading-relaxed mb-4">
-              Transform your resume from generic job duties into powerful, results-oriented statements that get noticed by hiring managers.
+              Transform your professional documents from generic job duties into powerful, results-oriented statements that capture attention and drive results.
             </p>
             <div className="grid md:grid-cols-3 gap-4 text-center">
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
@@ -247,68 +247,68 @@ const Reskill = () => {
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="section-header">
-                  Get ReSkilled
+                  Skill Up Strategically
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed mb-6">
-                In today's rapidly evolving job market, continuous learning isn't just an advantage—it's essential for career growth and personal fulfillment. Whether you're re-entering the workforce, changing careers, or building new skills, our programs help you stay competitive and unlock new opportunities.
+                Learn exactly what matters—structured micro-courses, real-world projects, and flexible pacing to help you build new competencies seamlessly. Master in-demand skills through hands-on practice and pathways to certification.
               </p>
               
               {/* ReSkilled Benefits List */}
               <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-4">The Power of ReSkilling:</h4>
+                <h4 className="font-semibold text-foreground mb-4">Strategic Learning Benefits:</h4>
                 <div className="space-y-3">
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Stay competitive and relevant in an ever-changing market</span>
+                    <span className="text-foreground">Structured microlearning modules that fit your schedule</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Increase your value with skills that command higher salaries</span>
+                    <span className="text-foreground">Hands-on practice opportunities with real-world applications</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Build confidence and expand your network through learning</span>
+                    <span className="text-foreground">Flexible pacing to build competencies at your own speed</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Master job search skills with AI-powered coaching and optimization</span>
+                    <span className="text-foreground">Clear pathways to mastery and professional certification</span>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-6 h-6 bg-gradient-hero rounded-lg flex items-center justify-center mt-1">
                       <div className="w-2 h-2 bg-white rounded-full"></div>
                     </div>
-                    <span className="text-foreground">Learn practical, real-world knowledge you can apply immediately</span>
+                    <span className="text-foreground">Interactive learning with immediate feedback and progress tracking</span>
                   </div>
                 </div>
               </div>
               
               <div className="bg-gradient-card/50 p-6 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-3">Why Our Courses Stand Out:</h4>
+                <h4 className="font-semibold text-foreground mb-3">What Makes Our Learning Approach Effective:</h4>
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Hands-on projects with real-world applications</span>
+                    <span>Microlearning modules designed for busy professionals</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Industry-recognized certifications upon completion</span>
+                    <span>Interactive exercises with immediate practical application</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Flexible learning with lifetime access</span>
+                    <span>Flexible scheduling with lifetime access to materials</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>
-                    <span>Expert mentorship and career guidance</span>
+                    <span>Progress tracking and competency-based advancement</span>
                   </li>
                 </ul>
               </div>
@@ -460,6 +460,62 @@ const Reskill = () => {
                 </Button>
               </div>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Your Path Forward - Call to Action */}
+      <section className="py-16 bg-gradient-hero relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Your Path Forward
+              </h2>
+            </div>
+            <p className="text-lg text-foreground leading-relaxed mb-8">
+              Take the next step—identify your goals, prep for interviews, level up your skills, and launch your next career journey. Your transformation starts with a single assessment, grows through targeted preparation, and succeeds with strategic skill development.
+            </p>
+            
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Brain className="h-6 w-6 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-2">1. Assess</h4>
+                <p className="text-sm text-muted-foreground">Discover your strengths and career opportunities with comprehensive assessments</p>
+              </div>
+              <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Target className="h-6 w-6 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-2">2. Prepare</h4>
+                <p className="text-sm text-muted-foreground">Master interviews and optimize your resume with AI-powered coaching</p>
+              </div>
+              <div className="bg-gradient-card/30 p-6 rounded-xl backdrop-blur-sm border border-white/10">
+                <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Award className="h-6 w-6 text-white" />
+                </div>
+                <h4 className="font-semibold text-foreground mb-2">3. Excel</h4>
+                <p className="text-sm text-muted-foreground">Build strategic skills through microlearning and earn professional certifications</p>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <CareerAssessment />
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="bg-white/10 text-white border-white hover:bg-white hover:text-primary backdrop-blur-sm"
+                >
+                  Explore All Tools
+                </Button>
+              </div>
+              <p className="text-sm text-white/80 italic">
+                Join thousands who have transformed their careers with confidence and clarity
+              </p>
+            </div>
           </div>
         </div>
       </section>
