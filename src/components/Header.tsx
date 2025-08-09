@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Briefcase, Menu, X, ChevronDown, User, LogOut } from "lucide-react";
+import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,11 +25,12 @@ export const Header = () => {
     <header className="bg-card shadow-soft border-b">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <Briefcase className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              ReLaunch
-            </h1>
+          <Link to="/" className="flex items-center">
+            <img 
+              src="/lovable-uploads/b197140f-1102-43f0-a16f-94d073f11bec.png" 
+              alt="ReLaunch Logo" 
+              className="h-12 w-auto"
+            />
           </Link>
           
           <nav className="hidden md:flex space-x-8 ml-12">
