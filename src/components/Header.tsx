@@ -27,7 +27,7 @@ export const Header = () => {
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/b197140f-1102-43f0-a16f-94d073f11bec.png" 
+              src="/lovable-uploads/886d77fd-2ee6-4975-b601-5e3965d16fa5.png" 
               alt="ReLaunch Logo" 
               className="h-12 w-auto"
             />
