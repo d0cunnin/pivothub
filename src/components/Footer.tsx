@@ -7,6 +7,11 @@ export const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
+            <img 
+              src="/lovable-uploads/8b198e86-3cfb-4d7f-aa3e-16204fb06794.png" 
+              alt="ReLaunch Logo" 
+              className="h-12 w-auto"
+            />
             <p className="text-primary-foreground/80">
               Empowering individuals to transform their careers through reskilling and entrepreneurship.
             </p>
