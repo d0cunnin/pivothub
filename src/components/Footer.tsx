@@ -7,9 +7,6 @@ export const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <h3 className="text-2xl font-bold">ReLaunch</h3>
-            </div>
             <p className="text-primary-foreground/80">
               Empowering individuals to transform their careers through reskilling and entrepreneurship.
             </p>
