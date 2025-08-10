@@ -8,11 +8,6 @@ export const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <img 
-                src="/lovable-uploads/6f8eb986-42ca-49fd-a1b7-77c90ee6d2e0.png" 
-                alt="ReLaunch Logo" 
-                className="h-8 w-auto"
-              />
               <h3 className="text-2xl font-bold">ReLaunch</h3>
             </div>
             <p className="text-primary-foreground/80">
