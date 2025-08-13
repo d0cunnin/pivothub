@@ -8,7 +8,7 @@ export const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <img 
-              src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
+              src="/lovable-uploads/e9310b7d-2004-432c-a5dc-11828a70f8e7.png" 
               alt="PivotHub Logo" 
               className="h-16 w-auto"
             />
