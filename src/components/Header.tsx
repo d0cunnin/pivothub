@@ -27,7 +27,7 @@ export const Header = () => {
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/b197140f-1102-43f0-a16f-94d073f11bec.png" 
+              src="/lovable-uploads/a80d6385-d42b-4185-932b-427aec2b395d.png" 
               alt="PivotHub Logo" 
               className="h-16 w-auto"
             />
