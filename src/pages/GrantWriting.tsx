@@ -17,6 +17,7 @@ interface GrantFormData {
   projectTitle: string;
   projectDescription: string;
   grantAmountRequested: string;
+  grantType: string;
   purposeOfFunds: string;
   targetPopulation: string;
   projectGoals: string;
@@ -34,11 +35,11 @@ interface GrantFormData {
 }
 
 interface GrantSearchData {
-  businessType: string;
+  organizationType: string;
   industry: string;
   location: string;
   fundingAmount: string;
-  businessStage: string;
+  organizationStage: string;
 }
 
 interface Grant {
@@ -57,6 +58,7 @@ const GrantWriting = () => {
     projectTitle: '',
     projectDescription: '',
     grantAmountRequested: '',
+    grantType: '',
     purposeOfFunds: '',
     targetPopulation: '',
     projectGoals: '',
@@ -79,11 +81,11 @@ const GrantWriting = () => {
 
   // Grant search state
   const [searchData, setSearchData] = useState<GrantSearchData>({
-    businessType: '',
+    organizationType: '',
     industry: '',
     location: '',
     fundingAmount: '',
-    businessStage: '',
+    organizationStage: '',
   });
   const [isSearching, setIsSearching] = useState(false);
   const [foundGrants, setFoundGrants] = useState<Grant[]>([]);
@@ -131,8 +133,8 @@ const GrantWriting = () => {
   };
 
   const searchGrants = async () => {
-    if (!searchData.businessType || !searchData.industry) {
-      toast.error('Please fill in Business Type and Industry');
+    if (!searchData.organizationType || !searchData.industry) {
+      toast.error('Please fill in Organization Type and Industry');
       return;
     }
 
@@ -342,6 +344,27 @@ const GrantWriting = () => {
                             className="h-10"
                           />
                         </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="grantType">Grant Type *</Label>
+                        <Select onValueChange={(value) => handleInputChange('grantType', value)}>
+                          <SelectTrigger className="h-10">
+                            <SelectValue placeholder="Select grant type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="federal">Federal Grant</SelectItem>
+                            <SelectItem value="state">State Grant</SelectItem>
+                            <SelectItem value="local">Local/Municipal Grant</SelectItem>
+                            <SelectItem value="foundation">Foundation Grant</SelectItem>
+                            <SelectItem value="corporate">Corporate Grant</SelectItem>
+                            <SelectItem value="nonprofit">Nonprofit Grant</SelectItem>
+                            <SelectItem value="research">Research Grant</SelectItem>
+                            <SelectItem value="education">Education Grant</SelectItem>
+                            <SelectItem value="community">Community Grant</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
 
                       <div className="space-y-2">
@@ -623,19 +646,20 @@ const GrantWriting = () => {
                         Grant Search Criteria
                       </CardTitle>
                       <CardDescription>
-                        Enter your business details to find relevant grant opportunities
+                        Enter your organization details to find relevant grant opportunities
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label htmlFor="businessType">Business Type *</Label>
-                          <Select onValueChange={(value) => handleSearchChange('businessType', value)}>
+                          <Label htmlFor="organizationType">Organization Type *</Label>
+                          <Select onValueChange={(value) => handleSearchChange('organizationType', value)}>
                             <SelectTrigger className="h-10">
-                              <SelectValue placeholder="Select business type" />
+                              <SelectValue placeholder="Select organization type" />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="nonprofit">Nonprofit Organization</SelectItem>
+                              <SelectItem value="faith-based">Faith Based Organization</SelectItem>
                               <SelectItem value="startup">Startup</SelectItem>
                               <SelectItem value="small-business">Small Business</SelectItem>
                               <SelectItem value="tech">Technology Company</SelectItem>
@@ -702,10 +726,10 @@ const GrantWriting = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="businessStage">Business Stage</Label>
-                        <Select onValueChange={(value) => handleSearchChange('businessStage', value)}>
+                        <Label htmlFor="organizationStage">Organization Stage</Label>
+                        <Select onValueChange={(value) => handleSearchChange('organizationStage', value)}>
                           <SelectTrigger className="h-10">
-                            <SelectValue placeholder="Select business stage" />
+                            <SelectValue placeholder="Select organization stage" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="idea">Idea Stage</SelectItem>
