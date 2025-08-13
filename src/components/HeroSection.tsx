@@ -19,11 +19,11 @@ export const HeroSection = () => {
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Transform Your Future. 
-            <span className="text-accent">Relaunch with Purpose.</span>
+            <span className="text-accent">Pivot with Purpose.</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-6 text-white/90 max-w-2xl">
-            Whether you're building a business or pivoting into a new career, Relaunch gives you the tools, training, and support to step into your next chapter with clarity, confidence, and impact.
+            Whether you're building a business or pivoting into a new career, PivotHub gives you the tools, training, and support to step into your next chapter with clarity, confidence, and impact.
           </p>
           
           <div className="flex flex-row gap-3 mb-8 justify-center sm:justify-start">

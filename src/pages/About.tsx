@@ -47,10 +47,10 @@ export default function About() {
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
-              <h2 className="section-header">The Beginning of ReLaunch</h2>
+              <h2 className="section-header">The Beginning of PivotHub</h2>
               <div className="space-y-4">
                 <p className="section-body-text">
-                  ReLaunch was born out of necessity during a critical period in our economy. Between January and July 2025, 
+                  PivotHub was born out of necessity during a critical period in our economy. Between January and July 2025, 
                   hundreds of thousands of people found themselves unemployed or underemployed, facing an unprecedented challenge 
                   in securing meaningful work.
                 </p>
@@ -90,7 +90,7 @@ export default function About() {
                   upskill for the evolving job market or forge their own path through entrepreneurship.
                 </p>
                 <p className="section-body-text">
-                  ReLaunch was created to provide exactly that: a platform where individuals can either reskill to become more 
+                  PivotHub was created to provide exactly that: a platform where individuals can either reskill to become more 
                   marketable for employment or launch their own businesses with the tools and guidance they need to succeed.
                 </p>
               </div>

@@ -131,7 +131,7 @@ const Auth = () => {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome to reLaunch</CardTitle>
+          <CardTitle className="text-2xl font-bold">Welcome to PivotHub</CardTitle>
           <CardDescription>
             Sign in to access your career and business development tools
           </CardDescription>

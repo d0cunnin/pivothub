@@ -28,7 +28,7 @@ export const Header = () => {
           <Link to="/" className="flex items-center">
             <img 
               src="/lovable-uploads/e3ff9028-42aa-4224-8c06-a2ed6d0e8de1.png" 
-              alt="ReLaunch Logo" 
+              alt="PivotHub Logo" 
               className="h-12 w-auto"
             />
           </Link>

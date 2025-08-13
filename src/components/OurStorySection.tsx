@@ -17,7 +17,7 @@ export const OurStorySection = () => {
             <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
               <div className="text-lg text-foreground space-y-6 leading-relaxed text-left">
                 <p>
-                  ReLaunch was born out of necessity during a critical period in our economy. Between January and July 2025, 
+                  PivotHub was born out of necessity during a critical period in our economy. Between January and July 2025, 
                   hundreds of thousands of people found themselves unemployed or underemployed, facing an unprecedented challenge 
                   in securing meaningful work.
                 </p>
@@ -28,12 +28,12 @@ export const OurStorySection = () => {
                 </p>
                 <p>
                   We realized that people needed more than just job search assistance. They needed comprehensive tools to either 
-                  upskill for the evolving job market or forge their own path through entrepreneurship. ReLaunch was created 
+                  upskill for the evolving job market or forge their own path through entrepreneurship. PivotHub was created 
                   to provide exactly that: a platform where individuals can either reskill to become more marketable for employment 
                   or launch their own businesses with the tools and guidance they need to succeed.
                 </p>
                 <p>
-                  Today, we're proud to be part of the solution, helping thousands of people relaunch their vocations and 
+                  Today, we're proud to be part of the solution, helping thousands of people pivot their vocations and 
                   build sustainable futures that create positive economic impact in our rapidly changing world.
                 </p>
               </div>

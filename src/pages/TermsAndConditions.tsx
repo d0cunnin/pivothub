@@ -19,7 +19,7 @@ const TermsAndConditions = () => {
               Terms and Conditions
             </h1>
             <p className="text-lg md:text-xl text-white/90 font-light leading-relaxed">
-              Please read these terms and conditions carefully before using ReLaunch services
+              Please read these terms and conditions carefully before using PivotHub services
             </p>
           </div>
         </div>

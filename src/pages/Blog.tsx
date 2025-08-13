@@ -79,7 +79,7 @@ const Blog = () => {
         <section className="bg-primary py-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              ReLaunch Blog
+              PivotHub Blog
             </h1>
             <p className="text-xl text-white/90 max-w-2xl mx-auto">
               Insights, tips, and strategies to help you succeed in your career journey 

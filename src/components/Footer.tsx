@@ -9,7 +9,7 @@ export const Footer = () => {
           <div className="space-y-4">
             <img 
               src="/lovable-uploads/cc448247-be83-4a4b-9120-baa60c7d1c18.png" 
-              alt="ReLaunch Logo" 
+              alt="PivotHub Logo" 
               className="h-12 w-auto"
             />
             <p className="text-primary-foreground/80">
@@ -57,7 +57,7 @@ export const Footer = () => {
         </div>
         
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-primary-foreground/60">
-          <p>&copy; 2024 ReLaunch. All rights reserved. Empowering careers, enabling dreams.</p>
+          <p>&copy; 2024 PivotHub. All rights reserved. Empowering careers, enabling dreams.</p>
         </div>
       </div>
     </footer>
