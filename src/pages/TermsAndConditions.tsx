@@ -35,14 +35,14 @@ const TermsAndConditions = () => {
             <CardContent className="space-y-8 prose prose-gray max-w-none">
               <div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Welcome to the website operated by Bold AI Solutions ("Company," "we," "our," or "us"). By accessing or using this website and its tools, you agree to be bound by the following Terms and Conditions. If you do not agree with these terms, please do not use this site.
+                  Welcome to the website operated by PivotHub ("Company," "we," "our," or "us"). By accessing or using this website and its tools, you agree to be bound by the following Terms and Conditions. If you do not agree with these terms, please do not use this site.
                 </p>
               </div>
 
               <div>
                 <h3 className="text-xl font-semibold mb-4">1. Disclaimer of Liability</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Bold AI Solutions provides access to artificial intelligence (AI)-powered tools and platforms for informational, educational, and professional development purposes. We act solely as an intermediary, connecting users with generative AI technologies.
+                  PivotHub provides access to artificial intelligence (AI)-powered tools and platforms for informational, educational, and professional development purposes. We act solely as an intermediary, connecting users with generative AI technologies.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   We do not guarantee the accuracy, legality, completeness, or usefulness of any AI-generated content, and we make no warranties, expressed or implied, as to the outcomes or decisions based on such content.
@@ -52,7 +52,7 @@ const TermsAndConditions = () => {
                 </p>
                 <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
                   <li>You are solely responsible for how you use the tools and any resulting content.</li>
-                  <li>Bold AI Solutions shall not be held liable for any decisions, losses, damages, or legal outcomes (including but not limited to employment, financial, reputational, or emotional consequences) resulting from the use of this platform.</li>
+                  <li>PivotHub shall not be held liable for any decisions, losses, damages, or legal outcomes (including but not limited to employment, financial, reputational, or emotional consequences) resulting from the use of this platform.</li>
                   <li>You use the AI tools and their outputs entirely at your own risk.</li>
                 </ul>
               </div>
@@ -66,7 +66,7 @@ const TermsAndConditions = () => {
                   By using this site, you understand and agree that:
                 </p>
                 <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                  <li>Bold AI Solutions assumes no responsibility or liability for any potential copyright, intellectual property, or legal disputes that may arise from AI-generated content.</li>
+                  <li>PivotHub assumes no responsibility or liability for any potential copyright, intellectual property, or legal disputes that may arise from AI-generated content.</li>
                   <li>You are solely responsible for ensuring that any content you publish or distribute complies with applicable copyright and intellectual property laws.</li>
                 </ul>
               </div>

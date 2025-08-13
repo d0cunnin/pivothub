@@ -35,7 +35,7 @@ const PrivacyPolicy = () => {
             <CardContent className="space-y-8 prose prose-gray max-w-none">
               <div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Bold AI Solutions ("we," "us," or "our") respects your privacy and is committed to protecting the personal information you provide while using our website and tools. This Privacy Policy outlines how we collect, use, and protect your information in compliance with Michigan law and applicable data protection regulations.
+                  PivotHub ("we," "us," or "our") respects your privacy and is committed to protecting the personal information you provide while using our website and tools. This Privacy Policy outlines how we collect, use, and protect your information in compliance with Michigan law and applicable data protection regulations.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   By accessing and using this website, you agree to the terms of this Privacy Policy.
@@ -83,7 +83,7 @@ const PrivacyPolicy = () => {
                 <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
                   <li>With service providers that assist in website functionality or security (e.g., hosting).</li>
                   <li>As required by law or legal process.</li>
-                  <li>To protect the safety, rights, or property of Bold AI Solutions or others.</li>
+                  <li>To protect the safety, rights, or property of PivotHub or others.</li>
                 </ul>
               </div>
 
@@ -94,7 +94,7 @@ const PrivacyPolicy = () => {
                 </p>
                 <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
                   <li>Generated content (e.g., resumes, cover letters, assessments, or grant narratives) is for informational and illustrative purposes only.</li>
-                  <li>Bold AI Solutions is not responsible for the accuracy, suitability, originality, or legality of AI-generated content.</li>
+                  <li>PivotHub is not responsible for the accuracy, suitability, originality, or legality of AI-generated content.</li>
                   <li>Users are solely responsible for reviewing, editing, and ensuring the appropriateness of any AI-generated content before use or publication.</li>
                 </ul>
               </div>
