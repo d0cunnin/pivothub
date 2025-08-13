@@ -29,7 +29,7 @@ export const Header = () => {
             <img 
               src="/lovable-uploads/a80d6385-d42b-4185-932b-427aec2b395d.png" 
               alt="PivotHub Logo" 
-              className="h-16 w-auto"
+              className="h-12 w-auto"
             />
           </Link>
           
