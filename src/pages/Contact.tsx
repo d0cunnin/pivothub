@@ -140,7 +140,7 @@ const Contact = () => {
                   <div className="space-y-4">
                     <div className="flex items-center space-x-3">
                       <Mail className="w-5 h-5 text-primary" />
-                      <span>support@pivothub.com</span>
+                      <span>support@pivothub.io</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Phone className="w-5 h-5 text-primary" />
@@ -148,7 +148,7 @@ const Contact = () => {
                     </div>
                     <div className="flex items-center space-x-3">
                       <MapPin className="w-5 h-5 text-primary" />
-                      <span>123 Innovation Drive, Tech City, TC 12345</span>
+                      <span>PO Box 2025 Kalamazoo, MI 49003</span>
                     </div>
                     <div className="flex items-center space-x-3">
                       <Clock className="w-5 h-5 text-primary" />
