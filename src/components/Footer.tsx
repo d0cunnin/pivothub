@@ -13,7 +13,7 @@ export const Footer = () => {
               className="h-12 w-auto"
             />
             <p className="text-primary-foreground/80">
-              Empowering individuals to transform their careers through reskilling and entrepreneurship.
+              Helping individuals pivot their careers through preparation, reskilling, and entrepreneurship.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
