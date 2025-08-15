@@ -28,6 +28,7 @@ const learningModules = [
         description: 'Breaks down AI in simple terms and explains why it\'s relevant to daily life',
         duration: '20 min',
         completed: false,
+        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/ai-technology/what-is-ai/lesson-video.mp4',
         content: `Welcome to AI & Technology for Everyday People!
 
 In this course, we'll demystify AI and show you exactly how it can improve your daily life - no tech degree required.
@@ -95,6 +96,7 @@ By the end of this lesson, you'll understand exactly what AI is and why it's wor
         description: 'Covers the real-world benefits of AI without overwhelming jargon',
         duration: '22 min',
         completed: false,
+        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/ai-technology/ai-makes-life-easier/lesson-video.mp4',
         content: `How AI Makes Life Easier for Regular People
 
 You don't need to understand how a car engine works to drive to the grocery store. Same with AI - you don't need to know the technical details to benefit from it.
@@ -627,6 +629,7 @@ Pick ONE skill area that interests you most and start there. Small, consistent e
         description: 'Teaches affordable, beginner-friendly branding tips',
         duration: '25 min',
         completed: false,
+        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/business-building/beautiful-brand/lesson-video.mp4',
         content: `Create a Professional Brand Without Breaking the Bank
 
 Your brand is more than just a logo - it's the complete experience people have with your business. Here's how to build something beautiful and memorable, even with limited funds.
@@ -682,6 +685,7 @@ Remember: Consistency beats perfection. A simple brand executed consistently wil
         description: 'Covers visibility, messaging, and marketing for first-time founders',
         duration: '28 min',
         completed: false,
+        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/business-building/get-noticed/lesson-video.mp4',
         content: `Cut Through the Noise and Get Noticed
 
 In a world full of businesses competing for attention, standing out isn't about being the loudest - it's about being the most relevant and memorable to your ideal customers.
@@ -1181,6 +1185,7 @@ The future belongs to businesses that combine human insight with AI efficiency.`
         description: 'Learn what front-end development is and what front-end developers do every day',
         duration: '30 min',
         completed: false,
+        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/web-development/frontend-dev/lesson-video.mp4',
         content: `Understanding Front-End Development
 
 Front-end development is like being the architect and interior designer of the digital world - you create what people see and interact with on websites and apps.
@@ -1248,6 +1253,7 @@ No computer science degree required! Many successful front-end developers are se
         description: 'Discover the server-side world and what back-end developers build behind the scenes',
         duration: '35 min',
         completed: false,
+        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/web-development/backend-dev/lesson-video.mp4',
         content: `Understanding Back-End Development
 
 If front-end is what users see, back-end is the engine that makes everything work behind the scenes. Back-end developers are like the architects of the digital infrastructure.

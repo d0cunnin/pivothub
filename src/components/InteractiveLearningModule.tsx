@@ -28,6 +28,7 @@ interface Lesson {
   duration: string;
   completed: boolean;
   content: string;
+  videoUrl?: string;
   quiz?: QuizQuestion[];
   activities?: HandsOnActivity[];
   resources?: DownloadableResource[];
@@ -219,6 +220,31 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
               </TabsList>
 
               <TabsContent value="content" className="space-y-4">
+                {/* Video Section */}
+                {currentLesson.videoUrl && (
+                  <Card className="mb-6">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Play className="h-5 w-5 text-primary" />
+                        Lesson Video
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="aspect-video w-full rounded-lg overflow-hidden bg-muted">
+                        <video
+                          controls
+                          className="w-full h-full"
+                          poster="/placeholder.svg"
+                        >
+                          <source src={currentLesson.videoUrl} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+                
+                {/* Text Content */}
                 <div className="prose max-w-none">
                   <div className="whitespace-pre-line">{currentLesson.content}</div>
                 </div>
