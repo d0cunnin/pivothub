@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { CheckCircle, Play, BookOpen, Award, Clock, Star, Download, Code, FileText, CheckSquare, Lightbulb } from 'lucide-react';
 import { toast } from 'sonner';
 import { useLearningProgress } from '@/hooks/useLearningProgress';
+import { useVideoUrl } from '@/hooks/useVideoUrl';
 
 interface LearningModule {
   id: string;
@@ -70,6 +71,7 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({});
   const { progress, completeLesson, saveActivitySubmission, saveQuizResult } = useLearningProgress();
+  const { videoUrl, loading: videoLoading, error: videoError } = useVideoUrl(currentLesson?.videoUrl);
 
   // Get completed lessons for this module from progress hook
   const completedLessons = new Set(progress.completedLessons[module.id] || []);
@@ -231,14 +233,24 @@ export const InteractiveLearningModule: React.FC<InteractiveLearningModuleProps>
                     </CardHeader>
                     <CardContent>
                       <div className="aspect-video w-full rounded-lg overflow-hidden bg-muted">
-                        <video
-                          controls
-                          className="w-full h-full"
-                          poster="/placeholder.svg"
-                        >
-                          <source src={currentLesson.videoUrl} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
+                        {videoLoading ? (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="text-muted-foreground">Loading video...</div>
+                          </div>
+                        ) : videoError ? (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <div className="text-destructive">Failed to load video: {videoError}</div>
+                          </div>
+                        ) : videoUrl ? (
+                          <video
+                            controls
+                            className="w-full h-full"
+                            poster="/placeholder.svg"
+                          >
+                            <source src={videoUrl} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : null}
                       </div>
                     </CardContent>
                   </Card>
