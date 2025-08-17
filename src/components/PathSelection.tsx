@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GraduationCap, Rocket, Briefcase, ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import reskillIcon from "@/assets/reskill-icon.jpg";
-import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
-import jobprepIcon from "@/assets/jobprep-icon.jpg";
+import reskillIcon from "@/assets/reskill-person.jpg";
+import hireyourselfIcon from "@/assets/hireyourself-person.jpg";
+import jobprepIcon from "@/assets/jobprep-person.jpg";
 
 export const PathSelection = () => {
   return (
@@ -25,10 +25,10 @@ export const PathSelection = () => {
 
         <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Reskill Path */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0">
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20 transition-all duration-500"></div>
             
-            <div className="relative p-8">
+            <div className="relative p-8 h-full flex flex-col">
               <div className="flex items-center mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mr-4">
                   <GraduationCap className="h-8 w-8 text-primary" />
@@ -50,7 +50,7 @@ export const PathSelection = () => {
                 Build a portfolio that makes you irresistible to employers.
               </p>
 
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8 flex-grow">
                 {[
                   "Industry-recognized certifications",
                   "Personalized learning paths", 
@@ -64,7 +64,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/reskill">
+              <Link to="/reskill" className="mt-auto">
                 <Button 
                   variant="default" 
                   size="lg" 
@@ -78,10 +78,10 @@ export const PathSelection = () => {
           </Card>
 
           {/* HireYourself Path */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0">
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-secondary/10 group-hover:from-secondary/10 group-hover:to-secondary/20 transition-all duration-500"></div>
             
-            <div className="relative p-8">
+            <div className="relative p-8 h-full flex flex-col">
               <div className="flex items-center mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center mr-4">
                   <Rocket className="h-8 w-8 text-secondary" />
@@ -103,7 +103,7 @@ export const PathSelection = () => {
                 to funding opportunities, we've got you covered.
               </p>
 
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8 flex-grow">
                 {[
                   "Business plan generation",
                   "Market research tools",
@@ -117,7 +117,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/hireyourself">
+              <Link to="/hireyourself" className="mt-auto">
                 <Button 
                   variant="hero" 
                   size="lg" 
@@ -131,10 +131,10 @@ export const PathSelection = () => {
           </Card>
 
           {/* Job Prep Path */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0">
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent/10 group-hover:from-accent/10 group-hover:to-accent/20 transition-all duration-500"></div>
             
-            <div className="relative p-8">
+            <div className="relative p-8 h-full flex flex-col">
               <div className="flex items-center mb-6">
                 <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mr-4">
                   <Briefcase className="h-8 w-8 text-accent" />
@@ -156,7 +156,7 @@ export const PathSelection = () => {
                 practice questions, and professional resume feedback.
               </p>
 
-              <div className="space-y-3 mb-8">
+              <div className="space-y-3 mb-8 flex-grow">
                 {[
                   "AI-powered interview coaching",
                   "Personalized career advice",
@@ -170,7 +170,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/jobprep">
+              <Link to="/jobprep" className="mt-auto">
                 <Button 
                   variant="default" 
                   size="lg" 
