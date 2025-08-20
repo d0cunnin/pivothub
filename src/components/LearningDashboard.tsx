@@ -17,18 +17,18 @@ const learningModules = [
     id: 'ai-technology',
     title: 'AI & Technology for Everyday People',
     description: 'Master AI tools and concepts without tech overwhelm - designed specifically for non-technical people',
-    duration: '10-12 weeks',
+    duration: '6-8 weeks',
     level: 'Beginner',
     skills: ['AI Literacy', 'Productivity Tools', 'Digital Confidence', 'Future-Proofing'],
     certificate: 'AI Literacy for Everyday People Certificate',
     lessons: [
       {
-        id: 'what-is-ai',
-        title: 'What Exactly Is AI, and Why Should I Care?',
+        id: 'what-is-ai-and-why',
+        title: 'What is AI and Why Should I Use It?',
         description: 'Breaks down AI in simple terms and explains why it\'s relevant to daily life',
-        duration: '20 min',
+        duration: '25 min',
         completed: false,
-        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/ai-technology/what-is-ai/lesson-video.mp4',
+        videoPath: 'What is AI and Why Should I Use It??.mp4',
         content: `Welcome to AI & Technology for Everyday People!
 
 In this course, we'll demystify AI and show you exactly how it can improve your daily life - no tech degree required.
@@ -66,14 +66,6 @@ By the end of this lesson, you'll understand exactly what AI is and why it's wor
             description: 'Quick reference guide to essential AI terminology',
             fileUrl: '#',
             fileName: 'AI-Glossary-Cheatsheet.pdf'
-          },
-          {
-            id: 'ai-timeline',
-            title: 'History of AI Timeline',
-            type: 'pdf' as const,
-            description: 'Visual timeline of key AI milestones from 1950 to today',
-            fileUrl: '#',
-            fileName: 'AI-Timeline.pdf'
           }
         ],
         quiz: [
@@ -91,84 +83,80 @@ By the end of this lesson, you'll understand exactly what AI is and why it's wor
         ]
       },
       {
-        id: 'ai-makes-life-easier',
-        title: 'How AI Can Make Life Easier — Even If You\'re Not Techy',
-        description: 'Covers the real-world benefits of AI without overwhelming jargon',
-        duration: '22 min',
+        id: 'history-and-future-ai',
+        title: 'The History and Future of AI',
+        description: 'Learn about AI\'s journey from past to future and what it means for you',
+        duration: '28 min',
         completed: false,
-        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/ai-technology/ai-makes-life-easier/lesson-video.mp4',
-        content: `How AI Makes Life Easier for Regular People
+        videoPath: 'The History and Future of AI.mp4',
+        content: `Understanding AI's Journey: Past, Present & Future
 
-You don't need to understand how a car engine works to drive to the grocery store. Same with AI - you don't need to know the technical details to benefit from it.
+Knowing where AI came from and where it's heading helps you make better decisions about how to use it in your own life.
 
-Real-World AI Benefits:
-• Saves you time on routine tasks
-• Helps you make better decisions
-• Reduces mental fatigue from "thinking about everything"
-• Makes complex tasks feel simple
-• Gives you confidence in new situations
+AI Timeline Highlights:
+• 1950s: The birth of AI concepts
+• 1990s: Early practical applications
+• 2000s: Internet and data revolution
+• 2010s: Machine learning breakthroughs
+• 2020s: AI becomes accessible to everyone
 
-Everyday Examples:
-• GPS apps that find the fastest route (that's AI!)
-• Email apps that filter spam automatically
-• Streaming services that suggest movies you'll like
-• Voice assistants that set timers and reminders
-• Shopping apps that help you find what you're looking for
+What This Means for You:
+• AI is not a new fad - it's here to stay
+• The technology keeps getting easier to use
+• Early adopters get the biggest advantages
+• You don't need to wait for "perfect" AI to start benefiting
 
-The best part? You're probably already using AI and didn't even know it. This lesson shows you how to recognize AI in your daily life and start using it more intentionally.`,
+Future Trends to Watch:
+• More personalized AI assistants
+• Better integration with everyday tools
+• Improved accuracy and reliability
+• Greater accessibility for non-technical users`,
         activities: [
           {
-            id: 'ai-tools-exploration',
-            title: 'AI Tools Scavenger Hunt',
-            type: 'exercise' as const,
-            description: 'Find and test 3 AI tools you can use immediately',
+            id: 'ai-timeline-reflection',
+            title: 'Personal AI Timeline',
+            type: 'reflection' as const,
+            description: 'Map your own relationship with AI technology over time',
             instructions: [
-              'Visit three different AI tools: ChatGPT, Grammarly, and your phone\'s voice assistant',
-              'For each tool, complete a simple task (ask a question, check grammar, set a reminder)',
-              'Rate each tool\'s usefulness for your daily life (1-5 stars)',
-              'Write down one specific way you could use each tool this week'
+              'Think back to the first time you encountered AI (even if you didn\'t know it was AI)',
+              'List 3-5 AI tools or features you\'ve adopted over the years',
+              'Reflect on how your attitude toward AI has changed',
+              'Identify one AI development you\'re most excited about for the future'
             ],
             submissionType: 'text' as const
           }
         ],
         resources: [
           {
-            id: 'ai-tools-starter-pack',
-            title: 'AI Tools Starter Pack',
-            type: 'workbook' as const,
-            description: '10 beginner-friendly AI tools with step-by-step setup guides',
+            id: 'ai-timeline-infographic',
+            title: 'AI History Timeline',
+            type: 'pdf' as const,
+            description: 'Visual timeline of key AI milestones from 1950 to today',
             fileUrl: '#',
-            fileName: 'AI-Tools-Starter-Pack.pdf'
-          },
-          {
-            id: 'ai-benefits-checklist',
-            title: 'AI Benefits Checklist',
-            type: 'template' as const,
-            description: 'Track how AI improves different areas of your life',
-            fileUrl: '#',
-            fileName: 'AI-Benefits-Tracker.xlsx'
+            fileName: 'AI-Timeline.pdf'
           }
         ],
         quiz: [
           {
             id: 'q2',
-            question: 'Which of these is an example of AI you might already use?',
+            question: 'Why is understanding AI\'s history important for everyday users?',
             options: [
-              'A basic calculator',
-              'A paper calendar',
-              'Netflix movie recommendations',
-              'A printed map'
+              'To become an AI expert',
+              'To understand it\'s a proven, evolving technology worth learning',
+              'To impress others with technical knowledge',
+              'To predict exactly what will happen next'
             ],
-            correctAnswer: 2
+            correctAnswer: 1
           }
         ]
       },
       {
-        id: 'ai-productivity',
-        title: 'Let AI Help You Get More Done — Without Doing More',
-        description: 'Explains how AI can increase productivity and ease mental load',
-        duration: '25 min',
+        id: 'ai-productivity-help',
+        title: 'How Can AI Help My Productivity?',
+        description: 'Discover practical ways AI can boost your daily productivity',
+        duration: '30 min',
         completed: false,
+        videoPath: 'How Can AI Help My Productivity?.mp4',
         content: `Work Smarter, Not Harder with AI
 
 The secret to productivity isn't working more hours - it's letting AI handle the boring, repetitive stuff so you can focus on what matters most.
@@ -190,6 +178,32 @@ AI can help reduce the constant mental juggling we all do by:
 • Suggesting next steps when you're stuck
 
 Real Example: Instead of spending 30 minutes writing a professional email, you can give AI the key points and have a polished draft in 2 minutes. Then you spend your saved time on things that actually need your human touch.`,
+        activities: [
+          {
+            id: 'productivity-experiment',
+            title: 'AI Productivity Challenge',
+            type: 'exercise' as const,
+            description: 'Test AI tools for your biggest productivity pain points',
+            instructions: [
+              'Identify your top 3 daily productivity challenges',
+              'Choose one AI tool to help with each challenge',
+              'Use each tool for one specific task',
+              'Document time saved and quality of results',
+              'Plan how to integrate the most helpful tool into your routine'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'productivity-tools-guide',
+            title: 'AI Productivity Tools Guide',
+            type: 'workbook' as const,
+            description: 'Comprehensive guide to AI tools for common productivity tasks',
+            fileUrl: '#',
+            fileName: 'AI-Productivity-Guide.pdf'
+          }
+        ],
         quiz: [
           {
             id: 'q3',
@@ -205,11 +219,12 @@ Real Example: Instead of spending 30 minutes writing a professional email, you c
         ]
       },
       {
-        id: 'ai-work-confidence',
-        title: 'Using AI to Boost Your Confidence and Skills at Work',
-        description: 'Shows how AI can help with resumes, interviews, and job readiness',
-        duration: '28 min',
+        id: 'ai-workforce-help',
+        title: 'How Can AI Help Me for the Workforce?',
+        description: 'Learn how AI can boost your career and workplace confidence',
+        duration: '32 min',
         completed: false,
+        videoPath: 'How Can AI Help Me for the Workforce?.mp4',
         content: `Build Work Confidence with AI Support
 
 Whether you're job searching, wanting a promotion, or just trying to feel more confident at work, AI can be your secret weapon for professional growth.
@@ -238,6 +253,32 @@ Career Development:
 • Salary negotiation preparation
 
 Remember: AI doesn't replace your unique value - it amplifies it by helping you present your best professional self.`,
+        activities: [
+          {
+            id: 'career-ai-audit',
+            title: 'Career AI Opportunity Assessment',
+            type: 'exercise' as const,
+            description: 'Identify where AI can most help your career goals',
+            instructions: [
+              'List your top 3 career goals for the next year',
+              'For each goal, identify 2-3 specific tasks AI could help with',
+              'Choose one AI tool to try for each career goal',
+              'Create an action plan for using AI in your professional development',
+              'Set a timeline for implementing these AI solutions'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'career-ai-toolkit',
+            title: 'AI Career Development Toolkit',
+            type: 'template' as const,
+            description: 'Templates and guides for using AI in career advancement',
+            fileUrl: '#',
+            fileName: 'Career-AI-Toolkit.xlsx'
+          }
+        ],
         quiz: [
           {
             id: 'q4',
@@ -253,65 +294,17 @@ Remember: AI doesn't replace your unique value - it amplifies it by helping you 
         ]
       },
       {
-        id: 'ai-personal-helper',
-        title: 'How AI Can Be Your Personal Helper (No Tech Degree Needed)',
-        description: 'Discusses everyday uses like scheduling, reminders, and planning',
-        duration: '24 min',
-        completed: false,
-        content: `Your AI Personal Assistant
-
-Think of AI as having a personal assistant who's available 24/7, never gets tired, and is great at organizing, planning, and remembering things.
-
-Personal Organization:
-• Managing your calendar and appointments
-• Setting smart reminders and follow-ups
-• Creating and organizing to-do lists
-• Planning meals and grocery lists
-• Tracking habits and goals
-• Managing household tasks and maintenance
-
-Planning & Decision Making:
-• Travel planning and itinerary creation
-• Event planning and coordination
-• Budget planning and expense tracking
-• Gift ideas and holiday planning
-• Health and wellness planning
-• Family activity suggestions
-
-Daily Life Support:
-• Weather and traffic updates
-• News summaries on topics you care about
-• Recipe suggestions based on what you have
-• Entertainment recommendations
-• Learning new skills or hobbies
-• Staying connected with friends and family
-
-The key is starting small with one or two areas where you'd most like help, then gradually expanding as you get comfortable.`,
-        quiz: [
-          {
-            id: 'q5',
-            question: 'What\'s the best way to start using AI as a personal helper?',
-            options: [
-              'Try to use AI for everything at once',
-              'Start with one or two areas where you need the most help',
-              'Only use it for work-related tasks',
-              'Wait until you understand all the technology'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'ai-smart-employee',
-        title: 'Let AI Work With You — Like a Smart Employee You Don\'t Have to Pay',
-        description: 'Describes AI as a support tool that can "do the boring stuff" for you',
+        id: 'ai-work-with-you',
+        title: 'How AI Can Work With and For You',
+        description: 'Understanding AI as your collaborative partner, not replacement',
         duration: '26 min',
         completed: false,
-        content: `AI: Your Unpaid Intern Who Never Complains
+        videoPath: 'How AI Can Work With and For You.mp4',
+        content: `AI: Your Collaborative Partner
 
-Imagine having a team member who's excellent at research, writing first drafts, organizing information, and handling repetitive tasks - and they work for free, 24/7.
+Think of AI as having a team member who's excellent at research, writing first drafts, organizing information, and handling repetitive tasks - and they work alongside you, not instead of you.
 
-What Your "AI Employee" Can Do:
+What Your AI Partner Can Do:
 • Research topics thoroughly and summarize findings
 • Write first drafts of emails, documents, and reports
 • Organize and categorize information
@@ -322,14 +315,14 @@ What Your "AI Employee" Can Do:
 • Handle data entry and organization
 
 The Perfect Partnership:
-• AI handles the grunt work
+• AI handles the preparation and grunt work
 • You provide the creativity, judgment, and personal touch
 • AI does the initial heavy lifting
 • You refine, personalize, and make final decisions
 • AI processes information quickly
 • You interpret and apply it to your specific situation
 
-Best Practices:
+Best Practices for AI Collaboration:
 • Always review and edit AI output
 • Use AI as a starting point, not the final product
 • Combine AI efficiency with your human insight
@@ -337,14 +330,40 @@ Best Practices:
 • Think of AI as a collaborator, not a replacement
 
 This partnership approach helps you accomplish more while staying true to your own voice and values.`,
+        activities: [
+          {
+            id: 'ai-collaboration-test',
+            title: 'AI Partnership Experiment',
+            type: 'exercise' as const,
+            description: 'Practice collaborating with AI on a real project',
+            instructions: [
+              'Choose a current project or task you\'re working on',
+              'Identify which parts AI could help with (research, drafting, organizing)',
+              'Use AI to complete those parts, then add your personal touch',
+              'Compare the final result to what you would have done alone',
+              'Reflect on how this collaboration approach could improve your work'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'collaboration-guide',
+            title: 'Human-AI Collaboration Best Practices',
+            type: 'cheatsheet' as const,
+            description: 'Quick reference for effective AI collaboration techniques',
+            fileUrl: '#',
+            fileName: 'AI-Collaboration-Guide.pdf'
+          }
+        ],
         quiz: [
           {
-            id: 'q6',
+            id: 'q5',
             question: 'What\'s the best way to work with AI?',
             options: [
               'Let AI make all decisions for you',
               'Use AI output exactly as it\'s generated',
-              'Partner with AI - let it handle grunt work while you add creativity and judgment',
+              'Partner with AI - let it handle preparation while you add creativity and judgment',
               'Only use AI for simple tasks'
             ],
             correctAnswer: 2
@@ -352,261 +371,88 @@ This partnership approach helps you accomplish more while staying true to your o
         ]
       },
       {
-        id: 'ai-future-relevance',
-        title: 'What AI Means for the Future — and Why You Still Matter',
-        description: 'Encourages hope, self-worth, and staying relevant in a tech-driven world',
-        duration: '30 min',
+        id: 'making-best-of-ai',
+        title: 'Making the Best of AI',
+        description: 'Maximize AI\'s benefits while maintaining your human value and ethics',
+        duration: '35 min',
         completed: false,
-        content: `Your Value in an AI World
+        videoPath: 'Making the Best of AI.mp4',
+        content: `Getting the Most Out of AI While Staying True to Yourself
 
-The rise of AI doesn't diminish your worth - it actually makes your uniquely human qualities more valuable than ever.
+The goal isn't to become dependent on AI, but to use it strategically to enhance your natural abilities and achieve your personal and professional goals.
 
-What AI Can't Replace:
-• Emotional intelligence and empathy
-• Creative problem-solving and innovation
-• Personal relationships and trust
-• Cultural understanding and context
-• Ethical judgment and values
-• Leadership and inspiration
-• Adaptability and learning from experience
-• Intuition and "gut feelings"
+Maximizing AI Benefits:
+• Start with your biggest pain points or time-consuming tasks
+• Experiment with different AI tools to find what works for you
+• Gradually integrate AI into your existing workflows
+• Focus on AI applications that align with your values and goals
+• Keep learning and adapting as AI technology improves
 
-Why You're More Valuable, Not Less:
-• AI amplifies human capabilities
-• Human oversight and judgment are essential
-• Personal connection becomes a premium service
-• Creative and strategic thinking are in high demand
-• Emotional support and understanding can't be automated
-• Cultural sensitivity and personal touch matter more
+Maintaining Your Human Edge:
+• Use AI to enhance, not replace, your critical thinking
+• Always fact-check and verify AI-generated information
+• Add your personal perspective and experience to AI outputs
+• Maintain genuine human connections and relationships
+• Trust your instincts when something doesn't feel right
 
-Future-Proofing Your Value:
-• Focus on developing your uniquely human skills
-• Learn to collaborate with AI effectively
-• Stay curious and adaptable
-• Cultivate emotional intelligence
-• Build genuine relationships
-• Develop critical thinking skills
-• Embrace continuous learning
+Ethical AI Use:
+• Be transparent when you've used AI assistance
+• Respect others' privacy and intellectual property
+• Use AI to help others, not to deceive or manipulate
+• Stay informed about AI limitations and potential biases
+• Consider the broader impact of your AI use on others
 
-The future belongs to humans who can work WITH AI, not those who try to compete against it or ignore it entirely.`,
-        quiz: [
+Future-Proofing Your Approach:
+• Stay curious and open to new AI developments
+• Focus on developing skills that complement AI
+• Build a sustainable relationship with AI technology
+• Help others learn to use AI responsibly
+• Remember that you're in control of how AI fits into your life
+
+The best AI users are those who thoughtfully integrate AI into their lives while maintaining their humanity, ethics, and unique value.`,
+        activities: [
           {
-            id: 'q7',
-            question: 'What makes humans valuable in an AI world?',
-            options: [
-              'Ability to work faster than AI',
-              'Knowledge of technical programming',
-              'Emotional intelligence, creativity, and personal relationships',
-              'Resistance to using new technology'
+            id: 'ai-integration-plan',
+            title: 'Personal AI Integration Strategy',
+            type: 'reflection' as const,
+            description: 'Create your personalized plan for using AI effectively and ethically',
+            instructions: [
+              'Identify 3 areas where AI could most benefit your life or work',
+              'Choose specific AI tools for each area and set learning goals',
+              'Define your personal ethics and boundaries for AI use',
+              'Create a plan for staying updated on AI developments',
+              'Set up a system for regularly evaluating and adjusting your AI use'
             ],
-            correctAnswer: 2
+            submissionType: 'text' as const
           }
-        ]
-      },
-      {
-        id: 'creating-with-ai',
-        title: 'Creating with AI: Writing, Ideas, Videos, and More',
-        description: 'A gentle intro to AI tools for content creators, writers, artists, etc.',
-        duration: '32 min',
-        completed: false,
-        content: `Unleash Your Creativity with AI
-
-AI isn't here to replace human creativity - it's here to amplify it. Think of AI as your creative partner who can help you brainstorm, overcome creative blocks, and bring your ideas to life faster.
-
-Creative Applications:
-• Writing assistance: blogs, stories, emails, social media
-• Visual content: images, graphics, presentations
-• Video creation: scripts, editing, thumbnails
-• Music and audio: composition, editing, podcasts
-• Idea generation: brainstorming sessions, concept development
-• Content planning: editorial calendars, themes, series
-
-Breaking Through Creative Blocks:
-• Use AI to generate initial ideas when you're stuck
-• Get feedback and suggestions on your work
-• Explore different angles and approaches
-• Create variations and alternatives quickly
-• Research and inspiration gathering
-• Overcoming the "blank page" problem
-
-Practical Creative Workflows:
-1. Start with your concept or goal
-2. Use AI to brainstorm and expand ideas
-3. Let AI create initial drafts or mockups
-4. Add your personal touch, style, and voice
-5. Refine and iterate with AI assistance
-6. Polish the final result with your expertise
-
-Remember: AI gives you the building blocks - you create the masterpiece. Your unique perspective, experiences, and voice are what make the final creation truly yours.`,
+        ],
+        resources: [
+          {
+            id: 'ai-ethics-guide',
+            title: 'Ethical AI Use Guidelines',
+            type: 'cheatsheet' as const,
+            description: 'Framework for responsible and ethical AI adoption',
+            fileUrl: '#',
+            fileName: 'AI-Ethics-Guide.pdf'
+          },
+          {
+            id: 'ai-tools-comparison',
+            title: 'AI Tools Comparison Chart',
+            type: 'template' as const,
+            description: 'Compare different AI tools to find the best fit for your needs',
+            fileUrl: '#',
+            fileName: 'AI-Tools-Comparison.xlsx'
+          }
+        ],
         quiz: [
           {
-            id: 'q8',
-            question: 'How should AI be used in creative work?',
+            id: 'q6',
+            question: 'What\'s the most important principle for making the best of AI?',
             options: [
-              'To completely replace human creativity',
-              'As a creative partner to amplify and support your ideas',
-              'Only for technical tasks',
-              'To copy other people\'s work'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'ai-history-future',
-        title: 'The Story of AI: Where It Started and Where It\'s Going',
-        description: 'An engaging overview of AI history, simplified for non-tech folks',
-        duration: '18 min',
-        completed: false,
-        content: `The AI Journey: From Science Fiction to Your Phone
-
-Understanding AI's story helps you see where we are now and where we're headed - without the hype or fear.
-
-AI's Simple Timeline:
-• 1950s-60s: Scientists dream of "thinking machines"
-• 1970s-80s: Early computer programs that could play games
-• 1990s-2000s: AI gets better at specific tasks (like chess)
-• 2010s: AI learns to recognize images and understand speech
-• 2020s: AI can have conversations and create content
-• Future: AI becomes a seamless part of daily life
-
-Key Breakthroughs Made Simple:
-• Pattern Recognition: AI learned to see patterns in data
-• Machine Learning: AI learned to improve from experience
-• Deep Learning: AI learned to think in layers (like humans)
-• Natural Language: AI learned to understand and speak human language
-• Generative AI: AI learned to create new content
-
-What This Means for You:
-• AI has been steadily improving for decades
-• Each breakthrough makes AI more useful for regular people
-• We're in an exciting phase where AI can actually help with everyday tasks
-• The technology will keep getting better and easier to use
-• You don't need to understand the technical details to benefit
-
-The future isn't about AI taking over - it's about AI becoming an invisible helper that makes life more convenient, productive, and enjoyable.`,
-        quiz: [
-          {
-            id: 'q9',
-            question: 'What\'s the most important thing to understand about AI\'s development?',
-            options: [
-              'It happened overnight',
-              'It\'s been gradually improving for decades to become more helpful',
-              'Only tech experts can benefit from it',
-              'It will stop improving soon'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'staying-relevant',
-        title: 'Staying Relevant in a Fast-Changing, Tech-Heavy World',
-        description: 'Motivational video about adapting and staying marketable',
-        duration: '28 min',
-        completed: false,
-        content: `Thrive in a Changing World
-
-Change can feel overwhelming, but you have more power to adapt and stay relevant than you think. This lesson is about building confidence for the future.
-
-Your Adaptation Superpowers:
-• Life experience that can't be taught
-• Emotional intelligence developed over time
-• Problem-solving skills from real-world challenges
-• Ability to learn and adapt (you've done it before!)
-• Unique perspective and insights
-• Relationships and networks you've built
-• Values and judgment that come from experience
-
-Staying Marketable Strategies:
-• Focus on skills that complement AI, don't compete with it
-• Develop your communication and people skills
-• Stay curious and open to learning new things
-• Build bridges between technology and human needs
-• Cultivate your unique expertise and knowledge
-• Practice continuous small improvements
-• Network and maintain relationships
-
-The Growth Mindset:
-• View challenges as opportunities to grow
-• Embrace "I don't know yet" instead of "I can't"
-• Celebrate small wins and progress
-• Learn from setbacks without giving up
-• Stay curious about new developments
-• Ask questions and seek help when needed
-
-Remember: Every generation has faced technological change. Your grandparents adapted to cars, phones, and computers. You can adapt to AI. The key is starting now and taking it one step at a time.`,
-        quiz: [
-          {
-            id: 'q10',
-            question: 'What\'s the most important mindset for staying relevant?',
-            options: [
-              'Resist all technological change',
-              'Try to compete directly with AI',
-              'Embrace continuous learning and focus on uniquely human skills',
-              'Wait for things to go back to how they were'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'future-proof-skills',
-        title: 'Future-Proof Skills You Can Learn Now — No Matter Your Age',
-        description: 'Focuses on digital literacy, creativity, and communication',
-        duration: '25 min',
-        completed: false,
-        content: `Skills That Will Always Be Valuable
-
-These skills become more valuable as AI handles routine tasks. The good news? You can develop all of these at any age and stage of life.
-
-Core Future-Proof Skills:
-
-Digital Literacy:
-• Comfortable using basic technology
-• Understanding how to learn new digital tools
-• Knowing how to find reliable information online
-• Basic understanding of digital privacy and security
-
-Communication:
-• Clear writing and speaking
-• Active listening and empathy
-• Ability to explain complex ideas simply
-• Cross-cultural and generational communication
-• Conflict resolution and negotiation
-
-Critical Thinking:
-• Asking good questions
-• Evaluating information and sources
-• Problem-solving from multiple angles
-• Understanding bias and assumptions
-• Making decisions with incomplete information
-
-Adaptability:
-• Learning from failure and setbacks
-• Staying flexible when plans change
-• Comfort with uncertainty and ambiguity
-• Willingness to try new approaches
-• Resilience and persistence
-
-Creativity:
-• Thinking outside conventional solutions
-• Combining ideas in new ways
-• Storytelling and narrative skills
-• Visual and design thinking
-• Innovation and experimentation
-
-Getting Started:
-Pick ONE skill area that interests you most and start there. Small, consistent efforts compound over time. Remember: these skills build on each other, and you already have more of them than you think!`,
-        quiz: [
-          {
-            id: 'q11',
-            question: 'Which approach is best for developing future-proof skills?',
-            options: [
-              'Try to master all skills at once',
-              'Focus only on technical skills',
-              'Pick one skill area and build consistently',
-              'Wait until you have more time'
+              'Using as many AI tools as possible',
+              'Replacing all human work with AI',
+              'Strategically using AI to enhance your abilities while maintaining your values',
+              'Avoiding AI until it\'s perfect'
             ],
             correctAnswer: 2
           }
@@ -648,523 +494,67 @@ Visual Identity:
 • Choose a simple, readable font combination
 • Pick a cohesive color palette (2-3 colors max)
 • Create consistent visual templates
-• Use high-quality free stock photos
+• Design a simple, memorable logo
 
 Brand Voice:
-• Write like you talk (authentic and natural)
-• Define your tone (professional, friendly, expert, etc.)
-• Create messaging templates for consistency
-• Develop your elevator pitch and key messages
-• Practice telling your brand story simply
+• Define your personality (professional, friendly, edgy, etc.)
+• Write in a consistent tone across all communications
+• Use the same vocabulary and style everywhere
+• Let your authentic personality shine through
+• Stay true to your values in all messaging
 
-Online Presence:
-• Choose a clear, memorable business name
-• Secure matching social media handles
-• Create a simple website or landing page
-• Use consistent branding across all platforms
-• Focus on quality over quantity in content
+Low-Cost Brand Building Tactics:
+• Create branded social media templates
+• Use consistent colors and fonts everywhere
+• Develop a simple brand style guide
+• Take professional-looking photos with your phone
+• Write compelling copy that reflects your personality
 
-Remember: Consistency beats perfection. A simple brand executed consistently will outperform a complex brand used inconsistently.`,
+Brand Experience:
+• Deliver consistent quality in everything you do
+• Respond promptly and professionally to customers
+• Package/present your work beautifully
+• Ask for feedback and testimonials
+• Exceed expectations whenever possible
+
+Remember: People connect with authentic brands that solve real problems. Focus on being genuinely helpful rather than trying to look "perfect."`,
+        activities: [
+          {
+            id: 'brand-foundation-worksheet',
+            title: 'Brand Foundation Worksheet',
+            type: 'exercise' as const,
+            description: 'Define your brand\'s core elements',
+            instructions: [
+              'Write your business mission in one clear sentence',
+              'List 5 words that describe your brand personality',
+              'Describe your ideal customer in detail',
+              'List 3 things that make you different from competitors',
+              'Define what you promise to deliver to customers'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'brand-toolkit',
+            title: 'DIY Brand Toolkit',
+            type: 'template' as const,
+            description: 'Templates and guides for creating your brand identity',
+            fileUrl: '#',
+            fileName: 'DIY-Brand-Toolkit.zip'
+          }
+        ],
         quiz: [
           {
-            id: 'b1',
-            question: 'What\'s the most important aspect of building a brand on a budget?',
+            id: 'q1',
+            question: 'What is the most important element of a strong brand?',
             options: [
-              'Having the most expensive logo',
-              'Consistency across all touchpoints',
-              'Using the latest design trends',
-              'Having a complex visual identity'
+              'An expensive logo',
+              'Consistent experience and authentic personality',
+              'Having many social media followers',
+              'Using trendy design elements'
             ],
             correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'get-noticed',
-        title: 'Get Noticed: How to Make Your Business Stand Out in a Noisy World',
-        description: 'Covers visibility, messaging, and marketing for first-time founders',
-        duration: '28 min',
-        completed: false,
-        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/business-building/get-noticed/lesson-video.mp4',
-        content: `Cut Through the Noise and Get Noticed
-
-In a world full of businesses competing for attention, standing out isn't about being the loudest - it's about being the most relevant and memorable to your ideal customers.
-
-The Foundation of Getting Noticed:
-
-Know Your Unique Value:
-• What problem do you solve better than anyone else?
-• What's your unique approach or perspective?
-• What results do you deliver that others can't?
-• What's your personal story or background that matters?
-• How do you make customers feel different/better?
-
-Visibility Strategies That Work:
-
-Content Marketing:
-• Share valuable tips and insights regularly
-• Tell stories about your customers' successes
-• Behind-the-scenes content that builds connection
-• Educational content that positions you as an expert
-• Consistent posting schedule on 1-2 platforms
-
-Networking and Relationships:
-• Join communities where your customers spend time
-• Collaborate with complementary businesses
-• Speak at local events or industry meetups
-• Build genuine relationships, not just sales pitches
-• Ask for referrals from satisfied customers
-
-Strategic Partnerships:
-• Team up with businesses that serve your audience
-• Cross-promote each other's services
-• Create valuable joint offerings or events
-• Share resources and knowledge
-• Build your network of professional supporters
-
-The key is consistency over perfection. Pick 2-3 strategies you can maintain long-term rather than trying everything at once.`,
-        quiz: [
-          {
-            id: 'b2',
-            question: 'What\'s the foundation of getting noticed in business?',
-            options: [
-              'Having the biggest advertising budget',
-              'Being the loudest on social media',
-              'Knowing your unique value and being consistent',
-              'Copying what successful competitors do'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'money-matters',
-        title: 'Money Matters: Bookkeeping and Budgeting Tips for Small Business Owners',
-        description: 'Simplifies financial basics in a relatable way',
-        duration: '30 min',
-        completed: false,
-        content: `Master Your Business Finances (No Accounting Degree Required)
-
-Good financial management is the difference between a business that survives and one that thrives. Here's how to handle money matters without getting overwhelmed.
-
-Financial Basics Made Simple:
-
-Essential Financial Concepts:
-• Revenue (money coming in)
-• Expenses (money going out)
-• Profit (what's left after expenses)
-• Cash flow (timing of money in and out)
-• Break-even point (when revenue covers all costs)
-
-Simple Bookkeeping System:
-• Separate business and personal finances completely
-• Use accounting software (QuickBooks, FreshBooks, or Wave)
-• Track income and expenses in real-time
-• Save and categorize all receipts
-• Reconcile bank statements monthly
-• Set aside money for taxes (25-30% of profit)
-
-Budget Planning:
-• Fixed costs (rent, insurance, software subscriptions)
-• Variable costs (materials, marketing, contractor fees)
-• Emergency fund (3-6 months of expenses)
-• Growth investments (marketing, equipment, training)
-• Owner pay (yes, you need to pay yourself!)
-
-Financial Health Checkups:
-• Review profit/loss monthly
-• Track key metrics (customer acquisition cost, lifetime value)
-• Monitor cash flow patterns
-• Plan for seasonal fluctuations
-• Regular financial goal setting and review
-
-Tools and Resources:
-• Banking apps for easy expense tracking
-• Receipt scanning apps (Expensify, Receipt Bank)
-• Simple spreadsheet templates for planning
-• Professional bookkeeper for complex situations
-
-Remember: You don't need to be a financial expert, but you do need to stay on top of the basics.`,
-        quiz: [
-          {
-            id: 'b3',
-            question: 'What\'s the most important financial habit for small business owners?',
-            options: [
-              'Checking finances once per year',
-              'Mixing business and personal finances',
-              'Separating business finances and tracking them regularly',
-              'Avoiding looking at financial reports'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'winning-pitch',
-        title: 'Your Big Idea Deserves a Big Pitch: How to Make a Winning Deck',
-        description: 'A guide to pitching that\'s both creative and simple',
-        duration: '32 min',
-        completed: false,
-        content: `Create Pitches That Win Hearts and Minds
-
-Whether you're pitching to investors, customers, or partners, a great pitch tells a compelling story that connects emotionally and provides clear value.
-
-The Winning Pitch Structure:
-
-1. The Hook (30 seconds)
-• Start with a relatable problem or interesting fact
-• Make it personal and specific
-• Create curiosity about your solution
-
-2. The Problem (1-2 minutes)
-• Paint a clear picture of the pain point
-• Use real examples and stories
-• Show the size and urgency of the problem
-• Make it relevant to your audience
-
-3. The Solution (2-3 minutes)
-• Present your unique approach
-• Explain how it works simply
-• Show why it's better than alternatives
-• Use visuals, demos, or examples
-
-4. The Opportunity (1-2 minutes)
-• Market size and potential
-• Your target customers and how to reach them
-• Revenue model and growth projections
-• What success looks like
-
-5. The Ask (1 minute)
-• Be specific about what you need
-• Explain what you'll do with it
-• Show what they get in return
-• Make it easy to say yes
-
-Pitch Design Tips:
-• Use large, readable fonts
-• Limit text to key points only
-• Include compelling visuals and graphics
-• Tell stories, not just facts
-• Practice your timing and transitions
-• Prepare for questions and objections
-
-Remember: People invest in people, not just ideas. Show your passion, expertise, and commitment throughout your pitch.`,
-        quiz: [
-          {
-            id: 'b4',
-            question: 'What\'s the most important element of a winning pitch?',
-            options: [
-              'Having perfect slides',
-              'Including lots of technical details',
-              'Telling a compelling story that connects emotionally',
-              'Making it as long as possible'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'business-plan',
-        title: 'Make a Business Plan That Actually Works — and Doesn\'t Confuse You',
-        description: 'Helps learners draft practical plans without overwhelm',
-        duration: '35 min',
-        completed: false,
-        content: `Create a Business Plan That Guides Real Action
-
-Forget 50-page documents that nobody reads. A good business plan is a living document that helps you make decisions and stay focused on what matters.
-
-Simple Business Plan Structure:
-
-1. Executive Summary (1 page)
-• What your business does in 2-3 sentences
-• Who your customers are
-• What makes you different
-• Key financial projections
-• What you're asking for (if seeking funding)
-
-2. Business Description (1-2 pages)
-• Your mission and vision
-• Products or services you offer
-• Target market and customer needs
-• Your competitive advantages
-• Legal structure and location
-
-3. Market Analysis (1-2 pages)
-• Industry overview and trends
-• Target customer demographics and psychographics
-• Market size and growth potential
-• Competitor analysis
-• Market entry strategy
-
-4. Marketing and Sales Plan (1-2 pages)
-• Pricing strategy and rationale
-• Marketing channels and tactics
-• Sales process and customer journey
-• Customer retention strategies
-• Marketing budget and timeline
-
-5. Operations Plan (1 page)
-• How you'll deliver your product/service
-• Key processes and systems
-• Staffing needs and structure
-• Technology and equipment requirements
-• Quality control measures
-
-6. Financial Projections (1-2 pages)
-• Revenue projections (3 years)
-• Expense budgets and cash flow
-• Break-even analysis
-• Funding requirements
-• Financial assumptions and risks
-
-Business Plan Best Practices:
-• Keep it simple and actionable
-• Update it regularly (quarterly reviews)
-• Focus on customer value, not just features
-• Be realistic with financial projections
-• Include specific, measurable goals
-• Plan for both success and challenges
-
-Your business plan should be a tool you actually use, not a document that sits on a shelf.`,
-        quiz: [
-          {
-            id: 'b5',
-            question: 'What makes a business plan actually useful?',
-            options: [
-              'Making it as long and detailed as possible',
-              'Writing it once and never changing it',
-              'Keeping it simple, actionable, and regularly updated',
-              'Copying another business\'s plan exactly'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'ai-solo-business',
-        title: 'Running a Business Solo? Here\'s How AI Can Lighten the Load',
-        description: 'Designed for solopreneurs using AI for time, content, and admin help',
-        duration: '28 min',
-        completed: false,
-        content: `AI: Your Business Partner When You're Flying Solo
-
-Running a business alone means wearing all the hats. AI can help you manage multiple roles more effectively without hiring a full team.
-
-AI for Solopreneur Challenges:
-
-Administrative Tasks:
-• Email management and response drafting
-• Appointment scheduling and calendar coordination
-• Invoice creation and follow-up reminders
-• Document creation and formatting
-• Data entry and organization
-• Customer service responses
-
-Content Creation:
-• Blog posts and article writing
-• Social media content and captions
-• Marketing email sequences
-• Product descriptions and web copy
-• Video scripts and presentations
-• SEO optimization
-
-Business Operations:
-• Market research and competitor analysis
-• Customer feedback analysis
-• Financial planning and budget tracking
-• Project management and task prioritization
-• Lead generation and qualification
-• Process documentation
-
-Customer Support:
-• FAQ responses and knowledge base creation
-• Chatbot setup for common questions
-• Customer onboarding sequences
-• Follow-up communication templates
-• Feedback collection and analysis
-
-Strategic Planning:
-• Business idea validation
-• Market opportunity analysis
-• Growth strategy development
-• Risk assessment and planning
-• Goal setting and progress tracking
-
-Implementation Strategy:
-1. Start with your biggest time drain
-2. Choose one AI tool and master it
-3. Create templates and systems
-4. Gradually expand to other areas
-5. Always review and personalize AI output
-6. Maintain the human touch in customer relationships
-
-Remember: AI handles the grunt work so you can focus on strategy, relationships, and growing your business.`,
-        quiz: [
-          {
-            id: 'b6',
-            question: 'What\'s the best way for solopreneurs to start using AI?',
-            options: [
-              'Try to automate everything at once',
-              'Start with your biggest time drain and master one tool',
-              'Only use AI for customer service',
-              'Replace all human interaction with AI'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'smart-tools',
-        title: 'Smart Tools and AI Hacks to Save You Time (and Sanity)',
-        description: 'Introduces automation and AI tools that don\'t require tech expertise',
-        duration: '26 min',
-        completed: false,
-        content: `Time-Saving Tools That Don't Require a Tech Degree
-
-These practical tools and hacks can save you hours every week, and most require no technical setup beyond creating an account and following simple steps.
-
-Essential Time-Saving Categories:
-
-Communication & Email:
-• Gmail Smart Compose for faster email writing
-• Calendly for automated appointment scheduling
-• Loom for quick video messages instead of long emails
-• Grammarly for error-free, professional writing
-• Boomerang for email scheduling and follow-ups
-
-Content Creation:
-• Canva AI for social media graphics and presentations
-• ChatGPT for writing assistance and brainstorming
-• Jasper or Copy.ai for marketing copy
-• Descript for easy audio and video editing
-• Buffer or Hootsuite for social media scheduling
-
-Project Management:
-• Notion AI for smart note-taking and organization
-• Trello with automation rules for task management
-• Zapier for connecting apps (no coding required)
-• IFTTT for simple automation recipes
-• Google Workspace for collaboration and file sharing
-
-Customer Management:
-• HubSpot free CRM for contact management
-• Typeform for smart surveys and forms
-• Intercom or Zendesk for customer support
-• Mailchimp for email marketing automation
-• Google Analytics for website insights
-
-Financial Management:
-• QuickBooks or FreshBooks for invoicing and bookkeeping
-• PayPal or Stripe for payment processing
-• Expensify for expense tracking
-• Mint or YNAB for budgeting
-• TaxJar for sales tax automation
-
-Getting Started Strategy:
-1. Audit your current time usage
-2. Identify your top 3 time drains
-3. Research tools for those specific problems
-4. Start with free versions or trials
-5. Implement one tool at a time
-6. Create systems and templates
-7. Train yourself before expanding
-
-The goal isn't to use every tool, but to find the ones that solve your specific problems and stick with them.`,
-        quiz: [
-          {
-            id: 'b7',
-            question: 'What\'s the best approach to adopting new business tools?',
-            options: [
-              'Sign up for every tool available',
-              'Wait until you have time to learn everything',
-              'Identify specific problems and implement one solution at a time',
-              'Only use the most expensive, premium tools'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'ai-powered-business',
-        title: 'Start an AI-Powered Business — Even If You\'re Not Techy',
-        description: 'Shows how non-technical people can build digital businesses with AI',
-        duration: '30 min',
-        completed: false,
-        content: `Build a Modern Business with AI (No Programming Required)
-
-AI has democratized business creation. You can now start businesses that were previously only possible with large teams and technical expertise.
-
-AI-Powered Business Ideas:
-
-Service-Based Businesses:
-• AI-assisted content writing and copywriting
-• Social media management with AI tools
-• Virtual assistant services using AI productivity tools
-• Online course creation with AI content assistance
-• Consulting with AI research and analysis support
-
-Product Businesses:
-• Print-on-demand with AI-generated designs
-• Digital products (templates, guides) created with AI
-• Custom artwork and graphics using AI art tools
-• Personalized products with AI customization
-• Stock photography with AI-enhanced images
-
-Marketplace Businesses:
-• Curated AI tool recommendations and reviews
-• AI-generated content marketplace
-• Template and resource libraries
-• Online coaching with AI-supported curriculum
-• Digital agency services powered by AI tools
-
-Business Setup Steps:
-
-1. Choose Your Niche:
-• Pick something you're already interested in or knowledgeable about
-• Research market demand and competition
-• Identify how AI can enhance your offering
-• Start small and focused
-
-2. Set Up Your AI Toolkit:
-• Content creation (ChatGPT, Jasper, Copy.ai)
-• Design tools (Canva AI, Midjourney, Figma)
-• Business automation (Zapier, IFTTT)
-• Customer service (chatbots, automated responses)
-• Analytics and insights (Google Analytics, social media insights)
-
-3. Create Your Business Foundation:
-• Simple website or landing page
-• Social media presence
-• Basic business systems and processes
-• Payment processing setup
-• Legal structure and basic contracts
-
-4. Launch and Iterate:
-• Start with a minimum viable product
-• Get feedback from early customers
-• Use AI to analyze and improve based on data
-• Scale what works, pivot what doesn't
-• Continuously learn and adapt
-
-Success Principles:
-• Focus on solving real problems for real people
-• Use AI to enhance, not replace, human value
-• Maintain quality and personal touch
-• Build relationships, not just transactions
-• Start lean and grow organically
-
-The future belongs to businesses that combine human insight with AI efficiency.`,
-        quiz: [
-          {
-            id: 'b8',
-            question: 'What\'s the key to success with an AI-powered business?',
-            options: [
-              'Using the most advanced AI tools available',
-              'Completely automating everything',
-              'Combining human insight with AI efficiency to solve real problems',
-              'Competing on price alone'
-            ],
-            correctAnswer: 2
           }
         ]
       }
@@ -1188,666 +578,86 @@ The future belongs to businesses that combine human insight with AI efficiency.`
         videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/web-development/frontend-dev/lesson-video.mp4',
         content: `Understanding Front-End Development
 
-Front-end development is like being the architect and interior designer of the digital world - you create what people see and interact with on websites and apps.
+Front-end development is the art and science of creating the parts of websites and applications that users see and interact with directly.
 
 What Front-End Developers Do:
-• Design and build the visual parts of websites and applications
-• Make sure everything looks good and works smoothly for users
-• Turn creative designs into functional, interactive experiences
-• Ensure websites work on different devices (phones, tablets, computers)
-• Focus on user experience and making things easy to use
+• Build user interfaces (the visual parts of websites/apps)
+• Ensure websites work on all devices and browsers
+• Implement designs from UI/UX designers
+• Optimize websites for speed and accessibility
+• Connect front-end interfaces to back-end systems
+• Debug and fix user interface issues
 
-Key Technologies:
-• HTML (HyperText Markup Language): The structure and content
-• CSS (Cascading Style Sheets): The styling and appearance
-• JavaScript: The interactivity and dynamic behavior
-• Various frameworks and libraries to speed up development
-
-Think of it like building a house:
-• HTML is the foundation and frame
-• CSS is the paint, decorations, and styling
-• JavaScript is the electricity that makes things work
+Core Technologies:
+• HTML: The structure and content of web pages
+• CSS: The styling and layout of web pages
+• JavaScript: The interactive behavior of web pages
+• Frameworks/Libraries: React, Vue, Angular, etc.
+• Build Tools: Webpack, Vite, etc.
+• Version Control: Git and GitHub
 
 Daily Tasks:
-• Converting design mockups into working web pages
-• Making websites responsive (work on all screen sizes)
+• Writing clean, maintainable code
 • Testing across different browsers and devices
 • Collaborating with designers and back-end developers
-• Optimizing for speed and performance
-• Debugging and fixing visual or interaction issues
+• Staying updated with new technologies and best practices
+• Problem-solving and debugging issues
+• Optimizing performance and user experience
 
 Career Opportunities:
-Front-end developers are in high demand because every business needs a web presence. You could work at:
-• Tech companies and startups
-• Digital agencies
-• Large corporations
-• As a freelancer or consultant
-• Remote work opportunities are abundant
+• Front-End Developer
+• UI Developer
+• React/Vue/Angular Developer
+• Full-Stack Developer
+• Web Designer with coding skills
+• Freelance web developer
 
-Skills You'll Develop:
-• Technical skills in HTML, CSS, and JavaScript
-• Problem-solving and logical thinking
-• Attention to detail and design sense
-• Communication and teamwork
-• Continuous learning (technology evolves fast!)
+Why It's Exciting:
+• You see immediate visual results of your work
+• High demand for skilled front-end developers
+• Great entry point into tech careers
+• Combines creativity with logical thinking
+• Excellent remote work opportunities
+• Constantly evolving with new tools and techniques
 
-Getting Started:
-No computer science degree required! Many successful front-end developers are self-taught or completed coding bootcamps. The key is consistent practice and building projects.`,
+Whether you want to build your own projects, start a freelance business, or join a tech company, front-end development skills open many doors in today's digital world.`,
+        activities: [
+          {
+            id: 'frontend-exploration',
+            title: 'Front-End Developer Research',
+            type: 'research' as const,
+            description: 'Research front-end developer roles and requirements',
+            instructions: [
+              'Visit 3 job boards and find 5 front-end developer job postings',
+              'List the most commonly required skills and technologies',
+              'Note the salary ranges and experience levels',
+              'Identify 2-3 companies you\'d be interested in working for',
+              'Research the career path from junior to senior front-end developer'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'frontend-roadmap',
+            title: 'Front-End Developer Learning Roadmap',
+            type: 'guide' as const,
+            description: 'Step-by-step guide to becoming a front-end developer',
+            fileUrl: '#',
+            fileName: 'Frontend-Developer-Roadmap.pdf'
+          }
+        ],
         quiz: [
           {
-            id: 'fe1',
-            question: 'What is front-end development primarily concerned with?',
+            id: 'q1',
+            question: 'What are the three core technologies of front-end development?',
             options: [
-              'Server management and databases',
-              'What users see and interact with on websites',
-              'Network security and protocols',
-              'Mobile app store optimization'
+              'HTML, CSS, Python',
+              'HTML, CSS, JavaScript',
+              'CSS, JavaScript, PHP',
+              'HTML, JavaScript, SQL'
             ],
             correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'backend-dev',
-        title: 'What is Back-End Development?',
-        description: 'Discover the server-side world and what back-end developers build behind the scenes',
-        duration: '35 min',
-        completed: false,
-        videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/web-development/backend-dev/lesson-video.mp4',
-        content: `Understanding Back-End Development
-
-If front-end is what users see, back-end is the engine that makes everything work behind the scenes. Back-end developers are like the architects of the digital infrastructure.
-
-What Back-End Developers Do:
-• Build and maintain the server-side logic that powers websites and apps
-• Create and manage databases that store all the information
-• Develop APIs (Application Programming Interfaces) that connect different systems
-• Ensure data security and user authentication
-• Handle the complex business logic and calculations
-• Optimize performance and scalability
-
-Key Technologies:
-• Programming languages: Python, Java, JavaScript (Node.js), PHP, Ruby, C#
-• Databases: MySQL, PostgreSQL, MongoDB, Redis
-• Server technologies: AWS, Google Cloud, Microsoft Azure
-• Frameworks: Express.js, Django, Spring, Laravel
-• Version control: Git and GitHub
-
-Think of a restaurant analogy:
-• Front-end is the dining room where customers eat
-• Back-end is the kitchen where food is prepared
-• APIs are the waiters carrying orders back and forth
-• Databases are the pantry storing all ingredients
-
-Daily Tasks:
-• Writing server-side code and business logic
-• Designing and managing database structures
-• Creating APIs for front-end and mobile apps to use
-• Implementing security measures and user authentication
-• Optimizing database queries and server performance
-• Debugging and troubleshooting server issues
-• Collaborating with front-end developers and stakeholders
-
-Career Opportunities:
-Back-end developers are essential for any digital product. Career paths include:
-• Software engineer at tech companies
-• Systems architect for large-scale applications
-• DevOps engineer focusing on deployment and infrastructure
-• Database administrator
-• Cloud solutions architect
-• Freelance API developer
-
-Skills You'll Develop:
-• Strong problem-solving and logical thinking
-• Understanding of system architecture and design patterns
-• Database design and optimization
-• Security best practices
-• Performance optimization
-• Working with cloud services and deployment
-
-Why Back-End Matters:
-Without back-end development:
-• No user accounts or login systems
-• No data storage or retrieval
-• No e-commerce transactions
-• No real-time features like chat or notifications
-• No complex calculations or business logic
-
-Getting Started:
-Back-end development requires learning programming languages and understanding how systems work together. Start with one language and build simple projects, then gradually learn about databases and server deployment.`,
-        quiz: [
-          {
-            id: 'be1',
-            question: 'What is the primary responsibility of back-end development?',
-            options: [
-              'Creating visual designs and layouts',
-              'Managing server-side logic and databases',
-              'Writing marketing copy for websites',
-              'Designing user interfaces'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'fullstack-dev',
-        title: 'What is Full-Stack Development?',
-        description: 'Learn about being a versatile developer who works on both front-end and back-end',
-        duration: '40 min',
-        completed: false,
-        content: `Understanding Full-Stack Development
-
-A full-stack developer is like a Swiss Army knife of web development - capable of working on both the front-end (what users see) and back-end (server-side logic) of applications.
-
-What Full-Stack Developers Do:
-• Build complete web applications from start to finish
-• Work on user interfaces, server logic, and databases
-• Bridge the gap between design and functionality
-• Handle the entire development process for smaller projects
-• Collaborate effectively with specialized front-end and back-end teams
-• Make architectural decisions for web applications
-
-The Full Stack Includes:
-• Front-end technologies (HTML, CSS, JavaScript, React, Vue, Angular)
-• Back-end technologies (Node.js, Python, Java, databases)
-• DevOps and deployment (servers, cloud platforms, CI/CD)
-• Version control and project management tools
-• Understanding of the entire web development ecosystem
-
-Advantages of Being Full-Stack:
-• Versatility and flexibility in job opportunities
-• Better understanding of how all pieces fit together
-• Ability to work on complete projects independently
-• Higher demand in startups and smaller companies
-• Better communication between front-end and back-end teams
-• More comprehensive problem-solving abilities
-
-Career Paths:
-• Full-stack developer at startups or agencies
-• Technical lead overseeing entire projects
-• Solo freelancer building complete applications
-• Consultant helping businesses with end-to-end solutions
-• Entrepreneur building your own digital products
-• Team lead bridging different development teams
-
-Common Full-Stack Combinations:
-• MEAN Stack: MongoDB, Express.js, Angular, Node.js
-• MERN Stack: MongoDB, Express.js, React, Node.js
-• LAMP Stack: Linux, Apache, MySQL, PHP
-• Django + React: Python Django backend with React frontend
-• Ruby on Rails + Vue.js: Full-stack Ruby solution with Vue frontend
-
-Daily Responsibilities:
-• Planning application architecture and database design
-• Building user interfaces and user experience flows
-• Developing server-side APIs and business logic
-• Integrating front-end with back-end services
-• Testing across the entire application stack
-• Deploying and maintaining applications in production
-• Troubleshooting issues across different layers
-
-Skills You'll Develop:
-• Broad technical knowledge across multiple technologies
-• System thinking and architecture design
-• Project management and planning abilities
-• Problem-solving across different technical domains
-• Communication skills to work with diverse teams
-• Ability to learn new technologies quickly
-
-Challenges:
-• Keeping up with rapidly changing technologies in multiple areas
-• Depth vs. breadth trade-off (knowing many things well vs. specializing)
-• Higher learning curve initially
-• Need to stay current with trends in multiple technology stacks
-
-Getting Started:
-1. Choose one full-stack combination (like MERN or Django + React)
-2. Build a simple project using all parts of the stack
-3. Focus on understanding how front-end and back-end communicate
-4. Practice deploying complete applications
-5. Gradually expand your knowledge to other technologies
-
-Remember: You don't need to be an expert in everything immediately. Full-stack is about understanding how all pieces work together and being able to contribute meaningfully to all parts of a project.`,
-        quiz: [
-          {
-            id: 'fs1',
-            question: 'What makes a full-stack developer different from specialized developers?',
-            options: [
-              'They only work on mobile apps',
-              'They work on both front-end and back-end of applications',
-              'They only focus on database management',
-              'They specialize in just one programming language'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'programming-languages',
-        title: 'Programming Languages 101 — What They Are & What They\'re For',
-        description: 'Get a beginner-friendly overview of popular programming languages and their uses',
-        duration: '45 min',
-        completed: false,
-        content: `Programming Languages: Your Digital Communication Tools
-
-Programming languages are like different human languages - each has its own vocabulary, grammar, and is better suited for certain types of communication. Let's explore the most popular ones and what they're used for.
-
-What Are Programming Languages?
-Programming languages are sets of instructions that tell computers what to do. Just like you might choose Spanish to communicate in Mexico or French in France, you choose different programming languages for different types of projects.
-
-Popular Programming Languages and Their Uses:
-
-**JavaScript - The Language of the Web**
-• What it's for: Making websites interactive and building web applications
-• Where you'll see it: Every website you visit uses JavaScript
-• Beginner-friendly: Yes! Great starting language
-• Career opportunities: Web development, mobile apps (React Native), even server development
-• Think of it as: The Swiss Army knife of programming
-
-**Python - The Friendly Giant**
-• What it's for: Data science, artificial intelligence, web development, automation
-• Where you'll see it: Netflix recommendations, Instagram backend, scientific research
-• Beginner-friendly: Extremely! Reads almost like English
-• Career opportunities: AI/ML engineer, data scientist, web developer, automation specialist
-• Think of it as: The friendly, versatile tool that can do almost anything
-
-**Java - The Enterprise Workhorse**
-• What it's for: Large business applications, Android apps, web backends
-• Where you'll see it: Banking systems, large corporate applications, Android phones
-• Beginner-friendly: Moderate learning curve
-• Career opportunities: Enterprise developer, Android developer, backend engineer
-• Think of it as: The reliable, professional suit of programming languages
-
-**HTML & CSS - The Building Blocks of the Web**
-• What they're for: HTML structures web content, CSS makes it look beautiful
-• Where you'll see them: Every website you visit
-• Beginner-friendly: Very! Not technically programming languages but essential
-• Career opportunities: Front-end developer, web designer, UI developer
-• Think of them as: HTML is the skeleton, CSS is the skin and clothing
-
-**C# - Microsoft's Professional Language**
-• What it's for: Business applications, games (Unity), web development
-• Where you'll see it: Windows applications, video games, enterprise software
-• Beginner-friendly: Moderate, similar to Java
-• Career opportunities: Game developer, enterprise developer, Windows app developer
-• Think of it as: The professional tool for Microsoft-focused development
-
-**Swift - Apple's Language**
-• What it's for: iOS and macOS applications
-• Where you'll see it: iPhone apps, Mac applications
-• Beginner-friendly: Moderate
-• Career opportunities: iOS developer, Mac app developer
-• Think of it as: The key to the Apple ecosystem
-
-**SQL - The Database Communicator**
-• What it's for: Managing and retrieving data from databases
-• Where you'll see it: Behind every app that stores user information
-• Beginner-friendly: Yes! Very logical and straightforward
-• Career opportunities: Data analyst, database administrator, backend developer
-• Think of it as: The librarian that organizes and finds information
-
-**PHP - The Web Backend Classic**
-• What it's for: Server-side web development
-• Where you'll see it: WordPress, Facebook (originally), many websites
-• Beginner-friendly: Yes, especially for web development
-• Career opportunities: Web developer, WordPress developer, backend engineer
-• Think of it as: The reliable engine that powers many websites
-
-How to Choose Your First Language:
-
-**Want to build websites?** Start with HTML, CSS, and JavaScript
-**Interested in mobile apps?** Try Swift (iOS) or learn JavaScript for React Native
-**Fascinated by data and AI?** Python is your best friend
-**Want to work at big companies?** Java or C# are excellent choices
-**Love games?** C# with Unity or learn JavaScript for web games
-**Curious about everything?** Python or JavaScript are great starting points
-
-Learning Tips:
-• Don't try to learn multiple languages at once - master one first
-• Practice by building real projects, not just tutorials
-• Join communities and forums for your chosen language
-• Remember: the first language is the hardest; subsequent ones are easier
-• Focus on problem-solving skills, not just syntax
-
-The Truth About Programming Languages:
-• Most concepts transfer between languages
-• Companies often care more about problem-solving ability than specific language knowledge
-• You'll likely learn multiple languages throughout your career
-• The "best" language depends on what you want to build
-• All popular languages have good career opportunities
-
-Remember: Programming languages are just tools. A carpenter can build a house with different types of hammers, and you can solve problems with different programming languages. The key is learning to think like a programmer, not memorizing every language syntax.`,
-        quiz: [
-          {
-            id: 'pl1',
-            question: 'What should be the primary factor when choosing your first programming language?',
-            options: [
-              'Which language pays the most money',
-              'Which language is the newest',
-              'What type of projects you want to build',
-              'Which language has the most complex syntax'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'vibe-coding',
-        title: 'What is Vibe Coding?',
-        description: 'Discover the intuitive approach to coding that focuses on creativity, flow, and building with AI assistance',
-        duration: '35 min',
-        completed: false,
-        content: `Vibe Coding: The Creative Flow Approach to Development
-
-Vibe coding isn't just a development method - it's a mindset that combines creativity, intuition, and modern AI tools to create software in a more natural, flowing way.
-
-What is Vibe Coding?
-Vibe coding is an approach to programming that emphasizes:
-• Following your creative intuition and flow state
-• Using AI as a collaborative partner, not just a tool
-• Building iteratively based on what feels right
-• Prioritizing user experience and emotional connection
-• Embracing experimentation and rapid prototyping
-• Creating code that's both functional and expressive
-
-Core Principles of Vibe Coding:
-
-**1. Flow Over Structure**
-• Work when you're in the zone, not just on schedule
-• Let your creativity guide the development process
-• Build what excites you and feels meaningful
-• Trust your instincts about user experience
-• Allow the project to evolve organically
-
-**2. AI as Creative Partner**
-• Use AI to handle boilerplate and repetitive tasks
-• Collaborate with AI for brainstorming and problem-solving
-• Let AI help you explore different approaches quickly
-• Focus your energy on the creative and strategic decisions
-• Use AI to learn new technologies faster
-
-**3. User-Centric Development**
-• Build for how people actually think and feel
-• Prioritize intuitive interfaces over complex features
-• Test early and often with real users
-• Make decisions based on user delight, not just functionality
-• Create experiences that people want to use
-
-**4. Rapid Experimentation**
-• Build quick prototypes to test ideas
-• Fail fast and iterate quickly
-• Use modern tools that speed up development
-• Don't get stuck in analysis paralysis
-• Ship early versions and improve based on feedback
-
-Modern Tools for Vibe Coding:
-
-**AI Development Assistants:**
-• GitHub Copilot for code suggestions
-• ChatGPT for problem-solving and learning
-• Claude for code review and architecture discussions
-• Replit AI for quick prototyping
-• Cursor for AI-powered code editing
-
-**Rapid Development Frameworks:**
-• Next.js for full-stack React applications
-• Svelte/SvelteKit for lightweight, fast apps
-• Tailwind CSS for rapid styling
-• Supabase for instant backend and database
-• Vercel/Netlify for one-click deployment
-
-**No-Code/Low-Code Tools:**
-• Webflow for visual web development
-• Framer for interactive prototypes
-• Notion for database-driven applications
-• Zapier for workflow automation
-• Bubble for complete app development
-
-The Vibe Coding Workflow:
-
-**1. Vibe Check**
-• What problem am I solving?
-• Who am I building this for?
-• What would make this delightful to use?
-• What's my vision for the end result?
-
-**2. Quick Exploration**
-• Build a minimal prototype quickly
-• Use AI to explore different approaches
-• Test the core concept with real users
-• Get feedback on the basic idea
-
-**3. Iterative Building**
-• Add one feature at a time
-• Test each addition with users
-• Use AI to help implement new features
-• Keep the overall vision in mind
-
-**4. Polish and Ship**
-• Focus on the details that matter to users
-• Use AI to help optimize performance
-• Launch when it's good enough to be useful
-• Continue improving based on real usage
-
-Benefits of Vibe Coding:
-• Faster development cycles
-• More creative and user-friendly results
-• Less burnout and more enjoyment
-• Better alignment between vision and execution
-• Leverages modern AI tools effectively
-• Encourages continuous learning and growth
-
-When to Use Vibe Coding:
-• Startup and MVP development
-• Creative projects and experiments
-• User-facing applications
-• Rapid prototyping phases
-• Solo development or small teams
-• Projects where user experience is crucial
-
-Remember: Vibe coding isn't about being unprofessional or skipping best practices. It's about being more intentional, creative, and user-focused in how you approach development. The "vibe" is about creating software that people love to use.`,
-        quiz: [
-          {
-            id: 'vc1',
-            question: 'What is the core philosophy of vibe coding?',
-            options: [
-              'Following strict development methodologies',
-              'Combining creativity, intuition, and AI collaboration for user-focused development',
-              'Writing as much code as possible without AI help',
-              'Focusing only on technical performance'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'ai-agents',
-        title: 'Building AI Agents',
-        description: 'Learn what AI agents are and how to create intelligent assistants for yourself, your business, or clients',
-        duration: '50 min',
-        completed: false,
-        content: `Building AI Agents: Your Digital Workforce
-
-AI agents are autonomous software programs that can perceive their environment, make decisions, and take actions to achieve specific goals. Think of them as digital employees that work 24/7.
-
-What Are AI Agents?
-AI agents are intelligent systems that can:
-• Understand and respond to natural language
-• Make decisions based on given parameters
-• Perform tasks automatically without constant supervision
-• Learn from interactions and improve over time
-• Integrate with various tools and platforms
-• Handle complex, multi-step workflows
-
-Types of AI Agents:
-
-**1. Conversational Agents (Chatbots)**
-• Customer service representatives
-• Personal assistants for scheduling and reminders
-• Educational tutors and coaches
-• Sales and lead qualification bots
-• Support agents for troubleshooting
-
-**2. Task Automation Agents**
-• Email management and response agents
-• Social media content creators and schedulers
-• Data analysis and reporting agents
-• Inventory management systems
-• Financial transaction processors
-
-**3. Research and Analysis Agents**
-• Market research assistants
-• Competitive analysis tools
-• Content research and summarization
-• Trend monitoring and alerts
-• Lead generation and qualification
-
-**4. Creative Agents**
-• Content writing assistants
-• Design and image generation tools
-• Video editing and production aids
-• Music composition helpers
-• Marketing campaign creators
-
-Building Your First AI Agent:
-
-**Step 1: Define the Purpose**
-• What specific problem will this agent solve?
-• Who is the target user?
-• What tasks should it perform?
-• How will success be measured?
-• What are the constraints and limitations?
-
-**Step 2: Choose Your Platform**
-Popular platforms for building AI agents:
-• **OpenAI API**: Most versatile, great for custom solutions
-• **Anthropic Claude**: Excellent for reasoning and analysis
-• **Google Dialogflow**: Good for conversational agents
-• **Microsoft Bot Framework**: Enterprise-focused solutions
-• **Rasa**: Open-source conversational AI
-• **LangChain**: For complex agent workflows
-• **AutoGPT**: For autonomous task completion
-
-**Step 3: Design the Agent's Personality**
-• Define the tone and communication style
-• Create consistent responses and behaviors
-• Set boundaries for what the agent can/cannot do
-• Develop fallback responses for unclear requests
-• Ensure brand alignment and professional standards
-
-**Step 4: Build the Core Functionality**
-• Set up the AI model and training data
-• Create intent recognition and response systems
-• Integrate with necessary tools and databases
-• Implement safety and error handling
-• Test with real user scenarios
-
-**Step 5: Deploy and Monitor**
-• Choose deployment platform (web, mobile, Slack, etc.)
-• Set up monitoring and analytics
-• Create feedback loops for improvement
-• Plan for scaling and maintenance
-• Document usage and best practices
-
-AI Agent Use Cases:
-
-**For Personal Use:**
-• Personal productivity assistant
-• Learning and study companion
-• Health and fitness tracker
-• Financial planning advisor
-• Travel planning agent
-
-**For Business:**
-• Customer support automation
-• Sales lead qualification
-• Employee onboarding assistant
-• Invoice and expense processing
-• Social media management
-
-**For Clients/Services:**
-• Custom chatbots for websites
-• Industry-specific assistants (legal, medical, real estate)
-• Educational tutoring systems
-• E-commerce recommendation engines
-• Content moderation agents
-
-Technical Implementation Example:
-
-\`\`\`python
-# Simple AI Agent using OpenAI API
-import openai
-from datetime import datetime
-
-class PersonalAssistant:
-    def __init__(self, api_key):
-        self.client = openai.OpenAI(api_key=api_key)
-        self.conversation_history = []
-    
-    def respond(self, user_input):
-        # Add context and personality
-        system_prompt = \"\"\"
-        You are a helpful personal assistant. Be friendly, 
-        professional, and provide actionable advice.
-        \"\"\"
-        
-        # Get AI response
-        response = self.client.chat.completions.create(
-            model="gpt-4",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_input}
-            ]
-        )
-        
-        return response.choices[0].message.content
-\`\`\`
-
-Advanced Features to Consider:
-• Memory and context retention
-• Integration with calendars, emails, databases
-• Multi-modal capabilities (text, voice, image)
-• Workflow automation and task chaining
-• Learning from user feedback
-• Multi-language support
-
-Business Opportunities:
-• Freelance AI agent development
-• SaaS products with built-in agents
-• Consulting on AI implementation
-• Agency services for custom agents
-• Training and education services
-• White-label agent solutions
-
-Best Practices:
-• Start simple and iterate
-• Always include human oversight options
-• Be transparent about AI limitations
-• Protect user privacy and data
-• Test thoroughly before deployment
-• Plan for maintenance and updates
-• Monitor performance and user satisfaction
-
-Getting Started Today:
-1. Choose a simple use case (like a FAQ chatbot)
-2. Sign up for an AI platform (OpenAI, Anthropic, etc.)
-3. Build a basic prototype
-4. Test with friends or colleagues
-5. Iterate based on feedback
-6. Gradually add more sophisticated features
-
-Remember: The best AI agents solve real problems for real people. Focus on creating value, not just showcasing technology. Start with simple automation and gradually build more complex capabilities as you learn what users actually need.`,
-        quiz: [
-          {
-            id: 'ai1',
-            question: 'What is the most important first step when building an AI agent?',
-            options: [
-              'Choosing the most advanced AI model',
-              'Learning complex programming languages',
-              'Clearly defining the problem the agent will solve',
-              'Building the most features possible'
-            ],
-            correctAnswer: 2
           }
         ]
       }
@@ -1856,129 +666,133 @@ Remember: The best AI agents solve real problems for real people. Focus on creat
 ];
 
 export const LearningDashboard: React.FC = () => {
-  const [selectedModule, setSelectedModule] = useState<string | null>(null);
+  const [selectedModule, setSelectedModule] = useState<any>(null);
   const [filterLevel, setFilterLevel] = useState<string>('all');
-  const [filterCategory, setFilterCategory] = useState<string>('all');
-  const [moduleProgress, setModuleProgress] = useState<Record<string, number>>({});
-  const [registeredCourses, setRegisteredCourses] = useState<Set<string>>(new Set());
+  const { session } = useAuth();
+  const { progress, loading } = useLearningProgress();
 
-  const handleProgressUpdate = (moduleId: string, progress: number) => {
-    setModuleProgress(prev => ({ ...prev, [moduleId]: progress }));
+  const filteredModules = learningModules.filter(module => 
+    filterLevel === 'all' || module.level === filterLevel
+  );
+
+  const handleStartCourse = (module: any) => {
+    setSelectedModule(module);
   };
 
-  const handleRegister = (courseId: string) => {
-    setRegisteredCourses(prev => new Set([...prev, courseId]));
+  const handleBackToDashboard = () => {
+    setSelectedModule(null);
   };
 
-  const handleStartCourse = (courseId: string) => {
-    setSelectedModule(courseId);
-  };
-
-  const filteredModules = learningModules.filter(module => {
-    if (filterLevel !== 'all' && module.level.toLowerCase() !== filterLevel) return false;
-    return true;
-  });
-
-  const currentModule = learningModules.find(m => m.id === selectedModule);
-
-  const overallProgress = Object.values(moduleProgress).length > 0 
-    ? Object.values(moduleProgress).reduce((sum, progress) => sum + progress, 0) / Object.values(moduleProgress).length
-    : 0;
-
-  const completedModules = Object.values(moduleProgress).filter(progress => progress === 100).length;
-
-  if (currentModule) {
+  if (selectedModule) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" onClick={() => setSelectedModule(null)}>
-            ← Back to Dashboard
-          </Button>
-          <div>
-            <h2 className="text-2xl font-bold">Learning in Progress</h2>
-            <p className="text-muted-foreground">Continue your learning journey</p>
-          </div>
-        </div>
-        
-        <InteractiveLearningModule 
-          module={currentModule} 
-        />
+      <div className="container mx-auto p-6">
+        <Button 
+          variant="ghost" 
+          onClick={handleBackToDashboard}
+          className="mb-4"
+        >
+          ← Back to Dashboard
+        </Button>
+        <InteractiveLearningModule module={selectedModule} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Learning Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Courses Enrolled</CardTitle>
-            <BookOpen className="h-4 w-4 ml-auto text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{learningModules.length}</div>
-            <p className="text-xs text-muted-foreground">Available courses</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <Award className="h-4 w-4 ml-auto text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{completedModules}</div>
-            <p className="text-xs text-muted-foreground">Certificates earned</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Overall Progress</CardTitle>
-            <TrendingUp className="h-4 w-4 ml-auto text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{Math.round(overallProgress)}%</div>
-            <Progress value={overallProgress} className="h-2 mt-2" />
-          </CardContent>
-        </Card>
+    <div className="container mx-auto p-6 space-y-8">
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl font-bold">Learning Dashboard</h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Master new skills with our comprehensive courses designed for real-world success
+        </p>
       </div>
 
-      {/* Filters */}
-      <div className="flex gap-4 items-center">
-        <Filter className="h-4 w-4 text-muted-foreground" />
-        <Select value={filterLevel} onValueChange={setFilterLevel}>
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Filter by level" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Levels</SelectItem>
-            <SelectItem value="beginner">Beginner</SelectItem>
-            <SelectItem value="intermediate">Intermediate</SelectItem>
-            <SelectItem value="advanced">Advanced</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {!session ? (
+        <Card className="max-w-md mx-auto">
+          <CardHeader className="text-center">
+            <LogIn className="w-12 h-12 mx-auto mb-4 text-primary" />
+            <CardTitle>Sign In to Access Courses</CardTitle>
+            <CardDescription>
+              Create an account to track your progress and access premium learning content
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Button className="w-full" onClick={() => window.location.href = '/auth'}>
+              Sign In / Sign Up
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          {/* Progress Overview */}
+          {progress && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Enrolled Courses</CardTitle>
+                  <BookOpen className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{progress.enrollments.length}</div>
+                  <p className="text-xs text-muted-foreground">Active learning paths</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Completed Lessons</CardTitle>
+                  <Award className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{progress.completedLessons.length}</div>
+                  <p className="text-xs text-muted-foreground">Lessons mastered</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Overall Progress</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {progress.enrollments.length > 0 
+                      ? Math.round((progress.completedLessons.length / progress.enrollments.length) * 10) + '%'
+                      : '0%'
+                    }
+                  </div>
+                  <p className="text-xs text-muted-foreground">Across all courses</p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
-      {/* Course Catalog */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredModules.map((module) => {
-          const progress = moduleProgress[module.id] || 0;
-          const isCompleted = progress === 100;
-          const isRegistered = registeredCourses.has(module.id);
-          
-          return (
-            <CoursePreview
-              key={module.id}
-              course={module}
-              onRegister={handleRegister}
-              isRegistered={isRegistered}
-              onStartCourse={handleStartCourse}
-            />
-          );
-        })}
-      </div>
+          {/* Course Filter */}
+          <div className="flex items-center gap-4">
+            <Filter className="h-5 w-5 text-muted-foreground" />
+            <Select value={filterLevel} onValueChange={setFilterLevel}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Filter by level" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Levels</SelectItem>
+                <SelectItem value="Beginner">Beginner</SelectItem>
+                <SelectItem value="Intermediate">Intermediate</SelectItem>
+                <SelectItem value="Advanced">Advanced</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Course Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredModules.map((module) => (
+              <CoursePreview
+                key={module.id}
+                course={module}
+                onStartCourse={() => handleStartCourse(module)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
