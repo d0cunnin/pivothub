@@ -86,7 +86,7 @@ export const CoursePreview: React.FC<CoursePreviewProps> = ({
               setShowPreview(true);
             }}
           >
-            View Course Details
+            View Mini Course Details
           </Button>
         </CardContent>
       </Card>
@@ -103,7 +103,7 @@ export const CoursePreview: React.FC<CoursePreviewProps> = ({
           <Tabs defaultValue="overview" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="modules">Course Modules</TabsTrigger>
+              <TabsTrigger value="modules">Mini Course Modules</TabsTrigger>
               <TabsTrigger value="outcomes">Learning Outcomes</TabsTrigger>
             </TabsList>
 
@@ -161,7 +161,7 @@ export const CoursePreview: React.FC<CoursePreviewProps> = ({
 
             <TabsContent value="modules" className="space-y-4">
               <div className="space-y-3">
-                <h3 className="font-semibold">Course Modules ({course.lessons.length} total)</h3>
+                <h3 className="font-semibold">Mini Course Modules ({course.lessons.length} total)</h3>
                 {course.lessons.map((lesson, index) => (
                   <Card key={lesson.id} className="p-4">
                     <div className="flex items-start gap-3">
@@ -248,7 +248,7 @@ export const CoursePreview: React.FC<CoursePreviewProps> = ({
                 }}
                 className="flex-1 bg-gradient-primary"
               >
-                Register for Course
+                Register for Mini Course
               </Button>
             )}
             <Button variant="outline" onClick={() => setShowPreview(false)}>

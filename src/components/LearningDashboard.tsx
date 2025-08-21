@@ -11,16 +11,16 @@ import { CoursePreview } from './CoursePreview';
 import { useLearningProgress } from '@/hooks/useLearningProgress';
 import { useAuth } from '@/contexts/AuthContext';
 
-// Real course content - AI & Technology and Business Building
+// Mini courses - Essential skills without the fluff
 const learningModules = [
   {
     id: 'ai-technology',
-    title: 'AI & Technology for Everyday People',
-    description: 'Master AI tools and concepts without tech overwhelm - designed specifically for non-technical people',
-    duration: '6-8 weeks',
+    title: 'AI & Technology Essentials',
+    description: 'Learn AI basics in simple terms. Get comfortable with AI tools that can actually help you.',
+    duration: '3-4 hours',
     level: 'Beginner',
-    skills: ['AI Literacy', 'Productivity Tools', 'Digital Confidence', 'Future-Proofing'],
-    certificate: 'AI Literacy for Everyday People Certificate',
+    skills: ['AI Basics', 'Productivity Tools', 'Digital Confidence'],
+    certificate: 'AI Essentials Mini Course Certificate',
     lessons: [
       {
         id: 'what-is-ai-and-why',
@@ -29,20 +29,16 @@ const learningModules = [
         duration: '25 min',
         completed: false,
         videoPath: 'What is AI and Why Should I Use It??.mp4',
-        content: `Welcome to AI & Technology for Everyday People!
+        content: `What is AI?
+AI is like having a smart assistant that can help with writing, research, and daily tasks.
 
-In this course, we'll demystify AI and show you exactly how it can improve your daily life - no tech degree required.
+Key Points:
+• AI helps with everyday tasks (like GPS, email suggestions, shopping recommendations)
+• It's a tool to make life easier, not replace you
+• You don't need tech skills to use it
+• Start simple - most AI tools are designed for regular people
 
-What You'll Learn in This Lesson:
-• What AI really is (in plain English)
-• Why AI matters to YOU personally
-• How AI is already part of your daily routine
-• Simple examples you can relate to
-• Why you don't need to be afraid of AI
-
-Key Takeaway: AI isn't magic or rocket science - it's a powerful tool that can make your life easier, more productive, and more enjoyable. Think of it as having a really smart assistant who never gets tired and is always ready to help.
-
-By the end of this lesson, you'll understand exactly what AI is and why it's worth learning about - even if you consider yourself "not a tech person."`,
+Bottom Line: AI is already helping you daily. Learning to use it intentionally can save you time and stress.`,
         activities: [
           {
             id: 'ai-audit-activity',
@@ -89,28 +85,18 @@ By the end of this lesson, you'll understand exactly what AI is and why it's wor
         duration: '28 min',
         completed: false,
         videoPath: 'The History and Future of AI.mp4',
-        content: `Understanding AI's Journey: Past, Present & Future
+        content: `AI's Quick Timeline
+• Past: Started in research labs, was complicated
+• Now: Easy-to-use apps and tools for everyone
+• Future: Even more helpful and integrated into daily life
 
-Knowing where AI came from and where it's heading helps you make better decisions about how to use it in your own life.
+What You Need to Know:
+• AI is proven and stable technology
+• It keeps getting easier to use
+• Starting now gives you an advantage
+• You don't need to be an expert to benefit
 
-AI Timeline Highlights:
-• 1950s: The birth of AI concepts
-• 1990s: Early practical applications
-• 2000s: Internet and data revolution
-• 2010s: Machine learning breakthroughs
-• 2020s: AI becomes accessible to everyone
-
-What This Means for You:
-• AI is not a new fad - it's here to stay
-• The technology keeps getting easier to use
-• Early adopters get the biggest advantages
-• You don't need to wait for "perfect" AI to start benefiting
-
-Future Trends to Watch:
-• More personalized AI assistants
-• Better integration with everyday tools
-• Improved accuracy and reliability
-• Greater accessibility for non-technical users`,
+The Point: AI went from rocket science to everyday tool. Learning the basics now sets you up for success.`,
         activities: [
           {
             id: 'ai-timeline-reflection',
@@ -157,27 +143,21 @@ Future Trends to Watch:
         duration: '30 min',
         completed: false,
         videoPath: 'How Can AI Help My Productivity?.mp4',
-        content: `Work Smarter, Not Harder with AI
+        content: `How AI Boosts Your Productivity
 
-The secret to productivity isn't working more hours - it's letting AI handle the boring, repetitive stuff so you can focus on what matters most.
+AI handles the repetitive stuff so you can focus on what matters.
 
-AI Productivity Boosters:
-• Automatic scheduling and calendar management
-• Email drafting and response suggestions
-• Task prioritization and planning
-• Research and information gathering
-• Document creation and editing
-• Social media content planning
+Simple Ways AI Helps:
+• Writes email drafts from your key points
+• Creates schedules and manages calendars  
+• Organizes information and research
+• Breaks big tasks into smaller steps
+• Suggests next actions when you're stuck
 
-Mental Load Relief:
-AI can help reduce the constant mental juggling we all do by:
-• Remembering important dates and deadlines
-• Organizing your thoughts and ideas
-• Breaking big projects into manageable steps
-• Keeping track of multiple ongoing tasks
-• Suggesting next steps when you're stuck
+Real Example: 
+Instead of 30 minutes writing an email, give AI your main points and get a good draft in 2 minutes. You edit it and move on to important work.
 
-Real Example: Instead of spending 30 minutes writing a professional email, you can give AI the key points and have a polished draft in 2 minutes. Then you spend your saved time on things that actually need your human touch.`,
+The Goal: Let AI do the prep work while you handle the creative and personal parts.`,
         activities: [
           {
             id: 'productivity-experiment',
@@ -225,34 +205,28 @@ Real Example: Instead of spending 30 minutes writing a professional email, you c
         duration: '32 min',
         completed: false,
         videoPath: 'How Can AI Help Me for the Workforce?.mp4',
-        content: `Build Work Confidence with AI Support
+        content: `AI for Career Success
 
-Whether you're job searching, wanting a promotion, or just trying to feel more confident at work, AI can be your secret weapon for professional growth.
+AI helps you look professional and confident at work.
 
-Resume & Job Search Help:
-• Writing compelling resume bullets
-• Tailoring your resume for specific jobs
-• Practicing interview questions and answers
-• Researching companies before interviews
-• Writing professional cover letters
-• LinkedIn profile optimization
+Job Search Support:
+• Write better resumes and cover letters
+• Practice interview answers
+• Research companies quickly
+• Improve your LinkedIn profile
 
-Daily Work Confidence:
-• Drafting professional emails and messages
-• Preparing for meetings and presentations
-• Learning new skills relevant to your job
-• Staying updated on industry trends
-• Problem-solving when you're stuck
-• Communicating complex ideas clearly
+Daily Work Help:
+• Draft professional emails
+• Prepare for meetings
+• Learn industry updates
+• Solve problems faster
 
-Career Development:
-• Identifying skills gaps and learning paths
-• Setting realistic professional goals
-• Building a professional online presence
-• Networking conversation starters
-• Salary negotiation preparation
+Career Growth:
+• Identify skill gaps
+• Set clear goals
+• Build your professional image
 
-Remember: AI doesn't replace your unique value - it amplifies it by helping you present your best professional self.`,
+Key Point: AI doesn't replace your value - it helps you show your best professional self.`,
         activities: [
           {
             id: 'career-ai-audit',
@@ -300,36 +274,31 @@ Remember: AI doesn't replace your unique value - it amplifies it by helping you 
         duration: '26 min',
         completed: false,
         videoPath: 'How AI Can Work With and For You.mp4',
-        content: `AI: Your Collaborative Partner
+        content: `Working WITH AI, Not FOR AI
 
-Think of AI as having a team member who's excellent at research, writing first drafts, organizing information, and handling repetitive tasks - and they work alongside you, not instead of you.
+Think of AI as your research assistant and first-draft writer.
 
-What Your AI Partner Can Do:
-• Research topics thoroughly and summarize findings
-• Write first drafts of emails, documents, and reports
-• Organize and categorize information
-• Create outlines and structure for projects
-• Generate ideas and brainstorm solutions
-• Proofread and improve your writing
-• Create schedules and manage timelines
-• Handle data entry and organization
+What AI Does Well:
+• Research and summarize information
+• Write first drafts of documents
+• Organize and structure information
+• Generate ideas and options
+• Handle repetitive tasks
 
-The Perfect Partnership:
-• AI handles the preparation and grunt work
-• You provide the creativity, judgment, and personal touch
-• AI does the initial heavy lifting
-• You refine, personalize, and make final decisions
-• AI processes information quickly
-• You interpret and apply it to your specific situation
+What You Do Best:
+• Make final decisions
+• Add personal touch and creativity
+• Review and improve AI output
+• Apply information to your situation
+• Maintain relationships and values
 
-Best Practices for AI Collaboration:
-• Always review and edit AI output
-• Use AI as a starting point, not the final product
-• Combine AI efficiency with your human insight
-• Be specific about what you need
-• Think of AI as a collaborator, not a replacement
+The Partnership:
+• AI does the prep work and heavy lifting
+• You provide judgment, creativity, and personal insight
+• Always review what AI creates
+• Use AI as your starting point, not your final answer
 
-This partnership approach helps you accomplish more while staying true to your own voice and values.`,
+This way you get more done while keeping your unique value and voice.`,
         activities: [
           {
             id: 'ai-collaboration-test',
@@ -377,39 +346,35 @@ This partnership approach helps you accomplish more while staying true to your o
         duration: '35 min',
         completed: false,
         videoPath: 'Making the Best of AI.mp4',
-        content: `Getting the Most Out of AI While Staying True to Yourself
+        content: `Using AI Effectively and Responsibly
 
-The goal isn't to become dependent on AI, but to use it strategically to enhance your natural abilities and achieve your personal and professional goals.
+Get the most from AI while staying true to yourself.
 
-Maximizing AI Benefits:
-• Start with your biggest pain points or time-consuming tasks
-• Experiment with different AI tools to find what works for you
-• Gradually integrate AI into your existing workflows
-• Focus on AI applications that align with your values and goals
-• Keep learning and adapting as AI technology improves
+Smart AI Use:
+• Start with tasks that take you the most time
+• Try different tools to see what works
+• Gradually add AI to your routine
+• Focus on your biggest challenges first
 
-Maintaining Your Human Edge:
-• Use AI to enhance, not replace, your critical thinking
-• Always fact-check and verify AI-generated information
-• Add your personal perspective and experience to AI outputs
-• Maintain genuine human connections and relationships
-• Trust your instincts when something doesn't feel right
+Stay Human:
+• Always check AI's work
+• Add your personal touch
+• Trust your instincts
+• Keep building real relationships
 
-Ethical AI Use:
-• Be transparent when you've used AI assistance
-• Respect others' privacy and intellectual property
-• Use AI to help others, not to deceive or manipulate
-• Stay informed about AI limitations and potential biases
-• Consider the broader impact of your AI use on others
+Be Ethical:
+• Be honest when you use AI help
+• Respect others' work and privacy
+• Use AI to help, not to trick people
+• Stay aware of AI's limits
 
-Future-Proofing Your Approach:
-• Stay curious and open to new AI developments
-• Focus on developing skills that complement AI
-• Build a sustainable relationship with AI technology
-• Help others learn to use AI responsibly
-• Remember that you're in control of how AI fits into your life
+Future Success:
+• Keep learning as AI improves
+• Develop skills that work well with AI
+• Help others learn to use AI well
+• Remember: you control how AI fits your life
 
-The best AI users are those who thoughtfully integrate AI into their lives while maintaining their humanity, ethics, and unique value.`,
+The best approach: Use AI thoughtfully to enhance your abilities while staying authentic.`,
         activities: [
           {
             id: 'ai-integration-plan',
@@ -462,12 +427,12 @@ The best AI users are those who thoughtfully integrate AI into their lives while
   },
   {
     id: 'business-building',
-    title: 'Business Building for Beginners and Solopreneurs',
-    description: 'Start and grow your business with confidence - no MBA required, just practical steps that work',
-    duration: '8-10 weeks',
+    title: 'Business Building Basics',
+    description: 'Start your business with confidence. Practical steps without the complexity.',
+    duration: '4-5 hours',
     level: 'Beginner',
-    skills: ['Brand Building', 'Marketing Strategy', 'Financial Planning', 'AI Business Tools'],
-    certificate: 'Small Business Fundamentals Certificate',
+    skills: ['Brand Building', 'Marketing Basics', 'Business Planning'],
+    certificate: 'Business Basics Mini Course Certificate',
     lessons: [
       {
         id: 'beautiful-brand',
@@ -476,48 +441,31 @@ The best AI users are those who thoughtfully integrate AI into their lives while
         duration: '25 min',
         completed: false,
         videoUrl: 'https://fkvjsgqjgissolpdqbdh.supabase.co/storage/v1/object/public/course-media/business-building/beautiful-brand/lesson-video.mp4',
-        content: `Create a Professional Brand Without Breaking the Bank
+        content: `Build Your Brand on a Budget
 
-Your brand is more than just a logo - it's the complete experience people have with your business. Here's how to build something beautiful and memorable, even with limited funds.
+Your brand is how customers see and remember your business.
 
-Brand Foundation Elements:
-• Your mission and values (why you exist)
-• Your unique voice and personality
-• Your target audience and their needs
-• Your key differentiators and strengths
-• Your brand promise and customer experience
+Brand Basics:
+• Know your mission (why you exist)
+• Define your personality (professional, friendly, etc.)  
+• Know your customers and what they need
+• Be consistent everywhere
 
-Budget-Friendly Brand Building:
+Simple Brand Building:
+• Use free tools like Canva for design
+• Pick 2-3 colors and stick with them
+• Choose simple, readable fonts
+• Create templates for social media
+• Write in the same voice everywhere
 
-Visual Identity:
-• Use free design tools like Canva or GIMP
-• Choose a simple, readable font combination
-• Pick a cohesive color palette (2-3 colors max)
-• Create consistent visual templates
-• Design a simple, memorable logo
+Budget Tips:
+• Take good photos with your phone
+• Use consistent colors and fonts
+• Create simple templates
+• Be authentic and helpful
+• Focus on solving real problems
 
-Brand Voice:
-• Define your personality (professional, friendly, edgy, etc.)
-• Write in a consistent tone across all communications
-• Use the same vocabulary and style everywhere
-• Let your authentic personality shine through
-• Stay true to your values in all messaging
-
-Low-Cost Brand Building Tactics:
-• Create branded social media templates
-• Use consistent colors and fonts everywhere
-• Develop a simple brand style guide
-• Take professional-looking photos with your phone
-• Write compelling copy that reflects your personality
-
-Brand Experience:
-• Deliver consistent quality in everything you do
-• Respond promptly and professionally to customers
-• Package/present your work beautifully
-• Ask for feedback and testimonials
-• Exceed expectations whenever possible
-
-Remember: People connect with authentic brands that solve real problems. Focus on being genuinely helpful rather than trying to look "perfect."`,
+Remember: People connect with brands that are genuine and solve their problems, not perfect logos.`,
         activities: [
           {
             id: 'brand-foundation-worksheet',
@@ -562,12 +510,12 @@ Remember: People connect with authentic brands that solve real problems. Focus o
   },
   {
     id: 'web-development',
-    title: 'Intro to Web & Software Development',
-    description: 'Learn the fundamentals of web and software development - perfect for beginners wanting to understand the tech world',
-    duration: '6-8 weeks',
+    title: 'Web Development Basics',
+    description: 'Build your first simple website. Learn the essentials without getting overwhelmed.',
+    duration: '5-6 hours',
     level: 'Beginner',
-    skills: ['HTML/CSS Basics', 'JavaScript Fundamentals', 'Development Concepts', 'Programming Logic', 'Vibe Coding', 'AI Agents'],
-    certificate: 'Web Development Fundamentals Certificate',
+    skills: ['HTML Basics', 'CSS Basics', 'Website Building'],
+    certificate: 'Web Development Basics Mini Course Certificate',
     lessons: [
       {
         id: 'frontend-dev',
@@ -716,7 +664,7 @@ export const LearningDashboard: React.FC = () => {
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold">Learning Dashboard</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Master new skills with our comprehensive courses designed for real-world success
+          Quick, focused mini courses with just the essentials you need to get started
         </p>
       </div>
 
@@ -724,9 +672,9 @@ export const LearningDashboard: React.FC = () => {
         <Card className="max-w-md mx-auto">
           <CardHeader className="text-center">
             <LogIn className="w-12 h-12 mx-auto mb-4 text-primary" />
-            <CardTitle>Sign In to Access Courses</CardTitle>
+            <CardTitle>Sign In to Access Mini Courses</CardTitle>
             <CardDescription>
-              Create an account to track your progress and access premium learning content
+              Create an account to track your progress and access focused learning content
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -742,7 +690,7 @@ export const LearningDashboard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Enrolled Courses</CardTitle>
+                  <CardTitle className="text-sm font-medium">Enrolled Mini Courses</CardTitle>
                   <BookOpen className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
@@ -772,13 +720,13 @@ export const LearningDashboard: React.FC = () => {
                       : '0%'
                     }
                   </div>
-                  <p className="text-xs text-muted-foreground">Across all courses</p>
+                  <p className="text-xs text-muted-foreground">Across all mini courses</p>
                 </CardContent>
               </Card>
             </div>
           )}
 
-          {/* Course Filter */}
+          {/* Mini Course Filter */}
           <div className="flex items-center gap-4">
             <Filter className="h-5 w-5 text-muted-foreground" />
             <Select value={filterLevel} onValueChange={setFilterLevel}>
@@ -794,7 +742,7 @@ export const LearningDashboard: React.FC = () => {
             </Select>
           </div>
 
-          {/* Course Grid */}
+          {/* Mini Course Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredModules.map((module) => (
               <CoursePreview
