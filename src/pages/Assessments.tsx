@@ -173,7 +173,7 @@ const Assessments = () => {
             
             <div className="flex justify-center lg:justify-end">
               <img 
-                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                src="/lovable-uploads/fb9c9908-cc4b-42f4-ba7e-70ac6225403e.png" 
                 alt="Professional development and skill building" 
                 className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
