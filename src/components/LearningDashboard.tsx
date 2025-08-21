@@ -683,6 +683,19 @@ export const LearningDashboard: React.FC = () => {
     setSelectedModule(null);
   };
 
+  const handleRegister = (courseId: string) => {
+    // Registration logic would go here
+    console.log('Registering for course:', courseId);
+  };
+
+  const isRegistered = (courseId: string) => {
+    // Check if user is registered for this course
+    return progress?.enrollments.includes(courseId) || false;
+  };
+
+  // Calculate total lessons across all courses for better progress calculation
+  const totalLessonsAcrossAllCourses = learningModules.reduce((total, module) => total + module.lessons.length, 0);
+
   if (selectedModule) {
     return (
       <div className="container mx-auto p-6">
@@ -743,7 +756,7 @@ export const LearningDashboard: React.FC = () => {
                   <Award className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{progress.completedLessons.length}</div>
+                  <div className="text-2xl font-bold">{Object.values(progress?.completedLessons || {}).flat().length}</div>
                   <p className="text-xs text-muted-foreground">Lessons mastered</p>
                 </CardContent>
               </Card>
@@ -754,8 +767,8 @@ export const LearningDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {progress.enrollments.length > 0 
-                      ? Math.round((progress.completedLessons.length / progress.enrollments.length) * 10) + '%'
+                    {totalLessonsAcrossAllCourses > 0 && progress?.completedLessons
+                      ? Math.round((Object.values(progress.completedLessons).flat().length / totalLessonsAcrossAllCourses) * 100) + '%'
                       : '0%'
                     }
                   </div>
@@ -787,6 +800,8 @@ export const LearningDashboard: React.FC = () => {
               <CoursePreview
                 key={module.id}
                 course={module}
+                onRegister={handleRegister}
+                isRegistered={isRegistered(module.id)}
                 onStartCourse={() => handleStartCourse(module)}
               />
             ))}
