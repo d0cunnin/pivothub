@@ -133,12 +133,12 @@ export const Header = () => {
           </div>
 
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="lg:hidden"
+            className="lg:hidden border-2 border-primary/20 hover:border-primary hover:bg-primary/10"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
         </div>
 
