@@ -80,12 +80,6 @@ export const Header = () => {
               HireYourself
             </Link>
             <Link 
-              to="/contact" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/contact' ? 'text-primary font-medium' : ''}`}
-            >
-              Contact
-            </Link>
-            <Link 
               to="/pricing" 
               className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
             >
@@ -197,13 +191,6 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 HireYourself
-              </Link>
-              <Link 
-                to="/contact" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/contact' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Contact
               </Link>
               <Link 
                 to="/pricing" 
