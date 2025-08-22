@@ -49,11 +49,16 @@ export const Header = () => {
               </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <div 
-                    className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 cursor-pointer whitespace-nowrap ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
-                  >
-                    <span>ReSkill</span>
-                    <ChevronDown className="h-4 w-4" />
+                  <div className="flex items-center space-x-1">
+                    <Link 
+                      to="/reskill"
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                    >
+                      ReSkill
+                    </Link>
+                    <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
@@ -160,9 +165,13 @@ export const Header = () => {
                 About
               </Link>
               <div className="space-y-2">
-                <div className={`font-medium ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}>
+                <Link 
+                  to="/reskill"
+                  className={`font-medium hover:text-primary transition-colors ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   ReSkill
-                </div>
+                </Link>
                 <div className="pl-4 space-y-2">
                   <Link 
                     to="/assessments" 
