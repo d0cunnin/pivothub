@@ -23,83 +23,85 @@ export const Header = () => {
 
   return (
     <header className="bg-card shadow-soft border-b">
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center flex-shrink-0">
             <img 
               src="/lovable-uploads/a80d6385-d42b-4185-932b-427aec2b395d.png" 
               alt="PivotHub Logo" 
-              className="h-12 w-auto"
+              className="h-10 w-auto object-contain"
             />
           </Link>
           
-          <nav className="hidden md:flex space-x-8 ml-12">
-            <Link 
-              to="/" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/' ? 'text-primary font-medium' : ''}`}
-            >
-              Home
-            </Link>
-            <Link 
-              to="/about" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
-            >
-              About
-            </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div 
-                  className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 cursor-pointer ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
-                >
-                  <span>ReSkill</span>
-                  <ChevronDown className="h-4 w-4" />
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
-                <DropdownMenuItem asChild>
-                  <Link to="/assessments" className="flex w-full cursor-pointer">
-                    Assessments
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/jobprep" className="flex w-full cursor-pointer">
-                    Job Prep Tools
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link to="/learn-a-skill" className="flex w-full cursor-pointer">
-                    Learn a Skill
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Link 
-              to="/hireyourself" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/hireyourself' ? 'text-primary font-medium' : ''}`}
-            >
-              HireYourself
-            </Link>
-            <Link 
-              to="/pricing" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
-            >
-              Pricing
-            </Link>
-            <Link 
-              to="/downloads" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/downloads' ? 'text-primary font-medium' : ''}`}
-            >
-              Downloads
-            </Link>
-            <Link 
-              to="/grantwriting" 
-              className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
-            >
-              Grant Writing
-            </Link>
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-8">
+            <div className="flex items-center space-x-6 xl:space-x-8">
+              <Link 
+                to="/" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/' ? 'text-primary font-medium' : ''}`}
+              >
+                Home
+              </Link>
+              <Link 
+                to="/about" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
+              >
+                About
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div 
+                    className={`text-foreground hover:text-primary transition-colors flex items-center space-x-1 cursor-pointer whitespace-nowrap ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                  >
+                    <span>ReSkill</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
+                  <DropdownMenuItem asChild>
+                    <Link to="/assessments" className="flex w-full cursor-pointer">
+                      Assessments
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/jobprep" className="flex w-full cursor-pointer">
+                      Job Prep Tools
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/learn-a-skill" className="flex w-full cursor-pointer">
+                      Learn a Skill
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Link 
+                to="/hireyourself" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/hireyourself' ? 'text-primary font-medium' : ''}`}
+              >
+                HireYourself
+              </Link>
+              <Link 
+                to="/pricing" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
+              >
+                Pricing
+              </Link>
+              <Link 
+                to="/downloads" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/downloads' ? 'text-primary font-medium' : ''}`}
+              >
+                Downloads
+              </Link>
+              <Link 
+                to="/grantwriting" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
+              >
+                Grant Writing
+              </Link>
+            </div>
           </nav>
 
-          <div className="hidden md:flex space-x-3">
+          <div className="hidden lg:flex space-x-3 flex-shrink-0">
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -133,7 +135,7 @@ export const Header = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="md:hidden"
+            className="lg:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -141,7 +143,7 @@ export const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden mt-4 py-4 border-t border-border">
+          <div className="lg:hidden mt-4 py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
               <Link 
                 to="/" 
