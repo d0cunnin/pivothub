@@ -123,6 +123,29 @@ const Pricing = () => {
       current: subscriptionTier === "Pro",
       ctaText: subscriptionTier === "Pro" ? "Current Plan" : "Upgrade to Pro",
       ctaAction: () => openCheckoutModal("Pro Plan", "$14.99", "pro-monthly")
+    },
+    {
+      name: "Enterprise",
+      price: "Custom",
+      period: "pricing",
+      description: "For organizations and institutions that need advanced capabilities, scalability, and priority support",
+      features: [
+        "Unlimited team members",
+        "Advanced admin controls and permissions",
+        "Priority customer support",
+        "Personalized onboarding assistance",
+        "Team training resources",
+        "Usage analytics and reporting dashboard",
+        "Enhanced data security options",
+        "API access and custom workflow setup",
+        "Flexible integrations with existing tools",
+        "Scalable storage and performance capacity",
+        "Early access to select new features"
+      ],
+      popular: false,
+      current: subscriptionTier === "Enterprise",
+      ctaText: subscriptionTier === "Enterprise" ? "Current Plan" : "Contact Us",
+      ctaAction: () => window.location.href = "/contact"
     }
   ];
 
@@ -167,7 +190,7 @@ const Pricing = () => {
       <section className="section-spacing-sm">
         <div className="page-container">
           <div className="content-width">
-            <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
               {plans.map((plan, index) => (
                 <Card 
                   key={plan.name} 
