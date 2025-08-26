@@ -17,16 +17,16 @@ const learningModules = [
     id: 'ai-technology',
     title: 'AI & Technology Essentials',
     description: 'Learn AI basics in simple terms. Get comfortable with AI tools that can actually help you.',
-    duration: '3-4 hours',
+    duration: '1-2 hours',
     level: 'Beginner',
     skills: ['AI Basics', 'Productivity Tools', 'Digital Confidence'],
     certificate: 'AI Essentials Mini Course Certificate',
     lessons: [
       {
-        id: 'what-is-ai-and-why',
+        id: 'module-1',
         title: 'What is AI and Why Should I Use It?',
         description: 'Breaks down AI in simple terms and explains why it\'s relevant to daily life',
-        duration: '25 min',
+        duration: 'Short video',
         completed: false,
         videoPath: 'What is AI and Why Should I Use It??.mp4',
         content: `What is AI?
@@ -79,199 +79,10 @@ Bottom Line: AI is already helping you daily. Learning to use it intentionally c
         ]
       },
       {
-        id: 'history-and-future-ai',
-        title: 'The History and Future of AI',
-        description: 'Learn about AI\'s journey from past to future and what it means for you',
-        duration: '28 min',
-        completed: false,
-        videoPath: 'The History and Future of AI.mp4',
-        content: `AI's Quick Timeline
-• Past: Started in research labs, was complicated
-• Now: Easy-to-use apps and tools for everyone
-• Future: Even more helpful and integrated into daily life
-
-What You Need to Know:
-• AI is proven and stable technology
-• It keeps getting easier to use
-• Starting now gives you an advantage
-• You don't need to be an expert to benefit
-
-The Point: AI went from rocket science to everyday tool. Learning the basics now sets you up for success.`,
-        activities: [
-          {
-            id: 'ai-timeline-reflection',
-            title: 'Personal AI Timeline',
-            type: 'reflection' as const,
-            description: 'Map your own relationship with AI technology over time',
-            instructions: [
-              'Think back to the first time you encountered AI (even if you didn\'t know it was AI)',
-              'List 3-5 AI tools or features you\'ve adopted over the years',
-              'Reflect on how your attitude toward AI has changed',
-              'Identify one AI development you\'re most excited about for the future'
-            ],
-            submissionType: 'text' as const
-          }
-        ],
-        resources: [
-          {
-            id: 'ai-timeline-infographic',
-            title: 'AI History Timeline',
-            type: 'pdf' as const,
-            description: 'Visual timeline of key AI milestones from 1950 to today',
-            fileUrl: '#',
-            fileName: 'AI-Timeline.pdf'
-          }
-        ],
-        quiz: [
-          {
-            id: 'q2',
-            question: 'Why is understanding AI\'s history important for everyday users?',
-            options: [
-              'To become an AI expert',
-              'To understand it\'s a proven, evolving technology worth learning',
-              'To impress others with technical knowledge',
-              'To predict exactly what will happen next'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'ai-productivity-help',
-        title: 'How Can AI Help My Productivity?',
-        description: 'Discover practical ways AI can boost your daily productivity',
-        duration: '30 min',
-        completed: false,
-        videoPath: 'How Can AI Help My Productivity?.mp4',
-        content: `How AI Boosts Your Productivity
-
-AI handles the repetitive stuff so you can focus on what matters.
-
-Simple Ways AI Helps:
-• Writes email drafts from your key points
-• Creates schedules and manages calendars  
-• Organizes information and research
-• Breaks big tasks into smaller steps
-• Suggests next actions when you're stuck
-
-Real Example: 
-Instead of 30 minutes writing an email, give AI your main points and get a good draft in 2 minutes. You edit it and move on to important work.
-
-The Goal: Let AI do the prep work while you handle the creative and personal parts.`,
-        activities: [
-          {
-            id: 'productivity-experiment',
-            title: 'AI Productivity Challenge',
-            type: 'exercise' as const,
-            description: 'Test AI tools for your biggest productivity pain points',
-            instructions: [
-              'Identify your top 3 daily productivity challenges',
-              'Choose one AI tool to help with each challenge',
-              'Use each tool for one specific task',
-              'Document time saved and quality of results',
-              'Plan how to integrate the most helpful tool into your routine'
-            ],
-            submissionType: 'text' as const
-          }
-        ],
-        resources: [
-          {
-            id: 'productivity-tools-guide',
-            title: 'AI Productivity Tools Guide',
-            type: 'workbook' as const,
-            description: 'Comprehensive guide to AI tools for common productivity tasks',
-            fileUrl: '#',
-            fileName: 'AI-Productivity-Guide.pdf'
-          }
-        ],
-        quiz: [
-          {
-            id: 'q3',
-            question: 'What is the main benefit of using AI for productivity?',
-            options: [
-              'Working longer hours',
-              'Replacing all human work',
-              'Handling routine tasks so you can focus on important things',
-              'Making everything completely automatic'
-            ],
-            correctAnswer: 2
-          }
-        ]
-      },
-      {
-        id: 'ai-workforce-help',
-        title: 'How Can AI Help Me for the Workforce?',
-        description: 'Learn how AI can boost your career and workplace confidence',
-        duration: '32 min',
-        completed: false,
-        videoPath: 'How Can AI Help Me for the Workforce?.mp4',
-        content: `AI for Career Success
-
-AI helps you look professional and confident at work.
-
-Job Search Support:
-• Write better resumes and cover letters
-• Practice interview answers
-• Research companies quickly
-• Improve your LinkedIn profile
-
-Daily Work Help:
-• Draft professional emails
-• Prepare for meetings
-• Learn industry updates
-• Solve problems faster
-
-Career Growth:
-• Identify skill gaps
-• Set clear goals
-• Build your professional image
-
-Key Point: AI doesn't replace your value - it helps you show your best professional self.`,
-        activities: [
-          {
-            id: 'career-ai-audit',
-            title: 'Career AI Opportunity Assessment',
-            type: 'exercise' as const,
-            description: 'Identify where AI can most help your career goals',
-            instructions: [
-              'List your top 3 career goals for the next year',
-              'For each goal, identify 2-3 specific tasks AI could help with',
-              'Choose one AI tool to try for each career goal',
-              'Create an action plan for using AI in your professional development',
-              'Set a timeline for implementing these AI solutions'
-            ],
-            submissionType: 'text' as const
-          }
-        ],
-        resources: [
-          {
-            id: 'career-ai-toolkit',
-            title: 'AI Career Development Toolkit',
-            type: 'template' as const,
-            description: 'Templates and guides for using AI in career advancement',
-            fileUrl: '#',
-            fileName: 'Career-AI-Toolkit.xlsx'
-          }
-        ],
-        quiz: [
-          {
-            id: 'q4',
-            question: 'How can AI help with job interviews?',
-            options: [
-              'By attending the interview for you',
-              'By helping you practice questions and research the company',
-              'By guaranteeing you get the job',
-              'By making you seem more technical'
-            ],
-            correctAnswer: 1
-          }
-        ]
-      },
-      {
-        id: 'ai-work-with-you',
+        id: 'module-2',
         title: 'How AI Can Work With and For You',
         description: 'Understanding AI as your collaborative partner, not replacement',
-        duration: '26 min',
+        duration: 'Short video',
         completed: false,
         videoPath: 'How AI Can Work With and For You.mp4',
         content: `Working WITH AI, Not FOR AI
@@ -327,7 +138,7 @@ This way you get more done while keeping your unique value and voice.`,
         ],
         quiz: [
           {
-            id: 'q5',
+            id: 'q2',
             question: 'What\'s the best way to work with AI?',
             options: [
               'Let AI make all decisions for you',
@@ -340,10 +151,141 @@ This way you get more done while keeping your unique value and voice.`,
         ]
       },
       {
-        id: 'making-best-of-ai',
+        id: 'module-3',
+        title: 'How Can AI Help Me for the Workforce?',
+        description: 'Learn how AI can boost your career and workplace confidence',
+        duration: 'Short video',
+        completed: false,
+        videoPath: 'How Can AI Help Me for the Workforce?.mp4',
+        content: `AI for Career Success
+
+AI helps you look professional and confident at work.
+
+Job Search Support:
+• Write better resumes and cover letters
+• Practice interview answers
+• Research companies quickly
+• Improve your LinkedIn profile
+
+Daily Work Help:
+• Draft professional emails
+• Prepare for meetings
+• Learn industry updates
+• Solve problems faster
+
+Career Growth:
+• Identify skill gaps
+• Set clear goals
+• Build your professional image
+
+Key Point: AI doesn't replace your value - it helps you show your best professional self.`,
+        activities: [
+          {
+            id: 'career-ai-audit',
+            title: 'Career AI Opportunity Assessment',
+            type: 'exercise' as const,
+            description: 'Identify where AI can most help your career goals',
+            instructions: [
+              'List your top 3 career goals for the next year',
+              'For each goal, identify 2-3 specific tasks AI could help with',
+              'Choose one AI tool to try for each career goal',
+              'Create an action plan for using AI in your professional development',
+              'Set a timeline for implementing these AI solutions'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'career-ai-toolkit',
+            title: 'AI Career Development Toolkit',
+            type: 'template' as const,
+            description: 'Templates and guides for using AI in career advancement',
+            fileUrl: '#',
+            fileName: 'Career-AI-Toolkit.xlsx'
+          }
+        ],
+        quiz: [
+          {
+            id: 'q3',
+            question: 'How can AI help with job interviews?',
+            options: [
+              'By attending the interview for you',
+              'By helping you practice questions and research the company',
+              'By guaranteeing you get the job',
+              'By making you seem more technical'
+            ],
+            correctAnswer: 1
+          }
+        ]
+      },
+      {
+        id: 'module-4',
+        title: 'How Can AI Help My Productivity?',
+        description: 'Discover practical ways AI can boost your daily productivity',
+        duration: 'Short video',
+        completed: false,
+        videoPath: 'How Can AI Help My Productivity?.mp4',
+        content: `How AI Boosts Your Productivity
+
+AI handles the repetitive stuff so you can focus on what matters.
+
+Simple Ways AI Helps:
+• Writes email drafts from your key points
+• Creates schedules and manages calendars  
+• Organizes information and research
+• Breaks big tasks into smaller steps
+• Suggests next actions when you're stuck
+
+Real Example: 
+Instead of 30 minutes writing an email, give AI your main points and get a good draft in 2 minutes. You edit it and move on to important work.
+
+The Goal: Let AI do the prep work while you handle the creative and personal parts.`,
+        activities: [
+          {
+            id: 'productivity-experiment',
+            title: 'AI Productivity Challenge',
+            type: 'exercise' as const,
+            description: 'Test AI tools for your biggest productivity pain points',
+            instructions: [
+              'Identify your top 3 daily productivity challenges',
+              'Choose one AI tool to help with each challenge',
+              'Use each tool for one specific task',
+              'Document time saved and quality of results',
+              'Plan how to integrate the most helpful tool into your routine'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'productivity-tools-guide',
+            title: 'AI Productivity Tools Guide',
+            type: 'workbook' as const,
+            description: 'Comprehensive guide to AI tools for common productivity tasks',
+            fileUrl: '#',
+            fileName: 'AI-Productivity-Guide.pdf'
+          }
+        ],
+        quiz: [
+          {
+            id: 'q4',
+            question: 'What is the main benefit of using AI for productivity?',
+            options: [
+              'Working longer hours',
+              'Replacing all human work',
+              'Handling routine tasks so you can focus on important things',
+              'Making everything completely automatic'
+            ],
+            correctAnswer: 2
+          }
+        ]
+      },
+      {
+        id: 'module-5',
         title: 'Making the Best of AI',
         description: 'Maximize AI\'s benefits while maintaining your human value and ethics',
-        duration: '35 min',
+        duration: 'Short video',
         completed: false,
         videoPath: 'Making the Best of AI.mp4',
         content: `Using AI Effectively and Responsibly
@@ -411,7 +353,7 @@ The best approach: Use AI thoughtfully to enhance your abilities while staying a
         ],
         quiz: [
           {
-            id: 'q6',
+            id: 'q5',
             question: 'What\'s the most important principle for making the best of AI?',
             options: [
               'Using as many AI tools as possible',
@@ -420,6 +362,64 @@ The best approach: Use AI thoughtfully to enhance your abilities while staying a
               'Avoiding AI until it\'s perfect'
             ],
             correctAnswer: 2
+          }
+        ]
+      },
+      {
+        id: 'module-6',
+        title: 'The History and Future of AI',
+        description: 'Learn about AI\'s journey from past to future and what it means for you',
+        duration: 'Short video',
+        completed: false,
+        videoPath: 'The History and Future of AI.mp4',
+        content: `AI's Quick Timeline
+• Past: Started in research labs, was complicated
+• Now: Easy-to-use apps and tools for everyone
+• Future: Even more helpful and integrated into daily life
+
+What You Need to Know:
+• AI is proven and stable technology
+• It keeps getting easier to use
+• Starting now gives you an advantage
+• You don't need to be an expert to benefit
+
+The Point: AI went from rocket science to everyday tool. Learning the basics now sets you up for success.`,
+        activities: [
+          {
+            id: 'ai-timeline-reflection',
+            title: 'Personal AI Timeline',
+            type: 'reflection' as const,
+            description: 'Map your own relationship with AI technology over time',
+            instructions: [
+              'Think back to the first time you encountered AI (even if you didn\'t know it was AI)',
+              'List 3-5 AI tools or features you\'ve adopted over the years',
+              'Reflect on how your attitude toward AI has changed',
+              'Identify one AI development you\'re most excited about for the future'
+            ],
+            submissionType: 'text' as const
+          }
+        ],
+        resources: [
+          {
+            id: 'ai-timeline-infographic',
+            title: 'AI History Timeline',
+            type: 'pdf' as const,
+            description: 'Visual timeline of key AI milestones from 1950 to today',
+            fileUrl: '#',
+            fileName: 'AI-Timeline.pdf'
+          }
+        ],
+        quiz: [
+          {
+            id: 'q6',
+            question: 'Why is understanding AI\'s history important for everyday users?',
+            options: [
+              'To become an AI expert',
+              'To understand it\'s a proven, evolving technology worth learning',
+              'To impress others with technical knowledge',
+              'To predict exactly what will happen next'
+            ],
+            correctAnswer: 1
           }
         ]
       }
