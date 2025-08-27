@@ -42,10 +42,10 @@ const LearnASkill = () => {
         <div className="page-container">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Mini Courses
+              Micro Courses
             </h1>
             <p className="text-lg text-muted-foreground">
-              Learn essential skills with our focused, practical mini courses
+              Short focused learning experiences designed to give you relevant information quickly. Each course delivers practical information in a concise format, so you can learn what you need without a large time commitment. Perfect for busy learners, these courses help you grow, adapt, and learn fast.
             </p>
           </div>
 
