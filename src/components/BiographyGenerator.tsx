@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { User, Target, Eye, Heart } from 'lucide-react';
+import { sanitizeAIContent, parseAISections } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 interface BiographyContent {
   founderBio: string;
@@ -27,12 +29,8 @@ export const BiographyGenerator = () => {
     setIsGenerating(true);
     
     try {
-      const response = await fetch('/functions/v1/generate-business-content', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+        body: {
           type: 'biography',
           data: { 
             founderName, 
@@ -44,33 +42,35 @@ export const BiographyGenerator = () => {
             traction, 
             achievements 
           }
-        })
+        }
       });
 
-      const result = await response.json();
-      
-      if (result.error) {
-        throw new Error(result.error);
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data.error) {
+        throw new Error(data.error);
       }
 
       // Parse AI response into biography sections
-      const sections = result.content.split('\n\n');
-      const mockContent: BiographyContent = {
+      const sections = parseAISections(data.content, 3);
+      const generatedContent: BiographyContent = {
         founderBio: sections[0] || `${founderName} is a passionate entrepreneur with extensive experience in ${background}.`,
         vision: sections[1] || `To become the leading ${businessType} that transforms the industry.`,
         mission: sections[2] || `Our mission is to ${goals.toLowerCase()} while maintaining excellence.`
       };
       
-      setContent(mockContent);
+      setContent(generatedContent);
     } catch (error) {
       console.error('Error generating biography:', error);
-      // Fallback to mock data
-      const mockContent: BiographyContent = {
-        founderBio: `${founderName} is a passionate entrepreneur with a background in ${background}. ${dateOfFormation ? `Founded in ${new Date(dateOfFormation).getFullYear()}, ` : ''}With years of experience and a deep understanding of market needs, ${founderName} founded this ${businessType} to make a meaningful impact in the industry.${achievements ? ` Notable achievements include ${achievements}.` : ''} Their commitment to excellence and innovation drives the company's success and growth.`,
-        vision: `To become the leading ${businessType} that transforms how people interact with our industry, creating lasting positive change and setting new standards for quality and service excellence.${traction ? ` Building on our current success of ${traction}, we aim to expand our impact significantly.` : ''}`,
-        mission: `Our mission is to ${goals.toLowerCase()} while maintaining the highest standards of integrity, innovation, and customer satisfaction.${productsServices ? ` Through our ${productsServices}, we are committed to` : ' We are committed to'} building long-term relationships with our clients and contributing positively to our community.`
+      // Enhanced fallback based on user input
+      const fallbackContent: BiographyContent = {
+        founderBio: `${founderName} is a passionate entrepreneur with a background in ${background}. ${dateOfFormation ? `Founded in ${new Date(dateOfFormation).getFullYear()}, ` : ''}With years of experience and a deep understanding of market needs, ${founderName} founded this ${businessType} to make a meaningful impact in the industry.${achievements ? ` Notable achievements include ${achievements}.` : ''} Their commitment to excellence and innovation drives the company's success and growth, with a focus on delivering exceptional value to customers and stakeholders.`,
+        vision: `To become the leading ${businessType} that transforms how people interact with our industry, creating lasting positive change and setting new standards for quality and service excellence.${traction ? ` Building on our current success including ${traction}, we aim to expand our impact significantly` : ' We envision a future where our solutions become the industry standard'}, driving innovation and sustainable growth in the marketplace.`,
+        mission: `Our mission is to ${goals.toLowerCase()} while maintaining the highest standards of integrity, innovation, and customer satisfaction.${productsServices ? ` Through our ${productsServices}, we are committed to` : ' We are committed to'} building long-term relationships with our clients, contributing positively to our community, and creating sustainable value for all stakeholders through ethical business practices and continuous improvement.`
       };
-      setContent(mockContent);
+      setContent(fallbackContent);
     } finally {
       setIsGenerating(false);
     }

@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Presentation, Download, Eye } from "lucide-react";
+import { sanitizeAIContent } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PitchData {
   companyName: string;
@@ -48,40 +50,29 @@ export const PitchDeckGenerator = () => {
     setIsGenerating(true);
     
     try {
-      const response = await fetch('/functions/v1/generate-business-content', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+        body: {
           type: 'pitch-deck',
           data: formData
-        })
+        }
       });
 
-      const result = await response.json();
-      
-      if (result.error) {
-        throw new Error(result.error);
+      if (error) {
+        throw new Error(error.message);
       }
 
-      // Parse AI response into slide format  
-      const slideContent = result.content.split('\n\n').filter((section: string) => section.trim());
-      const generatedSlides: Slide[] = slideContent.map((section: string, index: number) => {
-        const lines = section.split('\n');
-        const title = lines[0].replace(/^\d+\.\s*/, '').replace(/^#+\s*/, '').trim();
-        const content = lines.slice(1).join('\n').trim();
-        
-        return {
-          title: title || `Slide ${index + 1}`,
-          content: content || section
-        };
-      }).slice(0, 12); // Limit to 12 slides
+      if (data.error) {
+        throw new Error(data.error);
+      }
 
+      // Parse AI response into slide format
+      const sanitizedContent = sanitizeAIContent(data.content);
+      const generatedSlides = parsePitchDeckSlides(sanitizedContent);
+      
       setSlides(generatedSlides);
     } catch (error) {
       console.error('Error generating pitch deck:', error);
-      // Fallback to mock data
+      // Enhanced fallback based on user input
       const generatedSlides: Slide[] = [
         {
           title: "Company Overview",
@@ -104,18 +95,92 @@ export const PitchDeckGenerator = () => {
           content: formData.businessModel || "Subscription-based SaaS model with multiple pricing tiers\n• Basic: $29/month\n• Professional: $99/month\n• Enterprise: Custom pricing"
         },
         {
-          title: "Competition",
+          title: "Competitive Landscape",
           content: formData.competition || "While competitors exist, we differentiate through:\n• Superior user experience\n• Advanced features\n• Competitive pricing\n• Exceptional customer support"
         },
         {
-          title: "Traction",
+          title: "Traction & Metrics",
           content: formData.traction || "• 500+ early users\n• $50K monthly recurring revenue\n• 95% customer satisfaction\n• Growing at 20% month-over-month"
+        },
+        {
+          title: "Team",
+          content: formData.teamBackground || "Experienced team with proven track record in the industry. Combined expertise in technology, business development, and market strategy."
+        },
+        {
+          title: "Funding Request",
+          content: `We are seeking $${formData.fundingAmount || "500,000"} to accelerate growth and market expansion.\n\n${formData.useOfFunds || "Funds will be used for product development, marketing, and team expansion to capture market opportunity."}`
+        },
+        {
+          title: "Use of Funds",
+          content: formData.useOfFunds || "• 40% Product Development\n• 30% Marketing & Sales\n• 20% Team Expansion\n• 10% Operations & Infrastructure"
+        },
+        {
+          title: "Financial Projections",
+          content: "3-Year Revenue Forecast:\n• Year 1: Break-even with $500K revenue\n• Year 2: $2M revenue, 25% profit margin\n• Year 3: $5M revenue, 35% profit margin\n\nProjected ROI: 5-7x over 3 years"
+        },
+        {
+          title: "Next Steps",
+          content: "Timeline for investment deployment:\n• Month 1-2: Team hiring and onboarding\n• Month 3-6: Product development and testing\n• Month 6-12: Market launch and scaling\n\nLooking for strategic investors who bring industry expertise and network connections."
         }
       ];
       setSlides(generatedSlides);
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  // Helper function to parse pitch deck slides from AI response
+  const parsePitchDeckSlides = (content: string): Slide[] => {
+    const slides: Slide[] = [];
+    
+    // Split by slide markers
+    let sections = content.split(/\[SLIDE_TITLE\]|\[.*?\]|Slide \d+:/i).filter(section => section.trim());
+    
+    // If no clear slide markers, split by double newlines
+    if (sections.length < 3) {
+      sections = content.split(/\n\n+/).filter(section => section.trim() && section.length > 20);
+    }
+
+    sections.forEach((section, index) => {
+      const lines = section.split('\n').filter(line => line.trim());
+      if (lines.length === 0) return;
+
+      let title = '';
+      let slideContent = '';
+
+      // Try to identify title from first line
+      const firstLine = lines[0].trim();
+      if (firstLine.length < 100 && !firstLine.includes('.') && lines.length > 1) {
+        title = firstLine;
+        slideContent = lines.slice(1).join('\n').trim();
+      } else {
+        // Generate title based on content or position
+        const standardTitles = [
+          "Company Overview", "Problem Statement", "Our Solution", "Market Opportunity",
+          "Business Model", "Competitive Analysis", "Traction", "Team", "Financial Projections",
+          "Funding Request", "Use of Funds", "Next Steps"
+        ];
+        title = standardTitles[index] || `Slide ${index + 1}`;
+        slideContent = section.trim();
+      }
+
+      if (title && slideContent) {
+        slides.push({
+          title,
+          content: slideContent
+        });
+      }
+    });
+
+    // Ensure we have at least a few key slides
+    if (slides.length === 0) {
+      slides.push({
+        title: "Company Overview",
+        content: `${formData.companyName || "Your Company"} - Brief description of your business and mission.`
+      });
+    }
+
+    return slides.slice(0, 12); // Limit to 12 slides
   };
 
   return (

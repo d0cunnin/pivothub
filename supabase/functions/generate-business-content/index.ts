@@ -19,7 +19,7 @@ serve(async (req) => {
     }
 
     let prompt = ''
-    let systemMessage = 'You are an expert business consultant and content creator.'
+    let systemMessage = 'You are an expert business consultant and content creator. IMPORTANT: Provide responses in clean, plain text format without any markdown formatting, headers (#), or special characters. Use simple bullet points (•) if lists are needed. Avoid using symbols like ###, ##, **, *, or other markdown syntax.'
 
     switch (type) {
       case 'business-ideas':
@@ -28,7 +28,7 @@ Skills: ${data.skills}
 Interests: ${data.interests}
 Budget: ${data.budget}
 
-Provide specific, actionable business ideas that match their background. Format as a numbered list.`
+Provide specific, actionable business ideas that match their background. Format as simple numbered list without any markdown or special formatting. Each idea should be 1-2 sentences explaining the concept and why it fits their profile.`
         break
 
       case 'business-plan':
@@ -45,14 +45,21 @@ Include: Executive Summary, Business Description, Market Analysis, Marketing Str
         break
 
       case 'marketing-strategy':
-        prompt = `Create a 3-phase marketing strategy for:
+        prompt = `Create a detailed 3-phase marketing strategy for:
 Business Type: ${data.businessType}
 Target Market: ${data.targetMarket}
 Budget: ${data.budget}
 Goals: ${data.goals}
 Current Stage: ${data.currentStage}
 
-Provide 3 phases with specific tactics, timelines, budgets, and success metrics. Format with clear sections for each phase.`
+For each of the 3 phases, provide the following in plain text format:
+- Phase name and timeline
+- 2-3 specific objectives
+- 3-4 marketing tactics
+- Budget allocation percentage
+- 2-3 key metrics to track
+
+Use clear section breaks between phases but no markdown formatting.`
         break
 
       case 'pitch-deck':
@@ -68,7 +75,14 @@ Use of Funds: ${data.useOfFunds}
 Team: ${data.teamBackground}
 Traction: ${data.traction}
 
-Generate slide titles with detailed content for each. Format as: "Slide Title\nSlide content here"`
+Generate slides in this exact format for each slide:
+[SLIDE_TITLE]
+[Detailed slide content here]
+
+[SLIDE_TITLE]
+[Detailed slide content here]
+
+Use plain text only, no markdown or special formatting.`
         break
 
       case 'biography':
@@ -125,7 +139,17 @@ Create content for different platforms (Instagram, LinkedIn, Twitter, Facebook) 
       throw new Error(result.error.message)
     }
 
-    const content = result.choices[0].message.content
+    let content = result.choices[0].message.content
+
+    // Sanitize content to remove any remaining markdown artifacts
+    content = content
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/\*\*\*(.+?)\*\*\*/g, '$1')
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/#{2,}/g, '')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
 
     return new Response(
       JSON.stringify({ content, type }),

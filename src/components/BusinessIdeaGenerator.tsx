@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lightbulb, RefreshCw, Sparkles } from "lucide-react";
+import { sanitizeAIContent } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 export const BusinessIdeaGenerator = () => {
   const [skills, setSkills] = useState("");
@@ -16,38 +18,49 @@ export const BusinessIdeaGenerator = () => {
     setIsGenerating(true);
     
     try {
-      const response = await fetch('/functions/v1/generate-business-content', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+        body: {
           type: 'business-ideas',
           data: { skills, interests, budget }
-        })
+        }
       });
 
-      const result = await response.json();
-      
-      if (result.error) {
-        throw new Error(result.error);
+      if (error) {
+        throw new Error(error.message);
       }
 
-      // Parse the AI response to extract business ideas
-      const ideaLines = result.content.split('\n').filter((line: string) => 
-        line.trim() && (line.includes('.') || line.includes(':'))
-      );
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      // Parse and sanitize the AI response
+      const sanitizedContent = sanitizeAIContent(data.content);
+      const ideaLines = sanitizedContent
+        .split('\n')
+        .filter((line: string) => {
+          const trimmed = line.trim();
+          return trimmed && 
+                 trimmed.length > 20 && // Ensure substantial content
+                 (trimmed.match(/^\d+\./) || trimmed.includes(':') || trimmed.length > 30);
+        })
+        .map((line: string) => {
+          // Clean up numbered lists and formatting
+          return line.replace(/^\d+\.\s*/, '').trim();
+        })
+        .filter((idea: string) => idea.length > 15);
       
       setIdeas(ideaLines.slice(0, 5));
     } catch (error) {
       console.error('Error generating ideas:', error);
-      // Fallback to mock data if API fails
-      const sampleIdeas = [
-        "Online consulting service leveraging your professional expertise",
-        "E-commerce store selling products related to your interests", 
-        "Digital course creation and online education platform"
+      // Enhanced fallback based on user input
+      const fallbackIdeas = [
+        `${skills ? `Consulting service specializing in ${skills}` : 'Professional consulting service'} - Leverage your expertise to help businesses solve problems in your area of specialization.`,
+        `${interests ? `${interests}-focused` : 'Niche'} e-commerce store - Create an online store selling products that align with your interests and target a passionate community.`,
+        `Digital course platform teaching ${skills || 'professional skills'} - Create and sell online courses sharing your knowledge and experience.`,
+        `${budget && budget.includes('low') || budget.includes('500') ? 'Service-based' : 'Product'} business in ${interests || 'your field'} - Start with minimal upfront investment and scale based on demand.`,
+        `Content creation and monetization around ${interests || 'your expertise'} - Build an audience through blogging, YouTube, or social media and monetize through various channels.`
       ];
-      setIdeas(sampleIdeas);
+      setIdeas(fallbackIdeas);
     } finally {
       setIsGenerating(false);
     }
