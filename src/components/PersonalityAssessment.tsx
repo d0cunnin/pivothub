@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, ArrowLeft, ArrowRight, CheckCircle, TrendingUp } from "lucide-react";
+import { AssessmentResultsModal } from "./AssessmentResultsModal";
+import { supabase } from "@/integrations/supabase/client";
 
 const personalityQuestions = [
   // Introversion/Extroversion (1-10)
@@ -150,6 +152,7 @@ export const PersonalityAssessment = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [showResultsModal, setShowResultsModal] = useState(false);
   const [results, setResults] = useState<any>(null);
 
   const handleAnswer = (value: string) => {
@@ -175,39 +178,22 @@ export const PersonalityAssessment = () => {
 
   const calculateResults = async () => {
     try {
-      // Call the AI personality assessment API
-      const response = await fetch('/functions/v1/personality-assessment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      // Get auth token for the request
+      const { data: { session } } = await supabase.auth.getSession();
+      const authToken = session?.access_token;
+
+      const response = await supabase.functions.invoke('enhanced-assessment-analyzer', {
+        body: {
+          assessmentType: 'personality',
+          responses: answers,
+          userProfile: {}
         },
-        body: JSON.stringify({
-          responses: answers
-        }),
+        headers: authToken ? { Authorization: `Bearer ${authToken}` } : {}
       });
 
-      const data = await response.json();
-      
-      if (response.ok && data.personality) {
-        // Transform AI response to match existing interface
-        const interpretedResults = data.personality.keyTraits.map((trait: any, index: number) => ({
-          trait: trait.trait,
-          score: trait.score,
-          level: trait.score >= 4.0 ? "Strong" : trait.score >= 3.0 ? "Moderate" : "Developing",
-          interpretation: trait.description
-        }));
-
-        setResults({
-          traitScores: interpretedResults,
-          topStrengths: interpretedResults
-            .filter((r: any) => r.level === "Strong")
-            .sort((a: any, b: any) => b.score - a.score)
-            .slice(0, 3),
-          personalityType: data.personality.personalityType,
-          careerFit: data.personality.careerFit,
-          summary: data.personality.summary
-        });
-        setShowResults(true);
+      if (response.data && !response.error) {
+        setResults(response.data);
+        setShowResultsModal(true);
         return;
       }
     } catch (error) {
@@ -245,7 +231,7 @@ export const PersonalityAssessment = () => {
         .sort((a, b) => b.score - a.score)
         .slice(0, 3)
     });
-    setShowResults(true);
+    setShowResultsModal(true);
   };
 
   const getInterpretation = (traitIndex: number, score: number) => {
@@ -309,6 +295,7 @@ export const PersonalityAssessment = () => {
     setCurrentQuestion(0);
     setAnswers([]);
     setShowResults(false);
+    setShowResultsModal(false);
     setResults(null);
   };
 
@@ -476,6 +463,13 @@ export const PersonalityAssessment = () => {
           </>
         )}
       </DialogContent>
+      
+      <AssessmentResultsModal
+        isOpen={showResultsModal}
+        onClose={() => setShowResultsModal(false)}
+        assessmentType="personality"
+        results={results}
+      />
     </Dialog>
   );
 };

@@ -50,6 +50,42 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_results: {
+        Row: {
+          action_plan: Json | null
+          assessment_type: string
+          created_at: string
+          detailed_analysis: Json | null
+          id: string
+          results: Json
+          score: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_plan?: Json | null
+          assessment_type: string
+          created_at?: string
+          detailed_analysis?: Json | null
+          id?: string
+          results: Json
+          score?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_plan?: Json | null
+          assessment_type?: string
+          created_at?: string
+          detailed_analysis?: Json | null
+          id?: string
+          results?: Json
+          score?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       course_enrollments: {
         Row: {
           completed_at: string | null
@@ -160,6 +196,33 @@ export type Database = {
           quiz_id?: string
           score?: number
           total_questions?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          achieved_at: string
+          assessment_type: string
+          id: string
+          milestone: string | null
+          progress_data: Json
+          user_id: string
+        }
+        Insert: {
+          achieved_at?: string
+          assessment_type: string
+          id?: string
+          milestone?: string | null
+          progress_data: Json
+          user_id: string
+        }
+        Update: {
+          achieved_at?: string
+          assessment_type?: string
+          id?: string
+          milestone?: string | null
+          progress_data?: Json
           user_id?: string
         }
         Relationships: []

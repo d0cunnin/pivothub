@@ -6,6 +6,8 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, Calculator, BookOpen, Monitor, ClipboardList, Search, Users, Wrench } from "lucide-react";
+import { AssessmentResultsModal } from "./AssessmentResultsModal";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SkillQuestion {
   id: string;
@@ -575,6 +577,7 @@ export const SkillsAssessment = () => {
   const [results, setResults] = useState<SkillResults>({});
   const [aiAssessment, setAiAssessment] = useState<any>(null);
   const [showResults, setShowResults] = useState(false);
+  const [showResultsModal, setShowResultsModal] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
   const totalQuestions = skillCategories.reduce((sum, category) => sum + category.questions.length, 0);
@@ -603,7 +606,6 @@ export const SkillsAssessment = () => {
       // Calculate results when assessment is complete
       const finalResults = await calculateResults();
       setResults(finalResults);
-      setShowResults(true);
     }
   };
 
@@ -623,29 +625,30 @@ export const SkillsAssessment = () => {
     setResults({});
     setAiAssessment(null);
     setShowResults(false);
+    setShowResultsModal(false);
     setSelectedAnswer("");
     setIsOpen(false);
   };
 
   const calculateResults = async (): Promise<SkillResults> => {
     try {
-      // Call the AI skills assessment API
-      const response = await fetch('/functions/v1/skills-assessment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Get auth token for the request
+      const { data: { session } } = await supabase.auth.getSession();
+      const authToken = session?.access_token;
+
+      const response = await supabase.functions.invoke('enhanced-assessment-analyzer', {
+        body: {
+          assessmentType: 'skills',
           responses: answers,
-          targetField: 'General' // Could be enhanced with user's target field
-        }),
+          userProfile: {}
+        },
+        headers: authToken ? { Authorization: `Bearer ${authToken}` } : {}
       });
 
-      const data = await response.json();
-      
-      if (response.ok && data.assessment) {
+      if (response.data && !response.error) {
         // Store AI assessment for detailed insights
-        setAiAssessment(data.assessment);
+        setAiAssessment(response.data);
+        setShowResultsModal(true);
         
         // Transform AI response to match existing interface
         const results: SkillResults = {};
@@ -950,6 +953,13 @@ export const SkillsAssessment = () => {
           </div>
         )}
       </DialogContent>
+
+      <AssessmentResultsModal
+        isOpen={showResultsModal}
+        onClose={() => setShowResultsModal(false)}
+        assessmentType="skills"
+        results={aiAssessment}
+      />
     </Dialog>
   );
 };

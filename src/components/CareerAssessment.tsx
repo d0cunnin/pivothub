@@ -6,6 +6,8 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, Target, TrendingUp, Users, Heart, Wrench, Calculator, Shield, MessageCircle, GraduationCap, Lightbulb, HandHeart, Home } from "lucide-react";
+import { AssessmentResultsModal } from "./AssessmentResultsModal";
+import { supabase } from "@/integrations/supabase/client";
 
 interface CareerArea {
   id: string;
@@ -254,6 +256,7 @@ export const CareerAssessment = () => {
   const [currentResponse, setCurrentResponse] = useState<number>(0);
   const [results, setResults] = useState<AssessmentResults>({});
   const [showResults, setShowResults] = useState(false);
+  const [showResultsModal, setShowResultsModal] = useState(false);
 
   const totalQuestions = careerAreas.length * 10;
   const currentQuestionNumber = currentArea * 10 + currentStatement + 1;
@@ -507,6 +510,13 @@ export const CareerAssessment = () => {
           </div>
         )}
       </DialogContent>
+      
+      <AssessmentResultsModal
+        isOpen={showResultsModal}
+        onClose={() => setShowResultsModal(false)}
+        assessmentType="career"
+        results={results}
+      />
     </Dialog>
   );
 };
