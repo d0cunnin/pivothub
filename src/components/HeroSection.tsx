@@ -19,11 +19,11 @@ export const HeroSection = () => {
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
             Pivot Your Way to the Future
-            <span className="text-accent"> in a Digital World.</span>
+            <span className="text-accent"> in a Digital World</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-6 text-white/90 max-w-2xl">
-            PivotHub gives you the tools, training, and talent connections to pivot forward — no matter where you're starting from.
+            Learn, grow, relaunch your career, or connect with top tech talent — all in one place.
           </p>
           
           <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
@@ -33,7 +33,7 @@ export const HeroSection = () => {
               className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/assessments'}
             >
-              Assess Your Path
+              Take the Assessment
             </Button>
             <Button 
               size="lg" 
@@ -49,7 +49,7 @@ export const HeroSection = () => {
               className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/learn-a-skill'}
             >
-              Learn a New Skill
+              Learn a Skill
             </Button>
             <Button 
               size="lg" 
@@ -57,7 +57,7 @@ export const HeroSection = () => {
               className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/hire-yourself'}
             >
-              Hire Yourself
+              Hire Yourself / Launch a Business
             </Button>
             <Button 
               size="lg" 
@@ -65,7 +65,7 @@ export const HeroSection = () => {
               className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/freelancer-marketplace'}
             >
-              Tech Freelancer Hub
+              Offer or Hire Tech Talent
             </Button>
           </div>
         </div>
