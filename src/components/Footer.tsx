@@ -12,7 +12,7 @@ export const Footer = () => {
               alt="PivotHub Logo" 
               className="h-12 w-auto"
             />
-            <p className="text-primary-foreground/80">
+            <p className="text-sm text-primary-foreground/80 leading-tight">
               Learn, grow, relaunch your career, or connect with top tech talent — all in one place. PivotHub gives you the tools, training, and talent connections to pivot forward.
             </p>
             <div className="flex space-x-4">
