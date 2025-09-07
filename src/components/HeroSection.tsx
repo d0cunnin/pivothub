@@ -18,54 +18,54 @@ export const HeroSection = () => {
         <div className="max-w-3xl text-white">
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Transform Your Future. 
-            <span className="text-accent">Pivot with Purpose.</span>
+            Pivot Your Way to the Future
+            <span className="text-accent"> in a Digital World.</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-6 text-white/90 max-w-2xl">
-            Whether you're building a business or pivoting into a new career, PivotHub gives you the tools, training, and support to step into your next chapter with clarity, confidence, and impact.
+            PivotHub gives you the tools, training, and talent connections to pivot forward — no matter where you're starting from.
           </p>
           
-          <div className="flex flex-row gap-3 mb-8 justify-center sm:justify-start">
+          <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
             <Button 
               size="lg" 
               variant="heroWhite"
-              className="text-base px-6 py-3 flex-shrink-0"
+              className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/assessments'}
             >
-              Assessments
+              Assess Your Path
             </Button>
             <Button 
               size="lg" 
               variant="heroWhite"
-              className="text-base px-6 py-3 flex-shrink-0"
+              className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/job-prep'}
             >
-              Career Prep
+              Relaunch Your Career
             </Button>
             <Button 
               size="lg" 
               variant="heroWhite"
-              className="text-base px-6 py-3 flex-shrink-0"
+              className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/learn-a-skill'}
             >
-              Learn a Skill
+              Learn a New Skill
             </Button>
             <Button 
               size="lg" 
               variant="heroWhite"
-              className="text-base px-6 py-3 flex-shrink-0"
+              className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/hire-yourself'}
             >
-              Business Solutions
+              Hire Yourself
             </Button>
             <Button 
               size="lg" 
               variant="heroWhite"
-              className="text-base px-6 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/grantwriting'}
+              className="text-sm px-4 py-3 flex-shrink-0"
+              onClick={() => window.location.href = '/freelancer-marketplace'}
             >
-              Grant Writing
+              Tech Freelancer Hub
             </Button>
           </div>
         </div>
