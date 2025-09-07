@@ -5,7 +5,7 @@ export const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-5 gap-8">
           <div className="space-y-4">
             <img 
               src="/lovable-uploads/e9310b7d-2004-432c-a5dc-11828a70f8e7.png" 
@@ -13,7 +13,7 @@ export const Footer = () => {
               className="h-12 w-auto"
             />
             <p className="text-primary-foreground/80">
-              Helping individuals pivot their careers through preparation, reskilling, and entrepreneurship.
+              Learn, grow, relaunch your career, or connect with top tech talent — all in one place. PivotHub gives you the tools, training, and talent connections to pivot forward.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
@@ -40,6 +40,16 @@ export const Footer = () => {
               <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Business Ideas</Link></li>
               <li><Link to="/grantwriting" className="hover:text-accent transition-colors">Grant Writing</Link></li>
               <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Pitch Decks</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-semibold mb-4">Talent Marketplace</h4>
+            <ul className="space-y-2 text-primary-foreground/80">
+              <li><Link to="/freelancer-marketplace" className="hover:text-accent transition-colors">Find Freelancers</Link></li>
+              <li><Link to="/freelancer-onboarding" className="hover:text-accent transition-colors">Join as Freelancer</Link></li>
+              <li><Link to="/client-onboarding" className="hover:text-accent transition-colors">Post a Project</Link></li>
+              <li><Link to="/freelancer-marketplace" className="hover:text-accent transition-colors">Browse Services</Link></li>
             </ul>
           </div>
           
