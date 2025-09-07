@@ -103,6 +103,12 @@ export const Header = () => {
               >
                 Grant Writing
               </Link>
+              <Link 
+                to="/freelancer-marketplace" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname.includes('/freelancer') || location.pathname.includes('/client') ? 'text-primary font-medium' : ''}`}
+              >
+                Tech Talent Hub
+              </Link>
             </div>
           </nav>
 
@@ -217,12 +223,19 @@ export const Header = () => {
               >
                 Downloads
               </Link>
-              <Link 
+               <Link 
                 to="/grantwriting" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Grant Writing
+              </Link>
+              <Link 
+                to="/freelancer-marketplace" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname.includes('/freelancer') || location.pathname.includes('/client') ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Tech Talent Hub
               </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 {user ? (

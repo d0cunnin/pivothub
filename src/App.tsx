@@ -21,6 +21,11 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Auth from "./pages/Auth";
 import Pricing from "./pages/Pricing";
 import GrantWriting from "./pages/GrantWriting";
+import FreelancerMarketplace from "./pages/FreelancerMarketplace";
+import FreelancerOnboarding from "./pages/FreelancerOnboarding";
+import ClientOnboarding from "./pages/ClientOnboarding";
+import FreelancerDashboard from "./pages/FreelancerDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +48,11 @@ const App = () => (
             <Route path="/learn-a-skill" element={<LearnASkill />} />
             <Route path="/hireyourself" element={<HireYourself />} />
             <Route path="/grantwriting" element={<GrantWriting />} />
+            <Route path="/freelancer-marketplace" element={<FreelancerMarketplace />} />
+            <Route path="/freelancer-onboarding" element={<FreelancerOnboarding />} />
+            <Route path="/client-onboarding" element={<ClientOnboarding />} />
+            <Route path="/freelancer-dashboard" element={<FreelancerDashboard />} />
+            <Route path="/client-dashboard" element={<ClientDashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
