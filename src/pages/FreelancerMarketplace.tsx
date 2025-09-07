@@ -79,7 +79,7 @@ export default function FreelancerMarketplace() {
               <span className="block text-accent"> or Showcase Your Skills to the World</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-8">
-              Talent.PivotHub.io is your trusted marketplace to connect businesses with skilled tech professionals. Whether you're hiring or freelancing, we make the digital pivot simple.
+              PivotHub is your trusted marketplace to connect businesses with skilled tech professionals. Whether you're hiring or freelancing, we make the digital pivot simple. It's completely free to set up your profile!
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
@@ -298,14 +298,14 @@ export default function FreelancerMarketplace() {
         <div className="page-container">
           <div className="content-width">
             <div className="text-center content-spacing">
-              <h2 className="section-header">Why Use Talent.PivotHub.io?</h2>
+              <h2 className="section-header">Why Use PivotHub?</h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid-spacing">
               <div className="text-center">
                 <Users className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Community-Driven</h3>
-                <p className="text-muted-foreground">Not overcrowded - a curated community of quality professionals</p>
+                <h3 className="text-lg font-semibold mb-2">Free to Start</h3>
+                <p className="text-muted-foreground">Set up your freelancer or client profile completely free - no hidden costs</p>
               </div>
               <div className="text-center">
                 <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
