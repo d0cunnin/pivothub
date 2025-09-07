@@ -25,7 +25,7 @@ export const Footer = () => {
           
           <div>
             <h4 className="font-semibold mb-4">Reskill</h4>
-            <ul className="space-y-2 text-primary-foreground/80">
+            <ul className="space-y-2 text-sm text-primary-foreground/80">
               <li><Link to="/reskill" className="hover:text-accent transition-colors">Skills Assessment</Link></li>
               <li><Link to="/reskill" className="hover:text-accent transition-colors">Career Assessment</Link></li>
               <li><Link to="/reskill" className="hover:text-accent transition-colors">Personality Test</Link></li>
@@ -35,7 +35,7 @@ export const Footer = () => {
           
           <div>
             <h4 className="font-semibold mb-4">HireYourself</h4>
-            <ul className="space-y-2 text-primary-foreground/80">
+            <ul className="space-y-2 text-sm text-primary-foreground/80">
               <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Business Planning</Link></li>
               <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Business Ideas</Link></li>
               <li><Link to="/grantwriting" className="hover:text-accent transition-colors">Grant Writing</Link></li>
@@ -45,7 +45,7 @@ export const Footer = () => {
           
           <div>
             <h4 className="font-semibold mb-4">Talent Marketplace</h4>
-            <ul className="space-y-2 text-primary-foreground/80">
+            <ul className="space-y-2 text-sm text-primary-foreground/80">
               <li><Link to="/freelancer-marketplace" className="hover:text-accent transition-colors">Find Freelancers</Link></li>
               <li><Link to="/freelancer-onboarding" className="hover:text-accent transition-colors">Join as Freelancer</Link></li>
               <li><Link to="/client-onboarding" className="hover:text-accent transition-colors">Post a Project</Link></li>
@@ -55,7 +55,7 @@ export const Footer = () => {
           
           <div>
             <h4 className="font-semibold mb-4">Support</h4>
-            <ul className="space-y-2 text-primary-foreground/80">
+            <ul className="space-y-2 text-sm text-primary-foreground/80">
               <li><Link to="/about" className="hover:text-accent transition-colors">About Us</Link></li>
               <li><Link to="/contact" className="hover:text-accent transition-colors">Contact Us</Link></li>
               <li><a href="https://discord.gg/hbT6yvDg" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Community</a></li>
