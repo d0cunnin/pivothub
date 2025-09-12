@@ -87,8 +87,8 @@ const HireYourself = () => {
             
             <div className="lg:ml-4 self-center">
               <img 
-                src="/lovable-uploads/6dbaa8ab-9c93-4c2a-b08e-63196b35ecab.png" 
-                alt="Successful entrepreneur celebrating with keys to success" 
+                src="/lovable-uploads/d09b060a-7d04-49c0-ba9a-8685338c29c1.png" 
+                alt="Professional woman with curly hair looking at digital innovation displays" 
                 className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
@@ -167,8 +167,8 @@ const HireYourself = () => {
             
             <div className="animate-fade-in lg:ml-4 self-center">
               <img 
-                src="/lovable-uploads/8d6ceafa-b82d-4c50-a345-214b613d62c1.png" 
-                alt="Complete business toolkit and resources" 
+                src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
+                alt="Team of professionals collaborating with digital technology and business tools" 
                 className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>
