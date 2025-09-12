@@ -300,19 +300,20 @@ export const CareerAdvisorChatbot = () => {
         {/* Input */}
         <div className="p-6 border-t">
           <div className="flex space-x-3">
-            <Input
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Ask your career question..."
-              onKeyPress={(e) => e.key === "Enter" && !isTyping && handleSendMessage()}
-              className="flex-1"
-              disabled={isTyping}
-            />
+                <Input
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  placeholder="Ask your career question... (e.g., 'How do I transition from marketing to tech?')"
+                  onKeyPress={(e) => e.key === "Enter" && !isTyping && handleSendMessage()}
+                  className="flex-1"
+                  disabled={isTyping}
+                  minLength={10}
+                />
             <Button 
               onClick={() => handleSendMessage()} 
               size="default" 
               className="px-6"
-              disabled={isTyping || !inputMessage.trim()}
+              disabled={isTyping || !inputMessage.trim() || inputMessage.trim().length < 10}
             >
               <Send className="h-4 w-4 mr-2" />
               {isTyping ? "Thinking..." : "Send"}

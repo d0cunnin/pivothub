@@ -231,7 +231,11 @@ export const InterviewQuestionsCoach = () => {
                       placeholder="e.g., Software Engineer, Marketing Manager"
                       value={jobTitle}
                       onChange={(e) => setJobTitle(e.target.value)}
+                      className={jobTitle.trim().length > 0 && jobTitle.trim().length < 3 ? "border-destructive" : ""}
                     />
+                    {jobTitle.trim().length > 0 && jobTitle.trim().length < 3 && (
+                      <p className="text-xs text-destructive mt-1">Please enter at least 3 characters</p>
+                    )}
                   </div>
                   
                   <div>
@@ -241,6 +245,7 @@ export const InterviewQuestionsCoach = () => {
                       value={industry}
                       onChange={(e) => setIndustry(e.target.value)}
                     />
+                    <p className="text-xs text-muted-foreground mt-1">Helps generate more relevant questions</p>
                   </div>
 
                   <div>
@@ -298,13 +303,18 @@ export const InterviewQuestionsCoach = () => {
                 </div>
               </div>
 
-              <Button 
-                onClick={generateQuestions} 
-                disabled={loading || !jobTitle.trim()}
-                className="w-full"
-              >
-                {loading ? 'Generating Questions...' : 'Generate Interview Questions'}
-              </Button>
+                <Button 
+                  onClick={generateQuestions} 
+                  disabled={loading || !jobTitle.trim() || jobTitle.trim().length < 3}
+                  className="w-full"
+                >
+                  {loading ? 'Generating Questions...' : 'Generate Interview Questions'}
+                </Button>
+                {(!jobTitle.trim() || jobTitle.trim().length < 3) && (
+                  <p className="text-xs text-muted-foreground text-center mt-2">
+                    Please enter a job title with at least 3 characters
+                  </p>
+                )}
             </div>
           </Card>
         </TabsContent>
@@ -341,15 +351,24 @@ export const InterviewQuestionsCoach = () => {
 
                 <div className="space-y-4">
                   <label className="text-sm font-medium">Your Answer</label>
-                  <Textarea
-                    placeholder="Type your answer here... Use the STAR method: Situation, Task, Action, Result"
-                    value={currentAnswer}
-                    onChange={(e) => setCurrentAnswer(e.target.value)}
-                    rows={6}
-                  />
-                  <div className="text-xs text-muted-foreground">
-                    Tip: Structure your answer using STAR method for behavioral questions
-                  </div>
+                    <Textarea
+                      placeholder="Type your answer here... Use the STAR method: Situation, Task, Action, Result"
+                      value={currentAnswer}
+                      onChange={(e) => setCurrentAnswer(e.target.value)}
+                      rows={6}
+                      className={currentAnswer.trim().length > 0 && currentAnswer.trim().length < 20 ? "border-yellow-500" : ""}
+                    />
+                    <div className="flex justify-between items-center text-xs text-muted-foreground">
+                      <span>
+                        Tip: Structure your answer using STAR method for behavioral questions
+                      </span>
+                      <span>
+                        {currentAnswer.trim().length} characters
+                        {currentAnswer.trim().length < 20 && currentAnswer.trim().length > 0 && (
+                          <span className="text-yellow-600 ml-1">(too short for good feedback)</span>
+                        )}
+                      </span>
+                    </div>
                 </div>
 
                 <div className="flex space-x-2">

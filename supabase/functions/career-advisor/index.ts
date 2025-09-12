@@ -57,10 +57,9 @@ Remember: You're helping people transform their careers and lives. Be empathetic
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-5-2025-08-07',
         messages,
-        temperature: 0.7,
-        max_tokens: 500,
+        max_completion_tokens: 800,
       }),
     })
 

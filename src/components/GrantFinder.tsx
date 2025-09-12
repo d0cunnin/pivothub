@@ -93,15 +93,19 @@ export const GrantFinder = () => {
       <p className="text-sm text-muted-foreground mb-6">Find grants and funding opportunities for your business. Search by industry and location to discover financial support options.</p>
       <div className="space-y-6">
         <div className="grid md:grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="search">Business Type/Keywords</Label>
-            <Input
-              id="search"
-              placeholder="e.g., technology, healthcare, education"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="search">Business Type/Keywords *</Label>
+              <Input
+                id="search"
+                placeholder="e.g., technology startup, healthcare nonprofit, restaurant"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={searchTerm.trim().length > 0 && searchTerm.trim().length < 5 ? "border-destructive" : ""}
+              />
+              {searchTerm.trim().length > 0 && searchTerm.trim().length < 5 && (
+                <p className="text-xs text-destructive">Please be more specific (at least 5 characters)</p>
+              )}
+            </div>
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
             <Select value={category} onValueChange={setCategory}>
@@ -136,13 +140,19 @@ export const GrantFinder = () => {
         
         <Button 
           onClick={searchGrants}
-          disabled={isSearching}
+          disabled={isSearching || !searchTerm.trim() || searchTerm.trim().length < 5}
           size="lg"
           className="w-full"
           variant="hero"
         >
           {isSearching ? "Searching Grants..." : "Find Grants"}
         </Button>
+        
+        {(!searchTerm.trim() || searchTerm.trim().length < 5) && (
+          <p className="text-xs text-muted-foreground text-center">
+            Please provide specific business details to find relevant grants
+          </p>
+        )}
 
         {grants.length > 0 && (
           <div className="space-y-4">
