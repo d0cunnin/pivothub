@@ -86,6 +86,39 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_context: {
+        Row: {
+          context_data: Json
+          created_at: string
+          expires_at: string
+          id: string
+          session_id: string
+          tool_name: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          context_data?: Json
+          created_at?: string
+          expires_at?: string
+          id?: string
+          session_id: string
+          tool_name: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          context_data?: Json
+          created_at?: string
+          expires_at?: string
+          id?: string
+          session_id?: string
+          tool_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       course_enrollments: {
         Row: {
           completed_at: string | null
@@ -200,6 +233,108 @@ export type Database = {
         }
         Relationships: []
       }
+      result_feedback: {
+        Row: {
+          created_at: string
+          feedback_text: string | null
+          id: string
+          improvement_suggestions: string[] | null
+          rating: number
+          result_id: string
+          tool_name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          feedback_text?: string | null
+          id?: string
+          improvement_suggestions?: string[] | null
+          rating: number
+          result_id: string
+          tool_name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          feedback_text?: string | null
+          id?: string
+          improvement_suggestions?: string[] | null
+          rating?: number
+          result_id?: string
+          tool_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      tool_usage_analytics: {
+        Row: {
+          created_at: string
+          id: string
+          input_data: Json
+          input_quality_score: number | null
+          model_used: string | null
+          response_data: Json | null
+          response_quality_score: number | null
+          response_time_ms: number | null
+          session_id: string | null
+          tool_name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          input_data?: Json
+          input_quality_score?: number | null
+          model_used?: string | null
+          response_data?: Json | null
+          response_quality_score?: number | null
+          response_time_ms?: number | null
+          session_id?: string | null
+          tool_name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          input_data?: Json
+          input_quality_score?: number | null
+          model_used?: string | null
+          response_data?: Json | null
+          response_quality_score?: number | null
+          response_time_ms?: number | null
+          session_id?: string | null
+          tool_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          id: string
+          preferences: Json
+          tool_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          preferences?: Json
+          tool_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          preferences?: Json
+          tool_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_progress: {
         Row: {
           achieved_at: string
@@ -232,7 +367,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_expired_contexts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
