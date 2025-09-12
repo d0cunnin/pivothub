@@ -35,6 +35,23 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
   const [emailSent, setEmailSent] = useState(false);
   const { toast } = useToast();
 
+  // Early return if results is null or undefined
+  if (!results) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">Assessment Results</DialogTitle>
+          </DialogHeader>
+          <div className="text-center py-8">
+            <p className="text-muted-foreground mb-4">No assessment results available.</p>
+            <Button onClick={onClose}>Close</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   const getScoreInterpretation = (score: number) => {
     if (score >= 9) return "Excellent - You're very well-prepared and show strong readiness";
     if (score >= 7) return "Good - You have solid foundations with some areas to strengthen";
@@ -120,20 +137,20 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
-              <Progress value={(results.overallScore || 7) * 10} className="flex-1" />
+              <Progress value={(results?.overallScore || 7) * 10} className="flex-1" />
               <Badge variant="secondary" className="text-lg px-4 py-2">
-                {results.overallScore || 7}/10
+                {results?.overallScore || 7}/10
               </Badge>
             </div>
             <div className="text-sm text-muted-foreground">
-              <p><strong>Interpretation:</strong> {getScoreInterpretation(results.overallScore || 7)}</p>
-              <p className="mt-2"><strong>Percentile:</strong> You scored higher than {Math.round((results.overallScore || 7) * 8)}% of people taking this assessment</p>
+              <p><strong>Interpretation:</strong> {getScoreInterpretation(results?.overallScore || 7)}</p>
+              <p className="mt-2"><strong>Percentile:</strong> You scored higher than {Math.round((results?.overallScore || 7) * 8)}% of people taking this assessment</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {results.primaryInterests && (
+      {results?.primaryInterests && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -143,7 +160,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-2">
-              {results.primaryInterests.slice(0, 6).map((interest: string, index: number) => (
+              {results?.primaryInterests?.slice(0, 6).map((interest: string, index: number) => (
                 <Badge key={index} variant="outline" className="justify-center py-2">
                   {interest}
                 </Badge>
@@ -153,7 +170,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
         </Card>
       )}
 
-      {results.topCareerPaths && (
+      {results?.topCareerPaths && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -163,7 +180,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {results.topCareerPaths.slice(0, 3).map((career: any, index: number) => (
+              {results?.topCareerPaths?.slice(0, 3).map((career: any, index: number) => (
                 <div key={index} className="p-4 border rounded-lg">
                   <div className="flex justify-between items-start mb-2">
                     <h4 className="font-semibold">{career.title}</h4>
@@ -186,212 +203,222 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
     </>
   );
 
-  const renderSkillsResults = () => (
-    <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <BookOpen className="mr-2 h-5 w-5" />
-            Overall Skills Score
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <Progress value={(results.overallScore || 7) * 10} className="flex-1" />
-              <Badge variant="secondary" className="text-lg px-4 py-2">
-                {results.overallScore || 7}/10
-              </Badge>
-            </div>
-            <div className="text-sm text-muted-foreground">
-              <p><strong>Skills Level:</strong> {getSkillLevel(results.overallScore || 7)}</p>
-              <p className="mt-1"><strong>Benchmark:</strong> You performed better than {Math.round((results.overallScore || 7) * 9)}% of job seekers</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {results.topSkills && (
+  const renderSkillsResults = () => {
+    // Additional safety check
+    if (!results) return null;
+    
+    return (
+      <>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <CheckCircle className="mr-2 h-5 w-5" />
-              Your Strongest Skills
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-2">
-              {results.topSkills.slice(0, 6).map((skill: string, index: number) => (
-                <Badge key={index} variant="default" className="justify-center py-2">
-                  {skill}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {results.skillCategories && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Star className="mr-2 h-5 w-5" />
-              Detailed Skills Breakdown
+              <BookOpen className="mr-2 h-5 w-5" />
+              Overall Skills Score
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {results.skillCategories.slice(0, 6).map((category: any, index: number) => (
-                <div key={index} className="p-4 border rounded-lg">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold">{category.category}</h4>
-                    <Badge variant={category.level === 'Advanced' ? 'default' : category.level === 'Intermediate' ? 'secondary' : 'outline'}>
-                      {category.level}
-                    </Badge>
+              <div className="flex items-center space-x-4">
+                <Progress value={(results?.overallScore || 7) * 10} className="flex-1" />
+                <Badge variant="secondary" className="text-lg px-4 py-2">
+                  {results?.overallScore || 7}/10
+                </Badge>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                <p><strong>Skills Level:</strong> {getSkillLevel(results?.overallScore || 7)}</p>
+                <p className="mt-1"><strong>Benchmark:</strong> You performed better than {Math.round((results?.overallScore || 7) * 9)}% of job seekers</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {results?.topSkills && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <CheckCircle className="mr-2 h-5 w-5" />
+                Your Strongest Skills
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-2">
+                {results?.topSkills?.slice(0, 6).map((skill: string, index: number) => (
+                  <Badge key={index} variant="default" className="justify-center py-2">
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {results?.skillCategories && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Star className="mr-2 h-5 w-5" />
+                Detailed Skills Breakdown
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {results?.skillCategories?.slice(0, 6).map((category: any, index: number) => (
+                  <div key={index} className="p-4 border rounded-lg">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold">{category.category}</h4>
+                      <Badge variant={category.level === 'Advanced' ? 'default' : category.level === 'Intermediate' ? 'secondary' : 'outline'}>
+                        {category.level}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <Progress value={category.score * 10} className="flex-1" />
+                      <span className="text-sm font-medium">{category.score}/10</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground space-y-1">
+                      <p><strong>Strengths:</strong> {category.strengths?.join(', ') || 'Building foundation'}</p>
+                      {category.improvements && (
+                        <p><strong>Areas to improve:</strong> {category.improvements.join(', ')}</p>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Progress value={category.score * 10} className="flex-1" />
-                    <span className="text-sm font-medium">{category.score}/10</span>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {results?.skillGaps && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Target className="mr-2 h-5 w-5" />
+                Priority Skills to Develop
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {results?.skillGaps?.slice(0, 5).map((gap: string, index: number) => (
+                  <div key={index} className="flex items-center space-x-2 p-2 bg-muted rounded">
+                    <ArrowRight className="h-4 w-4 text-primary" />
+                    <span className="text-sm">{gap}</span>
                   </div>
-                  <div className="text-sm text-muted-foreground space-y-1">
-                    <p><strong>Strengths:</strong> {category.strengths?.join(', ') || 'Building foundation'}</p>
-                    {category.improvements && (
-                      <p><strong>Areas to improve:</strong> {category.improvements.join(', ')}</p>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </>
+    );
+  };
+
+  const renderPersonalityResults = () => {
+    // Additional safety check
+    if (!results) return null;
+    
+    return (
+      <>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Users className="mr-2 h-5 w-5" />
+              Your Personality Profile
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center space-y-3">
+              <Badge variant="default" className="text-lg px-6 py-3">
+                {results?.personalityType || 'Unique Individual'}
+              </Badge>
+              <p className="text-sm text-muted-foreground">
+                {results?.summary || 'Your personality profile reflects your unique strengths and working style.'}
+              </p>
+              {results?.personalityDescription && (
+                <p className="text-sm bg-muted p-3 rounded-lg">
+                  {results?.personalityDescription}
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {results?.strengths && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <CheckCircle className="mr-2 h-5 w-5" />
+                Your Top Strengths
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {results?.strengths?.slice(0, 4).map((strength: string, index: number) => (
+                  <Badge key={index} variant="default" className="justify-center py-2">
+                    {strength}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {results?.keyTraits && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Star className="mr-2 h-5 w-5" />
+                Detailed Trait Analysis
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {results?.keyTraits?.slice(0, 5).map((trait: any, index: number) => (
+                  <div key={index} className="p-4 border rounded-lg">
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-semibold">{trait.trait}</h4>
+                      <Badge variant={trait.score >= 4 ? "default" : "secondary"}>
+                        {trait.score}/5
+                      </Badge>
+                    </div>
+                    <Progress value={trait.score * 20} className="mb-2" />
+                    <p className="text-sm text-muted-foreground mb-2">{trait.description}</p>
+                    {trait.careerRelevance && (
+                      <p className="text-xs text-muted-foreground">
+                        <strong>Career Impact:</strong> {trait.careerRelevance}
+                      </p>
                     )}
                   </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-      {results.skillGaps && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Target className="mr-2 h-5 w-5" />
-              Priority Skills to Develop
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {results.skillGaps.slice(0, 5).map((gap: string, index: number) => (
-                <div key={index} className="flex items-center space-x-2 p-2 bg-muted rounded">
-                  <ArrowRight className="h-4 w-4 text-primary" />
-                  <span className="text-sm">{gap}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-    </>
-  );
-
-  const renderPersonalityResults = () => (
-    <>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Users className="mr-2 h-5 w-5" />
-            Your Personality Profile
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center space-y-3">
-            <Badge variant="default" className="text-lg px-6 py-3">
-              {results.personalityType || 'Unique Individual'}
-            </Badge>
-            <p className="text-sm text-muted-foreground">
-              {results.summary || 'Your personality profile reflects your unique strengths and working style.'}
-            </p>
-            {results.personalityDescription && (
-              <p className="text-sm bg-muted p-3 rounded-lg">
-                {results.personalityDescription}
-              </p>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {results.strengths && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <CheckCircle className="mr-2 h-5 w-5" />
-              Your Top Strengths
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {results.strengths.slice(0, 4).map((strength: string, index: number) => (
-                <Badge key={index} variant="default" className="justify-center py-2">
-                  {strength}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {results.keyTraits && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Star className="mr-2 h-5 w-5" />
-              Detailed Trait Analysis
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {results.keyTraits.slice(0, 5).map((trait: any, index: number) => (
-                <div key={index} className="p-4 border rounded-lg">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-semibold">{trait.trait}</h4>
-                    <Badge variant={trait.score >= 4 ? "default" : "secondary"}>
-                      {trait.score}/5
-                    </Badge>
+        {results?.careerFit && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Target className="mr-2 h-5 w-5" />
+                Career Fields That Match Your Personality
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {results?.careerFit?.slice(0, 4).map((field: any, index: number) => (
+                  <div key={index} className="p-3 border rounded-lg">
+                    <div className="flex justify-between items-center mb-1">
+                      <h5 className="font-medium">{field.field}</h5>
+                      <Badge variant="outline">{field.match}/10 Match</Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{field.reasoning}</p>
                   </div>
-                  <Progress value={trait.score * 20} className="mb-2" />
-                  <p className="text-sm text-muted-foreground mb-2">{trait.description}</p>
-                  {trait.careerRelevance && (
-                    <p className="text-xs text-muted-foreground">
-                      <strong>Career Impact:</strong> {trait.careerRelevance}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {results.careerFit && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Target className="mr-2 h-5 w-5" />
-              Career Fields That Match Your Personality
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {results.careerFit.slice(0, 4).map((field: any, index: number) => (
-                <div key={index} className="p-3 border rounded-lg">
-                  <div className="flex justify-between items-center mb-1">
-                    <h5 className="font-medium">{field.field}</h5>
-                    <Badge variant="outline">{field.match}/10 Match</Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{field.reasoning}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-    </>
-  );
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </>
+    );
+  };
 
   const renderActionPlan = () => (
     <Card>
@@ -403,13 +430,13 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {results.actionPlan?.immediate && (
+          {results?.actionPlan?.immediate && (
             <div>
               <h4 className="font-semibold text-sm mb-2 flex items-center">
                 🔥 Start This Week
               </h4>
               <ul className="space-y-1">
-                {results.actionPlan.immediate.slice(0, 2).map((action: string, index: number) => (
+                {results?.actionPlan?.immediate?.slice(0, 2).map((action: string, index: number) => (
                   <li key={index} className="text-sm flex items-start">
                     <ArrowRight className="h-3 w-3 mr-2 mt-0.5 text-primary flex-shrink-0" />
                     {action}
@@ -419,13 +446,13 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
             </div>
           )}
 
-          {results.actionPlan?.shortTerm && (
+          {results?.actionPlan?.shortTerm && (
             <div>
               <h4 className="font-semibold text-sm mb-2 flex items-center">
                 📅 Next 1-3 Months
               </h4>
               <ul className="space-y-1">
-                {results.actionPlan.shortTerm.slice(0, 2).map((action: string, index: number) => (
+                {results?.actionPlan?.shortTerm?.slice(0, 2).map((action: string, index: number) => (
                   <li key={index} className="text-sm flex items-start">
                     <ArrowRight className="h-3 w-3 mr-2 mt-0.5 text-primary flex-shrink-0" />
                     {action}
