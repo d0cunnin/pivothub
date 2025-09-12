@@ -39,7 +39,7 @@ export const HeroSection = () => {
               size="lg" 
               variant="heroWhite"
               className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/job-prep'}
+              onClick={() => window.location.href = '/jobprep'}
             >
               Relaunch Your Career
             </Button>
@@ -55,7 +55,7 @@ export const HeroSection = () => {
               size="lg" 
               variant="heroWhite"
               className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/hire-yourself'}
+              onClick={() => window.location.href = '/hireyourself'}
             >
               Hire Yourself / Launch a Business
             </Button>

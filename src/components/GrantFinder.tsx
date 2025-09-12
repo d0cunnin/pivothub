@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Search, ExternalLink, DollarSign, Calendar, Users } from "lucide-react";
+import { supabase } from '@/integrations/supabase/client';
 
 interface Grant {
   id: string;
@@ -31,28 +32,22 @@ export const GrantFinder = () => {
 
     setIsSearching(true);
     try {
-      const response = await fetch('/functions/v1/grant-finder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('grant-finder', {
+        body: {
           businessType: searchTerm,
           industry: category,
           location: 'United States', // Could add location field later
           fundingAmount: fundingRange,
           businessStage: 'early-stage' // Could add stage field later
-        }),
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to find grants');
+      if (error) {
+        throw new Error(error.message || 'Failed to find grants');
       }
 
       // Transform the data to match the existing interface
-      const transformedGrants: Grant[] = data.grants.map((grant: any) => ({
+      const transformedGrants: Grant[] = (data?.grants || []).map((grant: any) => ({
         id: grant.id,
         title: grant.name,
         description: grant.description,

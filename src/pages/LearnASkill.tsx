@@ -49,15 +49,15 @@ const LearnASkill = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 mini-courses-grid gap-8">
             {miniCourses.map((course, index) => {
               const IconComponent = course.icon;
               return (
                 <Card key={index} className="overflow-hidden bg-gradient-card/30 backdrop-blur-sm border border-white/10 hover:shadow-lg transition-all duration-300">
                   <div className="aspect-video relative overflow-hidden">
                     <img 
-                      src={course.thumbnail} 
-                      alt={course.title}
+                      src="/lovable-uploads/8d5741f6-0644-4cca-9d98-60d55c2bf66d.png" 
+                      alt={`${course.title} - Professional learning environment`}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

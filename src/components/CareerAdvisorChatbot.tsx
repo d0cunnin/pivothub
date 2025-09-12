@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, GraduationCap, User, AlertCircle, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   id: string;
@@ -31,29 +32,22 @@ export const CareerAdvisorChatbot = () => {
     try {
       console.log('🚀 Sending request to career advisor:', { message: userMessage });
       
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/career-advisor', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('career-advisor', {
+        body: {
           message: userMessage,
           conversationHistory: messages.slice(1) // Exclude the initial greeting
-        }),
+        }
       });
 
-      console.log('📡 Response status:', response.status, response.statusText);
-      
-      const data = await response.json();
       console.log('📦 Response data:', data);
       
-      if (!response.ok) {
-        console.error('❌ Response not ok:', data);
-        throw new Error(data.error || 'Failed to get AI response');
+      if (error) {
+        console.error('❌ Supabase error:', error);
+        throw new Error(error.message || 'Failed to get AI response');
       }
 
       // Enhanced response validation
-      const rawResponse = data.response;
+      const rawResponse = data?.response;
       console.log('🔍 Raw response details:', {
         exists: rawResponse !== undefined && rawResponse !== null,
         type: typeof rawResponse,

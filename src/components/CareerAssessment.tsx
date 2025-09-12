@@ -302,19 +302,15 @@ export const CareerAssessment = () => {
   const calculateResults = async (): Promise<AssessmentResults> => {
     try {
       // Call the AI assessment API
-      const response = await fetch('/functions/v1/career-assessment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('career-assessment', {
+        body: {
           responses: responses
-        }),
+        }
       });
 
-      const data = await response.json();
+      if (error) throw error;
       
-      if (response.ok && data.analysis) {
+      if (data && data.analysis) {
         // Transform AI response to match existing interface
         const results: AssessmentResults = {};
         

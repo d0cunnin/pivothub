@@ -131,8 +131,8 @@ const Reskill = () => {
             
             <div className="flex justify-center lg:justify-end">
               <img 
-                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
-                alt="Professional development and skill building" 
+                src="/lovable-uploads/8d5741f6-0644-4cca-9d98-60d55c2bf66d.png" 
+                alt="Professional woman working with analytics and code, representing career development and tech skills" 
                 className="w-full h-auto max-w-lg aspect-video object-cover rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-[1.02] border border-white/10"
               />
             </div>

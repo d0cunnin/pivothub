@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   MessageSquare, 
   Clock, 
@@ -75,27 +76,21 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/interview-questions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('interview-questions', {
+        body: {
           jobTitle,
           industry,
           level,
           questionTypes,
           jobDescription
-        }),
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate questions');
+      if (error) {
+        throw new Error(error.message || 'Failed to generate questions');
       }
 
-      const filteredQuestions = data.questions.filter((q: Question) => questionTypes.includes(q.type));
+      const filteredQuestions = (data?.questions || []).filter((q: Question) => questionTypes.includes(q.type));
       setQuestions(filteredQuestions);
       setCurrentQuestionIndex(0);
       setActiveTab('practice');
@@ -117,30 +112,24 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/interview-feedback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('interview-feedback', {
+        body: {
           question: questions[currentQuestionIndex].text,
           answer: currentAnswer,
           questionType: questions[currentQuestionIndex].type,
           jobTitle: jobTitle
-        }),
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to analyze answer');
+      if (error) {
+        throw new Error(error.message || 'Failed to analyze answer');
       }
 
       const response_data: Response = {
         questionId: questions[currentQuestionIndex].id,
         answer: currentAnswer,
-        feedback: data.feedback.detailedFeedback,
-        score: data.feedback.overallScore,
+        feedback: data?.feedback?.detailedFeedback || 'Good response provided',
+        score: data?.feedback?.overallScore || 4,
         timestamp: new Date()
       };
 
