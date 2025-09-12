@@ -61,7 +61,16 @@ serve(async (req) => {
     
     let analysis;
     try {
-      analysis = JSON.parse(content);
+      // Sanitize and parse JSON
+      const sanitizedContent = content
+        .replace(/^#{1,6}\s+/gm, '') // Remove markdown headers
+        .replace(/\*\*\*(.+?)\*\*\*/g, '$1') // Remove triple asterisks
+        .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold formatting
+        .replace(/\*(.+?)\*/g, '$1') // Remove italic formatting
+        .replace(/```json\s*|\s*```/g, '') // Remove code blocks
+        .trim();
+      
+      analysis = JSON.parse(sanitizedContent);
     } catch (parseError) {
       console.error('Failed to parse AI response as JSON:', parseError);
       analysis = createFallbackAnalysis(assessmentType, responses);
@@ -100,7 +109,7 @@ serve(async (req) => {
 });
 
 function getSystemPromptForAssessment(assessmentType: string): string {
-  const basePrompt = `You are an expert career counselor and assessment analyst. Provide detailed, actionable analysis in plain text without markdown formatting. Respond with valid JSON only.`;
+  const basePrompt = `You are an expert career counselor and assessment analyst. Provide detailed, actionable analysis in plain text without markdown formatting. Do NOT use ### headers, ** bold, or * italics. Respond with valid JSON only.`;
   
   switch (assessmentType) {
     case 'career':

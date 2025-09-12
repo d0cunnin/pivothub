@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Search, ExternalLink, DollarSign, Calendar, Users } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
+import { sanitizeAIContent } from "@/lib/utils";
 
 interface Grant {
   id: string;
@@ -49,9 +50,9 @@ export const GrantFinder = () => {
       // Transform the data to match the existing interface
       const transformedGrants: Grant[] = (data?.grants || []).map((grant: any) => ({
         id: grant.id,
-        title: grant.name,
-        description: grant.description,
-        agency: grant.organization,
+        title: sanitizeAIContent(grant.name),
+        description: sanitizeAIContent(grant.description),
+        agency: sanitizeAIContent(grant.organization),
         amount: grant.amountRange,
         deadline: grant.deadline,
         eligibility: grant.eligibility.join(', '),

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { CheckCircle, Calculator, BookOpen, Monitor, ClipboardList, Search, Users, Wrench } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitizeAIContent } from "@/lib/utils";
 
 interface SkillQuestion {
   id: string;

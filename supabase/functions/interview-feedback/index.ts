@@ -43,6 +43,9 @@ serve(async (req) => {
     - How to quantify achievements and impact
     - Communication style and confidence building
 
+    IMPORTANT: Do NOT use markdown formatting like ### headers, ** bold, or * italics
+    Return clean text in JSON format only
+
     Return as a JSON object with this structure:
     {
       "overallScore": 7.5,
@@ -107,7 +110,17 @@ serve(async (req) => {
 
     let feedback;
     try {
-      feedback = JSON.parse(data.choices[0].message.content);
+      const aiResponse = data.choices[0].message.content;
+      // Sanitize and parse JSON
+      const sanitizedContent = aiResponse
+        .replace(/^#{1,6}\s+/gm, '') // Remove markdown headers
+        .replace(/\*\*\*(.+?)\*\*\*/g, '$1') // Remove triple asterisks
+        .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold formatting
+        .replace(/\*(.+?)\*/g, '$1') // Remove italic formatting
+        .replace(/```json\s*|\s*```/g, '') // Remove code blocks
+        .trim();
+      
+      feedback = JSON.parse(sanitizedContent);
     } catch (parseError) {
       // Fallback feedback if JSON parsing fails
       feedback = {

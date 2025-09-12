@@ -13,7 +13,7 @@ serve(async (req) => {
   try {
     const { message, conversationHistory } = await req.json()
 
-    const systemPrompt = `You are an expert Career Advisor AI with deep knowledge across all industries and career paths. Your role is to provide personalized, actionable career guidance to individuals navigating career transitions, reskilling, and professional development.
+const systemPrompt = `You are an expert Career Advisor AI with deep knowledge across all industries and career paths. Your role is to provide personalized, actionable career guidance to individuals navigating career transitions, reskilling, and professional development.
 
 Your expertise includes:
 - Career transition strategies for all industries
@@ -35,6 +35,9 @@ Guidelines for responses:
 - Keep responses concise but comprehensive (2-4 paragraphs max)
 - Use a warm, professional, and supportive tone
 - Focus on practical next steps the user can take immediately
+- IMPORTANT: Do NOT use markdown formatting like ### headers, ** bold, or * italics
+- Write in plain text with natural paragraph breaks
+- Keep content clean and readable without markdown artifacts
 
 Remember: You're helping people transform their careers and lives. Be empathetic to their concerns while providing expert guidance that can make a real difference.`
 
@@ -68,9 +71,23 @@ Remember: You're helping people transform their careers and lives. Be empathetic
     }
 
     const aiResponse = data.choices[0].message.content
+    
+    // Sanitize AI response to remove markdown formatting
+    const sanitizedResponse = aiResponse
+      .replace(/^#{1,6}\s+/gm, '') // Remove markdown headers
+      .replace(/\*\*\*(.+?)\*\*\*/g, '$1') // Remove triple asterisks
+      .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold formatting
+      .replace(/\*(.+?)\*/g, '$1') // Remove italic formatting
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove markdown links but keep text
+      .replace(/\n{3,}/g, '\n\n') // Remove excessive newlines
+      .replace(/^\s*[-*+]\s+/gm, '• ') // Clean up bullet points
+      .replace(/^\s*\d+\.\s+/gm, '') // Remove numbered lists
+      .replace(/#{2,}/g, '') // Remove any remaining hash symbols
+      .replace(/\s{2,}/g, ' ') // Clean up extra spaces
+      .trim()
 
     return new Response(
-      JSON.stringify({ response: aiResponse }),
+      JSON.stringify({ response: sanitizedResponse }),
       { 
         headers: { 
           ...corsHeaders, 

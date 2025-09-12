@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Brain, ArrowLeft, ArrowRight, CheckCircle, TrendingUp } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitizeAIContent } from "@/lib/utils";
 
 const personalityQuestions = [
   // Introversion/Extroversion (1-10)
@@ -192,7 +193,21 @@ export const PersonalityAssessment = () => {
       });
 
       if (response.data && !response.error) {
-        setResults(response.data);
+        // Sanitize AI content in results
+        const sanitizedResults = {
+          ...response.data,
+          interpretation: response.data.interpretation ? sanitizeAIContent(response.data.interpretation) : response.data.interpretation,
+          actionPlan: response.data.actionPlan ? sanitizeAIContent(response.data.actionPlan) : response.data.actionPlan,
+          traitScores: response.data.traitScores?.map((trait: any) => ({
+            ...trait,
+            interpretation: trait.interpretation ? sanitizeAIContent(trait.interpretation) : trait.interpretation
+          })),
+          topStrengths: response.data.topStrengths?.map((strength: any) => ({
+            ...strength,
+            interpretation: strength.interpretation ? sanitizeAIContent(strength.interpretation) : strength.interpretation
+          }))
+        };
+        setResults(sanitizedResults);
         setShowResultsModal(true);
         return;
       }

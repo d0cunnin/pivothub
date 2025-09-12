@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, GraduationCap, User, AlertCircle, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+import { sanitizeAIContent } from "@/lib/utils";
 
 interface Message {
   id: string;
@@ -68,9 +69,9 @@ export const CareerAdvisorChatbot = () => {
         throw new Error('AI returned empty or invalid response');
       }
 
-      const cleanResponse = rawResponse.trim();
-      console.log('✅ Valid AI response:', { length: cleanResponse.length, content: cleanResponse });
-      return cleanResponse;
+      const sanitizedResponse = sanitizeAIContent(rawResponse.trim());
+      console.log('✅ Valid AI response:', { length: sanitizedResponse.length, content: sanitizedResponse });
+      return sanitizedResponse;
     } catch (error) {
       console.error('💥 Error getting AI response:', error);
       throw error;

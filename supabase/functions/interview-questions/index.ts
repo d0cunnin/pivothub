@@ -39,6 +39,9 @@ serve(async (req) => {
     - Level-appropriate complexity
     - Current industry trends and technologies
     
+    IMPORTANT: Do NOT use markdown formatting like ### headers, ** bold, or * italics
+    Return clean text in JSON format only
+    
     Return as a JSON array with this structure:
     [
       {
@@ -75,7 +78,17 @@ serve(async (req) => {
 
     let questions;
     try {
-      questions = JSON.parse(data.choices[0].message.content);
+      const aiResponse = data.choices[0].message.content;
+      // Sanitize and parse JSON
+      const sanitizedContent = aiResponse
+        .replace(/^#{1,6}\s+/gm, '') // Remove markdown headers
+        .replace(/\*\*\*(.+?)\*\*\*/g, '$1') // Remove triple asterisks
+        .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold formatting
+        .replace(/\*(.+?)\*/g, '$1') // Remove italic formatting
+        .replace(/```json\s*|\s*```/g, '') // Remove code blocks
+        .trim();
+      
+      questions = JSON.parse(sanitizedContent);
     } catch (parseError) {
       // Fallback if JSON parsing fails
       const content = data.choices[0].message.content;

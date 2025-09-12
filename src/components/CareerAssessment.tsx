@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { CheckCircle, Target, TrendingUp, Users, Heart, Wrench, Calculator, Shield, MessageCircle, GraduationCap, Lightbulb, HandHeart, Home } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { supabase } from "@/integrations/supabase/client";
+import { sanitizeAIContent } from "@/lib/utils";
 
 interface CareerArea {
   id: string;

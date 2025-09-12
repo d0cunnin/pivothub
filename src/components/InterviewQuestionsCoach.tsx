@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { sanitizeAIContent } from "@/lib/utils";
 import { 
   MessageSquare, 
   Clock, 
@@ -128,7 +129,7 @@ export const InterviewQuestionsCoach = () => {
       const response_data: Response = {
         questionId: questions[currentQuestionIndex].id,
         answer: currentAnswer,
-        feedback: data?.feedback?.detailedFeedback || 'Good response provided',
+        feedback: sanitizeAIContent(data?.feedback?.detailedFeedback || 'Good response provided'),
         score: data?.feedback?.overallScore || 4,
         timestamp: new Date()
       };
@@ -150,7 +151,7 @@ export const InterviewQuestionsCoach = () => {
       const response_data: Response = {
         questionId: questions[currentQuestionIndex].id,
         answer: currentAnswer,
-        feedback: mockFeedback,
+        feedback: sanitizeAIContent(mockFeedback),
         score: Math.floor(Math.random() * 3) + 3, // Random score 3-5
         timestamp: new Date()
       };

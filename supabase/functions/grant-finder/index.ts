@@ -45,6 +45,9 @@ serve(async (req) => {
 
     Focus on current, active grants that match their specific situation. Include both competitive and formula grants.
 
+    IMPORTANT: Do NOT use markdown formatting like ### headers, ** bold, or * italics
+    Return clean text in JSON format only
+
     Return as a JSON array with this structure:
     [
       {
@@ -88,7 +91,17 @@ serve(async (req) => {
 
     let grants;
     try {
-      grants = JSON.parse(data.choices[0].message.content);
+      const aiResponse = data.choices[0].message.content;
+      // Sanitize and parse JSON
+      const sanitizedContent = aiResponse
+        .replace(/^#{1,6}\s+/gm, '') // Remove markdown headers
+        .replace(/\*\*\*(.+?)\*\*\*/g, '$1') // Remove triple asterisks
+        .replace(/\*\*(.+?)\*\*/g, '$1') // Remove bold formatting
+        .replace(/\*(.+?)\*/g, '$1') // Remove italic formatting
+        .replace(/```json\s*|\s*```/g, '') // Remove code blocks
+        .trim();
+      
+      grants = JSON.parse(sanitizedContent);
     } catch (parseError) {
       // Fallback grants if JSON parsing fails
       grants = [
