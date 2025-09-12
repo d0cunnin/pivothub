@@ -64,8 +64,8 @@ export default function About() {
             <div className="lg:ml-4">
               <div className="relative">
                 <img 
-                  src="/lovable-uploads/55e6a726-43cb-426b-924c-84bf4a8ebab7.png"
-                  alt="Professional team collaboration and success" 
+                  src="/lovable-uploads/d09b060a-7d04-49c0-ba9a-8685338c29c1.png"
+                  alt="Diverse team of professionals collaborating in a modern meeting environment" 
                   className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 />
               </div>
