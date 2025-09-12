@@ -258,9 +258,9 @@ const HireYourself = () => {
             {[
               {
                 name: "Sarah Chen",
-                business: "Physician-Entrepreneur",
+                business: "Business Consultant",
                 result: "$50K revenue in first year",
-                image: "/lovable-uploads/d4fd30c6-edb3-46e3-825a-996fe8d56933.png"
+                image: "/lovable-uploads/4060c0f4-ac9a-4eb6-ae80-f0b0cf96d923.png"
               },
               {
                 name: "Marcus Johnson", 
@@ -276,9 +276,9 @@ const HireYourself = () => {
               },
               {
                 name: "David Kim",
-                business: "Tech Startup",
+                business: "Tech Innovator",
                 result: "Secured Series A funding in 18 months",
-                image: "/lovable-uploads/6c437a8b-65d7-4a74-92f8-893a974d4f08.png"
+                image: "/lovable-uploads/eeba4be2-649a-4760-a388-61ac10234d52.png"
               }
             ].map((story, index) => (
               <Card key={index} className="premium-card p-6 group cursor-pointer transition-elegant hover:scale-105 animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
