@@ -275,7 +275,7 @@ const HireYourself = () => {
                 image: "/lovable-uploads/e2d88637-eb38-414f-88a9-64e130ef90f8.png"
               },
               {
-                name: "David Kim",
+                name: "David Wallace",
                 business: "Tech Innovator",
                 result: "Secured Series A funding in 18 months",
                 image: "/lovable-uploads/eeba4be2-649a-4760-a388-61ac10234d52.png"
