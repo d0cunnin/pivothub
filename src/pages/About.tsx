@@ -76,8 +76,8 @@ export default function About() {
             <div className="lg:mr-4 order-2 lg:order-1">
               <div className="relative">
                 <img 
-                  src="/lovable-uploads/6dbaa8ab-9c93-4c2a-b08e-63196b35ecab.png"
-                  alt="Professional mentorship and partnership" 
+                  src="/lovable-uploads/0dc8e049-6853-488a-ba7e-2c5087721c46.png"
+                  alt="Professional woman with curly hair looking at innovative digital technology displays" 
                   className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 />
               </div>
