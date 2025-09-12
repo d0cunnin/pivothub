@@ -64,7 +64,7 @@ const Reskill = () => {
                   size="lg" 
                   variant="outline" 
                   className="bg-white/10 text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2 backdrop-blur-sm"
-                  onClick={() => window.location.href = '/job-prep'}
+                  onClick={() => window.location.href = '/jobprep'}
                   aria-label="Go to Job Preparation Tools"
                 >
                   <Briefcase className="h-5 w-5" />
@@ -172,7 +172,7 @@ const Reskill = () => {
               <div className="flex justify-center lg:justify-start">
                 <Button 
                   variant="default"
-                  onClick={() => window.location.href = '/job-prep'}
+                  onClick={() => window.location.href = '/jobprep'}
                   className="shadow-lg hover:shadow-xl transition-all duration-300"
                   aria-label="Learn more about Job Preparation Tools"
                 >

@@ -242,7 +242,7 @@ const Index = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="p-0 pt-3">
-                      <Link to="/job-prep">
+                      <Link to="/jobprep">
                         <Button size="sm" className="w-full">
                           Prepare for Jobs
                         </Button>
