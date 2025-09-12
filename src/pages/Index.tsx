@@ -280,8 +280,8 @@ const Index = () => {
               
               <div className="lg:ml-4 self-center">
                 <img 
-                  src="/lovable-uploads/56747a03-6995-4a3d-8f8d-0cee41e733e9.png"
-                  alt="Diverse group of professionals collaborating and smiling around a conference table in a modern office"
+                  src="/lovable-uploads/a2d8ed6b-e7a3-4bba-b5d7-9c2dd209ea3d.png"
+                  alt="Professional woman with locs working at computer with diverse team collaborating in modern office environment"
                   className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
                 />
               </div>
