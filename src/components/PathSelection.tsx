@@ -38,8 +38,8 @@ export const PathSelection = () => {
               </div>
 
               <img 
-                src={reskillIcon} 
-                alt="Assessment" 
+                src="/lovable-uploads/2880abfe-3eeb-45a9-b351-c770b8a889d0.png" 
+                alt="Smiling professional man working on career assessment and planning" 
                 className="w-64 h-40 object-cover rounded-lg mb-6 mx-auto group-hover:scale-105 transition-transform duration-500"
               />
 
