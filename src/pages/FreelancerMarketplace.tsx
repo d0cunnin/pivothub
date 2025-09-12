@@ -299,6 +299,19 @@ export default function FreelancerMarketplace() {
           <div className="content-width">
             <div className="text-center content-spacing">
               <h2 className="section-header">Why Use PivotHub?</h2>
+              <p className="section-description">
+                Join a thriving community of professionals building the future together
+              </p>
+            </div>
+
+            {/* Hero Image */}
+            <div className="relative mb-12 rounded-2xl overflow-hidden shadow-elegant">
+              <img
+                src="/lovable-uploads/235f12cc-a28e-438a-b275-d5f0de173f73.png"
+                alt="Professional team collaborating in modern workspace"
+                className="w-full h-64 md:h-80 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20"></div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid-spacing">
