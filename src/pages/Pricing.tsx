@@ -89,7 +89,7 @@ const Pricing = () => {
     },
     {
       name: "Basic",
-      price: "$7.99",
+      price: "$9.99",
       period: "month",
       description: "Everything you need to succeed",
       features: [
@@ -103,11 +103,11 @@ const Pricing = () => {
       popular: true,
       current: subscriptionTier === "Basic",
       ctaText: subscriptionTier === "Basic" ? "Current Plan" : "Upgrade to Basic",
-      ctaAction: () => openCheckoutModal("Basic Plan", "$7.99", "basic-monthly")
+      ctaAction: () => openCheckoutModal("Basic Plan", "$9.99", "basic-monthly")
     },
     {
       name: "Pro",
-      price: "$14.99",
+      price: "$16.99",
       period: "month",
       description: "For power users and teams",
       features: [
@@ -122,7 +122,7 @@ const Pricing = () => {
       popular: false,
       current: subscriptionTier === "Pro",
       ctaText: subscriptionTier === "Pro" ? "Current Plan" : "Upgrade to Pro",
-      ctaAction: () => openCheckoutModal("Pro Plan", "$14.99", "pro-monthly")
+      ctaAction: () => openCheckoutModal("Pro Plan", "$16.99", "pro-monthly")
     },
     {
       name: "Enterprise",
