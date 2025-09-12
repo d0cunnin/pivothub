@@ -85,37 +85,48 @@ export const BusinessIdeaGenerator = () => {
 
       <div className="grid md:grid-cols-3 gap-6 mb-8">
         <div className="space-y-2">
-          <Label htmlFor="skills">Your Skills</Label>
+          <Label htmlFor="skills">Your Skills *</Label>
           <Input
             id="skills"
-            placeholder="e.g., Marketing, Coding, Design"
+            placeholder="List 3-5 specific skills: e.g., Digital marketing, Python programming, Graphic design, Project management"
             value={skills}
             onChange={(e) => setSkills(e.target.value)}
+            className={skills.length < 10 ? "border-orange-300" : "border-green-300"}
           />
+          <p className="text-xs text-muted-foreground">
+            {skills.length < 10 ? `Add ${10 - skills.length} more characters for better results` : "Good input quality ✓"}
+          </p>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="interests">Your Interests</Label>
+          <Label htmlFor="interests">Your Interests *</Label>
           <Input
             id="interests"
-            placeholder="e.g., Health, Technology, Arts"
+            placeholder="Describe 2-3 passion areas: e.g., Sustainable living, AI technology, Fitness coaching, Financial planning"
             value={interests}
             onChange={(e) => setInterests(e.target.value)}
+            className={interests.length < 10 ? "border-orange-300" : "border-green-300"}
           />
+          <p className="text-xs text-muted-foreground">
+            {interests.length < 10 ? `Add ${10 - interests.length} more characters for better results` : "Good input quality ✓"}
+          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="budget">Starting Budget</Label>
           <Input
             id="budget"
-            placeholder="e.g., $1,000 - $5,000"
+            placeholder="e.g., $500-$1,000, $5,000-$10,000, or 'bootstrap with minimal investment'"
             value={budget}
             onChange={(e) => setBudget(e.target.value)}
           />
+          <p className="text-xs text-muted-foreground">
+            Optional: Helps tailor business suggestions to your financial capacity
+          </p>
         </div>
       </div>
 
       <Button 
         onClick={generateIdeas}
-        disabled={isGenerating}
+        disabled={isGenerating || skills.length < 10 || interests.length < 10}
         size="lg"
         className="w-full"
         variant="hero"

@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Lightbulb } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
@@ -24,40 +25,48 @@ export const BusinessMentorChatbot = () => {
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
-  const businessAdvice = {
-    "business idea": "Great question! Start by identifying a problem you're passionate about solving. Look at your skills, experiences, and what frustrates you daily. The best businesses solve real problems for real people.",
-    "funding": "There are several funding options: bootstrapping, angel investors, venture capital, crowdfunding, and small business loans. Start with your own savings and revenue when possible to maintain control.",
-    "marketing": "Focus on understanding your target audience first. Use social media, content marketing, networking, and word-of-mouth. Start with one channel and master it before expanding.",
-    "competition": "Competition validates your market! Study your competitors to understand what works and what doesn't. Find your unique value proposition and focus on serving your customers better.",
-    "legal": "Consider your business structure (LLC, Corporation, etc.), protect your intellectual property, get necessary licenses, and have proper contracts. Consult with a business attorney for specific advice.",
-    "team": "Hire slowly and fire quickly. Look for people who share your vision and complement your skills. Start with contractors or part-time help before committing to full-time employees.",
-    "pricing": "Research your competition, understand your costs, and consider the value you provide. Don't undervalue yourself, but be competitive. You can always adjust pricing as you learn more.",
-    "scaling": "Focus on systems and processes. Document everything, automate what you can, and build a strong team. Don't scale too fast without proper foundation.",
-  };
+  const getAIResponse = async (message: string, history: Message[]): Promise<string> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('business-mentor', {
+        body: {
+          message,
+          conversationHistory: history.slice(-10) // Include last 10 messages for context
+        }
+      });
 
-  const getBusinessAdvice = (userMessage: string): string => {
-    const lowercaseMessage = userMessage.toLowerCase();
-    
-    for (const [keyword, advice] of Object.entries(businessAdvice)) {
-      if (lowercaseMessage.includes(keyword)) {
-        return advice;
+      if (error) {
+        throw new Error(error.message);
       }
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      return data.response;
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      
+      // Enhanced fallback responses based on message content
+      const lowercaseMessage = message.toLowerCase();
+      
+      if (lowercaseMessage.includes("idea") || lowercaseMessage.includes("start")) {
+        return "Great question! Start by identifying a problem you're passionate about solving. Look at your skills, experiences, and what frustrates you daily. The best businesses solve real problems for real people. What specific area or industry interests you most?";
+      }
+      
+      if (lowercaseMessage.includes("funding") || lowercaseMessage.includes("money") || lowercaseMessage.includes("capital")) {
+        return "There are several funding options: bootstrapping (using your own money), angel investors, venture capital, crowdfunding, and small business loans. Start with your own savings and revenue when possible to maintain control. What stage is your business at currently?";
+      }
+      
+      if (lowercaseMessage.includes("marketing") || lowercaseMessage.includes("customer")) {
+        return "Focus on understanding your target audience first. Use social media, content marketing, networking, and word-of-mouth. Start with one channel and master it before expanding. Who is your ideal customer, and where do they spend their time?";
+      }
+      
+      return "That's an interesting point! In my experience, successful entrepreneurs focus on solving real problems for real people. I'd love to help you think through this - can you tell me more about your specific situation or challenge?";
     }
-    
-    // Default responses for common patterns
-    if (lowercaseMessage.includes("how") || lowercaseMessage.includes("what")) {
-      return "That's a great question! The key is to start small and validate your assumptions. Focus on solving one specific problem really well before expanding. What specific aspect would you like to dive deeper into?";
-    }
-    
-    if (lowercaseMessage.includes("help") || lowercaseMessage.includes("stuck")) {
-      return "I understand feeling stuck is part of the entrepreneurial journey. Let's break down your challenge step by step. What's the specific obstacle you're facing right now?";
-    }
-    
-    return "That's an interesting point! In my experience, successful entrepreneurs focus on solving real problems for real people. Can you tell me more about what you're trying to achieve?";
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || inputMessage.length < 5) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -66,22 +75,34 @@ export const BusinessMentorChatbot = () => {
       timestamp: new Date(),
     };
 
+    const currentInput = inputMessage;
     setMessages(prev => [...prev, userMessage]);
     setInputMessage("");
     setIsTyping(true);
 
-    // Simulate typing delay
-    setTimeout(() => {
+    try {
+      const aiResponse = await getAIResponse(currentInput, messages);
+      
       const botResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: getBusinessAdvice(inputMessage),
+        text: aiResponse,
         isBot: true,
         timestamp: new Date(),
       };
       
       setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error('Error handling message:', error);
+      const errorResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I apologize, but I'm having trouble right now. Please try rephrasing your question or ask again in a moment.",
+        isBot: true,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const quickQuestions = [
@@ -175,14 +196,24 @@ export const BusinessMentorChatbot = () => {
         {/* Input */}
         <div className="p-6 border-t">
           <div className="flex space-x-3">
-            <Input
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Ask your business question..."
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-              className="flex-1"
-            />
-            <Button onClick={handleSendMessage} size="default" className="px-6">
+            <div className="flex-1 space-y-2">
+              <Input
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder="Ask a specific business question... (minimum 5 characters for better responses)"
+                onKeyPress={(e) => e.key === "Enter" && !isTyping && handleSendMessage()}
+                className={inputMessage.length > 0 && inputMessage.length < 5 ? "border-orange-300" : ""}
+              />
+              {inputMessage.length > 0 && inputMessage.length < 5 && (
+                <p className="text-xs text-orange-600">Add more detail for a better response</p>
+              )}
+            </div>
+            <Button 
+              onClick={handleSendMessage} 
+              disabled={inputMessage.length < 5 || isTyping}
+              size="default" 
+              className="px-6"
+            >
               <Send className="h-4 w-4 mr-2" />
               Send
             </Button>

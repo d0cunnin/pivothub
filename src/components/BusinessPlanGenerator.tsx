@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { FileText, Download } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface BusinessPlanData {
   businessName: string;
@@ -44,18 +45,18 @@ export const BusinessPlanGenerator = () => {
     setIsGenerating(true);
     
     try {
-      const response = await fetch('/functions/v1/generate-business-content', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+        body: {
           type: 'business-plan',
           data: formData
-        })
+        }
       });
 
-      const result = await response.json();
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      const result = data;
       
       if (result.error) {
         throw new Error(result.error);
@@ -126,13 +127,17 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="businessName">Business Name</Label>
+            <Label htmlFor="businessName">Business Name *</Label>
             <Input
               id="businessName"
-              placeholder="Enter your business name"
+              placeholder="Enter your business name (e.g., TechSolutions Inc., Green Cafe)"
               value={formData.businessName}
               onChange={(e) => handleInputChange("businessName", e.target.value)}
+              className={formData.businessName.length < 3 ? "border-orange-300" : "border-green-300"}
             />
+            <p className="text-xs text-muted-foreground">
+              {formData.businessName.length < 3 ? "Business name required" : "✓ Good"}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="industry">Industry</Label>
@@ -176,30 +181,38 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="targetMarket">Target Market</Label>
+          <Label htmlFor="targetMarket">Target Market *</Label>
           <Textarea
             id="targetMarket"
-            placeholder="Describe your target customers..."
+            placeholder="Describe your ideal customers in detail: demographics (age, income), psychographics (values, interests), pain points, and behaviors. Example: 'Small business owners aged 25-45 with 10-50 employees who struggle with manual inventory management and seek affordable digital solutions.'"
             value={formData.targetMarket}
             onChange={(e) => handleInputChange("targetMarket", e.target.value)}
-            rows={2}
+            rows={3}
+            className={formData.targetMarket.length < 50 ? "border-orange-300" : "border-green-300"}
           />
+          <p className="text-xs text-muted-foreground">
+            {formData.targetMarket.length < 50 ? `Add ${50 - formData.targetMarket.length} more characters for detailed analysis` : "Excellent detail ✓"}
+          </p>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="uniqueValue">Unique Value Proposition</Label>
+          <Label htmlFor="uniqueValue">Unique Value Proposition *</Label>
           <Textarea
             id="uniqueValue"
-            placeholder="What makes your business unique?"
+            placeholder="Clearly explain what makes your business unique and why customers should choose you over competitors. Include specific benefits, features, or approaches that differentiate you. Example: '50% faster delivery than competitors through AI-powered route optimization, with 24/7 customer support and eco-friendly packaging.'"
             value={formData.uniqueValue}
             onChange={(e) => handleInputChange("uniqueValue", e.target.value)}
-            rows={2}
+            rows={3}
+            className={formData.uniqueValue.length < 40 ? "border-orange-300" : "border-green-300"}
           />
+          <p className="text-xs text-muted-foreground">
+            {formData.uniqueValue.length < 40 ? `Add ${40 - formData.uniqueValue.length} more characters for stronger positioning` : "Strong value proposition ✓"}
+          </p>
         </div>
 
         <Button 
           onClick={generateBusinessPlan}
-          disabled={isGenerating}
+          disabled={isGenerating || formData.businessName.length < 3 || formData.targetMarket.length < 50 || formData.uniqueValue.length < 40}
           size="lg"
           className="w-full"
           variant="hero"

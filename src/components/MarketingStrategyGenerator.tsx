@@ -235,24 +235,32 @@ export const MarketingStrategyGenerator = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Type</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Type *</label>
           <Input
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value)}
-            placeholder="e.g., SaaS startup, Local restaurant, Consulting firm"
+            placeholder="Be specific: e.g., B2B SaaS for accounting firms, Organic food delivery service, Executive leadership coaching"
             required
+            className={businessType.length < 15 ? "border-orange-300" : "border-green-300"}
           />
+          <p className="text-xs text-muted-foreground">
+            {businessType.length < 15 ? `Add ${15 - businessType.length} more characters for targeted strategy` : "Good specificity ✓"}
+          </p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Target Market</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Target Market *</label>
           <Textarea
             value={targetMarket}
             onChange={(e) => setTargetMarket(e.target.value)}
-            placeholder="Describe your ideal customers (demographics, interests, pain points)"
-            rows={2}
+            placeholder="Provide detailed customer profile: 'Marketing managers at tech startups (50-500 employees), aged 28-40, frustrated with scattered tools, active on LinkedIn and industry forums, budget $500-2000/month for marketing tools'"
+            rows={3}
             required
+            className={targetMarket.length < 50 ? "border-orange-300" : "border-green-300"}
           />
+          <p className="text-xs text-muted-foreground">
+            {targetMarket.length < 50 ? `Add ${50 - targetMarket.length} more characters for better targeting` : "Excellent targeting ✓"}
+          </p>
         </div>
 
         <div>
@@ -288,17 +296,27 @@ export const MarketingStrategyGenerator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Primary Goals</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Primary Goals *</label>
           <Textarea
             value={goals}
             onChange={(e) => setGoals(e.target.value)}
-            placeholder="What are your main marketing objectives? (e.g., increase awareness, generate leads, drive sales)"
-            rows={2}
+            placeholder="Set specific, measurable objectives: 'Increase brand awareness by 40%, generate 100 qualified leads monthly, achieve $50K MRR within 12 months, build email list to 5,000 subscribers'"
+            rows={3}
             required
+            className={goals.length < 30 ? "border-orange-300" : "border-green-300"}
           />
+          <p className="text-xs text-muted-foreground">
+            {goals.length < 30 ? `Add ${30 - goals.length} more characters for specific goals` : "Clear objectives ✓"}
+          </p>
         </div>
 
-        <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
+        <Button 
+          type="submit" 
+          disabled={isGenerating || businessType.length < 15 || targetMarket.length < 50 || goals.length < 30} 
+          size="lg" 
+          className="w-full" 
+          variant="hero"
+        >
           {isGenerating ? "Generating Strategy..." : "Generate Marketing Strategy"}
         </Button>
       </form>
