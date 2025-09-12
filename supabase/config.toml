@@ -47,3 +47,6 @@ verify_jwt = false
 
 [functions.generate-grant-content]
 verify_jwt = false
+
+[functions.business-mentor]
+verify_jwt = false
