@@ -257,7 +257,7 @@ const HireYourself = () => {
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
               {
-                name: "Sarah Chen",
+                name: "Sarah Smith",
                 business: "Business Consultant",
                 result: "$50K revenue in first year",
                 image: "/lovable-uploads/4060c0f4-ac9a-4eb6-ae80-f0b0cf96d923.png"
