@@ -10,6 +10,9 @@ interface AuthContextType {
   subscribed: boolean;
   subscriptionTier: string | null;
   subscriptionEnd: string | null;
+  isTrialActive: boolean;
+  trialEnd: string | null;
+  trialDaysRemaining: number;
   refreshSubscription: () => Promise<void>;
   signOut: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -33,6 +36,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [subscribed, setSubscribed] = useState(false);
   const [subscriptionTier, setSubscriptionTier] = useState<string | null>(null);
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
+  const [isTrialActive, setIsTrialActive] = useState<boolean>(false);
+  const [trialEnd, setTrialEnd] = useState<string | null>(null);
+  const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(0);
   const { toast } = useToast();
 
   const refreshSubscription = async () => {
@@ -50,9 +56,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      setSubscribed(data.subscribed || false);
-      setSubscriptionTier(data.subscription_tier || null);
-      setSubscriptionEnd(data.subscription_end || null);
+      if (data) {
+        setSubscribed(data.subscribed || false);
+        setSubscriptionTier(data.subscription_tier || null);
+        setSubscriptionEnd(data.subscription_end || null);
+        setIsTrialActive(data.is_trial_active || false);
+        setTrialEnd(data.trial_end || null);
+        setTrialDaysRemaining(data.trial_days_remaining || 0);
+      }
     } catch (error) {
       console.error('Error refreshing subscription:', error);
     }
@@ -114,6 +125,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setSubscribed(false);
           setSubscriptionTier(null);
           setSubscriptionEnd(null);
+          setIsTrialActive(false);
+          setTrialEnd(null);
+          setTrialDaysRemaining(0);
         }
         
         setLoading(false);
@@ -144,6 +158,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     subscribed,
     subscriptionTier,
     subscriptionEnd,
+    isTrialActive,
+    trialEnd,
+    trialDaysRemaining,
     refreshSubscription,
     signOut,
     signIn,

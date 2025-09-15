@@ -23,8 +23,8 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   onUse,
   toolName = "this tool"
 }) => {
-  const { user } = useAuth();
-  const { toolUsageCount, canUseTools, needsSignup, incrementUsage } = useUsage();
+  const { toolUsageCount, canUseTools, needsSignup, needsSubscription, incrementUsage } = useUsage();
+  const { user, isTrialActive, trialDaysRemaining, subscribed } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -128,17 +128,43 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   };
 
   // Show usage warning if approaching limit
+  const showTrialBanner = user && isTrialActive;
   const showUsageWarning = !user && toolUsageCount === 1;
+  const showFreeLimitWarning = user && !subscribed && !isTrialActive && toolUsageCount >= 3;
 
   return (
     <div>
+      {/* Trial Banner */}
+      {showTrialBanner && (
+        <div className="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-lg">
+          <div className="flex items-center gap-2 text-primary">
+            <AlertTriangle className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              🎉 Trial Active - {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Usage Warning Banner */}
       {showUsageWarning && (
         <div className="mb-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
           <div className="flex items-center space-x-2 text-yellow-600">
             <AlertTriangle className="h-4 w-4" />
             <span className="text-sm font-medium">
-              You have 1 free tool use remaining. Sign up to continue using tools after this.
+              1 use remaining before signup required
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Free User Limit Warning */}
+      {showFreeLimitWarning && (
+        <div className="mb-4 p-4 bg-accent/10 border border-accent/20 rounded-lg">
+          <div className="flex items-center gap-2 text-accent">
+            <AlertTriangle className="w-4 h-4" />
+            <span className="text-sm font-medium">
+              {5 - toolUsageCount} use{5 - toolUsageCount !== 1 ? 's' : ''} remaining this month - Upgrade for unlimited access
             </span>
           </div>
         </div>
@@ -154,10 +180,13 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">
-              {toolUsageCount >= 2 ? "Sign Up to Continue" : "Free Trial Limit Reached"}
+              {needsSubscription ? "Upgrade Your Plan" : "Start Your Free Trial"}
             </DialogTitle>
             <DialogDescription className="text-center">
-              You've used your free tools. Sign up to keep using our tools and unlock more features.
+              {needsSubscription 
+                ? "You've reached the free usage limit. Upgrade to continue accessing our tools."
+                : "Create your free account and get 3 days of unlimited access to all PivotHub tools."
+              }
             </DialogDescription>
           </DialogHeader>
           

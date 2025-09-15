@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { TrialBanner } from '@/components/TrialBanner';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +23,9 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-card shadow-soft border-b">
+    <>
+      <TrialBanner />
+      <header className="bg-card shadow-soft border-b">
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center flex-shrink-0">
@@ -264,5 +267,6 @@ export const Header = () => {
         )}
       </div>
     </header>
+    </>
   );
 };

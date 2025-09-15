@@ -77,15 +77,15 @@ const Pricing = () => {
       period: "forever",
       description: "Perfect for getting started",
       features: [
-        "Limited tool access",
+        "3-day free trial (all features)",
+        "5 tool uses per month after trial",
         "Basic assessments",
-        "Community support",
-        "Save progress"
+        "Email support"
       ],
       popular: false,
-      current: !subscribed,
-      ctaText: "Get Started Free",
-      ctaAction: () => window.location.href = "/auth"
+      current: !subscribed && !user,
+      ctaText: !user ? "Start Free Trial" : (subscribed ? "Downgrade" : "Current Plan"),
+      ctaAction: () => !user ? window.location.href = "/auth" : {}
     },
     {
       name: "Basic",

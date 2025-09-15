@@ -37,20 +37,63 @@ serve(async (req) => {
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
+    // First check if user has subscriber record, create if not exists
+    const { data: subscriberData, error: subscriberError } = await supabaseClient
+      .from("subscribers")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+
+    let subscriber = subscriberData;
+    
+    // If no subscriber record exists, create one (this handles existing users)
+    if (subscriberError && subscriberError.code === 'PGRST116') {
+      logStep("Creating subscriber record for existing user");
+      const { data: newSubscriber, error: createError } = await supabaseClient
+        .from("subscribers")
+        .insert({
+          user_id: user.id,
+          email: user.email,
+          trial_start: new Date().toISOString(),
+          trial_end: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
+          is_trial_active: true
+        })
+        .select()
+        .single();
+      
+      if (createError) throw new Error(`Failed to create subscriber record: ${createError.message}`);
+      subscriber = newSubscriber;
+    } else if (subscriberError) {
+      throw new Error(`Failed to fetch subscriber data: ${subscriberError.message}`);
+    }
+
+    // Check if trial has expired and update if necessary
+    const now = new Date();
+    const trialEnd = subscriber?.trial_end ? new Date(subscriber.trial_end) : null;
+    const isTrialExpired = trialEnd && now > trialEnd;
+    
+    if (subscriber?.is_trial_active && isTrialExpired) {
+      logStep("Trial expired, updating subscriber record");
+      const { error: updateError } = await supabaseClient
+        .from("subscribers")
+        .update({ is_trial_active: false })
+        .eq("user_id", user.id);
+      
+      if (updateError) throw new Error(`Failed to update trial status: ${updateError.message}`);
+      subscriber.is_trial_active = false;
+    }
+
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     
     if (customers.data.length === 0) {
-      logStep("No customer found, updating unsubscribed state");
-      await supabaseClient.from("subscribers").upsert({
-        email: user.email,
-        user_id: user.id,
-        stripe_customer_id: null,
+      logStep("No Stripe customer found, returning trial/free status");
+      return new Response(JSON.stringify({ 
         subscribed: false,
-        subscription_tier: null,
-        subscription_end: null,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'email' });
-      return new Response(JSON.stringify({ subscribed: false }), {
+        is_trial_active: subscriber?.is_trial_active || false,
+        trial_end: subscriber?.trial_end || null,
+        trial_days_remaining: subscriber?.is_trial_active && trialEnd ? 
+          Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (24 * 60 * 60 * 1000))) : 0
+      }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
       });
@@ -96,14 +139,25 @@ serve(async (req) => {
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_end: subscriptionEnd,
+      // If user has active subscription, trial should be inactive
+      is_trial_active: hasActiveSub ? false : (subscriber?.is_trial_active || false),
       updated_at: new Date().toISOString(),
     }, { onConflict: 'email' });
 
     logStep("Updated database with subscription info", { subscribed: hasActiveSub, subscriptionTier });
+    
+    // Calculate trial info for response
+    const trialEnd = subscriber?.trial_end ? new Date(subscriber.trial_end) : null;
+    const trialDaysRemaining = subscriber?.is_trial_active && trialEnd ? 
+      Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (24 * 60 * 60 * 1000))) : 0;
+    
     return new Response(JSON.stringify({
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
-      subscription_end: subscriptionEnd
+      subscription_end: subscriptionEnd,
+      is_trial_active: hasActiveSub ? false : (subscriber?.is_trial_active || false),
+      trial_end: subscriber?.trial_end || null,
+      trial_days_remaining: trialDaysRemaining
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface UsageContextType {
   toolUsageCount: number;
@@ -25,6 +26,7 @@ interface UsageProviderProps {
 
 export const UsageProvider: React.FC<UsageProviderProps> = ({ children }) => {
   const [toolUsageCount, setToolUsageCount] = useState(0);
+  const { user, subscribed, isTrialActive } = useAuth();
 
   useEffect(() => {
     // Load usage count from localStorage
@@ -45,12 +47,12 @@ export const UsageProvider: React.FC<UsageProviderProps> = ({ children }) => {
     localStorage.removeItem('tool_usage_count');
   };
 
-  // Free users can use 2 tools before requiring signup
-  const needsSignup = toolUsageCount >= 2;
+  // Determine usage limits based on user status
+  const needsSignup = !user && toolUsageCount >= 2;
   
-  // For now, we'll assume subscription is needed after signup
-  // This can be expanded later with actual subscription logic
-  const needsSubscription = false; // toolUsageCount >= 5 && user && !subscribed;
+  // If user has active subscription or trial, no limitations
+  // If user is logged in but no trial/subscription, they get 5 tools per month
+  const needsSubscription = user && !subscribed && !isTrialActive && toolUsageCount >= 5;
 
   const canUseTools = !needsSignup && !needsSubscription;
 
