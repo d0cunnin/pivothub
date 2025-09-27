@@ -120,9 +120,9 @@ serve(async (req) => {
       const priceId = subscription.items.data[0].price.id;
       const price = await stripe.prices.retrieve(priceId);
       const amount = price.unit_amount || 0;
-      if (amount <= 799) {
+      if (amount <= 999) {
         subscriptionTier = "Basic";
-      } else if (amount <= 1499) {
+      } else if (amount <= 1699) {
         subscriptionTier = "Pro";
       } else {
         subscriptionTier = "Enterprise";
@@ -147,9 +147,9 @@ serve(async (req) => {
     logStep("Updated database with subscription info", { subscribed: hasActiveSub, subscriptionTier });
     
     // Calculate trial info for response
-    const trialEnd = subscriber?.trial_end ? new Date(subscriber.trial_end) : null;
-    const trialDaysRemaining = subscriber?.is_trial_active && trialEnd ? 
-      Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (24 * 60 * 60 * 1000))) : 0;
+    const finalTrialEnd = subscriber?.trial_end ? new Date(subscriber.trial_end) : null;
+    const trialDaysRemaining = subscriber?.is_trial_active && finalTrialEnd ? 
+      Math.max(0, Math.ceil((finalTrialEnd.getTime() - now.getTime()) / (24 * 60 * 60 * 1000))) : 0;
     
     return new Response(JSON.stringify({
       subscribed: hasActiveSub,
