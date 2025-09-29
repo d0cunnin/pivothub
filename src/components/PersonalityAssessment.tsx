@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, ArrowLeft, ArrowRight, CheckCircle, TrendingUp } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
+import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeAIContent } from "@/lib/utils";
 
@@ -154,6 +155,7 @@ export const PersonalityAssessment = () => {
   const [answers, setAnswers] = useState<number[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [showResultsModal, setShowResultsModal] = useState(false);
+  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [results, setResults] = useState<any>(null);
 
   const handleAnswer = (value: string) => {
@@ -163,11 +165,12 @@ export const PersonalityAssessment = () => {
     setAnswers(newAnswers);
   };
 
-  const goNext = () => {
+  const goNext = async () => {
     if (currentQuestion < personalityQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      calculateResults();
+      await calculateResults();
+      setShowEmailPrompt(true);
     }
   };
 
@@ -208,8 +211,7 @@ export const PersonalityAssessment = () => {
           }))
         };
         setResults(sanitizedResults);
-        setShowResultsModal(true);
-        return;
+        return sanitizedResults;
       }
     } catch (error) {
       console.error('Error getting AI personality assessment:', error);
@@ -239,13 +241,15 @@ export const PersonalityAssessment = () => {
       interpretation: getInterpretation(index, score)
     }));
 
-    setResults({
+    const calculatedResults = {
       traitScores: interpretedResults,
       topStrengths: interpretedResults
         .filter(r => r.level === "Strong")
         .sort((a, b) => b.score - a.score)
         .slice(0, 3)
-    });
+    };
+    setResults(calculatedResults);
+    return calculatedResults;
     setShowResultsModal(true);
   };
 
@@ -311,6 +315,7 @@ export const PersonalityAssessment = () => {
     setAnswers([]);
     setShowResults(false);
     setShowResultsModal(false);
+    setShowEmailPrompt(false);
     setResults(null);
   };
 
@@ -325,7 +330,39 @@ export const PersonalityAssessment = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        {!showResults ? (
+        {showEmailPrompt ? (
+          <div className="space-y-6">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>
+              <p className="text-muted-foreground mb-6">
+                Would you like to receive your detailed results by email?
+              </p>
+            </div>
+            <EmailResultsPrompt
+              assessmentType="personality"
+              results={results}
+              onEmailSent={() => {
+                setShowResultsModal(true);
+                setShowEmailPrompt(false);
+              }}
+              onSkip={() => {
+                setShowResultsModal(true);
+                setShowEmailPrompt(false);
+              }}
+            />
+            <div className="text-center">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowResultsModal(true);
+                  setShowEmailPrompt(false);
+                }}
+              >
+                View Results Now
+              </Button>
+            </div>
+          </div>
+        ) : !showResults ? (
           <>
             <DialogHeader>
               <DialogTitle className="text-2xl font-bold text-center">Personality Assessment</DialogTitle>

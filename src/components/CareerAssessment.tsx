@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, Target, TrendingUp, Users, Heart, Wrench, Calculator, Shield, MessageCircle, GraduationCap, Lightbulb, HandHeart, Home } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
+import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { sanitizeAIContent } from "@/lib/utils";
 
@@ -258,6 +259,7 @@ export const CareerAssessment = () => {
   const [results, setResults] = useState<AssessmentResults>({});
   const [showResults, setShowResults] = useState(false);
   const [showResultsModal, setShowResultsModal] = useState(false);
+  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
 
   const totalQuestions = careerAreas.length * 10;
   const currentQuestionNumber = currentArea * 10 + currentStatement + 1;
@@ -285,8 +287,9 @@ export const CareerAssessment = () => {
       setCurrentStatement(0);
     } else {
       // Calculate results when assessment is complete
-      await calculateResults();
-      setShowResults(true);
+      const calculatedResults = await calculateResults();
+      setResults(calculatedResults);
+      setShowEmailPrompt(true);
     }
   };
 
@@ -358,6 +361,7 @@ export const CareerAssessment = () => {
     setResponses({});
     setCurrentResponse(0);
     setShowResults(false);
+    setShowEmailPrompt(false);
     setIsOpen(false);
   };
 
@@ -387,7 +391,39 @@ export const CareerAssessment = () => {
           </DialogTitle>
         </DialogHeader>
 
-        {!showResults ? (
+        {showEmailPrompt ? (
+          <div className="space-y-6">
+            <div className="text-center">
+              <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>
+              <p className="text-muted-foreground mb-6">
+                Would you like to receive your detailed results by email?
+              </p>
+            </div>
+            <EmailResultsPrompt
+              assessmentType="career"
+              results={results}
+              onEmailSent={() => {
+                setShowResults(true);
+                setShowEmailPrompt(false);
+              }}
+              onSkip={() => {
+                setShowResults(true);
+                setShowEmailPrompt(false);
+              }}
+            />
+            <div className="text-center">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowResults(true);
+                  setShowEmailPrompt(false);
+                }}
+              >
+                View Results Now
+              </Button>
+            </div>
+          </div>
+        ) : !showResults ? (
           <div className="space-y-6">
             <div className="space-y-2">
               <div className="flex justify-between text-sm text-muted-foreground">
