@@ -161,8 +161,9 @@ Create content for different platforms (Instagram, LinkedIn, Twitter, Facebook) 
 
   } catch (error) {
     console.error('Error generating content:', error)
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: errorMessage }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500 
