@@ -23,7 +23,7 @@ export const HeroSection = () => {
           </h1>
           
           <p className="text-xl md:text-2xl mb-6 text-white/90 max-w-2xl">
-            Learn, grow, relaunch your career, or connect with top tech talent — all in one place.
+            Learn, grow, and relaunch your career — all in one place.
           </p>
           
           <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
@@ -58,14 +58,6 @@ export const HeroSection = () => {
               onClick={() => window.location.href = '/hireyourself'}
             >
               Hire Yourself / Launch a Business
-            </Button>
-            <Button 
-              size="lg" 
-              variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/freelancer-marketplace'}
-            >
-              Offer or Hire Tech Talent
             </Button>
           </div>
         </div>
