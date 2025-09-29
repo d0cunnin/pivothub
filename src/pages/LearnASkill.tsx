@@ -44,6 +44,14 @@ const LearnASkill = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Micro Courses
             </h1>
+            <div className="bg-gradient-card/20 border border-accent/30 rounded-lg p-4 mb-6">
+              <p className="text-lg font-semibold text-accent mb-2">
+                🚧 Coming Soon!
+              </p>
+              <p className="text-muted-foreground">
+                Our micro courses are currently under development and will be available soon. Stay tuned for these exciting learning opportunities!
+              </p>
+            </div>
             <p className="text-lg text-muted-foreground">
               Short focused learning experiences designed to give you relevant information quickly. Each course delivers practical information in a concise format, so you can learn what you need without a large time commitment. Perfect for busy learners, these courses help you grow, adapt, and learn fast.
             </p>
