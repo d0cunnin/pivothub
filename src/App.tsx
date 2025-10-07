@@ -26,6 +26,7 @@ import FreelancerOnboarding from "./pages/FreelancerOnboarding";
 import ClientOnboarding from "./pages/ClientOnboarding";
 import FreelancerDashboard from "./pages/FreelancerDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/client-onboarding" element={<ClientOnboarding />} />
             <Route path="/freelancer-dashboard" element={<FreelancerDashboard />} />
             <Route path="/client-dashboard" element={<ClientDashboard />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />
