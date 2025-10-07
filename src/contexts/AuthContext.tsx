@@ -13,10 +13,12 @@ interface AuthContextType {
   isTrialActive: boolean;
   trialEnd: string | null;
   trialDaysRemaining: number;
+  isAdmin: boolean;
   refreshSubscription: () => Promise<void>;
   signOut: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, displayName?: string) => Promise<{ error: any }>;
+  checkAdminStatus: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isTrialActive, setIsTrialActive] = useState<boolean>(false);
   const [trialEnd, setTrialEnd] = useState<string | null>(null);
   const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(0);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
 
   const refreshSubscription = async () => {
@@ -106,6 +109,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const checkAdminStatus = async () => {
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error checking admin status:', error);
+        setIsAdmin(false);
+        return;
+      }
+
+      setIsAdmin(!!data);
+    } catch (error) {
+      console.error('Error in admin check:', error);
+      setIsAdmin(false);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -117,6 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session?.user && event === 'SIGNED_IN') {
           setTimeout(() => {
             refreshSubscription();
+            checkAdminStatus();
           }, 0);
         }
         
@@ -128,6 +159,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setIsTrialActive(false);
           setTrialEnd(null);
           setTrialDaysRemaining(0);
+          setIsAdmin(false);
         }
         
         setLoading(false);
@@ -142,6 +174,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (session?.user) {
         setTimeout(() => {
           refreshSubscription();
+          checkAdminStatus();
         }, 0);
       }
       
@@ -161,10 +194,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isTrialActive,
     trialEnd,
     trialDaysRemaining,
+    isAdmin,
     refreshSubscription,
     signOut,
     signIn,
     signUp,
+    checkAdminStatus,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
