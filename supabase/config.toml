@@ -50,3 +50,6 @@ verify_jwt = false
 
 [functions.business-mentor]
 verify_jwt = false
+
+[functions.send-assessment-results]
+verify_jwt = false
