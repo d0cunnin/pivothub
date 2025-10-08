@@ -178,7 +178,7 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="targetMarket">Target Market * - Describe your ideal customers in detail: demographics (age, income), psychographics (values, interests), pain points, and behaviors</Label>
+          <Label htmlFor="targetMarket">Target Market * - Describe your ideal customers in detail: demographics (age, income), psychographics (values, interests), pain points, and behaviors. You can type these details here or copy information from the Business Foundation Builder above.</Label>
           <Textarea
             id="targetMarket"
             placeholder="Example: 'Small business owners aged 25-45 with 10-50 employees who struggle with manual inventory management and seek affordable digital solutions.'"
