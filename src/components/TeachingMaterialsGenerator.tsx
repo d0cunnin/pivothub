@@ -49,8 +49,9 @@ const skillOptions = [
 ];
 
 const audienceOptions = [
-  "Kids",
-  "Teens",
+  "Grades K-5",
+  "Grades 6-8",
+  "Grades 9-12",
   "Adults",
   "Professionals",
   "Other"
