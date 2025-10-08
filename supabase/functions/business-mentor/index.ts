@@ -19,10 +19,13 @@ serve(async (req) => {
       throw new Error('Message is required');
     }
 
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
       throw new Error('OpenAI API key not configured');
     }
+    
+    console.log('Processing business mentor chat with GPT-5...');
 
     const systemPrompt = `You are an experienced business mentor with 20+ years of experience helping entrepreneurs build successful companies. You provide practical, actionable advice with specific examples and next steps.
 
@@ -66,7 +69,6 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
         model: 'gpt-5-2025-08-07',
         messages: messages,
         max_completion_tokens: 800,
-        temperature: 0.7,
       }),
     });
 
