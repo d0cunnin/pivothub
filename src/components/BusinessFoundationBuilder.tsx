@@ -60,6 +60,7 @@ export const BusinessFoundationBuilder = () => {
   
   // Demographics state
   const [demographics, setDemographics] = useState({
+    gender: [] as string[],
     ageRange: "",
     maritalStatus: [] as string[],
     lgbtqia: false,
@@ -82,6 +83,9 @@ export const BusinessFoundationBuilder = () => {
   const applyDemographics = () => {
     let profile = "";
     
+    if (demographics.gender.length > 0) {
+      profile += `Gender: ${demographics.gender.join(", ")}. `;
+    }
     if (demographics.ageRange) {
       profile += `Age: ${demographics.ageRange}. `;
     }
@@ -380,6 +384,26 @@ export const BusinessFoundationBuilder = () => {
             <Card className="p-4 space-y-4 bg-muted/30">
               <p className="text-sm text-muted-foreground">Select demographic options to help build your ideal customer profile:</p>
               
+              {/* Gender */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Gender</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {["Male", "Female"].map(option => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`gender-${option}`}
+                        checked={demographics.gender.includes(option)}
+                        onCheckedChange={() => setDemographics(prev => ({
+                          ...prev,
+                          gender: toggleArrayValue(prev.gender, option)
+                        }))}
+                      />
+                      <label htmlFor={`gender-${option}`} className="text-sm cursor-pointer">{option}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Age Range */}
               <div className="space-y-2">
                 <Label className="text-sm font-semibold">Age Range</Label>
