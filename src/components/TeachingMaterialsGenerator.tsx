@@ -17,7 +17,9 @@ interface TeachingMaterialsData {
   skills: string[];
   otherSkill?: string;
   experience: string;
-  education: string;
+  educationLevel: string;
+  major: string;
+  otherMajor?: string;
   certifications: string;
   teachingFormat: string;
   targetAudience: string[];
@@ -54,12 +56,42 @@ const audienceOptions = [
   "Other"
 ];
 
+const educationLevels = [
+  "High School",
+  "Associate's Degree",
+  "Bachelor's Degree",
+  "Master's Degree",
+  "Doctorate (PhD)",
+  "Professional Degree",
+  "Other"
+];
+
+const majorOptions = [
+  "Business Administration",
+  "Computer Science",
+  "Engineering",
+  "Education",
+  "Healthcare/Nursing",
+  "Psychology",
+  "Marketing",
+  "Communications",
+  "Art & Design",
+  "Music",
+  "Mathematics",
+  "Biology/Life Sciences",
+  "Social Sciences",
+  "Liberal Arts/Humanities",
+  "Finance/Accounting",
+  "Other"
+];
+
 const TeachingMaterialsGenerator = () => {
   const [formData, setFormData] = useState<TeachingMaterialsData>({
     fullName: "",
     skills: [],
     experience: "",
-    education: "",
+    educationLevel: "",
+    major: "",
     certifications: "",
     teachingFormat: "Self-Paced Course",
     targetAudience: [],
@@ -242,16 +274,64 @@ ${generatedMaterials.lessonScript}
             />
           </div>
 
-          {/* Education */}
+          {/* Education Level */}
           <div className="space-y-2">
-            <Label htmlFor="education">Education</Label>
-            <Input
-              id="education"
-              value={formData.education}
-              onChange={(e) => setFormData({ ...formData, education: e.target.value })}
-              placeholder="Degrees, certifications, or formal training"
-            />
+            <Label htmlFor="educationLevel">Highest Level of Education</Label>
+            <select
+              id="educationLevel"
+              value={formData.educationLevel}
+              onChange={(e) => setFormData({ ...formData, educationLevel: e.target.value, major: "" })}
+              className="w-full px-3 py-2 border border-input bg-background rounded-md"
+            >
+              <option value="">Select education level</option>
+              {educationLevels.map((level) => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
+              ))}
+            </select>
           </div>
+
+          {/* Major - Only show if education level is selected and not "High School" or "Other" */}
+          {formData.educationLevel && formData.educationLevel !== "High School" && formData.educationLevel !== "Other" && (
+            <div className="space-y-2">
+              <Label htmlFor="major">Major / Field of Study</Label>
+              <select
+                id="major"
+                value={formData.major}
+                onChange={(e) => setFormData({ ...formData, major: e.target.value })}
+                className="w-full px-3 py-2 border border-input bg-background rounded-md"
+              >
+                <option value="">Select major</option>
+                {majorOptions.map((major) => (
+                  <option key={major} value={major}>
+                    {major}
+                  </option>
+                ))}
+              </select>
+              {formData.major === "Other" && (
+                <Input
+                  placeholder="Specify your major"
+                  value={formData.otherMajor || ""}
+                  onChange={(e) => setFormData({ ...formData, otherMajor: e.target.value })}
+                  className="mt-2"
+                />
+              )}
+            </div>
+          )}
+
+          {/* Other Education - Show text field if "Other" is selected */}
+          {formData.educationLevel === "Other" && (
+            <div className="space-y-2">
+              <Label htmlFor="otherEducation">Specify Your Education</Label>
+              <Input
+                id="otherEducation"
+                placeholder="Describe your education background"
+                value={formData.otherMajor || ""}
+                onChange={(e) => setFormData({ ...formData, otherMajor: e.target.value })}
+              />
+            </div>
+          )}
 
           {/* Certifications */}
           <div className="space-y-2">

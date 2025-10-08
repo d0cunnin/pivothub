@@ -27,13 +27,23 @@ serve(async (req) => {
       const skills = data.skills.join(', ') + (data.otherSkill ? `, ${data.otherSkill}` : '')
       const audience = data.targetAudience.join(', ') + (data.otherAudience ? `, ${data.otherAudience}` : '')
       
+      // Construct education string
+      let education = data.educationLevel || 'Not specified'
+      if (data.major && data.major !== 'Other') {
+        education += ` in ${data.major}`
+      } else if (data.major === 'Other' && data.otherMajor) {
+        education += ` in ${data.otherMajor}`
+      } else if (data.educationLevel === 'Other' && data.otherMajor) {
+        education = data.otherMajor
+      }
+      
       prompt = `You are an expert curriculum designer and educational content creator. Generate comprehensive teaching materials for ${data.fullName}.
 
 INSTRUCTOR PROFILE:
 - Name: ${data.fullName}
 - Skills/Expertise: ${skills}
 - Experience: ${data.experience}
-- Education: ${data.education}
+- Education: ${education}
 - Certifications: ${data.certifications}
 - Preferred Teaching Format: ${data.teachingFormat}
 - Target Audience: ${audience}
