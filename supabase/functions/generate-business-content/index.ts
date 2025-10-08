@@ -94,26 +94,90 @@ Use plain text format without markdown. Be specific to the business type and goa
         break
 
       case 'pitch-deck':
-        prompt = `Create 10-12 pitch deck slides for:
+        prompt = `Create EXACTLY 10 pitch deck slides with SHORT BULLET POINTS ONLY.
+
+CRITICAL FORMATTING RULES:
+- Each slide MUST have 3-5 bullet points maximum
+- Each bullet point MUST be 10-15 words or less
+- NO paragraphs, NO long explanations, NO narrative text
+- Format each bullet with • symbol
+- Keep language concise and impactful
+
+INPUT DATA:
 Company: ${data.companyName}
+Presenter: ${data.presenterName || 'N/A'}
 Problem: ${data.problem}
 Solution: ${data.solution}
 Market Size: ${data.marketSize}
 Business Model: ${data.businessModel}
 Competition: ${data.competition}
+Go-to-Market: ${data.goToMarketStrategy || data.businessModel}
 Funding: ${data.fundingAmount}
 Use of Funds: ${data.useOfFunds}
 Team: ${data.teamBackground}
 Traction: ${data.traction}
 
-Generate slides in this exact format for each slide:
-[SLIDE_TITLE]
-[Detailed slide content here]
+Generate EXACTLY these 10 slides in this format:
 
-[SLIDE_TITLE]
-[Detailed slide content here]
+[Title / Cover]
+• ${data.companyName}
+• Presenter: ${data.presenterName || 'Name'}
+• [One sentence tagline/value proposition]
 
-Use plain text only, no markdown or special formatting.`
+[Problem]
+• [Key problem point 1 - max 15 words]
+• [Key problem point 2 - max 15 words]
+• [Key problem point 3 - max 15 words]
+
+[Solution]
+• [How you solve it - point 1]
+• [How you solve it - point 2]
+• [How you solve it - point 3]
+• [Key differentiator]
+
+[Market Opportunity]
+• Total addressable market: [size from input]
+• [Growth rate or trend]
+• [Target segment details]
+• [Market validation point]
+
+[Product / Technology]
+• [Core product feature 1]
+• [Core product feature 2]
+• [Technology advantage]
+• [Current development stage]
+
+[Business Model]
+• Revenue model: [from input]
+• [Pricing strategy point]
+• [Customer acquisition approach]
+• [Unit economics highlight]
+
+[Go-to-Market Strategy]
+• [Channel strategy point 1]
+• [Channel strategy point 2]
+• [Partnership approach]
+• [Timeline milestone]
+
+[Competition / Differentiation]
+• Key competitors: [from input]
+• [Our unique advantage 1]
+• [Our unique advantage 2]
+• [Defensibility point]
+
+[Financials / Traction]
+• Current traction: [from input]
+• [Key metric or milestone]
+• [Revenue projection or funding]
+• [Use of funds summary]
+
+[Team & Ask / Closing]
+• Team: [from input - key credentials]
+• Funding ask: [from input]
+• [What funding will achieve]
+• [Contact or call to action]
+
+Use ONLY bullet points with • symbol. NO paragraphs.`
         break
 
       case 'biography':

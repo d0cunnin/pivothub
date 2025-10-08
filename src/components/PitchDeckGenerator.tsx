@@ -11,9 +11,11 @@ import { PitchDeckPresentation } from './PitchDeckPresentation';
 
 interface PitchData {
   companyName: string;
+  presenterName: string;
   problem: string;
   solution: string;
   marketSize: string;
+  goToMarketStrategy: string;
   businessModel: string;
   competition: string;
   fundingAmount: string;
@@ -33,9 +35,11 @@ interface Slide {
 export const PitchDeckGenerator = () => {
   const [formData, setFormData] = useState<PitchData>({
     companyName: "",
+    presenterName: "",
     problem: "",
     solution: "",
     marketSize: "",
+    goToMarketStrategy: "",
     businessModel: "",
     competition: "",
     fundingAmount: "",
@@ -112,7 +116,20 @@ export const PitchDeckGenerator = () => {
       const { data, error } = await supabase.functions.invoke('generate-business-content', {
         body: {
           type: 'pitch-deck',
-          data: formData
+          data: {
+            companyName: formData.companyName,
+            presenterName: formData.presenterName,
+            problem: formData.problem,
+            solution: formData.solution,
+            marketSize: formData.marketSize,
+            goToMarketStrategy: formData.goToMarketStrategy,
+            businessModel: formData.businessModel,
+            competition: formData.competition,
+            fundingAmount: formData.fundingAmount,
+            useOfFunds: formData.useOfFunds,
+            teamBackground: formData.teamBackground,
+            traction: formData.traction
+          }
         }
       });
 
@@ -131,55 +148,63 @@ export const PitchDeckGenerator = () => {
       setSlides(generatedSlides);
     } catch (error) {
       console.error('Error generating pitch deck:', error);
-      // Enhanced fallback based on user input
+      // Enhanced fallback with bullet points
       const generatedSlides: Slide[] = [
         {
-          title: "Company Overview",
-          content: `${formData.companyName || "Your Company"}\n\nTransforming the way people ${formData.solution || "solve problems"} through innovative technology and exceptional service.`
+          title: "Title / Cover",
+          content: `• ${formData.companyName || 'Your Company'}\n• Presenter: ${formData.presenterName || 'Your Name'}\n• Transforming the market with innovative solutions`
         },
         {
-          title: "The Problem",
-          content: formData.problem || "Current solutions are inadequate, expensive, or difficult to use. Customers need a better way to achieve their goals efficiently and cost-effectively."
+          title: "Problem",
+          content: formData.problem 
+            ? `• ${formData.problem.split('.')[0]}\n• Current solutions are inadequate\n• Market needs better approach`
+            : "• Market challenges exist\n• Current solutions fall short\n• Growing demand for innovation"
         },
         {
-          title: "Our Solution",
-          content: formData.solution || "We provide an innovative platform that simplifies complex processes, reduces costs, and delivers exceptional user experience."
+          title: "Solution",
+          content: formData.solution 
+            ? `• ${formData.solution.split('.')[0]}\n• Innovative approach to market needs\n• Proven technology foundation`
+            : "• Innovative solution addressing core problems\n• Technology-driven approach\n• Validated with early users"
         },
         {
           title: "Market Opportunity",
-          content: `Market Size: ${formData.marketSize || "$10B+ addressable market"}\n\nRapid growth expected due to digital transformation trends and increasing demand for efficient solutions.`
+          content: formData.marketSize 
+            ? `• Total addressable market: ${formData.marketSize}\n• Rapid market growth trajectory\n• Strong customer demand signals`
+            : "• Large addressable market\n• Growing at significant rate\n• Strong customer demand"
+        },
+        {
+          title: "Product / Technology",
+          content: formData.solution 
+            ? `• ${formData.solution.split('.')[0]}\n• Scalable platform architecture\n• Proprietary technology advantage`
+            : "• Advanced product capabilities\n• Scalable technology platform\n• Continuous innovation pipeline"
         },
         {
           title: "Business Model",
-          content: formData.businessModel || "Subscription-based SaaS model with multiple pricing tiers\n• Basic: $29/month\n• Professional: $99/month\n• Enterprise: Custom pricing"
+          content: formData.businessModel 
+            ? `• Revenue model: ${formData.businessModel}\n• Attractive unit economics\n• Multiple revenue streams`
+            : "• Subscription-based revenue model\n• Strong unit economics\n• Scalable customer acquisition"
         },
         {
-          title: "Competitive Landscape",
-          content: formData.competition || "While competitors exist, we differentiate through:\n• Superior user experience\n• Advanced features\n• Competitive pricing\n• Exceptional customer support"
+          title: "Go-to-Market Strategy",
+          content: formData.goToMarketStrategy 
+            ? `• ${formData.goToMarketStrategy.split('.')[0]}\n• Multi-channel customer acquisition\n• Strategic partnership approach`
+            : "• Direct sales and digital marketing\n• Strategic partnerships\n• Phased market expansion"
         },
         {
-          title: "Traction & Metrics",
-          content: formData.traction || "• 500+ early users\n• $50K monthly recurring revenue\n• 95% customer satisfaction\n• Growing at 20% month-over-month"
+          title: "Competition / Differentiation",
+          content: formData.competition 
+            ? `• Key competitors: ${formData.competition}\n• Superior product capabilities\n• Strong customer satisfaction\n• Defensible market position`
+            : "• Competitive but fragmented market\n• Clear differentiation strategy\n• Strong competitive advantages"
         },
         {
-          title: "Team",
-          content: formData.teamBackground || "Experienced team with proven track record in the industry. Combined expertise in technology, business development, and market strategy."
+          title: "Financials / Traction",
+          content: formData.traction 
+            ? `• ${formData.traction}\n• Funding: ${formData.fundingAmount || 'Seeking investment'}\n• Strong growth metrics\n• Path to profitability`
+            : "• Early traction with customers\n• Growing revenue\n• Clear path to profitability"
         },
         {
-          title: "Funding Request",
-          content: `We are seeking $${formData.fundingAmount || "500,000"} to accelerate growth and market expansion.\n\n${formData.useOfFunds || "Funds will be used for product development, marketing, and team expansion to capture market opportunity."}`
-        },
-        {
-          title: "Use of Funds",
-          content: formData.useOfFunds || "• 40% Product Development\n• 30% Marketing & Sales\n• 20% Team Expansion\n• 10% Operations & Infrastructure"
-        },
-        {
-          title: "Financial Projections",
-          content: "3-Year Revenue Forecast:\n• Year 1: Break-even with $500K revenue\n• Year 2: $2M revenue, 25% profit margin\n• Year 3: $5M revenue, 35% profit margin\n\nProjected ROI: 5-7x over 3 years"
-        },
-        {
-          title: "Next Steps",
-          content: "Timeline for investment deployment:\n• Month 1-2: Team hiring and onboarding\n• Month 3-6: Product development and testing\n• Month 6-12: Market launch and scaling\n\nLooking for strategic investors who bring industry expertise and network connections."
+          title: "Team & Ask / Closing",
+          content: `• Team: ${formData.teamBackground || 'Experienced team with proven track record'}\n• Funding ask: ${formData.fundingAmount || 'Investment amount TBD'}\n• ${formData.useOfFunds || 'Fuel growth and market expansion'}\n• Contact us to join our journey`
         }
       ];
       setSlides(generatedSlides);
@@ -191,55 +216,59 @@ export const PitchDeckGenerator = () => {
   // Helper function to parse pitch deck slides from AI response
   const parsePitchDeckSlides = (content: string): Slide[] => {
     const slides: Slide[] = [];
+    const expectedTitles = [
+      "Title / Cover",
+      "Problem",
+      "Solution", 
+      "Market Opportunity",
+      "Product / Technology",
+      "Business Model",
+      "Go-to-Market Strategy",
+      "Competition / Differentiation",
+      "Financials / Traction",
+      "Team & Ask / Closing"
+    ];
     
-    // Split by slide markers
-    let sections = content.split(/\[SLIDE_TITLE\]|\[.*?\]|Slide \d+:/i).filter(section => section.trim());
+    // Split by [Title] markers
+    const slidePattern = /\[(.*?)\]/g;
+    const parts = content.split(slidePattern);
     
-    // If no clear slide markers, split by double newlines
-    if (sections.length < 3) {
-      sections = content.split(/\n\n+/).filter(section => section.trim() && section.length > 20);
-    }
-
-    sections.forEach((section, index) => {
-      const lines = section.split('\n').filter(line => line.trim());
-      if (lines.length === 0) return;
-
-      let title = '';
-      let slideContent = '';
-
-      // Try to identify title from first line
-      const firstLine = lines[0].trim();
-      if (firstLine.length < 100 && !firstLine.includes('.') && lines.length > 1) {
-        title = firstLine;
-        slideContent = lines.slice(1).join('\n').trim();
-      } else {
-        // Generate title based on content or position
-        const standardTitles = [
-          "Company Overview", "Problem Statement", "Our Solution", "Market Opportunity",
-          "Business Model", "Competitive Analysis", "Traction", "Team", "Financial Projections",
-          "Funding Request", "Use of Funds", "Next Steps"
-        ];
-        title = standardTitles[index] || `Slide ${index + 1}`;
-        slideContent = section.trim();
-      }
-
+    for (let i = 1; i < parts.length; i += 2) {
+      const title = parts[i].trim();
+      const slideContent = parts[i + 1]?.trim() || '';
+      
       if (title && slideContent) {
+        // Extract only bullet points (lines starting with •)
+        const bulletLines = slideContent
+          .split('\n')
+          .filter(line => line.trim().startsWith('•'))
+          .slice(0, 5) // Max 5 bullets
+          .join('\n');
+        
         slides.push({
-          title,
-          content: slideContent
+          title: title,
+          content: bulletLines || slideContent
         });
       }
-    });
-
-    // Ensure we have at least a few key slides
-    if (slides.length === 0) {
-      slides.push({
-        title: "Company Overview",
-        content: `${formData.companyName || "Your Company"} - Brief description of your business and mission.`
+    }
+    
+    // If parsing failed, ensure we have exactly 10 slides with expected titles
+    if (slides.length < 10) {
+      const contentLines = content.split('\n').filter(l => l.trim());
+      const bulletsPerSlide = Math.max(3, Math.floor(contentLines.length / 10));
+      
+      return expectedTitles.map((title, index) => {
+        const startIdx = index * bulletsPerSlide;
+        const slideLines = contentLines.slice(startIdx, startIdx + bulletsPerSlide);
+        return {
+          title,
+          content: slideLines.map(l => l.startsWith('•') ? l : `• ${l}`).join('\n')
+        };
       });
     }
-
-    return slides.slice(0, 12); // Limit to 12 slides
+    
+    // Limit to exactly 10 slides
+    return slides.slice(0, 10);
   };
 
   return (
@@ -268,6 +297,15 @@ export const PitchDeckGenerator = () => {
                 placeholder="Your company name"
                 value={formData.companyName}
                 onChange={(e) => handleInputChange("companyName", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="presenterName">Presenter Name</Label>
+              <Input
+                id="presenterName"
+                placeholder="Your full name"
+                value={formData.presenterName}
+                onChange={(e) => handleInputChange("presenterName", e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -385,6 +423,17 @@ export const PitchDeckGenerator = () => {
             placeholder="How do you make money?"
             value={formData.businessModel}
             onChange={(e) => handleInputChange("businessModel", e.target.value)}
+            rows={2}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="goToMarketStrategy">Go-to-Market Strategy</Label>
+          <Textarea
+            id="goToMarketStrategy"
+            placeholder="How will you acquire customers and enter the market?"
+            value={formData.goToMarketStrategy}
+            onChange={(e) => handleInputChange("goToMarketStrategy", e.target.value)}
             rows={2}
           />
         </div>

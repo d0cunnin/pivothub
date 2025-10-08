@@ -56,31 +56,54 @@ export const PitchDeckPresentation = ({
   const slide = slides[currentSlide];
 
   // Format slide content with better styling
-  const formatContent = (content: string) => {
-    return content.split('\n').map((line, idx) => {
-      const trimmed = line.trim();
-      
-      // Handle bullet points
-      if (trimmed.startsWith('•') || trimmed.startsWith('-')) {
-        return (
-          <li key={idx} className="ml-6 mb-2 text-lg">
-            {trimmed.replace(/^[•\-]\s*/, '')}
-          </li>
-        );
-      }
-      
-      // Handle empty lines
-      if (!trimmed) {
-        return <div key={idx} className="h-4" />;
-      }
-      
-      // Regular paragraphs
+  const formatContent = (content: string, isFirstSlide: boolean = false) => {
+    const lines = content.split('\n').filter(line => line.trim());
+    
+    // For first slide (cover), use special formatting
+    if (isFirstSlide) {
       return (
-        <p key={idx} className="mb-4 text-lg leading-relaxed">
-          {trimmed}
-        </p>
+        <div className="flex flex-col items-center justify-center h-full space-y-6">
+          {logo && (
+            <img 
+              src={logo} 
+              alt="Company Logo" 
+              className="max-w-[200px] max-h-[200px] object-contain mb-4"
+            />
+          )}
+          {lines.map((line, index) => {
+            const trimmedLine = line.trim().replace(/^•\s*/, '');
+            return (
+              <div 
+                key={index} 
+                className="text-center"
+                style={{ 
+                  fontSize: index === 0 ? '3rem' : index === 1 ? '1.5rem' : '1.25rem',
+                  fontWeight: index === 0 ? 'bold' : 'normal',
+                  color: index === 0 ? primaryColor : 'inherit'
+                }}
+              >
+                {trimmedLine}
+              </div>
+            );
+          })}
+        </div>
       );
-    });
+    }
+    
+    // For other slides, format as bullet points
+    return (
+      <ul className="space-y-4 text-left">
+        {lines.map((line, index) => {
+          const trimmedLine = line.trim().replace(/^[•\-*]\s*/, '');
+          return (
+            <li key={index} className="flex items-start">
+              <span className="mr-3 text-2xl" style={{ color: accentColor }}>•</span>
+              <span className="text-xl leading-relaxed">{trimmedLine}</span>
+            </li>
+          );
+        })}
+      </ul>
+    );
   };
 
   return (
@@ -135,22 +158,24 @@ export const PitchDeckPresentation = ({
             }}
           />
           
-          {/* Slide Title */}
-          <h1 
-            className="text-5xl font-bold mb-8 relative z-10"
-            style={{
-              background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
-            {slide.title}
-          </h1>
+          {/* Slide Title - Hidden for cover slide */}
+          {currentSlide !== 0 && (
+            <h1 
+              className="text-5xl font-bold mb-8 relative z-10"
+              style={{
+                background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              {slide.title}
+            </h1>
+          )}
           
           {/* Slide Content */}
-          <div className="text-muted-foreground space-y-2 flex-1 overflow-y-auto relative z-10">
-            {formatContent(slide.content)}
+          <div className={`text-muted-foreground space-y-2 flex-1 overflow-y-auto relative z-10 ${currentSlide === 0 ? 'h-full' : ''}`}>
+            {formatContent(slide.content, currentSlide === 0)}
           </div>
 
           {/* Logo watermark on slide */}
