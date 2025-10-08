@@ -45,11 +45,11 @@ Provide real names, addresses, phone numbers, websites, and brief descriptions. 
         messages: [
           {
             role: 'system',
-            content: 'You are a business resource finder. Provide real, current local business resources with actual contact information, websites, and addresses when available. Format your response as a clear, structured list with organization names in bold.'
+            content: 'You are a business resource finder. Return ONLY valid JSON with this exact shape and no markdown, no text outside JSON: {"categories":[{"category":"string","description":"string","resources":[{"id":"string","name":"string","description":"string","type":"string","url":"string","cost":"string","rating":number,"pros":["string"],"cons":["string"],"bestFor":"string","location":"string","contactInfo":"string"}]}], "totalResources": number, "recommendedFirst": ["string"], "summary": "string"}. Ensure at least 3 resources overall using real organizations when possible.'
           },
           {
             role: 'user',
-            content: searchQuery
+            content: searchQuery + '\nReturn only the JSON object described above. Do not include code fences.'
           }
         ],
         max_completion_tokens: 2000
