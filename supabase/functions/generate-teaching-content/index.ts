@@ -24,7 +24,6 @@ serve(async (req) => {
 
     // Handle all-materials type first
     if (type === 'all-materials') {
-      const skills = data.skills.join(', ') + (data.otherSkill ? `, ${data.otherSkill}` : '')
       const audience = data.targetAudience.join(', ') + (data.otherAudience ? `, ${data.otherAudience}` : '')
       
       // Construct education string
@@ -36,15 +35,22 @@ serve(async (req) => {
       } else if (data.educationLevel === 'Other' && data.otherMajor) {
         education = data.otherMajor
       }
+
+      // Build military service string
+      let militaryInfo = ''
+      if (data.militaryService === 'yes') {
+        militaryInfo = `- Military Service: ${data.militaryBranch || 'N/A'}, Rank: ${data.militaryRank || 'N/A'}, Role: ${data.militaryRole || 'N/A'}`
+      }
       
       prompt = `You are an expert curriculum designer and educational content creator. Generate comprehensive teaching materials for ${data.fullName}.
 
 INSTRUCTOR PROFILE:
 - Name: ${data.fullName}
-- Skills/Expertise: ${skills}
+- Skills/Expertise: ${data.skills}
 - Experience: ${data.experience}
 - Education: ${education}
 - Certifications: ${data.certifications}
+${militaryInfo}
 - Preferred Teaching Format: ${data.teachingFormat}
 - Target Audience: ${audience}
 - Estimated Duration: ${data.duration}

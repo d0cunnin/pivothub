@@ -14,8 +14,11 @@ import { Loader2, Download, X } from "lucide-react";
 
 interface TeachingMaterialsData {
   fullName: string;
-  skills: string[];
-  otherSkill?: string;
+  skills: string;
+  militaryService: string;
+  militaryBranch?: string;
+  militaryRank?: string;
+  militaryRole?: string;
   experience: string;
   educationLevel: string;
   major: string;
@@ -34,19 +37,6 @@ interface GeneratedMaterials {
   handouts: string;
   lessonScript: string;
 }
-
-const skillOptions = [
-  "Coding",
-  "Public Speaking",
-  "Mental Health",
-  "STEM",
-  "Entrepreneurship",
-  "Art",
-  "Music",
-  "Cooking",
-  "Fitness",
-  "Other"
-];
 
 const audienceOptions = [
   "Grades K-5",
@@ -89,7 +79,8 @@ const majorOptions = [
 const TeachingMaterialsGenerator = () => {
   const [formData, setFormData] = useState<TeachingMaterialsData>({
     fullName: "",
-    skills: [],
+    skills: "",
+    militaryService: "no",
     experience: "",
     educationLevel: "",
     major: "",
@@ -103,15 +94,6 @@ const TeachingMaterialsGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedMaterials, setGeneratedMaterials] = useState<GeneratedMaterials | null>(null);
 
-  const handleSkillToggle = (skill: string) => {
-    setFormData(prev => ({
-      ...prev,
-      skills: prev.skills.includes(skill)
-        ? prev.skills.filter(s => s !== skill)
-        : [...prev.skills, skill]
-    }));
-  };
-
   const handleAudienceToggle = (audience: string) => {
     setFormData(prev => ({
       ...prev,
@@ -122,10 +104,10 @@ const TeachingMaterialsGenerator = () => {
   };
 
   const generateMaterials = async () => {
-    if (!formData.fullName.trim() || formData.skills.length === 0 || !formData.experience.trim()) {
+    if (!formData.fullName.trim() || !formData.skills.trim() || !formData.experience.trim()) {
       toast({
         title: "Missing Information",
-        description: "Please fill in your name, select at least one skill, and describe your experience.",
+        description: "Please fill in your name, describe your skills, and your experience.",
         variant: "destructive"
       });
       return;
@@ -225,41 +207,87 @@ ${generatedMaterials.lessonScript}
 
           {/* Skills / Expertise */}
           <div className="space-y-2">
-            <Label>Skills / Expertise Areas</Label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {skillOptions.map((skill) => (
-                <div key={skill} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`skill-${skill}`}
-                    checked={formData.skills.includes(skill)}
-                    onCheckedChange={() => handleSkillToggle(skill)}
-                  />
-                  <label htmlFor={`skill-${skill}`} className="text-sm cursor-pointer">
-                    {skill}
-                  </label>
-                </div>
-              ))}
+            <Label htmlFor="skills">Describe Your Skills & Expertise</Label>
+            <p className="text-sm text-muted-foreground">
+              Provide a detailed list of your skills, expertise areas, and specialties. Include technical skills, creative abilities, professional knowledge, certifications, and any other areas where you have significant experience. For each skill, include your proficiency level (Beginner, Intermediate, Advanced).
+            </p>
+            <div className="text-sm text-muted-foreground space-y-1 mt-2">
+              <p className="font-semibold">Example Categories:</p>
+              <ul className="list-disc list-inside space-y-1 ml-2">
+                <li>Technology & Coding – Web Development, Mobile Apps, Python, JavaScript, AI/ML, Data Science</li>
+                <li>Public Speaking & Communication – Presentation Skills, Storytelling, Leadership Communication</li>
+                <li>Mental Health – Therapy, Counseling, Clinical Psychology, Behavioral Therapy</li>
+                <li>Holistic Health – Nutrition, Fitness, Stress Management, Mindfulness, Wellness Coaching</li>
+                <li>STEM Education – Math, Physics, Chemistry, Biology, Coding for Kids</li>
+                <li>Engineering – Mechanical, Electrical, Civil, Software, Robotics</li>
+                <li>Entrepreneurship & Business – Startups, Marketing, Sales, Business Strategy</li>
+                <li>Finance & Banking – Financial Advising, Investment Banking, Wealth Management</li>
+                <li>Teaching / Education – K–12 Instruction, Curriculum Design, Special Education</li>
+                <li>Creative Arts – Painting, Drawing, Photography, Graphic Design</li>
+                <li>Music – Vocal, Instrumental, Music Production, Songwriting</li>
+                <li>Culinary & Cooking – Baking, Cooking Basics, Healthy Cooking, Meal Prep</li>
+                <li>Law / Legal Field – Criminal Law, Civil Law, Corporate Law, Legal Research</li>
+                <li>Medicine and Dentistry – General Medicine, Surgery, Nursing, Dentistry</li>
+                <li>Veterinary Services – Veterinary Medicine, Animal Surgery, Animal Care</li>
+                <li>Other / Miscellaneous – Any other skills not listed above</li>
+              </ul>
             </div>
-            {formData.skills.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3">
-                {formData.skills.map((skill) => (
-                  <Badge key={skill} variant="secondary" className="gap-1">
-                    {skill}
-                    <X
-                      className="h-3 w-3 cursor-pointer"
-                      onClick={() => handleSkillToggle(skill)}
-                    />
-                  </Badge>
-                ))}
+            <Textarea
+              id="skills"
+              value={formData.skills}
+              onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+              placeholder="E.g., Python programming for AI/ML (Advanced), Public Speaking for corporate teams (Advanced), Trauma Counseling (Intermediate), Holistic Health Coaching including nutrition and mindfulness (Advanced), Criminal Law research (Intermediate), General Medicine (Advanced), Veterinary Surgery (Intermediate), K–12 Math Teaching (Advanced), Mechanical Engineering (Intermediate), Wealth Management (Advanced), Financial Advising (Intermediate), Yoga instruction (Beginner), Baking and meal prep (Intermediate), STEM activities for kids (Beginner), etc."
+              rows={6}
+            />
+          </div>
+
+          {/* Military Service */}
+          <div className="space-y-3">
+            <Label>Military Service</Label>
+            <RadioGroup
+              value={formData.militaryService}
+              onValueChange={(value) => setFormData({ ...formData, militaryService: value })}
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="no" id="military-no" />
+                <Label htmlFor="military-no" className="cursor-pointer font-normal">No</Label>
               </div>
-            )}
-            {formData.skills.includes("Other") && (
-              <Input
-                placeholder="Specify other skill"
-                value={formData.otherSkill || ""}
-                onChange={(e) => setFormData({ ...formData, otherSkill: e.target.value })}
-                className="mt-2"
-              />
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="yes" id="military-yes" />
+                <Label htmlFor="military-yes" className="cursor-pointer font-normal">Yes</Label>
+              </div>
+            </RadioGroup>
+
+            {formData.militaryService === "yes" && (
+              <div className="space-y-3 pl-4 border-l-2 border-primary/20">
+                <div className="space-y-2">
+                  <Label htmlFor="militaryBranch">Branch of Service</Label>
+                  <Input
+                    id="militaryBranch"
+                    value={formData.militaryBranch || ""}
+                    onChange={(e) => setFormData({ ...formData, militaryBranch: e.target.value })}
+                    placeholder="E.g., Army, Navy, Air Force, Marines, Coast Guard"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="militaryRank">Rank</Label>
+                  <Input
+                    id="militaryRank"
+                    value={formData.militaryRank || ""}
+                    onChange={(e) => setFormData({ ...formData, militaryRank: e.target.value })}
+                    placeholder="E.g., Sergeant, Captain, Lieutenant"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="militaryRole">Role / Specialty</Label>
+                  <Input
+                    id="militaryRole"
+                    value={formData.militaryRole || ""}
+                    onChange={(e) => setFormData({ ...formData, militaryRole: e.target.value })}
+                    placeholder="E.g., Infantry, Logistics, Intelligence"
+                  />
+                </div>
+              </div>
             )}
           </div>
 
