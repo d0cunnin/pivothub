@@ -149,11 +149,11 @@ const HireYourself = () => {
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <BusinessFoundationBuilder />
+              <NameChecker />
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <NameChecker />
+              <BusinessFoundationBuilder />
             </div>
           </div>
         </div>
