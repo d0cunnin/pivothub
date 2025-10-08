@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileText, Scale, CheckCircle } from 'lucide-react';
+import { FileText, Scale, CheckCircle, ExternalLink } from 'lucide-react';
 
 interface LegalDocument {
   name: string;
   description: string;
   required: boolean;
   timeline: string;
+  officialLink?: string;
+  linkText?: string;
 }
 
 export const LegalDocsGenerator = () => {
@@ -17,42 +19,225 @@ export const LegalDocsGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [documents, setDocuments] = useState<LegalDocument[]>([]);
 
+  const getStateBusinessLink = (stateName: string) => {
+    const stateLinks: { [key: string]: string } = {
+      'alabama': 'https://www.sos.alabama.gov/business-entities',
+      'alaska': 'https://www.commerce.alaska.gov/web/cbpl/Corporations.aspx',
+      'arizona': 'https://azcc.gov/corporations',
+      'arkansas': 'https://www.sos.arkansas.gov/business-commercial-services',
+      'california': 'https://www.sos.ca.gov/business-programs',
+      'colorado': 'https://www.sos.state.co.us/biz/home.do',
+      'connecticut': 'https://portal.ct.gov/SOTS/Business-Services/Business-Services',
+      'delaware': 'https://corp.delaware.gov',
+      'florida': 'https://dos.myflorida.com/sunbiz',
+      'georgia': 'https://sos.ga.gov/corporations',
+      'hawaii': 'https://cca.hawaii.gov/breg',
+      'idaho': 'https://sos.idaho.gov/corp',
+      'illinois': 'https://www.ilsos.gov/departments/business_services',
+      'indiana': 'https://www.in.gov/sos/business',
+      'iowa': 'https://sos.iowa.gov/business',
+      'kansas': 'https://kssos.org/business/business.html',
+      'kentucky': 'https://www.sos.ky.gov/bus',
+      'louisiana': 'https://www.sos.la.gov/BusinessServices',
+      'maine': 'https://www.maine.gov/sos/cec/corp',
+      'maryland': 'https://dat.maryland.gov',
+      'massachusetts': 'https://www.sec.state.ma.us/cor',
+      'michigan': 'https://www.michigan.gov/sos/business',
+      'minnesota': 'https://www.sos.state.mn.us/business-liens',
+      'mississippi': 'https://www.sos.ms.gov/business-services',
+      'missouri': 'https://www.sos.mo.gov/business',
+      'montana': 'https://biz.sosmt.gov',
+      'nebraska': 'https://www.sos.nebraska.gov/business',
+      'nevada': 'https://www.nvsos.gov/sos/businesses',
+      'new-hampshire': 'https://www.sos.nh.gov/corporations',
+      'new-jersey': 'https://www.nj.gov/treasury/revenue/busregist.shtml',
+      'new-mexico': 'https://www.sos.state.nm.us/business-services',
+      'new-york': 'https://www.dos.ny.gov/corps',
+      'north-carolina': 'https://www.sosnc.gov/online_services/business',
+      'north-dakota': 'https://sos.nd.gov/business',
+      'ohio': 'https://www.sos.state.oh.us/businesses',
+      'oklahoma': 'https://www.sos.ok.gov/business',
+      'oregon': 'https://sos.oregon.gov/business',
+      'pennsylvania': 'https://www.dos.pa.gov/BusinessCharities',
+      'rhode-island': 'https://www.sos.ri.gov/divisions/business-services',
+      'south-carolina': 'https://www.sos.sc.gov/business-filing',
+      'south-dakota': 'https://sos.sd.gov/business-services',
+      'tennessee': 'https://sos.tn.gov/business-services',
+      'texas': 'https://www.sos.texas.gov/corp',
+      'utah': 'https://corporations.utah.gov',
+      'vermont': 'https://sos.vermont.gov/corporations',
+      'virginia': 'https://www.scc.virginia.gov/clk/begin.aspx',
+      'washington': 'https://www.sos.wa.gov/corps',
+      'west-virginia': 'https://sos.wv.gov/business',
+      'wisconsin': 'https://www.wdfi.org/corporations',
+      'wyoming': 'https://sos.wyo.gov/business'
+    };
+    return stateLinks[stateName] || 'https://www.sba.gov/business-guide/launch-your-business/register-your-business';
+  };
+
   const generateDocuments = () => {
     console.log("LegalDocsGenerator button clicked!");
     setIsGenerating(true);
     
     setTimeout(() => {
       let mockDocuments: LegalDocument[] = [];
+      const stateLink = getStateBusinessLink(state);
       
       if (businessStructure === 'llc') {
         mockDocuments = [
-          { name: "Articles of Organization", description: "Legal document that establishes your LLC", required: true, timeline: "Week 1" },
-          { name: "Operating Agreement", description: "Defines ownership structure and operating procedures", required: true, timeline: "Week 2" },
-          { name: "EIN Application (Form SS-4)", description: "Federal tax identification number", required: true, timeline: "Week 1" },
-          { name: "Business License Application", description: "General business operating license", required: true, timeline: "Week 2-3" },
-          { name: "State Tax Registration", description: "Register for state taxes if applicable", required: true, timeline: "Week 3" }
+          { 
+            name: "Articles of Organization", 
+            description: "Legal document that establishes your LLC", 
+            required: true, 
+            timeline: "Week 1",
+            officialLink: stateLink,
+            linkText: "File with State"
+          },
+          { 
+            name: "Operating Agreement", 
+            description: "Defines ownership structure and operating procedures", 
+            required: true, 
+            timeline: "Week 2",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/choose-business-structure",
+            linkText: "SBA Guide"
+          },
+          { 
+            name: "EIN Application (Form SS-4)", 
+            description: "Federal tax identification number", 
+            required: true, 
+            timeline: "Week 1",
+            officialLink: "https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online",
+            linkText: "Apply on IRS.gov"
+          },
+          { 
+            name: "Business License Application", 
+            description: "General business operating license", 
+            required: true, 
+            timeline: "Week 2-3",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/apply-licenses-permits",
+            linkText: "Find License Requirements"
+          },
+          { 
+            name: "State Tax Registration", 
+            description: "Register for state taxes if applicable", 
+            required: true, 
+            timeline: "Week 3",
+            officialLink: stateLink,
+            linkText: "State Tax Office"
+          }
         ];
       } else if (businessStructure === 'corporation') {
         mockDocuments = [
-          { name: "Articles of Incorporation", description: "Legal document that creates your corporation", required: true, timeline: "Week 1" },
-          { name: "Corporate Bylaws", description: "Rules and procedures for corporate governance", required: true, timeline: "Week 2" },
-          { name: "EIN Application (Form SS-4)", description: "Federal tax identification number", required: true, timeline: "Week 1" },
-          { name: "Board of Directors Resolutions", description: "Initial board resolutions and meeting minutes", required: true, timeline: "Week 2" },
-          { name: "Stock Certificates", description: "Certificates representing ownership shares", required: true, timeline: "Week 3" }
+          { 
+            name: "Articles of Incorporation", 
+            description: "Legal document that creates your corporation", 
+            required: true, 
+            timeline: "Week 1",
+            officialLink: stateLink,
+            linkText: "File with State"
+          },
+          { 
+            name: "Corporate Bylaws", 
+            description: "Rules and procedures for corporate governance", 
+            required: true, 
+            timeline: "Week 2",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/choose-business-structure",
+            linkText: "SBA Guide"
+          },
+          { 
+            name: "EIN Application (Form SS-4)", 
+            description: "Federal tax identification number", 
+            required: true, 
+            timeline: "Week 1",
+            officialLink: "https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online",
+            linkText: "Apply on IRS.gov"
+          },
+          { 
+            name: "Board of Directors Resolutions", 
+            description: "Initial board resolutions and meeting minutes", 
+            required: true, 
+            timeline: "Week 2",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/choose-business-structure",
+            linkText: "SBA Resources"
+          },
+          { 
+            name: "Stock Certificates", 
+            description: "Certificates representing ownership shares", 
+            required: true, 
+            timeline: "Week 3",
+            officialLink: stateLink,
+            linkText: "State Requirements"
+          }
         ];
       } else if (businessStructure === 'sole-proprietorship') {
         mockDocuments = [
-          { name: "DBA Filing", description: "Doing Business As registration if using trade name", required: false, timeline: "Week 1" },
-          { name: "EIN Application (Form SS-4)", description: "Federal tax identification number (optional for sole props)", required: false, timeline: "Week 1" },
-          { name: "Business License", description: "General business operating license", required: true, timeline: "Week 1-2" },
-          { name: "Professional Licenses", description: "Industry-specific licenses if required", required: false, timeline: "Varies" }
+          { 
+            name: "DBA Filing", 
+            description: "Doing Business As registration if using trade name", 
+            required: false, 
+            timeline: "Week 1",
+            officialLink: stateLink,
+            linkText: "File DBA"
+          },
+          { 
+            name: "EIN Application (Form SS-4)", 
+            description: "Federal tax identification number (optional for sole props)", 
+            required: false, 
+            timeline: "Week 1",
+            officialLink: "https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online",
+            linkText: "Apply on IRS.gov"
+          },
+          { 
+            name: "Business License", 
+            description: "General business operating license", 
+            required: true, 
+            timeline: "Week 1-2",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/apply-licenses-permits",
+            linkText: "Find License Requirements"
+          },
+          { 
+            name: "Professional Licenses", 
+            description: "Industry-specific licenses if required", 
+            required: false, 
+            timeline: "Varies",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/apply-licenses-permits",
+            linkText: "SBA License Guide"
+          }
         ];
       } else if (businessStructure === 'partnership') {
         mockDocuments = [
-          { name: "Partnership Agreement", description: "Legal document defining partnership terms", required: true, timeline: "Week 1" },
-          { name: "EIN Application (Form SS-4)", description: "Federal tax identification number", required: true, timeline: "Week 1" },
-          { name: "Business License", description: "General business operating license", required: true, timeline: "Week 2" },
-          { name: "State Registration", description: "Register partnership with state if required", required: false, timeline: "Week 2-3" }
+          { 
+            name: "Partnership Agreement", 
+            description: "Legal document defining partnership terms", 
+            required: true, 
+            timeline: "Week 1",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/choose-business-structure",
+            linkText: "SBA Guide"
+          },
+          { 
+            name: "EIN Application (Form SS-4)", 
+            description: "Federal tax identification number", 
+            required: true, 
+            timeline: "Week 1",
+            officialLink: "https://www.irs.gov/businesses/small-businesses-self-employed/apply-for-an-employer-identification-number-ein-online",
+            linkText: "Apply on IRS.gov"
+          },
+          { 
+            name: "Business License", 
+            description: "General business operating license", 
+            required: true, 
+            timeline: "Week 2",
+            officialLink: "https://www.sba.gov/business-guide/launch-your-business/apply-licenses-permits",
+            linkText: "Find License Requirements"
+          },
+          { 
+            name: "State Registration", 
+            description: "Register partnership with state if required", 
+            required: false, 
+            timeline: "Week 2-3",
+            officialLink: stateLink,
+            linkText: "State Registration"
+          }
         ];
       }
 
@@ -144,7 +329,7 @@ export const LegalDocsGenerator = () => {
                     )}
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <h5 className="font-medium text-foreground">{doc.name}</h5>
                       <span className={`text-xs px-2 py-1 rounded ${
                         doc.required 
@@ -155,7 +340,20 @@ export const LegalDocsGenerator = () => {
                       </span>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">{doc.description}</p>
-                    <p className="text-xs text-secondary font-medium">Timeline: {doc.timeline}</p>
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <p className="text-xs text-secondary font-medium">Timeline: {doc.timeline}</p>
+                      {doc.officialLink && (
+                        <a 
+                          href={doc.officialLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-primary hover:underline font-medium"
+                        >
+                          {doc.linkText || 'Official Form'}
+                          <ExternalLink className="h-3 w-3" />
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </Card>
