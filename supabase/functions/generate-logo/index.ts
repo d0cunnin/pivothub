@@ -1,3 +1,4 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -20,9 +21,9 @@ serve(async (req) => {
       );
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      console.error('LOVABLE_API_KEY is not configured');
+    const OPENAI_API_KEY = Deno.env.get('relaunch_openai_key');
+    if (!OPENAI_API_KEY) {
+      console.error('OpenAI API key is not configured');
       return new Response(
         JSON.stringify({ error: 'API key not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -38,49 +39,51 @@ serve(async (req) => {
     if (textDesired) additionalContext += ` Text to include: ${textDesired}.`;
     if (additionalPrompt) additionalContext += ` ${additionalPrompt}`;
 
-    // Generate 3 logo concepts
+    // Generate 3 logo concepts (DALL-E 3 optimized prompts)
     const logoPrompts = [
-      `Create a professional ${style} logo for "${businessName}", a ${industry} business.${additionalContext} Clean, modern design suitable for business use. High quality, transparent background.`,
-      `Design a ${style} emblem for "${businessName}" ${industry} company.${additionalContext} Professional, memorable, and brand-appropriate. High quality, transparent background.`,
-      `Generate a ${style} icon design for "${businessName}" in the ${industry} industry.${additionalContext} Simple, elegant, and professional. High quality, transparent background.`
+      `Professional ${style} logo design for "${businessName}", a ${industry} business.${additionalContext} Clean, modern, suitable for business branding. Vector style, simple shapes, high contrast.`,
+      `${style} emblem badge for "${businessName}" ${industry} company.${additionalContext} Memorable, professional, brand-focused. Circular or shield design, bold typography.`,
+      `Minimalist ${style} icon for "${businessName}" in ${industry} sector.${additionalContext} Simple geometric shapes, elegant, scalable design.`
     ];
 
     const logos = await Promise.all(
       logoPrompts.map(async (prompt, index) => {
         try {
-          const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          const response = await fetch('https://api.openai.com/v1/images/generations', {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+              'Authorization': `Bearer ${OPENAI_API_KEY}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'google/gemini-2.5-flash-image-preview',
-              messages: [
-                {
-                  role: 'user',
-                  content: prompt
-                }
-              ],
-              modalities: ['image', 'text']
+              model: 'dall-e-3',
+              prompt: prompt,
+              n: 1,
+              size: '1024x1024',
+              quality: 'standard',
+              response_format: 'b64_json'
             })
           });
 
           if (!response.ok) {
             const errorText = await response.text();
-            console.error(`AI gateway error for logo ${index + 1}:`, response.status, errorText);
+            console.error(`OpenAI API error for logo ${index + 1}:`, response.status, errorText);
             
             if (response.status === 429) {
               throw new Error('Rate limit exceeded. Please try again later.');
             }
-            if (response.status === 402) {
-              throw new Error('Payment required. Please add credits to your Lovable AI workspace.');
+            if (response.status === 401) {
+              throw new Error('Invalid API key. Please check your OpenAI configuration.');
+            }
+            if (response.status === 400) {
+              throw new Error('Invalid request. Please check your prompt.');
             }
             throw new Error('Failed to generate logo image');
           }
 
           const data = await response.json();
-          const imageUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+          const base64Image = data.data?.[0]?.b64_json;
+          const imageUrl = base64Image ? `data:image/png;base64,${base64Image}` : null;
 
           if (!imageUrl) {
             console.error('No image URL in response:', data);

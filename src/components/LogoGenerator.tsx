@@ -109,6 +109,13 @@ export const LogoGenerator = () => {
         </AlertDescription>
       </Alert>
 
+      <Alert className="mb-6 border-primary/50 bg-primary/10">
+        <AlertCircle className="h-4 w-4 text-primary" />
+        <AlertDescription className="text-sm text-foreground">
+          <strong>Please Note:</strong> All generated images are watermarked and non-downloadable by design. This tool is designed to help you explore creative ideas and visualize concepts for what your professional, finished logo might look like. To create a final, commercial-ready logo, we recommend working with a professional designer or branding specialist.
+        </AlertDescription>
+      </Alert>
+
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
           <label className="block text-sm font-medium mb-2 text-foreground">Business Name</label>
