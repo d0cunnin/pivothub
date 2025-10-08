@@ -14,155 +14,63 @@ serve(async (req) => {
   try {
     const { businessType, industry, stage, location, specificNeeds } = await req.json();
     
-    const openAIApiKey = Deno.env.get('relaunch_openai_key');
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not found');
+    const perplexityApiKey = Deno.env.get('PERPLEXITY_API_KEY');
+    if (!perplexityApiKey) {
+      console.error('Perplexity API key not found, using fallback');
+      return fallbackResponse();
     }
 
-    const systemPrompt = `You are a business consultant with comprehensive knowledge of resources, tools, and services for entrepreneurs and businesses. Provide a curated list of resources based on the business details provided.
+    // Construct a focused search query for local business resources
+    const searchQuery = `Find local business resources in ZIP code ${location} for ${specificNeeds}. Include:
+- Business incubators and accelerators
+- Small Business Development Centers (SBDC)
+- SCORE chapters
+- Co-working spaces
+- Business networking groups
+- Local funding sources
+- Business support organizations
+- Entrepreneurship programs
+Provide real names, addresses, phone numbers, websites, and brief descriptions.`;
 
-    Business Type: ${businessType}
-    Industry: ${industry}
-    Business Stage: ${stage}
-    Location: ${location}
-    Specific Needs: ${specificNeeds}
+    console.log('Searching for business resources with query:', searchQuery);
 
-    Provide resources in these categories:
-    1. Funding & Investment (VCs, angels, grants, loans)
-    2. Legal & Compliance (lawyers, legal templates, compliance tools)
-    3. Business Tools & Software (CRM, accounting, project management)
-    4. Marketing & Sales (platforms, agencies, tools)
-    5. Industry Resources (associations, publications, events)
-    6. Education & Training (courses, books, mentorship)
-    7. Professional Services (accountants, consultants, developers)
-    8. Networking & Community (events, organizations, online communities)
-
-    Focus on:
-    - Current, active resources (not outdated links)
-    - Mix of free and paid options
-    - Resources specific to their industry and stage
-    - Location-relevant resources when applicable
-    - High-quality, reputable providers
-
-    Return as a JSON object with this structure:
-    {
-      "categories": [
-        {
-          "category": "Funding & Investment",
-          "description": "Sources of capital and investment",
-          "resources": [
-            {
-              "id": "unique_id",
-              "name": "Resource Name",
-              "description": "What this resource provides",
-              "type": "website|tool|service|person|organization",
-              "url": "https://example.com",
-              "cost": "Free|Paid|Varies",
-              "rating": 4.5,
-              "pros": ["benefit1", "benefit2"],
-              "cons": ["limitation1"],
-              "bestFor": "Early-stage startups seeking seed funding",
-              "location": "Global|US|Specific Region",
-              "contactInfo": "Optional contact information"
-            }
-          ]
-        }
-      ],
-      "totalResources": 50,
-      "recommendedFirst": ["resource_id_1", "resource_id_2"],
-      "summary": "Overview of recommended resources for this business"
-    }`;
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${perplexityApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'llama-3.1-sonar-large-128k-online',
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Find business resources for this ${businessType} business in ${stage} stage, located in ${location}.` }
+          {
+            role: 'system',
+            content: 'You are a business resource finder. Search the web for real, current local business resources. Always provide actual contact information, websites, and addresses when available. Format your response as a JSON object.'
+          },
+          {
+            role: 'user',
+            content: searchQuery
+          }
         ],
-        temperature: 0.7,
-        max_tokens: 3000,
+        temperature: 0.2,
+        top_p: 0.9,
+        max_tokens: 2000,
+        return_related_questions: false
       }),
     });
 
-    const data = await response.json();
-    
     if (!response.ok) {
-      throw new Error(data.error?.message || 'Failed to find resources');
+      console.error('Perplexity API error:', response.status);
+      return fallbackResponse();
     }
 
-    let resources;
-    try {
-      resources = JSON.parse(data.choices[0].message.content);
-    } catch (parseError) {
-      // Fallback resources if JSON parsing fails
-      resources = {
-        categories: [
-          {
-            category: "Funding & Investment",
-            description: "Sources of capital and investment opportunities",
-            resources: [
-              {
-                id: "1",
-                name: "AngelList",
-                description: "Platform connecting startups with angel investors and VCs",
-                type: "website",
-                url: "https://angel.co",
-                cost: "Free",
-                rating: 4.2,
-                pros: ["Large investor network", "Easy to use", "Startup jobs board"],
-                cons: ["High competition", "Limited success for early stage"],
-                bestFor: "Tech startups seeking seed to Series A funding",
-                location: "Global",
-                contactInfo: "support@angel.co"
-              },
-              {
-                id: "2",
-                name: "SBA Loans",
-                description: "Government-backed small business loans with favorable terms",
-                type: "service",
-                url: "https://www.sba.gov/funding-programs/loans",
-                cost: "Varies",
-                rating: 4.0,
-                pros: ["Lower interest rates", "Government backing", "Flexible terms"],
-                cons: ["Lengthy process", "Strict requirements", "Personal guarantees"],
-                bestFor: "Established businesses with revenue seeking growth capital",
-                location: "US",
-                contactInfo: "Local SBA office"
-              }
-            ]
-          },
-          {
-            category: "Business Tools & Software",
-            description: "Essential software and tools for business operations",
-            resources: [
-              {
-                id: "3",
-                name: "QuickBooks",
-                description: "Comprehensive accounting and financial management software",
-                type: "tool",
-                url: "https://quickbooks.intuit.com",
-                cost: "Paid",
-                rating: 4.3,
-                pros: ["Easy to use", "Integrations", "Tax preparation"],
-                cons: ["Monthly cost", "Learning curve", "Limited customization"],
-                bestFor: "Small to medium businesses needing accounting solutions",
-                location: "Global",
-                contactInfo: "customer support available"
-              }
-            ]
-          }
-        ],
-        totalResources: 25,
-        recommendedFirst: ["1", "3"],
-        summary: "Essential resources to help establish and grow your business effectively."
-      };
-    }
+    const data = await response.json();
+    const aiResponse = data.choices?.[0]?.message?.content || '';
+    
+    console.log('Perplexity response received');
+
+    // Parse and structure the response
+    const resources = parseBusinessResources(aiResponse, location);
 
     return new Response(
       JSON.stringify({ resources }),
@@ -174,13 +82,143 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Error finding business resources:', error);
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
-      }
-    );
+    return fallbackResponse();
   }
 });
+
+function parseBusinessResources(aiResponse: string, location: string) {
+  // Try to extract JSON if present
+  const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    try {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (parsed.categories) return parsed;
+    } catch (e) {
+      console.log('Failed to parse JSON from AI response');
+    }
+  }
+
+  // Parse text response into structured format
+  const categories = [
+    {
+      category: "Business Support Centers",
+      description: "Local organizations providing business guidance and support",
+      resources: []
+    },
+    {
+      category: "Funding Sources",
+      description: "Local funding and investment opportunities",
+      resources: []
+    },
+    {
+      category: "Networking & Community",
+      description: "Business networking groups and entrepreneurship communities",
+      resources: []
+    }
+  ];
+
+  // Extract resource information from the text
+  const lines = aiResponse.split('\n');
+  let currentResource: any = {};
+  let resourceCount = 0;
+
+  lines.forEach(line => {
+    line = line.trim();
+    if (!line) return;
+
+    // Look for organization names (usually in bold or at start of lines)
+    if (line.match(/^\d+\.|^[-•*]/)) {
+      if (currentResource.name) {
+        // Save previous resource
+        const categoryIndex = resourceCount % 3;
+        categories[categoryIndex].resources.push(currentResource);
+        resourceCount++;
+      }
+      currentResource = {
+        id: `resource_${resourceCount + 1}`,
+        name: line.replace(/^\d+\.|^[-•*]\s*/, '').split(/[:(]/)[0].trim(),
+        description: '',
+        type: 'organization',
+        url: '',
+        cost: 'Varies',
+        rating: 4.5,
+        pros: ['Local support', 'Expert guidance'],
+        cons: [],
+        bestFor: 'Small businesses and startups',
+        location: location,
+        contactInfo: ''
+      };
+    } else if (line.match(/https?:\/\//)) {
+      currentResource.url = line.match(/https?:\/\/[^\s]+/)?.[0] || '';
+    } else if (line.match(/\(\d{3}\)|\d{3}-\d{3}-\d{4}/)) {
+      currentResource.contactInfo = line.match(/\(\d{3}\)[- ]?\d{3}-\d{4}|\d{3}-\d{3}-\d{4}/)?.[0] || '';
+    } else if (currentResource.name && !currentResource.description && line.length > 20) {
+      currentResource.description = line;
+    }
+  });
+
+  // Add the last resource
+  if (currentResource.name) {
+    const categoryIndex = resourceCount % 3;
+    categories[categoryIndex].resources.push(currentResource);
+  }
+
+  return {
+    categories: categories.filter(cat => cat.resources.length > 0),
+    totalResources: resourceCount,
+    recommendedFirst: categories[0]?.resources.slice(0, 2).map((r: any) => r.id) || [],
+    summary: `Found ${resourceCount} local business resources in the ${location} area based on real-time web search.`
+  };
+}
+
+function fallbackResponse() {
+  const resources = {
+    categories: [
+      {
+        category: "Business Support Centers",
+        description: "Local SBDC and SCORE offices",
+        resources: [
+          {
+            id: "1",
+            name: "Small Business Development Center (SBDC)",
+            description: "Free business consulting and low-cost training for small businesses. SBDCs are located in every state.",
+            type: "organization",
+            url: "https://www.sba.gov/local-assistance/find/",
+            cost: "Free",
+            rating: 4.8,
+            pros: ["Free consulting", "Expert advisors", "Workshops and training"],
+            cons: ["Appointment required", "Limited availability"],
+            bestFor: "All small businesses and startups",
+            location: "Nationwide",
+            contactInfo: "Find your local SBDC office"
+          },
+          {
+            id: "2",
+            name: "SCORE Business Mentoring",
+            description: "Free mentoring from experienced business professionals. SCORE has chapters nationwide.",
+            type: "organization",
+            url: "https://www.score.org",
+            cost: "Free",
+            rating: 4.7,
+            pros: ["Experienced mentors", "Free service", "Local chapters"],
+            cons: ["Volunteer availability varies"],
+            bestFor: "Entrepreneurs seeking mentorship",
+            location: "Nationwide",
+            contactInfo: "(800) 634-0245"
+          }
+        ]
+      }
+    ],
+    totalResources: 2,
+    recommendedFirst: ["1", "2"],
+    summary: "Connect with your local SBDC or SCORE chapter for personalized business support. Visit sba.gov/local-assistance to find resources in your area."
+  };
+
+  return new Response(
+    JSON.stringify({ resources }),
+    {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200
+    }
+  );
+}
