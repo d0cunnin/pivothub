@@ -222,32 +222,52 @@ Industry: ${data.industry}
 Experience: ${data.experience || 'Not specified'}
 Passion: ${data.passion || 'Not specified'}
 Target Customers: ${data.customers || 'Not specified'}
+Ideal Customer Profile: ${data.idealCustomer || 'Not specified'}
+Core Values: ${data.values || 'Not specified'}
+Business Goals: ${data.goals || 'Not specified'}
+Business Model Input: ${data.businessModel || 'Not specified'}
+Go-to-Market Input: ${data.goToMarket || 'Not specified'}
 
-CRITICAL: Format your response with clear section markers:
+CRITICAL: Format your response with clear section markers and generate ALL sections:
 
 [VISION]
-Write a compelling 2-3 sentence vision statement that describes the long-term aspirational future of the business.
+Write a compelling 2-3 sentence vision statement that describes the long-term aspirational future of the business. ${data.goals ? 'Incorporate these goals: ' + data.goals : ''}
 
 [MISSION]
-Write a clear 2-3 sentence mission statement that defines the business's purpose, what it does, and who it serves.
+Write a clear 2-3 sentence mission statement that defines the business's purpose, what it does, and who it serves. ${data.passion ? 'Reflect this passion: ' + data.passion : ''}
+
+[VALUES]
+${data.values ? 'Expand on these core values with 2-3 sentences explaining how they guide the business: ' + data.values : 'Identify 3-5 core values that should guide this business based on the industry and target customers, with a brief explanation (2-3 sentences).'}
+
+[PILLARS]
+Identify 3-4 strategic pillars (foundational areas of focus) for this business and explain each in 2-3 sentences. These should align with the values and support the vision.
+
+[GOALS]
+${data.goals ? 'Expand on these business goals with specific, measurable details (2-3 sentences): ' + data.goals : 'Define 3-5 specific business goals (revenue, customer acquisition, market position, etc.) in 2-3 sentences.'}
+
+[OBJECTIVES]
+Create 3-5 specific, measurable objectives that support the vision and mission. Include timelines and metrics where possible (2-3 sentences total).
 
 [PROBLEM]
-Write a concise problem statement (2-3 sentences) that clearly articulates the pain points or challenges customers face.
+Write a concise problem statement (2-3 sentences) that clearly articulates the pain points or challenges customers face in this industry.
 
 [SOLUTION]
 Explain in 2-3 sentences how your business uniquely solves the identified problem.
 
 [AUDIENCE]
-Describe the target audience in 2-3 sentences, including demographics, psychographics, and key characteristics.
+Describe the target audience in 2-3 sentences, including demographics, psychographics, and key characteristics. ${data.customers ? 'Base this on: ' + data.customers : ''}
+
+[IDEAL_CUSTOMER]
+${data.idealCustomer ? 'Expand on this ideal customer profile with specific details (demographics, behaviors, pain points, motivations) in 2-3 sentences: ' + data.idealCustomer : 'Create a detailed ideal customer profile including demographics, psychographics, behaviors, pain points, and motivations (2-3 sentences).'}
 
 [MARKET_SIZE]
-Provide 2-3 sentences about the market opportunity, including size, growth trends, and potential.
+Provide 2-3 sentences about the market opportunity for ${data.industry}, including size estimates, growth trends, and potential.
 
 [BUSINESS_MODEL]
-Explain in 2-3 sentences how the business will generate revenue and create value.
+${data.businessModel ? 'Expand on this business model with specific revenue streams, pricing strategy, and value creation details (2-3 sentences): ' + data.businessModel : 'Explain in 2-3 sentences how the business will generate revenue, create value, and achieve profitability.'}
 
 [GO_TO_MARKET]
-Outline the go-to-market strategy in 2-3 sentences, including key channels and tactics for reaching customers.
+${data.goToMarket ? 'Expand on this go-to-market strategy with specific tactics, channels, and timelines (2-3 sentences): ' + data.goToMarket : 'Outline the go-to-market strategy in 2-3 sentences, including key channels, tactics, and customer acquisition approach.'}
 
 Keep each section concise and actionable. Use plain text without markdown.`
         break
