@@ -43,7 +43,15 @@ export const BusinessResourceFinder = () => {
       });
 
       if (fnError) {
+        console.error('Edge function error:', fnError);
         throw new Error(fnError.message || 'Failed to find resources');
+      }
+
+      console.log('Edge function response:', fnData);
+
+      if (!fnData || !fnData.resources || !fnData.resources.categories) {
+        console.error('Invalid response structure:', fnData);
+        throw new Error('Invalid response from server');
       }
 
       const data = fnData;
