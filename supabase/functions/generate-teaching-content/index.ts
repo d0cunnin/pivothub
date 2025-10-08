@@ -136,6 +136,18 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
         const aiResponse = await response.json()
         const fullContent = aiResponse.choices[0].message.content
 
+        // Function to clean markdown formatting
+        const cleanMarkdown = (text: string): string => {
+          return text
+            .replace(/^#{1,6}\s+/gm, '')           // Remove markdown headers
+            .replace(/\*\*\*(.+?)\*\*\*/g, '$1')   // Remove ***bold italic***
+            .replace(/\*\*(.+?)\*\*/g, '$1')       // Remove **bold**
+            .replace(/\*(.+?)\*/g, '$1')           // Remove *italic*
+            .replace(/#{2,}/g, '')                 // Remove multiple #
+            .replace(/\n{3,}/g, '\n\n')            // Normalize line breaks
+            .trim()
+        }
+
         // Parse the response into sections
         const extractSection = (content: string, startMarker: string, endMarker: string): string => {
           const startIndex = content.indexOf(startMarker)
@@ -143,7 +155,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
           if (startIndex === -1 || endIndex === -1) {
             return 'Content not found'
           }
-          return content.substring(startIndex + startMarker.length, endIndex).trim()
+          return cleanMarkdown(content.substring(startIndex + startMarker.length, endIndex))
         }
 
         const webinarConcepts = extractSection(fullContent, '---WEBINAR_CONCEPTS_START---', '---WEBINAR_CONCEPTS_END---')
