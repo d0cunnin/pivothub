@@ -56,3 +56,6 @@ verify_jwt = false
 
 [functions.send-assessment-results]
 verify_jwt = false
+
+[functions.generate-teaching-content]
+verify_jwt = false

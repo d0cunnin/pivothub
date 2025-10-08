@@ -3,6 +3,10 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { GraduationCap, Video, FileText, Users, BookOpen, Target } from "lucide-react";
+import { WebinarPlanner } from "@/components/WebinarPlanner";
+import { CourseOutlineGenerator } from "@/components/CourseOutlineGenerator";
+import { HandoutCreator } from "@/components/HandoutCreator";
+import { LessonScriptWriter } from "@/components/LessonScriptWriter";
 import heroImage from "@/assets/hero-image.jpg";
 
 const TeachIt = () => {
@@ -109,65 +113,21 @@ const TeachIt = () => {
           </div>
           
           <div className="space-y-6">
-            <Card className="premium-card p-8">
-              <div className="flex items-start gap-6">
-                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center flex-shrink-0 shadow-glow">
-                  <Video className="h-8 w-8 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3 text-foreground">Webinar Planner</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Create structured webinar outlines with timing, talking points, and engagement activities
-                  </p>
-                  <Button variant="hero">Coming Soon</Button>
-                </div>
-              </div>
-            </Card>
+            <div className="animate-fade-in-scale">
+              <WebinarPlanner />
+            </div>
 
-            <Card className="premium-card p-8">
-              <div className="flex items-start gap-6">
-                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center flex-shrink-0 shadow-glow">
-                  <BookOpen className="h-8 w-8 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3 text-foreground">Course Outline Generator</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Build comprehensive course structures with modules, lessons, and learning objectives
-                  </p>
-                  <Button variant="hero">Coming Soon</Button>
-                </div>
-              </div>
-            </Card>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
+              <CourseOutlineGenerator />
+            </div>
 
-            <Card className="premium-card p-8">
-              <div className="flex items-start gap-6">
-                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center flex-shrink-0 shadow-glow">
-                  <FileText className="h-8 w-8 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3 text-foreground">Handout Creator</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Generate professional handouts, worksheets, and reference materials for your students
-                  </p>
-                  <Button variant="hero">Coming Soon</Button>
-                </div>
-              </div>
-            </Card>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
+              <HandoutCreator />
+            </div>
 
-            <Card className="premium-card p-8">
-              <div className="flex items-start gap-6">
-                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center flex-shrink-0 shadow-glow">
-                  <Users className="h-8 w-8 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-3 text-foreground">Lesson Script Writer</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Create engaging lesson scripts with explanations, examples, and interactive elements
-                  </p>
-                  <Button variant="hero">Coming Soon</Button>
-                </div>
-              </div>
-            </Card>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
+              <LessonScriptWriter />
+            </div>
           </div>
         </div>
         
