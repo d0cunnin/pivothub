@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { CheckSquare, Clock, Building } from 'lucide-react';
+import { CheckSquare, Clock, Building, Download } from 'lucide-react';
 
 interface ChecklistItem {
   id: string;
@@ -126,6 +126,38 @@ export const StartupChecklist = () => {
     }
   };
 
+  const downloadChecklist = () => {
+    let content = `STARTUP CHECKLIST\n`;
+    content += `Business Structure: ${businessStructure.replace('-', ' ').toUpperCase()}\n`;
+    content += `State: ${state.replace('-', ' ').toUpperCase()}\n`;
+    content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+    content += `Progress: ${completedTasks} of ${checklist.length} tasks completed (${Math.round(progressPercentage)}%)\n\n`;
+    content += `${'='.repeat(80)}\n\n`;
+
+    ['Planning', 'Legal', 'Finance', 'Marketing', 'Operations'].forEach(category => {
+      const categoryItems = checklist.filter(item => item.category === category);
+      if (categoryItems.length === 0) return;
+      
+      content += `\n${category.toUpperCase()}\n${'-'.repeat(category.length)}\n\n`;
+      
+      categoryItems.forEach((item, index) => {
+        const status = item.completed ? '[✓]' : '[ ]';
+        content += `${status} ${item.task}\n`;
+        content += `    Timeline: ${item.timeline} | Priority: ${item.priority.toUpperCase()}\n\n`;
+      });
+    });
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `startup-checklist-${businessStructure}-${state}-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const states = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
     'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
@@ -191,17 +223,28 @@ export const StartupChecklist = () => {
 
       {checklist.length > 0 && (
         <div className="space-y-6">
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <h4 className="font-semibold text-foreground">Progress</h4>
-              <span className="text-sm text-muted-foreground">{completedTasks} of {checklist.length} completed</span>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-semibold text-foreground">Progress</h4>
+                <span className="text-sm text-muted-foreground">{completedTasks} of {checklist.length} completed</span>
+              </div>
+              <div className="w-full bg-muted rounded-full h-2">
+                <div 
+                  className="bg-secondary h-2 rounded-full transition-all duration-300" 
+                  style={{ width: `${progressPercentage}%` }}
+                />
+              </div>
             </div>
-            <div className="w-full bg-muted rounded-full h-2">
-              <div 
-                className="bg-secondary h-2 rounded-full transition-all duration-300" 
-                style={{ width: `${progressPercentage}%` }}
-              />
-            </div>
+            <Button 
+              onClick={downloadChecklist}
+              variant="outline"
+              size="sm"
+              className="ml-4"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
           </div>
 
           <div className="space-y-3">
