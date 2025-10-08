@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { TrendingUp, Target, DollarSign, Users, Calendar } from 'lucide-react';
+import { TrendingUp, Target, DollarSign, Users, Calendar, Download } from 'lucide-react';
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -231,6 +231,46 @@ export const MarketingStrategyGenerator = () => {
     generateStrategy();
   };
 
+  const downloadStrategy = () => {
+    let content = `MARKETING STRATEGY\n`;
+    content += `Business Type: ${businessType}\n`;
+    content += `Target Market: ${targetMarket}\n`;
+    content += `Budget: ${budget}\n`;
+    content += `Goals: ${goals}\n`;
+    content += `Current Stage: ${currentStage}\n`;
+    content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+    content += `${'='.repeat(80)}\n\n`;
+
+    strategy.forEach((phase, index) => {
+      content += `\n${phase.phase}\n`;
+      content += `${'-'.repeat(phase.phase.length)}\n`;
+      content += `Timeline: ${phase.timeline}\n`;
+      content += `Budget Allocation: ${phase.budget}\n\n`;
+      
+      content += `OBJECTIVES:\n`;
+      phase.objectives.forEach(obj => content += `  • ${obj}\n`);
+      content += `\n`;
+      
+      content += `MARKETING TACTICS:\n`;
+      phase.tactics.forEach(tactic => content += `  • ${tactic}\n`);
+      content += `\n`;
+      
+      content += `KEY METRICS:\n`;
+      phase.metrics.forEach(metric => content += `  • ${metric}\n`);
+      content += `\n${'='.repeat(80)}\n`;
+    });
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `marketing-strategy-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
@@ -331,8 +371,20 @@ export const MarketingStrategyGenerator = () => {
       {strategy.length > 0 && (
         <div className="space-y-6">
           <div className="text-center mb-6">
-            <h4 className="text-xl font-semibold text-foreground mb-2">Your Marketing Roadmap</h4>
-            <p className="text-muted-foreground">A comprehensive 12-month strategy tailored to your business</p>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex-1">
+                <h4 className="text-xl font-semibold text-foreground mb-2">Your Marketing Roadmap</h4>
+                <p className="text-muted-foreground">A comprehensive 12-month strategy tailored to your business</p>
+              </div>
+              <Button 
+                onClick={downloadStrategy}
+                variant="outline"
+                size="sm"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download Strategy
+              </Button>
+            </div>
           </div>
 
           {strategy.map((phase, index) => (

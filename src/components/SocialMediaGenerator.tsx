@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Hash, Share2, Calendar, Copy } from 'lucide-react';
+import { Hash, Share2, Calendar, Copy, Download } from 'lucide-react';
 
 interface SocialMediaContent {
   platform: string;
@@ -25,7 +25,7 @@ export const SocialMediaGenerator = () => {
   const generateContent = async () => {
     setIsGenerating(true);
     try {
-      const response = await fetch('/functions/v1/social-media-content', {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/social-media-content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,6 +77,34 @@ export const SocialMediaGenerator = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
+  };
+
+  const downloadContent = () => {
+    let content = `SOCIAL MEDIA CONTENT IDEAS\n`;
+    content += `Business Type: ${businessType}\n`;
+    content += `Target Audience: ${targetAudience}\n`;
+    content += `Products/Services: ${products}\n`;
+    content += `Brand Tone: ${tone}\n`;
+    content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+    content += `${'='.repeat(80)}\n\n`;
+
+    contentIdeas.forEach((idea, index) => {
+      content += `\n${index + 1}. ${idea.platform.toUpperCase()} - ${idea.contentType}\n`;
+      content += `${'-'.repeat(60)}\n\n`;
+      content += `${idea.content}\n\n`;
+      content += `Hashtags: ${idea.hashtags.join(', ')}\n`;
+      content += `Best Time to Post: ${idea.bestTime}\n\n`;
+    });
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `social-media-content-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -143,7 +171,17 @@ export const SocialMediaGenerator = () => {
 
       {contentIdeas.length > 0 && (
         <div className="space-y-4">
-          <h4 className="font-semibold text-foreground">Content Ideas</h4>
+          <div className="flex items-center justify-between">
+            <h4 className="font-semibold text-foreground">Content Ideas</h4>
+            <Button 
+              onClick={downloadContent}
+              variant="outline"
+              size="sm"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download All
+            </Button>
+          </div>
           {contentIdeas.map((idea, index) => (
             <Card key={index} className="p-4 border-l-4 border-secondary">
               <div className="space-y-3">

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { FileText, Scale, CheckCircle, ExternalLink } from 'lucide-react';
+import { FileText, Scale, CheckCircle, ExternalLink, Download } from 'lucide-react';
 
 interface LegalDocument {
   name: string;
@@ -251,6 +251,57 @@ export const LegalDocsGenerator = () => {
     generateDocuments();
   };
 
+  const downloadDocumentList = () => {
+    let content = `LEGAL DOCUMENTS CHECKLIST\n`;
+    content += `Business Structure: ${businessStructure.replace('-', ' ').toUpperCase()}\n`;
+    content += `State: ${state.replace('-', ' ').toUpperCase()}\n`;
+    content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+    content += `${'='.repeat(80)}\n\n`;
+
+    const required = documents.filter(doc => doc.required);
+    const optional = documents.filter(doc => !doc.required);
+
+    if (required.length > 0) {
+      content += `REQUIRED DOCUMENTS\n${'-'.repeat(80)}\n\n`;
+      required.forEach((doc, index) => {
+        content += `${index + 1}. ${doc.name}\n`;
+        content += `   Description: ${doc.description}\n`;
+        content += `   Timeline: ${doc.timeline}\n`;
+        if (doc.officialLink) {
+          content += `   Link: ${doc.officialLink}\n`;
+        }
+        content += `\n`;
+      });
+    }
+
+    if (optional.length > 0) {
+      content += `\nOPTIONAL DOCUMENTS\n${'-'.repeat(80)}\n\n`;
+      optional.forEach((doc, index) => {
+        content += `${index + 1}. ${doc.name}\n`;
+        content += `   Description: ${doc.description}\n`;
+        content += `   Timeline: ${doc.timeline}\n`;
+        if (doc.officialLink) {
+          content += `   Link: ${doc.officialLink}\n`;
+        }
+        content += `\n`;
+      });
+    }
+
+    content += `\n${'='.repeat(80)}\n`;
+    content += `DISCLAIMER: This is general information only. Consult with a qualified attorney\n`;
+    content += `or business advisor for specific legal requirements in your jurisdiction.\n`;
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `legal-documents-${businessStructure}-${state}-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const states = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
     'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
@@ -316,7 +367,17 @@ export const LegalDocsGenerator = () => {
 
       {documents.length > 0 && (
         <div className="space-y-4">
-          <h4 className="font-semibold text-foreground">Required Legal Documents</h4>
+          <div className="flex items-center justify-between">
+            <h4 className="font-semibold text-foreground">Required Legal Documents</h4>
+            <Button 
+              onClick={downloadDocumentList}
+              variant="outline"
+              size="sm"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download Checklist
+            </Button>
+          </div>
           <div className="space-y-3">
             {documents.map((doc, index) => (
               <Card key={index} className={`p-4 border-l-4 ${doc.required ? 'border-red-500' : 'border-yellow-500'}`}>

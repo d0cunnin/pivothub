@@ -67,6 +67,30 @@ export const PitchDeckGenerator = () => {
     }
   };
 
+  const exportPitchDeck = () => {
+    let content = `INVESTOR PITCH DECK\n`;
+    content += `Company: ${formData.companyName || 'Your Company'}\n`;
+    content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+    content += `${'='.repeat(80)}\n\n`;
+
+    slides.forEach((slide, index) => {
+      content += `\nSLIDE ${index + 1}: ${slide.title.toUpperCase()}\n`;
+      content += `${'-'.repeat(60)}\n\n`;
+      content += `${slide.content}\n\n`;
+      content += `${'='.repeat(80)}\n`;
+    });
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `pitch-deck-${formData.companyName.replace(/\s+/g, '-').toLowerCase() || 'startup'}-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   // Keyboard navigation for presentation
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -388,7 +412,11 @@ export const PitchDeckGenerator = () => {
                   <Play className="h-4 w-4 mr-2" />
                   Present
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={exportPitchDeck}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export
                 </Button>

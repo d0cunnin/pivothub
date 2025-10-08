@@ -35,7 +35,7 @@ export const NameChecker = () => {
     setIsChecking(true);
     
     try {
-      const response = await fetch('/functions/v1/name-checker', {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/name-checker', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

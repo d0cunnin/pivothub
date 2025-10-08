@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import { User, Target, Eye, Heart } from 'lucide-react';
+import { User, Target, Eye, Heart, Download } from 'lucide-react';
 import { sanitizeAIContent, parseAISections } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -79,6 +79,27 @@ export const BiographyGenerator = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     generateContent();
+  };
+
+  const downloadBiography = () => {
+    if (!content) return;
+    
+    let fileContent = `FOUNDER BIOGRAPHY & COMPANY STATEMENTS\n`;
+    fileContent += `Generated: ${new Date().toLocaleDateString()}\n\n`;
+    fileContent += `${'='.repeat(80)}\n\n`;
+    fileContent += `FOUNDER BIOGRAPHY\n${'-'.repeat(80)}\n\n${content.founderBio}\n\n\n`;
+    fileContent += `VISION STATEMENT\n${'-'.repeat(80)}\n\n${content.vision}\n\n\n`;
+    fileContent += `MISSION STATEMENT\n${'-'.repeat(80)}\n\n${content.mission}\n`;
+
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `biography-${founderName.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -179,6 +200,18 @@ export const BiographyGenerator = () => {
 
       {content && (
         <div className="space-y-6">
+          <div className="flex items-center justify-between mb-4">
+            <h4 className="font-semibold text-foreground">Generated Content</h4>
+            <Button 
+              onClick={downloadBiography}
+              variant="outline"
+              size="sm"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download All
+            </Button>
+          </div>
+          
           <div>
             <div className="flex items-center gap-2 mb-3">
               <User className="h-4 w-4 text-secondary" />
