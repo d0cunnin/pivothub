@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { MapPin, ExternalLink, Phone, Clock, Star } from "lucide-react";
-
+import { supabase } from "@/integrations/supabase/client";
 interface BusinessResource {
   id: string;
   name: string;
@@ -32,25 +32,21 @@ export const BusinessResourceFinder = () => {
     setIsSearching(true);
     
     try {
-      const response = await fetch('/functions/v1/business-resources', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data: fnData, error: fnError } = await supabase.functions.invoke('business-resources', {
+        body: {
           businessType: 'Small Business',
           industry: 'General',
           stage: 'startup',
           location: zipCode,
-          specificNeeds: resourceType === 'all' ? 'General business support' : resourceType
-        }),
+          specificNeeds: resourceType === 'all' ? 'General business support' : resourceType,
+        },
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to find resources');
+      if (fnError) {
+        throw new Error(fnError.message || 'Failed to find resources');
       }
+
+      const data = fnData;
 
       // Transform AI response to match existing interface
       const transformedResources: BusinessResource[] = [];
