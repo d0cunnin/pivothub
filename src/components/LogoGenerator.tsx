@@ -94,7 +94,18 @@ export const LogoGenerator = () => {
       <Alert className="mb-6 border-warning/50 bg-warning/10">
         <AlertCircle className="h-4 w-4 text-warning" />
         <AlertDescription className="text-sm text-foreground">
-          <strong>Disclaimer:</strong> Logos are generated using AI technology. While we strive for quality, we are not responsible for the final output. Please review carefully and consider professional design services for commercial use.
+          <strong>AI Logo Generator Disclaimer:</strong> The AI Logo Generator on this site creates designs automatically using artificial intelligence. All generated logos and images are provided for creative and informational purposes only.
+          <br /><br />
+          While we strive to produce original content, we cannot guarantee that any logo or design will be unique or free from resemblance to existing trademarks, copyrighted materials, or other intellectual property.
+          <br /><br />
+          By using this tool, you acknowledge and agree that:
+          <ul className="list-disc ml-4 mt-2 space-y-1">
+            <li>You are responsible for reviewing and verifying the originality and legal usability of any logo before using it for branding, marketing, or commercial purposes.</li>
+            <li>This website and its creators do not claim ownership of your generated content.</li>
+            <li>This website and its creators are not liable for any copyright, trademark, or intellectual property disputes that may arise from the use of generated designs.</li>
+          </ul>
+          <br />
+          We recommend that you conduct a trademark search or consult a qualified legal professional before finalizing or distributing any logo created with this tool.
         </AlertDescription>
       </Alert>
 
@@ -195,12 +206,20 @@ export const LogoGenerator = () => {
             {concepts.map((concept, index) => (
               <Card key={index} className="p-4 border-2 border-secondary/20 hover:border-secondary/40 transition-colors">
                 {concept.imageURL && (
-                  <div className="mb-4 bg-muted rounded-lg overflow-hidden">
+                  <div className="mb-4 bg-muted rounded-lg overflow-hidden relative">
                     <img 
                       src={concept.imageURL} 
                       alt={`Logo concept: ${concept.style}`}
                       className="w-full h-auto"
+                      onContextMenu={(e) => e.preventDefault()}
+                      draggable={false}
+                      style={{ pointerEvents: 'none', userSelect: 'none' }}
                     />
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                      <div className="text-white/30 text-4xl font-bold rotate-[-45deg] select-none">
+                        PREVIEW
+                      </div>
+                    </div>
                   </div>
                 )}
                 <div className="space-y-2">
@@ -211,21 +230,6 @@ export const LogoGenerator = () => {
                       <p className="text-sm text-muted-foreground mt-1">{concept.concept}</p>
                     </div>
                   </div>
-                  {concept.imageURL && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="w-full"
-                      onClick={() => {
-                        const link = document.createElement('a');
-                        link.href = concept.imageURL!;
-                        link.download = `${businessName}-logo-${index + 1}.png`;
-                        link.click();
-                      }}
-                    >
-                      Download Logo
-                    </Button>
-                  )}
                 </div>
               </Card>
             ))}
