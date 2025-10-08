@@ -20,6 +20,9 @@ interface PitchData {
   useOfFunds: string;
   teamBackground: string;
   traction: string;
+  primaryColor: string;
+  accentColor: string;
+  logo?: string;
 }
 
 interface Slide {
@@ -38,14 +41,30 @@ export const PitchDeckGenerator = () => {
     fundingAmount: "",
     useOfFunds: "",
     teamBackground: "",
-    traction: ""
+    traction: "",
+    primaryColor: "#6366f1",
+    accentColor: "#8b5cf6"
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [slides, setSlides] = useState<Slide[]>([]);
   const [showPresentation, setShowPresentation] = useState(false);
+  const [logoPreview, setLogoPreview] = useState<string>("");
 
   const handleInputChange = (field: keyof PitchData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setLogoPreview(result);
+        setFormData(prev => ({ ...prev, logo: result }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // Keyboard navigation for presentation
@@ -211,16 +230,75 @@ export const PitchDeckGenerator = () => {
       </p>
       <p className="text-sm text-muted-foreground mb-6">Create a professional investor pitch deck with all essential slides. Perfect for fundraising meetings and investor presentations.</p>
       <div className="space-y-6">
-        <div className="grid md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="companyName">Company Name</Label>
-            <Input
-              id="companyName"
-              placeholder="Your company name"
-              value={formData.companyName}
-              onChange={(e) => handleInputChange("companyName", e.target.value)}
-            />
+        {/* Branding Section */}
+        <Card className="p-4 bg-muted/30">
+          <h4 className="font-semibold mb-4 flex items-center gap-2">
+            <Presentation className="h-4 w-4" />
+            Presentation Branding
+          </h4>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="companyName">Company Name</Label>
+              <Input
+                id="companyName"
+                placeholder="Your company name"
+                value={formData.companyName}
+                onChange={(e) => handleInputChange("companyName", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="logo">Company Logo</Label>
+              <div className="flex items-center gap-2">
+                <Input
+                  id="logo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoUpload}
+                  className="cursor-pointer"
+                />
+                {logoPreview && (
+                  <img src={logoPreview} alt="Logo preview" className="h-10 w-10 object-contain rounded" />
+                )}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="primaryColor">Primary Color</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="primaryColor"
+                  type="color"
+                  value={formData.primaryColor}
+                  onChange={(e) => handleInputChange("primaryColor", e.target.value)}
+                  className="w-20 h-10 cursor-pointer"
+                />
+                <Input
+                  value={formData.primaryColor}
+                  onChange={(e) => handleInputChange("primaryColor", e.target.value)}
+                  placeholder="#6366f1"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="accentColor">Accent Color</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="accentColor"
+                  type="color"
+                  value={formData.accentColor}
+                  onChange={(e) => handleInputChange("accentColor", e.target.value)}
+                  className="w-20 h-10 cursor-pointer"
+                />
+                <Input
+                  value={formData.accentColor}
+                  onChange={(e) => handleInputChange("accentColor", e.target.value)}
+                  placeholder="#8b5cf6"
+                />
+              </div>
+            </div>
           </div>
+        </Card>
+
+        <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="fundingAmount">Funding Amount ($)</Label>
             <Input
@@ -352,6 +430,9 @@ export const PitchDeckGenerator = () => {
       <PitchDeckPresentation 
         slides={slides}
         companyName={formData.companyName || "Your Company"}
+        primaryColor={formData.primaryColor}
+        accentColor={formData.accentColor}
+        logo={formData.logo}
         onClose={() => setShowPresentation(false)}
       />
     )}

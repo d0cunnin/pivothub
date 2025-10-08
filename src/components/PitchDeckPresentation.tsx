@@ -11,10 +11,20 @@ interface Slide {
 interface PitchDeckPresentationProps {
   slides: Slide[];
   companyName: string;
+  primaryColor: string;
+  accentColor: string;
+  logo?: string;
   onClose: () => void;
 }
 
-export const PitchDeckPresentation = ({ slides, companyName, onClose }: PitchDeckPresentationProps) => {
+export const PitchDeckPresentation = ({ 
+  slides, 
+  companyName, 
+  primaryColor, 
+  accentColor, 
+  logo, 
+  onClose 
+}: PitchDeckPresentationProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -74,20 +84,35 @@ export const PitchDeckPresentation = ({ slides, companyName, onClose }: PitchDec
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-background">
+    <div 
+      className="fixed inset-0 z-50 bg-background"
+      style={{
+        background: `linear-gradient(135deg, ${primaryColor}08 0%, ${accentColor}08 100%)`
+      }}
+    >
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between bg-gradient-to-b from-background to-transparent z-10">
+      <div 
+        className="absolute top-0 left-0 right-0 p-6 flex items-center justify-between z-10"
+        style={{
+          background: `linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 100%)`
+        }}
+      >
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-bold">{companyName} Pitch Deck</h2>
-          <span className="text-sm text-muted-foreground">
-            Slide {currentSlide + 1} of {slides.length}
-          </span>
+          {logo && (
+            <img src={logo} alt={companyName} className="h-10 w-auto object-contain" />
+          )}
+          <div>
+            <h2 className="text-xl font-bold text-white drop-shadow-lg">{companyName}</h2>
+            <span className="text-sm text-white/80">
+              Slide {currentSlide + 1} of {slides.length}
+            </span>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={toggleFullscreen}>
+          <Button variant="outline" size="sm" onClick={toggleFullscreen} className="bg-white/90">
             <Maximize2 className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="sm" onClick={onClose}>
+          <Button variant="outline" size="sm" onClick={onClose} className="bg-white/90">
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -95,27 +120,60 @@ export const PitchDeckPresentation = ({ slides, companyName, onClose }: PitchDec
 
       {/* Main Slide Area */}
       <div className="h-full flex items-center justify-center p-20">
-        <Card className="w-full max-w-5xl h-full max-h-[700px] p-12 flex flex-col justify-center shadow-2xl">
+        <Card 
+          className="w-full max-w-5xl h-full max-h-[700px] p-12 flex flex-col justify-center shadow-2xl relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%)',
+            backdropFilter: 'blur(10px)'
+          }}
+        >
+          {/* Decorative gradient overlay */}
+          <div 
+            className="absolute top-0 right-0 w-64 h-64 opacity-10 blur-3xl"
+            style={{
+              background: `radial-gradient(circle, ${primaryColor} 0%, ${accentColor} 100%)`
+            }}
+          />
+          
           {/* Slide Title */}
-          <h1 className="text-5xl font-bold mb-8 text-foreground bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <h1 
+            className="text-5xl font-bold mb-8 relative z-10"
+            style={{
+              background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
             {slide.title}
           </h1>
           
           {/* Slide Content */}
-          <div className="text-muted-foreground space-y-2 flex-1 overflow-y-auto">
+          <div className="text-muted-foreground space-y-2 flex-1 overflow-y-auto relative z-10">
             {formatContent(slide.content)}
           </div>
+
+          {/* Logo watermark on slide */}
+          {logo && currentSlide > 0 && (
+            <div className="absolute bottom-6 right-6 opacity-30">
+              <img src={logo} alt={companyName} className="h-8 w-auto object-contain" />
+            </div>
+          )}
         </Card>
       </div>
 
       {/* Navigation Controls */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-4">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-4 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg">
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={prevSlide}
           disabled={currentSlide === 0}
-          className="rounded-full"
+          className="rounded-full hover:bg-black/5"
+          style={{ 
+            color: primaryColor,
+            opacity: currentSlide === 0 ? 0.3 : 1 
+          }}
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
@@ -126,22 +184,29 @@ export const PitchDeckPresentation = ({ slides, companyName, onClose }: PitchDec
             <button
               key={idx}
               onClick={() => goToSlide(idx)}
-              className={`w-2 h-2 rounded-full transition-all ${
+              className={`rounded-full transition-all ${
                 idx === currentSlide 
-                  ? 'bg-primary w-8' 
-                  : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                  ? 'w-8 h-2' 
+                  : 'w-2 h-2 hover:opacity-70'
               }`}
+              style={{
+                backgroundColor: idx === currentSlide ? primaryColor : `${primaryColor}40`
+              }}
               aria-label={`Go to slide ${idx + 1}`}
             />
           ))}
         </div>
 
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={nextSlide}
           disabled={currentSlide === slides.length - 1}
-          className="rounded-full"
+          className="rounded-full hover:bg-black/5"
+          style={{ 
+            color: primaryColor,
+            opacity: currentSlide === slides.length - 1 ? 0.3 : 1 
+          }}
         >
           <ChevronRight className="h-5 w-5" />
         </Button>
