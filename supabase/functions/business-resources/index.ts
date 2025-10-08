@@ -17,56 +17,126 @@ serve(async (req) => {
     const googleApiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
     
     if (!googleApiKey) {
-      console.error('Google Places API key not found, using fallback');
+      console.error('Google Places API key not found');
+      return new Response(
+        JSON.stringify({ error: 'Google Places API key not configured' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500
+        }
+      );
+    }
+
+    console.log('Starting Google Places search for location:', location);
+    console.log('Request params:', { businessType, industry, stage, location, specificNeeds });
+
+    // Step 1: Geocode the location to get lat/lng
+    console.log('Step 1: Geocoding location...');
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${googleApiKey}`;
+    const geocodeResponse = await fetch(geocodeUrl);
+    
+    if (!geocodeResponse.ok) {
+      console.error('Geocoding API request failed:', geocodeResponse.status);
       return fallbackResponse();
     }
 
-    console.log('Using Google Places API for location:', location);
-    console.log('Request params:', { businessType, industry, stage, location, specificNeeds });
+    const geocodeData = await geocodeResponse.json();
+    console.log('Geocoding response status:', geocodeData.status);
 
-    // Search for different types of business resources
-    const searchQueries = [
-      `small business development center ${location}`,
-      `SCORE business mentoring ${location}`,
-      `business incubator ${location}`,
-      `coworking space ${location}`,
-      `entrepreneurship center ${location}`
+    if (geocodeData.status !== 'OK' || !geocodeData.results || geocodeData.results.length === 0) {
+      console.error('Geocoding failed or no results:', geocodeData.status, geocodeData.error_message);
+      return fallbackResponse();
+    }
+
+    const { lat, lng } = geocodeData.results[0].geometry.location;
+    console.log('Geocoded coordinates:', { lat, lng });
+
+    // Step 2: Search for business resources using nearbysearch
+    const searchKeywords = [
+      'small business development center',
+      'SCORE business mentoring',
+      'business incubator',
+      'coworking space',
+      'entrepreneurship center'
     ];
 
     const allPlaces: any[] = [];
 
-    // Fetch results for each query
-    for (const query of searchQueries) {
+    // Fetch results for each keyword
+    for (const keyword of searchKeywords) {
       try {
-        const placesUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${googleApiKey}`;
+        console.log(`Searching for: ${keyword}`);
+        const placesUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=25000&keyword=${encodeURIComponent(keyword)}&key=${googleApiKey}`;
         const placesResponse = await fetch(placesUrl);
         
-        if (placesResponse.ok) {
-          const placesData = await placesResponse.json();
-          if (placesData.results && placesData.results.length > 0) {
-            // Get details for the top result
-            const place = placesData.results[0];
-            const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_address,formatted_phone_number,website,rating,business_status&key=${googleApiKey}`;
-            const detailsResponse = await fetch(detailsUrl);
-            
-            if (detailsResponse.ok) {
-              const detailsData = await detailsResponse.json();
-              if (detailsData.result) {
-                allPlaces.push({
-                  ...place,
-                  details: detailsData.result
-                });
+        if (!placesResponse.ok) {
+          console.error(`Places API request failed for "${keyword}":`, placesResponse.status);
+          continue;
+        }
+
+        const placesData = await placesResponse.json();
+        console.log(`Places API status for "${keyword}":`, placesData.status);
+
+        if (placesData.status === 'REQUEST_DENIED') {
+          console.error('Places API REQUEST_DENIED:', placesData.error_message);
+          return new Response(
+            JSON.stringify({ 
+              error: 'Google Places API access denied. Please verify your API key has Places API enabled.',
+              details: placesData.error_message 
+            }),
+            {
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              status: 403
+            }
+          );
+        }
+
+        if (placesData.status === 'OVER_QUERY_LIMIT') {
+          console.error('Places API OVER_QUERY_LIMIT');
+          return new Response(
+            JSON.stringify({ error: 'Google Places API quota exceeded. Please check your billing settings.' }),
+            {
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              status: 429
+            }
+          );
+        }
+        
+        if (placesData.results && placesData.results.length > 0) {
+          console.log(`Found ${placesData.results.length} results for "${keyword}"`);
+          // Get details for top 2 results
+          for (const place of placesData.results.slice(0, 2)) {
+            try {
+              const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_address,formatted_phone_number,website,rating,business_status,opening_hours&key=${googleApiKey}`;
+              const detailsResponse = await fetch(detailsUrl);
+              
+              if (detailsResponse.ok) {
+                const detailsData = await detailsResponse.json();
+                if (detailsData.result) {
+                  allPlaces.push({
+                    ...place,
+                    details: detailsData.result,
+                    searchKeyword: keyword
+                  });
+                  console.log(`Added place: ${detailsData.result.name}`);
+                }
               }
+            } catch (detailErr) {
+              console.error(`Error fetching details for place:`, detailErr);
             }
           }
+        } else {
+          console.log(`No results found for "${keyword}"`);
         }
       } catch (err) {
-        console.error(`Error fetching places for query "${query}":`, err);
+        console.error(`Error fetching places for keyword "${keyword}":`, err);
       }
     }
 
+    console.log(`Total places found: ${allPlaces.length}`);
+
     if (allPlaces.length === 0) {
-      console.log('No places found, using fallback');
+      console.log('No places found from Google Places API, using fallback');
       return fallbackResponse();
     }
 
