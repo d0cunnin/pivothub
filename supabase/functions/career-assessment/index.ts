@@ -16,8 +16,11 @@ serve(async (req) => {
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
       throw new Error('OpenAI API key not found');
     }
+
+    console.log('Processing career assessment with OpenAI gpt-4.1 model...');
 
     const systemPrompt = `You are a career counseling expert specializing in career path analysis and professional development guidance. Analyze the user's assessment responses to provide comprehensive career recommendations.
 
@@ -82,8 +85,11 @@ serve(async (req) => {
     const data = await response.json();
     
     if (!response.ok) {
+      console.error('OpenAI API error:', data);
       throw new Error(data.error?.message || 'Failed to analyze career assessment');
     }
+
+    console.log('Successfully received OpenAI response');
 
     let analysis;
     try {

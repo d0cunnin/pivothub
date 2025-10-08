@@ -21,7 +21,8 @@ serve(async (req) => {
       return fallbackResponse();
     }
 
-    console.log('Searching for business resources in location:', location);
+    console.log('Using Google Places API for location:', location);
+    console.log('Resource type requested:', resourceType);
 
     // Search for different types of business resources
     const searchQueries = [
