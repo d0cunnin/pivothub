@@ -51,6 +51,33 @@ const TeachIt = () => {
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
+      {/* Why Teach Section */}
+      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
+              Why Teach Online?
+            </h2>
+            <div className="max-w-3xl mx-auto text-left">
+              <ul className="space-y-4 text-lg text-foreground/80">
+                <li className="flex items-start">
+                  <span className="mr-3">•</span>
+                  <span>Share your expertise and turn years of experience into valuable lessons that help others succeed</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-3">•</span>
+                  <span>Build your audience and establish yourself as a thought leader while growing your professional network</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-3">•</span>
+                  <span>Generate income by creating passive revenue through selling courses and hosting paid webinars</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Getting Started Section */}
       <section id="getting-started" className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
@@ -91,50 +118,6 @@ const TeachIt = () => {
                 </div>
                 <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{item.title}</h3>
                 <p className="text-muted-foreground text-sm">{item.description}</p>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Teach Section */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
-        <div className="page-container">
-          <div className="text-center mb-12">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Why Teach Online?
-              </h2>
-            </div>
-            <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-              Share your knowledge, build your brand, and create an additional income stream
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Target,
-                title: "Share Your Expertise",
-                description: "Turn years of experience into valuable lessons that help others succeed"
-              },
-              {
-                icon: Users,
-                title: "Build Your Audience",
-                description: "Establish yourself as a thought leader and grow your professional network"
-              },
-              {
-                icon: BookOpen,
-                title: "Generate Income",
-                description: "Create passive income by selling courses and hosting paid webinars"
-              }
-            ].map((benefit, index) => (
-              <Card key={index} className="premium-card p-8 text-center group animate-fade-in-scale" style={{ animationDelay: `${index * 0.15}s` }}>
-                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-glow group-hover:shadow-strong transition-elegant">
-                  <benefit.icon className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-foreground">{benefit.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
               </Card>
             ))}
           </div>
