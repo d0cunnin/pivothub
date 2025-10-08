@@ -14,9 +14,9 @@ serve(async (req) => {
   try {
     const { businessType, industry, stage, location, specificNeeds } = await req.json();
     
-    const perplexityApiKey = Deno.env.get('PERPLEXITY_API_KEY');
-    if (!perplexityApiKey) {
-      console.error('Perplexity API key not found, using fallback');
+    const openaiApiKey = Deno.env.get('relaunch_openai_key');
+    if (!openaiApiKey) {
+      console.error('OpenAI API key not found, using fallback');
       return fallbackResponse();
     }
 
@@ -30,44 +30,41 @@ serve(async (req) => {
 - Local funding sources
 - Business support organizations
 - Entrepreneurship programs
-Provide real names, addresses, phone numbers, websites, and brief descriptions.`;
+Provide real names, addresses, phone numbers, websites, and brief descriptions. Format your response as a structured list.`;
 
     console.log('Searching for business resources with query:', searchQuery);
 
-    const response = await fetch('https://api.perplexity.ai/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${perplexityApiKey}`,
+        'Authorization': `Bearer ${openaiApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-sonar-large-128k-online',
+        model: 'gpt-5-mini-2025-08-07',
         messages: [
           {
             role: 'system',
-            content: 'You are a business resource finder. Search the web for real, current local business resources. Always provide actual contact information, websites, and addresses when available. Format your response as a JSON object.'
+            content: 'You are a business resource finder. Provide real, current local business resources with actual contact information, websites, and addresses when available. Format your response as a clear, structured list with organization names in bold.'
           },
           {
             role: 'user',
             content: searchQuery
           }
         ],
-        temperature: 0.2,
-        top_p: 0.9,
-        max_tokens: 2000,
-        return_related_questions: false
+        max_completion_tokens: 2000
       }),
     });
 
     if (!response.ok) {
-      console.error('Perplexity API error:', response.status);
+      console.error('OpenAI API error:', response.status);
       return fallbackResponse();
     }
 
     const data = await response.json();
     const aiResponse = data.choices?.[0]?.message?.content || '';
     
-    console.log('Perplexity response received');
+    console.log('OpenAI response received');
 
     // Parse and structure the response
     const resources = parseBusinessResources(aiResponse, location);
