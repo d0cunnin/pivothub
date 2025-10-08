@@ -71,27 +71,37 @@ export const StartupChecklist = () => {
       console.error('Error generating checklist:', error);
       // Fallback to basic checklist
       const baseChecklist: ChecklistItem[] = [
-        { id: '1', task: 'Validate business idea and market research', category: 'Planning', timeline: 'Week 1', completed: false, priority: 'high' },
-        { id: '2', task: 'Write business plan', category: 'Planning', timeline: 'Week 1-2', completed: false, priority: 'high' },
-        { id: '3', task: 'Secure initial funding/capital', category: 'Finance', timeline: 'Week 2-4', completed: false, priority: 'high' },
-        { id: '4', task: 'Choose and register business name', category: 'Legal', timeline: 'Week 2', completed: false, priority: 'high' },
-        { id: '5', task: 'File business formation documents', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
-        { id: '6', task: 'Obtain EIN (Tax ID Number)', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
-        { id: '7', task: 'Open business bank account', category: 'Finance', timeline: 'Week 4', completed: false, priority: 'high' },
-        { id: '8', task: 'Get business insurance', category: 'Legal', timeline: 'Week 4-5', completed: false, priority: 'medium' },
-        { id: '9', task: 'Obtain necessary licenses and permits', category: 'Legal', timeline: 'Week 4-6', completed: false, priority: 'high' },
-        { id: '10', task: 'Set up accounting system', category: 'Finance', timeline: 'Week 5', completed: false, priority: 'medium' }
+        { id: '1', task: 'Create vision statement', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
+        { id: '2', task: 'Create mission statement', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
+        { id: '3', task: 'Define problem statement', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
+        { id: '4', task: 'Define solution', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
+        { id: '5', task: 'Identify target audience', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
+        { id: '6', task: 'Research market size', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
+        { id: '7', task: 'Define business model', category: 'Foundation', timeline: 'Week 1-2', completed: false, priority: 'high' },
+        { id: '8', task: 'Create go-to-market strategy', category: 'Foundation', timeline: 'Week 1-2', completed: false, priority: 'high' },
+        { id: '9', task: 'Validate business idea and market research', category: 'Planning', timeline: 'Week 1-2', completed: false, priority: 'high' },
+        { id: '10', task: 'Write business plan', category: 'Planning', timeline: 'Week 2-3', completed: false, priority: 'high' },
+        { id: '11', task: 'Secure initial funding/capital', category: 'Finance', timeline: 'Week 2-4', completed: false, priority: 'high' },
+        { id: '12', task: 'Choose and register business name', category: 'Legal', timeline: 'Week 2', completed: false, priority: 'high' },
+        { id: '13', task: 'File business formation documents', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
+        { id: '14', task: 'Obtain EIN (Tax ID Number)', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
+        { id: '15', task: 'Open business bank account', category: 'Finance', timeline: 'Week 4', completed: false, priority: 'high' },
+        { id: '16', task: 'Get business insurance', category: 'Legal', timeline: 'Week 4-5', completed: false, priority: 'medium' },
+        { id: '17', task: 'Obtain necessary licenses and permits', category: 'Legal', timeline: 'Week 4-6', completed: false, priority: 'high' },
+        { id: '18', task: 'Set up accounting system', category: 'Finance', timeline: 'Week 5', completed: false, priority: 'medium' },
+        { id: '19', task: 'Create marketing materials', category: 'Marketing', timeline: 'Week 3-4', completed: false, priority: 'medium' },
+        { id: '20', task: 'Build website and online presence', category: 'Marketing', timeline: 'Week 4-6', completed: false, priority: 'high' }
       ];
 
       // Add structure-specific items
       if (businessStructure === 'corporation') {
         baseChecklist.push(
-          { id: '11', task: 'Draft corporate bylaws', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
-          { id: '12', task: 'Issue stock certificates', category: 'Legal', timeline: 'Week 4', completed: false, priority: 'medium' }
+          { id: '21', task: 'Draft corporate bylaws', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
+          { id: '22', task: 'Issue stock certificates', category: 'Legal', timeline: 'Week 4', completed: false, priority: 'medium' }
         );
       } else if (businessStructure === 'llc') {
         baseChecklist.push(
-          { id: '11', task: 'Create operating agreement', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' }
+          { id: '21', task: 'Create operating agreement', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' }
         );
       }
 
@@ -134,7 +144,7 @@ export const StartupChecklist = () => {
     content += `Progress: ${completedTasks} of ${checklist.length} tasks completed (${Math.round(progressPercentage)}%)\n\n`;
     content += `${'='.repeat(80)}\n\n`;
 
-    ['Planning', 'Legal', 'Finance', 'Marketing', 'Operations'].forEach(category => {
+    ['Foundation', 'Planning', 'Legal', 'Finance', 'Marketing', 'Operations'].forEach(category => {
       const categoryItems = checklist.filter(item => item.category === category);
       if (categoryItems.length === 0) return;
       
@@ -248,7 +258,7 @@ export const StartupChecklist = () => {
           </div>
 
           <div className="space-y-3">
-            {['Planning', 'Legal', 'Finance', 'Marketing', 'Operations'].map(category => {
+            {['Foundation', 'Planning', 'Legal', 'Finance', 'Marketing', 'Operations'].map(category => {
               const categoryItems = checklist.filter(item => item.category === category);
               if (categoryItems.length === 0) return null;
               

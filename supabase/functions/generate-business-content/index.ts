@@ -215,6 +215,43 @@ Brand Tone: ${data.brandTone}
 Create content for different platforms (Instagram, LinkedIn, Twitter, Facebook) with captions, hashtags, and optimal posting times.`
         break
 
+      case 'business-foundation':
+        prompt = `Create comprehensive business foundation elements for:
+Business Name: ${data.businessName}
+Industry: ${data.industry}
+Experience: ${data.experience || 'Not specified'}
+Passion: ${data.passion || 'Not specified'}
+Target Customers: ${data.customers || 'Not specified'}
+
+CRITICAL: Format your response with clear section markers:
+
+[VISION]
+Write a compelling 2-3 sentence vision statement that describes the long-term aspirational future of the business.
+
+[MISSION]
+Write a clear 2-3 sentence mission statement that defines the business's purpose, what it does, and who it serves.
+
+[PROBLEM]
+Write a concise problem statement (2-3 sentences) that clearly articulates the pain points or challenges customers face.
+
+[SOLUTION]
+Explain in 2-3 sentences how your business uniquely solves the identified problem.
+
+[AUDIENCE]
+Describe the target audience in 2-3 sentences, including demographics, psychographics, and key characteristics.
+
+[MARKET_SIZE]
+Provide 2-3 sentences about the market opportunity, including size, growth trends, and potential.
+
+[BUSINESS_MODEL]
+Explain in 2-3 sentences how the business will generate revenue and create value.
+
+[GO_TO_MARKET]
+Outline the go-to-market strategy in 2-3 sentences, including key channels and tactics for reaching customers.
+
+Keep each section concise and actionable. Use plain text without markdown.`
+        break
+
       default:
         throw new Error('Invalid content type')
     }

@@ -16,6 +16,7 @@ import { BusinessMentorChatbot } from "@/components/BusinessMentorChatbot";
 import { BusinessPlanGenerator } from "@/components/BusinessPlanGenerator";
 import { PitchDeckGenerator } from "@/components/PitchDeckGenerator";
 import { BusinessResourceFinder } from "@/components/BusinessResourceFinder";
+import { BusinessFoundationBuilder } from "@/components/BusinessFoundationBuilder";
 import heroImage from "@/assets/hero-image.jpg";
 
 const HireYourself = () => {
@@ -148,6 +149,7 @@ const HireYourself = () => {
                 <h4 className="font-semibold text-foreground mb-3 text-sm">Available Tools:</h4>
                 <div className="grid grid-cols-2 gap-1 text-xs text-muted-foreground">
                   <span>• Business Idea Generator</span>
+                  <span>• Foundation Builder</span>
                   <span>• Name & Domain Checker</span>
                   <span>• Biography Generator</span>
                   <span>• Logo Designer</span>
@@ -177,6 +179,10 @@ const HireYourself = () => {
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
               <BusinessIdeaGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.05s' }}>
+              <BusinessFoundationBuilder />
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
