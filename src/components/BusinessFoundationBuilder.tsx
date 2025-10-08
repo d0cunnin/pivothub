@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Target, Download, Sparkles } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Target, Download, Sparkles, HelpCircle } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from "sonner";
@@ -54,9 +56,65 @@ export const BusinessFoundationBuilder = () => {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [results, setResults] = useState<FoundationResults | null>(null);
+  const [showDemographics, setShowDemographics] = useState(false);
+  
+  // Demographics state
+  const [demographics, setDemographics] = useState({
+    gender: [] as string[],
+    ageRange: "",
+    maritalStatus: [] as string[],
+    lgbtqia: false,
+    religiousAffiliation: [] as string[],
+    incomeBracket: "",
+    education: [] as string[],
+    occupation: [] as string[]
+  });
 
   const handleInputChange = (field: keyof FoundationData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const toggleArrayValue = (array: string[], value: string) => {
+    return array.includes(value) 
+      ? array.filter(item => item !== value)
+      : [...array, value];
+  };
+
+  const applyDemographics = () => {
+    let profile = "";
+    
+    if (demographics.gender.length > 0) {
+      profile += `Gender: ${demographics.gender.join(", ")}. `;
+    }
+    if (demographics.ageRange) {
+      profile += `Age: ${demographics.ageRange}. `;
+    }
+    if (demographics.maritalStatus.length > 0) {
+      profile += `Marital Status: ${demographics.maritalStatus.join(", ")}. `;
+    }
+    if (demographics.lgbtqia) {
+      profile += `Inclusive of LGBTQIA+ community. `;
+    }
+    if (demographics.religiousAffiliation.length > 0) {
+      profile += `Religious Affiliation: ${demographics.religiousAffiliation.join(", ")}. `;
+    }
+    if (demographics.incomeBracket) {
+      profile += `Income: ${demographics.incomeBracket}. `;
+    }
+    if (demographics.education.length > 0) {
+      profile += `Education: ${demographics.education.join(", ")}. `;
+    }
+    if (demographics.occupation.length > 0) {
+      profile += `Occupation: ${demographics.occupation.join(", ")}. `;
+    }
+
+    setFormData(prev => ({ 
+      ...prev, 
+      idealCustomer: prev.idealCustomer 
+        ? `${prev.idealCustomer}\n\n${profile}`.trim() 
+        : profile 
+    }));
+    setShowDemographics(false);
   };
 
   const exportFoundation = () => {
@@ -309,7 +367,169 @@ export const BusinessFoundationBuilder = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="idealCustomer">Ideal Customer Profile - Describe your perfect customer in detail (demographics, psychographics, behaviors)</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="idealCustomer">Ideal Customer Profile - Describe your perfect customer in detail (demographics, psychographics, behaviors)</Label>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowDemographics(!showDemographics)}
+            >
+              <HelpCircle className="h-4 w-4 mr-2" />
+              {showDemographics ? "Hide" : "Show"} Demographics Helper
+            </Button>
+          </div>
+          
+          {showDemographics && (
+            <Card className="p-4 space-y-4 bg-muted/30">
+              <p className="text-sm text-muted-foreground">Select demographic options to help build your ideal customer profile:</p>
+              
+              {/* Gender */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Gender</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {["Male", "Female", "Non-binary", "All genders"].map(option => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`gender-${option}`}
+                        checked={demographics.gender.includes(option)}
+                        onCheckedChange={() => setDemographics(prev => ({
+                          ...prev,
+                          gender: toggleArrayValue(prev.gender, option)
+                        }))}
+                      />
+                      <label htmlFor={`gender-${option}`} className="text-sm cursor-pointer">{option}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Age Range */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Age Range</Label>
+                <RadioGroup value={demographics.ageRange} onValueChange={(value) => setDemographics(prev => ({ ...prev, ageRange: value }))}>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {["18-24", "25-34", "35-44", "45-54", "55-64", "65+"].map(option => (
+                      <div key={option} className="flex items-center space-x-2">
+                        <RadioGroupItem value={option} id={`age-${option}`} />
+                        <label htmlFor={`age-${option}`} className="text-sm cursor-pointer">{option}</label>
+                      </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Marital Status */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Marital Status</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {["Single", "Married", "Divorced", "Widowed", "Partnered"].map(option => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`marital-${option}`}
+                        checked={demographics.maritalStatus.includes(option)}
+                        onCheckedChange={() => setDemographics(prev => ({
+                          ...prev,
+                          maritalStatus: toggleArrayValue(prev.maritalStatus, option)
+                        }))}
+                      />
+                      <label htmlFor={`marital-${option}`} className="text-sm cursor-pointer">{option}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* LGBTQIA+ */}
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="lgbtqia"
+                  checked={demographics.lgbtqia}
+                  onCheckedChange={(checked) => setDemographics(prev => ({ ...prev, lgbtqia: checked as boolean }))}
+                />
+                <label htmlFor="lgbtqia" className="text-sm font-semibold cursor-pointer">LGBTQIA+ Inclusive</label>
+              </div>
+
+              {/* Religious Affiliation */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Religious Affiliation (Optional)</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {["Christian", "Muslim", "Jewish", "Hindu", "Buddhist", "Spiritual", "Non-religious", "All faiths"].map(option => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`religion-${option}`}
+                        checked={demographics.religiousAffiliation.includes(option)}
+                        onCheckedChange={() => setDemographics(prev => ({
+                          ...prev,
+                          religiousAffiliation: toggleArrayValue(prev.religiousAffiliation, option)
+                        }))}
+                      />
+                      <label htmlFor={`religion-${option}`} className="text-sm cursor-pointer">{option}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Income Bracket */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Income Bracket</Label>
+                <RadioGroup value={demographics.incomeBracket} onValueChange={(value) => setDemographics(prev => ({ ...prev, incomeBracket: value }))}>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {["Under $25k", "$25k-$50k", "$50k-$75k", "$75k-$100k", "$100k-$150k", "$150k+"].map(option => (
+                      <div key={option} className="flex items-center space-x-2">
+                        <RadioGroupItem value={option} id={`income-${option}`} />
+                        <label htmlFor={`income-${option}`} className="text-sm cursor-pointer">{option}</label>
+                      </div>
+                    ))}
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Education */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Education Level</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {["High School", "Some College", "Bachelor's", "Master's", "Doctorate", "Trade School"].map(option => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`education-${option}`}
+                        checked={demographics.education.includes(option)}
+                        onCheckedChange={() => setDemographics(prev => ({
+                          ...prev,
+                          education: toggleArrayValue(prev.education, option)
+                        }))}
+                      />
+                      <label htmlFor={`education-${option}`} className="text-sm cursor-pointer">{option}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Occupation */}
+              <div className="space-y-2">
+                <Label className="text-sm font-semibold">Occupation Type</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {["Professional", "Manager", "Student", "Entrepreneur", "Retired", "Homemaker", "Freelancer"].map(option => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`occupation-${option}`}
+                        checked={demographics.occupation.includes(option)}
+                        onCheckedChange={() => setDemographics(prev => ({
+                          ...prev,
+                          occupation: toggleArrayValue(prev.occupation, option)
+                        }))}
+                      />
+                      <label htmlFor={`occupation-${option}`} className="text-sm cursor-pointer">{option}</label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Button type="button" onClick={applyDemographics} variant="outline" className="w-full">
+                Apply Demographics to Profile
+              </Button>
+            </Card>
+          )}
+          
           <Textarea
             id="idealCustomer"
             value={formData.idealCustomer}
