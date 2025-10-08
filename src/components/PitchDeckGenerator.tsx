@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Presentation, Download, Eye } from "lucide-react";
+import { Presentation, Download, Eye, Play } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { PitchDeckPresentation } from './PitchDeckPresentation';
 
 interface PitchData {
   companyName: string;
@@ -41,10 +42,25 @@ export const PitchDeckGenerator = () => {
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [slides, setSlides] = useState<Slide[]>([]);
+  const [showPresentation, setShowPresentation] = useState(false);
 
   const handleInputChange = (field: keyof PitchData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
+
+  // Keyboard navigation for presentation
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (showPresentation) {
+        if (e.key === 'Escape') {
+          setShowPresentation(false);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [showPresentation]);
 
   const generatePitchDeck = async () => {
     setIsGenerating(true);
@@ -184,6 +200,7 @@ export const PitchDeckGenerator = () => {
   };
 
   return (
+    <>
     <Card className="p-8">
       <div className="flex items-center gap-2 mb-6">
         <Presentation className="h-6 w-6 text-primary" />
@@ -285,9 +302,13 @@ export const PitchDeckGenerator = () => {
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Generated Pitch Deck ({slides.length} slides)</h3>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  <Eye className="h-4 w-4 mr-2" />
-                  Preview
+                <Button 
+                  variant="default" 
+                  size="sm"
+                  onClick={() => setShowPresentation(true)}
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  Present
                 </Button>
                 <Button variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-2" />
@@ -295,21 +316,45 @@ export const PitchDeckGenerator = () => {
                 </Button>
               </div>
             </div>
-            <div className="grid gap-4 max-h-80 overflow-y-auto">
+            <div className="grid gap-3 max-h-80 overflow-y-auto pr-2">
               {slides.map((slide, index) => (
-                <Card key={index} className="border">
+                <Card 
+                  key={index} 
+                  className="border hover:border-primary/50 cursor-pointer transition-colors"
+                  onClick={() => setShowPresentation(true)}
+                >
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm">Slide {index + 1}: {slide.title}</CardTitle>
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold">
+                        {index + 1}
+                      </span>
+                      {slide.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <pre className="whitespace-pre-wrap text-xs text-muted-foreground">{slide.content}</pre>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {slide.content}
+                    </p>
                   </CardContent>
                 </Card>
               ))}
             </div>
+            <p className="text-xs text-muted-foreground text-center">
+              Click any slide or press "Present" to view full presentation
+            </p>
           </div>
         )}
       </div>
     </Card>
+    
+    {/* Presentation Mode */}
+    {showPresentation && (
+      <PitchDeckPresentation 
+        slides={slides}
+        companyName={formData.companyName || "Your Company"}
+        onClose={() => setShowPresentation(false)}
+      />
+    )}
+    </>
   );
 };
