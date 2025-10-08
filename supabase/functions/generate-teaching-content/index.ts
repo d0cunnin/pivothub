@@ -26,6 +26,11 @@ serve(async (req) => {
     if (type === 'all-materials') {
       const audience = data.targetAudience.join(', ') + (data.otherAudience ? `, ${data.otherAudience}` : '')
       
+      // Build skills string from array of skill objects
+      const skillsText = data.skills.map((s: any) => 
+        `${s.category}: ${s.specificSkill} (${s.proficiency})`
+      ).join(', ')
+      
       // Construct education string
       let education = data.educationLevel || 'Not specified'
       if (data.major && data.major !== 'Other') {
@@ -46,7 +51,7 @@ serve(async (req) => {
 
 INSTRUCTOR PROFILE:
 - Name: ${data.fullName}
-- Skills/Expertise: ${data.skills}
+- Skills/Expertise: ${skillsText}
 - Experience: ${data.experience}
 - Education: ${education}
 - Certifications: ${data.certifications}

@@ -12,9 +12,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Download, X } from "lucide-react";
 
+interface SkillEntry {
+  category: string;
+  specificSkill: string;
+  proficiency: string;
+}
+
 interface TeachingMaterialsData {
   fullName: string;
-  skills: string;
+  skills: SkillEntry[];
   militaryService: string;
   militaryBranch?: string;
   militaryRank?: string;
@@ -37,6 +43,27 @@ interface GeneratedMaterials {
   handouts: string;
   lessonScript: string;
 }
+
+const skillCategories = {
+  "Technology & Coding": ["Web Development", "Mobile Apps", "Python", "JavaScript", "AI/ML", "Data Science", "Cybersecurity", "Database Management", "Other"],
+  "Public Speaking & Communication": ["Presentation Skills", "Storytelling", "Leadership Communication", "Podcasting", "Debate", "Other"],
+  "Mental Health": ["Therapy", "Counseling", "Trauma-Informed Care", "Clinical Psychology", "Behavioral Therapy", "Psychiatric Support", "Addiction Counseling", "Crisis Intervention", "Other"],
+  "Holistic Health": ["Nutrition", "Exercise", "Fitness", "Stress Management", "Emotional Intelligence", "Mindfulness", "Meditation", "Yoga", "Wellness Coaching", "Lifestyle Coaching", "Other"],
+  "STEM Education": ["Math", "Physics", "Chemistry", "Biology", "Coding for Kids", "Science Curriculum Development", "Other"],
+  "Engineering": ["Mechanical", "Electrical", "Civil", "Software", "Industrial", "Robotics", "Systems Engineering", "Other"],
+  "Entrepreneurship & Business": ["Startups", "Marketing", "Sales", "Business Strategy", "Leadership", "Small Business Growth", "Other"],
+  "Finance & Banking": ["Financial Advising", "Investment Banking", "Corporate Finance", "Accounting", "Wealth Management", "Risk Management", "Banking Operations", "Other"],
+  "Teaching / Education": ["K–12 Instruction", "College Teaching", "Curriculum Design", "Special Education", "Educational Technology", "Tutoring", "Other"],
+  "Creative Arts": ["Painting", "Drawing", "Photography", "Graphic Design", "Fashion Design", "Digital Arts", "Other"],
+  "Music": ["Vocal", "Instrumental", "Music Production", "Songwriting", "Music Theory", "Other"],
+  "Culinary & Cooking": ["Baking", "Cooking Basics", "Healthy Cooking", "Meal Prep", "World Cuisines", "Other"],
+  "Law / Legal Field": ["Criminal Law", "Civil Law", "Corporate Law", "Family Law", "Paralegal Services", "Legal Research", "Compliance", "Other"],
+  "Medicine and Dentistry": ["General Medicine", "Surgery", "Pediatrics", "Nursing", "Dentistry", "Oral Surgery", "Specialty Care", "Other"],
+  "Veterinary Services": ["Veterinary Medicine", "Animal Surgery", "Animal Care", "Veterinary Technician", "Animal Behavior", "Other"],
+  "Other / Miscellaneous": ["Other"]
+};
+
+const proficiencyLevels = ["Beginner", "Intermediate", "Advanced"];
 
 const audienceOptions = [
   "Grades K-5",
@@ -79,7 +106,7 @@ const majorOptions = [
 const TeachingMaterialsGenerator = () => {
   const [formData, setFormData] = useState<TeachingMaterialsData>({
     fullName: "",
-    skills: "",
+    skills: [],
     militaryService: "no",
     experience: "",
     educationLevel: "",
@@ -94,6 +121,29 @@ const TeachingMaterialsGenerator = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedMaterials, setGeneratedMaterials] = useState<GeneratedMaterials | null>(null);
 
+  const addSkill = () => {
+    setFormData(prev => ({
+      ...prev,
+      skills: [...prev.skills, { category: "", specificSkill: "", proficiency: "Intermediate" }]
+    }));
+  };
+
+  const removeSkill = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      skills: prev.skills.filter((_, i) => i !== index)
+    }));
+  };
+
+  const updateSkill = (index: number, field: keyof SkillEntry, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      skills: prev.skills.map((skill, i) => 
+        i === index ? { ...skill, [field]: value } : skill
+      )
+    }));
+  };
+
   const handleAudienceToggle = (audience: string) => {
     setFormData(prev => ({
       ...prev,
@@ -104,10 +154,10 @@ const TeachingMaterialsGenerator = () => {
   };
 
   const generateMaterials = async () => {
-    if (!formData.fullName.trim() || !formData.skills.trim() || !formData.experience.trim()) {
+    if (!formData.fullName.trim() || formData.skills.length === 0 || !formData.experience.trim()) {
       toast({
         title: "Missing Information",
-        description: "Please fill in your name, describe your skills, and your experience.",
+        description: "Please fill in your name, add at least one skill, and describe your experience.",
         variant: "destructive"
       });
       return;
@@ -206,39 +256,100 @@ ${generatedMaterials.lessonScript}
           </div>
 
           {/* Skills / Expertise */}
-          <div className="space-y-2">
-            <Label htmlFor="skills">Describe Your Skills & Expertise</Label>
-            <p className="text-sm text-muted-foreground">
-              Provide a detailed list of your skills, expertise areas, and specialties. Include technical skills, creative abilities, professional knowledge, certifications, and any other areas where you have significant experience. For each skill, include your proficiency level (Beginner, Intermediate, Advanced).
-            </p>
-            <div className="text-sm text-muted-foreground space-y-1 mt-2">
-              <p className="font-semibold">Example Categories:</p>
-              <ul className="list-disc list-inside space-y-1 ml-2">
-                <li>Technology & Coding – Web Development, Mobile Apps, Python, JavaScript, AI/ML, Data Science</li>
-                <li>Public Speaking & Communication – Presentation Skills, Storytelling, Leadership Communication</li>
-                <li>Mental Health – Therapy, Counseling, Clinical Psychology, Behavioral Therapy</li>
-                <li>Holistic Health – Nutrition, Fitness, Stress Management, Mindfulness, Wellness Coaching</li>
-                <li>STEM Education – Math, Physics, Chemistry, Biology, Coding for Kids</li>
-                <li>Engineering – Mechanical, Electrical, Civil, Software, Robotics</li>
-                <li>Entrepreneurship & Business – Startups, Marketing, Sales, Business Strategy</li>
-                <li>Finance & Banking – Financial Advising, Investment Banking, Wealth Management</li>
-                <li>Teaching / Education – K–12 Instruction, Curriculum Design, Special Education</li>
-                <li>Creative Arts – Painting, Drawing, Photography, Graphic Design</li>
-                <li>Music – Vocal, Instrumental, Music Production, Songwriting</li>
-                <li>Culinary & Cooking – Baking, Cooking Basics, Healthy Cooking, Meal Prep</li>
-                <li>Law / Legal Field – Criminal Law, Civil Law, Corporate Law, Legal Research</li>
-                <li>Medicine and Dentistry – General Medicine, Surgery, Nursing, Dentistry</li>
-                <li>Veterinary Services – Veterinary Medicine, Animal Surgery, Animal Care</li>
-                <li>Other / Miscellaneous – Any other skills not listed above</li>
-              </ul>
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <Label>Skills & Expertise</Label>
+              <Button type="button" onClick={addSkill} variant="outline" size="sm">
+                Add Skill
+              </Button>
             </div>
-            <Textarea
-              id="skills"
-              value={formData.skills}
-              onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-              placeholder="E.g., Python programming for AI/ML (Advanced), Public Speaking for corporate teams (Advanced), Trauma Counseling (Intermediate), Holistic Health Coaching including nutrition and mindfulness (Advanced), Criminal Law research (Intermediate), General Medicine (Advanced), Veterinary Surgery (Intermediate), K–12 Math Teaching (Advanced), Mechanical Engineering (Intermediate), Wealth Management (Advanced), Financial Advising (Intermediate), Yoga instruction (Beginner), Baking and meal prep (Intermediate), STEM activities for kids (Beginner), etc."
-              rows={6}
-            />
+            <p className="text-sm text-muted-foreground">
+              Select categories and specific skills, then indicate your proficiency level for each.
+            </p>
+
+            {formData.skills.map((skill, index) => (
+              <Card key={index} className="p-4 bg-muted/30">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-start">
+                    <Label className="text-sm">Skill {index + 1}</Label>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeSkill(index)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor={`category-${index}`}>Category</Label>
+                    <select
+                      id={`category-${index}`}
+                      value={skill.category}
+                      onChange={(e) => {
+                        updateSkill(index, "category", e.target.value);
+                        updateSkill(index, "specificSkill", "");
+                      }}
+                      className="w-full px-3 py-2 border border-input bg-background rounded-md z-50"
+                    >
+                      <option value="">Select a category</option>
+                      {Object.keys(skillCategories).map((cat) => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {skill.category && (
+                    <div className="space-y-2">
+                      <Label htmlFor={`skill-${index}`}>Specific Skill</Label>
+                      <select
+                        id={`skill-${index}`}
+                        value={skill.specificSkill}
+                        onChange={(e) => updateSkill(index, "specificSkill", e.target.value)}
+                        className="w-full px-3 py-2 border border-input bg-background rounded-md z-50"
+                      >
+                        <option value="">Select a skill</option>
+                        {skillCategories[skill.category as keyof typeof skillCategories]?.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {skill.specificSkill === "Other" && (
+                    <div className="space-y-2">
+                      <Label htmlFor={`other-${index}`}>Specify Skill</Label>
+                      <Input
+                        id={`other-${index}`}
+                        placeholder="Enter specific skill"
+                        onChange={(e) => updateSkill(index, "specificSkill", e.target.value)}
+                      />
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label htmlFor={`proficiency-${index}`}>Proficiency Level</Label>
+                    <select
+                      id={`proficiency-${index}`}
+                      value={skill.proficiency}
+                      onChange={(e) => updateSkill(index, "proficiency", e.target.value)}
+                      className="w-full px-3 py-2 border border-input bg-background rounded-md z-50"
+                    >
+                      {proficiencyLevels.map((level) => (
+                        <option key={level} value={level}>{level}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </Card>
+            ))}
+
+            {formData.skills.length === 0 && (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                Click "Add Skill" to start adding your expertise
+              </p>
+            )}
           </div>
 
           {/* Military Service */}
