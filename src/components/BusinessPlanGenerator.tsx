@@ -127,10 +127,9 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="businessName">Business Name *</Label>
+            <Label htmlFor="businessName">Business Name * (e.g., TechSolutions Inc., Green Cafe)</Label>
             <Input
               id="businessName"
-              placeholder="Enter your business name (e.g., TechSolutions Inc., Green Cafe)"
               value={formData.businessName}
               onChange={(e) => handleInputChange("businessName", e.target.value)}
               className={formData.businessName.length < 3 ? "border-orange-300" : "border-green-300"}
@@ -160,19 +159,17 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
 
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="businessType">Business Type</Label>
+            <Label htmlFor="businessType">Business Type (e.g., LLC, Corporation, Partnership)</Label>
             <Input
               id="businessType"
-              placeholder="e.g., LLC, Corporation, Partnership"
               value={formData.businessType}
               onChange={(e) => handleInputChange("businessType", e.target.value)}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="startupCosts">Estimated Startup Costs</Label>
+            <Label htmlFor="startupCosts">Estimated Startup Costs (in dollars, e.g., 50000)</Label>
             <Input
               id="startupCosts"
-              placeholder="50000"
               type="number"
               value={formData.startupCosts}
               onChange={(e) => handleInputChange("startupCosts", e.target.value)}
@@ -181,10 +178,10 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="targetMarket">Target Market *</Label>
+          <Label htmlFor="targetMarket">Target Market * - Describe your ideal customers in detail: demographics (age, income), psychographics (values, interests), pain points, and behaviors</Label>
           <Textarea
             id="targetMarket"
-            placeholder="Describe your ideal customers in detail: demographics (age, income), psychographics (values, interests), pain points, and behaviors. Example: 'Small business owners aged 25-45 with 10-50 employees who struggle with manual inventory management and seek affordable digital solutions.'"
+            placeholder="Example: 'Small business owners aged 25-45 with 10-50 employees who struggle with manual inventory management and seek affordable digital solutions.'"
             value={formData.targetMarket}
             onChange={(e) => handleInputChange("targetMarket", e.target.value)}
             rows={3}
@@ -196,10 +193,10 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="uniqueValue">Unique Value Proposition *</Label>
+          <Label htmlFor="uniqueValue">Unique Value Proposition * - Explain what makes your business unique and why customers should choose you over competitors. Include specific benefits, features, or approaches that differentiate you</Label>
           <Textarea
             id="uniqueValue"
-            placeholder="Clearly explain what makes your business unique and why customers should choose you over competitors. Include specific benefits, features, or approaches that differentiate you. Example: '50% faster delivery than competitors through AI-powered route optimization, with 24/7 customer support and eco-friendly packaging.'"
+            placeholder="Example: '50% faster delivery than competitors through AI-powered route optimization, with 24/7 customer support and eco-friendly packaging.'"
             value={formData.uniqueValue}
             onChange={(e) => handleInputChange("uniqueValue", e.target.value)}
             rows={3}
