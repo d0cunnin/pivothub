@@ -159,12 +159,22 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
 
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="businessType">Business Type (e.g., LLC, Corporation, Partnership)</Label>
-            <Input
-              id="businessType"
-              value={formData.businessType}
-              onChange={(e) => handleInputChange("businessType", e.target.value)}
-            />
+            <Label htmlFor="businessType">Business Type</Label>
+            <Select value={formData.businessType} onValueChange={(value) => handleInputChange("businessType", value)}>
+              <SelectTrigger className="bg-background">
+                <SelectValue placeholder="Select business type" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="LLC">LLC (Limited Liability Company)</SelectItem>
+                <SelectItem value="Corporation">Corporation</SelectItem>
+                <SelectItem value="S-Corporation">S-Corporation</SelectItem>
+                <SelectItem value="Partnership">Partnership</SelectItem>
+                <SelectItem value="Sole Proprietorship">Sole Proprietorship</SelectItem>
+                <SelectItem value="Nonprofit">Nonprofit Organization</SelectItem>
+                <SelectItem value="Cooperative">Cooperative</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="startupCosts">Estimated Startup Costs (in dollars, e.g., 50000)</Label>
