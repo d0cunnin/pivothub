@@ -12,6 +12,7 @@ serve(async (req) => {
 
   try {
     const { type, data } = await req.json()
+    console.log('Received request:', { type, data })
     
     const openaiApiKey = Deno.env.get('relaunch_openai_key')
     if (!openaiApiKey) {
@@ -21,6 +22,131 @@ serve(async (req) => {
     let prompt = ''
     const systemMessage = 'You are an expert educator and instructional designer with deep expertise in creating engaging educational content. Provide responses in clean, plain text format without any markdown formatting. Use simple bullet points (•) if lists are needed.'
 
+    // Handle all-materials type first
+    if (type === 'all-materials') {
+      const skills = data.skills.join(', ') + (data.otherSkill ? `, ${data.otherSkill}` : '')
+      const audience = data.targetAudience.join(', ') + (data.otherAudience ? `, ${data.otherAudience}` : '')
+      
+      prompt = `You are an expert curriculum designer and educational content creator. Generate comprehensive teaching materials for ${data.fullName}.
+
+INSTRUCTOR PROFILE:
+- Name: ${data.fullName}
+- Skills/Expertise: ${skills}
+- Experience: ${data.experience}
+- Education: ${data.education}
+- Certifications: ${data.certifications}
+- Preferred Teaching Format: ${data.teachingFormat}
+- Target Audience: ${audience}
+- Estimated Duration: ${data.duration}
+${data.additionalNotes ? `- Additional Goals: ${data.additionalNotes}` : ''}
+
+Generate ALL FOUR of the following materials in a single response. Format your response EXACTLY as shown below with clear section markers:
+
+---WEBINAR_CONCEPTS_START---
+Generate 3-5 compelling webinar/course topic ideas that align with the instructor's expertise and target audience. Each concept should include:
+- A catchy title
+- Brief description (2-3 sentences)
+- Key value proposition
+- Who it's best for
+---WEBINAR_CONCEPTS_END---
+
+---COURSE_OUTLINE_START---
+Create a detailed course outline with:
+- Course title and overview
+- 4-6 modules/sessions with:
+  * Module title
+  * Learning objectives (3-4 per module)
+  * Key topics covered
+  * Estimated duration
+  * Activities or assignments
+---COURSE_OUTLINE_END---
+
+---HANDOUTS_START---
+Design handouts and resources including:
+- Quick reference guides
+- Worksheets with exercises
+- Resource lists (tools, books, websites)
+- Practice activities
+- Checklists
+Format these as ready-to-use materials.
+---HANDOUTS_END---
+
+---LESSON_SCRIPT_START---
+Create a detailed lesson script for the first session including:
+- Opening hook (2-3 minutes)
+- Introduction and learning objectives
+- Main content sections with:
+  * Key talking points
+  * Examples to share
+  * Questions to ask
+  * Interactive elements
+- Closing and call-to-action
+- Estimated timing for each section
+---LESSON_SCRIPT_END---
+
+Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${openaiApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'gpt-4.1-2025-04-14',
+            messages: [
+              { role: 'system', content: 'You are an expert educational content creator who generates comprehensive, professional teaching materials.' },
+              { role: 'user', content: prompt }
+            ],
+            temperature: 0.8,
+            max_completion_tokens: 4000,
+          })
+        })
+
+        if (!response.ok) {
+          const errorData = await response.text()
+          console.error('OpenAI API error:', response.status, errorData)
+          throw new Error(`OpenAI API error: ${response.status}`)
+        }
+
+        const aiResponse = await response.json()
+        const fullContent = aiResponse.choices[0].message.content
+
+        // Parse the response into sections
+        const extractSection = (content: string, startMarker: string, endMarker: string): string => {
+          const startIndex = content.indexOf(startMarker)
+          const endIndex = content.indexOf(endMarker)
+          if (startIndex === -1 || endIndex === -1) {
+            return 'Content not found'
+          }
+          return content.substring(startIndex + startMarker.length, endIndex).trim()
+        }
+
+        const webinarConcepts = extractSection(fullContent, '---WEBINAR_CONCEPTS_START---', '---WEBINAR_CONCEPTS_END---')
+        const courseOutline = extractSection(fullContent, '---COURSE_OUTLINE_START---', '---COURSE_OUTLINE_END---')
+        const handouts = extractSection(fullContent, '---HANDOUTS_START---', '---HANDOUTS_END---')
+        const lessonScript = extractSection(fullContent, '---LESSON_SCRIPT_START---', '---LESSON_SCRIPT_END---')
+
+        return new Response(
+          JSON.stringify({
+            webinarConcepts,
+            courseOutline,
+            handouts,
+            lessonScript
+          }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 200 
+          }
+        )
+      } catch (error) {
+        console.error('Error in all-materials generation:', error)
+        throw error
+      }
+    }
+
+    // Handle individual content types
     switch (type) {
       case 'webinar-plan':
         prompt = `Create a comprehensive webinar plan for:
