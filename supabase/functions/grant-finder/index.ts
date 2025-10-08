@@ -12,20 +12,22 @@ serve(async (req) => {
   }
 
   try {
-    const { businessType, industry, location, fundingAmount, businessStage } = await req.json();
+    const { businessType, industry, location, fundingAmount, businessStage, category, subcategory } = await req.json();
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a grant research specialist with comprehensive knowledge of government and private funding opportunities. Find relevant grants and funding sources based on the business details provided.
+    const systemPrompt = `You are a grant research specialist with comprehensive knowledge of government and private funding opportunities. Find relevant grants and funding sources based on the details provided.
 
     Business Type: ${businessType}
     Industry: ${industry}
     Location: ${location}
     Funding Amount Needed: ${fundingAmount}
     Business Stage: ${businessStage}
+    ${category ? `Category: ${category}` : ''}
+    ${subcategory ? `Subcategory: ${subcategory}` : ''}
 
     Provide 8-12 relevant grant opportunities including:
     1. Federal grants (SBA, SBIR, STTR, etc.)
@@ -42,8 +44,15 @@ serve(async (req) => {
     - Brief description
     - Application difficulty level
     - Success tips
+    - **CRITICAL: Include the actual, real website URL where applicants can learn more or apply**
 
     Focus on current, active grants that match their specific situation. Include both competitive and formula grants.
+    
+    RESEARCH REQUIREMENT: You must provide real, verifiable grant URLs. Research actual grant opportunities from:
+    - Federal grants: grants.gov, SBA.gov, agency-specific sites
+    - State/local grants: state economic development sites, city/county websites
+    - Private foundations: foundation websites, candid.org listings
+    - Corporate grants: company CSR/foundation pages
 
     IMPORTANT: Do NOT use markdown formatting like ### headers, ** bold, or * italics
     Return clean text in JSON format only
@@ -61,6 +70,7 @@ serve(async (req) => {
         "matchScore": 85,
         "difficulty": "Medium",
         "applicationUrl": "https://example.com/apply",
+        "websiteUrl": "https://realwebsite.com/grant-details",
         "tips": "Key success tips for this specific grant",
         "category": "Federal|State|Private|Corporate"
       }

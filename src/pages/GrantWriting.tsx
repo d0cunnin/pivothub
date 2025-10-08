@@ -40,16 +40,127 @@ interface GrantSearchData {
   location: string;
   fundingAmount: string;
   organizationStage: string;
+  category: string;
+  subcategory: string;
 }
 
 interface Grant {
+  id: string;
   name: string;
-  description: string;
-  amount: string;
+  organization: string;
+  amountRange: string;
   deadline: string;
-  eligibility: string;
-  link: string;
+  description: string;
+  eligibility: string[];
+  matchScore: number;
+  difficulty: string;
+  applicationUrl?: string;
+  websiteUrl?: string;
+  tips: string;
+  category: string;
 }
+
+interface LocalResource {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  address: string;
+  phone: string;
+  website: string;
+  rating: number;
+  hours: string[];
+  category: string;
+}
+
+// Grant categories and subcategories data
+const GRANT_CATEGORIES = {
+  "Government & Public Sector": {
+    "Community Development": "Grants for housing, neighborhood revitalization, and infrastructure.",
+    "Economic Development": "Supports job creation, entrepreneurship, and business expansion.",
+    "Education": "Funds for K–12, college, and educational innovation programs.",
+    "Health & Human Services": "Supports healthcare access, mental health, and family support services.",
+    "Environmental": "Promotes sustainability, green energy, and conservation initiatives.",
+    "Arts & Culture": "Funds museums, creative arts, and cultural heritage programs.",
+    "Justice & Public Safety": "Supports reentry, violence prevention, and emergency services.",
+    "Transportation": "Infrastructure, electric vehicles, and public transit innovation.",
+    "Technology & Innovation": "Digital inclusion, smart cities, and innovation funding."
+  },
+  "Business & Entrepreneurship": {
+    "Small Business": "Start-up or expansion funding for for-profit businesses.",
+    "Minority-Owned Business": "Grants to support minority entrepreneurs and business growth.",
+    "Women-Owned Business": "Funds to empower women entrepreneurs.",
+    "Veteran-Owned Business": "Capital and training for veteran business owners.",
+    "Rural Business": "Grants to stimulate economic growth in rural areas.",
+    "Innovation & Research": "R&D, tech, and product innovation grants.",
+    "Export/Trade": "Supports international trade or export development.",
+    "Green & Sustainability": "Funds for eco-friendly or sustainable business practices."
+  },
+  "Research & Academic": {
+    "Scientific Research": "Grants for natural and applied sciences.",
+    "Medical Research": "Supports biomedical and public health research.",
+    "STEM Education": "Focused on improving science, tech, engineering, and math learning.",
+    "Social Science Research": "Supports studies in sociology, psychology, or economics.",
+    "Humanities & Arts Research": "Funds projects in arts, culture, and humanities.",
+    "Technology & AI Research": "Supports artificial intelligence and data science innovation."
+  },
+  "Nonprofit & Community": {
+    "Capacity Building": "Strengthens operations, leadership, and infrastructure.",
+    "Program or Project": "Funds specific nonprofit activities or initiatives.",
+    "Operating Support": "Provides general organizational funding.",
+    "Capital Projects": "Supports construction, renovation, or equipment.",
+    "Matching Grants": "Requires grantees to raise partial funds to qualify.",
+    "Challenge Grants": "Incentivizes innovation or fundraising performance.",
+    "Faith-Based": "Supports faith-led social impact initiatives.",
+    "Youth Development": "Funds mentoring, after-school, and leadership programs.",
+    "Family & Social Services": "Supports food security, counseling, or housing programs.",
+    "Health & Wellness": "Focused on holistic or preventative health."
+  },
+  "Environmental & Sustainability": {
+    "Clean Energy": "Renewable energy generation and adoption.",
+    "Climate Action": "Projects addressing climate mitigation or adaptation.",
+    "Agriculture & Food Security": "Supports farming innovation and hunger relief.",
+    "Conservation": "Land, wildlife, or biodiversity preservation.",
+    "Water & Sanitation": "Access to clean water and sanitation infrastructure."
+  },
+  "Arts, Culture, & Humanities": {
+    "Arts Education": "Enhances arts learning and access.",
+    "Performing Arts": "Funds music, theater, and dance programs.",
+    "Visual Arts": "Supports artists, exhibits, and creative spaces.",
+    "Media & Journalism": "Funds storytelling, journalism, and media innovation.",
+    "Cultural Heritage": "Preserves traditions and cultural history."
+  },
+  "Health & Human Services": {
+    "Behavioral Health": "Supports mental health and trauma care.",
+    "Substance Abuse Recovery": "Prevention and rehabilitation programs.",
+    "Public Health": "Promotes wellness and disease prevention.",
+    "Nutrition & Food Access": "Improves food systems and healthy eating access.",
+    "Holistic & Integrative Health": "Combines natural and traditional wellness models."
+  },
+  "Education & Workforce": {
+    "Early Childhood": "Early learning and family support services.",
+    "K–12 Education": "School-based enrichment and academic improvement.",
+    "Higher Education": "College access, scholarships, and institutional innovation.",
+    "STEM & Career Readiness": "Workforce pipelines in science and tech fields.",
+    "Workforce & Apprenticeship": "Job training and reskilling programs.",
+    "Digital Literacy": "Tech access and training in digital skills."
+  },
+  "Special Populations": {
+    "Youth": "Youth engagement and empowerment initiatives.",
+    "Seniors & Aging": "Health and quality of life programs for older adults.",
+    "Veterans": "Employment, housing, and reintegration for veterans.",
+    "Disability Inclusion": "Accessibility and inclusion projects.",
+    "Minority Equity": "Racial equity and inclusion-focused programs.",
+    "Rural & Underserved": "Supports development in low-resource communities."
+  },
+  "International & Global": {
+    "Humanitarian Aid": "Disaster response and global assistance.",
+    "Education & Health Abroad": "Improves access to global education and health care.",
+    "Women's Empowerment": "Promotes gender equity and leadership abroad.",
+    "Global Sustainability": "Climate and sustainability programs worldwide.",
+    "Disaster Relief": "Supports crisis response and recovery efforts."
+  }
+};
 
 const GrantWriting = () => {
   const [activeTab, setActiveTab] = useState('generator');
@@ -86,9 +197,14 @@ const GrantWriting = () => {
     location: '',
     fundingAmount: '',
     organizationStage: '',
+    category: '',
+    subcategory: '',
   });
   const [isSearching, setIsSearching] = useState(false);
   const [foundGrants, setFoundGrants] = useState<Grant[]>([]);
+  const [localResources, setLocalResources] = useState<LocalResource[]>([]);
+  const [isSearchingResources, setIsSearchingResources] = useState(false);
+  const [availableSubcategories, setAvailableSubcategories] = useState<string[]>([]);
 
   const handleInputChange = (field: keyof GrantFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -96,6 +212,13 @@ const GrantWriting = () => {
 
   const handleSearchChange = (field: keyof GrantSearchData, value: string) => {
     setSearchData(prev => ({ ...prev, [field]: value }));
+    
+    // Handle cascading dropdown for categories
+    if (field === 'category') {
+      const subcategories = Object.keys(GRANT_CATEGORIES[value as keyof typeof GRANT_CATEGORIES] || {});
+      setAvailableSubcategories(subcategories);
+      setSearchData(prev => ({ ...prev, category: value, subcategory: '' }));
+    }
   };
 
   const generateGrantDocuments = async () => {
@@ -133,8 +256,8 @@ const GrantWriting = () => {
   };
 
   const searchGrants = async () => {
-    if (!searchData.organizationType || !searchData.industry) {
-      toast.error('Please fill in Organization Type and Industry');
+    if (!searchData.organizationType || !searchData.category) {
+      toast.error('Please fill in Organization Type and Category');
       return;
     }
 
@@ -146,21 +269,65 @@ const GrantWriting = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(searchData),
+        body: JSON.stringify({
+          businessType: searchData.organizationType,
+          industry: searchData.industry,
+          location: searchData.location,
+          fundingAmount: searchData.fundingAmount,
+          businessStage: searchData.organizationStage,
+          category: searchData.category,
+          subcategory: searchData.subcategory,
+        }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to search grants');
       }
 
-      const grants = await response.json();
-      setFoundGrants(grants);
-      toast.success(`Found ${grants.length} potential grant opportunities!`);
+      const data = await response.json();
+      setFoundGrants(data.grants || []);
+      toast.success(`Found ${data.grants?.length || 0} potential grant opportunities!`);
     } catch (error) {
       console.error('Error searching grants:', error);
       toast.error('Failed to search grants. Please try again.');
     } finally {
       setIsSearching(false);
+    }
+  };
+
+  const searchLocalResources = async () => {
+    if (!searchData.location) {
+      toast.error('Please provide a location to find local grant assistance resources');
+      return;
+    }
+
+    setIsSearchingResources(true);
+    
+    try {
+      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/grant-resources', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          location: searchData.location,
+          category: searchData.category,
+          subcategory: searchData.subcategory,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to find local resources');
+      }
+
+      const data = await response.json();
+      setLocalResources(data.resources?.resources || []);
+      toast.success(`Found ${data.resources?.resources?.length || 0} local grant assistance resources!`);
+    } catch (error) {
+      console.error('Error finding local resources:', error);
+      toast.error('Failed to find local resources. Please try again.');
+    } finally {
+      setIsSearchingResources(false);
     }
   };
 
@@ -742,47 +909,118 @@ const GrantWriting = () => {
                         </Select>
                       </div>
 
-                      <Button 
-                        onClick={searchGrants} 
-                        disabled={isSearching}
-                        className="w-full h-11"
-                        size="lg"
-                      >
-                        {isSearching ? (
-                          <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Searching Grants...
-                          </>
-                        ) : (
-                          <>
-                            <Search className="h-4 w-4 mr-2" />
-                            Find Grant Opportunities
-                          </>
-                        )}
-                      </Button>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="category">Grant Category *</Label>
+                          <Select onValueChange={(value) => handleSearchChange('category', value)}>
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder="Select category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.keys(GRANT_CATEGORIES).map((cat) => (
+                                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="subcategory">Grant Subcategory</Label>
+                          <Select 
+                            value={searchData.subcategory}
+                            onValueChange={(value) => handleSearchChange('subcategory', value)}
+                            disabled={!searchData.category}
+                          >
+                            <SelectTrigger className="h-10">
+                              <SelectValue placeholder={searchData.category ? "Select subcategory" : "Select category first"} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {availableSubcategories.map((subcat) => (
+                                <SelectItem key={subcat} value={subcat}>
+                                  {subcat}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {searchData.category && searchData.subcategory && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {GRANT_CATEGORIES[searchData.category as keyof typeof GRANT_CATEGORIES][searchData.subcategory as keyof typeof GRANT_CATEGORIES[keyof typeof GRANT_CATEGORIES]]}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3">
+                        <Button 
+                          onClick={searchGrants} 
+                          disabled={isSearching}
+                          className="flex-1 h-11"
+                          size="lg"
+                        >
+                          {isSearching ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                              Searching Grants...
+                            </>
+                          ) : (
+                            <>
+                              <Search className="h-4 w-4 mr-2" />
+                              Find Online Grants
+                            </>
+                          )}
+                        </Button>
+                        <Button 
+                          onClick={searchLocalResources} 
+                          disabled={isSearchingResources || !searchData.location}
+                          variant="outline"
+                          className="flex-1 h-11"
+                          size="lg"
+                        >
+                          {isSearchingResources ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mr-2"></div>
+                              Finding Resources...
+                            </>
+                          ) : (
+                            <>
+                              <Search className="h-4 w-4 mr-2" />
+                              Find Local Assistance
+                            </>
+                          )}
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
 
                 {/* Results Section */}
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-2 space-y-6">
+                  {/* Online Grants Results */}
                   {foundGrants.length > 0 && (
                     <div className="space-y-4">
                       <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-semibold">Found Grants</h3>
+                        <h3 className="text-xl font-semibold">Online Grant Opportunities</h3>
                         <span className="bg-primary text-primary-foreground px-2 py-1 rounded-full text-sm">
                           {foundGrants.length}
                         </span>
                       </div>
                       
-                      <div className="space-y-4 max-h-96 overflow-y-auto">
+                      <div className="space-y-4 max-h-[600px] overflow-y-auto">
                         {foundGrants.map((grant, index) => (
                           <Card key={index} className="border">
                             <CardHeader className="pb-3">
-                              <CardTitle className="text-lg">{grant.name}</CardTitle>
-                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                <span className="font-medium text-primary">{grant.amount}</span>
+                              <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg">{grant.name}</CardTitle>
+                                <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full">
+                                  {grant.category}
+                                </span>
+                              </div>
+                              <p className="text-sm text-muted-foreground">{grant.organization}</p>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
+                                <span className="font-medium text-primary">{grant.amountRange}</span>
                                 <span>{grant.deadline}</span>
+                                <span className="text-xs bg-accent text-accent-foreground px-2 py-1 rounded-full">
+                                  Match: {grant.matchScore}%
+                                </span>
                               </div>
                             </CardHeader>
                             <CardContent>
@@ -790,17 +1028,102 @@ const GrantWriting = () => {
                               <div className="space-y-2">
                                 <div>
                                   <span className="text-xs font-medium text-muted-foreground">Eligibility:</span>
-                                  <p className="text-sm">{grant.eligibility}</p>
+                                  <ul className="text-sm list-disc list-inside mt-1">
+                                    {grant.eligibility.map((req, i) => (
+                                      <li key={i}>{req}</li>
+                                    ))}
+                                  </ul>
                                 </div>
-                                {grant.link && (
+                                <div>
+                                  <span className="text-xs font-medium text-muted-foreground">Difficulty: </span>
+                                  <span className="text-sm">{grant.difficulty}</span>
+                                </div>
+                                {grant.tips && (
+                                  <div>
+                                    <span className="text-xs font-medium text-muted-foreground">Success Tips:</span>
+                                    <p className="text-sm mt-1">{grant.tips}</p>
+                                  </div>
+                                )}
+                                <div className="flex gap-2 mt-3">
+                                  {grant.websiteUrl && (
+                                    <Button 
+                                      variant="default" 
+                                      size="sm"
+                                      onClick={() => window.open(grant.websiteUrl, '_blank')}
+                                      className="flex-1"
+                                    >
+                                      <ArrowRight className="h-3 w-3 mr-1" />
+                                      View Grant Website
+                                    </Button>
+                                  )}
+                                  {grant.applicationUrl && (
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      onClick={() => window.open(grant.applicationUrl, '_blank')}
+                                      className="flex-1"
+                                    >
+                                      Apply Now
+                                    </Button>
+                                  )}
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Local Grant Assistance Resources */}
+                  {localResources.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-xl font-semibold">Local Grant Assistance Resources</h3>
+                        <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-sm">
+                          {localResources.length}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-4 max-h-[600px] overflow-y-auto">
+                        {localResources.map((resource, index) => (
+                          <Card key={index} className="border">
+                            <CardHeader className="pb-3">
+                              <div className="flex items-center justify-between">
+                                <CardTitle className="text-lg">{resource.name}</CardTitle>
+                                <span className="text-xs bg-accent text-accent-foreground px-2 py-1 rounded-full">
+                                  {resource.type}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                                {resource.rating && (
+                                  <div className="flex items-center gap-1">
+                                    <span className="text-yellow-500">★</span>
+                                    <span>{resource.rating}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-muted-foreground mb-3">{resource.description}</p>
+                              <div className="space-y-2 text-sm">
+                                <div>
+                                  <span className="font-medium text-muted-foreground">Address: </span>
+                                  <span>{resource.address}</span>
+                                </div>
+                                <div>
+                                  <span className="font-medium text-muted-foreground">Phone: </span>
+                                  <span>{resource.phone}</span>
+                                </div>
+                                {resource.website && (
                                   <Button 
                                     variant="outline" 
                                     size="sm"
-                                    onClick={() => window.open(grant.link, '_blank')}
-                                    className="w-full"
+                                    onClick={() => window.open(resource.website, '_blank')}
+                                    className="w-full mt-2"
                                   >
                                     <ArrowRight className="h-3 w-3 mr-1" />
-                                    View Grant Details
+                                    Visit Website
                                   </Button>
                                 )}
                               </div>
