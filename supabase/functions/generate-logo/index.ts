@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { businessName, industry, style } = await req.json();
+    const { businessName, industry, style, colors, fonts, textDesired, additionalPrompt } = await req.json();
     
     if (!businessName || !industry || !style) {
       return new Response(
@@ -29,13 +29,20 @@ serve(async (req) => {
       );
     }
 
-    console.log('Generating logo for:', { businessName, industry, style });
+    console.log('Generating logo for:', { businessName, industry, style, colors, fonts, textDesired });
+
+    // Build additional context from optional fields
+    let additionalContext = '';
+    if (colors) additionalContext += ` Use color palette: ${colors}.`;
+    if (fonts) additionalContext += ` Font style: ${fonts}.`;
+    if (textDesired) additionalContext += ` Text to include: ${textDesired}.`;
+    if (additionalPrompt) additionalContext += ` ${additionalPrompt}`;
 
     // Generate 3 logo concepts
     const logoPrompts = [
-      `Create a professional ${style} logo for "${businessName}", a ${industry} business. Clean, modern design suitable for business use. Include business name. High quality, transparent background.`,
-      `Design a ${style} emblem for "${businessName}" ${industry} company. Professional, memorable, and brand-appropriate. Include business name. High quality, transparent background.`,
-      `Generate a ${style} icon design for "${businessName}" in the ${industry} industry. Simple, elegant, and professional. Include business name. High quality, transparent background.`
+      `Create a professional ${style} logo for "${businessName}", a ${industry} business.${additionalContext} Clean, modern design suitable for business use. High quality, transparent background.`,
+      `Design a ${style} emblem for "${businessName}" ${industry} company.${additionalContext} Professional, memorable, and brand-appropriate. High quality, transparent background.`,
+      `Generate a ${style} icon design for "${businessName}" in the ${industry} industry.${additionalContext} Simple, elegant, and professional. High quality, transparent background.`
     ];
 
     const logos = await Promise.all(

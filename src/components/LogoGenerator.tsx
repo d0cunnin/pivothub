@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Palette, Type, Sparkles } from 'lucide-react';
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Palette, Type, Sparkles, AlertCircle } from 'lucide-react';
 
 interface LogoConcept {
   style: string;
@@ -17,6 +19,10 @@ export const LogoGenerator = () => {
   const [businessName, setBusinessName] = useState('');
   const [industry, setIndustry] = useState('');
   const [style, setStyle] = useState('');
+  const [colors, setColors] = useState('');
+  const [fonts, setFonts] = useState('');
+  const [textDesired, setTextDesired] = useState('');
+  const [additionalPrompt, setAdditionalPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [concepts, setConcepts] = useState<LogoConcept[]>([]);
 
@@ -33,7 +39,11 @@ export const LogoGenerator = () => {
         body: JSON.stringify({
           businessName,
           industry,
-          style
+          style,
+          colors,
+          fonts,
+          textDesired,
+          additionalPrompt
         })
       });
 
@@ -79,7 +89,14 @@ export const LogoGenerator = () => {
         <h3 className="text-xl font-bold text-foreground">Logo Concept Generator</h3>
       </div>
       
-      <p className="text-sm text-muted-foreground mb-6">Generate custom logo designs for your business. Describe your vision and get multiple professional logo concepts to choose from.</p>
+      <p className="text-sm text-muted-foreground mb-4">Generate custom logo designs for your business. Describe your vision and get multiple professional logo concepts to choose from.</p>
+      
+      <Alert className="mb-6 border-warning/50 bg-warning/10">
+        <AlertCircle className="h-4 w-4 text-warning" />
+        <AlertDescription className="text-sm text-foreground">
+          <strong>Disclaimer:</strong> Logos are generated using AI technology. While we strive for quality, we are not responsible for the final output. Please review carefully and consider professional design services for commercial use.
+        </AlertDescription>
+      </Alert>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
@@ -127,6 +144,43 @@ export const LogoGenerator = () => {
               <SelectItem value="elegant">Elegant</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Colors (Optional)</label>
+          <Input
+            value={colors}
+            onChange={(e) => setColors(e.target.value)}
+            placeholder="e.g., Blue and gold, vibrant colors, monochrome"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Fonts (Optional)</label>
+          <Input
+            value={fonts}
+            onChange={(e) => setFonts(e.target.value)}
+            placeholder="e.g., Modern sans-serif, classic serif, bold"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Text to Include (Optional)</label>
+          <Input
+            value={textDesired}
+            onChange={(e) => setTextDesired(e.target.value)}
+            placeholder="e.g., Company name only, name + tagline"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2 text-foreground">Additional Design Instructions (Optional)</label>
+          <Textarea
+            value={additionalPrompt}
+            onChange={(e) => setAdditionalPrompt(e.target.value)}
+            placeholder="Describe any specific elements, symbols, or concepts you want in your logo..."
+            rows={3}
+          />
         </div>
 
         <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
