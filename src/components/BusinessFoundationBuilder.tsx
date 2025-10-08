@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Target, Download, Sparkles } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -245,12 +246,35 @@ export const BusinessFoundationBuilder = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="industry">Industry * - e.g., Tech, Healthcare, Retail</Label>
-            <Input
-              id="industry"
-              value={formData.industry}
-              onChange={(e) => handleInputChange("industry", e.target.value)}
-            />
+            <Label htmlFor="industry">Industry * - Select your business industry</Label>
+            <Select value={formData.industry} onValueChange={(value) => handleInputChange("industry", value)}>
+              <SelectTrigger className="bg-background">
+                <SelectValue placeholder="Select an industry" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="Technology">Technology</SelectItem>
+                <SelectItem value="Healthcare">Healthcare</SelectItem>
+                <SelectItem value="Retail">Retail</SelectItem>
+                <SelectItem value="Food & Beverage">Food & Beverage</SelectItem>
+                <SelectItem value="E-commerce">E-commerce</SelectItem>
+                <SelectItem value="Finance">Finance</SelectItem>
+                <SelectItem value="Education">Education</SelectItem>
+                <SelectItem value="Real Estate">Real Estate</SelectItem>
+                <SelectItem value="Consulting">Consulting</SelectItem>
+                <SelectItem value="Marketing & Advertising">Marketing & Advertising</SelectItem>
+                <SelectItem value="Manufacturing">Manufacturing</SelectItem>
+                <SelectItem value="Construction">Construction</SelectItem>
+                <SelectItem value="Transportation & Logistics">Transportation & Logistics</SelectItem>
+                <SelectItem value="Hospitality & Tourism">Hospitality & Tourism</SelectItem>
+                <SelectItem value="Entertainment & Media">Entertainment & Media</SelectItem>
+                <SelectItem value="Professional Services">Professional Services</SelectItem>
+                <SelectItem value="Beauty & Wellness">Beauty & Wellness</SelectItem>
+                <SelectItem value="Fitness & Sports">Fitness & Sports</SelectItem>
+                <SelectItem value="Agriculture">Agriculture</SelectItem>
+                <SelectItem value="Nonprofit">Nonprofit</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
