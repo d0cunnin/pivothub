@@ -96,10 +96,18 @@ Products/Services: ${data.productsServices}
 Traction: ${data.traction}
 Achievements: ${data.achievements}
 
-Format as three sections separated by double line breaks:
-1. Founder Biography
-2. Vision Statement  
-3. Mission Statement`
+CRITICAL: Format your response EXACTLY as shown below with [SECTION] markers:
+
+[BIOGRAPHY]
+Write a compelling 2-3 paragraph founder biography here in plain text.
+
+[VISION]
+Write a concise vision statement here in plain text (1-2 paragraphs).
+
+[MISSION]
+Write a clear mission statement here in plain text (1-2 paragraphs).
+
+Do NOT include the section labels in your output, only the content for each section.`
         break
 
       case 'social-media':
