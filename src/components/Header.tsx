@@ -95,12 +95,12 @@ export const Header = () => {
                 Pricing
               </Link>
               <Link 
-                to="/downloads" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/downloads' ? 'text-primary font-medium' : ''}`}
+                to="/teachit" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/teachit' ? 'text-primary font-medium' : ''}`}
               >
-                Downloads
+                Teach It
               </Link>
-              <Link 
+              <Link
                 to="/grantwriting" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
               >
@@ -220,13 +220,13 @@ export const Header = () => {
                 Pricing
               </Link>
                <Link 
-                to="/downloads" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/downloads' ? 'text-primary font-medium' : ''}`}
+                to="/teachit" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/teachit' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                Downloads
+                Teach It
               </Link>
-               <Link 
+               <Link
                 to="/grantwriting" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
