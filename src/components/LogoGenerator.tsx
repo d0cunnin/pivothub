@@ -22,9 +22,10 @@ export const LogoGenerator = () => {
 
   const generateLogoConcepts = async () => {
     setIsGenerating(true);
+    setConcepts([]);
     
     try {
-      const response = await fetch('/functions/v1/generate-logo', {
+      const response = await fetch(`https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/generate-logo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,28 +43,25 @@ export const LogoGenerator = () => {
         throw new Error(data.error);
       }
 
-      // Convert API response to LogoConcept format
-      const logosConcepts: LogoConcept[] = data.logos.map((logo: any, index: number) => ({
-        style: logo.style,
-        colors: "AI Generated Colors",
-        fonts: "AI Generated Typography", 
-        concept: logo.concept,
-        imageURL: logo.imageURL
-      }));
+      // Convert API response to LogoConcept format, filtering out failed generations
+      const logosConcepts: LogoConcept[] = data.logos
+        .filter((logo: any) => logo.imageURL)
+        .map((logo: any) => ({
+          style: logo.style,
+          colors: "AI Generated",
+          fonts: "AI Generated", 
+          concept: logo.concept,
+          imageURL: logo.imageURL
+        }));
+
+      if (logosConcepts.length === 0) {
+        throw new Error('No logos were successfully generated');
+      }
 
       setConcepts(logosConcepts);
     } catch (error) {
       console.error('Error generating logos:', error);
-      // Fallback to mock data if API fails
-      const mockConcepts: LogoConcept[] = [
-        {
-          style: "Modern Minimalist",
-          colors: "Deep Blue (#1e40af) & White", 
-          fonts: "Inter, Clean Sans-serif",
-          concept: "Clean geometric icon with business initials, emphasizing professionalism and trust"
-        }
-      ];
-      setConcepts(mockConcepts);
+      alert(`Failed to generate logos: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsGenerating(false);
     }
@@ -138,24 +136,46 @@ export const LogoGenerator = () => {
 
       {concepts.length > 0 && (
         <div className="space-y-4">
-          <h4 className="font-semibold text-foreground">Logo Concepts</h4>
-          {concepts.map((concept, index) => (
-            <Card key={index} className="p-4 border-l-4 border-secondary">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-secondary/10 rounded-lg flex items-center justify-center mt-1">
-                  <Type className="h-4 w-4 text-secondary" />
-                </div>
-                <div className="flex-1">
-                  <h5 className="font-medium text-foreground mb-1">{concept.style}</h5>
-                  <p className="text-sm text-muted-foreground mb-2">{concept.concept}</p>
-                  <div className="text-xs space-y-1">
-                    <p><span className="font-medium">Colors:</span> {concept.colors}</p>
-                    <p><span className="font-medium">Typography:</span> {concept.fonts}</p>
+          <h4 className="font-semibold text-foreground mb-4">Generated Logo Concepts</h4>
+          <div className="grid md:grid-cols-2 gap-4">
+            {concepts.map((concept, index) => (
+              <Card key={index} className="p-4 border-2 border-secondary/20 hover:border-secondary/40 transition-colors">
+                {concept.imageURL && (
+                  <div className="mb-4 bg-muted rounded-lg overflow-hidden">
+                    <img 
+                      src={concept.imageURL} 
+                      alt={`Logo concept: ${concept.style}`}
+                      className="w-full h-auto"
+                    />
                   </div>
+                )}
+                <div className="space-y-2">
+                  <div className="flex items-start gap-2">
+                    <Sparkles className="h-4 w-4 text-secondary mt-1 flex-shrink-0" />
+                    <div>
+                      <h5 className="font-medium text-foreground">{concept.style}</h5>
+                      <p className="text-sm text-muted-foreground mt-1">{concept.concept}</p>
+                    </div>
+                  </div>
+                  {concept.imageURL && (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = concept.imageURL!;
+                        link.download = `${businessName}-logo-${index + 1}.png`;
+                        link.click();
+                      }}
+                    >
+                      Download Logo
+                    </Button>
+                  )}
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            ))}
+          </div>
         </div>
       )}
     </Card>
