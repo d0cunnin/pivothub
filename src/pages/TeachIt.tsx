@@ -52,12 +52,14 @@ const TeachIt = () => {
       </section>
 
       {/* Why Teach Section */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section className="pt-16 pb-8 bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
-              Why Teach Online?
-            </h2>
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Why Teach Online?
+              </h2>
+            </div>
             <div className="max-w-3xl mx-auto text-left">
               <ul className="space-y-4 text-lg text-foreground/80">
                 <li className="flex items-start">
@@ -79,7 +81,7 @@ const TeachIt = () => {
       </section>
 
       {/* Getting Started Section */}
-      <section id="getting-started" className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      <section id="getting-started" className="pt-8 pb-16 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
