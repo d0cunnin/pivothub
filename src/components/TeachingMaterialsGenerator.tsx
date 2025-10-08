@@ -76,7 +76,8 @@ const audienceOptions = [
 ];
 
 const educationLevels = [
-  "High School",
+  "High School Diploma/GED",
+  "Skilled Trades",
   "Associate's Degree",
   "Bachelor's Degree",
   "Master's Degree",
@@ -585,14 +586,14 @@ ${generatedMaterials.lessonScript}
 
           {/* Education Level */}
           <div className="space-y-2">
-            <Label htmlFor="educationLevel">Highest Level of Education</Label>
+            <Label htmlFor="educationLevel">Education/Training</Label>
             <select
               id="educationLevel"
               value={formData.educationLevel}
               onChange={(e) => setFormData({ ...formData, educationLevel: e.target.value, major: "", professionalDegreeType: "" })}
               className="w-full px-3 py-2 border border-input bg-background rounded-md"
             >
-              <option value="">Select education level</option>
+              <option value="">Select education/training level</option>
               {educationLevels.map((level) => (
                 <option key={level} value={level}>
                   {level}
@@ -621,8 +622,8 @@ ${generatedMaterials.lessonScript}
             </div>
           )}
 
-          {/* Major - Only show if education level is selected and not "High School", "Professional Degree", or "Other" */}
-          {formData.educationLevel && formData.educationLevel !== "High School" && formData.educationLevel !== "Professional Degree" && formData.educationLevel !== "Other" && (
+          {/* Major - Only show if education level is selected and not "High School Diploma/GED", "Skilled Trades", "Professional Degree", or "Other" */}
+          {formData.educationLevel && formData.educationLevel !== "High School Diploma/GED" && formData.educationLevel !== "Skilled Trades" && formData.educationLevel !== "Professional Degree" && formData.educationLevel !== "Other" && (
             <div className="space-y-2">
               <Label htmlFor="major">Major / Field of Study</Label>
               <select
