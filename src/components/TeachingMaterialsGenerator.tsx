@@ -27,6 +27,7 @@ interface TeachingMaterialsData {
   militaryRole?: string;
   experience: string;
   educationLevel: string;
+  professionalDegreeType?: string;
   major: string;
   otherMajor?: string;
   certifications: string;
@@ -81,6 +82,30 @@ const educationLevels = [
   "Master's Degree",
   "Doctorate (PhD)",
   "Professional Degree",
+  "Other"
+];
+
+const professionalDegreeTypes = [
+  "Doctor of Medicine (MD)",
+  "Doctor of Osteopathic Medicine (DO)",
+  "Doctor of Veterinary Medicine (DVM)",
+  "Juris Doctor (JD)",
+  "Doctor of Pharmacy (PharmD)",
+  "Doctor of Dental Surgery (DDS)",
+  "Doctor of Dental Medicine (DMD)",
+  "Doctor of Physical Therapy (DPT)",
+  "Doctor of Nursing Practice (DNP)",
+  "Doctor of Psychology (PsyD)",
+  "Doctor of Education (EdD)",
+  "Doctor of Philosophy (PhD)",
+  "Doctor of Optometry (OD)",
+  "Doctor of Audiology (AuD)",
+  "Doctor of Occupational Therapy (OTD)",
+  "Doctor of Podiatric Medicine (DPM)",
+  "Doctor of Chiropractic (DC)",
+  "Doctor of Social Work (DSW)",
+  "Master of Science in Nursing (MSN)",
+  "Physician Assistant (PA)",
   "Other"
 ];
 
@@ -564,7 +589,7 @@ ${generatedMaterials.lessonScript}
             <select
               id="educationLevel"
               value={formData.educationLevel}
-              onChange={(e) => setFormData({ ...formData, educationLevel: e.target.value, major: "" })}
+              onChange={(e) => setFormData({ ...formData, educationLevel: e.target.value, major: "", professionalDegreeType: "" })}
               className="w-full px-3 py-2 border border-input bg-background rounded-md"
             >
               <option value="">Select education level</option>
@@ -576,8 +601,28 @@ ${generatedMaterials.lessonScript}
             </select>
           </div>
 
-          {/* Major - Only show if education level is selected and not "High School" or "Other" */}
-          {formData.educationLevel && formData.educationLevel !== "High School" && formData.educationLevel !== "Other" && (
+          {/* Professional Degree Type - Show if Professional Degree is selected */}
+          {formData.educationLevel === "Professional Degree" && (
+            <div className="space-y-2">
+              <Label htmlFor="professionalDegreeType">Professional Degree Type</Label>
+              <select
+                id="professionalDegreeType"
+                value={formData.professionalDegreeType || ""}
+                onChange={(e) => setFormData({ ...formData, professionalDegreeType: e.target.value })}
+                className="w-full px-3 py-2 border border-input bg-background rounded-md"
+              >
+                <option value="">Select degree type</option>
+                {professionalDegreeTypes.map((degree) => (
+                  <option key={degree} value={degree}>
+                    {degree}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Major - Only show if education level is selected and not "High School", "Professional Degree", or "Other" */}
+          {formData.educationLevel && formData.educationLevel !== "High School" && formData.educationLevel !== "Professional Degree" && formData.educationLevel !== "Other" && (
             <div className="space-y-2">
               <Label htmlFor="major">Major / Field of Study</Label>
               <select

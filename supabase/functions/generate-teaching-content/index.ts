@@ -33,7 +33,9 @@ serve(async (req) => {
       
       // Construct education string
       let education = data.educationLevel || 'Not specified'
-      if (data.major && data.major !== 'Other') {
+      if (data.educationLevel === 'Professional Degree' && data.professionalDegreeType) {
+        education = data.professionalDegreeType
+      } else if (data.major && data.major !== 'Other') {
         education += ` in ${data.major}`
       } else if (data.major === 'Other' && data.otherMajor) {
         education += ` in ${data.otherMajor}`
