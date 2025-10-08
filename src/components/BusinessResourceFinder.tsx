@@ -54,11 +54,6 @@ export const BusinessResourceFinder = () => {
         throw new Error('Invalid response from server');
       }
 
-      if (fnData.resources.categories.length === 0) {
-        console.warn('No resources found from API, using fallback');
-        throw new Error('No resources found');
-      }
-
       const data = fnData;
 
       // Transform AI response to match existing interface

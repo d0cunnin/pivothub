@@ -14,60 +14,63 @@ serve(async (req) => {
   try {
     const { businessType, industry, stage, location, specificNeeds } = await req.json();
     
-    const openaiApiKey = Deno.env.get('relaunch_openai_key');
-    if (!openaiApiKey) {
-      console.error('OpenAI API key not found, using fallback');
-      return fallbackResponse();
-    }
-
-    // Construct a focused search query for local business resources
-    const searchQuery = `Find local business resources in ZIP code ${location} for ${specificNeeds}. Include:
-- Business incubators and accelerators
-- Small Business Development Centers (SBDC)
-- SCORE chapters
-- Co-working spaces
-- Business networking groups
-- Local funding sources
-- Business support organizations
-- Entrepreneurship programs
-Provide real names, addresses, phone numbers, websites, and brief descriptions. Format your response as a structured list.`;
-
-    console.log('Searching for business resources with query:', searchQuery);
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-5-mini-2025-08-07',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a business resource finder. Return ONLY valid JSON with this exact shape and no markdown, no text outside JSON: {"categories":[{"category":"string","description":"string","resources":[{"id":"string","name":"string","description":"string","type":"string","url":"string","cost":"string","rating":number,"pros":["string"],"cons":["string"],"bestFor":"string","location":"string","contactInfo":"string"}]}], "totalResources": number, "recommendedFirst": ["string"], "summary": "string"}. Ensure at least 3 resources overall using real organizations when possible.'
-          },
-          {
-            role: 'user',
-            content: searchQuery + '\nReturn only the JSON object described above. Do not include code fences.'
-          }
-        ],
-        max_completion_tokens: 2000
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('OpenAI API error:', response.status);
-      return fallbackResponse();
-    }
-
-    const data = await response.json();
-    const aiResponse = data.choices?.[0]?.message?.content || '';
+    const googleApiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
     
-    console.log('OpenAI response received');
+    if (!googleApiKey) {
+      console.error('Google Places API key not found, using fallback');
+      return fallbackResponse();
+    }
 
-    // Parse and structure the response
-    const resources = parseBusinessResources(aiResponse, location);
+    console.log('Searching for business resources in location:', location);
+
+    // Search for different types of business resources
+    const searchQueries = [
+      `small business development center ${location}`,
+      `SCORE business mentoring ${location}`,
+      `business incubator ${location}`,
+      `coworking space ${location}`,
+      `entrepreneurship center ${location}`
+    ];
+
+    const allPlaces: any[] = [];
+
+    // Fetch results for each query
+    for (const query of searchQueries) {
+      try {
+        const placesUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(query)}&key=${googleApiKey}`;
+        const placesResponse = await fetch(placesUrl);
+        
+        if (placesResponse.ok) {
+          const placesData = await placesResponse.json();
+          if (placesData.results && placesData.results.length > 0) {
+            // Get details for the top result
+            const place = placesData.results[0];
+            const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place.place_id}&fields=name,formatted_address,formatted_phone_number,website,rating,business_status&key=${googleApiKey}`;
+            const detailsResponse = await fetch(detailsUrl);
+            
+            if (detailsResponse.ok) {
+              const detailsData = await detailsResponse.json();
+              if (detailsData.result) {
+                allPlaces.push({
+                  ...place,
+                  details: detailsData.result
+                });
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.error(`Error fetching places for query "${query}":`, err);
+      }
+    }
+
+    if (allPlaces.length === 0) {
+      console.log('No places found, using fallback');
+      return fallbackResponse();
+    }
+
+    // Format the results
+    const resources = formatGooglePlacesResults(allPlaces, location);
 
     return new Response(
       JSON.stringify({ resources }),
@@ -83,88 +86,62 @@ Provide real names, addresses, phone numbers, websites, and brief descriptions. 
   }
 });
 
-function parseBusinessResources(aiResponse: string, location: string) {
-  // Try to extract JSON if present
-  const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    try {
-      const parsed = JSON.parse(jsonMatch[0]);
-      if (parsed.categories) return parsed;
-    } catch (e) {
-      console.log('Failed to parse JSON from AI response');
-    }
-  }
-
-  // Parse text response into structured format
+function formatGooglePlacesResults(places: any[], location: string) {
   const categories = [
     {
       category: "Business Support Centers",
       description: "Local organizations providing business guidance and support",
-      resources: []
+      resources: [] as any[]
     },
     {
-      category: "Funding Sources",
-      description: "Local funding and investment opportunities",
-      resources: []
+      category: "Coworking & Incubators",
+      description: "Workspace and incubation programs for entrepreneurs",
+      resources: [] as any[]
     },
     {
-      category: "Networking & Community",
-      description: "Business networking groups and entrepreneurship communities",
-      resources: []
+      category: "Mentorship & Education",
+      description: "Business mentoring and entrepreneurship programs",
+      resources: [] as any[]
     }
   ];
 
-  // Extract resource information from the text
-  const lines = aiResponse.split('\n');
-  let currentResource: any = {};
-  let resourceCount = 0;
-
-  lines.forEach(line => {
-    line = line.trim();
-    if (!line) return;
-
-    // Look for organization names (usually in bold or at start of lines)
-    if (line.match(/^\d+\.|^[-•*]/)) {
-      if (currentResource.name) {
-        // Save previous resource
-        const categoryIndex = resourceCount % 3;
-        categories[categoryIndex].resources.push(currentResource);
-        resourceCount++;
-      }
-      currentResource = {
-        id: `resource_${resourceCount + 1}`,
-        name: line.replace(/^\d+\.|^[-•*]\s*/, '').split(/[:(]/)[0].trim(),
-        description: '',
-        type: 'organization',
-        url: '',
-        cost: 'Varies',
-        rating: 4.5,
-        pros: ['Local support', 'Expert guidance'],
-        cons: [],
-        bestFor: 'Small businesses and startups',
-        location: location,
-        contactInfo: ''
-      };
-    } else if (line.match(/https?:\/\//)) {
-      currentResource.url = line.match(/https?:\/\/[^\s]+/)?.[0] || '';
-    } else if (line.match(/\(\d{3}\)|\d{3}-\d{3}-\d{4}/)) {
-      currentResource.contactInfo = line.match(/\(\d{3}\)[- ]?\d{3}-\d{4}|\d{3}-\d{3}-\d{4}/)?.[0] || '';
-    } else if (currentResource.name && !currentResource.description && line.length > 20) {
-      currentResource.description = line;
+  places.forEach((place, index) => {
+    const details = place.details;
+    const query = place.name.toLowerCase();
+    
+    let categoryIndex = 0;
+    if (query.includes('cowork') || query.includes('incubator')) {
+      categoryIndex = 1;
+    } else if (query.includes('score') || query.includes('mentor')) {
+      categoryIndex = 2;
     }
+
+    const resource = {
+      id: `place_${index + 1}`,
+      name: details.name || place.name,
+      description: `${details.name} provides business support and resources for entrepreneurs and small businesses in ${location}.`,
+      type: 'organization',
+      url: details.website || '',
+      cost: 'Contact for details',
+      rating: details.rating || 4.5,
+      pros: ['Real local organization', 'Professional support', 'Verified by Google'],
+      cons: ['Contact for availability'],
+      bestFor: 'Local entrepreneurs and small businesses',
+      location: details.formatted_address || location,
+      contactInfo: details.formatted_phone_number || 'Contact via website'
+    };
+
+    categories[categoryIndex].resources.push(resource);
   });
 
-  // Add the last resource
-  if (currentResource.name) {
-    const categoryIndex = resourceCount % 3;
-    categories[categoryIndex].resources.push(currentResource);
-  }
+  const totalResources = places.length;
+  const activeCategories = categories.filter(cat => cat.resources.length > 0);
 
   return {
-    categories: categories.filter(cat => cat.resources.length > 0),
-    totalResources: resourceCount,
-    recommendedFirst: categories[0]?.resources.slice(0, 2).map((r: any) => r.id) || [],
-    summary: `Found ${resourceCount} local business resources in the ${location} area based on real-time web search.`
+    categories: activeCategories,
+    totalResources,
+    recommendedFirst: activeCategories[0]?.resources.slice(0, 2).map(r => r.id) || [],
+    summary: `Found ${totalResources} verified local business resources in ${location} using Google Places data.`
   };
 }
 
