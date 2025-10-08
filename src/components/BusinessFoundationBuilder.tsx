@@ -191,20 +191,18 @@ export const BusinessFoundationBuilder = () => {
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="businessName">Business Name *</Label>
+            <Label htmlFor="businessName">Business Name * - Your business name</Label>
             <Input
               id="businessName"
-              placeholder="Your business name"
               value={formData.businessName}
               onChange={(e) => handleInputChange("businessName", e.target.value)}
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="industry">Industry *</Label>
+            <Label htmlFor="industry">Industry * - e.g., Tech, Healthcare, Retail</Label>
             <Input
               id="industry"
-              placeholder="e.g., Tech, Healthcare, Retail"
               value={formData.industry}
               onChange={(e) => handleInputChange("industry", e.target.value)}
             />
@@ -212,10 +210,9 @@ export const BusinessFoundationBuilder = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="experience">Your Experience & Background</Label>
+          <Label htmlFor="experience">Your Experience & Background - What relevant experience do you bring? What makes you qualified?</Label>
           <Textarea
             id="experience"
-            placeholder="What relevant experience do you bring? What makes you qualified?"
             value={formData.experience}
             onChange={(e) => handleInputChange("experience", e.target.value)}
             rows={2}
@@ -223,10 +220,9 @@ export const BusinessFoundationBuilder = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="passion">Your Passion & Motivation</Label>
+          <Label htmlFor="passion">Your Passion & Motivation - What drives you? Why does this matter to you?</Label>
           <Textarea
             id="passion"
-            placeholder="What drives you? Why does this matter to you?"
             value={formData.passion}
             onChange={(e) => handleInputChange("passion", e.target.value)}
             rows={2}
@@ -234,10 +230,9 @@ export const BusinessFoundationBuilder = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="customers">Who Are Your Customers?</Label>
+          <Label htmlFor="customers">Who Are Your Customers? - Describe the people or businesses you want to serve</Label>
           <Textarea
             id="customers"
-            placeholder="Describe the people or businesses you want to serve"
             value={formData.customers}
             onChange={(e) => handleInputChange("customers", e.target.value)}
             rows={2}

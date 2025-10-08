@@ -118,41 +118,38 @@ export const SocialMediaGenerator = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Type</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Type - e.g., Digital marketing agency, Coffee shop, Fitness coaching</label>
           <Input
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value)}
-            placeholder="e.g., Digital marketing agency, Coffee shop, Fitness coaching"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Target Audience</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Target Audience - e.g., Small business owners, Fitness enthusiasts, Working professionals</label>
           <Input
             value={targetAudience}
             onChange={(e) => setTargetAudience(e.target.value)}
-            placeholder="e.g., Small business owners, Fitness enthusiasts, Working professionals"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Products/Services</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Products/Services - Describe your main products or services</label>
           <Textarea
             value={products}
             onChange={(e) => setProducts(e.target.value)}
-            placeholder="Describe your main products or services"
             rows={2}
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Brand Tone</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Brand Tone - Select your brand tone</label>
           <Select value={tone} onValueChange={setTone}>
             <SelectTrigger>
-              <SelectValue placeholder="Select your brand tone" />
+              <SelectValue placeholder="Choose tone" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="professional">Professional</SelectItem>

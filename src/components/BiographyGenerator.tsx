@@ -113,82 +113,74 @@ export const BiographyGenerator = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Founder Name *</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Founder Name * - Enter founder's name</label>
           <Input
             value={founderName}
             onChange={(e) => setFounderName(e.target.value)}
-            placeholder="Enter founder's name"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Professional Background *</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Professional Background * - e.g., software development, marketing, healthcare</label>
           <Input
             value={background}
             onChange={(e) => setBackground(e.target.value)}
-            placeholder="e.g., software development, marketing, healthcare"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Type *</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Type * - e.g., consulting firm, tech startup, retail store</label>
           <Input
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value)}
-            placeholder="e.g., consulting firm, tech startup, retail store"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Goals *</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Goals * - Describe what you want to achieve with your business</label>
           <Textarea
             value={goals}
             onChange={(e) => setGoals(e.target.value)}
-            placeholder="Describe what you want to achieve with your business"
             rows={3}
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Date of Formation (if applicable)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Date of Formation (if applicable) - Select formation date</label>
           <Input
             type="date"
             value={dateOfFormation}
             onChange={(e) => setDateOfFormation(e.target.value)}
-            placeholder="Select formation date"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Products/Services Offered (if applicable)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Products/Services Offered (if applicable) - Describe your main products or services</label>
           <Textarea
             value={productsServices}
             onChange={(e) => setProductsServices(e.target.value)}
-            placeholder="Describe your main products or services"
             rows={3}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Traction (if applicable)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Traction (if applicable) - e.g., number of customers, revenue milestones, partnerships</label>
           <Textarea
             value={traction}
             onChange={(e) => setTraction(e.target.value)}
-            placeholder="e.g., number of customers, revenue milestones, partnerships"
             rows={2}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Achievements (if applicable)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Achievements (if applicable) - e.g., awards, recognition, significant milestones</label>
           <Textarea
             value={achievements}
             onChange={(e) => setAchievements(e.target.value)}
-            placeholder="e.g., awards, recognition, significant milestones"
             rows={2}
           />
         </div>

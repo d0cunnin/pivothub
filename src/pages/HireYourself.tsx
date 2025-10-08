@@ -129,103 +129,130 @@ const HireYourself = () => {
         </div>
       </section>
 
-      {/* Complete Business Toolkit */}
+      {/* Step 1: Validate Idea */}
       <section id="business-tools" className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
         <div className="page-container">
-          {/* Header with Business Image */}
-          <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
-            <div className="animate-fade-in space-y-4">
-              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="section-header">
-                  Complete Business Toolkit
-                </h2>
-              </div>
-              <p className="section-description">
-                Everything you need to launch and grow your business, from idea validation to legal documentation
-              </p>
-              
-              {/* Tools List */}
-              <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10">
-                <h4 className="font-semibold text-foreground mb-3 text-sm">Available Tools:</h4>
-                <div className="grid grid-cols-2 gap-1 text-xs text-muted-foreground">
-                  <span>• Business Idea Generator</span>
-                  <span>• Foundation Builder</span>
-                  <span>• Name & Domain Checker</span>
-                  <span>• Biography Generator</span>
-                  <span>• Logo Designer</span>
-                  <span>• Startup Checklist</span>
-                  <span>• Legal Documents</span>
-                  <span>• Business Mentor AI</span>
-                  <span>• Business Plan Creator</span>
-                  <span>• Pitch Deck Builder</span>
-                  <span>• Marketing Strategy</span>
-                  <span>• Social Media Content</span>
-                  <span>• Resource Library</span>
-                </div>
-              </div>
+          <div className="text-center mb-12">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Step 1: Validate Your Idea
+              </h2>
             </div>
-            
-            <div className="animate-fade-in lg:ml-4 self-center">
-              <img 
-                src="/lovable-uploads/ff570306-7c9e-46e8-9820-4eeea020f969.png" 
-                alt="Team of professionals collaborating with digital technology and business tools" 
-                className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-              />
-            </div>
+            <p className="text-lg text-foreground/80">
+              Use our tools to research and validate your business concept
+            </p>
           </div>
           
-          
-          {/* Business Tools - Single Row Layout */}
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
               <BusinessIdeaGenerator />
             </div>
             
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.05s' }}>
-              <BusinessFoundationBuilder />
-            </div>
-            
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <BusinessPlanGenerator />
+              <BusinessFoundationBuilder />
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
               <NameChecker />
             </div>
-            
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
-              <LogoGenerator />
+          </div>
+        </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
+      </section>
+
+      {/* Step 2: Plan & Strategy */}
+      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Step 2: Plan & Strategy
+              </h2>
+            </div>
+            <p className="text-lg text-foreground/80">
+              Create your business plan and marketing strategy
+            </p>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="animate-fade-in-scale">
+              <BusinessPlanGenerator />
             </div>
             
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.4s' }}>
-              <StartupChecklist />
-            </div>
-            
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.5s' }}>
-              <LegalDocsGenerator />
-            </div>
-            
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.6s' }}>
-              <BiographyGenerator />
-            </div>
-            
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.7s' }}>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
               <MarketingStrategyGenerator />
             </div>
             
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.8s' }}>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
+              <PitchDeckGenerator />
+            </div>
+          </div>
+        </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
+      </section>
+
+      {/* Step 3: Legal & Branding */}
+      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Step 3: Legal & Branding
+              </h2>
+            </div>
+            <p className="text-lg text-foreground/80">
+              Set up your business legally and create your brand identity
+            </p>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="animate-fade-in-scale">
+              <LogoGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
+              <BiographyGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
+              <LegalDocsGenerator />
+            </div>
+            
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
+              <StartupChecklist />
+            </div>
+          </div>
+        </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
+      </section>
+
+      {/* Step 4: Launch & Scale */}
+      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Step 4: Launch & Scale
+              </h2>
+            </div>
+            <p className="text-lg text-foreground/80">
+              Go to market and grow your business with ongoing support
+            </p>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="animate-fade-in-scale">
               <SocialMediaGenerator />
             </div>
             
-            <div className="animate-fade-in-scale" style={{ animationDelay: '0.9s' }}>
-              <PitchDeckGenerator />
-            </div>
-            
-            <div className="animate-fade-in-scale" style={{ animationDelay: '1.0s' }}>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
               <BusinessMentorChatbot />
             </div>
             
-            <div className="animate-fade-in-scale" style={{ animationDelay: '1.1s' }}>
+            <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
               <BusinessResourceFinder />
             </div>
           </div>

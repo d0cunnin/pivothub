@@ -126,10 +126,9 @@ export const NameChecker = () => {
       <div className="space-y-6 mb-8">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="businessName">Business Name *</Label>
+            <Label htmlFor="businessName">Business Name * - e.g., TechCorp Solutions</Label>
             <Input
               id="businessName"
-              placeholder="e.g., TechCorp Solutions"
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               className="text-lg"
@@ -141,10 +140,10 @@ export const NameChecker = () => {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="state">State *</Label>
+            <Label htmlFor="state">State * - Choose your state for business registry checks</Label>
             <Select value={state} onValueChange={setState}>
               <SelectTrigger className="text-lg">
-                <SelectValue placeholder="Choose your state" />
+                <SelectValue placeholder="Select state" />
               </SelectTrigger>
               <SelectContent className="max-h-48 bg-background border shadow-lg z-50">
                 {states.map((stateName) => (
@@ -154,9 +153,6 @@ export const NameChecker = () => {
                 ))}
               </SelectContent>
             </Select>
-            {!state && (
-              <p className="text-sm text-muted-foreground">Select your state for business registry checks</p>
-            )}
           </div>
         </div>
 

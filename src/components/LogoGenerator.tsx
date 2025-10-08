@@ -118,20 +118,19 @@ export const LogoGenerator = () => {
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Business Name</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Business Name - Enter your business name</label>
           <Input
             value={businessName}
             onChange={(e) => setBusinessName(e.target.value)}
-            placeholder="Enter your business name"
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Industry</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Industry - Select your industry</label>
           <Select value={industry} onValueChange={setIndustry}>
             <SelectTrigger>
-              <SelectValue placeholder="Select your industry" />
+              <SelectValue placeholder="Choose industry" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="technology">Technology</SelectItem>
@@ -148,10 +147,10 @@ export const LogoGenerator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Style</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Style - Choose a style preference</label>
           <Select value={style} onValueChange={setStyle}>
             <SelectTrigger>
-              <SelectValue placeholder="Choose a style preference" />
+              <SelectValue placeholder="Choose style" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="minimalist">Minimalist</SelectItem>
@@ -165,38 +164,34 @@ export const LogoGenerator = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Colors (Optional)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Colors (Optional) - e.g., Blue and gold, vibrant colors, monochrome</label>
           <Input
             value={colors}
             onChange={(e) => setColors(e.target.value)}
-            placeholder="e.g., Blue and gold, vibrant colors, monochrome"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Fonts (Optional)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Preferred Fonts (Optional) - e.g., Modern sans-serif, classic serif, bold</label>
           <Input
             value={fonts}
             onChange={(e) => setFonts(e.target.value)}
-            placeholder="e.g., Modern sans-serif, classic serif, bold"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Text to Include (Optional)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Text to Include (Optional) - e.g., Company name only, name + tagline</label>
           <Input
             value={textDesired}
             onChange={(e) => setTextDesired(e.target.value)}
-            placeholder="e.g., Company name only, name + tagline"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2 text-foreground">Additional Design Instructions (Optional)</label>
+          <label className="block text-sm font-medium mb-2 text-foreground">Additional Design Instructions (Optional) - Describe any specific elements, symbols, or concepts you want in your logo</label>
           <Textarea
             value={additionalPrompt}
             onChange={(e) => setAdditionalPrompt(e.target.value)}
-            placeholder="Describe any specific elements, symbols, or concepts you want in your logo..."
             rows={3}
           />
         </div>
