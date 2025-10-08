@@ -22,7 +22,7 @@ serve(async (req) => {
     }
 
     console.log('Using Google Places API for location:', location);
-    console.log('Resource type requested:', resourceType);
+    console.log('Request params:', { businessType, industry, stage, location, specificNeeds });
 
     // Search for different types of business resources
     const searchQueries = [
