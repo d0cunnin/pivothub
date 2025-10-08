@@ -13,7 +13,6 @@ import { StartupChecklist } from "@/components/StartupChecklist";
 import { SocialMediaGenerator } from "@/components/SocialMediaGenerator";
 import { MarketingStrategyGenerator } from "@/components/MarketingStrategyGenerator";
 import { BusinessMentorChatbot } from "@/components/BusinessMentorChatbot";
-import { GrantFinder } from "@/components/GrantFinder";
 import { BusinessPlanGenerator } from "@/components/BusinessPlanGenerator";
 import { PitchDeckGenerator } from "@/components/PitchDeckGenerator";
 import { BusinessResourceFinder } from "@/components/BusinessResourceFinder";
@@ -159,7 +158,6 @@ const HireYourself = () => {
                   <span>• Pitch Deck Builder</span>
                   <span>• Marketing Strategy</span>
                   <span>• Social Media Content</span>
-                  <span>• Grant Finder</span>
                   <span>• Resource Library</span>
                 </div>
               </div>
@@ -222,10 +220,6 @@ const HireYourself = () => {
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '1.1s' }}>
-              <GrantFinder />
-            </div>
-            
-            <div className="animate-fade-in-scale" style={{ animationDelay: '1.2s' }}>
               <BusinessResourceFinder />
             </div>
           </div>
