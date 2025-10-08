@@ -56,7 +56,7 @@ export const MarketingStrategyGenerator = () => {
       const fallbackStrategies = [
         {
           phase: "Phase 1: Foundation & Brand Building",
-          timeline: "Months 1-3",
+          timeline: "Months 1-4",
           objectives: [
             `Establish ${businessType} brand presence`,
             "Build core marketing infrastructure",
@@ -73,7 +73,7 @@ export const MarketingStrategyGenerator = () => {
         },
         {
           phase: "Phase 2: Audience Engagement & Lead Generation",
-          timeline: "Months 4-8",
+          timeline: "Months 5-8",
           objectives: [
             "Generate qualified leads from target market",
             "Build engaged community around brand",
@@ -117,13 +117,15 @@ export const MarketingStrategyGenerator = () => {
     const phases: MarketingStrategy[] = [];
     const sections = content.split(/Phase \d+|PHASE \d+/i).filter(section => section.trim());
     
+    const defaultTimelines = ["Months 1-4", "Months 5-8", "Months 9-12"];
+    
     sections.forEach((section, index) => {
       if (index === 0 && !section.includes('Phase')) return; // Skip intro text
       
       const lines = section.split('\n').filter(line => line.trim());
       const phase: MarketingStrategy = {
         phase: `Phase ${index + 1}`,
-        timeline: "3-4 months",
+        timeline: defaultTimelines[index] || "Months 1-4",
         objectives: [],
         tactics: [],
         budget: "33% of budget",
@@ -135,19 +137,24 @@ export const MarketingStrategyGenerator = () => {
       lines.forEach(line => {
         const cleanLine = line.trim().toLowerCase();
         
-        if (cleanLine.includes('timeline') || cleanLine.includes('duration')) {
-          phase.timeline = line.split(':')[1]?.trim() || phase.timeline;
+        if (cleanLine.includes('timeline') || cleanLine.includes('month')) {
+          const timelineMatch = line.match(/months?\s+\d+[-–]\d+/i);
+          if (timelineMatch) {
+            phase.timeline = timelineMatch[0];
+          } else if (line.includes(':')) {
+            phase.timeline = line.split(':')[1]?.trim() || phase.timeline;
+          }
         } else if (cleanLine.includes('objective') || cleanLine.includes('goal')) {
           currentSection = 'objectives';
         } else if (cleanLine.includes('tactic') || cleanLine.includes('strategy') || cleanLine.includes('action')) {
           currentSection = 'tactics';
-        } else if (cleanLine.includes('budget') || cleanLine.includes('cost')) {
+        } else if (cleanLine.includes('budget') || cleanLine.includes('cost') || cleanLine.includes('allocation')) {
           if (line.includes(':')) {
             phase.budget = line.split(':')[1]?.trim() || phase.budget;
           } else {
             currentSection = 'budget';
           }
-        } else if (cleanLine.includes('metric') || cleanLine.includes('kpi') || cleanLine.includes('measure')) {
+        } else if (cleanLine.includes('metric') || cleanLine.includes('kpi') || cleanLine.includes('measure') || cleanLine.includes('track')) {
           currentSection = 'metrics';
         } else if (line.trim().startsWith('•') || line.trim().startsWith('-') || /^\d+\./.test(line.trim())) {
           const content = line.replace(/^[•\-\d\.]\s*/, '').trim();
@@ -208,7 +215,7 @@ export const MarketingStrategyGenerator = () => {
     if (phases.length === 0) {
       phases.push({
         phase: "Marketing Strategy Foundation",
-        timeline: "Initial 3 months",
+        timeline: "Months 1-4",
         objectives: [`Build ${businessType} market presence`],
         tactics: ["Digital marketing setup", "Brand development"],
         budget: "100% of allocated budget",

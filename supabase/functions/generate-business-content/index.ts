@@ -45,21 +45,52 @@ Include: Executive Summary, Business Description, Market Analysis, Marketing Str
         break
 
       case 'marketing-strategy':
-        prompt = `Create a detailed 3-phase marketing strategy for:
+        prompt = `Create a detailed 3-phase marketing strategy for a 12-month period for:
 Business Type: ${data.businessType}
 Target Market: ${data.targetMarket}
 Budget: ${data.budget}
 Goals: ${data.goals}
 Current Stage: ${data.currentStage}
 
-For each of the 3 phases, provide the following in plain text format:
-- Phase name and timeline
-- 2-3 specific objectives
-- 3-4 marketing tactics
-- Budget allocation percentage
-- 2-3 key metrics to track
+Structure your response with THREE phases covering the full 12 months:
 
-Use clear section breaks between phases but no markdown formatting.`
+Phase 1: Foundation (Months 1-4)
+Timeline: Months 1-4
+Objectives:
+- [List 2-3 specific objectives]
+
+Tactics:
+- [List 3-4 specific marketing tactics]
+
+Budget Allocation: [percentage]
+Metrics to Track:
+- [List 2-3 key metrics]
+
+Phase 2: Growth (Months 5-8)
+Timeline: Months 5-8
+Objectives:
+- [List 2-3 specific objectives]
+
+Tactics:
+- [List 3-4 specific marketing tactics]
+
+Budget Allocation: [percentage]
+Metrics to Track:
+- [List 2-3 key metrics]
+
+Phase 3: Scale (Months 9-12)
+Timeline: Months 9-12
+Objectives:
+- [List 2-3 specific objectives]
+
+Tactics:
+- [List 3-4 specific marketing tactics]
+
+Budget Allocation: [percentage]
+Metrics to Track:
+- [List 2-3 key metrics]
+
+Use plain text format without markdown. Be specific to the business type and goals provided.`
         break
 
       case 'pitch-deck':
