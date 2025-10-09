@@ -411,7 +411,7 @@ ${generatedMaterials.lessonScript}
   return (
     <div className="space-y-6">
       <Card className="p-6 bg-card/50 backdrop-blur-sm border-primary/20">
-        <h3 className="text-2xl font-bold mb-6 text-foreground">Turn Your Skills into a Course</h3>
+        <h3 className="text-2xl font-bold mb-6 text-foreground">Monetize Teaching Others What You Know</h3>
         
         <div className="space-y-6">
           {/* Full Name */}
