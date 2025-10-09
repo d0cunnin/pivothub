@@ -41,7 +41,23 @@ export const HeroSection = () => {
               className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/jobprep'}
             >
-              Relaunch Your Career
+              Job Prep
+            </Button>
+            <Button 
+              size="lg" 
+              variant="heroWhite"
+              className="text-sm px-4 py-3 flex-shrink-0"
+              onClick={() => window.location.href = '/teachit'}
+            >
+              Teach It
+            </Button>
+            <Button 
+              size="lg" 
+              variant="heroWhite"
+              className="text-sm px-4 py-3 flex-shrink-0"
+              onClick={() => window.location.href = '/launchit'}
+            >
+              Launch It
             </Button>
             <Button 
               size="lg" 
@@ -50,14 +66,6 @@ export const HeroSection = () => {
               onClick={() => window.location.href = '/learn-a-skill'}
             >
               Learn a Skill
-            </Button>
-            <Button 
-              size="lg" 
-              variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/hireyourself'}
-            >
-              Hire Yourself / Launch a Business
             </Button>
           </div>
         </div>
