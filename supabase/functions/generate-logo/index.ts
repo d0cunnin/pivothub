@@ -21,9 +21,9 @@ serve(async (req) => {
       );
     }
 
-    const OPENAI_API_KEY = Deno.env.get('relaunch_openai_key');
-    if (!OPENAI_API_KEY) {
-      console.error('OpenAI API key is not configured');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      console.error('Lovable API key is not configured');
       return new Response(
         JSON.stringify({ error: 'API key not configured' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -49,31 +49,36 @@ serve(async (req) => {
     const logos = await Promise.all(
       logoPrompts.map(async (prompt, index) => {
         try {
-          const response = await fetch('https://api.openai.com/v1/images/generations', {
+          const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${OPENAI_API_KEY}`,
+              'Authorization': `Bearer ${LOVABLE_API_KEY}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'dall-e-3',
-              prompt: prompt,
-              n: 1,
-              size: '1024x1024',
-              quality: 'standard',
-              response_format: 'b64_json'
+              model: 'google/gemini-2.5-flash-image-preview',
+              messages: [
+                {
+                  role: 'user',
+                  content: prompt
+                }
+              ],
+              modalities: ['image', 'text']
             })
           });
 
           if (!response.ok) {
             const errorText = await response.text();
-            console.error(`OpenAI API error for logo ${index + 1}:`, response.status, errorText);
+            console.error(`Lovable AI error for logo ${index + 1}:`, response.status, errorText);
             
             if (response.status === 429) {
               throw new Error('Rate limit exceeded. Please try again later.');
             }
+            if (response.status === 402) {
+              throw new Error('Payment required. Please add credits to your Lovable AI workspace.');
+            }
             if (response.status === 401) {
-              throw new Error('Invalid API key. Please check your OpenAI configuration.');
+              throw new Error('Invalid API key. Please check your Lovable AI configuration.');
             }
             if (response.status === 400) {
               throw new Error('Invalid request. Please check your prompt.');
@@ -82,8 +87,8 @@ serve(async (req) => {
           }
 
           const data = await response.json();
-          const base64Image = data.data?.[0]?.b64_json;
-          const imageUrl = base64Image ? `data:image/png;base64,${base64Image}` : null;
+          const base64Image = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+          const imageUrl = base64Image || null;
 
           if (!imageUrl) {
             console.error('No image URL in response:', data);
