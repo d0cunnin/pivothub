@@ -63,6 +63,14 @@ export const HeroSection = () => {
               size="lg" 
               variant="heroWhite"
               className="text-sm px-4 py-3 flex-shrink-0"
+              onClick={() => window.location.href = '/grantwriting'}
+            >
+              Grant Writing
+            </Button>
+            <Button 
+              size="lg" 
+              variant="heroWhite"
+              className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/learn-a-skill'}
             >
               Learn a Skill
