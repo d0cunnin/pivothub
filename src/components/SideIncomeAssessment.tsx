@@ -20,7 +20,7 @@ const CONSTRAINT_OPTIONS = [
   "Limited internet/computer access",
   "No car/transportation",
   "Childcare responsibilities (need flexible schedule)",
-  "Physical limitations (need desk/remote work)",
+  "Physical limitations (including mobility, sensory, cognitive, speech disabilities)",
   "Language barriers (English not first language)",
   "No constraints"
 ];
