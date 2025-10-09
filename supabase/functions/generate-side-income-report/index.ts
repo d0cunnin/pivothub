@@ -6,6 +6,37 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Sanitize AI output to remove excessive markdown formatting
+function sanitizeText(text: string): string {
+  if (!text || typeof text !== 'string') return text;
+  
+  return text
+    .replace(/#{3,}/g, '') // Remove excessive ###
+    .replace(/\*{3,}/g, '') // Remove excessive ***
+    .replace(/\*\*([^*]+)\*\*/g, '$1') // Remove bold markdown
+    .replace(/\*([^*]+)\*/g, '$1') // Remove italic markdown
+    .replace(/`([^`]+)`/g, '$1') // Remove code markdown
+    .trim();
+}
+
+// Recursively sanitize all string values in an object
+function sanitizeObject(obj: any): any {
+  if (typeof obj === 'string') {
+    return sanitizeText(obj);
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(item => sanitizeObject(item));
+  }
+  if (obj && typeof obj === 'object') {
+    const sanitized: any = {};
+    for (const key in obj) {
+      sanitized[key] = sanitizeObject(obj[key]);
+    }
+    return sanitized;
+  }
+  return obj;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -35,7 +66,8 @@ serve(async (req) => {
       throw new Error('Assessment not found');
     }
 
-    if (assessment.payment_status !== 'paid') {
+    // Check if payment is completed (accept both 'paid' and 'completed' status)
+    if (assessment.payment_status !== 'paid' && assessment.payment_status !== 'completed') {
       throw new Error('Payment required to generate report');
     }
 
@@ -57,6 +89,8 @@ serve(async (req) => {
 
     // Generate comprehensive report using AI
     const systemPrompt = `You are an expert business consultant specializing in helping people create side income streams. Generate a comprehensive, actionable blueprint based on the user's assessment.
+
+IMPORTANT: Provide clean, professional text without any markdown formatting. Do not use asterisks (*), hash symbols (#), or other markdown syntax in your response text. Write in clear, readable prose.
 
 Structure the response as a JSON object with these sections:
 {
@@ -92,12 +126,17 @@ Current Situation:
 - Employment: ${assessmentData.employmentStatus}
 - Monthly Income: ${assessmentData.currentIncome}
 - Available Time: ${assessmentData.timeAvailable} hours/week
+- Timeline: ${assessmentData.timeframe}
+- Work Environment: ${assessmentData.workEnvironment}
+- Client Interaction: ${assessmentData.clientInteraction}
 - Skills: ${assessmentData.skills?.join(', ')}
-- Interests: ${assessmentData.interests?.join(', ')}
 - Goals: ${assessmentData.goals}
 - Budget: ${assessmentData.startupBudget}
+- Risk Tolerance: ${assessmentData.riskTolerance}
+${assessmentData.constraints ? `- Constraints: ${assessmentData.constraints}` : ''}
+${assessmentData.dealBreakers ? `- Deal Breakers: ${assessmentData.dealBreakers}` : ''}
 
-Create 3-5 specific, actionable side income paths ranked by feasibility.`;
+Create 3-5 specific, actionable side income paths ranked by feasibility based on their unique situation.`;
 
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -123,6 +162,9 @@ Create 3-5 specific, actionable side income paths ranked by feasibility.`;
 
     const aiData = await aiResponse.json();
     const reportContent = JSON.parse(aiData.choices[0].message.content);
+    
+    // Sanitize the report content to remove excessive markdown
+    const sanitizedReport = sanitizeObject(reportContent);
 
     // Save the report
     const { data: newReport, error: insertError } = await supabase
@@ -130,7 +172,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility.`;
       .insert({
         assessment_id: assessmentId,
         user_id: assessment.user_id,
-        report_content: reportContent
+        report_content: sanitizedReport
       })
       .select()
       .single();
