@@ -4,11 +4,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckoutModal } from "@/components/CheckoutModal";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, DollarSign, Clock, Target } from "lucide-react";
+import { Loader2, DollarSign } from "lucide-react";
 import SideIncomeAssessment from "@/components/SideIncomeAssessment";
 import SideIncomeReport from "@/components/SideIncomeReport";
 import heroImage from "@/assets/hero-image.jpg";
@@ -18,20 +17,18 @@ export default function SideIncomeBlueprint() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
-  const [step, setStep] = useState<'intro' | 'assessment' | 'checkout' | 'report'>('intro');
+  const [step, setStep] = useState<'intro' | 'assessment' | 'report'>('intro');
   const [assessmentId, setAssessmentId] = useState<string>("");
-  const [showCheckout, setShowCheckout] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [hasPaid, setHasPaid] = useState(false);
 
   const handleAssessmentComplete = useCallback(async (assessmentData: any) => {
-    if (!user) {
-      // Store assessment data and prompt to sign in
-      localStorage.setItem('pendingAssessment', JSON.stringify(assessmentData));
+    if (!user || !hasPaid) {
       toast({
-        title: "Sign in required",
-        description: "Please sign in to continue with your purchase",
+        title: "Payment required",
+        description: "Please complete payment before submitting assessment",
+        variant: "destructive"
       });
-      navigate("/auth?redirect=side-income-blueprint");
       return;
     }
 
@@ -42,7 +39,7 @@ export default function SideIncomeBlueprint() {
         .insert({
           user_id: user.id,
           assessment_data: assessmentData,
-          payment_status: 'pending'
+          payment_status: 'completed'
         })
         .select()
         .single();
@@ -50,8 +47,7 @@ export default function SideIncomeBlueprint() {
       if (error) throw error;
 
       setAssessmentId(data.id);
-      setStep('checkout');
-      setShowCheckout(true);
+      setStep('report');
     } catch (error) {
       console.error('Error saving assessment:', error);
       toast({
@@ -62,46 +58,46 @@ export default function SideIncomeBlueprint() {
     } finally {
       setLoading(false);
     }
-  }, [user, navigate, toast]);
+  }, [user, hasPaid, toast]);
 
-  // Check if returning from auth with pending assessment
+  // Check if returning from successful payment
   useEffect(() => {
     const success = searchParams.get('success');
-    const assessmentParam = searchParams.get('assessment');
+    const session_id = searchParams.get('session_id');
     
-    if (success === 'true' && assessmentParam) {
-      setAssessmentId(assessmentParam);
-      setStep('report');
+    if (success === 'true' && session_id) {
+      setHasPaid(true);
+      setStep('assessment');
+      toast({
+        title: "Payment successful!",
+        description: "Please complete the assessment to get your blueprint.",
+      });
       return;
     }
 
-    // Check for pending assessment after sign-in
-    const pendingAssessment = localStorage.getItem('pendingAssessment');
-    if (user && pendingAssessment && step === 'intro') {
-      try {
-        const assessmentData = JSON.parse(pendingAssessment);
-        localStorage.removeItem('pendingAssessment');
-        handleAssessmentComplete(assessmentData);
-      } catch (error) {
-        console.error('Error processing pending assessment:', error);
-      }
+    // Check if assessment already completed
+    const assessmentParam = searchParams.get('assessment');
+    if (assessmentParam) {
+      setAssessmentId(assessmentParam);
+      setStep('report');
     }
-  }, [searchParams, user, step, handleAssessmentComplete]);
+  }, [searchParams, toast]);
 
-  const handleCheckoutConfirm = async () => {
+  const handleStartCheckout = async () => {
     if (!user) {
       toast({
         title: "Sign in required",
-        description: "Please sign in to complete your purchase",
+        description: "Please sign in to purchase your blueprint",
         variant: "destructive"
       });
-      navigate("/auth");
+      navigate("/auth?redirect=/side-income-blueprint");
       return;
     }
 
+    setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier: 'side-income-blueprint', assessmentId }
+        body: { tier: 'side-income-blueprint' }
       });
 
       if (error) throw error;
@@ -116,6 +112,8 @@ export default function SideIncomeBlueprint() {
         description: "Failed to start checkout. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -203,7 +201,7 @@ export default function SideIncomeBlueprint() {
             </h2>
           </div>
           <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-            Pay once, take a quick assessment, and receive your personalized blueprint instantly
+            Secure payment first, then take your assessment and get instant access to your personalized blueprint
           </p>
         </div>
 
@@ -212,10 +210,10 @@ export default function SideIncomeBlueprint() {
             <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
               1
             </div>
-            <CardTitle className="text-lg mb-3">Make Payment</CardTitle>
+            <CardTitle className="text-lg mb-3">Secure Payment</CardTitle>
             <CardContent className="p-0">
               <p className="text-muted-foreground text-sm">
-                One-time payment of $27 for lifetime access to your blueprint
+                One-time payment of $27 via secure Stripe checkout
               </p>
             </CardContent>
           </Card>
@@ -224,7 +222,7 @@ export default function SideIncomeBlueprint() {
             <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
               2
             </div>
-            <CardTitle className="text-lg mb-3">Take Assessment</CardTitle>
+            <CardTitle className="text-lg mb-3">Complete Assessment</CardTitle>
             <CardContent className="p-0">
               <p className="text-muted-foreground text-sm">
                 Answer questions about your skills, time, and income goals
@@ -239,7 +237,7 @@ export default function SideIncomeBlueprint() {
             <CardTitle className="text-lg mb-3">Get Your Blueprint</CardTitle>
             <CardContent className="p-0">
               <p className="text-muted-foreground text-sm">
-                Receive your personalized plan instantly
+                Receive your personalized plan with lifetime access
               </p>
             </CardContent>
           </Card>
@@ -297,13 +295,21 @@ export default function SideIncomeBlueprint() {
             </div>
             <Button 
               size="lg" 
-              onClick={() => setStep('assessment')}
+              onClick={handleStartCheckout}
+              disabled={loading}
               className="text-lg px-12 py-6 shadow-glow hover:scale-105 transition-elegant"
             >
-              Get Your Blueprint Now
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                'Get Your Blueprint Now - $27'
+              )}
             </Button>
             <p className="text-sm text-muted-foreground mt-6">
-              Pay once • Take assessment • Get instant blueprint
+              Secure payment → Quick assessment → Instant blueprint
             </p>
             <p className="text-xs text-muted-foreground mt-2">
               Lifetime access • No recurring fees • 100% digital delivery
@@ -313,15 +319,6 @@ export default function SideIncomeBlueprint() {
         </div>
       </section>
 
-      <CheckoutModal
-        open={showCheckout}
-        onOpenChange={setShowCheckout}
-        onConfirm={handleCheckoutConfirm}
-        planName="Side Income Blueprint"
-        price="$27"
-        isEbook={true}
-      />
-      
       <Footer />
     </div>
   );
