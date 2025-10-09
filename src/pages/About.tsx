@@ -50,7 +50,7 @@ export default function About() {
               <h2 className="section-header">The Beginning of PivotHub</h2>
               <div className="space-y-4">
                 <p className="section-body-text">
-                  PivotHub was born out of necessity during a critical period in our economy. Between January and July 2025, 
+                  PivotHub was born out of necessity during a critical period in our economy. Between January and October 2025, 
                   hundreds of thousands of people found themselves unemployed or underemployed, facing an unprecedented challenge 
                   in securing meaningful work.
                 </p>
