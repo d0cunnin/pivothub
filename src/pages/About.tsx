@@ -150,8 +150,8 @@ export default function About() {
             </div>
             <div className="lg:ml-4">
               <img 
-                src="/lovable-uploads/0dc8e049-6853-488a-ba7e-2c5087721c46.png"
-                alt="Professional learning and skill development" 
+                src="/lovable-uploads/15ff2b92-41d2-4845-9967-ed77d59d05c2.jpg"
+                alt="Diverse team learning and growing together in a supportive environment" 
                 className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
               />
             </div>
