@@ -9,18 +9,23 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { Mail, Lock, Eye, EyeOff, Shield } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Shield, Check, X } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [grantingAdmin, setGrantingAdmin] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [formStartTime, setFormStartTime] = useState(Date.now());
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { user, isAdmin, checkAdminStatus } = useAuth();
+
+  const emailsMatch = confirmEmail && email === confirmEmail;
 
   const redirectPath = searchParams.get('redirect') || '/';
 
@@ -33,6 +38,9 @@ const Auth = () => {
       }
     };
     checkUser();
+    
+    // Track form start time for bot detection
+    setFormStartTime(Date.now());
   }, [navigate, redirectPath]);
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -40,6 +48,38 @@ const Auth = () => {
     setLoading(true);
 
     try {
+      // Bot protection checks
+      if (honeypot) {
+        toast({
+          title: "Error",
+          description: "Invalid form submission detected.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      const formFillTime = Date.now() - formStartTime;
+      if (formFillTime < 2000) {
+        toast({
+          title: "Please slow down",
+          description: "Please take a moment to review your information.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      if (email !== confirmEmail) {
+        toast({
+          title: "Error",
+          description: "Email addresses do not match.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const redirectUrl = redirectPath === '/' 
         ? `${window.location.origin}/`
         : `${window.location.origin}/${redirectPath}`;
@@ -61,7 +101,7 @@ const Auth = () => {
       } else {
         toast({
           title: "Success",
-          description: "Check your email for the confirmation link!",
+          description: "Your account has been created! You can now sign in.",
         });
       }
     } catch (error) {
@@ -300,6 +340,17 @@ const Auth = () => {
             
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
+                {/* Honeypot field - hidden from users */}
+                <input
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  style={{ position: 'absolute', left: '-9999px' }}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+                
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
@@ -315,6 +366,35 @@ const Auth = () => {
                     />
                   </div>
                 </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="signup-confirm-email">Confirm Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="signup-confirm-email"
+                      type="email"
+                      placeholder="Confirm your email"
+                      value={confirmEmail}
+                      onChange={(e) => setConfirmEmail(e.target.value)}
+                      className="pl-10 pr-10"
+                      required
+                    />
+                    {confirmEmail && (
+                      <div className="absolute right-3 top-3">
+                        {emailsMatch ? (
+                          <Check className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <X className="h-4 w-4 text-destructive" />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  {confirmEmail && !emailsMatch && (
+                    <p className="text-xs text-destructive">Emails do not match</p>
+                  )}
+                </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
                   <div className="relative">
@@ -338,7 +418,7 @@ const Auth = () => {
                     </button>
                   </div>
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full" disabled={loading || !emailsMatch}>
                   {loading ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>

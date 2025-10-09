@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUsage } from '@/contexts/UsageContext';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Mail, Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, AlertTriangle, Check, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ToolGuardProps {
@@ -27,10 +27,19 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   const { user, isTrialActive, trialDaysRemaining, subscribed, isAdmin } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
+  const [honeypot, setHoneypot] = useState('');
+  const [formStartTime, setFormStartTime] = useState(Date.now());
   const { toast } = useToast();
+
+  const emailsMatch = confirmEmail && email === confirmEmail;
+
+  useEffect(() => {
+    setFormStartTime(Date.now());
+  }, [showAuthModal]);
 
   const handleToolUse = () => {
     // Admins bypass all restrictions
@@ -80,6 +89,39 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
     e.preventDefault();
     try {
       setAuthLoading(true);
+
+      // Bot protection checks
+      if (honeypot) {
+        toast({
+          title: "Error",
+          description: "Invalid form submission detected.",
+          variant: "destructive",
+        });
+        setAuthLoading(false);
+        return;
+      }
+
+      const formFillTime = Date.now() - formStartTime;
+      if (formFillTime < 2000) {
+        toast({
+          title: "Please slow down",
+          description: "Please take a moment to review your information.",
+          variant: "destructive",
+        });
+        setAuthLoading(false);
+        return;
+      }
+
+      if (email !== confirmEmail) {
+        toast({
+          title: "Error",
+          description: "Email addresses do not match.",
+          variant: "destructive",
+        });
+        setAuthLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -92,7 +134,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
       
       toast({
         title: "Success!",
-        description: "Check your email for the confirmation link.",
+        description: "Your account has been created! You can now sign in.",
       });
       setShowAuthModal(false);
     } catch (error: any) {
@@ -229,6 +271,17 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
               
               <TabsContent value="signup">
                 <form onSubmit={handleEmailSignUp} className="space-y-4">
+                  {/* Honeypot field - hidden from users */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    style={{ position: 'absolute', left: '-9999px' }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                  
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
@@ -244,6 +297,35 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
                       />
                     </div>
                   </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-confirm-email">Confirm Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="signup-confirm-email"
+                        type="email"
+                        placeholder="Confirm your email"
+                        value={confirmEmail}
+                        onChange={(e) => setConfirmEmail(e.target.value)}
+                        className="pl-10 pr-10"
+                        required
+                      />
+                      {confirmEmail && (
+                        <div className="absolute right-3 top-3">
+                          {emailsMatch ? (
+                            <Check className="h-4 w-4 text-green-500" />
+                          ) : (
+                            <X className="h-4 w-4 text-destructive" />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {confirmEmail && !emailsMatch && (
+                      <p className="text-xs text-destructive">Emails do not match</p>
+                    )}
+                  </div>
+                  
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
                     <div className="relative">
@@ -267,7 +349,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
                       </button>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full" disabled={authLoading}>
+                  <Button type="submit" className="w-full" disabled={authLoading || !emailsMatch}>
                     {authLoading ? "Creating Account..." : "Create Account"}
                   </Button>
                 </form>
