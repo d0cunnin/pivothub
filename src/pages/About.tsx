@@ -105,15 +105,15 @@ export default function About() {
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="section-header mb-6">Our Mission & Values</h2>
             <p className="section-description">
-              We believe in fostering environments where professionals thrive, businesses grow strategically, and meaningful relationships drive success.
+              Empowering individuals to navigate career transitions through comprehensive assessments, skill development, entrepreneurship support, and job preparation—all powered by AI-driven tools and expert guidance.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
-              <h3 className="section-header">Find Your Career Path</h3>
+              <h3 className="section-header">Discover Your Path</h3>
               <p className="section-body-text">
-                Discover your ideal career direction with personalized guidance and assessment tools. Whether you're looking to reskill for new opportunities or launch your own business, we help you identify the path that aligns with your goals, skills, and aspirations.
+                Start with our comprehensive career assessments to identify your strengths, skills, and ideal career direction. Whether you're pivoting to a new industry, reskilling for emerging opportunities, or preparing to launch your own venture, our AI-powered tools provide personalized insights to guide your journey.
               </p>
             </div>
             <div className="lg:ml-4">
@@ -134,17 +134,33 @@ export default function About() {
               />
             </div>
             <div className="space-y-6 order-1 lg:order-2">
-              <h3 className="section-header">Strategic Planning</h3>
+              <h3 className="section-header">Build Your Future</h3>
               <p className="section-body-text">
-                Empowering individuals and organizations with the tools and insights needed for long-term success and sustainable growth. Our strategic approach helps you navigate complex challenges and identify opportunities for advancement.
+                From job preparation and interview coaching to launching your own business, teaching a skill, or securing grant funding—we provide end-to-end support. Our platform includes AI-powered resume builders, business plan generators, pitch deck creators, grant writing assistance, and course development tools to help you succeed in any direction you choose.
               </p>
             </div>
           </div>
 
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
+            <div className="space-y-6">
+              <h3 className="section-header">Learn & Grow</h3>
+              <p className="section-body-text">
+                Access curated learning pathways designed to help you master in-demand skills. Whether you're learning to code, developing business acumen, or gaining expertise to teach others, our interactive courses and AI mentorship provide the knowledge and confidence you need to thrive in today's digital economy.
+              </p>
+            </div>
+            <div className="lg:ml-4">
+              <img 
+                src="/lovable-uploads/0dc8e049-6853-488a-ba7e-2c5087721c46.png"
+                alt="Professional learning and skill development" 
+                className="max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-shadow"
+              />
+            </div>
+          </div>
+
           <div className="max-w-3xl mx-auto text-center">
-            <h3 className="section-header">Join Our Mission</h3>
+            <h3 className="section-header">Join the PivotHub Community</h3>
             <p className="section-body-text mb-6">
-              Whether you're looking to advance your career, reskill for the future, or launch your own business, we're here to provide the tools, guidance, and community support you need to succeed.
+              Since October 2025, we've been helping thousands of professionals navigate career transitions with confidence. Whether you're seeking your next job opportunity, launching a business, teaching your expertise, or securing grant funding, PivotHub provides the comprehensive tools, AI-powered guidance, and supportive community you need to pivot successfully into your future.
             </p>
           </div>
         </div>
