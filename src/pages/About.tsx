@@ -160,7 +160,7 @@ export default function About() {
           <div className="max-w-3xl mx-auto text-center">
             <h3 className="section-header">Join the PivotHub Community</h3>
             <p className="section-body-text mb-6">
-              Since October 2025, we've been helping professionals navigate career transitions with confidence. Whether you're seeking your next job opportunity, launching a business, teaching your expertise, or securing grant funding, PivotHub provides the comprehensive tools, AI-powered guidance, and supportive community you need to pivot successfully into your future.
+              Since July 2025, we've been helping professionals navigate career transitions with confidence. Whether you're seeking your next job opportunity, launching a business, teaching your expertise, or securing grant funding, PivotHub provides the comprehensive tools, AI-powered guidance, and supportive community you need to pivot successfully into your future.
             </p>
           </div>
         </div>
