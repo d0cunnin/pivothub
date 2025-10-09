@@ -26,6 +26,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
     employmentStatus: "",
     currentIncome: "",
     timeAvailable: "",
+    incomeGoal: "",
     skills: [] as string[],
     languages: [] as string[],
     customLanguage: "",
@@ -114,6 +115,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
     formData.employmentStatus &&
     formData.currentIncome &&
     formData.timeAvailable &&
+    formData.incomeGoal &&
     totalSkillsSelected >= 3 &&
     totalSkillsSelected <= 30 &&
     formData.interests.length > 0 &&
@@ -181,6 +183,25 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
                 <SelectItem value="10-20">10-20 hours</SelectItem>
                 <SelectItem value="20-30">20-30 hours</SelectItem>
                 <SelectItem value="30+">30+ hours</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="incomeGoal">How much extra money do you want to earn per month?</Label>
+            <Select 
+              value={formData.incomeGoal}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, incomeGoal: value }))}
+            >
+              <SelectTrigger id="incomeGoal">
+                <SelectValue placeholder="Select your income goal" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="500-1000">$500-$1,000 (supplemental income)</SelectItem>
+                <SelectItem value="1000-2000">$1,000-$2,000 (meaningful side income)</SelectItem>
+                <SelectItem value="2000-3500">$2,000-$3,500 (substantial second income)</SelectItem>
+                <SelectItem value="3500-5000">$3,500-$5,000 (near full-time income)</SelectItem>
+                <SelectItem value="5000+">$5,000+ (replacement income)</SelectItem>
               </SelectContent>
             </Select>
           </div>
