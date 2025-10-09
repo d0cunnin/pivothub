@@ -6,18 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronDown, ChevronUp } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { skillCategories, commonLanguages } from "@/lib/skillsData";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SideIncomeAssessmentProps {
   onComplete: (data: any) => void;
   loading?: boolean;
 }
-
-const SKILLS_OPTIONS = [
-  "Writing", "Design", "Programming", "Marketing", "Sales", 
-  "Teaching", "Consulting", "Photography", "Video Editing", 
-  "Social Media", "Data Analysis", "Project Management"
-];
 
 const INTERESTS_OPTIONS = [
   "Technology", "Creative Arts", "Business", "Health & Wellness",
@@ -30,19 +27,61 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
     currentIncome: "",
     timeAvailable: "",
     skills: [] as string[],
+    languages: [] as string[],
+    customLanguage: "",
     interests: [] as string[],
     goals: "",
     startupBudget: "",
     experience: ""
   });
+  
+  const [openCategories, setOpenCategories] = useState<string[]>([]);
 
   const handleSkillToggle = (skill: string) => {
+    if (formData.skills.includes(skill)) {
+      setFormData(prev => ({
+        ...prev,
+        skills: prev.skills.filter(s => s !== skill)
+      }));
+    } else {
+      if (formData.skills.length >= 30) {
+        return; // Max 30 skills
+      }
+      setFormData(prev => ({
+        ...prev,
+        skills: [...prev.skills, skill]
+      }));
+    }
+  };
+
+  const handleLanguageToggle = (language: string) => {
     setFormData(prev => ({
       ...prev,
-      skills: prev.skills.includes(skill)
-        ? prev.skills.filter(s => s !== skill)
-        : [...prev.skills, skill]
+      languages: prev.languages.includes(language)
+        ? prev.languages.filter(l => l !== language)
+        : [...prev.languages, language]
     }));
+  };
+
+  const handleSelectAllCategory = (categorySkills: string[]) => {
+    const availableSlots = 30 - formData.skills.length;
+    const skillsToAdd = categorySkills.filter(s => !formData.skills.includes(s)).slice(0, availableSlots);
+    
+    setFormData(prev => ({
+      ...prev,
+      skills: [...prev.skills, ...skillsToAdd]
+    }));
+  };
+
+  const handleDeselectAllCategory = (categorySkills: string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      skills: prev.skills.filter(s => !categorySkills.includes(s))
+    }));
+  };
+
+  const getCategorySelectedCount = (categorySkills: string[]) => {
+    return categorySkills.filter(s => formData.skills.includes(s)).length;
   };
 
   const handleInterestToggle = (interest: string) => {
@@ -56,14 +95,27 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onComplete(formData);
+    
+    // Combine skills and languages for submission
+    const allSkills = [
+      ...formData.skills,
+      ...formData.languages.map(l => `Language: ${l}`),
+      ...(formData.customLanguage ? [`Language: ${formData.customLanguage}`] : [])
+    ];
+    
+    onComplete({
+      ...formData,
+      skills: allSkills
+    });
   };
 
+  const totalSkillsSelected = formData.skills.length;
   const isFormValid = 
     formData.employmentStatus &&
     formData.currentIncome &&
     formData.timeAvailable &&
-    formData.skills.length > 0 &&
+    totalSkillsSelected >= 3 &&
+    totalSkillsSelected <= 30 &&
     formData.interests.length > 0 &&
     formData.goals &&
     formData.startupBudget;
@@ -87,7 +139,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
               <SelectTrigger id="employmentStatus">
                 <SelectValue placeholder="Select your status" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-background z-50">
                 <SelectItem value="full-time">Full-time Employed</SelectItem>
                 <SelectItem value="part-time">Part-time Employed</SelectItem>
                 <SelectItem value="freelance">Freelance/Self-employed</SelectItem>
@@ -106,7 +158,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
               <SelectTrigger id="currentIncome">
                 <SelectValue placeholder="Select income range" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-background z-50">
                 <SelectItem value="0-2000">$0 - $2,000</SelectItem>
                 <SelectItem value="2000-4000">$2,000 - $4,000</SelectItem>
                 <SelectItem value="4000-6000">$4,000 - $6,000</SelectItem>
@@ -124,7 +176,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
               <SelectTrigger id="timeAvailable">
                 <SelectValue placeholder="Select available hours" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-background z-50">
                 <SelectItem value="5-10">5-10 hours</SelectItem>
                 <SelectItem value="10-20">10-20 hours</SelectItem>
                 <SelectItem value="20-30">20-30 hours</SelectItem>
@@ -134,21 +186,123 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
           </div>
 
           <div className="space-y-3">
-            <Label>Your Skills (select all that apply)</Label>
-            <div className="grid grid-cols-2 gap-3">
-              {SKILLS_OPTIONS.map(skill => (
-                <div key={skill} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={`skill-${skill}`}
-                    checked={formData.skills.includes(skill)}
-                    onCheckedChange={() => handleSkillToggle(skill)}
-                  />
-                  <label htmlFor={`skill-${skill}`} className="text-sm cursor-pointer">
-                    {skill}
-                  </label>
-                </div>
-              ))}
+            <div className="flex items-center justify-between">
+              <Label>Your Skills</Label>
+              <div className="text-sm text-muted-foreground">
+                {totalSkillsSelected} selected
+                {totalSkillsSelected < 3 && (
+                  <span className="text-destructive ml-2">(min 3 required)</span>
+                )}
+                {totalSkillsSelected >= 30 && (
+                  <span className="text-warning ml-2">(max 30 reached)</span>
+                )}
+              </div>
             </div>
+            <p className="text-sm text-muted-foreground">
+              Select 3-30 skills that best represent your abilities
+            </p>
+            
+            <ScrollArea className="h-[400px] rounded-md border p-4">
+              <Accordion type="multiple" value={openCategories} onValueChange={setOpenCategories} className="w-full">
+                {skillCategories.map((category) => {
+                  const selectedCount = getCategorySelectedCount(category.skills);
+                  const allSelected = selectedCount === category.skills.length;
+                  
+                  return (
+                    <AccordionItem key={category.id} value={category.id}>
+                      <AccordionTrigger className="hover:no-underline">
+                        <div className="flex items-center justify-between w-full pr-4">
+                          <span className="font-medium">{category.name}</span>
+                          {selectedCount > 0 && (
+                            <span className="text-sm text-primary font-semibold">
+                              {selectedCount} selected
+                            </span>
+                          )}
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-3 pt-2">
+                          <div className="flex gap-2 mb-3">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleSelectAllCategory(category.skills)}
+                              disabled={totalSkillsSelected >= 30}
+                            >
+                              Select All
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDeselectAllCategory(category.skills)}
+                              disabled={selectedCount === 0}
+                            >
+                              Deselect All
+                            </Button>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {category.skills.map((skill) => (
+                              <div key={skill} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`skill-${skill}`}
+                                  checked={formData.skills.includes(skill)}
+                                  onCheckedChange={() => handleSkillToggle(skill)}
+                                  disabled={totalSkillsSelected >= 30 && !formData.skills.includes(skill)}
+                                />
+                                <label
+                                  htmlFor={`skill-${skill}`}
+                                  className="text-sm cursor-pointer leading-tight"
+                                >
+                                  {skill}
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
+              
+              {/* Language Skills Section */}
+              <div className="mt-6 pt-6 border-t space-y-4">
+                <div>
+                  <Label className="text-base font-semibold">Language Skills</Label>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Select all languages you're fluent in
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {commonLanguages.map((language) => (
+                    <div key={language} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`lang-${language}`}
+                        checked={formData.languages.includes(language)}
+                        onCheckedChange={() => handleLanguageToggle(language)}
+                      />
+                      <label
+                        htmlFor={`lang-${language}`}
+                        className="text-sm cursor-pointer"
+                      >
+                        {language}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2 pt-2">
+                  <Label htmlFor="customLanguage">Other Language</Label>
+                  <Input
+                    id="customLanguage"
+                    placeholder="Enter another language you speak"
+                    value={formData.customLanguage}
+                    onChange={(e) => setFormData(prev => ({ ...prev, customLanguage: e.target.value }))}
+                  />
+                </div>
+              </div>
+            </ScrollArea>
           </div>
 
           <div className="space-y-3">
@@ -189,7 +343,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
               <SelectTrigger id="startupBudget">
                 <SelectValue placeholder="Select budget range" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-background z-50">
                 <SelectItem value="0-100">$0 - $100</SelectItem>
                 <SelectItem value="100-500">$100 - $500</SelectItem>
                 <SelectItem value="500-1000">$500 - $1,000</SelectItem>
