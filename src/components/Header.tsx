@@ -38,13 +38,7 @@ export const Header = () => {
           
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-8">
             <div className="flex items-center space-x-6 xl:space-x-8">
-              <Link 
-                to="/" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/' ? 'text-primary font-medium' : ''}`}
-              >
-                Home
-              </Link>
-              <Link 
+              <Link
                 to="/about" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
               >
@@ -159,14 +153,7 @@ export const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
-              <Link 
-                to="/" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link 
+              <Link
                 to="/about" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
