@@ -10,6 +10,7 @@ import Reskill from "./pages/Reskill";
 import HireYourself from "./pages/HireYourself";
 import About from "./pages/About";
 import TeachIt from "./pages/TeachIt";
+import LaunchIt from "./pages/LaunchIt";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/teachit" element={<TeachIt />} />
+            <Route path="/launchit" element={<LaunchIt />} />
             <Route path="/reskill" element={<Reskill />} />
             <Route path="/assessments" element={<Assessments />} />
             <Route path="/jobprep" element={<JobPrep />} />
