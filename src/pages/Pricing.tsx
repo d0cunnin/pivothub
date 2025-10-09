@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
-import { Check, Star, Zap, Crown } from "lucide-react";
+import { Check, Star, Zap, Crown, Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -18,29 +18,28 @@ const Pricing = () => {
     open: boolean;
     planName: string;
     price: string;
-    priceId: string;
-    isEbook?: boolean;
+    tier: string;
   }>({
     open: false,
     planName: '',
     price: '',
-    priceId: '',
-    isEbook: false
+    tier: ''
   });
 
-  const handleSubscribe = async (priceId: string) => {
+  const handleSubscribe = async (tier: string) => {
     if (!user) {
       toast({
         title: "Sign In Required",
         description: "Please sign in to subscribe to a plan.",
         variant: "destructive",
       });
+      window.location.href = "/auth";
       return;
     }
 
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { priceId },
+        body: { tier },
         headers: {
           Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
@@ -49,7 +48,7 @@ const Pricing = () => {
       if (error) throw error;
 
       if (data?.url) {
-        window.open(data.url, '_blank');
+        window.location.href = data.url;
       }
     } catch (error) {
       toast({
@@ -60,92 +59,106 @@ const Pricing = () => {
     }
   };
 
-  const openCheckoutModal = (planName: string, price: string, priceId: string, isEbook = false) => {
+  const openCheckoutModal = (planName: string, price: string, tier: string) => {
     setCheckoutModal({
       open: true,
       planName,
       price,
-      priceId,
-      isEbook
+      tier
     });
   };
 
-  const plans = [
+  const pathPlans = [
     {
-      name: "Free",
-      price: "$0",
-      period: "forever",
-      description: "Perfect for getting started",
-      features: [
-        "3-day free trial (all features)",
-        "5 tool uses per month after trial",
-        "Basic assessments",
-        "Email support"
-      ],
-      popular: false,
-      current: !subscribed && !user,
-      ctaText: !user ? "Start Free Trial" : (subscribed ? "Downgrade" : "Current Plan"),
-      ctaAction: () => !user ? window.location.href = "/auth" : {}
-    },
-    {
-      name: "Basic",
-      price: "$9.99",
+      name: "Job Prep Path",
+      price: "$12",
       period: "month",
-      description: "Everything you need to succeed",
+      description: "Master the job search and land your dream role",
       features: [
-        "Full access to all tools",
-        "Advanced assessments",
-        "Priority support",
-        "Export capabilities",
-        "Advanced AI features",
-        "Progress tracking"
+        "Career Assessment",
+        "Skills Assessment",
+        "Personality Assessment",
+        "Interview Coach",
+        "Interview Questions Generator",
+        "Resume & Cover Letter Coach"
       ],
-      popular: true,
-      current: subscriptionTier === "Basic",
-      ctaText: subscriptionTier === "Basic" ? "Current Plan" : "Upgrade to Basic",
-      ctaAction: () => openCheckoutModal("Basic Plan", "$9.99", "basic-monthly")
+      tier: "job-prep",
+      icon: "🎯"
     },
     {
-      name: "Pro",
-      price: "$16.99",
+      name: "Hire Yourself Path",
+      price: "$15",
       period: "month",
-      description: "For power users and teams",
+      description: "Launch and grow your own business",
       features: [
-        "Everything in Basic",
-        "Team collaboration",
-        "Custom branding",
-        "API access",
-        "Advanced analytics",
-        "Priority processing",
-        "Custom integrations"
+        "Business Idea Generator",
+        "Name Checker",
+        "Logo Generator",
+        "Biography Generator",
+        "Legal Docs Generator",
+        "Startup Checklist",
+        "Social Media Generator",
+        "Marketing Strategy Generator",
+        "Business Mentor Chatbot",
+        "Business Plan Generator",
+        "Pitch Deck Generator",
+        "Business Resource Finder",
+        "Business Foundation Builder"
       ],
-      popular: false,
-      current: subscriptionTier === "Pro",
-      ctaText: subscriptionTier === "Pro" ? "Current Plan" : "Upgrade to Pro",
-      ctaAction: () => openCheckoutModal("Pro Plan", "$16.99", "pro-monthly")
+      tier: "hire-yourself",
+      icon: "🚀"
     },
     {
-      name: "Enterprise",
-      price: "Custom",
-      period: "pricing",
-      description: "For organizations and institutions that need advanced capabilities, scalability, and priority support",
+      name: "Launch It Path",
+      price: "$15",
+      period: "month",
+      description: "Turn your creative idea into reality",
       features: [
-        "Unlimited team members",
-        "Advanced admin controls and permissions",
-        "Priority customer support",
-        "Personalized onboarding assistance",
-        "Team training resources",
-        "Usage analytics and reporting dashboard",
-        "Enhanced data security options",
-        "API access and custom workflow setup",
-        "Flexible integrations with existing tools",
-        "Scalable storage and performance capacity",
-        "Early access to select new features"
+        "Comprehensive Launch Strategy Generator",
+        "Idea validation & market research",
+        "Step-by-step launch roadmap",
+        "Branding & marketing strategy",
+        "Monetization planning",
+        "Social media & content plan",
+        "Funding opportunity finder",
+        "Tech setup guidance"
       ],
-      popular: false,
-      current: subscriptionTier === "Enterprise",
-      ctaText: subscriptionTier === "Enterprise" ? "Current Plan" : "Contact Us",
-      ctaAction: () => window.location.href = "/contact"
+      tier: "launch-it",
+      icon: "💡"
+    },
+    {
+      name: "Teach It Path",
+      price: "$15",
+      period: "month",
+      description: "Share your expertise through courses & webinars",
+      features: [
+        "Teaching Materials Generator",
+        "Webinar concept development",
+        "Course outline creation",
+        "Handout & resource generator",
+        "Script & presentation builder",
+        "Student engagement tools",
+        "Assessment creation"
+      ],
+      tier: "teach-it",
+      icon: "📚"
+    },
+    {
+      name: "Grant Writing Path",
+      price: "$15",
+      period: "month",
+      description: "Secure funding for your mission",
+      features: [
+        "Grant Narrative Generator",
+        "Grant Finder & Search",
+        "Local Resource Finder",
+        "Application guidance",
+        "Budget templates",
+        "Impact statement builder",
+        "Eligibility checker"
+      ],
+      tier: "grant-writing",
+      icon: "📝"
     }
   ];
 
@@ -154,7 +167,6 @@ const Pricing = () => {
       <Header />
       
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
-        {/* Background Image with Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -162,7 +174,6 @@ const Pricing = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
         </div>
         
-        {/* Decorative Elements */}
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
         <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
         <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
@@ -174,11 +185,11 @@ const Pricing = () => {
               <Crown className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Choose Your Plan
+              Choose Your Path
             </h1>
-            <div className="text-left max-w-4xl mx-auto">
+            <div className="text-center max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Unlock your potential with the right plan for your journey. Start free and upgrade as you grow.
+                Start with a free trial, then choose the path that fits your journey—or get everything with our All Access Pass.
               </p>
             </div>
           </div>
@@ -187,79 +198,206 @@ const Pricing = () => {
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
-      <section className="section-spacing-sm">
+      {/* Free Tier */}
+      <section className="section-spacing-sm bg-gradient-section-1">
         <div className="page-container">
-          <div className="content-width">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-              {plans.map((plan, index) => (
-                <Card 
-                  key={plan.name} 
-                  className={`relative premium-card card-padding-lg ${
-                    plan.popular ? 'border-primary shadow-glow' : ''
-                  } ${plan.current ? 'ring-2 ring-primary' : ''}`}
-                >
-                  {plan.popular && (
-                    <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
-                      <Star className="h-3 w-3 mr-1" />
-                      Most Popular
-                    </Badge>
-                  )}
-                  {plan.current && (
-                    <Badge className="absolute -top-3 right-4 bg-green-500 text-white">
-                      <Crown className="h-3 w-3 mr-1" />
-                      Current Plan
-                    </Badge>
-                  )}
-                  
-                  <CardHeader className="text-left">
-                    <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
-                    <div className="mt-4">
-                      <span className="text-4xl font-bold text-primary">{plan.price}</span>
-                      {plan.period !== "forever" && (
-                        <span className="text-muted-foreground">/{plan.period}</span>
-                      )}
-                    </div>
-                    <CardDescription className="mt-2 text-left">{plan.description}</CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent className="space-y-6">
-                    <ul className="space-y-3">
-                      {plan.features.map((feature, featureIndex) => (
-                        <li key={featureIndex} className="flex items-center">
-                          <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                          <span className="text-sm text-left">{feature}</span>
-                        </li>
-                      ))}
+          <div className="max-w-4xl mx-auto">
+            <Card className="premium-card card-padding-lg border-2 border-primary/20">
+              <CardHeader className="text-center">
+                <Badge className="mx-auto mb-4 bg-green-500 text-white">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  Free Forever
+                </Badge>
+                <CardTitle className="text-3xl font-bold">Explore Mode</CardTitle>
+                <CardDescription className="text-lg mt-4">
+                  Try everything free for 2 days, then keep limited access forever
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-primary">During 2-Day Trial:</h4>
+                    <ul className="space-y-2">
+                      <li className="flex items-center">
+                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-sm">Full access to all tools</span>
+                      </li>
+                      <li className="flex items-center">
+                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-sm">Unlimited AI generations</span>
+                      </li>
+                      <li className="flex items-center">
+                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-sm">All premium features</span>
+                      </li>
                     </ul>
-                    
-                    <div className="pt-4">
-                      <Button
-                        className="w-full"
-                        variant={plan.popular ? "default" : "outline"}
-                        size="lg"
-                        onClick={plan.ctaAction}
-                        disabled={plan.current}
-                      >
-                        {plan.current && <Crown className="h-4 w-4 mr-2" />}
-                        {plan.ctaText}
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-primary">After Trial:</h4>
+                    <ul className="space-y-2">
+                      <li className="flex items-center">
+                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-sm">1 AI tool use per month</span>
+                      </li>
+                      <li className="flex items-center">
+                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-sm">Community access</span>
+                      </li>
+                      <li className="flex items-center">
+                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-sm">Email support</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="pt-4">
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={() => window.location.href = "/auth"}
+                  >
+                    Start Free Trial
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Checkout Modal */}
+      {/* Path-Based Subscriptions */}
+      <section className="section-spacing-sm">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <h2 className="section-header mb-4">Path-Based Subscriptions</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Choose the path that matches your goals. Each includes specialized tools and unlimited access to that path's features.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+            {pathPlans.map((plan) => (
+              <Card 
+                key={plan.name}
+                className="premium-card card-padding-lg hover:shadow-glow transition-all"
+              >
+                <CardHeader className="text-left">
+                  <div className="text-4xl mb-4">{plan.icon}</div>
+                  <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
+                  <div className="mt-4">
+                    <span className="text-3xl font-bold text-primary">{plan.price}</span>
+                    <span className="text-muted-foreground">/{plan.period}</span>
+                  </div>
+                  <CardDescription className="mt-2 text-left">{plan.description}</CardDescription>
+                </CardHeader>
+                
+                <CardContent className="space-y-6">
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+                    {plan.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-start">
+                        <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm text-left">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="pt-4">
+                    <Button
+                      className="w-full"
+                      variant="outline"
+                      size="lg"
+                      onClick={() => openCheckoutModal(plan.name, plan.price, plan.tier)}
+                    >
+                      Get Started
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* All Access Pass */}
+      <section className="section-spacing-sm bg-gradient-section-2">
+        <div className="page-container">
+          <div className="max-w-4xl mx-auto">
+            <Card className="premium-card card-padding-lg border-2 border-primary shadow-glow relative overflow-hidden">
+              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
+                <Star className="h-3 w-3 mr-1" />
+                Best Value
+              </Badge>
+              
+              <CardHeader className="text-center">
+                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Crown className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-3xl font-bold">All Access Pass</CardTitle>
+                <div className="mt-4">
+                  <span className="text-5xl font-bold text-primary">$29</span>
+                  <span className="text-muted-foreground">/month</span>
+                </div>
+                <CardDescription className="text-lg mt-4">
+                  Get unlimited access to every tool, feature, and path
+                </CardDescription>
+              </CardHeader>
+              
+              <CardContent className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="font-medium">Everything from all 5 paths</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="font-medium">Unlimited AI tool usage</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="font-medium">Priority feature access</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="font-medium">Save unlimited results</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="font-medium">Early access to new tools</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                    <span className="font-medium">Priority email support</span>
+                  </div>
+                </div>
+                
+                <div className="bg-primary/5 rounded-lg p-4 text-center">
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Save up to <span className="font-bold text-primary">$46/month</span> compared to individual paths
+                  </p>
+                </div>
+                
+                <div className="pt-4">
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={() => openCheckoutModal("All Access Pass", "$29", "all-access")}
+                  >
+                    <Crown className="h-4 w-4 mr-2" />
+                    Get All Access Pass
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       <CheckoutModal
         open={checkoutModal.open}
         onOpenChange={(open) => setCheckoutModal(prev => ({ ...prev, open }))}
-        onConfirm={() => handleSubscribe(checkoutModal.priceId)}
+        onConfirm={() => handleSubscribe(checkoutModal.tier)}
         planName={checkoutModal.planName}
         price={checkoutModal.price}
-        isEbook={checkoutModal.isEbook}
       />
 
       {/* FAQ Section */}
@@ -271,46 +409,46 @@ const Pricing = () => {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Can I change plans anytime?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">Can I switch between paths?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+                    Yes! You can upgrade, downgrade, or switch to a different path anytime. Changes take effect immediately.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What payment methods do you accept?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What happens after my free trial?</h3>
                   <p className="text-muted-foreground text-sm">
-                    We accept all major credit cards, PayPal, and bank transfers through our secure payment processor.
+                    After 2 days, you'll automatically be on the free Explore Mode with 1 tool use per month. Upgrade anytime to unlock unlimited access.
                   </p>
                 </div>
                 
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Is there a free trial?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Our free plan gives you access to basic features forever. Premium features require a paid subscription.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="space-y-6">
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Can I cancel anytime?</h3>
                   <p className="text-muted-foreground text-sm">
                     Absolutely! Cancel your subscription anytime. You'll continue to have access until the end of your billing period.
                   </p>
                 </div>
-                
+              </div>
+              
+              <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Do you offer refunds?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What payment methods do you accept?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final.
+                    We accept all major credit cards through our secure payment processor, Stripe.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Need help choosing?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">Do you offer refunds?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Contact our support team and we'll help you find the perfect plan for your needs.
+                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final. Try our free trial first!
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">Which path is right for me?</h3>
+                  <p className="text-muted-foreground text-sm">
+                    If you're job hunting, choose Job Prep. Starting a business? Pick Hire Yourself. Not sure? Get the All Access Pass for everything.
                   </p>
                 </div>
               </div>

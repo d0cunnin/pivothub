@@ -49,22 +49,22 @@ serve(async (req) => {
 
     // Define pricing based on tier
     const pricing = {
-      basic: { amount: 799, name: "Basic Plan" },     // $7.99
-      pro: { amount: 1499, name: "Pro Plan" },        // $14.99
-      "ebook-career": { amount: 299, name: "Career Transformation Guide" },
-      "ebook-business": { amount: 299, name: "Business Startup Handbook" },
-      "ebook-skills": { amount: 299, name: "Skills Development Mastery" },
+      "job-prep": { amount: 1200, name: "Job Prep Path" },     // $12.00
+      "hire-yourself": { amount: 1500, name: "Hire Yourself Path" },        // $15.00
+      "launch-it": { amount: 1500, name: "Launch It Path" },        // $15.00
+      "teach-it": { amount: 1500, name: "Teach It Path" },        // $15.00
+      "grant-writing": { amount: 1500, name: "Grant Writing Path" },        // $15.00
+      "all-access": { amount: 2900, name: "All Access Pass" },        // $29.00
       "side-income-blueprint": { amount: 4700, name: "Side Income Blueprint" }
     };
 
     const selectedPlan = pricing[tier as keyof typeof pricing];
     if (!selectedPlan) throw new Error("Invalid subscription tier");
 
-    // Determine if it's an e-book or subscription
-    const isEbook = tier.includes('ebook');
-    const isSideIncome = tier === 'side-income-blueprint';
+    // Determine if it's a one-time payment or subscription
+    const isOneTimePayment = tier === 'side-income-blueprint';
     
-    const successUrl = isSideIncome && assessmentId
+    const successUrl = isOneTimePayment && assessmentId
       ? `${req.headers.get("origin")}/side-income-blueprint?assessment=${assessmentId}&success=true`
       : `${req.headers.get("origin")}/pricing?success=true`;
     
@@ -77,15 +77,15 @@ serve(async (req) => {
             currency: "usd",
             product_data: { name: selectedPlan.name },
             unit_amount: selectedPlan.amount,
-            ...(isEbook || isSideIncome ? {} : { recurring: { interval: "month" } }),
+            ...(isOneTimePayment ? {} : { recurring: { interval: "month" } }),
           },
           quantity: 1,
         },
       ],
-      mode: (isEbook || isSideIncome) ? "payment" : "subscription",
+      mode: isOneTimePayment ? "payment" : "subscription",
       success_url: successUrl,
       cancel_url: `${req.headers.get("origin")}/pricing?canceled=true`,
-      metadata: assessmentId ? { assessmentId, userId: user.id } : {},
+      metadata: assessmentId ? { assessmentId, userId: user.id } : { tier },
     });
 
     logStep("Checkout session created", { sessionId: session.id });
