@@ -15,6 +15,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Shield, Users, Activity, Search, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { SupabaseUsageMonitor } from "@/components/SupabaseUsageMonitor";
 
 interface UserWithSubscription {
   id: string;
@@ -145,6 +146,9 @@ const Admin = () => {
             </div>
             <p className="text-muted-foreground">Manage user access and subscriptions</p>
           </div>
+
+          {/* Supabase Usage Monitor */}
+          <SupabaseUsageMonitor />
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
