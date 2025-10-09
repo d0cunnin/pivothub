@@ -296,6 +296,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
 
           <div className="space-y-2">
             <Label htmlFor="riskTolerance">What's your risk tolerance?</Label>
+            <p className="text-sm text-muted-foreground">This helps match you with opportunities that fit your financial comfort level</p>
             <Select 
               value={formData.riskTolerance}
               onValueChange={(value) => setFormData(prev => ({ ...prev, riskTolerance: value }))}
