@@ -50,6 +50,12 @@ export const Header = () => {
               >
                 About
               </Link>
+              <Link 
+                to="/pricing" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
+              >
+                Pricing
+              </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
@@ -89,12 +95,6 @@ export const Header = () => {
                 HireYourself
               </Link>
               <Link 
-                to="/pricing" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
-              >
-                Pricing
-              </Link>
-              <Link 
                 to="/teachit" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/teachit' ? 'text-primary font-medium' : ''}`}
               >
@@ -111,12 +111,6 @@ export const Header = () => {
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
               >
                 Grant Writing
-              </Link>
-              <Link 
-                to="/freelancer-marketplace" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname.includes('/freelancer') || location.pathname.includes('/client') ? 'text-primary font-medium' : ''}`}
-              >
-                Tech Talent Hub
               </Link>
             </div>
           </nav>
@@ -147,7 +141,7 @@ export const Header = () => {
                 <Link to="/auth">
                   <Button variant="ghost">Sign In</Button>
                 </Link>
-                <Button variant="hero" onClick={handleGetStarted}>Get Started</Button>
+                <Button variant="hero" onClick={handleGetStarted}>Sign Up</Button>
               </>
             )}
           </div>
@@ -178,6 +172,13 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
+              </Link>
+              <Link 
+                to="/pricing" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Pricing
               </Link>
               <div className="space-y-2">
                 <Link 
@@ -218,13 +219,6 @@ export const Header = () => {
               >
                 HireYourself
               </Link>
-              <Link 
-                to="/pricing" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Pricing
-              </Link>
                <Link 
                 to="/teachit" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/teachit' ? 'text-primary font-medium' : ''}`}
@@ -246,13 +240,6 @@ export const Header = () => {
               >
                 Grant Writing
               </Link>
-              <Link 
-                to="/freelancer-marketplace" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname.includes('/freelancer') || location.pathname.includes('/client') ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Tech Talent Hub
-              </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 {user ? (
                   <>
@@ -271,7 +258,7 @@ export const Header = () => {
                     <Link to="/auth">
                       <Button variant="ghost" className="w-full">Sign In</Button>
                     </Link>
-                    <Button variant="hero" onClick={handleGetStarted} className="w-full">Get Started</Button>
+                    <Button variant="hero" onClick={handleGetStarted} className="w-full">Sign Up</Button>
                   </>
                 )}
               </div>
