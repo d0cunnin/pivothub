@@ -104,7 +104,7 @@ export const Header = () => {
                 to="/launchit" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/launchit' ? 'text-primary font-medium' : ''}`}
               >
-                Launch It 🚀
+                Launch It
               </Link>
               <Link
                 to="/grantwriting" 
@@ -231,7 +231,7 @@ export const Header = () => {
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/launchit' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                Launch It 🚀
+                Launch It
               </Link>
                <Link
                 to="/grantwriting" 
