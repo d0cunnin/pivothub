@@ -24,7 +24,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   toolName = "this tool"
 }) => {
   const { toolUsageCount, canUseTools, needsSignup, needsSubscription, incrementUsage } = useUsage();
-  const { user, isTrialActive, trialDaysRemaining, subscribed } = useAuth();
+  const { user, isTrialActive, trialDaysRemaining, subscribed, isAdmin } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,6 +33,12 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   const { toast } = useToast();
 
   const handleToolUse = () => {
+    // Admins bypass all restrictions
+    if (isAdmin) {
+      onUse?.();
+      return;
+    }
+
     if (canUseTools || user) {
       incrementUsage();
       onUse?.();
@@ -127,10 +133,10 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
     }
   };
 
-  // Show usage warning if approaching limit
-  const showTrialBanner = user && isTrialActive;
-  const showUsageWarning = !user && toolUsageCount === 1;
-  const showFreeLimitWarning = user && !subscribed && !isTrialActive && toolUsageCount >= 3;
+  // Show usage warning if approaching limit (but not for admins)
+  const showTrialBanner = !isAdmin && user && isTrialActive;
+  const showUsageWarning = !isAdmin && !user && toolUsageCount === 1;
+  const showFreeLimitWarning = !isAdmin && user && !subscribed && !isTrialActive && toolUsageCount >= 3;
 
   return (
     <div>
