@@ -45,6 +45,12 @@ export const Header = () => {
                 About
               </Link>
               <Link 
+                to="/side-income-blueprint" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/side-income-blueprint' ? 'text-primary font-medium' : ''}`}
+              >
+                Side Income Blueprint
+              </Link>
+              <Link 
                 to="/pricing" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
               >
@@ -159,6 +165,13 @@ export const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
+              </Link>
+              <Link 
+                to="/side-income-blueprint" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/side-income-blueprint' ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Side Income Blueprint
               </Link>
               <Link 
                 to="/pricing" 

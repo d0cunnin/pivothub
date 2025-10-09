@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,30 +18,37 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const [grantingAdmin, setGrantingAdmin] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { user, isAdmin, checkAdminStatus } = useAuth();
+
+  const redirectPath = searchParams.get('redirect') || '/';
 
   useEffect(() => {
     // Check if user is already logged in
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate('/');
+        navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
       }
     };
     checkUser();
-  }, [navigate]);
+  }, [navigate, redirectPath]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const redirectUrl = redirectPath === '/' 
+        ? `${window.location.origin}/`
+        : `${window.location.origin}/${redirectPath}`;
+        
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`
+          emailRedirectTo: redirectUrl
         }
       });
 
@@ -71,10 +78,14 @@ const Auth = () => {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
+      const redirectUrl = redirectPath === '/' 
+        ? `${window.location.origin}/`
+        : `${window.location.origin}/${redirectPath}`;
+        
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`
+          redirectTo: redirectUrl
         }
       });
 
@@ -117,7 +128,7 @@ const Auth = () => {
           title: "Success",
           description: "Welcome back!",
         });
-        navigate('/');
+        navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
       }
     } catch (error) {
       toast({

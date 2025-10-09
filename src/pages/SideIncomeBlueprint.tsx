@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,25 +20,15 @@ export default function SideIncomeBlueprint() {
   const [showCheckout, setShowCheckout] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Check if returning from successful payment
-  useEffect(() => {
-    const success = searchParams.get('success');
-    const assessmentParam = searchParams.get('assessment');
-    
-    if (success === 'true' && assessmentParam) {
-      setAssessmentId(assessmentParam);
-      setStep('report');
-    }
-  }, [searchParams]);
-
-  const handleAssessmentComplete = async (assessmentData: any) => {
+  const handleAssessmentComplete = useCallback(async (assessmentData: any) => {
     if (!user) {
+      // Store assessment data and prompt to sign in
+      localStorage.setItem('pendingAssessment', JSON.stringify(assessmentData));
       toast({
-        title: "Authentication required",
-        description: "Please sign in to continue",
-        variant: "destructive"
+        title: "Sign in required",
+        description: "Please sign in to continue with your purchase",
       });
-      navigate("/auth");
+      navigate("/auth?redirect=side-income-blueprint");
       return;
     }
 
@@ -69,9 +59,43 @@ export default function SideIncomeBlueprint() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, navigate, toast]);
+
+  // Check if returning from auth with pending assessment
+  useEffect(() => {
+    const success = searchParams.get('success');
+    const assessmentParam = searchParams.get('assessment');
+    
+    if (success === 'true' && assessmentParam) {
+      setAssessmentId(assessmentParam);
+      setStep('report');
+      return;
+    }
+
+    // Check for pending assessment after sign-in
+    const pendingAssessment = localStorage.getItem('pendingAssessment');
+    if (user && pendingAssessment && step === 'intro') {
+      try {
+        const assessmentData = JSON.parse(pendingAssessment);
+        localStorage.removeItem('pendingAssessment');
+        handleAssessmentComplete(assessmentData);
+      } catch (error) {
+        console.error('Error processing pending assessment:', error);
+      }
+    }
+  }, [searchParams, user, step, handleAssessmentComplete]);
 
   const handleCheckoutConfirm = async () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to complete your purchase",
+        variant: "destructive"
+      });
+      navigate("/auth");
+      return;
+    }
+
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: { tier: 'side-income-blueprint', assessmentId }
@@ -91,24 +115,6 @@ export default function SideIncomeBlueprint() {
       });
     }
   };
-
-  if (!user) {
-    return (
-      <div className="container mx-auto px-4 py-16">
-        <Card className="max-w-2xl mx-auto">
-          <CardHeader>
-            <CardTitle>Sign In Required</CardTitle>
-            <CardDescription>
-              Please sign in to access the Side Income Blueprint
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => navigate('/auth')}>Sign In</Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   if (step === 'report') {
     return <SideIncomeReport assessmentId={assessmentId} />;
@@ -219,9 +225,9 @@ export default function SideIncomeBlueprint() {
           </CardContent>
         </Card>
 
-        <div className="text-center">
+          <div className="text-center">
           <div className="mb-6">
-            <span className="text-5xl font-bold">$47</span>
+            <span className="text-5xl font-bold">$27</span>
             <span className="text-muted-foreground ml-2">one-time payment</span>
           </div>
           <Button 
@@ -242,7 +248,7 @@ export default function SideIncomeBlueprint() {
         onOpenChange={setShowCheckout}
         onConfirm={handleCheckoutConfirm}
         planName="Side Income Blueprint"
-        price="$47"
+        price="$27"
         isEbook={true}
       />
     </div>

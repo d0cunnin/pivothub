@@ -55,7 +55,7 @@ serve(async (req) => {
       "teach-it": { amount: 1500, name: "Teach It Path" },        // $15.00
       "grant-writing": { amount: 1500, name: "Grant Writing Path" },        // $15.00
       "all-access": { amount: 2900, name: "All Access Pass" },        // $29.00
-      "side-income-blueprint": { amount: 4700, name: "Side Income Blueprint" }
+      "side-income-blueprint": { amount: 2700, name: "Side Income Blueprint" }     // $27.00
     };
 
     const selectedPlan = pricing[tier as keyof typeof pricing];
