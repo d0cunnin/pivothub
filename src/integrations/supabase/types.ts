@@ -266,6 +266,68 @@ export type Database = {
         }
         Relationships: []
       }
+      side_income_assessments: {
+        Row: {
+          assessment_data: Json
+          created_at: string
+          id: string
+          payment_status: string
+          stripe_session_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assessment_data?: Json
+          created_at?: string
+          id?: string
+          payment_status?: string
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assessment_data?: Json
+          created_at?: string
+          id?: string
+          payment_status?: string
+          stripe_session_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      side_income_reports: {
+        Row: {
+          assessment_id: string
+          created_at: string
+          id: string
+          report_content: Json
+          user_id: string
+        }
+        Insert: {
+          assessment_id: string
+          created_at?: string
+          id?: string
+          report_content: Json
+          user_id: string
+        }
+        Update: {
+          assessment_id?: string
+          created_at?: string
+          id?: string
+          report_content?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "side_income_reports_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: true
+            referencedRelation: "side_income_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscribers: {
         Row: {
           created_at: string

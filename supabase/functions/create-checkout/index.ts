@@ -32,8 +32,8 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    const { tier } = await req.json();
-    logStep("Request received", { tier });
+    const { tier, assessmentId } = await req.json();
+    logStep("Request received", { tier, assessmentId });
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
     
@@ -53,7 +53,8 @@ serve(async (req) => {
       pro: { amount: 1499, name: "Pro Plan" },        // $14.99
       "ebook-career": { amount: 299, name: "Career Transformation Guide" },
       "ebook-business": { amount: 299, name: "Business Startup Handbook" },
-      "ebook-skills": { amount: 299, name: "Skills Development Mastery" }
+      "ebook-skills": { amount: 299, name: "Skills Development Mastery" },
+      "side-income-blueprint": { amount: 4700, name: "Side Income Blueprint" }
     };
 
     const selectedPlan = pricing[tier as keyof typeof pricing];
@@ -61,6 +62,11 @@ serve(async (req) => {
 
     // Determine if it's an e-book or subscription
     const isEbook = tier.includes('ebook');
+    const isSideIncome = tier === 'side-income-blueprint';
+    
+    const successUrl = isSideIncome && assessmentId
+      ? `${req.headers.get("origin")}/side-income-blueprint?assessment=${assessmentId}&success=true`
+      : `${req.headers.get("origin")}/pricing?success=true`;
     
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -71,14 +77,15 @@ serve(async (req) => {
             currency: "usd",
             product_data: { name: selectedPlan.name },
             unit_amount: selectedPlan.amount,
-            ...(isEbook ? {} : { recurring: { interval: "month" } }),
+            ...(isEbook || isSideIncome ? {} : { recurring: { interval: "month" } }),
           },
           quantity: 1,
         },
       ],
-      mode: isEbook ? "payment" : "subscription",
-      success_url: `${req.headers.get("origin")}/pricing?success=true`,
+      mode: (isEbook || isSideIncome) ? "payment" : "subscription",
+      success_url: successUrl,
       cancel_url: `${req.headers.get("origin")}/pricing?canceled=true`,
+      metadata: assessmentId ? { assessmentId, userId: user.id } : {},
     });
 
     logStep("Checkout session created", { sessionId: session.id });

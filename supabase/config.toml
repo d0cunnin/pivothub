@@ -1,5 +1,11 @@
 project_id = "fkvjsgqjgissolpdqbdh"
 
+[functions.generate-side-income-report]
+verify_jwt = false
+
+[functions.stripe-webhook-side-income]
+verify_jwt = false
+
 [functions.get-course-video]
 verify_jwt = false
 
