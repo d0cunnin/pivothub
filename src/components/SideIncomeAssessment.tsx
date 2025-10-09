@@ -16,9 +16,13 @@ interface SideIncomeAssessmentProps {
   loading?: boolean;
 }
 
-const INTERESTS_OPTIONS = [
-  "Technology", "Creative Arts", "Business", "Health & Wellness",
-  "Education", "Real Estate", "Finance", "E-commerce", "Content Creation"
+const CONSTRAINT_OPTIONS = [
+  "Limited internet/computer access",
+  "No car/transportation",
+  "Childcare responsibilities (need flexible schedule)",
+  "Physical limitations (need desk/remote work)",
+  "Language barriers (English not first language)",
+  "No constraints"
 ];
 
 export default function SideIncomeAssessment({ onComplete, loading = false }: SideIncomeAssessmentProps) {
@@ -27,13 +31,18 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
     currentIncome: "",
     timeAvailable: "",
     incomeGoal: "",
+    timeframe: "",
+    workEnvironment: "",
+    clientInteraction: "",
+    constraints: [] as string[],
+    riskTolerance: "",
     skills: [] as string[],
     languages: [] as string[],
     customLanguage: "",
-    interests: [] as string[],
     goals: "",
     startupBudget: "",
-    experience: ""
+    experience: "",
+    dealBreakers: ""
   });
   
   const [openCategories, setOpenCategories] = useState<string[]>([]);
@@ -85,12 +94,12 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
     return categorySkills.filter(s => formData.skills.includes(s)).length;
   };
 
-  const handleInterestToggle = (interest: string) => {
+  const handleConstraintToggle = (constraint: string) => {
     setFormData(prev => ({
       ...prev,
-      interests: prev.interests.includes(interest)
-        ? prev.interests.filter(i => i !== interest)
-        : [...prev.interests, interest]
+      constraints: prev.constraints.includes(constraint)
+        ? prev.constraints.filter(c => c !== constraint)
+        : [...prev.constraints, constraint]
     }));
   };
 
@@ -116,9 +125,13 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
     formData.currentIncome &&
     formData.timeAvailable &&
     formData.incomeGoal &&
+    formData.timeframe &&
+    formData.workEnvironment &&
+    formData.clientInteraction &&
+    formData.constraints.length > 0 &&
+    formData.riskTolerance &&
     totalSkillsSelected >= 3 &&
     totalSkillsSelected <= 30 &&
-    formData.interests.length > 0 &&
     formData.goals &&
     formData.startupBudget;
 
@@ -202,6 +215,99 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
                 <SelectItem value="2000-3500">$2,000-$3,500 (substantial second income)</SelectItem>
                 <SelectItem value="3500-5000">$3,500-$5,000 (near full-time income)</SelectItem>
                 <SelectItem value="5000+">$5,000+ (replacement income)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="timeframe">How quickly do you need to start making money?</Label>
+            <Select 
+              value={formData.timeframe}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, timeframe: value }))}
+            >
+              <SelectTrigger id="timeframe">
+                <SelectValue placeholder="Select timeframe" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="urgent">This week (emergency/urgent)</SelectItem>
+                <SelectItem value="30-days">Within 30 days (soon but not desperate)</SelectItem>
+                <SelectItem value="60-90-days">Within 60-90 days (can build slowly)</SelectItem>
+                <SelectItem value="exploring">No rush, just exploring options</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="workEnvironment">What type of work environment do you prefer?</Label>
+            <p className="text-sm text-muted-foreground">This affects what opportunities fit your lifestyle</p>
+            <Select 
+              value={formData.workEnvironment}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, workEnvironment: value }))}
+            >
+              <SelectTrigger id="workEnvironment">
+                <SelectValue placeholder="Select work environment" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="remote-only">Work from home/remote only</SelectItem>
+                <SelectItem value="local-in-person">Willing to meet clients in person locally</SelectItem>
+                <SelectItem value="travel">Willing to travel to client locations</SelectItem>
+                <SelectItem value="hybrid">Mix of remote and in-person</SelectItem>
+                <SelectItem value="no-preference">No preference</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="clientInteraction">Are you willing to work with clients/customers directly?</Label>
+            <Select 
+              value={formData.clientInteraction}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, clientInteraction: value }))}
+            >
+              <SelectTrigger id="clientInteraction">
+                <SelectValue placeholder="Select preference" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="yes-enjoy">Yes, I enjoy working with people</SelectItem>
+                <SelectItem value="yes-virtual">Yes, but only virtually (no in-person)</SelectItem>
+                <SelectItem value="prefer-minimal">Prefer minimal client interaction</SelectItem>
+                <SelectItem value="no-passive">No, I want passive/automated income only</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-3">
+            <Label>Do you have any of these constraints?</Label>
+            <p className="text-sm text-muted-foreground">Select all that apply</p>
+            <div className="grid grid-cols-1 gap-3">
+              {CONSTRAINT_OPTIONS.map(constraint => (
+                <div key={constraint} className="flex items-center space-x-2">
+                  <Checkbox 
+                    id={`constraint-${constraint}`}
+                    checked={formData.constraints.includes(constraint)}
+                    onCheckedChange={() => handleConstraintToggle(constraint)}
+                  />
+                  <label htmlFor={`constraint-${constraint}`} className="text-sm cursor-pointer">
+                    {constraint}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="riskTolerance">What's your risk tolerance?</Label>
+            <Select 
+              value={formData.riskTolerance}
+              onValueChange={(value) => setFormData(prev => ({ ...prev, riskTolerance: value }))}
+            >
+              <SelectTrigger id="riskTolerance">
+                <SelectValue placeholder="Select risk tolerance" />
+              </SelectTrigger>
+              <SelectContent className="bg-background z-50">
+                <SelectItem value="very-low">Very low (need guaranteed payment for work done)</SelectItem>
+                <SelectItem value="low">Low (prefer predictable hourly/project-based work)</SelectItem>
+                <SelectItem value="moderate">Moderate (okay with some income variability)</SelectItem>
+                <SelectItem value="high">High (willing to build something that pays off later)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -326,23 +432,6 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
             </ScrollArea>
           </div>
 
-          <div className="space-y-3">
-            <Label>Areas of Interest (select all that apply)</Label>
-            <div className="grid grid-cols-2 gap-3">
-              {INTERESTS_OPTIONS.map(interest => (
-                <div key={interest} className="flex items-center space-x-2">
-                  <Checkbox 
-                    id={`interest-${interest}`}
-                    checked={formData.interests.includes(interest)}
-                    onCheckedChange={() => handleInterestToggle(interest)}
-                  />
-                  <label htmlFor={`interest-${interest}`} className="text-sm cursor-pointer">
-                    {interest}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
 
           <div className="space-y-2">
             <Label htmlFor="goals">What are your income goals?</Label>
@@ -380,6 +469,21 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
               placeholder="Have you tried any side hustles before? What worked or didn't work?"
               value={formData.experience}
               onChange={(e) => setFormData(prev => ({ ...prev, experience: e.target.value }))}
+              rows={3}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="dealBreakers">Any specific deal-breakers? (optional)</Label>
+            <p className="text-sm text-muted-foreground">
+              Things you absolutely won't do (e.g., won't do cold calling/sales, won't work nights/weekends, 
+              won't do physical labor, won't handle food/cooking, won't work with children, won't do commission-only work)
+            </p>
+            <Textarea 
+              id="dealBreakers"
+              placeholder="List any activities or work conditions you want to avoid..."
+              value={formData.dealBreakers}
+              onChange={(e) => setFormData(prev => ({ ...prev, dealBreakers: e.target.value }))}
               rows={3}
             />
           </div>
