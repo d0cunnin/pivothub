@@ -195,6 +195,17 @@ const LaunchIt = () => {
       {/* Form Section */}
       <section id="launch-form" className="py-16 bg-gradient-section-1 relative overflow-hidden">
         <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Create Your Launch Strategy
+              </h2>
+            </div>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Answer a few questions about your project and we'll generate a comprehensive, personalized launch plan tailored to your goals.
+            </p>
+          </div>
+          
           <div className="max-w-4xl mx-auto">
 
             {/* Form */}
