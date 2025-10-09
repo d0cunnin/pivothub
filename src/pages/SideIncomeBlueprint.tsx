@@ -5,10 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckoutModal } from "@/components/CheckoutModal";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, DollarSign, Clock, Target } from "lucide-react";
 import SideIncomeAssessment from "@/components/SideIncomeAssessment";
 import SideIncomeReport from "@/components/SideIncomeReport";
+import heroImage from "@/assets/hero-image.jpg";
 
 export default function SideIncomeBlueprint() {
   const { user } = useAuth();
@@ -117,131 +120,198 @@ export default function SideIncomeBlueprint() {
   };
 
   if (step === 'report') {
-    return <SideIncomeReport assessmentId={assessmentId} />;
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <SideIncomeReport assessmentId={assessmentId} />
+        <Footer />
+      </div>
+    );
   }
 
   if (step === 'assessment') {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <SideIncomeAssessment 
-          onComplete={handleAssessmentComplete}
-          loading={loading}
-        />
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <SideIncomeAssessment 
+            onComplete={handleAssessmentComplete}
+            loading={loading}
+          />
+        </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Your Personalized Side Income Blueprint
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Get a custom plan to build sustainable side income based on your unique situation
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
+        </div>
+        
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
+              <DollarSign className="h-12 w-12 text-white" />
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
+              Your Personalized Side Income Blueprint
+            </h1>
+            <div className="text-center max-w-4xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Get a custom plan to build sustainable side income based on your unique situation, skills, and goals
+              </p>
+            </div>
+            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg"
+                onClick={() => document.getElementById('blueprint-info')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Get Your Blueprint
+              </Button>
+            </div>
+          </div>
+        </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
+      </section>
+
+      {/* Main Content */}
+      <section id="blueprint-info" className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+        <div className="page-container">
+          <div className="max-w-4xl mx-auto">
+
+        <div className="text-center mb-8">
+          <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              How It Works
+            </h2>
+          </div>
+          <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
+            Pay once, take a quick assessment, and receive your personalized blueprint instantly
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
-          <Card>
-            <CardHeader>
-              <DollarSign className="h-8 w-8 mb-2 text-primary" />
-              <CardTitle>Personalized Paths</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                3-5 specific income opportunities tailored to your skills and goals
+          <Card className="premium-card p-6 text-center">
+            <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
+              1
+            </div>
+            <CardTitle className="text-lg mb-3">Make Payment</CardTitle>
+            <CardContent className="p-0">
+              <p className="text-muted-foreground text-sm">
+                One-time payment of $27 for lifetime access to your blueprint
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <Clock className="h-8 w-8 mb-2 text-primary" />
-              <CardTitle>90-Day Action Plan</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Month-by-month roadmap with specific milestones and tasks
+          <Card className="premium-card p-6 text-center">
+            <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
+              2
+            </div>
+            <CardTitle className="text-lg mb-3">Take Assessment</CardTitle>
+            <CardContent className="p-0">
+              <p className="text-muted-foreground text-sm">
+                Answer questions about your skills, time, and income goals
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <Target className="h-8 w-8 mb-2 text-primary" />
-              <CardTitle>Resources & Tools</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Curated list of platforms, courses, and communities to accelerate your success
+          <Card className="premium-card p-6 text-center">
+            <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow">
+              3
+            </div>
+            <CardTitle className="text-lg mb-3">Get Your Blueprint</CardTitle>
+            <CardContent className="p-0">
+              <p className="text-muted-foreground text-sm">
+                Receive your personalized plan instantly
               </p>
             </CardContent>
           </Card>
         </div>
 
-        <Card className="mb-8">
+        <Card className="mb-8 premium-card">
           <CardHeader>
-            <CardTitle>What You'll Get</CardTitle>
+            <CardTitle className="text-2xl">What's Included in Your Blueprint</CardTitle>
+            <CardDescription>Everything you need to launch your side income in 90 days</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-start gap-3">
               <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary text-sm">✓</span>
+                <span className="text-primary text-sm font-bold">✓</span>
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Skills & Assets Analysis</h3>
-                <p className="text-muted-foreground">Deep dive into your unique strengths and how to monetize them</p>
+                <h3 className="font-semibold mb-1">3 Custom Income Ideas</h3>
+                <p className="text-muted-foreground text-sm">Personalized opportunities ranked by feasibility, with startup costs, time requirements, and income potential for each</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary text-sm">✓</span>
+                <span className="text-primary text-sm font-bold">✓</span>
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Ranked Income Opportunities</h3>
-                <p className="text-muted-foreground">Multiple paths with startup costs, time commitment, and income potential</p>
+                <h3 className="font-semibold mb-1">Week-by-Week Launch Plans</h3>
+                <p className="text-muted-foreground text-sm">90-day roadmap broken down into weekly action steps—know exactly what to do each week</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary text-sm">✓</span>
+                <span className="text-primary text-sm font-bold">✓</span>
               </div>
               <div>
-                <h3 className="font-semibold mb-1">Immediate Action Steps</h3>
-                <p className="text-muted-foreground">Quick wins you can start implementing today</p>
+                <h3 className="font-semibold mb-1">All Templates & Scripts</h3>
+                <p className="text-muted-foreground text-sm">Ready-to-use resources including email templates, pitch scripts, and client outreach guides</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-primary text-sm">✓</span>
+                <span className="text-primary text-sm font-bold">✓</span>
               </div>
               <div>
-                <h3 className="font-semibold mb-1">90-Day Implementation Plan</h3>
-                <p className="text-muted-foreground">Month-by-month milestones to keep you on track</p>
+                <h3 className="font-semibold mb-1">Bonus Tax & Legal Guide</h3>
+                <p className="text-muted-foreground text-sm">Essential information on business registration, tax considerations, and legal basics for your side income</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-          <div className="text-center">
-          <div className="mb-6">
-            <span className="text-5xl font-bold">$27</span>
-            <span className="text-muted-foreground ml-2">one-time payment</span>
+          <div className="text-center bg-gradient-card p-8 rounded-2xl shadow-elegant">
+            <div className="mb-6">
+              <span className="text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">$27</span>
+              <span className="text-muted-foreground ml-2 text-lg">one-time payment</span>
+            </div>
+            <Button 
+              size="lg" 
+              onClick={() => setStep('assessment')}
+              className="text-lg px-12 py-6 shadow-glow hover:scale-105 transition-elegant"
+            >
+              Get Your Blueprint Now
+            </Button>
+            <p className="text-sm text-muted-foreground mt-6">
+              Pay once • Take assessment • Get instant blueprint
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Lifetime access • No recurring fees • 100% digital delivery
+            </p>
           </div>
-          <Button 
-            size="lg" 
-            onClick={() => setStep('assessment')}
-            className="text-lg px-8"
-          >
-            Start Your Assessment
-          </Button>
-          <p className="text-sm text-muted-foreground mt-4">
-            Complete the assessment, then pay to receive your personalized blueprint
-          </p>
         </div>
-      </div>
+        </div>
+      </section>
 
       <CheckoutModal
         open={showCheckout}
@@ -251,6 +321,8 @@ export default function SideIncomeBlueprint() {
         price="$27"
         isEbook={true}
       />
+      
+      <Footer />
     </div>
   );
 }
