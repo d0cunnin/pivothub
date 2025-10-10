@@ -10,7 +10,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut, isAdmin } = useAuth();
+  const { user, signOut, isAdmin, subscribed, subscriptionTier, subscriptionEnd, isTrialActive, trialDaysRemaining } = useAuth();
 
   const handleGetStarted = () => {
     navigate('/');
@@ -125,6 +125,30 @@ export const Header = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-card border border-border shadow-lg z-50">
+                  <div className="px-2 py-2 text-sm border-b mb-1">
+                    <div className="font-medium text-foreground">Subscription</div>
+                    <div className="text-muted-foreground text-xs mt-1">
+                      {subscribed ? (
+                        <>
+                          <span className="capitalize font-medium">{subscriptionTier || 'Pro'}</span>
+                          {subscriptionEnd && (
+                            <span className="block mt-0.5">
+                              Until {new Date(subscriptionEnd).toLocaleDateString()}
+                            </span>
+                          )}
+                        </>
+                      ) : isTrialActive ? (
+                        <>
+                          <span className="font-medium">Free Trial</span>
+                          <span className="block mt-0.5">
+                            {trialDaysRemaining} days left
+                          </span>
+                        </>
+                      ) : (
+                        <span className="font-medium">Free Plan</span>
+                      )}
+                    </div>
+                  </div>
                   <DropdownMenuItem asChild>
                     <Link to="/pricing" className="flex w-full cursor-pointer">
                       Manage Subscription

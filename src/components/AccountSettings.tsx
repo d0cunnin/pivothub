@@ -8,10 +8,13 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { CreditCard, Calendar, AlertCircle } from "lucide-react";
 
 export const AccountSettings = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { subscribed, subscriptionTier, subscriptionEnd, isTrialActive, trialDaysRemaining, trialEnd } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [deleteReason, setDeleteReason] = useState("");
@@ -91,6 +94,73 @@ export const AccountSettings = () => {
   return (
     <div className="space-y-6 max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold">Account Settings</h1>
+      
+      {/* Subscription Details Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CreditCard className="h-5 w-5" />
+            Subscription Details
+          </CardTitle>
+          <CardDescription>
+            View and manage your subscription plan
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">
+            {subscribed ? (
+              <>
+                <CreditCard className="h-5 w-5 mt-0.5 text-primary" />
+                <div className="flex-1">
+                  <div className="font-semibold text-lg capitalize">
+                    {subscriptionTier || 'Pro'} Plan
+                  </div>
+                  {subscriptionEnd && (
+                    <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                      <Calendar className="h-4 w-4" />
+                      <span>Renews on {new Date(subscriptionEnd).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : isTrialActive ? (
+              <>
+                <AlertCircle className="h-5 w-5 mt-0.5 text-amber-500" />
+                <div className="flex-1">
+                  <div className="font-semibold text-lg">Free Trial Active</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    {trialDaysRemaining} days remaining
+                  </div>
+                  {trialEnd && (
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Trial ends {new Date(trialEnd).toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <AlertCircle className="h-5 w-5 mt-0.5 text-muted-foreground" />
+                <div className="flex-1">
+                  <div className="font-semibold text-lg">Free Plan</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    Upgrade to access premium features
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+          
+          <div className="flex gap-3">
+            <Button 
+              onClick={() => window.location.href = '/pricing'}
+              variant="default"
+            >
+              {subscribed ? 'Manage Subscription' : 'Upgrade Plan'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Cancel Subscription */}
       <Card>
