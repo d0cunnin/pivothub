@@ -38,8 +38,8 @@ const Blog = () => {
     },
     {
       id: 4,
-      title: "Grant Writing 101: Securing Funding for Your Startup",
-      excerpt: "Master the art of grant writing and unlock funding opportunities for your business venture.",
+      title: "Funding 101: Securing Grants for Your Startup",
+      excerpt: "Master the art of securing funding and unlock grant opportunities for your business venture.",
       author: "David Thompson",
       date: "March 8, 2024",
       readTime: "7 min read",

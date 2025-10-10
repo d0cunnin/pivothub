@@ -42,7 +42,7 @@ const Index = () => {
               <p className="section-description">
                 Our platform is designed to help you rediscover your strengths, explore new career paths, 
                 and access powerful tools to build your future. Start with our comprehensive assessments 
-                to gain clarity on your direction, then leverage our business and grant writing tools to 
+                to gain clarity on your direction, then leverage our business and funding tools to 
                 take action toward your goals.
               </p>
             </div>
@@ -142,16 +142,16 @@ const Index = () => {
               <Card className="premium-card card-padding-sm hover-scale">
                 <CardHeader className="p-0 pb-4">
                   <FileText className="h-10 w-10 text-primary mb-3" />
-                  <CardTitle className="text-2xl">Grant Writing Generator</CardTitle>
+                  <CardTitle className="text-2xl">Funding Generator</CardTitle>
                   <CardDescription className="text-muted-foreground mb-4">
-                    Professional grant writing assistance to help you secure funding for education, 
+                    Professional funding assistance to help you secure grants for education, 
                     training, or business ventures. Generate compelling proposals with AI-powered guidance.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
                   <Link to="/hireyourself">
                     <Button size="lg" className="w-full mb-3">
-                      Start Grant Writing
+                      Start Funding
                     </Button>
                   </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">

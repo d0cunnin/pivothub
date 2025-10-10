@@ -144,7 +144,7 @@ const Pricing = () => {
       icon: "📚"
     },
     {
-      name: "Grant Writing Path",
+      name: "Fund It Path",
       price: "$15",
       period: "month",
       description: "Secure funding for your mission",

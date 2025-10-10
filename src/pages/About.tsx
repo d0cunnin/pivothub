@@ -136,7 +136,7 @@ export default function About() {
             <div className="space-y-6 order-1 lg:order-2">
               <h3 className="section-header">Build Your Future</h3>
               <p className="section-body-text">
-                From job preparation and interview coaching to launching your own business, teaching a skill, or securing grant funding—we provide end-to-end support. Our platform includes AI-powered resume builders, business plan generators, pitch deck creators, grant writing assistance, and course development tools to help you succeed in any direction you choose.
+                From job preparation and interview coaching to launching your own business, teaching a skill, or securing funding—we provide end-to-end support. Our platform includes AI-powered resume builders, business plan generators, pitch deck creators, funding assistance, and course development tools to help you succeed in any direction you choose.
               </p>
             </div>
           </div>

@@ -65,7 +65,7 @@ export const HeroSection = () => {
               className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/grantwriting'}
             >
-              Grant Writing
+              Fund It
             </Button>
             <Button 
               size="lg" 

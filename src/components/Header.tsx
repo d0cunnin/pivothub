@@ -106,11 +106,11 @@ export const Header = () => {
               >
                 Launch It
               </Link>
-              <Link
+              <Link 
                 to="/grantwriting" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
               >
-                Grant Writing
+                Fund It
               </Link>
             </div>
           </nav>
@@ -281,7 +281,7 @@ export const Header = () => {
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                Grant Writing
+                Fund It
               </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 {user ? (
