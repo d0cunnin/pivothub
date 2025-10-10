@@ -121,7 +121,7 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="flex items-center space-x-2">
                     <User className="h-4 w-4" />
-                    <span>{user.email?.split('@')[0]}</span>
+                    <span>Account</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
