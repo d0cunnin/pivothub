@@ -1,5 +1,11 @@
 project_id = "fkvjsgqjgissolpdqbdh"
 
+[functions.cancel-subscription]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = true
+
 [functions.generate-side-income-report]
 verify_jwt = false
 
