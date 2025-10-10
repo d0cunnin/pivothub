@@ -10,7 +10,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, isAdmin } = useAuth();
 
   const handleGetStarted = () => {
     navigate('/');
@@ -124,7 +124,7 @@ export const Header = () => {
                     <span>Account</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuContent align="end" className="w-56 bg-card border border-border shadow-lg z-50">
                   <DropdownMenuItem asChild>
                     <Link to="/pricing" className="flex w-full cursor-pointer">
                       Manage Subscription
@@ -135,6 +135,18 @@ export const Header = () => {
                       Account Settings
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/contact" className="flex w-full cursor-pointer">
+                      Contact
+                    </Link>
+                  </DropdownMenuItem>
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="flex w-full cursor-pointer font-medium text-primary">
+                        Admin Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={signOut} className="text-red-600 cursor-pointer">
                     <LogOut className="h-4 w-4 mr-2" />
                     Sign Out
@@ -252,8 +264,19 @@ export const Header = () => {
                       Signed in as {user.email?.split('@')[0]}
                     </div>
                     <Link to="/pricing">
-                      <Button variant="ghost" className="w-full">Manage Subscription</Button>
+                      <Button variant="ghost" className="w-full justify-start">Manage Subscription</Button>
                     </Link>
+                    <Link to="/settings">
+                      <Button variant="ghost" className="w-full justify-start">Account Settings</Button>
+                    </Link>
+                    <Link to="/contact">
+                      <Button variant="ghost" className="w-full justify-start">Contact</Button>
+                    </Link>
+                    {isAdmin && (
+                      <Link to="/admin">
+                        <Button variant="ghost" className="w-full justify-start font-medium text-primary">Admin Dashboard</Button>
+                      </Link>
+                    )}
                     <Button variant="outline" onClick={signOut} className="w-full">
                       Sign Out
                     </Button>
