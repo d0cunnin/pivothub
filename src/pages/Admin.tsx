@@ -50,7 +50,7 @@ const Admin = () => {
 
       const { data: subscribers } = await supabase
         .from("subscribers_public")
-        .select("user_id, email, subscribed, subscription_tier, subscription_end, trial_start, trial_end, is_trial_active, created_at, updated_at");
+        .select("user_id, subscribed, subscription_tier, subscription_end, trial_start, trial_end, is_trial_active, created_at, updated_at");
 
       const combinedData: UserWithSubscription[] = authUsers?.users.map(user => {
         const profile = profiles?.find(p => p.id === user.id);

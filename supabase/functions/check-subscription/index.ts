@@ -53,7 +53,6 @@ serve(async (req) => {
         .from("subscribers_public")
         .insert({
           user_id: user.id,
-          email: user.email,
           trial_start: new Date().toISOString(),
           trial_end: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
           is_trial_active: true
@@ -134,7 +133,6 @@ serve(async (req) => {
 
     // Update public subscription data
     await supabaseClient.from("subscribers_public").upsert({
-      email: user.email,
       user_id: user.id,
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
@@ -144,10 +142,11 @@ serve(async (req) => {
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id' });
 
-    // Store Stripe customer ID securely (service role only)
+    // Store Stripe customer ID and email securely (service role only)
     await supabaseClient.from("subscribers_secure").upsert({
       user_id: user.id,
       stripe_customer_id: customerId,
+      email: user.email,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id' });
 

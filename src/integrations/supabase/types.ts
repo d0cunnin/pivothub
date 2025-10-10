@@ -331,7 +331,6 @@ export type Database = {
       subscribers_public: {
         Row: {
           created_at: string
-          email: string
           id: string
           is_trial_active: boolean
           subscribed: boolean
@@ -344,7 +343,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          email: string
           id?: string
           is_trial_active?: boolean
           subscribed?: boolean
@@ -357,7 +355,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          email?: string
           id?: string
           is_trial_active?: boolean
           subscribed?: boolean
@@ -373,6 +370,7 @@ export type Database = {
       subscribers_secure: {
         Row: {
           created_at: string
+          email: string | null
           id: string
           stripe_customer_id: string | null
           updated_at: string
@@ -380,6 +378,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          email?: string | null
           id?: string
           stripe_customer_id?: string | null
           updated_at?: string
@@ -387,6 +386,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          email?: string | null
           id?: string
           stripe_customer_id?: string | null
           updated_at?: string
