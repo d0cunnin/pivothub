@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { Mail, Lock, Eye, EyeOff, Shield, Check, X } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Check, X } from "lucide-react";
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +17,6 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [grantingAdmin, setGrantingAdmin] = useState(false);
   const [honeypot, setHoneypot] = useState('');
   const [formStartTime, setFormStartTime] = useState(Date.now());
   const navigate = useNavigate();
@@ -181,78 +180,10 @@ const Auth = () => {
     }
   };
 
-  const handleGrantAdminAccess = async () => {
-    setGrantingAdmin(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('grant-self-admin');
-      
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to grant admin access. Please try again.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (data.alreadyAdmin) {
-        toast({
-          title: "Already Admin",
-          description: "You already have admin access!",
-        });
-        await checkAdminStatus();
-        navigate("/admin");
-        return;
-      }
-
-      toast({
-        title: "Success!",
-        description: "Admin access granted. Redirecting...",
-      });
-      
-      await checkAdminStatus();
-      setTimeout(() => navigate("/admin"), 1000);
-    } catch (error) {
-      console.error("Error granting admin:", error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred.",
-        variant: "destructive",
-      });
-    } finally {
-      setGrantingAdmin(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-4">
-        {user && !isAdmin && (
-          <Card className="border-primary/20 bg-primary/5">
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <Shield className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1 space-y-2">
-                  <h3 className="font-semibold text-foreground">Need Admin Access?</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Get instant admin access to manage the platform and access all features.
-                  </p>
-                  <Button 
-                    onClick={handleGrantAdminAccess}
-                    disabled={grantingAdmin}
-                    className="w-full mt-2"
-                    variant="default"
-                  >
-                    {grantingAdmin ? "Granting Access..." : "Grant Me Admin Access"}
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
         <Card className="w-full">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">Welcome to PivotHub</CardTitle>
