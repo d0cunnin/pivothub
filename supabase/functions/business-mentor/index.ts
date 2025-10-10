@@ -1,10 +1,22 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation schema
+const chatMessageSchema = z.object({
+  text: z.string().trim().min(1).max(2000),
+  isBot: z.boolean()
+});
+
+const businessMentorSchema = z.object({
+  message: z.string().trim().min(1, "Message cannot be empty").max(2000, "Message too long"),
+  conversationHistory: z.array(chatMessageSchema).max(20, "Conversation history too long").default([])
+});
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -13,11 +25,24 @@ serve(async (req) => {
   }
 
   try {
-    const { message, conversationHistory = [] } = await req.json();
+    const requestBody = await req.json();
     
-    if (!message?.trim()) {
-      throw new Error('Message is required');
+    // Validate input
+    const validation = businessMentorSchema.safeParse(requestBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input", 
+          details: validation.error.issues 
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
+
+    const { message, conversationHistory } = validation.data;
 
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {

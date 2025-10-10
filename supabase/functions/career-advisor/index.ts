@@ -1,9 +1,21 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts"
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
+
+// Input validation schema
+const chatMessageSchema = z.object({
+  text: z.string().trim().min(1).max(2000),
+  isBot: z.boolean()
+})
+
+const careerAdvisorSchema = z.object({
+  message: z.string().trim().min(1, "Message cannot be empty").max(2000, "Message too long"),
+  conversationHistory: z.array(chatMessageSchema).max(20, "Conversation history too long").default([])
+})
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -11,7 +23,24 @@ serve(async (req) => {
   }
 
   try {
-    const { message, conversationHistory } = await req.json()
+    const requestBody = await req.json()
+    
+    // Validate input
+    const validation = careerAdvisorSchema.safeParse(requestBody)
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input", 
+          details: validation.error.issues 
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      )
+    }
+
+    const { message, conversationHistory } = validation.data
 
 const systemPrompt = `You are an expert Career Advisor AI with deep knowledge across all industries and career paths. Your role is to provide personalized, actionable career guidance to individuals navigating career transitions, reskilling, and professional development.
 

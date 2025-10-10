@@ -1,10 +1,22 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation schema
+const careerAssessmentSchema = z.object({
+  responses: z.record(
+    z.string().min(1).max(50),
+    z.string().min(1).max(1000)
+  ).refine(
+    obj => Object.keys(obj).length >= 1 && Object.keys(obj).length <= 50,
+    { message: 'Responses must contain between 1 and 50 entries' }
+  )
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,7 +24,24 @@ serve(async (req) => {
   }
 
   try {
-    const { responses } = await req.json();
+    const requestBody = await req.json();
+    
+    // Validate input
+    const validation = careerAssessmentSchema.safeParse(requestBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input", 
+          details: validation.error.issues 
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    const { responses } = validation.data;
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {
