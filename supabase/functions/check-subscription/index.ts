@@ -39,7 +39,7 @@ serve(async (req) => {
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
     // First check if user has subscriber record, create if not exists
     const { data: subscriberData, error: subscriberError } = await supabaseClient
-      .from("subscribers")
+      .from("subscribers_public")
       .select("*")
       .eq("user_id", user.id)
       .single();
@@ -50,7 +50,7 @@ serve(async (req) => {
     if (subscriberError && subscriberError.code === 'PGRST116') {
       logStep("Creating subscriber record for existing user");
       const { data: newSubscriber, error: createError } = await supabaseClient
-        .from("subscribers")
+        .from("subscribers_public")
         .insert({
           user_id: user.id,
           email: user.email,
@@ -75,7 +75,7 @@ serve(async (req) => {
     if (subscriber?.is_trial_active && isTrialExpired) {
       logStep("Trial expired, updating subscriber record");
       const { error: updateError } = await supabaseClient
-        .from("subscribers")
+        .from("subscribers_public")
         .update({ is_trial_active: false })
         .eq("user_id", user.id);
       
@@ -132,17 +132,24 @@ serve(async (req) => {
       logStep("No active subscription found");
     }
 
-    await supabaseClient.from("subscribers").upsert({
+    // Update public subscription data
+    await supabaseClient.from("subscribers_public").upsert({
       email: user.email,
       user_id: user.id,
-      stripe_customer_id: customerId,
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_end: subscriptionEnd,
       // If user has active subscription, trial should be inactive
       is_trial_active: hasActiveSub ? false : (subscriber?.is_trial_active || false),
       updated_at: new Date().toISOString(),
-    }, { onConflict: 'email' });
+    }, { onConflict: 'user_id' });
+
+    // Store Stripe customer ID securely (service role only)
+    await supabaseClient.from("subscribers_secure").upsert({
+      user_id: user.id,
+      stripe_customer_id: customerId,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: 'user_id' });
 
     logStep("Updated database with subscription info", { subscribed: hasActiveSub, subscriptionTier });
     

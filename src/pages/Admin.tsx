@@ -49,7 +49,7 @@ const Admin = () => {
       const { data: authUsers } = await supabase.auth.admin.listUsers();
 
       const { data: subscribers } = await supabase
-        .from("subscribers")
+        .from("subscribers_public")
         .select("user_id, email, subscribed, subscription_tier, subscription_end, trial_start, trial_end, is_trial_active, created_at, updated_at");
 
       const combinedData: UserWithSubscription[] = authUsers?.users.map(user => {

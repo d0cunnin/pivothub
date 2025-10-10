@@ -36,13 +36,21 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
-    if (customers.data.length === 0) {
-      throw new Error("No Stripe customer found for this user");
+    // Get Stripe customer ID from secure table (service role access)
+    const { data: secureData, error: secureError } = await supabaseClient
+      .from("subscribers_secure")
+      .select("stripe_customer_id")
+      .eq("user_id", user.id)
+      .single();
+
+    if (secureError || !secureData?.stripe_customer_id) {
+      throw new Error("No Stripe customer ID found for this user");
     }
-    const customerId = customers.data[0].id;
-    logStep("Found Stripe customer", { customerId });
+
+    const customerId = secureData.stripe_customer_id;
+    logStep("Retrieved Stripe customer ID from secure storage", { customerId });
+
+    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
 
     const origin = req.headers.get("origin") || "http://localhost:3000";
     const portalSession = await stripe.billingPortal.sessions.create({

@@ -373,6 +373,80 @@ export type Database = {
         }
         Relationships: []
       }
+      subscribers_public: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_trial_active: boolean
+          subscribed: boolean
+          subscription_end: string | null
+          subscription_tier: string | null
+          trial_end: string | null
+          trial_start: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_trial_active?: boolean
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: string | null
+          trial_end?: string | null
+          trial_start?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_trial_active?: boolean
+          subscribed?: boolean
+          subscription_end?: string | null
+          subscription_tier?: string | null
+          trial_end?: string | null
+          trial_start?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscribers_secure: {
+        Row: {
+          created_at: string
+          id: string
+          stripe_customer_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          stripe_customer_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          stripe_customer_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscribers_secure_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "subscribers_public"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       subscription_audit_log: {
         Row: {
           action: string

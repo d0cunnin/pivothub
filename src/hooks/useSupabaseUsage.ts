@@ -22,14 +22,14 @@ export const useSupabaseUsage = (refreshInterval: number = 300000) => {
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       
       const { count: mauCount } = await supabase
-        .from("subscribers")
+        .from("subscribers_public")
         .select("user_id", { count: "exact", head: true })
         .gte("updated_at", thirtyDaysAgo.toISOString());
 
       // Count total database rows across key tables
       const tables = [
         "profiles",
-        "subscribers", 
+        "subscribers_public", 
         "assessment_results",
         "course_enrollments",
         "lesson_progress",
