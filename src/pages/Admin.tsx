@@ -9,13 +9,21 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Shield, Users, Activity, Search, Calendar } from "lucide-react";
+import { Shield, Users, Activity, Search, Calendar, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { SupabaseUsageMonitor } from "@/components/SupabaseUsageMonitor";
+import { PlatformAnalytics } from "@/components/admin/PlatformAnalytics";
+import { RevenueAnalytics } from "@/components/admin/RevenueAnalytics";
+import { UserDetailModal } from "@/components/admin/UserDetailModal";
+import { AuditLogViewer } from "@/components/admin/AuditLogViewer";
+import { ActivityFeed } from "@/components/admin/ActivityFeed";
+import { AssessmentAnalytics } from "@/components/admin/AssessmentAnalytics";
+import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 
 interface UserWithSubscription {
   id: string;
@@ -37,6 +45,8 @@ const Admin = () => {
   const [tier, setTier] = useState("Pro");
   const [duration, setDuration] = useState("1-month");
   const [notes, setNotes] = useState("");
+  const [userDetailModalOpen, setUserDetailModalOpen] = useState(false);
+  const [selectedUserDetail, setSelectedUserDetail] = useState<{ id: string; email: string } | null>(null);
 
   // Fetch all users with subscription data
   const { data: users, isLoading } = useQuery({
@@ -134,6 +144,29 @@ const Admin = () => {
     trialUsers: users?.filter(u => u.is_trial_active).length || 0,
   };
 
+  const exportToCSV = () => {
+    if (!filteredUsers) return;
+    
+    const csvContent = [
+      ["Email", "Name", "Status", "Tier", "Trial", "Expires"].join(","),
+      ...filteredUsers.map(user => [
+        user.email,
+        user.display_name || "",
+        user.is_trial_active ? "Trial" : user.subscribed ? "Active" : "Free",
+        user.subscription_tier || "",
+        user.is_trial_active ? "Yes" : "No",
+        user.subscription_end || ""
+      ].join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `users-export-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+  };
+
   return (
     <AdminGuard>
       <div className="min-h-screen flex flex-col">
@@ -147,120 +180,169 @@ const Admin = () => {
             <p className="text-muted-foreground">Manage user access and subscriptions</p>
           </div>
 
-          {/* Supabase Usage Monitor */}
-          <SupabaseUsageMonitor />
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList>
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="users">Users</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="activity">Activity</TabsTrigger>
+              <TabsTrigger value="system">System</TabsTrigger>
+            </TabsList>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.totalUsers}</div>
-              </CardContent>
-            </Card>
+            <TabsContent value="overview" className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{stats.totalUsers}</div>
+                  </CardContent>
+                </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Active Subscriptions</CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.activeSubscriptions}</div>
-              </CardContent>
-            </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium">Active Subscriptions</CardTitle>
+                    <Activity className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{stats.activeSubscriptions}</div>
+                  </CardContent>
+                </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Trial Users</CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.trialUsers}</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* User Management */}
-          <Card>
-            <CardHeader>
-              <CardTitle>User Management</CardTitle>
-              <CardDescription>View and manage user subscriptions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <div className="flex items-center gap-2">
-                  <Search className="h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search by email, name, or ID..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
-                </div>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium">Trial Users</CardTitle>
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{stats.trialUsers}</div>
+                  </CardContent>
+                </Card>
               </div>
+              
+              <PlatformAnalytics />
+              <RevenueAnalytics />
+            </TabsContent>
 
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Tier</TableHead>
-                      <TableHead>Expires</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {isLoading ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="text-center">Loading...</TableCell>
-                      </TableRow>
-                    ) : filteredUsers?.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="text-center">No users found</TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredUsers?.map((user) => (
-                        <TableRow key={user.id}>
-                          <TableCell className="font-medium">{user.email}</TableCell>
-                          <TableCell>{user.display_name || "-"}</TableCell>
-                          <TableCell>
-                            {user.is_trial_active ? (
-                              <Badge variant="outline">Trial</Badge>
-                            ) : user.subscribed ? (
-                              <Badge>Active</Badge>
-                            ) : (
-                              <Badge variant="secondary">Free</Badge>
-                            )}
-                          </TableCell>
-                          <TableCell>{user.subscription_tier || "-"}</TableCell>
-                          <TableCell>
-                            {user.subscription_end
-                              ? new Date(user.subscription_end).toLocaleDateString()
-                              : "-"}
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              size="sm"
-                              onClick={() => openGrantModal(user)}
-                            >
-                              Manage Access
-                            </Button>
-                          </TableCell>
+            <TabsContent value="users" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>User Management</CardTitle>
+                  <CardDescription>View and manage user subscriptions</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="mb-4 flex gap-2">
+                    <div className="flex-1 flex items-center gap-2">
+                      <Search className="h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search by email, name, or ID..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                      />
+                    </div>
+                    <Button onClick={exportToCSV} variant="outline">
+                      <Download className="h-4 w-4 mr-2" />
+                      Export CSV
+                    </Button>
+                  </div>
+
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Tier</TableHead>
+                          <TableHead>Expires</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
+                      </TableHeader>
+                      <TableBody>
+                        {isLoading ? (
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center">Loading...</TableCell>
+                          </TableRow>
+                        ) : filteredUsers?.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center">No users found</TableCell>
+                          </TableRow>
+                        ) : (
+                          filteredUsers?.map((user) => (
+                            <TableRow 
+                              key={user.id}
+                              className="cursor-pointer hover:bg-muted/50"
+                              onClick={() => {
+                                setSelectedUserDetail({ id: user.id, email: user.email });
+                                setUserDetailModalOpen(true);
+                              }}
+                            >
+                              <TableCell className="font-medium">{user.email}</TableCell>
+                              <TableCell>{user.display_name || "-"}</TableCell>
+                              <TableCell>
+                                {user.is_trial_active ? (
+                                  <Badge variant="outline">Trial</Badge>
+                                ) : user.subscribed ? (
+                                  <Badge>Active</Badge>
+                                ) : (
+                                  <Badge variant="secondary">Free</Badge>
+                                )}
+                              </TableCell>
+                              <TableCell>{user.subscription_tier || "-"}</TableCell>
+                              <TableCell>
+                                {user.subscription_end
+                                  ? new Date(user.subscription_end).toLocaleDateString()
+                                  : "-"}
+                              </TableCell>
+                              <TableCell onClick={(e) => e.stopPropagation()}>
+                                <Button
+                                  size="sm"
+                                  onClick={() => openGrantModal(user)}
+                                >
+                                  Manage Access
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="analytics" className="space-y-6">
+              <AnalyticsDashboard />
+              <AssessmentAnalytics />
+            </TabsContent>
+
+            <TabsContent value="activity" className="space-y-6">
+              <ActivityFeed />
+              <AuditLogViewer />
+            </TabsContent>
+
+            <TabsContent value="system" className="space-y-6">
+              <SupabaseUsageMonitor />
+            </TabsContent>
+          </Tabs>
         </main>
         <Footer />
       </div>
+
+      {selectedUserDetail && (
+        <UserDetailModal
+          userId={selectedUserDetail.id}
+          userEmail={selectedUserDetail.email}
+          isOpen={userDetailModalOpen}
+          onClose={() => {
+            setUserDetailModalOpen(false);
+            setSelectedUserDetail(null);
+          }}
+        />
+      )}
 
       {/* Grant Access Modal */}
       <Dialog open={grantModalOpen} onOpenChange={setGrantModalOpen}>
