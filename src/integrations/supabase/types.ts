@@ -242,7 +242,7 @@ export type Database = {
           rating: number
           result_id: string
           tool_name: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -252,7 +252,7 @@ export type Database = {
           rating: number
           result_id: string
           tool_name: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -262,7 +262,7 @@ export type Database = {
           rating?: number
           result_id?: string
           tool_name?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -447,7 +447,7 @@ export type Database = {
           response_time_ms: number | null
           session_id: string | null
           tool_name: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -460,7 +460,7 @@ export type Database = {
           response_time_ms?: number | null
           session_id?: string | null
           tool_name: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -473,7 +473,7 @@ export type Database = {
           response_time_ms?: number | null
           session_id?: string | null
           tool_name?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
