@@ -37,7 +37,7 @@ export const Header = () => {
           </Link>
           
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center space-x-6 xl:space-x-8">
+            <div className="flex items-center space-x-6 xl:space-x-8 text-sm">
               <Link
                 to="/about" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
@@ -115,7 +115,7 @@ export const Header = () => {
             </div>
           </nav>
 
-          <div className="hidden lg:flex space-x-3 flex-shrink-0">
+          <div className="hidden lg:flex space-x-2 flex-shrink-0">
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
