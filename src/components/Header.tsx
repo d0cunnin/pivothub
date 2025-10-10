@@ -158,7 +158,9 @@ export const Header = () => {
                 <Link to="/auth">
                   <Button variant="ghost">Sign In</Button>
                 </Link>
-                <Button variant="hero" onClick={handleGetStarted}>Sign Up</Button>
+                <Link to="/auth">
+                  <Button variant="hero">Sign Up</Button>
+                </Link>
               </>
             )}
           </div>
@@ -286,7 +288,9 @@ export const Header = () => {
                     <Link to="/auth">
                       <Button variant="ghost" className="w-full">Sign In</Button>
                     </Link>
-                    <Button variant="hero" onClick={handleGetStarted} className="w-full">Sign Up</Button>
+                    <Link to="/auth">
+                      <Button variant="hero" className="w-full">Sign Up</Button>
+                    </Link>
                   </>
                 )}
               </div>
