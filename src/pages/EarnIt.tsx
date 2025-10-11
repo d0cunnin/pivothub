@@ -475,46 +475,9 @@ export default function SideIncomeBlueprint() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4 pl-14">
-                  <div>
-                    <h4 className="font-semibold mb-2">What This Means:</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      No more wondering "what do I do next?" Every blueprint includes a detailed 90-day timeline broken into 12 weekly milestones. Each week has 5-7 specific action items, time estimates, and success criteria so you know exactly what to focus on.
-                    </p>
-                  </div>
-
-                  <div className="bg-muted/30 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2 text-sm">Sample Week Breakdown:</h4>
-                    <div className="space-y-3 text-xs text-muted-foreground">
-                      <div>
-                        <strong>Week 1: Foundation & Research (5 hours)</strong>
-                        <ul className="ml-4 mt-1 space-y-1">
-                          <li>• Research top 10 competitors in your niche (2 hours)</li>
-                          <li>• Set up business email and basic online presence (1 hour)</li>
-                          <li>• Define your unique value proposition (1 hour)</li>
-                          <li>• Create pricing structure using provided calculator (1 hour)</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <strong>Week 2: Build Your Foundation (8 hours)</strong>
-                        <ul className="ml-4 mt-1 space-y-1">
-                          <li>• Create professional portfolio/website (4 hours)</li>
-                          <li>• Design service packages (2 hours)</li>
-                          <li>• Write client-ready proposals using templates (2 hours)</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-2">Timeline Features:</h4>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      <li>• <strong>Daily time commitments:</strong> Know how many hours to dedicate each day</li>
-                      <li>• <strong>Progress milestones:</strong> Clear checkpoints to track your success</li>
-                      <li>• <strong>Flexible pacing:</strong> Behind schedule? We include catch-up strategies</li>
-                      <li>• <strong>Priority flags:</strong> Know which tasks are critical vs. nice-to-have</li>
-                      <li>• <strong>Tools & resources:</strong> Links to recommended platforms and services</li>
-                    </ul>
-                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    No more wondering "what do I do next?" Every blueprint includes a detailed 90-day timeline broken into 12 weekly milestones. Each week has specific action items, time estimates, and success criteria so you know exactly what to focus on. The plans include flexible pacing with catch-up strategies if you fall behind, priority flags for critical tasks, and links to recommended tools and resources.
+                  </p>
                 </CardContent>
               </Card>
 
@@ -531,64 +494,9 @@ export default function SideIncomeBlueprint() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4 pl-14">
-                  <div>
-                    <h4 className="font-semibold mb-2">What's Included:</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                      Don't waste time creating everything from scratch. Your blueprint includes 15-20 proven templates customized for your specific income ideas. Just fill in the blanks and start using them immediately.
-                    </p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-muted/30 p-3 rounded-lg">
-                      <h5 className="font-semibold text-sm mb-2">Client Communication:</h5>
-                      <ul className="text-xs text-muted-foreground space-y-1">
-                        <li>• Cold email outreach scripts (3 variations)</li>
-                        <li>• Client proposal templates</li>
-                        <li>• Service agreement contracts</li>
-                        <li>• Follow-up email sequences</li>
-                        <li>• Client onboarding checklist</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-muted/30 p-3 rounded-lg">
-                      <h5 className="font-semibold text-sm mb-2">Business Operations:</h5>
-                      <ul className="text-xs text-muted-foreground space-y-1">
-                        <li>• Invoice templates (3 formats)</li>
-                        <li>• Pricing calculator spreadsheet</li>
-                        <li>• Time tracking sheet</li>
-                        <li>• Expense tracker</li>
-                        <li>• Client intake forms</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-muted/30 p-3 rounded-lg">
-                      <h5 className="font-semibold text-sm mb-2">Marketing Materials:</h5>
-                      <ul className="text-xs text-muted-foreground space-y-1">
-                        <li>• Social media post templates</li>
-                        <li>• Portfolio/website copy framework</li>
-                        <li>• Service description templates</li>
-                        <li>• Testimonial request scripts</li>
-                        <li>• Referral request templates</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-muted/30 p-3 rounded-lg">
-                      <h5 className="font-semibold text-sm mb-2">Sales & Pitching:</h5>
-                      <ul className="text-xs text-muted-foreground space-y-1">
-                        <li>• Elevator pitch templates</li>
-                        <li>• Discovery call scripts</li>
-                        <li>• Objection handling guide</li>
-                        <li>• Pricing presentation templates</li>
-                        <li>• Value proposition worksheets</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      <strong>Customization guidance:</strong> Each template includes industry-specific variations and customization tips so you're not sending generic messages. Learn how to adapt templates for your unique voice and target audience.
-                    </p>
-                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Don't waste time creating everything from scratch. Your blueprint includes 15-20 proven templates customized for your specific income ideas. From client communication and business operations to marketing materials and sales scripts, these ready-to-use resources include industry-specific variations and customization tips so you're not sending generic messages. Each template comes with guidance on how to adapt it for your unique voice and target audience.
+                  </p>
                 </CardContent>
               </Card>
 
@@ -605,30 +513,9 @@ export default function SideIncomeBlueprint() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4 pl-14">
-                  <div>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                      Starting a side income comes with important tax and legal considerations. Your blueprint includes a comprehensive guide covering the essentials every side hustler needs to know—no legal jargon, just clear explanations and actionable steps.
-                    </p>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-2">Topics Covered:</h4>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      <li>• <strong>Business Structure:</strong> LLC vs. Sole Proprietor—which is right for you and when to make the switch</li>
-                      <li>• <strong>Tax Basics:</strong> Quarterly estimated taxes, how much to set aside, and payment schedules</li>
-                      <li>• <strong>Deductions Guide:</strong> 20+ common business expenses you can write off (home office, equipment, software, etc.)</li>
-                      <li>• <strong>Recordkeeping:</strong> Simple systems to track income and expenses (free tools included)</li>
-                      <li>• <strong>When to Hire Help:</strong> At what income level should you consult a CPA or lawyer?</li>
-                      <li>• <strong>State Considerations:</strong> How to check state-specific requirements for your income type</li>
-                      <li>• <strong>Insurance Basics:</strong> When you need liability insurance and how to get it</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-muted/30 p-4 rounded-lg">
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      <strong>Important:</strong> This guide provides general educational information to help you understand the basics. Always consult with a qualified tax professional or attorney for advice specific to your situation. We'll tell you exactly when it's time to hire professional help.
-                    </p>
-                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Starting a side income comes with important tax and legal considerations. Your blueprint includes a comprehensive guide covering the essentials every side hustler needs to know—no legal jargon, just clear explanations and actionable steps. Learn about business structures, tax basics, deductions, recordkeeping, and when to hire professional help. The guide provides general educational information with state-specific considerations to help you understand the basics and know when it's time to consult with a qualified tax professional or attorney.
+                  </p>
                 </CardContent>
               </Card>
             </div>
