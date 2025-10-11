@@ -35,34 +35,278 @@ const Index = () => {
           <div className="content-width">
             <div className="text-center">
               <h2 className="section-header mb-4">
-              Rediscover Your Strengths, Build Your Future
-            </h2>
+                Your Complete Career Transformation Platform
+              </h2>
             </div>
             <div className="max-w-4xl mx-auto">
-              <p className="section-description">
-                Our platform is designed to help you rediscover your strengths, explore new career paths, 
-                and access powerful tools to build your future. Start with our comprehensive assessments 
-                to gain clarity on your direction, then leverage our business and funding tools to 
-                take action toward your goals.
+              <p className="section-description mb-8">
+                PivotHub is your all-in-one platform for career transformation. Whether you're looking to 
+                relaunch your career, start a business, teach your expertise, launch a creative project, 
+                secure funding, or develop new skills—we've got the tools and guidance you need.
               </p>
+              
+              {/* Quick Overview Cards */}
+              <div className="grid md:grid-cols-3 gap-4 mt-8">
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
+                  <div className="text-3xl font-bold text-primary mb-2">6</div>
+                  <div className="text-sm text-muted-foreground">Career Paths</div>
+                </div>
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
+                  <div className="text-3xl font-bold text-primary mb-2">30+</div>
+                  <div className="text-sm text-muted-foreground">AI-Powered Tools</div>
+                </div>
+                <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
+                  <div className="text-3xl font-bold text-primary mb-2">∞</div>
+                  <div className="text-sm text-muted-foreground">Possibilities</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Six Paths Overview */}
+      <section className="section-spacing-xs bg-gradient-section-2 relative">
+        <div className="page-container">
+          <div className="content-width">
+            <div className="text-center mb-12">
+              <h2 className="section-header mb-4">
+                Choose Your Path Forward
+              </h2>
+              <p className="section-description max-w-3xl mx-auto">
+                Explore our six comprehensive paths, each designed to help you achieve specific career goals 
+                with AI-powered tools and expert guidance.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Learn It */}
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-emerald-600/5">
+                <CardHeader className="p-0 pb-4">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-teal-500/10 mb-3 border border-teal-500/20 w-fit">
+                    <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN IT</span>
+                  </div>
+                  <CardTitle className="text-xl">Develop New Skills</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Master in-demand digital and tech skills through interactive courses, AI mentorship, 
+                    and hands-on learning modules.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
+                      <span>Interactive skill courses</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
+                      <span>AI career advisor</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
+                      <span>Progress tracking</span>
+                    </li>
+                  </ul>
+                  <Link to="/learn-a-skill">
+                    <Button size="lg" className="w-full">
+                      Start Learning
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Earn It */}
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-indigo-500 bg-gradient-to-br from-indigo-500/5 to-purple-600/5">
+                <CardHeader className="p-0 pb-4">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-500/10 mb-3 border border-indigo-500/20 w-fit">
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">EARN IT</span>
+                  </div>
+                  <CardTitle className="text-xl">Freelance & Get Hired</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Showcase your skills, connect with clients, and land freelance opportunities in tech. 
+                    Perfect for building your portfolio.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
+                      <span>Create freelancer profile</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
+                      <span>Connect with clients</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
+                      <span>Build your portfolio</span>
+                    </li>
+                  </ul>
+                  <Link to="/freelancer-marketplace">
+                    <Button size="lg" className="w-full">
+                      Join Marketplace
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Build It */}
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-orange-500 bg-gradient-to-br from-orange-500/5 to-amber-600/5">
+                <CardHeader className="p-0 pb-4">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-orange-500/10 mb-3 border border-orange-500/20 w-fit">
+                    <span className="text-xs font-bold text-orange-600 dark:text-orange-400 tracking-wide">BUILD IT</span>
+                  </div>
+                  <CardTitle className="text-xl">Start Your Business</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Launch your entrepreneurial journey with business planning, idea validation, 
+                    and comprehensive startup tools.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                      <span>Business plan generator</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                      <span>Pitch deck builder</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                      <span>Marketing strategy tools</span>
+                    </li>
+                  </ul>
+                  <Link to="/buildit">
+                    <Button size="lg" className="w-full">
+                      Start Building
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Teach It */}
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-green-500 bg-gradient-to-br from-green-500/5 to-lime-600/5">
+                <CardHeader className="p-0 pb-4">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-green-500/10 mb-3 border border-green-500/20 w-fit">
+                    <span className="text-xs font-bold text-green-600 dark:text-green-400 tracking-wide">TEACH IT</span>
+                  </div>
+                  <CardTitle className="text-xl">Share Your Expertise</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Create courses, webinars, and teaching materials to share your knowledge 
+                    and build a teaching income stream.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0 mt-2" />
+                      <span>Course creation tools</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0 mt-2" />
+                      <span>Teaching materials generator</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0 mt-2" />
+                      <span>Webinar planning</span>
+                    </li>
+                  </ul>
+                  <Link to="/teachit">
+                    <Button size="lg" className="w-full">
+                      Start Teaching
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Launch It */}
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
+                <CardHeader className="p-0 pb-4">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-blue-500/10 mb-3 border border-blue-500/20 w-fit">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">LAUNCH IT</span>
+                  </div>
+                  <CardTitle className="text-xl">Launch Your Project</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Turn creative ideas into reality with comprehensive launch strategies, 
+                    from concept to market execution.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-2" />
+                      <span>Launch strategy generator</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-2" />
+                      <span>Market validation tools</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-2" />
+                      <span>Go-to-market planning</span>
+                    </li>
+                  </ul>
+                  <Link to="/launchit">
+                    <Button size="lg" className="w-full">
+                      Start Launching
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Fund It */}
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-purple-500 bg-gradient-to-br from-purple-500/5 to-violet-600/5">
+                <CardHeader className="p-0 pb-4">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-purple-500/10 mb-3 border border-purple-500/20 w-fit">
+                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-wide">FUND IT</span>
+                  </div>
+                  <CardTitle className="text-xl">Secure Funding</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    Find grants, write winning proposals, and secure funding for your education, 
+                    business, or creative projects.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0 mt-2" />
+                      <span>Grant finder & matcher</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0 mt-2" />
+                      <span>Proposal generator</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0 mt-2" />
+                      <span>Budget templates</span>
+                    </li>
+                  </ul>
+                  <Link to="/grantwriting">
+                    <Button size="lg" className="w-full">
+                      Find Funding
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
       </section>
       
       {/* Assessment Tools Section */}
-      <section className="section-spacing-xs bg-gradient-section-2 relative">
+      <section className="section-spacing-xs bg-gradient-section-1 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">
               <h2 className="section-header mb-4">
-                Start Your Journey with Self-Discovery
+                Start with Self-Discovery
               </h2>
             </div>
             <div className="max-w-3xl mx-auto mb-10">
               <p className="section-description">
-                Take our comprehensive assessments to understand your skills, interests, and personality. 
-                These insights will guide your career decisions and help you choose the right path forward.
+                Before choosing your path, understand yourself better. Take our comprehensive assessments 
+                to discover your strengths, interests, and ideal career direction.
               </p>
             </div>
             
@@ -128,94 +372,84 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Tools & Resources Section */}
-      <section className="section-spacing-xs bg-gradient-section-1 relative">
+      {/* Job Preparation Section */}
+      <section className="section-spacing-xs bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
-            <div className="text-center">
+            <div className="text-center mb-12">
               <h2 className="section-header mb-4">
-                Tools to Build Your Future
+                Get Job-Ready with Our Career Tools
               </h2>
-            </div>
-            <div className="max-w-3xl mx-auto mb-10">
-              <p className="section-description">
-                Access powerful tools designed to help you secure funding, develop business ideas, 
-                and turn your career goals into actionable plans.
+              <p className="section-description max-w-3xl mx-auto">
+                Prepare for your next career opportunity with professional resume building, 
+                interview coaching, and career guidance tools.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-indigo-500 bg-gradient-to-br from-indigo-500/5 to-purple-600/5">
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
                 <CardHeader className="p-0 pb-4">
-                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-500/10 mb-3 border border-indigo-500/20 w-fit">
-                    <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">FUNDING</span>
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-blue-500/10 mb-3 border border-blue-500/20 w-fit">
+                    <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">JOB PREP</span>
                   </div>
-                  <CardTitle className="text-2xl">Funding Generator</CardTitle>
+                  <CardTitle className="text-xl">Resume & Interview Coach</CardTitle>
                   <CardDescription className="text-muted-foreground mb-4">
-                    Professional funding assistance to help you secure grants for education, 
-                    training, or business ventures. Generate compelling proposals with AI-powered guidance.
+                    Get AI-powered feedback on your resume, cover letters, and interview responses. 
+                    Practice with mock interviews and improve your professional presence.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/buildit">
+                  <Link to="/jobprep">
                     <Button size="lg" className="w-full mb-3">
-                      Start Funding
+                      Start Job Prep
                     </Button>
                   </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
-                      <span>Education & training grants</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-2" />
+                      <span>AI resume optimization</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
-                      <span>Small business funding</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-2" />
+                      <span>Mock interview practice</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
-                      <span>Research & development grants</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
-                      <span>Professional templates</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-2" />
+                      <span>Cover letter generator</span>
                     </li>
                   </ul>
                 </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-orange-500 bg-gradient-to-br from-orange-500/5 to-amber-600/5">
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-emerald-600/5">
                 <CardHeader className="p-0 pb-4">
-                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-orange-500/10 mb-3 border border-orange-500/20 w-fit">
-                    <span className="text-sm font-bold text-orange-600 dark:text-orange-400 tracking-wide">BUSINESS</span>
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-teal-500/10 mb-3 border border-teal-500/20 w-fit">
+                    <span className="text-sm font-bold text-teal-600 dark:text-teal-400 tracking-wide">CAREER ADVISOR</span>
                   </div>
-                  <CardTitle className="text-2xl">Business & Entrepreneurship Tools</CardTitle>
+                  <CardTitle className="text-xl">AI Career Guidance</CardTitle>
                   <CardDescription className="text-muted-foreground mb-4">
-                    Complete suite of business development tools including idea generation, 
-                    business plans, pitch decks, and marketing strategies.
+                    Get personalized career advice, skill recommendations, and strategic guidance 
+                    from our AI-powered career advisor chatbot.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/buildit">
+                  <Link to="/learn-a-skill">
                     <Button size="lg" className="w-full mb-3">
-                      Explore Business Tools
+                      Get Career Advice
                     </Button>
                   </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
-                      <span>Business idea generator</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
+                      <span>Personalized career paths</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
-                      <span>Business plan creator</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
+                      <span>Skill gap analysis</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
-                      <span>Pitch deck builder</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
-                      <span>Marketing strategy planner</span>
+                      <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
+                      <span>Industry insights</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -225,106 +459,29 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Learn It Section */}
-      <section className="section-spacing-xs bg-gradient-section-2 relative">
-        <div className="page-container">
-          <div className="content-width">
-            <div className="text-center">
-              <h2 className="section-header mb-4">
-                Learn It: Develop Your Skills
-              </h2>
-            </div>
-            <div className="max-w-4xl mx-auto mb-10">
-              <p className="section-description">
-                Transform your career with industry-recognized certifications, personalized learning paths, 
-                and cutting-edge skills training. Our comprehensive Learn It platform includes AI-powered 
-                career guidance, interview coaching, and resume optimization.
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <div className="space-y-6 lg:mr-4">
-                <p className="text-muted-foreground">
-                  Access our complete suite of career development tools and training programs designed 
-                  to help you stay competitive in today's evolving job market.
-                </p>
-                
-                <div className="grid md:grid-cols-3 gap-4">
-                  <Card className="premium-card card-padding-sm hover-scale border-l-4 border-purple-500 bg-gradient-to-br from-purple-500/5 to-violet-600/5">
-                    <CardHeader className="p-0 pb-4">
-                      <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-purple-500/10 mb-3 border border-purple-500/20 w-fit">
-                        <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-wide">ASSESS</span>
-                      </div>
-                      <CardTitle className="text-lg">Assessments</CardTitle>
-                      <CardDescription className="text-sm">
-                        Discover your skills, interests, and personality to guide your career path.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0 pt-3">
-                      <Link to="/assessments">
-                        <Button size="sm" className="w-full">
-                          Take Assessments
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="premium-card card-padding-sm hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
-                    <CardHeader className="p-0 pb-4">
-                      <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-3 border border-blue-500/20 w-fit">
-                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">JOB PREP</span>
-                      </div>
-                      <CardTitle className="text-lg">Job Prep</CardTitle>
-                      <CardDescription className="text-sm">
-                        Get ready for your dream job with interview coaching and resume optimization.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0 pt-3">
-                      <Link to="/jobprep">
-                        <Button size="sm" className="w-full">
-                          Prepare for Jobs
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="premium-card card-padding-sm hover-scale border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-emerald-600/5">
-                    <CardHeader className="p-0 pb-4">
-                      <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-teal-500/10 mb-3 border border-teal-500/20 w-fit">
-                        <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN</span>
-                      </div>
-                      <CardTitle className="text-lg">Learn a Skill</CardTitle>
-                      <CardDescription className="text-sm">
-                        Develop new competencies with industry-recognized courses and certifications.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="p-0 pt-3">
-                      <Link to="/learn-a-skill">
-                        <Button size="sm" className="w-full">
-                          Start Learning
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </div>
-                
-                <div className="pt-4">
-                  <Link to="/learnit">
-                    <Button size="lg" className="w-full md:w-auto">
-                      Start Your Learn It Journey
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              
-              <div className="lg:ml-4 self-center">
-                <img 
-                  src="/lovable-uploads/a2d8ed6b-e7a3-4bba-b5d7-9c2dd209ea3d.png"
-                  alt="Professional woman with locs working at computer with diverse team collaborating in modern office environment"
-                  className="w-full h-auto max-w-md aspect-video object-cover rounded-xl shadow-md hover:shadow-lg transition-all duration-500 hover:scale-[1.02] border border-white/10"
-                />
-              </div>
+      {/* Ready to Get Started CTA */}
+      <section className="section-spacing-xs bg-gradient-hero relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
+        <div className="page-container relative z-10">
+          <div className="content-width text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+              Ready to Transform Your Career?
+            </h2>
+            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+              Join PivotHub today and get access to all the tools you need to build your future. 
+              Start with a free assessment to discover your best path forward.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/assessments">
+                <Button size="lg" variant="heroWhite" className="w-full sm:w-auto">
+                  Take Free Assessment
+                </Button>
+              </Link>
+              <Link to="/pricing">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary">
+                  View Pricing Plans
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
