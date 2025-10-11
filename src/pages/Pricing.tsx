@@ -27,7 +27,7 @@ const Pricing = () => {
     tier: ''
   });
   
-  const [selectedPathIndex, setSelectedPathIndex] = useState(0);
+  const [selectedPathIndex, setSelectedPathIndex] = useState(6); // Default to All Access Pass
 
   const handleSubscribe = async (tier: string) => {
     if (!user) {
@@ -71,7 +71,24 @@ const Pricing = () => {
     });
   };
 
-  const pathPlans = [
+  const allPlans = [
+    {
+      name: "Explore Mode",
+      price: "Free",
+      period: "forever",
+      description: "Try everything free for 2 days, then keep limited access forever",
+      features: [
+        "Full access to all tools (2-day trial)",
+        "Unlimited AI generations (during trial)",
+        "All premium features (during trial)",
+        "1 AI tool use per month (after trial)",
+        "Community access",
+        "Email support"
+      ],
+      tier: "free",
+      icon: "✨",
+      isFree: true
+    },
     {
       name: "Job Prep Path",
       price: "$12",
@@ -162,8 +179,28 @@ const Pricing = () => {
       ],
       tier: "grant-writing",
       icon: "📝"
+    },
+    {
+      name: "All Access Pass",
+      price: "$29",
+      period: "month",
+      description: "Get unlimited access to every tool, feature, and path",
+      features: [
+        "Everything from all 5 paths",
+        "Unlimited AI tool usage",
+        "Priority feature access",
+        "Save unlimited results",
+        "Early access to new tools",
+        "Priority email support"
+      ],
+      tier: "all-access",
+      icon: "👑",
+      isAllAccess: true,
+      savings: "Save up to $46/month compared to individual paths"
     }
   ];
+  
+  const selectedPlan = allPlans[selectedPathIndex];
 
   return (
     <div className="min-h-screen bg-background">
@@ -272,17 +309,17 @@ const Pricing = () => {
       <section className="section-spacing-sm">
         <div className="page-container">
           <div className="text-center mb-12">
-            <h2 className="section-header mb-4">Path-Based Subscriptions</h2>
+            <h2 className="section-header mb-4">Select Your Subscription</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Choose the path that matches your goals. Each includes specialized tools and unlimited access to that path's features.
+              Choose the plan that matches your goals. Start free or unlock unlimited access with our premium options.
             </p>
           </div>
           
           <div className="max-w-4xl mx-auto space-y-6">
-            {/* Path Selector Dropdown */}
+            {/* Plan Selector Dropdown */}
             <div className="w-full">
               <label className="text-sm font-medium text-foreground mb-2 block">
-                Select Your Path
+                Select Your Plan
               </label>
               <Select
                 value={selectedPathIndex.toString()}
@@ -291,13 +328,19 @@ const Pricing = () => {
                 <SelectTrigger className="w-full h-14 text-lg bg-background border-2">
                   <SelectValue>
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{pathPlans[selectedPathIndex].icon}</span>
-                      <span className="font-semibold">{pathPlans[selectedPathIndex].name}</span>
+                      <span className="text-2xl">{selectedPlan.icon}</span>
+                      <span className="font-semibold">{selectedPlan.name}</span>
+                      {selectedPlan.isAllAccess && (
+                        <Badge className="ml-2 bg-primary text-primary-foreground">
+                          <Star className="h-3 w-3 mr-1" />
+                          Best Value
+                        </Badge>
+                      )}
                     </div>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-popover border-2 max-h-[400px]">
-                  {pathPlans.map((plan, index) => (
+                <SelectContent className="bg-popover border-2 max-h-[400px] z-50">
+                  {allPlans.map((plan, index) => (
                     <SelectItem 
                       key={plan.name} 
                       value={index.toString()}
@@ -306,6 +349,14 @@ const Pricing = () => {
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">{plan.icon}</span>
                         <span className="font-medium">{plan.name}</span>
+                        {plan.isFree && (
+                          <Badge className="ml-2 bg-green-500 text-white text-xs">Free</Badge>
+                        )}
+                        {plan.isAllAccess && (
+                          <Badge className="ml-2 bg-primary text-primary-foreground text-xs">
+                            Best Value
+                          </Badge>
+                        )}
                       </div>
                     </SelectItem>
                   ))}
@@ -313,23 +364,39 @@ const Pricing = () => {
               </Select>
             </div>
 
-            {/* Selected Path Details Card */}
-            <Card className="premium-card card-padding-lg border-2 border-primary/20 shadow-lg">
-              <CardHeader className="text-center">
-                <div className="text-6xl mb-6">{pathPlans[selectedPathIndex].icon}</div>
+            {/* Selected Plan Details Card */}
+            <Card className={`premium-card card-padding-lg shadow-lg ${
+              selectedPlan.isAllAccess ? 'border-2 border-primary shadow-glow' : 
+              selectedPlan.isFree ? 'border-2 border-green-500/30' : 
+              'border-2 border-primary/20'
+            }`}>
+              <CardHeader className="text-center relative">
+                {selectedPlan.isAllAccess && (
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
+                    <Star className="h-3 w-3 mr-1" />
+                    Best Value
+                  </Badge>
+                )}
+                {selectedPlan.isFree && (
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-500 text-white">
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    Free Forever
+                  </Badge>
+                )}
+                <div className="text-6xl mb-6 mt-2">{selectedPlan.icon}</div>
                 <CardTitle className="text-3xl font-bold mb-4">
-                  {pathPlans[selectedPathIndex].name}
+                  {selectedPlan.name}
                 </CardTitle>
                 <div className="mb-4">
                   <span className="text-5xl font-bold text-primary">
-                    {pathPlans[selectedPathIndex].price}
+                    {selectedPlan.price}
                   </span>
                   <span className="text-xl text-muted-foreground">
-                    /{pathPlans[selectedPathIndex].period}
+                    /{selectedPlan.period}
                   </span>
                 </div>
                 <CardDescription className="text-lg">
-                  {pathPlans[selectedPathIndex].description}
+                  {selectedPlan.description}
                 </CardDescription>
               </CardHeader>
               
@@ -339,7 +406,7 @@ const Pricing = () => {
                     What's Included:
                   </h4>
                   <div className="grid md:grid-cols-2 gap-3">
-                    {pathPlans[selectedPathIndex].features.map((feature, featureIndex) => (
+                    {selectedPlan.features.map((feature, featureIndex) => (
                       <div key={featureIndex} className="flex items-start">
                         <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
                         <span className="text-sm">{feature}</span>
@@ -348,91 +415,33 @@ const Pricing = () => {
                   </div>
                 </div>
                 
+                {selectedPlan.isAllAccess && selectedPlan.savings && (
+                  <div className="bg-primary/5 rounded-lg p-4 text-center">
+                    <p className="text-sm text-muted-foreground">
+                      {selectedPlan.savings}
+                    </p>
+                  </div>
+                )}
+                
                 <div className="pt-6">
                   <Button
                     className="w-full"
                     size="lg"
-                    onClick={() => openCheckoutModal(
-                      pathPlans[selectedPathIndex].name,
-                      pathPlans[selectedPathIndex].price,
-                      pathPlans[selectedPathIndex].tier
-                    )}
+                    variant={selectedPlan.isAllAccess ? "default" : selectedPlan.isFree ? "outline" : "default"}
+                    onClick={() => {
+                      if (selectedPlan.isFree) {
+                        window.location.href = "/auth";
+                      } else {
+                        openCheckoutModal(
+                          selectedPlan.name,
+                          selectedPlan.price,
+                          selectedPlan.tier
+                        );
+                      }
+                    }}
                   >
-                    Get Started with {pathPlans[selectedPathIndex].name}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* All Access Pass */}
-      <section className="section-spacing-sm bg-gradient-section-2">
-        <div className="page-container">
-          <div className="max-w-4xl mx-auto">
-            <Card className="premium-card card-padding-lg border-2 border-primary shadow-glow relative overflow-hidden">
-              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
-                <Star className="h-3 w-3 mr-1" />
-                Best Value
-              </Badge>
-              
-              <CardHeader className="text-center">
-                <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Crown className="h-8 w-8 text-white" />
-                </div>
-                <CardTitle className="text-3xl font-bold">All Access Pass</CardTitle>
-                <div className="mt-4">
-                  <span className="text-5xl font-bold text-primary">$29</span>
-                  <span className="text-muted-foreground">/month</span>
-                </div>
-                <CardDescription className="text-lg mt-4">
-                  Get unlimited access to every tool, feature, and path
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="font-medium">Everything from all 5 paths</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="font-medium">Unlimited AI tool usage</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="font-medium">Priority feature access</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="font-medium">Save unlimited results</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="font-medium">Early access to new tools</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
-                    <span className="font-medium">Priority email support</span>
-                  </div>
-                </div>
-                
-                <div className="bg-primary/5 rounded-lg p-4 text-center">
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Save up to <span className="font-bold text-primary">$46/month</span> compared to individual paths
-                  </p>
-                </div>
-                
-                <div className="pt-4">
-                  <Button
-                    className="w-full"
-                    size="lg"
-                    onClick={() => openCheckoutModal("All Access Pass", "$29", "all-access")}
-                  >
-                    <Crown className="h-4 w-4 mr-2" />
-                    Get All Access Pass
+                    {selectedPlan.isAllAccess && <Crown className="h-4 w-4 mr-2" />}
+                    {selectedPlan.isFree ? "Start Free Trial" : `Get Started with ${selectedPlan.name}`}
                   </Button>
                 </div>
               </CardContent>
