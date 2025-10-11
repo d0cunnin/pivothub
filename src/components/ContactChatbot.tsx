@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageCircle, Send, X, Loader2, Settings, CreditCard, DollarSign, LayoutDashboard } from "lucide-react";
+import { MessageCircle, Send, X, Loader2, Settings, CreditCard, DollarSign } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,6 @@ const QUICK_ACTIONS = [
   { label: "View Subscription", icon: CreditCard, action: "/settings" },
   { label: "View Pricing", icon: DollarSign, action: "/pricing" },
   { label: "Account Settings", icon: Settings, action: "/settings" },
-  { label: "Admin Dashboard", icon: LayoutDashboard, action: "/admin" },
 ];
 
 const FAQS: string[] = [
