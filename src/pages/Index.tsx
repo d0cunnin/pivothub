@@ -1,384 +1,329 @@
 import { Header } from "@/components/Header";
-import { HeroSection } from "@/components/HeroSection";
-import { PathSelection } from "@/components/PathSelection";
 import { Footer } from "@/components/Footer";
-
-import { useAuth } from "@/contexts/AuthContext";
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { GraduationCap, Wrench, Rocket, DollarSign, TrendingUp, Briefcase, Target, ChevronRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
-  const { user } = useAuth();
-  const [showAuthModal, setShowAuthModal] = useState(false);
-
-  const handleToolAccess = (requiresAuth: boolean, action: () => void) => {
-    if (requiresAuth && !user) {
-      setShowAuthModal(true);
-      return;
+  const features = [
+    {
+      icon: GraduationCap,
+      title: "Teach It",
+      description: "Learn new skills and concepts that spark growth.",
+      color: "from-blue-500 to-blue-600",
+      link: "/teachit"
+    },
+    {
+      icon: Wrench,
+      title: "Build It",
+      description: "Turn your ideas into reality step by step.",
+      color: "from-purple-500 to-purple-600",
+      link: "/buildit"
+    },
+    {
+      icon: Rocket,
+      title: "Launch It",
+      description: "Get everything ready to go live with ease.",
+      color: "from-pink-500 to-pink-600",
+      link: "/launchit"
+    },
+    {
+      icon: DollarSign,
+      title: "Fund It",
+      description: "Explore funding options and strategies.",
+      color: "from-green-500 to-green-600",
+      link: "/grantwriting"
+    },
+    {
+      icon: TrendingUp,
+      title: "Earn It",
+      description: "Discover the right income opportunities for your lifestyle.",
+      color: "from-yellow-500 to-yellow-600",
+      link: "/earnit"
+    },
+    {
+      icon: Briefcase,
+      title: "Work It",
+      description: "Prepare for career success.",
+      color: "from-indigo-500 to-indigo-600",
+      link: "/prepit"
+    },
+    {
+      icon: Target,
+      title: "Prove It",
+      description: "Assess, improve, and grow with confidence.",
+      color: "from-red-500 to-red-600",
+      link: "/assessit"
     }
-    action();
-  };
+  ];
+
+  const steps = [
+    {
+      number: "01",
+      title: "Choose your path",
+      description: "Select the toolkit that fits your goals."
+    },
+    {
+      number: "02",
+      title: "Get your blueprint",
+      description: "Follow AI-guided steps to stay on track."
+    },
+    {
+      number: "03",
+      title: "Grow your results",
+      description: "Launch, earn, and keep building forward."
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: "Sarah M.",
+      role: "Entrepreneur",
+      quote: "PivotHub gave me the clarity and tools I needed to launch my business. The AI-guided steps made everything feel achievable."
+    },
+    {
+      name: "David K.",
+      role: "Creator",
+      quote: "I went from idea to launch in 90 days. The blueprint approach kept me focused and motivated through every step."
+    },
+    {
+      name: "Jessica R.",
+      role: "Career Changer",
+      quote: "The assessment tools helped me understand my strengths and find the right path forward. Truly transformative."
+    }
+  ];
 
   return (
-    <div id="home" className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Header />
-      <HeroSection />
-      <PathSelection />
-      
-      {/* Platform Explanation */}
-      <section className="section-spacing-xs bg-gradient-section-1 relative">
-        <div className="page-container">
-          <div className="content-width">
-            <div className="text-center">
-              <h2 className="section-header mb-4">
-                Your Guide to Pivot Forward Into the Future
-              </h2>
-            </div>
-            <div className="max-w-4xl mx-auto">
-              <p className="section-description mb-8">
-                PivotHub empowers you to transform your career journey. Whether you're developing new skills, 
-                starting a business, teaching your expertise, launching a creative project, 
-                or securing funding—we provide the tools and guidance to help you succeed.
-              </p>
-              
-              {/* Quick Overview Cards */}
-              <div className="grid md:grid-cols-3 gap-4 mt-8">
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
-                  <div className="text-3xl font-bold text-primary mb-2">6</div>
-                  <div className="text-sm text-muted-foreground">Pathways</div>
-                </div>
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
-                  <div className="text-3xl font-bold text-primary mb-2">30+</div>
-                  <div className="text-sm text-muted-foreground">AI-Powered Tools</div>
-                </div>
-                <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
-                  <div className="text-3xl font-bold text-primary mb-2">∞</div>
-                  <div className="text-sm text-muted-foreground">Possibilities</div>
-                </div>
+
+      {/* Hero Section - White background, dark text */}
+      <section className="relative bg-background py-24 md:py-32 overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl mx-auto text-center animate-fade-in">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
+              Your Hub for Ideas, Growth, and AI-Powered Launch Tools
+            </h1>
+            <p className="text-xl md:text-2xl text-foreground/80 mb-10 leading-relaxed">
+              Discover tools that help you build, launch, and grow smarter — all in one place.
+            </p>
+            <Link to="/pricing">
+              <Button 
+                size="lg" 
+                className="text-lg px-10 py-6 shadow-glow hover:scale-105 transition-elegant group"
+              >
+                Get Started
+                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Wave Separator */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+          <svg className="relative block w-full h-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-primary/10"></path>
+          </svg>
+        </div>
+      </section>
+
+      {/* Features Section - Dark background, light text */}
+      <section className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-24 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+        <div className="absolute top-20 right-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-20 left-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl"></div>
+
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Explore What You Can Do With PivotHub
+            </h2>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              From learning new skills to launching your first idea, PivotHub gives you the AI-driven tools to make it happen.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <Link key={feature.title} to={feature.link}>
+                <Card 
+                  className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl group animate-fade-in h-full"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <CardHeader>
+                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
+                      <feature.icon className="h-8 w-8 text-white" />
+                    </div>
+                    <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-white/80 text-base">
+                      {feature.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Diagonal Separator */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+          <svg className="relative block w-full h-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M1200 120L0 16.48V0h1200z" className="fill-muted"></path>
+          </svg>
+        </div>
+      </section>
+
+      {/* How It Works Section - Light gray background */}
+      <section className="relative bg-muted py-24 md:py-32 overflow-hidden">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
+              How It Works
+            </h2>
+            <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
+              PivotHub makes it easy to go from idea to impact.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {steps.map((step, index) => (
+              <div 
+                key={step.number}
+                className="relative animate-fade-in"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <Card className="h-full bg-background border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:scale-105 group">
+                  <CardHeader>
+                    <div className="text-7xl font-bold text-primary/20 mb-4 group-hover:text-primary/30 transition-colors">
+                      {step.number}
+                    </div>
+                    <CardTitle className="text-2xl mb-3">{step.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground text-lg">
+                      {step.description}
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                {/* Arrow connector between cards */}
+                {index < steps.length - 1 && (
+                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
+                    <ChevronRight className="h-8 w-8 text-primary" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Wave Separator */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+          <svg className="relative block w-full h-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="fill-primary"></path>
+          </svg>
+        </div>
+      </section>
+
+      {/* Testimonials Section - Dark background */}
+      <section className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-24 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              Real People. Real Results.
+            </h2>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              See how creators, entrepreneurs, and learners are transforming ideas into reality with PivotHub.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {testimonials.map((testimonial, index) => (
+              <Card 
+                key={testimonial.name}
+                className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 animate-fade-in"
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-white font-bold text-xl">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                      <CardTitle className="text-white text-lg">{testimonial.name}</CardTitle>
+                      <CardDescription className="text-white/70">{testimonial.role}</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-white/90 text-base leading-relaxed italic">
+                    "{testimonial.quote}"
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Diagonal Separator */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+          <svg className="relative block w-full h-24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M1200 120L0 16.48V0h1200z" className="fill-accent"></path>
+          </svg>
+        </div>
+      </section>
+
+      {/* CTA Section - Aqua/gradient background */}
+      <section className="relative bg-gradient-to-br from-accent to-secondary py-24 md:py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.1] bg-[size:20px_20px]"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl mx-auto text-center animate-fade-in">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">
+              Start Building Today
+            </h2>
+            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
+              Your next chapter begins here. Get access to AI-powered tools that help you grow smarter and faster.
+            </p>
+            <Link to="/pricing">
+              <Button 
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90 text-lg px-12 py-6 shadow-2xl hover:scale-105 transition-elegant group"
+              >
+                Join PivotHub
+                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+
+            <div className="mt-12 flex flex-wrap justify-center gap-8 text-white/80">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5" />
+                <span>No credit card required</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5" />
+                <span>Start free</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5" />
+                <span>Cancel anytime</span>
               </div>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Pathways Overview */}
-      <section className="section-spacing-xs bg-gradient-section-2 relative">
-        <div className="page-container">
-          <div className="content-width">
-            <div className="text-center mb-8">
-              <h2 className="section-header mb-4">
-                Choose Your Pathway Forward
-              </h2>
-              <p className="section-description max-w-3xl mx-auto">
-                Explore our comprehensive pathways, each designed to help you achieve specific goals 
-                with AI-powered tools and expert guidance.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-              {/* Upskill */}
-              <Card className="premium-card hover-scale border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-emerald-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-teal-500/10 mb-2 border border-teal-500/20 w-fit">
-                    <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">UPSKILL</span>
-                  </div>
-                  <CardTitle className="text-lg">Develop New Skills</CardTitle>
-                  <CardDescription className="text-sm">
-                    Master in-demand digital and tech skills through interactive courses and AI mentorship.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/upskill">
-                    <Button size="sm" className="w-full">
-                      Start Learning
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              {/* Job Prep */}
-              <Card className="premium-card hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-2 border border-blue-500/20 w-fit">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">PREP IT</span>
-                  </div>
-                  <CardTitle className="text-lg">Relaunch Your Career</CardTitle>
-                  <CardDescription className="text-sm">
-                    Get AI-powered feedback on resumes, cover letters, and interview practice.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/prepit">
-                    <Button size="sm" className="w-full">
-                      Start Prep
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-
-              {/* Build It */}
-              <Card className="premium-card hover-scale border-l-4 border-emerald-500 bg-gradient-to-br from-emerald-500/5 to-green-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-500/10 mb-2 border border-emerald-500/20 w-fit">
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">BUILD IT</span>
-                  </div>
-                  <CardTitle className="text-lg">Start Your Business</CardTitle>
-                  <CardDescription className="text-sm">
-                    Launch your entrepreneurial journey with business planning and comprehensive startup tools.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/buildit">
-                    <Button size="sm" className="w-full">
-                      Start Building
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              {/* Teach It */}
-              <Card className="premium-card hover-scale border-l-4 border-green-500 bg-gradient-to-br from-green-500/5 to-lime-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-green-500/10 mb-2 border border-green-500/20 w-fit">
-                    <span className="text-xs font-bold text-green-600 dark:text-green-400 tracking-wide">TEACH IT</span>
-                  </div>
-                  <CardTitle className="text-lg">Share Your Expertise</CardTitle>
-                  <CardDescription className="text-sm">
-                    Create courses, webinars, and teaching materials to share your knowledge.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/teachit">
-                    <Button size="sm" className="w-full">
-                      Start Teaching
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              {/* Launch It */}
-              <Card className="premium-card hover-scale border-l-4 border-cyan-500 bg-gradient-to-br from-cyan-500/5 to-blue-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-cyan-500/10 mb-2 border border-cyan-500/20 w-fit">
-                    <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 tracking-wide">LAUNCH IT</span>
-                  </div>
-                  <CardTitle className="text-lg">Launch Your Project</CardTitle>
-                  <CardDescription className="text-sm">
-                    Turn creative ideas into reality with comprehensive launch strategies.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/launchit">
-                    <Button size="sm" className="w-full">
-                      Start Launching
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-
-              {/* Fund It */}
-              <Card className="premium-card hover-scale border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-cyan-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-teal-500/10 mb-2 border border-teal-500/20 w-fit">
-                    <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">FUND IT</span>
-                  </div>
-                  <CardTitle className="text-lg">Secure Funding</CardTitle>
-                  <CardDescription className="text-sm">
-                    Find grants, write winning proposals, and secure funding for your projects.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/grantwriting">
-                    <Button size="sm" className="w-full">
-                      Find Funding
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Assessment Tools Section */}
-      <section className="section-spacing-xs bg-gradient-section-1 relative">
-        <div className="page-container">
-          <div className="content-width">
-            <div className="text-center">
-              <h2 className="section-header mb-4">
-                Start with Self-Discovery
-              </h2>
-            </div>
-            <div className="max-w-3xl mx-auto mb-10">
-              <p className="section-description">
-                Before choosing your pathway, understand yourself better. Take our comprehensive assessments 
-                to discover your strengths, interests, and ideal direction.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto">
-              <Card className="premium-card hover-scale text-center border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-2 border border-blue-500/20 mx-auto">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">SKILLS</span>
-                  </div>
-                  <CardTitle className="text-lg">Skills Assessment</CardTitle>
-                  <CardDescription className="text-sm">
-                    Evaluate your current abilities across 8 key areas.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/assessit#take-your-assessment-today">
-                    <Button size="sm" className="w-full">
-                      Take Assessment
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-              
-              <Card className="premium-card hover-scale text-center border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-emerald-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-teal-500/10 mb-2 border border-teal-500/20 mx-auto">
-                    <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">INTERESTS</span>
-                  </div>
-                  <CardTitle className="text-lg">Interest Assessment</CardTitle>
-                  <CardDescription className="text-sm">
-                    Discover what truly motivates you and explore pathways.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/assessit#take-your-assessment-today">
-                    <Button size="sm" className="w-full">
-                      Take Assessment
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-              
-              <Card className="premium-card hover-scale text-center border-l-4 border-cyan-500 bg-gradient-to-br from-cyan-500/5 to-blue-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-cyan-500/10 mb-2 border border-cyan-500/20 mx-auto">
-                    <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 tracking-wide">PERSONALITY</span>
-                  </div>
-                  <CardTitle className="text-lg">Personality Assessment</CardTitle>
-                  <CardDescription className="text-sm">
-                    Understand your work style and ideal work environments.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/assessit#take-your-assessment-today">
-                    <Button size="sm" className="w-full">
-                      Take Assessment
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Job Preparation Section */}
-      <section className="section-spacing-xs bg-gradient-section-2 relative">
-        <div className="page-container">
-          <div className="content-width">
-            <div className="text-center mb-8">
-              <h2 className="section-header mb-4">
-                Get Job-Ready with Our Career Tools
-              </h2>
-              <p className="section-description max-w-3xl mx-auto">
-                Prepare for your next career opportunity with professional resume building, 
-                interview coaching, and career guidance tools.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-              <Card className="premium-card hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-2 border border-blue-500/20 w-fit">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">PREP IT</span>
-                  </div>
-                  <CardTitle className="text-lg">Resume & Interview Coach</CardTitle>
-                  <CardDescription className="text-sm">
-                    Get AI-powered feedback on your resume, cover letters, and interview responses.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/prepit">
-                    <Button size="sm" className="w-full">
-                      Start Prep
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-              
-              <Card className="premium-card hover-scale border-l-4 border-emerald-500 bg-gradient-to-br from-emerald-500/5 to-green-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-emerald-500/10 mb-2 border border-emerald-500/20 w-fit">
-                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">CAREER ADVISOR</span>
-                  </div>
-                  <CardTitle className="text-lg">AI Career Guidance</CardTitle>
-                  <CardDescription className="text-sm">
-                    Get personalized career advice, skill recommendations, and strategic guidance.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/upskill">
-                    <Button size="sm" className="w-full">
-                      Get Career Advice
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Ready to Get Started CTA */}
-      <section className="section-spacing-xs bg-gradient-hero relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        <div className="page-container relative z-10">
-          <div className="content-width text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-              Ready to Transform Your Career?
-            </h2>
-            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Join PivotHub today and get access to all the tools you need to build your future. 
-              Start with a free assessment to discover your best pathway forward.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/assessments">
-                <Button size="lg" variant="heroWhite" className="w-full sm:w-auto">
-                  Take Free Assessment
-                </Button>
-              </Link>
-              <Link to="/pricing">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary">
-                  View Pricing Plans
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <Footer />
-      
-      {/* Success Modal */}
-      {user && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <div className="bg-green-500 text-white p-4 rounded-lg shadow-lg animate-fade-in">
-            <h3 className="font-semibold">You're In!</h3>
-            <p className="text-sm">Welcome! You now have full access to explore and use all available tools.</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
