@@ -149,7 +149,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/hireyourself">
+                  <Link to="/buildit">
                     <Button size="lg" className="w-full mb-3">
                       Start Funding
                     </Button>
@@ -173,7 +173,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <Link to="/hireyourself">
+                  <Link to="/buildit">
                     <Button size="lg" className="w-full mb-3">
                       Explore Business Tools
                     </Button>
@@ -269,7 +269,7 @@ const Index = () => {
                 </div>
                 
                 <div className="pt-4">
-                  <Link to="/reskill">
+                  <Link to="/learnit">
                     <Button size="lg" className="w-full md:w-auto">
                       Start Your Reskilling Journey
                       <ArrowRight className="ml-2 h-5 w-5" />

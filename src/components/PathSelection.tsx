@@ -221,7 +221,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/hireyourself" className="mt-auto">
+              <Link to="/buildit" className="mt-auto">
                 <Button 
                   variant="hero" 
                   size="lg" 

@@ -60,10 +60,10 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
                     <Link 
-                      to="/reskill"
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                      to="/learnit"
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${['/learnit', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
-                      ReSkill
+                      Learn It
                     </Link>
                     <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
                       <ChevronDown className="h-4 w-4" />
@@ -89,10 +89,10 @@ export const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
               <Link 
-                to="/hireyourself" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/hireyourself' ? 'text-primary font-medium' : ''}`}
+                to="/buildit" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/buildit' ? 'text-primary font-medium' : ''}`}
               >
-                HireYourself
+                Build It
               </Link>
               <Link 
                 to="/teachit" 
@@ -231,11 +231,11 @@ export const Header = () => {
               </Link>
               <div className="space-y-2">
                 <Link 
-                  to="/reskill"
-                  className={`font-medium hover:text-primary transition-colors ${['/reskill', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
+                  to="/learnit"
+                  className={`font-medium hover:text-primary transition-colors ${['/learnit', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  ReSkill
+                  Learn It
                 </Link>
                 <div className="pl-4 space-y-2">
                   <Link 
@@ -262,11 +262,11 @@ export const Header = () => {
                 </div>
               </div>
               <Link 
-                to="/hireyourself" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/hireyourself' ? 'text-primary font-medium' : ''}`}
+                to="/buildit" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/buildit' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                HireYourself
+                Build It
               </Link>
                <Link 
                 to="/teachit" 

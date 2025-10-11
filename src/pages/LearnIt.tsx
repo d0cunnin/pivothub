@@ -14,7 +14,7 @@ import { EnhancedReskillDashboard } from "@/components/EnhancedReskillDashboard"
 import { Award, BookOpen, Users, TrendingUp, Target, Star, CheckCircle, ArrowRight, Brain, Lightbulb, Zap, GraduationCap, FileText, Edit3, Briefcase, MessageSquare } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
-const Reskill = () => {
+const LearnIt = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -272,4 +272,4 @@ const Reskill = () => {
   );
 };
 
-export default Reskill;
+export default LearnIt;

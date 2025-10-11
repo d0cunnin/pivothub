@@ -19,8 +19,8 @@ import { BusinessResourceFinder } from "@/components/BusinessResourceFinder";
 import { BusinessFoundationBuilder } from "@/components/BusinessFoundationBuilder";
 import heroImage from "@/assets/hero-image.jpg";
 
-const HireYourself = () => {
-  console.log("HireYourself component rendering...");
+const BuildIt = () => {
+  console.log("BuildIt component rendering...");
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -47,7 +47,7 @@ const HireYourself = () => {
               <Rocket className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              HireYourself
+              Build It
             </h1>
             <div className="text-left max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
@@ -333,4 +333,4 @@ const HireYourself = () => {
   );
 };
 
-export default HireYourself;
+export default BuildIt;

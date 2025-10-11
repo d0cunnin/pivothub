@@ -24,22 +24,22 @@ export const Footer = () => {
           </div>
           
           <div>
-            <h4 className="font-semibold mb-4">Reskill</h4>
+            <h4 className="font-semibold mb-4">Learn It</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link to="/reskill" className="hover:text-accent transition-colors">Skills Assessment</Link></li>
-              <li><Link to="/reskill" className="hover:text-accent transition-colors">Career Assessment</Link></li>
-              <li><Link to="/reskill" className="hover:text-accent transition-colors">Personality Test</Link></li>
-              <li><Link to="/reskill" className="hover:text-accent transition-colors">Career Guidance</Link></li>
+              <li><Link to="/learnit" className="hover:text-accent transition-colors">Skills Assessment</Link></li>
+              <li><Link to="/learnit" className="hover:text-accent transition-colors">Career Assessment</Link></li>
+              <li><Link to="/learnit" className="hover:text-accent transition-colors">Personality Test</Link></li>
+              <li><Link to="/learnit" className="hover:text-accent transition-colors">Career Guidance</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="font-semibold mb-4">HireYourself</h4>
+            <h4 className="font-semibold mb-4">Build It</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Business Planning</Link></li>
-              <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Business Ideas</Link></li>
+              <li><Link to="/buildit" className="hover:text-accent transition-colors">Business Planning</Link></li>
+              <li><Link to="/buildit" className="hover:text-accent transition-colors">Business Ideas</Link></li>
               <li><Link to="/grantwriting" className="hover:text-accent transition-colors">Fund It</Link></li>
-              <li><Link to="/hireyourself" className="hover:text-accent transition-colors">Pitch Decks</Link></li>
+              <li><Link to="/buildit" className="hover:text-accent transition-colors">Pitch Decks</Link></li>
             </ul>
           </div>
           

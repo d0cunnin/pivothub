@@ -6,8 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UsageProvider } from "@/contexts/UsageContext";
 import Index from "./pages/Index";
-import Reskill from "./pages/Reskill";
-import HireYourself from "./pages/HireYourself";
+import LearnIt from "./pages/LearnIt";
+import BuildIt from "./pages/BuildIt";
 import About from "./pages/About";
 import TeachIt from "./pages/TeachIt";
 import LaunchIt from "./pages/LaunchIt";
@@ -47,11 +47,11 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/teachit" element={<TeachIt />} />
             <Route path="/launchit" element={<LaunchIt />} />
-            <Route path="/reskill" element={<Reskill />} />
+            <Route path="/learnit" element={<LearnIt />} />
             <Route path="/assessments" element={<Assessments />} />
             <Route path="/jobprep" element={<JobPrep />} />
             <Route path="/learn-a-skill" element={<LearnASkill />} />
-            <Route path="/hireyourself" element={<HireYourself />} />
+            <Route path="/buildit" element={<BuildIt />} />
             <Route path="/grantwriting" element={<GrantWriting />} />
             <Route path="/freelancer-marketplace" element={<FreelancerMarketplace />} />
             <Route path="/freelancer-onboarding" element={<FreelancerOnboarding />} />
