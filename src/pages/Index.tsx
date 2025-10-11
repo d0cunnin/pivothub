@@ -159,7 +159,7 @@ const Index = () => {
             {features.map((feature, index) => (
               <Link key={feature.title} to={feature.link}>
                 <Card 
-                  className="bg-secondary/90 backdrop-blur-sm border-secondary hover:bg-secondary transition-all duration-300 hover:scale-105 hover:shadow-2xl group animate-fade-in h-full"
+                  className="bg-accent/90 backdrop-blur-sm border-accent hover:bg-accent transition-all duration-300 hover:scale-105 hover:shadow-2xl group animate-fade-in h-full"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardHeader>
