@@ -41,7 +41,7 @@ const LearnIt = () => {
               <GraduationCap className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Reskill with Confidence: From Preparation to Performance
+              Learn It with Confidence: From Preparation to Performance
             </h1>
             <div className="text-left max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
@@ -249,7 +249,7 @@ const LearnIt = () => {
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Ready to Start Your Reskill Journey?
+              Ready to Start Your Learn It Journey?
             </h2>
             <p className="text-lg text-white/90 mb-8">
               Transform your career with confidence and take the first step today.
@@ -258,7 +258,7 @@ const LearnIt = () => {
               size="lg" 
               variant="hero"
               onClick={() => window.location.href = '/assessments'}
-              aria-label="Start Your Reskill Journey"
+              aria-label="Start Your Learn It Journey"
               className="w-full md:w-auto"
             >
               Start Assessment

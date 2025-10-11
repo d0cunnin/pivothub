@@ -90,7 +90,7 @@ export default function About() {
                   upskill for the evolving job market or forge their own path through entrepreneurship.
                 </p>
                 <p className="section-body-text">
-                  PivotHub was created to provide exactly that: a platform where individuals can either reskill to become more 
+                  PivotHub was created to provide exactly that: a platform where individuals can either develop new skills to become more 
                   marketable for employment or launch their own businesses with the tools and guidance they need to succeed.
                 </p>
               </div>
@@ -113,7 +113,7 @@ export default function About() {
             <div className="space-y-6">
               <h3 className="section-header">Discover Your Path</h3>
               <p className="section-body-text">
-                Start with our comprehensive career assessments to identify your strengths, skills, and ideal career direction. Whether you're pivoting to a new industry, reskilling for emerging opportunities, or preparing to launch your own venture, our AI-powered tools provide personalized insights to guide your journey.
+                Start with our comprehensive career assessments to identify your strengths, skills, and ideal career direction. Whether you're pivoting to a new industry, developing new skills for emerging opportunities, or preparing to launch your own venture, our AI-powered tools provide personalized insights to guide your journey.
               </p>
             </div>
             <div className="lg:ml-4">

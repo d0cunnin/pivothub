@@ -191,19 +191,19 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Reskill Section */}
+      {/* Learn It Section */}
       <section className="section-spacing-xs bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center">
               <h2 className="section-header mb-4">
-                Get ReSkilled for Success
+                Learn It: Develop Your Skills
               </h2>
             </div>
             <div className="max-w-4xl mx-auto mb-10">
               <p className="section-description">
                 Transform your career with industry-recognized certifications, personalized learning paths, 
-                and cutting-edge skills training. Our comprehensive reskilling platform includes AI-powered 
+                and cutting-edge skills training. Our comprehensive Learn It platform includes AI-powered 
                 career guidance, interview coaching, and resume optimization.
               </p>
             </div>
@@ -271,7 +271,7 @@ const Index = () => {
                 <div className="pt-4">
                   <Link to="/learnit">
                     <Button size="lg" className="w-full md:w-auto">
-                      Start Your Reskilling Journey
+                      Start Your Learn It Journey
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </Link>

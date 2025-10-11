@@ -97,7 +97,7 @@ export const PathSelection = () => {
               />
 
               <p className="text-foreground mb-6 leading-relaxed">
-                Use our job prep tools to get ready for your next opportunity. 
+                Use our comprehensive Learn It tools to develop your skills and get ready for your next opportunity. 
                 Master interviews, resumes, and professional positioning.
               </p>
 
@@ -181,7 +181,7 @@ export const PathSelection = () => {
             </div>
           </Card>
 
-          {/* Hire Yourself */}
+          {/* Build It */}
           <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20 transition-all duration-500"></div>
             
@@ -191,14 +191,14 @@ export const PathSelection = () => {
                   <Rocket className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-foreground">Hire Yourself</h3>
+                  <h3 className="text-2xl font-bold text-foreground">Build It</h3>
                   <p className="text-muted-foreground">Launch Your Business</p>
                 </div>
               </div>
 
               <img 
                 src={hireyourselfIcon} 
-                alt="HireYourself" 
+                alt="Build It - Launch your business" 
                 className="w-64 h-40 object-cover rounded-lg mb-6 mx-auto group-hover:scale-105 transition-transform duration-500"
               />
 

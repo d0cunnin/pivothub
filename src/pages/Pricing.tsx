@@ -238,87 +238,25 @@ const Pricing = () => {
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
-      {/* Free Tier */}
-      <section className="section-spacing-sm bg-gradient-section-1">
-        <div className="page-container">
-          <div className="max-w-4xl mx-auto">
-            <Card className="premium-card card-padding-lg border-2 border-primary/20">
-              <CardHeader className="text-center">
-                <Badge className="mx-auto mb-4 bg-green-500 text-white">
-                  <Sparkles className="h-3 w-3 mr-1" />
-                  Free Forever
-                </Badge>
-                <CardTitle className="text-3xl font-bold">Explore Mode</CardTitle>
-                <CardDescription className="text-lg mt-4">
-                  Try everything free for 2 days, then keep limited access forever
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-primary">During 2-Day Trial:</h4>
-                    <ul className="space-y-2">
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-sm">Full access to all tools</span>
-                      </li>
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-sm">Unlimited AI generations</span>
-                      </li>
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-sm">All premium features</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="space-y-3">
-                    <h4 className="font-semibold text-primary">After Trial:</h4>
-                    <ul className="space-y-2">
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-sm">1 AI tool use per month</span>
-                      </li>
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-sm">Community access</span>
-                      </li>
-                      <li className="flex items-center">
-                        <Check className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-sm">Email support</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="pt-4">
-                  <Button
-                    className="w-full"
-                    size="lg"
-                    onClick={() => window.location.href = "/auth"}
-                  >
-                    Start Free Trial
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Path-Based Subscriptions */}
+      {/* Subscription Plans */}
       <section className="section-spacing-sm">
         <div className="page-container">
           <div className="text-center mb-12">
-            <h2 className="section-header mb-4">Select Your Subscription</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold mb-6">Select Your Plan</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-4">
               Choose the plan that matches your goals. Start free or unlock unlimited access with our premium options.
+            </p>
+            <p className="text-base text-muted-foreground max-w-4xl mx-auto">
+              <strong>Explore Mode</strong> gives you a 2-day free trial with full access, then 1 tool use per month forever. 
+              <strong> Path-based plans</strong> ($12-$15/month) unlock unlimited access to specialized toolkits. 
+              The <strong>All Access Pass</strong> ($29/month) includes everything from all paths with priority support and early feature access.
             </p>
           </div>
           
           <div className="max-w-4xl mx-auto space-y-6">
             {/* Plan Selector Dropdown */}
             <div className="w-full">
-              <label className="text-sm font-medium text-foreground mb-2 block">
+              <label className="text-lg font-semibold text-foreground mb-3 block">
                 Select Your Plan
               </label>
               <Select

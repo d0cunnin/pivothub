@@ -29,7 +29,7 @@ export const OurStorySection = () => {
                 <p>
                   We realized that people needed more than just job search assistance. They needed comprehensive tools to either 
                   upskill for the evolving job market or forge their own path through entrepreneurship. PivotHub was created 
-                  to provide exactly that: a platform where individuals can either reskill to become more marketable for employment 
+                  to provide exactly that: a platform where individuals can either develop new skills to become more marketable for employment 
                   or launch their own businesses with the tools and guidance they need to succeed.
                 </p>
                 <p>
