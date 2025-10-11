@@ -365,21 +365,6 @@ export default function SideIncomeBlueprint() {
                       Our AI analyzes your assessment answers across 50+ data points, comparing your skills, available time, financial goals, and risk tolerance against a database of 200+ proven income models. You receive 3 personalized recommendations ranked by feasibility score (1-10).
                     </p>
                   </div>
-                  
-                  <div className="bg-muted/30 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2 text-sm">Real Example:</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed mb-2">
-                      <strong>If you have:</strong> Teaching experience, 10 hours/week, $1,000/month goal, low risk tolerance
-                    </p>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      <strong>You might get:</strong>
-                    </p>
-                    <ul className="text-xs text-muted-foreground space-y-1 mt-2 ml-4">
-                      <li>• <strong>Online Tutoring</strong> (Feasibility: 9.2/10) - $500-2,000/mo potential, $0 startup, first dollar in 1-2 weeks</li>
-                      <li>• <strong>Course Creation</strong> (Feasibility: 7.8/10) - $300-1,500/mo potential, $100 startup, first dollar in 6-8 weeks</li>
-                      <li>• <strong>Educational Content Writing</strong> (Feasibility: 8.5/10) - $400-1,200/mo potential, $0 startup, first dollar in 2-3 weeks</li>
-                    </ul>
-                  </div>
 
                   <div>
                     <h4 className="font-semibold mb-2">Each Idea Includes:</h4>
