@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { GraduationCap, Rocket, Briefcase, ArrowRight, CheckCircle, Target, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import reskillIcon from "@/assets/reskill-person.jpg";
 import hireyourselfIcon from "@/assets/hireyourself-person.jpg";
@@ -23,18 +23,16 @@ export const PathSelection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Assess Your Path */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20 transition-all duration-500"></div>
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-purple-500 h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-violet-600/5 group-hover:from-purple-500/10 group-hover:to-violet-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mr-4">
-                  <GraduationCap className="h-8 w-8 text-primary" />
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-purple-500/10 mb-4 border border-purple-500/20 w-fit">
+                  <span className="text-sm font-bold text-purple-600 dark:text-purple-400 tracking-wide">ASSESS</span>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-foreground">Assess Your Path</h3>
-                  <p className="text-muted-foreground">Discover Your Options</p>
-                </div>
+                <h3 className="text-2xl font-bold text-foreground">Assess Your Path</h3>
+                <p className="text-muted-foreground">Discover Your Options</p>
               </div>
 
               <img 
@@ -55,8 +53,8 @@ export const PathSelection = () => {
                   "Career path recommendations",
                   "Personalized action plans"
                 ].map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0 mt-2" />
                     <span className="text-foreground">{feature}</span>
                   </div>
                 ))}
@@ -76,18 +74,16 @@ export const PathSelection = () => {
           </Card>
 
           {/* Relaunch Your Career */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
-            <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-secondary/10 group-hover:from-secondary/10 group-hover:to-secondary/20 transition-all duration-500"></div>
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-blue-500 h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-600/5 group-hover:from-blue-500/10 group-hover:to-cyan-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center mr-4">
-                  <Briefcase className="h-8 w-8 text-secondary" />
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-blue-500/10 mb-4 border border-blue-500/20 w-fit">
+                  <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">RESKILL</span>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-foreground">Relaunch Your Career</h3>
-                  <p className="text-muted-foreground">Get Ready for Next Opportunity</p>
-                </div>
+                <h3 className="text-2xl font-bold text-foreground">Relaunch Your Career</h3>
+                <p className="text-muted-foreground">Get Ready for Next Opportunity</p>
               </div>
 
               <img 
@@ -108,8 +104,8 @@ export const PathSelection = () => {
                   "Professional biography generator",
                   "Mock interview practice"
                 ].map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-2" />
                     <span className="text-foreground">{feature}</span>
                   </div>
                 ))}
@@ -129,18 +125,16 @@ export const PathSelection = () => {
           </Card>
 
           {/* Learn a New Skill */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent/10 group-hover:from-accent/10 group-hover:to-accent/20 transition-all duration-500"></div>
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-teal-500 h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-emerald-600/5 group-hover:from-teal-500/10 group-hover:to-emerald-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mr-4">
-                  <Target className="h-8 w-8 text-accent" />
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-teal-500/10 mb-4 border border-teal-500/20 w-fit">
+                  <span className="text-sm font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN</span>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-foreground">Learn a New Skill</h3>
-                  <p className="text-muted-foreground">Build Digital Skills</p>
-                </div>
+                <h3 className="text-2xl font-bold text-foreground">Learn a New Skill</h3>
+                <p className="text-muted-foreground">Build Digital Skills</p>
               </div>
 
               <img 
@@ -161,8 +155,8 @@ export const PathSelection = () => {
                   "Practical applications",
                   "Industry-relevant content"
                 ].map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
                     <span className="text-foreground">{feature}</span>
                   </div>
                 ))}
@@ -182,18 +176,16 @@ export const PathSelection = () => {
           </Card>
 
           {/* Build It */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 group-hover:from-primary/10 group-hover:to-primary/20 transition-all duration-500"></div>
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-orange-500 h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-600/5 group-hover:from-orange-500/10 group-hover:to-amber-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mr-4">
-                  <Rocket className="h-8 w-8 text-primary" />
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-orange-500/10 mb-4 border border-orange-500/20 w-fit">
+                  <span className="text-sm font-bold text-orange-600 dark:text-orange-400 tracking-wide">BUILD</span>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-foreground">Build It</h3>
-                  <p className="text-muted-foreground">Launch Your Business</p>
-                </div>
+                <h3 className="text-2xl font-bold text-foreground">Build It</h3>
+                <p className="text-muted-foreground">Launch Your Business</p>
               </div>
 
               <img 
@@ -214,8 +206,8 @@ export const PathSelection = () => {
                   "Marketing strategy tools",
                   "Grant search & writing"
                 ].map((feature, index) => (
-                  <div key={index} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
                     <span className="text-foreground">{feature}</span>
                   </div>
                 ))}
@@ -235,38 +227,36 @@ export const PathSelection = () => {
           </Card>
 
           {/* Tech Freelancer Hub - spans 2 columns on lg screens */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-0 h-full lg:col-span-2">
-            <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-secondary/10 group-hover:from-secondary/10 group-hover:to-secondary/20 transition-all duration-500"></div>
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-indigo-500 h-full lg:col-span-2">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-600/5 group-hover:from-indigo-500/10 group-hover:to-purple-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center mr-4">
-                  <Users className="h-8 w-8 text-secondary" />
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-500/10 mb-4 border border-indigo-500/20 w-fit">
+                  <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">FREELANCE</span>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-foreground">Tech Freelancer Hub</h3>
-                  <p className="text-muted-foreground">Connect & Collaborate</p>
-                </div>
+                <h3 className="text-2xl font-bold text-foreground">Tech Freelancer Hub</h3>
+                <p className="text-muted-foreground">Connect & Collaborate</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div className="text-center p-6 bg-secondary/5 rounded-lg border border-secondary/10">
-                  <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-3">
-                    <Users className="h-6 w-6 text-secondary" />
+                <div className="text-center p-6 bg-indigo-500/5 rounded-lg border border-indigo-500/10">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-500/10 mb-3 border border-indigo-500/20">
+                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">FREELANCER</span>
                   </div>
-                  <h4 className="font-semibold text-secondary mb-2">I'm a Freelancer</h4>
+                  <h4 className="font-semibold text-indigo-600 dark:text-indigo-400 mb-2">I'm a Freelancer</h4>
                   <p className="text-sm text-muted-foreground mb-4">Showcase your tech skills to the world</p>
-                  <Button variant="outline" size="sm" className="border-secondary text-secondary hover:bg-secondary hover:text-white">
+                  <Button variant="outline" size="sm" className="border-indigo-500 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500 hover:text-white">
                     Create Profile
                   </Button>
                 </div>
-                <div className="text-center p-6 bg-primary/5 rounded-lg border border-primary/10">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
-                    <Briefcase className="h-6 w-6 text-primary" />
+                <div className="text-center p-6 bg-purple-500/5 rounded-lg border border-purple-500/10">
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-purple-500/10 mb-3 border border-purple-500/20">
+                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-wide">HIRING</span>
                   </div>
-                  <h4 className="font-semibold text-primary mb-2">I'm Hiring</h4>
+                  <h4 className="font-semibold text-purple-600 dark:text-purple-400 mb-2">I'm Hiring</h4>
                   <p className="text-sm text-muted-foreground mb-4">Find the perfect tech expert for your project</p>
-                  <Button variant="outline" size="sm" className="border-primary text-primary hover:bg-primary hover:text-white">
+                  <Button variant="outline" size="sm" className="border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-500 hover:text-white">
                     Post Project
                   </Button>
                 </div>

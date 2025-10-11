@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Target, Zap } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpg";
 import heroVideo from "@/assets/hero-video.mp4";
 
 export const HeroSection = () => {

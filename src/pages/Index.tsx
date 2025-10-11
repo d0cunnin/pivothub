@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Target, BookOpen, Award, TrendingUp, Lightbulb, Brain, Heart, FileText, Briefcase, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -67,9 +67,11 @@ const Index = () => {
             </div>
             
             <div className="grid md:grid-cols-3 gap-6">
-              <Card className="premium-card card-padding-sm hover-scale text-center">
+              <Card className="premium-card card-padding-sm hover-scale text-center border-l-4 border-purple-500 bg-gradient-to-br from-purple-500/5 to-violet-600/5">
                 <CardHeader className="p-0 pb-4">
-                  <Brain className="h-10 w-10 text-primary mb-3 mx-auto" />
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-purple-500/10 mb-3 border border-purple-500/20 mx-auto">
+                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-wide">SKILLS</span>
+                  </div>
                   <CardTitle className="text-xl">Skills Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Evaluate your current abilities across 8 key areas including math, communication, technology, and more.
@@ -84,9 +86,11 @@ const Index = () => {
                 </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding-sm hover-scale text-center">
+              <Card className="premium-card card-padding-sm hover-scale text-center border-l-4 border-pink-500 bg-gradient-to-br from-pink-500/5 to-rose-600/5">
                 <CardHeader className="p-0 pb-4">
-                  <Heart className="h-10 w-10 text-primary mb-3 mx-auto" />
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-pink-500/10 mb-3 border border-pink-500/20 mx-auto">
+                    <span className="text-xs font-bold text-pink-600 dark:text-pink-400 tracking-wide">INTERESTS</span>
+                  </div>
                   <CardTitle className="text-xl">Interest Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Discover what truly motivates you and explore career paths that align with your passions.
@@ -101,9 +105,11 @@ const Index = () => {
                 </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding-sm hover-scale text-center">
+              <Card className="premium-card card-padding-sm hover-scale text-center border-l-4 border-cyan-500 bg-gradient-to-br from-cyan-500/5 to-blue-600/5">
                 <CardHeader className="p-0 pb-4">
-                  <Users className="h-10 w-10 text-primary mb-3 mx-auto" />
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-cyan-500/10 mb-3 border border-cyan-500/20 mx-auto">
+                    <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 tracking-wide">PERSONALITY</span>
+                  </div>
                   <CardTitle className="text-xl">Personality Assessment</CardTitle>
                   <CardDescription className="text-muted-foreground">
                     Understand your work style, communication preferences, and ideal work environments.
@@ -139,9 +145,11 @@ const Index = () => {
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
-              <Card className="premium-card card-padding-sm hover-scale">
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-indigo-500 bg-gradient-to-br from-indigo-500/5 to-purple-600/5">
                 <CardHeader className="p-0 pb-4">
-                  <FileText className="h-10 w-10 text-primary mb-3" />
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-500/10 mb-3 border border-indigo-500/20 w-fit">
+                    <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">FUNDING</span>
+                  </div>
                   <CardTitle className="text-2xl">Funding Generator</CardTitle>
                   <CardDescription className="text-muted-foreground mb-4">
                     Professional funding assistance to help you secure grants for education, 
@@ -155,17 +163,31 @@ const Index = () => {
                     </Button>
                   </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
-                    <li>• Education & training grants</li>
-                    <li>• Small business funding</li>
-                    <li>• Research & development grants</li>
-                    <li>• Professional templates</li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
+                      <span>Education & training grants</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
+                      <span>Small business funding</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
+                      <span>Research & development grants</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0 mt-2" />
+                      <span>Professional templates</span>
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
               
-              <Card className="premium-card card-padding-sm hover-scale">
+              <Card className="premium-card card-padding-sm hover-scale border-l-4 border-orange-500 bg-gradient-to-br from-orange-500/5 to-amber-600/5">
                 <CardHeader className="p-0 pb-4">
-                  <Briefcase className="h-10 w-10 text-primary mb-3" />
+                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-orange-500/10 mb-3 border border-orange-500/20 w-fit">
+                    <span className="text-sm font-bold text-orange-600 dark:text-orange-400 tracking-wide">BUSINESS</span>
+                  </div>
                   <CardTitle className="text-2xl">Business & Entrepreneurship Tools</CardTitle>
                   <CardDescription className="text-muted-foreground mb-4">
                     Complete suite of business development tools including idea generation, 
@@ -179,10 +201,22 @@ const Index = () => {
                     </Button>
                   </Link>
                   <ul className="space-y-2 text-sm text-muted-foreground text-left">
-                    <li>• Business idea generator</li>
-                    <li>• Business plan creator</li>
-                    <li>• Pitch deck builder</li>
-                    <li>• Marketing strategy planner</li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                      <span>Business idea generator</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                      <span>Business plan creator</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                      <span>Pitch deck builder</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                      <span>Marketing strategy planner</span>
+                    </li>
                   </ul>
                 </CardContent>
               </Card>
@@ -216,9 +250,11 @@ const Index = () => {
                 </p>
                 
                 <div className="grid md:grid-cols-3 gap-4">
-                  <Card className="premium-card card-padding-sm hover-scale">
+                  <Card className="premium-card card-padding-sm hover-scale border-l-4 border-purple-500 bg-gradient-to-br from-purple-500/5 to-violet-600/5">
                     <CardHeader className="p-0 pb-4">
-                      <Brain className="h-8 w-8 text-primary mb-3" />
+                      <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-purple-500/10 mb-3 border border-purple-500/20 w-fit">
+                        <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-wide">ASSESS</span>
+                      </div>
                       <CardTitle className="text-lg">Assessments</CardTitle>
                       <CardDescription className="text-sm">
                         Discover your skills, interests, and personality to guide your career path.
@@ -233,9 +269,11 @@ const Index = () => {
                     </CardContent>
                   </Card>
                   
-                  <Card className="premium-card card-padding-sm hover-scale">
+                  <Card className="premium-card card-padding-sm hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
                     <CardHeader className="p-0 pb-4">
-                      <Briefcase className="h-8 w-8 text-primary mb-3" />
+                      <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-3 border border-blue-500/20 w-fit">
+                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">JOB PREP</span>
+                      </div>
                       <CardTitle className="text-lg">Job Prep</CardTitle>
                       <CardDescription className="text-sm">
                         Get ready for your dream job with interview coaching and resume optimization.
@@ -250,9 +288,11 @@ const Index = () => {
                     </CardContent>
                   </Card>
                   
-                  <Card className="premium-card card-padding-sm hover-scale">
+                  <Card className="premium-card card-padding-sm hover-scale border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-emerald-600/5">
                     <CardHeader className="p-0 pb-4">
-                      <BookOpen className="h-8 w-8 text-primary mb-3" />
+                      <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-teal-500/10 mb-3 border border-teal-500/20 w-fit">
+                        <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN</span>
+                      </div>
                       <CardTitle className="text-lg">Learn a Skill</CardTitle>
                       <CardDescription className="text-sm">
                         Develop new competencies with industry-recognized courses and certifications.

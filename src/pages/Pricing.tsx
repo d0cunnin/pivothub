@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
-import { Check, Star, Zap, Crown, Sparkles } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -86,7 +86,7 @@ const Pricing = () => {
         "Email support"
       ],
       tier: "free",
-      icon: "✨",
+      gradient: "from-gray-500/10 to-gray-600/10",
       isFree: true
     },
     {
@@ -103,7 +103,8 @@ const Pricing = () => {
         "Resume & Cover Letter Coach"
       ],
       tier: "job-prep",
-      icon: "🎯"
+      gradient: "from-blue-500/10 to-cyan-600/10",
+      accent: "border-l-4 border-blue-500"
     },
     {
       name: "Hire Yourself Path",
@@ -126,7 +127,8 @@ const Pricing = () => {
         "Business Foundation Builder"
       ],
       tier: "hire-yourself",
-      icon: "🚀"
+      gradient: "from-orange-500/10 to-amber-600/10",
+      accent: "border-l-4 border-orange-500"
     },
     {
       name: "Launch It Path",
@@ -144,7 +146,8 @@ const Pricing = () => {
         "Tech setup guidance"
       ],
       tier: "launch-it",
-      icon: "💡"
+      gradient: "from-indigo-500/10 to-purple-600/10",
+      accent: "border-l-4 border-indigo-500"
     },
     {
       name: "Teach It Path",
@@ -161,7 +164,8 @@ const Pricing = () => {
         "Assessment creation"
       ],
       tier: "teach-it",
-      icon: "📚"
+      gradient: "from-green-500/10 to-lime-600/10",
+      accent: "border-l-4 border-green-500"
     },
     {
       name: "Fund It Path",
@@ -178,7 +182,8 @@ const Pricing = () => {
         "Eligibility checker"
       ],
       tier: "grant-writing",
-      icon: "📝"
+      gradient: "from-purple-500/10 to-violet-600/10",
+      accent: "border-l-4 border-purple-500"
     },
     {
       name: "All Access Pass",
@@ -194,7 +199,8 @@ const Pricing = () => {
         "Priority email support"
       ],
       tier: "all-access",
-      icon: "👑",
+      gradient: "from-amber-500/10 to-orange-600/10",
+      accent: "border-l-4 border-amber-500",
       isAllAccess: true,
       savings: "Save up to $46/month compared to individual paths"
     }
@@ -221,8 +227,8 @@ const Pricing = () => {
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
-            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
-              <Crown className="h-12 w-12 text-white" />
+            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+              <span className="text-3xl font-bold text-white tracking-wider">PRICING</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
               Choose Your Path
@@ -266,7 +272,6 @@ const Pricing = () => {
                 <SelectTrigger className="w-full h-14 text-lg bg-background border-2">
                   <SelectValue>
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{selectedPlan.icon}</span>
                       <span className="font-semibold">{selectedPlan.name}</span>
                       {selectedPlan.isAllAccess && (
                         <Badge className="ml-2 bg-primary text-primary-foreground">
@@ -285,7 +290,6 @@ const Pricing = () => {
                       className="cursor-pointer py-3"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">{plan.icon}</span>
                         <span className="font-medium">{plan.name}</span>
                         {plan.isFree && (
                           <Badge className="ml-2 bg-green-500 text-white text-xs">Free</Badge>
@@ -303,7 +307,7 @@ const Pricing = () => {
             </div>
 
             {/* Selected Plan Details Card */}
-            <Card className={`premium-card card-padding-lg shadow-lg ${
+            <Card className={`premium-card card-padding-lg shadow-lg ${selectedPlan.accent || ''} bg-gradient-to-br ${selectedPlan.gradient || 'from-background to-background'} ${
               selectedPlan.isAllAccess ? 'border-2 border-primary shadow-glow' : 
               selectedPlan.isFree ? 'border-2 border-green-500/30' : 
               'border-2 border-primary/20'
@@ -317,13 +321,15 @@ const Pricing = () => {
                 )}
                 {selectedPlan.isFree && (
                   <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-500 text-white">
-                    <Sparkles className="h-3 w-3 mr-1" />
+                    <Star className="h-3 w-3 mr-1" />
                     Free Forever
                   </Badge>
                 )}
-                <div className="text-6xl mb-6 mt-2">{selectedPlan.icon}</div>
-                <CardTitle className="text-3xl font-bold mb-4">
-                  {selectedPlan.name}
+                <div className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-primary/10 mb-4 mt-2 border border-primary/20">
+                  <span className="text-xl font-bold text-primary tracking-wide">{selectedPlan.name.toUpperCase()}</span>
+                </div>
+                <CardTitle className="text-2xl font-bold mb-4">
+                  {selectedPlan.description}
                 </CardTitle>
                 <div className="mb-4">
                   <span className="text-5xl font-bold text-primary">
@@ -378,7 +384,6 @@ const Pricing = () => {
                       }
                     }}
                   >
-                    {selectedPlan.isAllAccess && <Crown className="h-4 w-4 mr-2" />}
                     {selectedPlan.isFree ? "Start Free Trial" : `Get Started with ${selectedPlan.name}`}
                   </Button>
                 </div>
