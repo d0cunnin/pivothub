@@ -188,7 +188,7 @@ export default function SideIncomeBlueprint() {
       </section>
 
       {/* Introduction Section */}
-      <section className="py-12 bg-white relative overflow-hidden">
+      <section className="py-8 bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="max-w-4xl mx-auto">
             <p className="text-lg md:text-xl text-foreground leading-relaxed text-left">
@@ -199,7 +199,7 @@ export default function SideIncomeBlueprint() {
       </section>
 
       {/* How It Works - Enhanced */}
-      <section id="blueprint-info" className="section-spacing-sm bg-accent relative overflow-hidden">
+      <section id="blueprint-info" className="py-12 bg-accent relative overflow-hidden">
         <div className="page-container">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -263,144 +263,79 @@ export default function SideIncomeBlueprint() {
         </div>
       </section>
 
-      {/* Who This Is Perfect For */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      {/* Final CTA - Ready to Build Your Side Income */}
+      <section className="py-12 bg-white relative overflow-hidden">
         <div className="page-container">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Who This Is Perfect For</h2>
-            </div>
-            <p className="text-lg text-foreground/80 mb-12 text-left">
-              Your Earn It Blueprint works for anyone ready to build sustainable side income
-            </p>
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="bg-gradient-card p-12 rounded-2xl shadow-elegant">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                Ready to Build Your Side Income?
+              </h2>
+              <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
+                Stop guessing and start with a clear, personalized plan. Join 1,000+ people who've launched sustainable side income with their Earn It Blueprint.
+              </p>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              <Card className="premium-card p-6">
-                <CardHeader className="p-0 mb-4">
-                  <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-3 text-white text-2xl">
-                    💼
-                  </div>
-                  <CardTitle className="text-lg">The 9-to-5er</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Goal:</strong> $500-$2,000/month extra without quitting your job
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Example match:</strong> Weekend consulting, online course creation, freelance writing
-                  </p>
-                  <p className="text-xs text-muted-foreground italic mt-3">
-                    "I kept my job security while building $1,800/month on the side doing weekend consulting."
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="flex flex-wrap justify-center gap-6 mb-8">
+                <div className="flex items-center gap-2">
+                  <span className="text-primary text-xl">✓</span>
+                  <span className="text-sm">3 Custom Income Ideas</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary text-xl">✓</span>
+                  <span className="text-sm">90-Day Launch Plan</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary text-xl">✓</span>
+                  <span className="text-sm">All Templates Included</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary text-xl">✓</span>
+                  <span className="text-sm">Lifetime Access</span>
+                </div>
+              </div>
 
-              <Card className="premium-card p-6">
-                <CardHeader className="p-0 mb-4">
-                  <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-3 text-white text-2xl">
-                    👨‍👩‍👧
-                  </div>
-                  <CardTitle className="text-lg">The Parent</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Goal:</strong> Flexible income around family time
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Example match:</strong> Virtual assistance, Etsy shop, social media management
-                  </p>
-                  <p className="text-xs text-muted-foreground italic mt-3">
-                    "I work during nap times and after bedtime, earning $1,200/month as a VA."
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="mb-8">
+                <span className="text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">$27</span>
+                <span className="text-muted-foreground ml-2 text-lg">one-time payment</span>
+              </div>
 
-              <Card className="premium-card p-6">
-                <CardHeader className="p-0 mb-4">
-                  <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-3 text-white text-2xl">
-                    🎓
-                  </div>
-                  <CardTitle className="text-lg">The Student</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Goal:</strong> Build income while studying
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Example match:</strong> Tutoring, campus services, digital products
-                  </p>
-                  <p className="text-xs text-muted-foreground italic mt-3">
-                    "I went from broke college student to earning $800/month tutoring online."
-                  </p>
-                </CardContent>
-              </Card>
+              <Button 
+                size="lg" 
+                onClick={handleStartCheckout}
+                disabled={loading}
+                className="text-lg px-16 py-7 shadow-glow hover:scale-105 transition-elegant mb-6"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Get Your Blueprint Now'
+                )}
+              </Button>
 
-              <Card className="premium-card p-6">
-                <CardHeader className="p-0 mb-4">
-                  <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-3 text-white text-2xl">
-                    🏖️
-                  </div>
-                  <CardTitle className="text-lg">The Retiree</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Goal:</strong> Supplement retirement with meaningful work
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Example match:</strong> Consulting, teaching, hobby monetization
-                  </p>
-                  <p className="text-xs text-muted-foreground italic mt-3">
-                    "I turned 40 years of experience into a $2,500/month consulting practice."
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card p-6">
-                <CardHeader className="p-0 mb-4">
-                  <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-3 text-white text-2xl">
-                    🔄
-                  </div>
-                  <CardTitle className="text-lg">The Career Transitioner</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Goal:</strong> Test new field before fully committing
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Example match:</strong> Freelancing, project work, small business
-                  </p>
-                  <p className="text-xs text-muted-foreground italic mt-3">
-                    "I tested UX design as a side gig before transitioning full-time with confidence."
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card p-6">
-                <CardHeader className="p-0 mb-4">
-                  <div className="w-12 h-12 bg-gradient-hero rounded-lg flex items-center justify-center mb-3 text-white text-2xl">
-                    💪
-                  </div>
-                  <CardTitle className="text-lg">The Debt Crusher</CardTitle>
-                </CardHeader>
-                <CardContent className="p-0 space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Goal:</strong> Fast extra income to pay off loans
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Example match:</strong> High-demand services, quick-turn projects
-                  </p>
-                  <p className="text-xs text-muted-foreground italic mt-3">
-                    "I paid off $15,000 in credit card debt in 18 months with side income."
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-primary">🔒</span>
+                  <span>Secure payment via Stripe • No recurring fees</span>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-primary">⚡</span>
+                  <span>Instant delivery • 15-minute assessment • Lifetime access</span>
+                </div>
+                <div className="flex items-center justify-center gap-2">
+                  <span className="text-primary">💰</span>
+                  <span>Less than a meal out for a complete side income roadmap</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* What's Included - Detailed */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section className="py-12 bg-accent relative overflow-hidden">
         <div className="page-container">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -522,7 +457,7 @@ export default function SideIncomeBlueprint() {
       </section>
 
       {/* FAQ Section */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section className="py-12 bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
@@ -631,77 +566,6 @@ export default function SideIncomeBlueprint() {
                   </p>
                 </CardContent>
               </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
-        <div className="page-container">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="bg-gradient-card p-12 rounded-2xl shadow-elegant">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Ready to Build Your Side Income?
-              </h2>
-              <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Stop guessing and start with a clear, personalized plan. Join 1,000+ people who've launched sustainable side income with their Earn It Blueprint.
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-6 mb-8">
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">3 Custom Income Ideas</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">90-Day Launch Plan</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">All Templates Included</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">Lifetime Access</span>
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <span className="text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">$27</span>
-                <span className="text-muted-foreground ml-2 text-lg">one-time payment</span>
-              </div>
-
-              <Button 
-                size="lg" 
-                onClick={handleStartCheckout}
-                disabled={loading}
-                className="text-lg px-16 py-7 shadow-glow hover:scale-105 transition-elegant mb-6"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  'Get Your Blueprint Now'
-                )}
-              </Button>
-
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-primary">🔒</span>
-                  <span>Secure payment via Stripe • No recurring fees</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-primary">⚡</span>
-                  <span>Instant delivery • 15-minute assessment • Lifetime access</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-primary">💰</span>
-                  <span>Less than a meal out for a complete side income roadmap</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
