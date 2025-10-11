@@ -14,7 +14,7 @@ const Index = () => {
     {
       icon: reskillIcon,
       title: "Teach It",
-      description: "Learn new skills and concepts that spark growth.",
+      description: "Monetize your expertise by teaching others what you know best.",
       link: "/teachit"
     },
     {

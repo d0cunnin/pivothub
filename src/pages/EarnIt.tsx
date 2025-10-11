@@ -191,7 +191,7 @@ export default function SideIncomeBlueprint() {
       <section className="py-12 bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="max-w-4xl mx-auto">
-            <p className="text-lg md:text-xl text-foreground/80 leading-relaxed text-left">
+            <p className="text-lg md:text-xl text-foreground leading-relaxed text-left">
               Stop wasting time on side hustle ideas that do not fit your life. The Earn It Blueprint helps you discover three income opportunities that align with your skills, time, financial goals, and comfort level. It gives you a clear roadmap to start earning within 90 days whether you are a stay-at-home parent, working professional, retiree, or student.
             </p>
           </div>

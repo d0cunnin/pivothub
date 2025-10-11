@@ -245,7 +245,7 @@ const Pricing = () => {
       </section>
 
       {/* Subscription Plans */}
-      <section className="section-spacing-sm">
+      <section className="section-spacing-sm bg-white">
         <div className="page-container">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-6">Select Your Plan</h2>

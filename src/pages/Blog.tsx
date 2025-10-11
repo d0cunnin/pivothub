@@ -106,7 +106,7 @@ const Blog = () => {
         </section>
 
         {/* Blog Posts */}
-        <section className="py-16">
+        <section className="py-16 bg-accent">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {blogPosts.map((post) => (
@@ -152,7 +152,7 @@ const Blog = () => {
         </section>
 
         {/* Newsletter Signup */}
-        <section className="bg-muted py-16">
+        <section className="bg-white py-16">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-foreground mb-4">
               Stay Updated

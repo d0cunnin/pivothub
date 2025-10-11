@@ -90,7 +90,7 @@ const BuildIt = () => {
                   Quick Start Your Business
                 </h2>
               </div>
-              <p className="text-lg text-foreground/80">
+              <p className="text-lg text-foreground">
                 Follow our proven 4-step process to launch your business in weeks, not months
               </p>
             </div>
@@ -178,7 +178,7 @@ const BuildIt = () => {
                 Step 2: Plan & Strategy
               </h2>
             </div>
-            <p className="text-lg text-foreground/80">
+            <p className="text-lg text-foreground">
               Create your business plan and marketing strategy
             </p>
           </div>
@@ -277,7 +277,7 @@ const BuildIt = () => {
                 Success Stories
               </h2>
             </div>
-            <p className="text-xl md:text-2xl text-foreground/80 max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl md:text-2xl text-foreground max-w-4xl mx-auto leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               See how others have transformed their lives through entrepreneurship
             </p>
           </div>

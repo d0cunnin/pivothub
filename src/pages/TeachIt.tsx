@@ -58,7 +58,7 @@ const TeachIt = () => {
               </h2>
             </div>
             <div className="max-w-3xl mx-auto text-left">
-              <ul className="space-y-4 text-lg text-foreground/80">
+              <ul className="space-y-4 text-lg text-foreground">
                 <li className="flex items-start">
                   <span className="mr-3">•</span>
                   <span>Share your expertise and turn years of experience into valuable lessons that help others succeed</span>
@@ -132,7 +132,7 @@ const TeachIt = () => {
                 Generate Your Teaching Materials
               </h2>
             </div>
-            <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
+            <p className="text-lg text-foreground max-w-3xl mx-auto">
               Provide your skills, experience, and expertise below. We'll generate webinar concepts, course outlines, handouts, and scripts that you can use to teach your subject anywhere.
             </p>
           </div>
