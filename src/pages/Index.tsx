@@ -163,8 +163,8 @@ const Index = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardHeader>
-                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg overflow-hidden">
-                      <img src={feature.icon} alt={feature.title} className="w-full h-full object-cover" />
+                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform overflow-hidden border-2 border-white/30">
+                      <img src={feature.icon} alt={feature.title} className="w-12 h-12 object-cover rounded-full" />
                     </div>
                     <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
                   </CardHeader>
@@ -208,7 +208,7 @@ const Index = () => {
               >
                 <Card className="h-full bg-background border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:scale-105 group">
                   <CardHeader>
-                    <div className="text-7xl font-bold text-primary/20 mb-4 group-hover:text-primary/30 transition-colors">
+                    <div className="text-7xl font-bold text-primary mb-4 group-hover:text-accent transition-colors">
                       {step.number}
                     </div>
                     <CardTitle className="text-2xl mb-3">{step.title}</CardTitle>
