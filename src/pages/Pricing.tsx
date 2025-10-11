@@ -333,7 +333,7 @@ const Pricing = () => {
                       {selectedPlan.isAllAccess && (
                         <Badge className="ml-2 bg-primary text-primary-foreground">
                           <Star className="h-3 w-3 mr-1" />
-                          Best Value
+                          Most Popular
                         </Badge>
                       )}
                     </div>
@@ -354,7 +354,7 @@ const Pricing = () => {
                         )}
                         {plan.isAllAccess && (
                           <Badge className="ml-2 bg-primary text-primary-foreground text-xs">
-                            Best Value
+                            Most Popular
                           </Badge>
                         )}
                       </div>
@@ -374,7 +374,7 @@ const Pricing = () => {
                 {selectedPlan.isAllAccess && (
                   <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
                     <Star className="h-3 w-3 mr-1" />
-                    Best Value
+                    Most Popular
                   </Badge>
                 )}
                 {selectedPlan.isFree && (
