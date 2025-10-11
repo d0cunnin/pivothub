@@ -163,9 +163,6 @@ const Index = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardHeader>
-                    <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 group-hover:scale-110 transition-transform overflow-hidden border-2 border-white/30">
-                      <img src={feature.icon} alt={feature.title} className="w-12 h-12 object-cover rounded-full" />
-                    </div>
                     <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
