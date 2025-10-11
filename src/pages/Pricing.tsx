@@ -184,10 +184,10 @@ const Pricing = () => {
       name: "All Access Pass",
       price: "$29",
       period: "month",
-      description: "Get unlimited access to every tool, feature, and path",
+      description: "Get access to every tool, feature, and path with generous usage limits",
       features: [
         "Everything from all 5 paths",
-        "Unlimited AI tool usage",
+        "Generous AI usage limits",
         "Priority feature access",
         "Save unlimited results",
         "Early access to new tools",
@@ -244,12 +244,12 @@ const Pricing = () => {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-6">Select Your Plan</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-4">
-              Choose the plan that matches your goals. Start free or unlock unlimited access with our premium options.
+              Choose the plan that matches your goals. Start free or unlock full access with our premium options.
             </p>
             <p className="text-base text-muted-foreground max-w-4xl mx-auto">
               <strong>Explore Mode</strong> gives you a 2-day free trial with full access, then 1 tool use per month forever. 
-              <strong> Path-based plans</strong> ($12-$15/month) unlock unlimited access to specialized toolkits. 
-              The <strong>All Access Pass</strong> ($29/month) includes everything from all paths with priority support and early feature access.
+              <strong> Path-based plans</strong> ($12-$15/month) unlock full access to specialized toolkits with generous usage limits. 
+              The <strong>All Access Pass</strong> ($29/month) includes everything from all paths with the highest usage limits, priority support, and early feature access.
             </p>
           </div>
           
