@@ -2,58 +2,55 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCap, Wrench, Rocket, DollarSign, TrendingUp, Briefcase, Target, ChevronRight, CheckCircle } from "lucide-react";
+import { ChevronRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import reskillIcon from "@/assets/reskill-icon.jpg";
+import jobprepIcon from "@/assets/jobprep-icon.jpg";
+import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
+import heroVideo from "@/assets/hero-video.mp4";
 
 const Index = () => {
   const features = [
     {
-      icon: GraduationCap,
+      icon: reskillIcon,
       title: "Teach It",
       description: "Learn new skills and concepts that spark growth.",
-      color: "from-blue-500 to-blue-600",
       link: "/teachit"
     },
     {
-      icon: Wrench,
+      icon: reskillIcon,
       title: "Build It",
       description: "Turn your ideas into reality step by step.",
-      color: "from-purple-500 to-purple-600",
       link: "/buildit"
     },
     {
-      icon: Rocket,
+      icon: reskillIcon,
       title: "Launch It",
       description: "Get everything ready to go live with ease.",
-      color: "from-pink-500 to-pink-600",
       link: "/launchit"
     },
     {
-      icon: DollarSign,
+      icon: reskillIcon,
       title: "Fund It",
       description: "Explore funding options and strategies.",
-      color: "from-green-500 to-green-600",
       link: "/grantwriting"
     },
     {
-      icon: TrendingUp,
+      icon: hireyourselfIcon,
       title: "Earn It",
       description: "Discover the right income opportunities for your lifestyle.",
-      color: "from-yellow-500 to-yellow-600",
       link: "/earnit"
     },
     {
-      icon: Briefcase,
-      title: "Work It",
+      icon: jobprepIcon,
+      title: "Prep It",
       description: "Prepare for career success.",
-      color: "from-indigo-500 to-indigo-600",
       link: "/prepit"
     },
     {
-      icon: Target,
-      title: "Prove It",
+      icon: reskillIcon,
+      title: "Assess It",
       description: "Assess, improve, and grow with confidence.",
-      color: "from-red-500 to-red-600",
       link: "/assessit"
     }
   ];
@@ -98,23 +95,34 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Hero Section - White background, dark text */}
+      {/* Hero Section - White background with video, dark text */}
       <section className="relative bg-background py-24 md:py-32 overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+        {/* Background Video */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={heroVideo} type="video/mp4" />
+        </video>
+        
+        {/* Semi-transparent gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 to-secondary/80"></div>
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
               Your Hub for Ideas, Growth, and AI-Powered Launch Tools
             </h1>
-            <p className="text-xl md:text-2xl text-foreground/80 mb-10 leading-relaxed">
+            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
               Discover tools that help you build, launch, and grow smarter — all in one place.
             </p>
             <Link to="/pricing">
               <Button 
                 size="lg" 
-                className="text-lg px-10 py-6 shadow-glow hover:scale-105 transition-elegant group"
+                className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
               >
                 Get Started
                 <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -155,8 +163,8 @@ const Index = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardHeader>
-                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
-                      <feature.icon className="h-8 w-8 text-white" />
+                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-accent to-accent/80 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg overflow-hidden">
+                      <img src={feature.icon} alt={feature.title} className="w-full h-full object-cover" />
                     </div>
                     <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
                   </CardHeader>
