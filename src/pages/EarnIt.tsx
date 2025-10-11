@@ -339,9 +339,9 @@ export default function SideIncomeBlueprint() {
         <div className="page-container">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">What's Included in Your Blueprint</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">What's Included in Your Blueprint</h2>
             </div>
-            <p className="text-lg text-foreground/80 mb-12 text-left">
+            <p className="text-lg text-white mb-12 text-left">
               Everything you need to launch your side income in 90 days or less
             </p>
 
