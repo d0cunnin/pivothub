@@ -35,21 +35,21 @@ const Index = () => {
           <div className="content-width">
             <div className="text-center">
               <h2 className="section-header mb-4">
-                Your Complete Career Transformation Platform
+                Your Guide to Pivot Forward Into the Future
               </h2>
             </div>
             <div className="max-w-4xl mx-auto">
               <p className="section-description mb-8">
-                PivotHub is your all-in-one platform for career transformation. Whether you're looking to 
-                relaunch your career, start a business, teach your expertise, launch a creative project, 
-                secure funding, or develop new skills—we've got the tools and guidance you need.
+                PivotHub empowers you to transform your career journey. Whether you're developing new skills, 
+                starting a business, teaching your expertise, launching a creative project, 
+                or securing funding—we provide the tools and guidance to help you succeed.
               </p>
               
               {/* Quick Overview Cards */}
               <div className="grid md:grid-cols-3 gap-4 mt-8">
                 <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
-                  <div className="text-3xl font-bold text-primary mb-2">6</div>
-                  <div className="text-sm text-muted-foreground">Career Paths</div>
+                  <div className="text-3xl font-bold text-primary mb-2">5</div>
+                  <div className="text-sm text-muted-foreground">Pathways</div>
                 </div>
                 <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
                   <div className="text-3xl font-bold text-primary mb-2">30+</div>
@@ -65,16 +65,16 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Six Paths Overview */}
+      {/* Pathways Overview */}
       <section className="section-spacing-xs bg-gradient-section-2 relative">
         <div className="page-container">
           <div className="content-width">
             <div className="text-center mb-8">
               <h2 className="section-header mb-4">
-                Choose Your Path Forward
+                Choose Your Pathway Forward
               </h2>
               <p className="section-description max-w-3xl mx-auto">
-                Explore our six comprehensive paths, each designed to help you achieve specific career goals 
+                Explore our comprehensive pathways, each designed to help you achieve specific goals 
                 with AI-powered tools and expert guidance.
               </p>
             </div>
@@ -100,25 +100,6 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              {/* Earn It */}
-              <Card className="premium-card hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
-                <CardHeader className="pb-3">
-                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-2 border border-blue-500/20 w-fit">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">EARN IT</span>
-                  </div>
-                  <CardTitle className="text-lg">Freelance & Get Hired</CardTitle>
-                  <CardDescription className="text-sm">
-                    Showcase your skills, connect with clients, and land freelance opportunities in tech.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Link to="/freelancer-marketplace">
-                    <Button size="sm" className="w-full">
-                      Join Marketplace
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
 
               {/* Build It */}
               <Card className="premium-card hover-scale border-l-4 border-emerald-500 bg-gradient-to-br from-emerald-500/5 to-green-600/5">
@@ -215,8 +196,8 @@ const Index = () => {
             </div>
             <div className="max-w-3xl mx-auto mb-10">
               <p className="section-description">
-                Before choosing your path, understand yourself better. Take our comprehensive assessments 
-                to discover your strengths, interests, and ideal career direction.
+                Before choosing your pathway, understand yourself better. Take our comprehensive assessments 
+                to discover your strengths, interests, and ideal direction.
               </p>
             </div>
             
@@ -247,7 +228,7 @@ const Index = () => {
                   </div>
                   <CardTitle className="text-lg">Interest Assessment</CardTitle>
                   <CardDescription className="text-sm">
-                    Discover what truly motivates you and explore career paths.
+                    Discover what truly motivates you and explore pathways.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
@@ -349,7 +330,7 @@ const Index = () => {
             </h2>
             <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               Join PivotHub today and get access to all the tools you need to build your future. 
-              Start with a free assessment to discover your best path forward.
+              Start with a free assessment to discover your best pathway forward.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/assessments">

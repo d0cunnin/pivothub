@@ -23,13 +23,13 @@ export const PathSelection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {/* Assess Your Path */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-purple-500 h-full">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-violet-600/5 group-hover:from-purple-500/10 group-hover:to-violet-600/20 transition-all duration-500"></div>
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-cyan-500 h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-600/5 group-hover:from-cyan-500/10 group-hover:to-blue-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
               <div className="mb-6">
-                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-purple-500/10 mb-4 border border-purple-500/20 w-fit">
-                  <span className="text-sm font-bold text-purple-600 dark:text-purple-400 tracking-wide">ASSESS</span>
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-cyan-500/10 mb-4 border border-cyan-500/20 w-fit">
+                  <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400 tracking-wide">ASSESS</span>
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">Assess Your Path</h3>
                 <p className="text-muted-foreground">Discover Your Options</p>
@@ -54,7 +54,7 @@ export const PathSelection = () => {
                   "Personalized action plans"
                 ].map((feature, index) => (
                   <div key={index} className="flex items-start space-x-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0 mt-2" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0 mt-2" />
                     <span className="text-foreground">{feature}</span>
                   </div>
                 ))}
@@ -162,7 +162,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/learn-a-skill" className="mt-auto">
+              <Link to="/upskill" className="mt-auto">
                 <Button 
                   variant="default" 
                   size="lg" 
@@ -176,13 +176,13 @@ export const PathSelection = () => {
           </Card>
 
           {/* Build It */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-orange-500 h-full">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-600/5 group-hover:from-orange-500/10 group-hover:to-amber-600/20 transition-all duration-500"></div>
+          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-emerald-500 h-full">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-600/5 group-hover:from-emerald-500/10 group-hover:to-green-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
               <div className="mb-6">
-                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-orange-500/10 mb-4 border border-orange-500/20 w-fit">
-                  <span className="text-sm font-bold text-orange-600 dark:text-orange-400 tracking-wide">BUILD</span>
+                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-emerald-500/10 mb-4 border border-emerald-500/20 w-fit">
+                  <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tracking-wide">BUILD</span>
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">Build It</h3>
                 <p className="text-muted-foreground">Launch Your Business</p>
@@ -207,7 +207,7 @@ export const PathSelection = () => {
                   "Grant search & writing"
                 ].map((feature, index) => (
                   <div key={index} className="flex items-start space-x-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0 mt-2" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0 mt-2" />
                     <span className="text-foreground">{feature}</span>
                   </div>
                 ))}
@@ -226,58 +226,6 @@ export const PathSelection = () => {
             </div>
           </Card>
 
-          {/* Tech Freelancer Hub - spans 2 columns on lg screens */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-indigo-500 h-full lg:col-span-2">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-purple-600/5 group-hover:from-indigo-500/10 group-hover:to-purple-600/20 transition-all duration-500"></div>
-            
-            <div className="relative p-8 h-full flex flex-col">
-              <div className="mb-6">
-                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-500/10 mb-4 border border-indigo-500/20 w-fit">
-                  <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">FREELANCE</span>
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">Tech Freelancer Hub</h3>
-                <p className="text-muted-foreground">Connect & Collaborate</p>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div className="text-center p-6 bg-indigo-500/5 rounded-lg border border-indigo-500/10">
-                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-indigo-500/10 mb-3 border border-indigo-500/20">
-                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 tracking-wide">FREELANCER</span>
-                  </div>
-                  <h4 className="font-semibold text-indigo-600 dark:text-indigo-400 mb-2">I'm a Freelancer</h4>
-                  <p className="text-sm text-muted-foreground mb-4">Showcase your tech skills to the world</p>
-                  <Button variant="outline" size="sm" className="border-indigo-500 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500 hover:text-white">
-                    Create Profile
-                  </Button>
-                </div>
-                <div className="text-center p-6 bg-purple-500/5 rounded-lg border border-purple-500/10">
-                  <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-purple-500/10 mb-3 border border-purple-500/20">
-                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400 tracking-wide">HIRING</span>
-                  </div>
-                  <h4 className="font-semibold text-purple-600 dark:text-purple-400 mb-2">I'm Hiring</h4>
-                  <p className="text-sm text-muted-foreground mb-4">Find the perfect tech expert for your project</p>
-                  <Button variant="outline" size="sm" className="border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-500 hover:text-white">
-                    Post Project
-                  </Button>
-                </div>
-              </div>
-
-              <p className="text-foreground mb-6 leading-relaxed text-center">
-                Showcase your services as a freelancer or find the expert you need to move your project forward.
-              </p>
-
-              <Link to="/freelancer-marketplace" className="mt-auto">
-                <Button 
-                  variant="hero" 
-                  size="lg" 
-                  className="w-full group-hover:shadow-glow transition-all duration-300"
-                >
-                  Enter Marketplace
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-          </Card>
         </div>
       </div>
     </section>
