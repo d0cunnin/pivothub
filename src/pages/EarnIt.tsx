@@ -147,7 +147,7 @@ export default function SideIncomeBlueprint() {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <section className="py-20 bg-primary relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -185,12 +185,10 @@ export default function SideIncomeBlueprint() {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Introduction Section */}
-      <section className="py-12 bg-gradient-section-1 relative overflow-hidden">
+      <section className="py-12 bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="max-w-4xl mx-auto">
             <p className="text-lg md:text-xl text-foreground/80 leading-relaxed text-left">
@@ -201,17 +199,17 @@ export default function SideIncomeBlueprint() {
       </section>
 
       {/* How It Works - Enhanced */}
-      <section id="blueprint-info" className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section id="blueprint-info" className="section-spacing-sm bg-accent relative overflow-hidden">
         <div className="page-container">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                <h2 className="text-3xl md:text-4xl font-bold text-white">
                   How It Works
                 </h2>
               </div>
             </div>
-            <p className="text-lg text-foreground/80 mb-12 text-left">
+            <p className="text-lg text-white/90 mb-12 text-left">
               Three simple steps from payment to personalized plan
             </p>
 

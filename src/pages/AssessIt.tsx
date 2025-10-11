@@ -15,7 +15,7 @@ const AssessIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-12 bg-gradient-hero relative overflow-hidden">
+      <section className="py-12 bg-primary relative overflow-hidden">
         {/* Background Image with Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -49,12 +49,10 @@ const AssessIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Assessment Tools - Featured Section */}
-      <section id="take-your-assessment-today" className="py-12 bg-gradient-section-1 relative overflow-hidden">
+      <section id="take-your-assessment-today" className="py-12 bg-white relative overflow-hidden">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">

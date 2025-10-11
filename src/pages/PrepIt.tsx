@@ -14,7 +14,7 @@ const PrepIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <section className="py-20 bg-primary relative overflow-hidden">
         {/* Background Image with Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -73,12 +73,10 @@ const PrepIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Career Advisor AI */}
-      <section id="career-advisor" className="py-16 bg-gradient-section-3 relative overflow-hidden">
+      <section id="career-advisor" className="py-16 bg-white relative overflow-hidden">
         <div className="page-container">
           {/* Header Section */}
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">

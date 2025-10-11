@@ -11,7 +11,7 @@ const TeachIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <section className="py-20 bg-primary relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -46,12 +46,10 @@ const TeachIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Why Teach Section */}
-      <section className="pt-16 pb-8 bg-gradient-section-2 relative overflow-hidden">
+      <section className="pt-16 pb-8 bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
@@ -80,7 +78,7 @@ const TeachIt = () => {
       </section>
 
       {/* Getting Started Section */}
-      <section id="getting-started" className="pt-8 pb-16 bg-gradient-section-1 relative overflow-hidden">
+      <section id="getting-started" className="pt-8 pb-16 bg-accent relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
@@ -114,11 +112,11 @@ const TeachIt = () => {
               }
             ].map((item, index) => (
               <Card key={index} className="premium-card p-6 text-center group cursor-pointer transition-elegant hover:scale-105">
-                <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow group-hover:shadow-strong transition-elegant">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow group-hover:shadow-strong transition-elegant">
                   {item.step}
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{item.title}</h3>
-                <p className="text-muted-foreground text-sm">{item.description}</p>
+                <h3 className="text-lg font-bold mb-2 text-white group-hover:text-white/80 transition-colors">{item.title}</h3>
+                <p className="text-white/80 text-sm">{item.description}</p>
               </Card>
             ))}
           </div>
@@ -126,7 +124,7 @@ const TeachIt = () => {
       </section>
 
       {/* Generate Teaching Materials Section */}
-      <section id="course-tools" className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      <section id="course-tools" className="section-spacing-sm bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
@@ -143,8 +141,6 @@ const TeachIt = () => {
             <TeachingMaterialsGenerator />
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       <Footer />

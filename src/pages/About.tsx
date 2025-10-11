@@ -8,7 +8,7 @@ export default function About() {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-hero hero-glow overflow-hidden">
+      <section className="relative py-20 bg-primary hero-glow overflow-hidden">
         {/* Background Image with Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -37,12 +37,10 @@ export default function About() {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Story Content */}
-      <section className="section-spacing">
+      <section className="section-spacing bg-white">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
@@ -99,19 +97,19 @@ export default function About() {
       </section>
 
       {/* Mission and Values */}
-      <section className="section-spacing bg-gradient-to-br from-secondary/5 via-background to-accent/5">
+      <section className="section-spacing bg-accent">
         <div className="page-container">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="section-header mb-6">Our Mission & Values</h2>
-            <p className="section-description">
+            <h2 className="section-header mb-6 text-white">Our Mission & Values</h2>
+            <p className="section-description text-white/90">
               Empowering individuals to navigate career transitions through comprehensive assessments, skill development, entrepreneurship support, and job preparation—all powered by AI-driven tools and expert guidance.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
-              <h3 className="section-header">Discover Your Path</h3>
-              <p className="section-body-text">
+              <h3 className="section-header text-white">Discover Your Path</h3>
+              <p className="section-body-text text-white/90">
                 Start with our comprehensive career assessments to identify your strengths, skills, and ideal career direction. Whether you're pivoting to a new industry, developing new skills for emerging opportunities, or preparing to launch your own venture, our AI-powered tools provide personalized insights to guide your journey.
               </p>
             </div>
@@ -133,8 +131,8 @@ export default function About() {
               />
             </div>
             <div className="space-y-6 order-1 lg:order-2">
-              <h3 className="section-header">Build Your Future</h3>
-              <p className="section-body-text">
+              <h3 className="section-header text-white">Build Your Future</h3>
+              <p className="section-body-text text-white/90">
                 From job preparation and interview coaching to launching your own business, teaching a skill, or securing funding—we provide end-to-end support. Our platform includes AI-powered resume builders, business plan generators, pitch deck creators, funding assistance, and course development tools to help you succeed in any direction you choose.
               </p>
             </div>
@@ -142,8 +140,8 @@ export default function About() {
 
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
-              <h3 className="section-header">Learn & Grow</h3>
-              <p className="section-body-text">
+              <h3 className="section-header text-white">Learn & Grow</h3>
+              <p className="section-body-text text-white/90">
                 Access curated learning pathways designed to help you master in-demand skills. Whether you're learning to code, developing business acumen, or gaining expertise to teach others, our interactive courses and AI mentorship provide the knowledge and confidence you need to thrive in today's digital economy.
               </p>
             </div>
@@ -157,8 +155,8 @@ export default function About() {
           </div>
 
           <div className="max-w-3xl mx-auto text-center">
-            <h3 className="section-header">Join the PivotHub Community</h3>
-            <p className="section-body-text mb-6">
+            <h3 className="section-header text-white">Join the PivotHub Community</h3>
+            <p className="section-body-text text-white/90 mb-6">
               Since July 2025, we've been helping professionals navigate career transitions with confidence. Whether you're seeking your next job opportunity, launching a business, teaching your expertise, or securing grant funding, PivotHub provides the comprehensive tools, AI-powered guidance, and supportive community you need to pivot successfully into your future.
             </p>
           </div>

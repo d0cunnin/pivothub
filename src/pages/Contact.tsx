@@ -57,8 +57,8 @@ const Contact = () => {
       <Header />
       
       <main className="pt-20">
-        {/* Hero Section */}
-        <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      {/* Hero Section */}
+      <section className="py-20 bg-primary relative overflow-hidden">
           {/* Background Image with Overlay */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -89,12 +89,10 @@ const Contact = () => {
               </div>
             </div>
           </div>
-          
-          <div className="section-divider absolute bottom-0 left-0"></div>
         </section>
 
         {/* Contact Form & Info Section */}
-        <section className="py-16">
+        <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-12">
               {/* Contact Form */}

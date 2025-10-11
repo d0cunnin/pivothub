@@ -38,7 +38,7 @@ const BuildIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <section className="py-20 bg-primary relative overflow-hidden">
         {/* Background Image with Overlay */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -78,12 +78,10 @@ const BuildIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Quick Start */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      <section className="section-spacing-sm bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-10">
             <div className="animate-fade-in space-y-4 lg:mr-4">
@@ -142,15 +140,15 @@ const BuildIt = () => {
       </section>
 
       {/* Step 1: Validate Idea */}
-      <section id="business-tools" className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section id="business-tools" className="section-spacing-sm bg-accent relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl font-bold text-white">
                 Step 1: Validate Your Idea
               </h2>
             </div>
-            <p className="text-lg text-foreground/80">
+            <p className="text-lg text-white/90">
               Use our tools to research and validate your business concept
             </p>
           </div>
@@ -169,12 +167,10 @@ const BuildIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Step 2: Plan & Strategy */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      <section className="section-spacing-sm bg-white relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
@@ -201,20 +197,18 @@ const BuildIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Step 3: Legal & Branding */}
-      <section className="section-spacing-sm bg-gradient-section-2 relative overflow-hidden">
+      <section className="section-spacing-sm bg-primary relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl font-bold text-white">
                 Step 3: Legal & Branding
               </h2>
             </div>
-            <p className="text-lg text-foreground/80">
+            <p className="text-lg text-white/90">
               Set up your business legally and create your brand identity
             </p>
           </div>
@@ -237,20 +231,18 @@ const BuildIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Step 4: Launch & Scale */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      <section className="section-spacing-sm bg-accent relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl font-bold text-white">
                 Step 4: Launch & Scale
               </h2>
             </div>
-            <p className="text-lg text-foreground/80">
+            <p className="text-lg text-white/90">
               Go to market and grow your business with ongoing support
             </p>
           </div>
@@ -269,12 +261,10 @@ const BuildIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Success Stories Preview */}
-      <section className="section-transition py-32 bg-gradient-section-1 relative overflow-hidden">
+      <section className="section-transition py-32 bg-white relative overflow-hidden">
         {/* Elegant ambient elements */}
         <div className="floating-orb top-20 right-20 w-56 h-56 bg-accent/4 animate-float"></div>
         <div className="floating-orb bottom-20 left-20 w-64 h-64 bg-secondary/3 animate-float" style={{ animationDelay: '2s' }}></div>

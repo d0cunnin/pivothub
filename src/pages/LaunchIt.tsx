@@ -153,7 +153,7 @@ const LaunchIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      <section className="py-20 bg-primary relative overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -188,12 +188,10 @@ const LaunchIt = () => {
             </div>
           </div>
         </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
       {/* Form Section */}
-      <section id="launch-form" className="py-16 bg-gradient-section-1 relative overflow-hidden">
+      <section id="launch-form" className="py-16 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
