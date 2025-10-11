@@ -90,14 +90,14 @@ export default function SideIncomeBlueprint() {
         description: "Please sign in to purchase your blueprint",
         variant: "destructive"
       });
-      navigate("/auth?redirect=/side-income-blueprint");
+      navigate("/auth?redirect=/earnit");
       return;
     }
 
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier: 'side-income-blueprint' }
+        body: { tier: 'earnit' }
       });
 
       if (error) throw error;
@@ -166,7 +166,7 @@ export default function SideIncomeBlueprint() {
               <DollarSign className="h-12 w-12 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Your Personalized Side Income Blueprint
+              Your Personalized Earn It Blueprint
             </h1>
             <div className="text-center max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>

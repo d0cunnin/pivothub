@@ -45,10 +45,10 @@ export const Header = () => {
                 About
               </Link>
               <Link 
-                to="/side-income-blueprint" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/side-income-blueprint' ? 'text-primary font-medium' : ''}`}
+                to="/earnit" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/earnit' ? 'text-primary font-medium' : ''}`}
               >
-                Side Income Blueprint
+                Earn It
               </Link>
               <Link 
                 to="/pricing" 
@@ -216,11 +216,11 @@ export const Header = () => {
                 About
               </Link>
               <Link 
-                to="/side-income-blueprint" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/side-income-blueprint' ? 'text-primary font-medium' : ''}`}
+                to="/earnit" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/earnit' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                Side Income Blueprint
+                Earn It
               </Link>
               <Link 
                 to="/pricing" 

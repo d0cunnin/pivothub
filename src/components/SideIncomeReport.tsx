@@ -81,7 +81,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'side-income-blueprint.json';
+    a.download = 'earnit-blueprint.json';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -128,7 +128,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Your Side Income Blueprint</h1>
+          <h1 className="text-3xl font-bold mb-2">Your Earn It Blueprint</h1>
           <p className="text-muted-foreground">Personalized plan for building sustainable income</p>
         </div>
         <Button onClick={downloadReport} variant="outline">
