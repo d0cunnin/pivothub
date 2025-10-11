@@ -214,46 +214,46 @@ export default function SideIncomeBlueprint() {
             </p>
 
             <div className="grid md:grid-cols-3 gap-8 mb-16">
-              <Card className="premium-card p-8">
+              <Card className="bg-white p-8">
                 <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
                   1
                 </div>
-                <CardTitle className="text-xl mb-4 text-center">Secure Payment</CardTitle>
+                <CardTitle className="text-xl mb-4 text-center text-foreground">Secure Payment</CardTitle>
                 <CardContent className="p-0 space-y-3">
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-foreground text-sm leading-relaxed">
                     <strong>One-time $27 payment</strong> via secure Stripe checkout. Payment is required first to prevent spam and ensure we're serving serious entrepreneurs. Your information is protected with 256-bit encryption, the same security banks use.
                   </p>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-foreground text-sm leading-relaxed">
                     After payment, you'll immediately access the assessment portal. No monthly fees, no hidden charges—just a single payment for lifetime access to your blueprint.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="premium-card p-8">
+              <Card className="bg-white p-8">
                 <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
                   2
                 </div>
-                <CardTitle className="text-xl mb-4 text-center">Complete Assessment</CardTitle>
+                <CardTitle className="text-xl mb-4 text-center text-foreground">Complete Assessment</CardTitle>
                 <CardContent className="p-0 space-y-3">
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-foreground text-sm leading-relaxed">
                     <strong>15-20 minute assessment</strong> that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
                   </p>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-foreground text-sm leading-relaxed">
                     <strong>Pro tip:</strong> The more detailed your answers, the more personalized your recommendations. Our AI analyzes 50+ data points to match you with the perfect opportunities. Take your time and be honest—there are no wrong answers.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="premium-card p-8">
+              <Card className="bg-white p-8">
                 <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
                   3
                 </div>
-                <CardTitle className="text-xl mb-4 text-center">Get Your Blueprint</CardTitle>
+                <CardTitle className="text-xl mb-4 text-center text-foreground">Get Your Blueprint</CardTitle>
                 <CardContent className="p-0 space-y-3">
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-foreground text-sm leading-relaxed">
                     <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. No waiting, no manual review—your custom plan is generated immediately and available in your account dashboard.
                   </p>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <p className="text-foreground text-sm leading-relaxed">
                     Access your blueprint anytime, from any device. Download it as PDF, revisit action steps, and update your progress as you build your side income. <strong>Lifetime access included.</strong>
                   </p>
                 </CardContent>

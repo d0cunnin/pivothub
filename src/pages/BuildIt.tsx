@@ -127,8 +127,8 @@ const BuildIt = () => {
                 description: "Go to market and grow your business with ongoing support"
               }
             ].map((item, index) => (
-              <Card key={index} className="premium-card p-6 text-center group cursor-pointer transition-elegant hover:scale-105">
-                <div className="w-12 h-12 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow group-hover:shadow-strong transition-elegant">
+              <Card key={index} className="bg-white p-6 text-center group cursor-pointer transition-elegant hover:scale-105">
+                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow group-hover:shadow-strong transition-elegant">
                   {item.step}
                 </div>
                 <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{item.title}</h3>

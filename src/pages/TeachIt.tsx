@@ -111,12 +111,12 @@ const TeachIt = () => {
                 description: "Host your webinar or publish your course and start teaching"
               }
             ].map((item, index) => (
-              <Card key={index} className="premium-card p-6 text-center group cursor-pointer transition-elegant hover:scale-105">
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow group-hover:shadow-strong transition-elegant">
+              <Card key={index} className="bg-white p-6 text-center group cursor-pointer transition-elegant hover:scale-105">
+                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mx-auto mb-4 text-white font-bold text-lg shadow-glow group-hover:shadow-strong transition-elegant">
                   {item.step}
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-white group-hover:text-white/80 transition-colors">{item.title}</h3>
-                <p className="text-white/80 text-sm">{item.description}</p>
+                <h3 className="text-lg font-bold mb-2 text-foreground group-hover:text-primary transition-colors">{item.title}</h3>
+                <p className="text-muted-foreground text-sm">{item.description}</p>
               </Card>
             ))}
           </div>
