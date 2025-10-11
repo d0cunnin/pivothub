@@ -192,8 +192,8 @@ export default function SideIncomeBlueprint() {
       {/* Introduction Section */}
       <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <p className="text-lg md:text-xl text-foreground/80 leading-relaxed">
+          <div className="max-w-4xl mx-auto mb-16">
+            <p className="text-lg md:text-xl text-foreground/80 leading-relaxed text-left">
               Stop wasting time testing random side hustle ideas that don't fit your life. Your personalized Earn It Blueprint analyzes your unique situation—your skills, available time, financial goals, and risk tolerance—to recommend 3 specific income opportunities that are perfect for YOU. Whether you're a stay-at-home parent looking for flexible income, a 9-to-5er wanting extra cash without quitting your job, a retiree seeking meaningful work, or a student building financial independence, this blueprint provides a proven roadmap to launch your side income in 90 days. No generic advice. No trial and error. Just a clear, actionable plan tailored to your life, complete with templates, scripts, and week-by-week guidance. Most people who follow their blueprint earn their first dollar within 30 days and build sustainable $1,500+ monthly income streams within 4-6 months.
             </p>
           </div>
@@ -210,10 +210,10 @@ export default function SideIncomeBlueprint() {
                   How It Works
                 </h2>
               </div>
-              <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-                Three simple steps from payment to personalized plan
-              </p>
             </div>
+            <p className="text-lg text-foreground/80 mb-12 text-left">
+              Three simple steps from payment to personalized plan
+            </p>
 
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               <Card className="premium-card p-8">
@@ -271,10 +271,10 @@ export default function SideIncomeBlueprint() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Who This Is Perfect For</h2>
-              <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-                Your Earn It Blueprint works for anyone ready to build sustainable side income
-              </p>
             </div>
+            <p className="text-lg text-foreground/80 mb-12 text-left">
+              Your Earn It Blueprint works for anyone ready to build sustainable side income
+            </p>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               <Card className="premium-card p-6">
@@ -407,10 +407,10 @@ export default function SideIncomeBlueprint() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">What's Included in Your Blueprint</h2>
-              <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-                Everything you need to launch your side income in 90 days or less
-              </p>
             </div>
+            <p className="text-lg text-foreground/80 mb-12 text-left">
+              Everything you need to launch your side income in 90 days or less
+            </p>
 
             <div className="space-y-6 mb-12">
               <Card className="premium-card">
@@ -642,10 +642,10 @@ export default function SideIncomeBlueprint() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">What Makes This Different</h2>
-              <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-                Why your Earn It Blueprint beats other side income approaches
-              </p>
             </div>
+            <p className="text-lg text-foreground/80 mb-12 text-left">
+              Why your Earn It Blueprint beats other side income approaches
+            </p>
 
             <div className="grid md:grid-cols-2 gap-6 mb-12">
               <Card className="premium-card p-6">
@@ -726,10 +726,10 @@ export default function SideIncomeBlueprint() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Real Success Stories</h2>
-              <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-                People who followed their blueprint and built sustainable side income
-              </p>
             </div>
+            <p className="text-lg text-foreground/80 mb-12 text-left">
+              People who followed their blueprint and built sustainable side income
+            </p>
 
             <div className="space-y-6 mb-12">
               <Card className="premium-card p-8">
@@ -841,10 +841,10 @@ export default function SideIncomeBlueprint() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Timeline & Expectations</h2>
-              <p className="text-lg text-foreground/80 max-w-3xl mx-auto">
-                Realistic income progression when you follow your blueprint
-              </p>
             </div>
+            <p className="text-lg text-foreground/80 mb-12 text-left">
+              Realistic income progression when you follow your blueprint
+            </p>
 
             <div className="space-y-6 mb-12">
               <Card className="premium-card p-6">
@@ -1001,10 +1001,10 @@ export default function SideIncomeBlueprint() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
-              <p className="text-lg text-foreground/80">
-                Everything you need to know before getting started
-              </p>
             </div>
+            <p className="text-lg text-foreground/80 mb-12 text-left">
+              Everything you need to know before getting started
+            </p>
 
             <div className="space-y-4">
               <Card className="premium-card">
