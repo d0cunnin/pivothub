@@ -24,7 +24,7 @@ const Index = () => {
   };
 
   return (
-    <div id="home" className="min-h-screen bg-background">
+    <div id="home" className="min-h-screen bg-white">
       <Header />
       <HeroSection />
       <PathSelection />
@@ -48,7 +48,7 @@ const Index = () => {
               {/* Quick Overview Cards */}
               <div className="grid md:grid-cols-3 gap-4 mt-8">
                 <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
-                  <div className="text-3xl font-bold text-primary mb-2">5</div>
+                  <div className="text-3xl font-bold text-primary mb-2">6</div>
                   <div className="text-sm text-muted-foreground">Pathways</div>
                 </div>
                 <div className="text-center p-4 bg-background/50 rounded-lg border border-primary/10">
@@ -95,6 +95,26 @@ const Index = () => {
                   <Link to="/upskill">
                     <Button size="sm" className="w-full">
                       Start Learning
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Job Prep */}
+              <Card className="premium-card hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
+                <CardHeader className="pb-3">
+                  <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-2 border border-blue-500/20 w-fit">
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">JOB PREP</span>
+                  </div>
+                  <CardTitle className="text-lg">Relaunch Your Career</CardTitle>
+                  <CardDescription className="text-sm">
+                    Get AI-powered feedback on resumes, cover letters, and interview practice.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <Link to="/jobprep">
+                    <Button size="sm" className="w-full">
+                      Start Job Prep
                     </Button>
                   </Link>
                 </CardContent>
