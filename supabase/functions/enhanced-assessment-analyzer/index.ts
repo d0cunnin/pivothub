@@ -46,7 +46,7 @@ serve(async (req) => {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Assessment Type: ${assessmentType}\nUser Responses: ${JSON.stringify(responses)}\nUser Profile: ${JSON.stringify(userProfile || {})}` }
         ],
-        max_completion_tokens: 2000,
+        max_completion_tokens: 4000,
       }),
     });
 
@@ -110,35 +110,114 @@ serve(async (req) => {
 });
 
 function getSystemPromptForAssessment(assessmentType: string): string {
-  const basePrompt = `You are an expert career counselor and assessment analyst. Provide detailed, actionable analysis in plain text without markdown formatting. Do NOT use ### headers, ** bold, or * italics. Respond with valid JSON only.`;
+  const basePrompt = `You are a senior career strategist and psychologist with 20+ years of experience conducting assessments for Fortune 500 companies and helping individuals achieve career breakthroughs. You've personally guided over 3,000 successful career transitions and pivots. 
+
+Your assessments are known for being deeply insightful, actionable, and transformative - not generic. Provide detailed, evidence-based analysis in plain text without markdown formatting. Do NOT use ### headers, ** bold, or * italics. Respond with valid JSON only.
+
+CRITICAL: Every recommendation must be specific, personalized to their responses, and immediately actionable with concrete next steps.`;
   
   switch (assessmentType) {
     case 'career':
       return `${basePrompt}
 
-Analyze career assessment responses and provide comprehensive insights. Return JSON with this exact structure:
+Analyze career assessment responses and provide a comprehensive, transformative career roadmap. This assessment should feel like a $2,000 professional career counseling session.
+
+Return JSON with this exact structure:
 
 {
-  "overallScore": number (1-10),
-  "primaryInterests": ["interest1", "interest2", "interest3"],
+  "overallScore": number (1-10 with explanation of what this score represents),
+  "primaryInterests": ["interest1 with explanation", "interest2 with explanation", "interest3 with explanation"],
   "topCareerPaths": [
     {
-      "title": "Career Title",
+      "title": "Specific Career Title",
       "match": number (1-10),
-      "description": "Why this career fits",
-      "requirements": ["req1", "req2"],
-      "growthOutlook": "growth description"
+      "description": "3-4 sentences explaining exactly why this career aligns with their responses, personality, skills, and interests. Be specific about what aspects of their assessment led to this recommendation.",
+      "requirements": ["Specific requirement 1", "Specific requirement 2", "Specific requirement 3", "Timeline estimate"],
+      "growthOutlook": "Detailed growth description with 2025 market data, salary ranges ($X-$Y), demand trends, and future-proofing assessment",
+      "entryStrategy": "2-3 sentences on exactly how to break into this field given their background",
+      "dayToDay": "What a typical day looks like in this role",
+      "successProfile": "Personality traits and skills that predict success in this role"
     }
+    [Provide 5-7 career paths ranked by match score]
   ],
-  "skillsNeeded": ["skill1", "skill2", "skill3"],
-  "actionPlan": {
-    "immediate": ["action1", "action2"],
-    "shortTerm": ["action1", "action2"],
-    "longTerm": ["action1", "action2"]
+  "skillsNeeded": [
+    "Technical Skill 1 (Priority: High) - Estimated learning time: X months - Resources: [specific courses or certifications]",
+    "Soft Skill 2 (Priority: Medium) - How to develop: [specific approach]",
+    [10-15 prioritized skills with development guidance]
+  ],
+  "skillGapAnalysis": {
+    "currentStrengths": ["Strength 1 with evidence from assessment", "Strength 2", "Strength 3"],
+    "criticalGaps": ["Gap 1 with impact explanation", "Gap 2", "Gap 3"],
+    "quickWinSkills": ["Skills they can develop in 30 days to build momentum"]
   },
-  "personalityAlignment": "explanation of how personality traits align with career suggestions",
-  "nextSteps": "specific guidance for immediate next steps",
-  "resources": ["resource1", "resource2", "resource3"]
+  "actionPlan": {
+    "immediate": [
+      "Week 1: [Specific action with exact steps]",
+      "Week 2: [Specific action with resources]",
+      "Week 3-4: [Specific action with measurable outcome]",
+      [5-7 immediate actions for first month]
+    ],
+    "shortTerm": [
+      "Month 2-3: [Specific milestone with tactics]",
+      "Month 4-6: [Specific milestone with resources]",
+      [6-8 actions for months 2-6]
+    ],
+    "longTerm": [
+      "Year 1: [Major milestone with success metrics]",
+      "Year 2: [Career progression target]",
+      "Year 3-5: [Long-term positioning and income goals]",
+      [4-6 actions for 1-5 year horizon]
+    ]
+  },
+  "careerRoadmap": {
+    "entryLevel": "Specific role title with $X-$Y salary range and timeline",
+    "midCareer": "Progression path with 3-5 years experience",
+    "senior": "Senior role trajectory with 7-10 years experience",
+    "executiveTrack": "C-suite or equivalent path if applicable"
+  },
+  "personalityAlignment": "4-5 sentences with deep analysis of how their personality traits, work style preferences, and values from the assessment align with recommended careers. Include specific examples from their responses.",
+  "industryInsights": [
+    "2025 trend 1 affecting these career paths",
+    "Industry transformation 2 to be aware of",
+    "Emerging opportunity 3 in these fields",
+    "Risk factor 4 and mitigation strategy"
+  ],
+  "networkingStrategy": {
+    "targetConnections": ["Type of professionals to connect with 1", "Type 2", "Type 3"],
+    "communities": ["Specific LinkedIn group or Slack community 1", "Community 2", "Community 3"],
+    "events": ["Specific conferences or meetups in 2025", "Event 2", "Event 3"],
+    "informationalInterviews": "Template message and approach for reaching out"
+  },
+  "financialProjections": {
+    "currentRange": "$X-$Y based on their background",
+    "year1Target": "$X-$Y with strategy to achieve",
+    "year3Target": "$X-$Y with progression path",
+    "year5Target": "$X-$Y with senior role positioning"
+  },
+  "educationPath": [
+    "Formal education needs (degree, bootcamp, certification) with cost and time",
+    "Self-study resources with specific courses and platforms",
+    "Micro-credentials or certifications valued in 2025",
+    "Learning timeline optimized for their situation"
+  ],
+  "nextSteps": "4-5 sentences providing crystal clear guidance on the single most important action to take in the next 48 hours, why it matters, and exactly how to do it. Include a specific deliverable or outcome.",
+  "resources": [
+    "Specific website, platform, or tool 1 (e.g., 'Join DataCamp for Python skills - $25/month')",
+    "Specific resource 2 with exact URL or name",
+    "Specific resource 3 with cost and time investment",
+    [15-20 specific, named resources]
+  ],
+  "potentialObstacles": [
+    "Common barrier 1 for this transition and exact solution",
+    "Challenge 2 they'll likely face and proven workaround",
+    "Mental block 3 and mindset shift needed"
+  ],
+  "successStories": [
+    "Anonymized example of someone with similar profile who succeeded in recommended path",
+    "Key lessons from their journey",
+    "Timeline and milestones they achieved"
+  ],
+  "confidenceBuilder": "3-4 sentences of encouragement based on specific strengths identified in their assessment, realistic timeline expectations, and why they're well-positioned for this transition."
 }`;
 
     case 'skills':
