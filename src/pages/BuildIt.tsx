@@ -1,5 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Helmet } from 'react-helmet-async';
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,6 +24,18 @@ const BuildIt = () => {
   console.log("BuildIt component rendering...");
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Build It – PivotHub</title>
+        <meta 
+          name="description" 
+          content="The Build It toolkit from PivotHub provides creators and entrepreneurs everything they need to build from scratch. It guides you step by step to turn your ideas into reality, offering support, structure, and AI-powered guidance along the way." 
+        />
+        <meta property="og:title" content="Build It – PivotHub" />
+        <meta 
+          property="og:description" 
+          content="The Build It toolkit from PivotHub provides creators and entrepreneurs everything they need to build from scratch. It guides you step by step to turn your ideas into reality, offering support, structure, and AI-powered guidance along the way." 
+        />
+      </Helmet>
       <Header />
       
       {/* Hero Section */}

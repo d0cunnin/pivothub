@@ -31,11 +31,14 @@ import Admin from "./pages/Admin";
 import EarnIt from "./pages/EarnIt";
 import Settings from "./pages/Settings";
 
+import { HelmetProvider } from 'react-helmet-async';
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
+    <HelmetProvider>
+      <TooltipProvider>
       <AuthProvider>
         <UsageProvider>
           <Toaster />
@@ -73,6 +76,7 @@ const App = () => (
         </UsageProvider>
       </AuthProvider>
     </TooltipProvider>
+    </HelmetProvider>
   </QueryClientProvider>
 );
 
