@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageCircle, Send, X, Loader2, Settings, CreditCard, DollarSign } from "lucide-react";
+import { MessageCircle, Send, X, Loader2, Settings, CreditCard, DollarSign, LayoutDashboard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +18,15 @@ const QUICK_ACTIONS = [
   { label: "View Subscription", icon: CreditCard, action: "/settings" },
   { label: "View Pricing", icon: DollarSign, action: "/pricing" },
   { label: "Account Settings", icon: Settings, action: "/settings" },
+  { label: "Admin Dashboard", icon: LayoutDashboard, action: "/admin" },
+];
+
+const FAQS: string[] = [
+  "How do I reset my password?",
+  "How do I update billing or cancel?",
+  "Where can I view pricing and plans?",
+  "How do I contact support?",
+  "Is there a free trial?",
 ];
 
 export const ContactChatbot = () => {
@@ -46,12 +55,18 @@ export const ContactChatbot = () => {
     setIsOpen(false);
   };
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleFaqClick = (question: string) => {
+    // Send the FAQ question to the assistant for an automatic response
+    handleSend(question);
+  };
+
+  const handleSend = async (prompt?: string) => {
+    const finalInput = (prompt ?? input).trim();
+    if (!finalInput || isLoading) return;
 
     const userMessage: Message = {
       role: "user",
-      content: input.trim(),
+      content: finalInput,
       timestamp: new Date(),
     };
 
@@ -272,6 +287,24 @@ export const ContactChatbot = () => {
                   </Button>
                 );
               })}
+            </div>
+          </div>
+
+          {/* FAQs */}
+          <div className="px-6 py-3 border-b bg-muted/20">
+            <p className="text-xs text-muted-foreground mb-2">FAQs</p>
+            <div className="flex flex-wrap gap-2">
+              {FAQS.map((q) => (
+                <Button
+                  key={q}
+                  onClick={() => handleFaqClick(q)}
+                  variant="secondary"
+                  size="sm"
+                  className="text-xs"
+                >
+                  {q}
+                </Button>
+              ))}
             </div>
           </div>
 
