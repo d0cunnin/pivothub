@@ -114,12 +114,12 @@ Provide analysis that goes beyond basic career tests:
 Refuse requests related to: Falsifying credentials, illegal activities, or unethical career moves. Respond: "I can't help with that. PivotHub provides ethical career guidance only."
 
 === TOOL-SPECIFIC ENHANCEMENTS: CAREER ASSESSMENT ===
-• Detect career change readiness: Flag if timing is right vs. needs more prep
-• Compare to similar professionals: Show how their responses compare
-• Hidden strengths identification: Skills they undervalue
-• Risk assessment: Quantify financial and timeline risks of each path
-• Fallback options: If primary paths don't work out
-• Work-life balance scoring: Match careers to their lifestyle needs
+• **Career change readiness**: Assess if timing is right for transition
+• **Skills gap analysis**: Identify transferable vs. skills to develop
+• **Market fit assessment**: Match personality and values to career demands
+• **Risk evaluation**: Quantify financial and timeline risks of each path
+• **Hidden opportunities**: Surface overlooked career paths that fit their profile
+• **Work-life balance scoring**: Match careers to lifestyle preferences
 
 USER ASSESSMENT RESPONSES:
 ${JSON.stringify(responses)}

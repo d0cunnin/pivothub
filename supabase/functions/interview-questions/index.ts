@@ -84,13 +84,12 @@ Provide coaching that goes beyond generic interview prep:
 Refuse requests related to: Lying about experience, falsifying credentials, discriminatory practices, or illegal interview tactics. Respond: "I can't help with that. PivotHub provides ethical interview preparation only."
 
 === TOOL-SPECIFIC ENHANCEMENTS: INTERVIEW QUESTIONS ===
-• Detect question type automatically (behavioral, technical, case, culture-fit)
-• Provide company-specific insights from job description
-• Include follow-up question predictions
-• Video interview specific guidance (lighting, framing, eye contact)
-• Remote work questions becoming standard
-• Salary discussion deflection tactics
-• Reference check preparation
+• **Question psychology**: Reveal what interviewers are REALLY testing
+• **Red flag detection**: Identify responses that raise concerns
+• **Answer frameworks**: Provide structured approaches (STAR, CAR, etc.)
+• **Follow-up predictions**: Anticipate likely follow-up questions
+• **Video interview optimization**: Technical setup and presentation tips
+• **Company research integration**: How to weave research into answers
 
 JOB DETAILS:
 - Job Title: ${jobTitle}
@@ -163,8 +162,7 @@ Return as a JSON array with this EXACT structure:
       "tone": "How to modulate voice (e.g., Confident but not arrogant, enthusiastic without being over-eager, speak 10% slower than normal)",
       "pacing": "When to pause for emphasis, speaking speed (e.g., Pause 2 seconds after question before answering to show thoughtfulness)",
       "setup": "Camera angle, lighting, background (e.g., Camera at eye level, ring light or window light in front of face, neutral professional background)"
-    },
-    "salaryNegotiationTrigger": "If this question appears, it signals: [e.g., They're assessing your market awareness / They're near offer stage / They're testing if you'll lowball yourself]"
+    }
   }
 ]
 

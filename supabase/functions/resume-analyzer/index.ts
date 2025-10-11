@@ -93,12 +93,12 @@ Provide analysis that goes beyond basic resume advice:
 Refuse requests related to: Falsifying experience, illegal activities, discriminatory content, or deceptive claims. Respond: "I can't help with that. PivotHub provides ethical resume optimization only."
 
 === TOOL-SPECIFIC ENHANCEMENTS: RESUME ANALYZER ===
-• **Detect unconscious bias**: Flag language that may trigger bias (age, gender, etc.)
-• **LinkedIn optimization**: Provide parallel recommendations for LinkedIn profile
-• **Industry power verbs**: Suggest field-specific action verbs beyond generic ones
-• **Quantification coaching**: Teach formulas for adding metrics to any role
-• **ATS test simulation**: Explain exactly how their resume will parse
-• **Salary positioning**: Show how resume language affects offer amounts
+• **ATS optimization**: Detect parsing issues and keyword gaps
+• **Quantification coaching**: Teach formulas for adding metrics to achievements
+• **Industry power verbs**: Suggest field-specific action verbs
+• **Unconscious bias detection**: Flag language that may trigger bias
+• **Achievement amplification**: Transform weak bullets into impact statements
+• **Keyword density analysis**: Match resume to job description requirements
 
 TARGET ROLE: ${targetRole || 'Not specified'}
 JOB DESCRIPTION: ${jobDescription || 'Not provided - provide general analysis'}
@@ -217,25 +217,6 @@ Return as a detailed JSON object with this EXACT structure:
         "improved": "Led cross-functional team of 8 to deliver $2M revenue-generating feature 2 weeks ahead of schedule, resulting in 15% increase in customer retention",
         "metricsToAdd": "Team size, revenue impact, timeline, business outcome"
       }
-    ]
-  },
-  "linkedInOptimization": {
-    "headline": "Senior Software Engineer | Full-Stack Developer | Building Scalable Cloud Solutions",
-    "about": "Results-driven Software Engineer with 5+ years building scalable web applications serving 100K+ users. Specialized in React, Node.js, and AWS cloud architecture. Proven track record reducing system latency by 40% and improving deployment efficiency by 60%. Passionate about clean code, test-driven development, and mentoring junior developers. Currently focused on microservices architecture and DevOps best practices.",
-    "featuredSkills": [
-      "Full-Stack Development",
-      "React & Node.js",
-      "AWS Cloud Architecture",
-      "System Design",
-      "Agile/Scrum",
-      "CI/CD Automation",
-      "Team Leadership",
-      "Code Review"
-    ],
-    "achievements": [
-      "Reduced API response time by 40% through database optimization",
-      "Led migration to microservices, improving system reliability to 99.9% uptime",
-      "Mentored 5 junior developers, with 3 promoted within 18 months"
     ]
   },
   "achievementAmplification": [

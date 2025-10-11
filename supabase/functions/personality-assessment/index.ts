@@ -130,9 +130,7 @@ serve(async (req) => {
       "personalBrandPositioning": {
         "uniqueStrengths": "What makes them stand out (2-3 sentences)",
         "differentiators": ["Analytical depth with collaborative style", "Technical expertise with business acumen", "Strategic thinking with execution capability"],
-        "linkedInHeadline": "Specific optimized LinkedIn headline (120 characters)",
         "elevatorPitch": "30-second professional introduction script they can use",
-        "targetAudience": "Who they should market themselves to (hiring managers, recruiters, clients)",
         "personalBrandAdjectives": ["Data-driven", "Collaborative", "Results-oriented"]
       },
       "teamComposition": {
@@ -147,7 +145,6 @@ serve(async (req) => {
         "longTerm": "VP/C-suite executive or specialized consultant/advisor (7-10 years)",
         "alternativePaths": [
           "Deep technical/functional expert (individual contributor track)",
-          "Startup founder or entrepreneur",
           "Independent consultant or fractional executive"
         ],
         "pivotOpportunities": "Adjacent careers or industries where skills transfer well"
