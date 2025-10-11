@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
 import { Check, Star, Zap, Crown, Sparkles } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -25,6 +26,8 @@ const Pricing = () => {
     price: '',
     tier: ''
   });
+  
+  const [selectedPathIndex, setSelectedPathIndex] = useState(0);
 
   const handleSubscribe = async (tier: string) => {
     if (!user) {
@@ -275,45 +278,91 @@ const Pricing = () => {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {pathPlans.map((plan) => (
-              <Card 
-                key={plan.name}
-                className="premium-card card-padding-lg hover:shadow-glow transition-all"
+          <div className="max-w-4xl mx-auto space-y-6">
+            {/* Path Selector Dropdown */}
+            <div className="w-full">
+              <label className="text-sm font-medium text-foreground mb-2 block">
+                Select Your Path
+              </label>
+              <Select
+                value={selectedPathIndex.toString()}
+                onValueChange={(value) => setSelectedPathIndex(parseInt(value))}
               >
-                <CardHeader className="text-left">
-                  <div className="text-4xl mb-4">{plan.icon}</div>
-                  <CardTitle className="text-xl font-bold">{plan.name}</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-3xl font-bold text-primary">{plan.price}</span>
-                    <span className="text-muted-foreground">/{plan.period}</span>
-                  </div>
-                  <CardDescription className="mt-2 text-left">{plan.description}</CardDescription>
-                </CardHeader>
-                
-                <CardContent className="space-y-6">
-                  <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
-                    {plan.features.map((feature, featureIndex) => (
+                <SelectTrigger className="w-full h-14 text-lg bg-background border-2">
+                  <SelectValue>
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{pathPlans[selectedPathIndex].icon}</span>
+                      <span className="font-semibold">{pathPlans[selectedPathIndex].name}</span>
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-popover border-2 max-h-[400px]">
+                  {pathPlans.map((plan, index) => (
+                    <SelectItem 
+                      key={plan.name} 
+                      value={index.toString()}
+                      className="cursor-pointer py-3"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{plan.icon}</span>
+                        <span className="font-medium">{plan.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Selected Path Details Card */}
+            <Card className="premium-card card-padding-lg border-2 border-primary/20 shadow-lg">
+              <CardHeader className="text-center">
+                <div className="text-6xl mb-6">{pathPlans[selectedPathIndex].icon}</div>
+                <CardTitle className="text-3xl font-bold mb-4">
+                  {pathPlans[selectedPathIndex].name}
+                </CardTitle>
+                <div className="mb-4">
+                  <span className="text-5xl font-bold text-primary">
+                    {pathPlans[selectedPathIndex].price}
+                  </span>
+                  <span className="text-xl text-muted-foreground">
+                    /{pathPlans[selectedPathIndex].period}
+                  </span>
+                </div>
+                <CardDescription className="text-lg">
+                  {pathPlans[selectedPathIndex].description}
+                </CardDescription>
+              </CardHeader>
+              
+              <CardContent className="space-y-6">
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-lg text-foreground mb-4">
+                    What's Included:
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {pathPlans[selectedPathIndex].features.map((feature, featureIndex) => (
                       <div key={featureIndex} className="flex items-start">
-                        <Check className="h-4 w-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm text-left">{feature}</span>
+                        <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">{feature}</span>
                       </div>
                     ))}
                   </div>
-                  
-                  <div className="pt-4">
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      size="lg"
-                      onClick={() => openCheckoutModal(plan.name, plan.price, plan.tier)}
-                    >
-                      Get Started
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+                
+                <div className="pt-6">
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={() => openCheckoutModal(
+                      pathPlans[selectedPathIndex].name,
+                      pathPlans[selectedPathIndex].price,
+                      pathPlans[selectedPathIndex].tier
+                    )}
+                  >
+                    Get Started with {pathPlans[selectedPathIndex].name}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
