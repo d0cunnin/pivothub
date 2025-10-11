@@ -80,11 +80,11 @@ const Index = () => {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Learn It */}
+              {/* Upskill */}
               <Card className="premium-card card-padding-sm hover-scale border-l-4 border-teal-500 bg-gradient-to-br from-teal-500/5 to-emerald-600/5">
                 <CardHeader className="p-0 pb-4">
                   <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-teal-500/10 mb-3 border border-teal-500/20 w-fit">
-                    <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN IT</span>
+                    <span className="text-xs font-bold text-teal-600 dark:text-teal-400 tracking-wide">UPSKILL</span>
                   </div>
                   <CardTitle className="text-xl">Develop New Skills</CardTitle>
                   <CardDescription className="text-muted-foreground">

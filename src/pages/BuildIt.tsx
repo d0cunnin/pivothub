@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet-async';
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Rocket, Lightbulb, FileText, Search, DollarSign, MessageSquare, Presentation, Palette, User, Scale, CheckSquare, Share2, TrendingUp } from "lucide-react";
 import { BusinessIdeaGenerator } from "@/components/BusinessIdeaGenerator";
 import { NameChecker } from "@/components/NameChecker";
 import { LogoGenerator } from "@/components/LogoGenerator";
@@ -56,8 +55,8 @@ const BuildIt = () => {
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
-            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
-              <Rocket className="h-12 w-12 text-white" />
+            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+              <span className="text-3xl font-bold text-white tracking-wider">BUILD IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
               Build It

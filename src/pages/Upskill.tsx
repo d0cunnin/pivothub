@@ -14,7 +14,7 @@ import { EnhancedUpskillDashboard } from "@/components/EnhancedUpskillDashboard"
 import { Award, BookOpen, Users, TrendingUp, Target, Star, CheckCircle, ArrowRight, Brain, Lightbulb, Zap, GraduationCap, FileText, Edit3, Briefcase, MessageSquare } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
-const LearnIt = () => {
+const Upskill = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -37,11 +37,11 @@ const LearnIt = () => {
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
-            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
-              <GraduationCap className="h-12 w-12 text-white" />
+            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+              <span className="text-3xl font-bold text-white tracking-wider">UPSKILL</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Learn It with Confidence: From Preparation to Performance
+              Upskill with Confidence: From Preparation to Performance
             </h1>
             <div className="text-left max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
@@ -75,10 +75,10 @@ const LearnIt = () => {
                   variant="outline" 
                   className="bg-white/10 text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2 backdrop-blur-sm"
                   onClick={() => window.location.href = '/learn-a-skill'}
-                  aria-label="Go to Learn It"
+                  aria-label="Go to Courses"
                 >
                   <Award className="h-5 w-5" />
-                  <span>Learn It</span>
+                  <span>View Courses</span>
                 </Button>
               </div>
             </div>
@@ -192,13 +192,13 @@ const LearnIt = () => {
         </div>
       </section>
 
-      {/* Learn It Section */}
+      {/* Courses Section */}
       <section className="py-8 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-8">
             <div className="inline-block p-4 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm border border-white/20">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Learn It
+                Available Courses
               </h2>
             </div>
           </div>
@@ -249,7 +249,7 @@ const LearnIt = () => {
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Ready to Start Your Learn It Journey?
+              Ready to Start Your Upskill Journey?
             </h2>
             <p className="text-lg text-white/90 mb-8">
               Transform your career with confidence and take the first step today.
@@ -258,7 +258,7 @@ const LearnIt = () => {
               size="lg" 
               variant="hero"
               onClick={() => window.location.href = '/assessments'}
-              aria-label="Start Your Learn It Journey"
+              aria-label="Start Your Upskill Journey"
               className="w-full md:w-auto"
             >
               Start Assessment
@@ -272,4 +272,4 @@ const LearnIt = () => {
   );
 };
 
-export default LearnIt;
+export default Upskill;

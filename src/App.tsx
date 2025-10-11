@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UsageProvider } from "@/contexts/UsageContext";
 import Index from "./pages/Index";
-import LearnIt from "./pages/LearnIt";
+import Upskill from "./pages/Upskill";
 import BuildIt from "./pages/BuildIt";
 import About from "./pages/About";
 import TeachIt from "./pages/TeachIt";
@@ -50,7 +50,7 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/teachit" element={<TeachIt />} />
             <Route path="/launchit" element={<LaunchIt />} />
-            <Route path="/learnit" element={<LearnIt />} />
+            <Route path="/learnit" element={<Upskill />} />
             <Route path="/assessments" element={<Assessments />} />
             <Route path="/jobprep" element={<JobPrep />} />
             <Route path="/learn-a-skill" element={<LearnASkill />} />

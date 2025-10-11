@@ -63,7 +63,7 @@ export const Header = () => {
                       to="/learnit"
                       className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${['/learnit', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
-                      Learn It
+                      Upskill
                     </Link>
                     <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
                       <ChevronDown className="h-4 w-4" />
@@ -235,7 +235,7 @@ export const Header = () => {
                   className={`font-medium hover:text-primary transition-colors ${['/learnit', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Learn It
+                  Upskill
                 </Link>
                 <div className="pl-4 space-y-2">
                   <Link 

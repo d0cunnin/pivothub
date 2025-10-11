@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Rocket } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
@@ -167,8 +167,8 @@ const LaunchIt = () => {
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
-            <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale">
-              <Rocket className="h-12 w-12 text-white" />
+            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+              <span className="text-3xl font-bold text-white tracking-wider">LAUNCH IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Launch It
@@ -371,7 +371,6 @@ const LaunchIt = () => {
                   </>
                 ) : (
                   <>
-                    <Rocket className="mr-2 h-4 w-4" />
                     Generate Launch Strategy
                   </>
                 )}
