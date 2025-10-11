@@ -133,7 +133,7 @@ Return JSON with this exact structure:
       "match": number (1-10),
       "description": "3-4 sentences explaining exactly why this career aligns with their responses, personality, skills, and interests. Be specific about what aspects of their assessment led to this recommendation.",
       "requirements": ["Specific requirement 1", "Specific requirement 2", "Specific requirement 3", "Timeline estimate"],
-      "growthOutlook": "Detailed growth description with 2025 market data, salary ranges ($X-$Y), demand trends, and future-proofing assessment",
+      "growthOutlook": "Detailed growth description with current market data, salary ranges ($X-$Y), demand trends, and future-proofing assessment",
       "entryStrategy": "2-3 sentences on exactly how to break into this field given their background",
       "dayToDay": "What a typical day looks like in this role",
       "successProfile": "Personality traits and skills that predict success in this role"
@@ -177,7 +177,7 @@ Return JSON with this exact structure:
   },
   "personalityAlignment": "4-5 sentences with deep analysis of how their personality traits, work style preferences, and values from the assessment align with recommended careers. Include specific examples from their responses.",
   "industryInsights": [
-    "2025 trend 1 affecting these career paths",
+    "Current trend 1 affecting these career paths",
     "Industry transformation 2 to be aware of",
     "Emerging opportunity 3 in these fields",
     "Risk factor 4 and mitigation strategy"
@@ -185,7 +185,7 @@ Return JSON with this exact structure:
   "networkingStrategy": {
     "targetConnections": ["Type of professionals to connect with 1", "Type 2", "Type 3"],
     "communities": ["Specific LinkedIn group or Slack community 1", "Community 2", "Community 3"],
-    "events": ["Specific conferences or meetups in 2025", "Event 2", "Event 3"],
+    "events": ["Specific upcoming conferences or meetups", "Event 2", "Event 3"],
     "informationalInterviews": "Template message and approach for reaching out"
   },
   "financialProjections": {
@@ -197,7 +197,7 @@ Return JSON with this exact structure:
   "educationPath": [
     "Formal education needs (degree, bootcamp, certification) with cost and time",
     "Self-study resources with specific courses and platforms",
-    "Micro-credentials or certifications valued in 2025",
+    "Micro-credentials or certifications currently valued",
     "Learning timeline optimized for their situation"
   ],
   "nextSteps": "4-5 sentences providing crystal clear guidance on the single most important action to take in the next 48 hours, why it matters, and exactly how to do it. Include a specific deliverable or outcome.",

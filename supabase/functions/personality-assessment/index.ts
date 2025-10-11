@@ -170,7 +170,7 @@ serve(async (req) => {
     • Provide executive-level insights, not generic personality descriptions
     • Be specific about career paths, roles, and industries
     • Include concrete development activities and timelines
-    • Reference current 2025 workplace trends
+    • Reference current workplace trends
     • Balance encouragement with realistic assessment
     • Focus on actionable career strategies`;
 

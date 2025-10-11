@@ -19,7 +19,7 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a senior grant research specialist with 15+ years experience identifying funding opportunities across federal, state, private, and corporate sources. You have deep knowledge of SBA programs, SBIR/STTR, foundation databases, and emerging grant opportunities in 2025.
+    const systemPrompt = `You are a senior grant research specialist with 15+ years experience identifying funding opportunities across federal, state, private, and corporate sources. You have deep knowledge of SBA programs, SBIR/STTR, foundation databases, and emerging grant opportunities.
 
     EXPERTISE:
     • Federal grants: SBA, SBIR/STTR, USDA, DOE, NIH, NSF programs
@@ -76,7 +76,7 @@ serve(async (req) => {
         "name": "Grant Name",
         "organization": "Funding Organization",
         "amountRange": "$10,000 - $50,000",
-        "deadline": "March 15, 2025",
+        "deadline": "Example: March 15",
         "description": "Brief description of the grant",
         "eligibility": ["requirement1", "requirement2"],
         "matchScore": 85,

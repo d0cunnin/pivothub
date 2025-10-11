@@ -53,7 +53,7 @@ STRUCTURE - Include ALL of these sections with substantial detail:
 
 1. EXECUTIVE SUMMARY (2-3 paragraphs)
 • Business concept and unique value in 2-3 sentences
-• Market opportunity size and growth trends for 2025
+• Market opportunity size and current growth trends
 • Competitive advantage and defensibility
 • Financial highlights (3-year revenue projection, profitability timeline, funding needs)
 • Key success factors
@@ -72,7 +72,7 @@ STRUCTURE - Include ALL of these sections with substantial detail:
 3. MARKET ANALYSIS
 
 Industry Overview:
-• ${data.industry} industry analysis for 2025
+• ${data.industry} current industry analysis
 • Market size: TAM, SAM, SOM with specific numbers
 • Growth rate and trends (past 5 years and next 5 years)
 • Key industry drivers and dynamics
@@ -96,7 +96,7 @@ Market Needs Analysis:
 • Unmet needs in ${data.industry}
 • Pain points ${data.targetMarket} currently experience
 • How existing solutions fall short
-• Why timing is right for this business in 2025
+• Why timing is right for this business now
 • Market gaps this business will fill
 
 4. COMPETITIVE ANALYSIS
@@ -671,7 +671,7 @@ FORMATTING:
 • NO markdown symbols (###, **, *)
 • Specific numbers, costs, and metrics throughout
 • Actionable tactics, not vague strategies
-• Reference 2025 marketing trends and tools`
+• Reference current marketing trends and tools`
         break
 
       case 'pitch-deck':

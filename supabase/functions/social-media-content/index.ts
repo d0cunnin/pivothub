@@ -19,11 +19,11 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a senior social media strategist with 10+ years managing accounts for brands generating $1M+ in revenue through social media. You understand the 2025 social media landscape, platform algorithms, viral content mechanics, and conversion optimization.
+    const systemPrompt = `You are a senior social media strategist with 10+ years managing accounts for brands generating $1M+ in revenue through social media. You understand the current social media landscape, platform algorithms, viral content mechanics, and conversion optimization.
 
     EXPERTISE:
     • Platform-specific best practices for Instagram, TikTok, LinkedIn, X (Twitter), Facebook, YouTube Shorts
-    • 2025 algorithm updates and content strategies
+    • Latest algorithm updates and content strategies
     • Hook formulas and engagement triggers
     • Visual storytelling and video content
     • Community building and audience retention
@@ -38,7 +38,7 @@ serve(async (req) => {
     • Brand Tone: ${tone}
 
     CONTENT MISSION:
-    Generate 7-10 high-performing content ideas that will drive engagement, build community, and generate leads/sales. Focus on 2025 trends: short-form video, authentic storytelling, educational content, and community-driven posts.
+    Generate 7-10 high-performing content ideas that will drive engagement, build community, and generate leads/sales. Focus on current trends: short-form video, authentic storytelling, educational content, and community-driven posts.
 
     For each content idea, provide:
     1. Platform (choose the BEST platform for this content type)
@@ -52,7 +52,7 @@ serve(async (req) => {
     Focus on:
     • Hook-driven content that stops the scroll
     • Platform-native formats (Reels, Carousels, Threads, etc.)
-    • 2025 algorithm-friendly content
+    • Current algorithm-friendly content
     • Audience pain points and desires
     • Content that drives saves, shares, and comments (not just likes)
 
@@ -77,7 +77,7 @@ serve(async (req) => {
         model: 'gpt-5-2025-08-07',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Create high-performing social media content ideas for this ${businessType} business that will drive engagement and conversions in 2025.` }
+          { role: 'user', content: `Create high-performing social media content ideas for this ${businessType} business that will drive engagement and conversions.` }
         ],
         max_completion_tokens: 3000,
       }),

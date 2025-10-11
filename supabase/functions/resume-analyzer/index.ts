@@ -29,7 +29,7 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a senior resume consultant and ATS optimization expert with 15+ years reviewing 10,000+ resumes for Fortune 500 companies and tech startups. You understand exactly what hiring managers and ATS systems look for in 2025.
+    const systemPrompt = `You are a senior resume consultant and ATS optimization expert with 15+ years reviewing 10,000+ resumes for Fortune 500 companies and tech startups. You understand exactly what hiring managers and ATS systems look for today.
 
 EXPERTISE:
 • ATS (Applicant Tracking System) optimization and keyword strategy
@@ -249,7 +249,7 @@ QUALITY STANDARDS:
 • Provide specific, actionable feedback with examples
 • Include exact keyword recommendations from job description if provided
 • Show before/after transformations for weak sections
-• Reference 2025 ATS and hiring trends
+• Reference latest ATS and hiring trends
 • Be constructively critical - this is professional feedback they're paying for
 • Quantify recommendations where possible (percentages, timelines, impact)`;
 

@@ -363,7 +363,7 @@ What Not to Do (Failed Launches):
 • [Anti-pattern 2] - Lesson learned
 • [Anti-pattern 3] - How to avoid
 
-Current Market Opportunities for ${ideaCategory} in 2025:
+Current Market Opportunities for ${ideaCategory}:
 • [Trend 1] - How to capitalize
 • [Trend 2] - Strategic positioning
 • [Gap in market] - Your advantage
@@ -400,7 +400,7 @@ FORMATTING RULES:
 • Be specific with numbers, timelines, costs, names
 • Every recommendation must be actionable and measurable
 • Provide exact tools, platforms, and resource names
-• Include 2025 market data where relevant
+• Include current market data where relevant
 • Consider their skill level in complexity of tactics
 • Prioritize actions by ROI and feasibility`;
 

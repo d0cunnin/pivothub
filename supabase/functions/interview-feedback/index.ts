@@ -88,7 +88,7 @@ Provide expert feedback with this exact JSON structure, analyzing EVERY aspect i
   "improvedAnswerStructure": "Write a complete 4-6 sentence model answer showing exactly how to restructure their response using STAR method. Use [brackets] to indicate where they should insert their specific details. Make this actionable and copy-paste ready.",
   "industryTips": [
     "Industry-specific terminology for ${jobTitle} they should have used (e.g., specific frameworks, methodologies, tools)",
-    "Common expectations hiring managers have for ${jobTitle} candidates in 2025",
+    "Common expectations hiring managers have for ${jobTitle} candidates today",
     "Competitive advantages to emphasize for this role and question type",
     "Red flags this role/industry watches for and how to avoid them",
     "Company research elements they should weave in (if applicable)"
@@ -126,7 +126,7 @@ Provide expert feedback with this exact JSON structure, analyzing EVERY aspect i
 CRITICAL QUALITY STANDARDS:
 • Be brutally honest but constructive - this is premium coaching
 • Every suggestion must be actionable with specific examples
-• Reference current 2025 hiring trends and expectations
+• Reference current hiring trends and expectations
 • Identify subtle psychological signals their answer sends
 • Provide the "why" behind every piece of feedback
 • Include specific numbers, frameworks, or methodologies
