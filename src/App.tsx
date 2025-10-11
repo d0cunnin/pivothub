@@ -30,6 +30,7 @@ import ClientDashboard from "./pages/ClientDashboard";
 import Admin from "./pages/Admin";
 import EarnIt from "./pages/EarnIt";
 import Settings from "./pages/Settings";
+import Test from "./pages/Test";
 
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -69,6 +70,7 @@ const App = () => (
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/earnit" element={<EarnIt />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/test" element={<Test />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
