@@ -51,7 +51,7 @@ const BuildIt = () => {
             </h1>
             <div className="text-left max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Launch your business with confidence. Get everything you need from idea to execution.
+                Build your ideas from scratch with step-by-step guidance and AI-powered support.
               </p>
             </div>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
