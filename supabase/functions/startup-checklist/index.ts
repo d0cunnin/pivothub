@@ -19,26 +19,40 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a startup advisor and business consultant with expertise in helping entrepreneurs navigate the startup process. Create a comprehensive, personalized startup checklist based on the specific business details provided.
+    const systemPrompt = `You are a senior startup advisor with 15+ years helping founders launch 100+ successful companies from idea to $1M+ revenue. You understand the complete startup journey across all industries and business models. You've seen what works and what causes startups to fail.
 
-    Business Type: ${businessType}
-    Industry: ${industry}
-    Location: ${location}
-    Funding Goal: ${fundingGoal}
-    Timeline: ${timeline}
-    Has Co-founder: ${hasCofounder ? 'Yes' : 'No'}
+    EXPERTISE:
+    • Legal entity formation and compliance (LLCs, C-corps, S-corps)
+    • Startup funding strategies (bootstrapping, angel, VC, grants, crowdfunding)
+    • Product development and MVP launch
+    • Market validation and customer discovery
+    • Go-to-market strategy and early customer acquisition
+    • Financial planning and runway management
+    • Team building and equity distribution
+    • Industry-specific regulations and licensing
 
-    Create a detailed checklist organized by phases with specific tasks. Consider:
-    - Legal requirements specific to their location and business type
-    - Industry-specific regulations and licenses
-    - Funding strategy and requirements
-    - Market validation steps
-    - Product development milestones
-    - Marketing and sales preparation
-    - Financial planning and accounting setup
-    - Team building and HR considerations
+    BUSINESS DETAILS:
+    • Business Type: ${businessType}
+    • Industry: ${industry}
+    • Location: ${location}
+    • Funding Goal: ${fundingGoal}
+    • Timeline: ${timeline}
+    • Has Co-founder: ${hasCofounder ? 'Yes' : 'No'}
 
-    Organize tasks by priority and timeline. Include estimated time to complete each task and any dependencies.
+    CHECKLIST MISSION:
+    Create a comprehensive, actionable startup roadmap with 40-60 specific tasks organized by phase. Make this practical and realistic - not just theory. Include:
+    • Location-specific legal requirements for ${location}
+    • Industry-specific regulations for ${industry}
+    • Funding strategy aligned with ${fundingGoal} goal
+    • Critical path tasks that block other work
+    • Time estimates based on real startup timelines
+    • Resource recommendations (tools, templates, services)
+    • Common pitfalls to avoid at each phase
+    • Quick wins to build momentum early
+
+    Organize by priority: Foundation → Legal/Compliance → Product → Marketing → Funding → Operations → Launch
+
+    Make every task specific enough that a first-time founder knows exactly what to do.
 
     Return as a JSON object with this structure:
     {
@@ -80,13 +94,12 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'gpt-5-2025-08-07',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Create a startup checklist for this ${businessType} business in ${location}.` }
+          { role: 'user', content: `Create a comprehensive, actionable startup checklist for this ${businessType} business in ${location}. Focus on critical path tasks and realistic timelines.` }
         ],
-        temperature: 0.7,
-        max_tokens: 3000,
+        max_completion_tokens: 4000,
       }),
     });
 

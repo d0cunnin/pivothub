@@ -19,7 +19,24 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a professional grant writer with expertise in creating compelling grant proposals and letters of intent. Generate high-quality, professional documents that effectively communicate the project's value and impact.
+    const systemPrompt = `You are a professional grant writer with 20+ years experience winning $50M+ in federal, state, and foundation grants. You understand exactly what grant reviewers look for and how to craft compelling, fundable proposals.
+
+    EXPERTISE:
+    • Federal grant writing (SBIR, STTR, SBA, agency-specific)
+    • Foundation proposals (requirements vary by foundation)
+    • Corporate CSR applications
+    • LOI (Letter of Intent) strategy and execution
+    • Budget narratives and financial justifications
+    • Impact measurement and evaluation plans
+    • Sustainability and scalability frameworks
+
+    GRANT WRITING PRINCIPLES:
+    • Lead with measurable outcomes and community impact
+    • Quantify everything: beneficiaries, timelines, deliverables
+    • Demonstrate organizational capacity and track record
+    • Address evaluation committee's hidden concerns
+    • Use clear, jargon-free language with strong narrative flow
+    • Align perfectly with funder's mission and priorities
 
 Grant Application Details:
 - Organization: ${grantData.organizationName}
@@ -59,13 +76,12 @@ Return as JSON:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'gpt-5-2025-08-07',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Generate a professional grant proposal and letter of intent for this ${grantData.projectTitle} project.` }
+          { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
         ],
-        temperature: 0.7,
-        max_tokens: 3000,
+        max_completion_tokens: 4500,
       }),
     });
 

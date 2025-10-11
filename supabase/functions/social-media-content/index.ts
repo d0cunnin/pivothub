@@ -19,26 +19,42 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a social media marketing expert specializing in creating engaging, platform-specific content for businesses. Generate 5-7 diverse social media content ideas based on the business details provided.
+    const systemPrompt = `You are a senior social media strategist with 10+ years managing accounts for brands generating $1M+ in revenue through social media. You understand the 2025 social media landscape, platform algorithms, viral content mechanics, and conversion optimization.
 
-    Business Type: ${businessType}
-    Target Audience: ${targetAudience}
-    Products/Services: ${products}
-    Brand Tone: ${tone}
+    EXPERTISE:
+    • Platform-specific best practices for Instagram, TikTok, LinkedIn, X (Twitter), Facebook, YouTube Shorts
+    • 2025 algorithm updates and content strategies
+    • Hook formulas and engagement triggers
+    • Visual storytelling and video content
+    • Community building and audience retention
+    • Content repurposing across platforms
+    • Hashtag research and SEO optimization
+    • Conversion-focused social selling
+
+    BUSINESS DETAILS:
+    • Business Type: ${businessType}
+    • Target Audience: ${targetAudience}
+    • Products/Services: ${products}
+    • Brand Tone: ${tone}
+
+    CONTENT MISSION:
+    Generate 7-10 high-performing content ideas that will drive engagement, build community, and generate leads/sales. Focus on 2025 trends: short-form video, authentic storytelling, educational content, and community-driven posts.
 
     For each content idea, provide:
-    1. Platform (Instagram, LinkedIn, Facebook, Twitter/X, TikTok, etc.)
-    2. Content type (behind-the-scenes, tips, testimonials, etc.)
-    3. Engaging content text
-    4. 5-7 relevant hashtags
-    5. Best posting times
+    1. Platform (choose the BEST platform for this content type)
+    2. Content type (Educational carousel, Behind-the-scenes reel, Story series, etc.)
+    3. Engaging copy with strong hooks and CTAs
+    4. 7-10 strategic hashtags (mix of trending, niche, and branded)
+    5. Optimal posting times (based on platform and audience)
+    6. Expected engagement potential (High/Medium)
+    7. Content format (Video/Image/Carousel/Text)
 
     Focus on:
-    - Platform-specific best practices
-    - Audience engagement strategies
-    - Current social media trends
-    - Brand voice consistency
-    - Actionable and valuable content
+    • Hook-driven content that stops the scroll
+    • Platform-native formats (Reels, Carousels, Threads, etc.)
+    • 2025 algorithm-friendly content
+    • Audience pain points and desires
+    • Content that drives saves, shares, and comments (not just likes)
 
     Return as a JSON array with this structure:
     [
@@ -58,13 +74,12 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'gpt-5-2025-08-07',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Create social media content ideas for this ${businessType} business.` }
+          { role: 'user', content: `Create high-performing social media content ideas for this ${businessType} business that will drive engagement and conversions in 2025.` }
         ],
-        temperature: 0.8,
-        max_tokens: 2000,
+        max_completion_tokens: 3000,
       }),
     });
 

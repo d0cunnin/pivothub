@@ -114,19 +114,18 @@ serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'gpt-4.1-2025-04-14',
+            model: 'gpt-5-2025-08-07',
             messages: [
               { 
                 role: 'system', 
-                content: 'You are a business name research expert. Find similar existing business names that might cause trademark conflicts.' 
+                content: 'You are a trademark attorney and business name research specialist with 15+ years experience conducting comprehensive name clearance searches. You understand trademark law, industry naming conventions, and brand positioning strategies. You identify potential conflicts, sound-alike names, and trademark risks across all industries.' 
               },
               { 
                 role: 'user', 
-                content: `Check for existing businesses similar to "${businessName}". Return up to 10 similar business names with their industries. Format as JSON array: [{"name": "Business Name", "industry": "Industry", "risk": "High/Medium/Low"}]` 
+                content: `Conduct a comprehensive business name conflict analysis for "${businessName}". Search for: (1) Exact matches in any industry, (2) Phonetically similar names (sound-alikes), (3) Names with similar meaning/translation, (4) Well-known brands in the same semantic space. Return up to 12 potential conflicts with trademark risk assessment. Format as JSON array: [{"name": "Existing Business Name", "industry": "Industry", "similarity": "Exact/Phonetic/Semantic", "risk": "High/Medium/Low", "reason": "Why it's a potential conflict"}]` 
               }
             ],
-            temperature: 0.3,
-            max_tokens: 1000,
+            max_completion_tokens: 1500,
           }),
         });
 

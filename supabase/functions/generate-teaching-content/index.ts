@@ -20,7 +20,7 @@ serve(async (req) => {
     }
 
     let prompt = ''
-    const systemMessage = 'You are an expert educator and instructional designer with deep expertise in creating engaging educational content. Provide responses in clean, plain text format without any markdown formatting. Use simple bullet points (•) if lists are needed.'
+    const systemMessage = 'You are a senior instructional designer and curriculum expert with 20+ years creating courses, webinars, and educational programs across corporate training, higher education, and online learning platforms. You understand adult learning principles, engagement strategies, assessment design, and modern educational technology. You specialize in helping subject matter experts transform their knowledge into profitable teaching businesses. Provide responses in clean, plain text format without any markdown formatting. Use simple bullet points (•) if lists are needed.'
 
     // Handle all-materials type first
     if (type === 'all-materials') {
@@ -242,13 +242,12 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'gpt-4.1-2025-04-14',
+            model: 'gpt-5-2025-08-07',
             messages: [
-              { role: 'system', content: 'You are an expert educational content creator who generates comprehensive, professional teaching materials.' },
+              { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
               { role: 'user', content: prompt }
             ],
-            temperature: 0.8,
-            max_completion_tokens: 8000,
+            max_completion_tokens: 10000,
           })
         })
 
@@ -471,13 +470,12 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'gpt-5-2025-08-07',
         messages: [
           { role: 'system', content: systemMessage },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.7,
-        max_tokens: 3000
+        max_completion_tokens: 3500
       })
     })
 

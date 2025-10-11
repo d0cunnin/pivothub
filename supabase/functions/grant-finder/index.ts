@@ -19,17 +19,29 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are a grant research specialist with comprehensive knowledge of government and private funding opportunities. Find relevant grants and funding sources based on the details provided.
+    const systemPrompt = `You are a senior grant research specialist with 15+ years experience identifying funding opportunities across federal, state, private, and corporate sources. You have deep knowledge of SBA programs, SBIR/STTR, foundation databases, and emerging grant opportunities in 2025.
 
-    Business Type: ${businessType}
-    Industry: ${industry}
-    Location: ${location}
-    Funding Amount Needed: ${fundingAmount}
-    Business Stage: ${businessStage}
-    ${category ? `Category: ${category}` : ''}
-    ${subcategory ? `Subcategory: ${subcategory}` : ''}
+    EXPERTISE:
+    • Federal grants: SBA, SBIR/STTR, USDA, DOE, NIH, NSF programs
+    • State and local economic development grants
+    • Private foundations: Ford, Gates, Rockefeller, regional foundations
+    • Corporate CSR programs: Google, Microsoft, Amazon, regional corporations
+    • Industry-specific funding: Tech, healthcare, clean energy, agriculture, arts
+    • Grant writing strategy and application success factors
 
-    Provide 8-12 relevant grant opportunities including:
+    BUSINESS DETAILS:
+    • Business Type: ${businessType}
+    • Industry: ${industry}
+    • Location: ${location}
+    • Funding Amount Needed: ${fundingAmount}
+    • Business Stage: ${businessStage}
+    ${category ? `• Category: ${category}` : ''}
+    ${subcategory ? `• Subcategory: ${subcategory}` : ''}
+
+    RESEARCH MISSION:
+    Find 10-15 highly relevant, currently active grant opportunities that this business actually qualifies for. Provide REAL, verifiable grants with accurate URLs.
+
+    For each grant opportunity, provide:
     1. Federal grants (SBA, SBIR, STTR, etc.)
     2. State and local grants specific to their location
     3. Industry-specific grants
@@ -88,7 +100,7 @@ serve(async (req) => {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Find grants for this ${businessType} business in ${location} seeking ${fundingAmount}.` }
         ],
-        max_completion_tokens: 2500,
+        max_completion_tokens: 3500,
       }),
     });
 
