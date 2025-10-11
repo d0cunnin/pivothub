@@ -144,11 +144,11 @@ const BuildIt = () => {
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-white">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
                 Step 1: Validate Your Idea
               </h2>
             </div>
-            <p className="text-lg text-white/90">
+            <p className="text-lg text-foreground">
               Use our tools to research and validate your business concept
             </p>
           </div>
@@ -203,12 +203,12 @@ const BuildIt = () => {
       <section className="section-spacing-sm bg-primary relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-12">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-white">
+            <div className="inline-block p-6 bg-white rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
                 Step 3: Legal & Branding
               </h2>
             </div>
-            <p className="text-lg text-white/90">
+            <p className="text-lg text-foreground">
               Set up your business legally and create your brand identity
             </p>
           </div>
@@ -238,11 +238,11 @@ const BuildIt = () => {
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-white">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
                 Step 4: Launch & Scale
               </h2>
             </div>
-            <p className="text-lg text-white/90">
+            <p className="text-lg text-foreground">
               Go to market and grow your business with ongoing support
             </p>
           </div>
