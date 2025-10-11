@@ -104,7 +104,7 @@ const Index = () => {
               <Card className="premium-card hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
                 <CardHeader className="pb-3">
                   <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-2 border border-blue-500/20 w-fit">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">JOB PREP</span>
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">PREP IT</span>
                   </div>
                   <CardTitle className="text-lg">Relaunch Your Career</CardTitle>
                   <CardDescription className="text-sm">
@@ -112,9 +112,9 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Link to="/jobprep">
+                  <Link to="/prepit">
                     <Button size="sm" className="w-full">
-                      Start Job Prep
+                      Start Prep
                     </Button>
                   </Link>
                 </CardContent>
@@ -233,7 +233,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Link to="/assessments#take-your-assessment-today">
+                  <Link to="/assessit#take-your-assessment-today">
                     <Button size="sm" className="w-full">
                       Take Assessment
                     </Button>
@@ -252,7 +252,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Link to="/assessments#take-your-assessment-today">
+                  <Link to="/assessit#take-your-assessment-today">
                     <Button size="sm" className="w-full">
                       Take Assessment
                     </Button>
@@ -271,7 +271,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Link to="/assessments#take-your-assessment-today">
+                  <Link to="/assessit#take-your-assessment-today">
                     <Button size="sm" className="w-full">
                       Take Assessment
                     </Button>
@@ -301,7 +301,7 @@ const Index = () => {
               <Card className="premium-card hover-scale border-l-4 border-blue-500 bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
                 <CardHeader className="pb-3">
                   <div className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-blue-500/10 mb-2 border border-blue-500/20 w-fit">
-                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">JOB PREP</span>
+                    <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wide">PREP IT</span>
                   </div>
                   <CardTitle className="text-lg">Resume & Interview Coach</CardTitle>
                   <CardDescription className="text-sm">
@@ -309,9 +309,9 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <Link to="/jobprep">
+                  <Link to="/prepit">
                     <Button size="sm" className="w-full">
-                      Start Job Prep
+                      Start Prep
                     </Button>
                   </Link>
                 </CardContent>

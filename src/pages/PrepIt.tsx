@@ -8,7 +8,7 @@ import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
 import { ResumeCoachLetter } from "@/components/ResumeCoachLetter";
 import heroImage from "@/assets/hero-image.jpg";
 
-const JobPrep = () => {
+const PrepIt = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -32,7 +32,7 @@ const JobPrep = () => {
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-left max-w-5xl mx-auto">
             <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">JOB PREP</span>
+              <span className="text-3xl font-bold text-white tracking-wider">PREP IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Job Preparation Tools
@@ -235,4 +235,4 @@ const JobPrep = () => {
   );
 };
 
-export default JobPrep;
+export default PrepIt;

@@ -61,7 +61,7 @@ export const Header = () => {
                   <div className="flex items-center space-x-1">
                     <Link 
                       to="/learnit"
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${['/learnit', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${['/learnit', '/assessit', '/prepit', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
                       Upskill
                     </Link>
@@ -72,13 +72,13 @@ export const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
                   <DropdownMenuItem asChild>
-                    <Link to="/assessments" className="flex w-full cursor-pointer">
-                      Assessments
+                    <Link to="/assessit" className="flex w-full cursor-pointer">
+                      Assess It
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/jobprep" className="flex w-full cursor-pointer">
-                      Job Prep Tools
+                    <Link to="/prepit" className="flex w-full cursor-pointer">
+                      Prep It
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -232,25 +232,25 @@ export const Header = () => {
               <div className="space-y-2">
                 <Link 
                   to="/learnit"
-                  className={`font-medium hover:text-primary transition-colors ${['/learnit', '/assessments', '/jobprep', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
+                  className={`font-medium hover:text-primary transition-colors ${['/learnit', '/assessit', '/prepit', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Upskill
                 </Link>
                 <div className="pl-4 space-y-2">
                   <Link 
-                    to="/assessments" 
-                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/assessments' ? 'text-primary font-medium' : ''}`}
+                    to="/assessit" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/assessit' ? 'text-primary font-medium' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Assessments
+                    Assess It
                   </Link>
                   <Link 
-                    to="/jobprep" 
-                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/jobprep' ? 'text-primary font-medium' : ''}`}
+                    to="/prepit" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/prepit' ? 'text-primary font-medium' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Job Prep Tools
+                    Prep It
                   </Link>
                   <Link 
                     to="/learn-a-skill" 

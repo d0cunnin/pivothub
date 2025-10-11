@@ -36,17 +36,17 @@ export const HeroSection = () => {
               size="lg" 
               variant="heroWhite"
               className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/assessments'}
+              onClick={() => window.location.href = '/assessit'}
             >
-              Take the Assessment
+              Assess It
             </Button>
             <Button 
               size="lg" 
               variant="heroWhite"
               className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/jobprep'}
+              onClick={() => window.location.href = '/prepit'}
             >
-              Job Prep
+              Prep It
             </Button>
             <Button 
               size="lg" 

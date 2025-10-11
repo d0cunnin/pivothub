@@ -14,8 +14,8 @@ import LaunchIt from "./pages/LaunchIt";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
-import Assessments from "./pages/Assessments";
-import JobPrep from "./pages/JobPrep";
+import AssessIt from "./pages/AssessIt";
+import PrepIt from "./pages/PrepIt";
 import LearnASkill from "./pages/LearnASkill";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -51,8 +51,8 @@ const App = () => (
             <Route path="/teachit" element={<TeachIt />} />
             <Route path="/launchit" element={<LaunchIt />} />
             <Route path="/learnit" element={<Upskill />} />
-            <Route path="/assessments" element={<Assessments />} />
-            <Route path="/jobprep" element={<JobPrep />} />
+            <Route path="/assessit" element={<AssessIt />} />
+            <Route path="/prepit" element={<PrepIt />} />
             <Route path="/learn-a-skill" element={<LearnASkill />} />
             <Route path="/buildit" element={<BuildIt />} />
             <Route path="/grantwriting" element={<GrantWriting />} />

@@ -22,16 +22,16 @@ export const PathSelection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {/* Assess Your Path */}
+          {/* Assess It */}
           <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-cyan-500 h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-600/5 group-hover:from-cyan-500/10 group-hover:to-blue-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-cyan-500/10 mb-4 border border-cyan-500/20 w-fit">
-                  <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400 tracking-wide">ASSESS</span>
+                  <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400 tracking-wide">ASSESS IT</span>
                 </div>
-                <h3 className="text-2xl font-bold text-foreground">Assess Your Path</h3>
+                <h3 className="text-2xl font-bold text-foreground">Assess It</h3>
                 <p className="text-muted-foreground">Discover Your Options</p>
               </div>
 
@@ -60,7 +60,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/assessments" className="mt-auto">
+              <Link to="/assessit" className="mt-auto">
                 <Button 
                   variant="default" 
                   size="lg" 
@@ -73,16 +73,16 @@ export const PathSelection = () => {
             </div>
           </Card>
 
-          {/* Relaunch Your Career */}
+          {/* Prep It */}
           <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-blue-500 h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-600/5 group-hover:from-blue-500/10 group-hover:to-cyan-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-blue-500/10 mb-4 border border-blue-500/20 w-fit">
-                  <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">UPSKILL</span>
+                  <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">PREP IT</span>
                 </div>
-                <h3 className="text-2xl font-bold text-foreground">Relaunch Your Career</h3>
+                <h3 className="text-2xl font-bold text-foreground">Prep It</h3>
                 <p className="text-muted-foreground">Get Ready for Next Opportunity</p>
               </div>
 
@@ -93,7 +93,7 @@ export const PathSelection = () => {
               />
 
               <p className="text-foreground mb-6 leading-relaxed">
-                Use our comprehensive Learn It tools to develop your skills and get ready for your next opportunity. 
+                Use our comprehensive prep tools to develop your skills and get ready for your next opportunity. 
                 Master interviews, resumes, and professional positioning.
               </p>
 
@@ -111,7 +111,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/jobprep" className="mt-auto">
+              <Link to="/prepit" className="mt-auto">
                 <Button 
                   variant="hero" 
                   size="lg" 
