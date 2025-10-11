@@ -190,14 +190,20 @@ export const ContactChatbot = () => {
 
   return (
     <>
-      {/* Floating Chat Button */}
-      <Button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 hover:scale-110 transition-transform"
-        size="icon"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </Button>
+      {/* Floating Chat Button with Pulse Animation */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="absolute inset-0 bg-primary rounded-full animate-ping opacity-75"></div>
+        <Button
+          onClick={() => setIsOpen(true)}
+          className="relative h-16 w-16 rounded-full shadow-2xl hover:scale-110 transition-transform bg-primary hover:bg-primary/90"
+          size="icon"
+        >
+          <MessageCircle className="h-8 w-8" />
+        </Button>
+        <div className="absolute -top-2 -left-2 bg-destructive text-destructive-foreground text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center animate-bounce">
+          ?
+        </div>
+      </div>
 
       {/* Chat Sheet */}
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
