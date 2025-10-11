@@ -190,10 +190,19 @@ export default function SideIncomeBlueprint() {
       {/* Introduction Section */}
       <section className="py-8 bg-white relative overflow-hidden">
         <div className="page-container">
-          <div className="max-w-4xl mx-auto">
-            <p className="text-lg md:text-xl text-foreground leading-relaxed text-left">
-              Stop wasting time on side hustle ideas that do not fit your life. The Earn It Blueprint helps you discover three income opportunities that align with your skills, time, financial goals, and comfort level. It gives you a clear roadmap to start earning within 90 days whether you are a stay-at-home parent, working professional, retiree, or student.
-            </p>
+          <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto mb-8">
+            <div>
+              <p className="text-lg md:text-xl text-foreground leading-relaxed text-left">
+                Stop wasting time on side hustle ideas that do not fit your life. The Earn It Blueprint helps you discover three income opportunities that align with your skills, time, financial goals, and comfort level. It gives you a clear roadmap to start earning within 90 days whether you are a stay-at-home parent, working professional, retiree, or student.
+              </p>
+            </div>
+            <div className="relative overflow-hidden rounded-2xl shadow-xl">
+              <img 
+                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                alt="Successful entrepreneur with keys to new opportunities" 
+                className="w-full h-80 object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>

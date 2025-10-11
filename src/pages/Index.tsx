@@ -196,6 +196,40 @@ const Index = () => {
             </p>
           </div>
 
+          {/* Visual Showcase */}
+          <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
+            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
+              <img 
+                src="/lovable-uploads/4060c0f4-ac9a-4eb6-ae80-f0b0cf96d923.png" 
+                alt="Professional woman in red blazer representing career success" 
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end p-6">
+                <p className="text-white font-bold text-lg">Your Career Success Story</p>
+              </div>
+            </div>
+            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
+              <img 
+                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
+                alt="Entrepreneur with keys representing business ownership" 
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-secondary/90 to-transparent flex items-end p-6">
+                <p className="text-white font-bold text-lg">Build Your Business</p>
+              </div>
+            </div>
+            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
+              <img 
+                src="/lovable-uploads/15ff2b92-41d2-4845-9967-ed77d59d05c2.jpg" 
+                alt="Team learning and growing together" 
+                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-accent/90 to-transparent flex items-end p-6">
+                <p className="text-white font-bold text-lg">Learn & Grow Together</p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {steps.map((step, index) => (
               <div 

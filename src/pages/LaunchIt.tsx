@@ -193,15 +193,24 @@ const LaunchIt = () => {
       {/* Form Section */}
       <section id="launch-form" className="py-16 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Create Your Launch Strategy
-              </h2>
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-12 max-w-6xl mx-auto">
+            <div>
+              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Create Your Launch Strategy
+                </h2>
+              </div>
+              <p className="text-lg text-muted-foreground">
+                Answer a few questions about your project and we'll generate a comprehensive, personalized launch plan tailored to your goals.
+              </p>
             </div>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Answer a few questions about your project and we'll generate a comprehensive, personalized launch plan tailored to your goals.
-            </p>
+            <div className="relative overflow-hidden rounded-2xl shadow-xl">
+              <img 
+                src="/lovable-uploads/ee28fb16-2345-4e1b-a162-97d7223536c1.png" 
+                alt="Strategic business planning and innovation" 
+                className="w-full h-80 object-cover"
+              />
+            </div>
           </div>
           
           <div className="max-w-4xl mx-auto">

@@ -51,27 +51,36 @@ const TeachIt = () => {
       {/* Why Teach Section */}
       <section className="pt-16 pb-8 bg-white relative overflow-hidden">
         <div className="page-container">
-          <div className="text-center mb-12">
-            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Why Teach Online?
-              </h2>
+          <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
+            <div>
+              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  Why Teach Online?
+                </h2>
+              </div>
+              <div className="max-w-3xl text-left">
+                <ul className="space-y-4 text-lg text-foreground">
+                  <li className="flex items-start">
+                    <span className="mr-3">•</span>
+                    <span>Share your expertise and turn years of experience into valuable lessons that help others succeed</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-3">•</span>
+                    <span>Build your audience and establish yourself as a thought leader while growing your professional network</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="mr-3">•</span>
+                    <span>Generate income by creating passive revenue through selling courses and hosting paid webinars</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="max-w-3xl mx-auto text-left">
-              <ul className="space-y-4 text-lg text-foreground">
-                <li className="flex items-start">
-                  <span className="mr-3">•</span>
-                  <span>Share your expertise and turn years of experience into valuable lessons that help others succeed</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-3">•</span>
-                  <span>Build your audience and establish yourself as a thought leader while growing your professional network</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-3">•</span>
-                  <span>Generate income by creating passive revenue through selling courses and hosting paid webinars</span>
-                </li>
-              </ul>
+            <div className="relative overflow-hidden rounded-2xl shadow-xl">
+              <img 
+                src="/lovable-uploads/15ff2b92-41d2-4845-9967-ed77d59d05c2.jpg" 
+                alt="Team learning together in supportive environment" 
+                className="w-full h-80 object-cover"
+              />
             </div>
           </div>
         </div>

@@ -78,6 +78,24 @@ const PrepIt = () => {
       {/* Career Advisor AI */}
       <section id="career-advisor" className="py-16 bg-white relative overflow-hidden">
         <div className="page-container">
+          {/* Visual Banner */}
+          <div className="grid md:grid-cols-2 gap-8 mb-12 items-center max-w-6xl mx-auto">
+            <div className="relative overflow-hidden rounded-2xl shadow-xl">
+              <img 
+                src="/lovable-uploads/4060c0f4-ac9a-4eb6-ae80-f0b0cf96d923.png" 
+                alt="Professional preparing for career success" 
+                className="w-full h-80 object-cover"
+              />
+            </div>
+            <div className="relative overflow-hidden rounded-2xl shadow-xl">
+              <img 
+                src="/lovable-uploads/0dc8e049-6853-488a-ba7e-2c5087721c46.png" 
+                alt="Professional woman with digital technology" 
+                className="w-full h-80 object-cover"
+              />
+            </div>
+          </div>
+          
           {/* Header Section */}
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
