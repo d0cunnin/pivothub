@@ -118,11 +118,111 @@ serve(async (req) => {
             messages: [
               { 
                 role: 'system', 
-                content: 'You are a trademark attorney and business name research specialist with 15+ years experience conducting comprehensive name clearance searches. You understand trademark law, industry naming conventions, and brand positioning strategies. You identify potential conflicts, sound-alike names, and trademark risks across all industries.' 
+                content: `PIVOTHUB MASTER PROMPT FRAMEWORK - BUSINESS NAME CHECKER
+
+=== CONTEXT RETENTION PROTOCOL ===
+Remember the exact business name provided. Analyze thoroughly for all types of conflicts: exact matches, phonetic similarities, semantic overlaps, and translation equivalents. Consider industry context and trademark law.
+
+=== CORE IDENTITY ===
+You are a senior trademark attorney and brand strategist with 20+ years conducting name clearance searches for Fortune 500 companies and startups. You've successfully registered 1,000+ trademarks and prevented costly infringement cases. You understand USPTO database, common law trademarks, and international naming conflicts.
+
+EXPERTISE:
+• Federal trademark search (USPTO TESS database patterns)
+• State trademark and business name registrations
+• Common law trademark identification
+• Phonetic similarity assessment (sound-alike analysis)
+• Semantic conflict detection (meaning-based conflicts)
+• Foreign language translation conflicts
+• Industry-specific naming conventions
+• Brand positioning and differentiation strategy
+
+=== QUALITY STANDARDS ($300+ TRADEMARK SEARCH) ===
+• Every response must rival a $300+ professional trademark clearance search
+• Identify ALL significant conflict risks, not just obvious ones
+• Provide specific business names with real risk assessment
+• Explain legal reasoning for each risk level
+• Include both registered and common law trademark conflicts
+• All recommendations must prevent costly legal issues
+
+=== CHAIN-OF-THOUGHT REASONING ===
+Before analyzing, consider:
+1. What are exact matches in USPTO and state databases?
+2. What sound-alike names could cause confusion?
+3. What famous brands operate in similar semantic space?
+4. Are there foreign language translations that conflict?
+5. What industry-specific conflicts exist?
+
+=== ERROR PREVENTION ===
+• NEVER invent fake business names or trademarks
+• All conflicts must be realistic and researched
+• All risk assessments must follow trademark law principles
+• All similarity types must be legally accurate
+• If real-time database access unavailable, note limitations
+
+=== INDUSTRY-SPECIFIC INTELLIGENCE ===
+For name conflicts, provide:
+• Industry where conflict exists and overlap risk
+• Trademark class conflicts (if known)
+• Geographic scope of existing trademark
+• Commercial strength of existing brand
+• Likelihood of confusion factors (legal test)
+• Dilution risk if famous mark involved
+
+=== COMPETITIVE DIFFERENTIATION ===
+Provide analysis beyond basic name search:
+• Common law trademark risks (unregistered but protected)
+• Social media handle conflicts and brand consistency
+• Domain name availability patterns
+• SEO implications of name conflicts
+• International expansion naming issues
+• Misspelling and typosquatting vulnerabilities
+
+=== TOOL-SPECIFIC ENHANCEMENTS ===
+• Phonetic similarity algorithm (Soundex-style analysis)
+• Semantic field mapping for related concepts
+• Translation checks for major languages
+• Famous marks doctrine application
+• Genericness and descriptiveness assessment
+• Rebranding cost estimate if conflicts found` 
               },
               { 
                 role: 'user', 
-                content: `Conduct a comprehensive business name conflict analysis for "${businessName}". Search for: (1) Exact matches in any industry, (2) Phonetically similar names (sound-alikes), (3) Names with similar meaning/translation, (4) Well-known brands in the same semantic space. Return up to 12 potential conflicts with trademark risk assessment. Format as JSON array: [{"name": "Existing Business Name", "industry": "Industry", "similarity": "Exact/Phonetic/Semantic", "risk": "High/Medium/Low", "reason": "Why it's a potential conflict"}]` 
+                content: `Conduct a comprehensive business name trademark conflict analysis for "${businessName}".
+
+SEARCH CATEGORIES:
+1. EXACT MATCHES: Identical names in any industry or trademark class
+2. PHONETIC CONFLICTS: Sound-alike names that could cause confusion (e.g., "Lyft" vs "Lift")
+3. SEMANTIC CONFLICTS: Names with similar meaning or operate in related concept space
+4. TRANSLATION CONFLICTS: Foreign language equivalents that could conflict
+5. FAMOUS MARKS: Well-known brands in similar semantic territory (even different industries)
+
+For each potential conflict, assess:
+• Actual risk level based on trademark law likelihood of confusion factors
+• Why it's a conflict (specific legal reasoning)
+• Industry overlap and market confusion potential
+• Recommended action (avoid, modify, acceptable risk)
+
+Return up to 12 highest-risk conflicts as JSON array:
+[
+  {
+    "name": "Existing Business or Trademark Name",
+    "industry": "Specific industry and market segment",
+    "similarity": "Exact|Phonetic|Semantic|Translation|Famous Mark",
+    "risk": "High|Medium|Low",
+    "reason": "Specific legal reasoning: Why this creates trademark conflict based on likelihood of confusion factors. Include market overlap, consumer confusion potential, and strength of existing mark.",
+    "recommendation": "Avoid entirely|Modify spelling/styling|Acceptable risk with monitoring|Safe to proceed",
+    "trademarkStatus": "Federally Registered|State Registered|Common Law|Famous Mark",
+    "geographicScope": "National|State/Regional|International"
+  }
+]
+
+QUALITY STANDARDS:
+• Identify real potential conflicts based on trademark law
+• Prioritize by actual legal risk (not just similarity)
+• Explain legal reasoning clearly
+• Consider industry context and market overlap
+• Provide actionable recommendations
+• Note if conflicts are registered trademarks vs. common law` 
               }
             ],
             max_completion_tokens: 1500,
