@@ -127,8 +127,8 @@ const Pricing = () => {
         "Business Foundation Builder"
       ],
       tier: "hire-yourself",
-      gradient: "from-orange-500/10 to-amber-600/10",
-      accent: "border-l-4 border-orange-500"
+      gradient: "from-emerald-500/10 to-green-600/10",
+      accent: "border-l-4 border-emerald-500"
     },
     {
       name: "Launch It Path",
@@ -146,8 +146,8 @@ const Pricing = () => {
         "Tech setup guidance"
       ],
       tier: "launch-it",
-      gradient: "from-indigo-500/10 to-purple-600/10",
-      accent: "border-l-4 border-indigo-500"
+      gradient: "from-cyan-500/10 to-blue-600/10",
+      accent: "border-l-4 border-cyan-500"
     },
     {
       name: "Teach It Path",
@@ -182,8 +182,8 @@ const Pricing = () => {
         "Eligibility checker"
       ],
       tier: "grant-writing",
-      gradient: "from-purple-500/10 to-violet-600/10",
-      accent: "border-l-4 border-purple-500"
+      gradient: "from-teal-500/10 to-cyan-600/10",
+      accent: "border-l-4 border-teal-500"
     },
     {
       name: "All Access Pass",
@@ -199,8 +199,8 @@ const Pricing = () => {
         "Priority email support"
       ],
       tier: "all-access",
-      gradient: "from-amber-500/10 to-orange-600/10",
-      accent: "border-l-4 border-amber-500",
+      gradient: "from-blue-500/10 to-cyan-600/10",
+      accent: "border-l-4 border-blue-500",
       isAllAccess: true,
       savings: "Save up to $46/month compared to individual paths"
     }
@@ -209,7 +209,7 @@ const Pricing = () => {
   const selectedPlan = allPlans[selectedPathIndex];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Header />
       
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
@@ -269,7 +269,7 @@ const Pricing = () => {
                 value={selectedPathIndex.toString()}
                 onValueChange={(value) => setSelectedPathIndex(parseInt(value))}
               >
-                <SelectTrigger className="w-full h-14 text-lg bg-background border-2">
+                <SelectTrigger className="w-full h-14 text-lg bg-white border-2">
                   <SelectValue>
                     <div className="flex items-center gap-3">
                       <span className="font-semibold">{selectedPlan.name}</span>
@@ -282,7 +282,7 @@ const Pricing = () => {
                     </div>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-popover border-2 max-h-[400px] z-50">
+                <SelectContent className="bg-white border-2 max-h-[400px] z-50">
                   {allPlans.map((plan, index) => (
                     <SelectItem 
                       key={plan.name} 

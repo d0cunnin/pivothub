@@ -9,7 +9,7 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
+    --background: 0 0% 100%;
     --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
@@ -28,7 +28,7 @@ All colors MUST be HSL.
     --secondary-foreground: 0 0% 100%;
     --secondary-glow: 155 55% 35%;
 
-    --muted: 210 15% 95%;
+    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 0%;
 
     /* Success accent - brighter green */
@@ -45,13 +45,13 @@ All colors MUST be HSL.
     /* Premium gradients & textures */
     --gradient-hero: linear-gradient(135deg, hsl(215 85% 35%) 0%, hsl(155 55% 35%) 100%);
     --gradient-hero-subtle: linear-gradient(135deg, hsl(215 85% 35% / 0.95) 0%, hsl(155 55% 35% / 0.95) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(0 0% 100%) 100%);
     --gradient-accent: linear-gradient(90deg, hsl(215 85% 45%) 0%, hsl(155 65% 40%) 100%);
     --gradient-mesh: radial-gradient(circle at 25% 25%, hsl(215 85% 35% / 0.03) 0%, transparent 50%), 
                       radial-gradient(circle at 75% 75%, hsl(155 55% 35% / 0.03) 0%, transparent 50%);
-    --gradient-section-1: linear-gradient(165deg, hsl(210 20% 98%) 0%, hsl(215 25% 96%) 40%, hsl(210 15% 95%) 100%);
-    --gradient-section-2: linear-gradient(-15deg, hsl(215 15% 97%) 0%, hsl(210 20% 98%) 50%, hsl(215 25% 96%) 100%);
-    --gradient-section-3: linear-gradient(135deg, hsl(155 55% 97%) 0%, hsl(215 15% 97%) 60%, hsl(210 20% 98%) 100%);
+    --gradient-section-1: linear-gradient(165deg, hsl(0 0% 100%) 0%, hsl(0 0% 99%) 40%, hsl(0 0% 98%) 100%);
+    --gradient-section-2: linear-gradient(-15deg, hsl(0 0% 99%) 0%, hsl(0 0% 100%) 50%, hsl(0 0% 99%) 100%);
+    --gradient-section-3: linear-gradient(135deg, hsl(0 0% 99%) 0%, hsl(0 0% 100%) 60%, hsl(0 0% 100%) 100%);
     
     /* Sophisticated shadows */
     --shadow-soft: 0 4px 20px -2px hsl(215 25% 15% / 0.08), 0 0 0 1px hsl(215 15% 88% / 0.5);
