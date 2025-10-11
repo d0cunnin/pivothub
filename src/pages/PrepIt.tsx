@@ -82,8 +82,8 @@ const PrepIt = () => {
           <div className="grid md:grid-cols-2 gap-8 mb-12 items-center max-w-6xl mx-auto">
             <div className="relative overflow-hidden rounded-2xl shadow-xl">
               <img 
-                src="/lovable-uploads/4060c0f4-ac9a-4eb6-ae80-f0b0cf96d923.png" 
-                alt="Professional preparing for career success" 
+                src="/lovable-uploads/a2d8ed6b-e7a3-4bba-b5d7-9c2dd209ea3d.png" 
+                alt="Professional woman collaborating with team in office"
                 className="w-full h-80 object-cover"
               />
             </div>

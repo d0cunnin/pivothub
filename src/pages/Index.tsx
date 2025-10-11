@@ -200,8 +200,8 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
             <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
               <img 
-                src="/lovable-uploads/4060c0f4-ac9a-4eb6-ae80-f0b0cf96d923.png" 
-                alt="Professional woman in red blazer representing career success" 
+                src="/lovable-uploads/a2d8ed6b-e7a3-4bba-b5d7-9c2dd209ea3d.png" 
+                alt="Professional woman collaborating with team"
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end p-6">
