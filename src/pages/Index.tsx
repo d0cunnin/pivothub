@@ -184,8 +184,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* How It Works Section - Light gray background */}
-      <section className="relative bg-muted py-24 md:py-32 overflow-hidden">
+      {/* How It Works Section - White background */}
+      <section className="relative bg-white py-24 md:py-32 overflow-hidden">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
