@@ -19,7 +19,7 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `You are an expert interview coach specializing in creating realistic, tailored interview questions. Generate ${questionTypes.length * 3} high-quality interview questions based on the provided job details.
+    const systemPrompt = `You are an expert interview coach and psychology expert specializing in creating realistic, insightful interview questions. You understand the hidden agenda behind every interview question and can teach candidates how to truly impress hiring managers.
 
     Job Title: ${jobTitle}
     Industry: ${industry || 'Not specified'}
@@ -27,31 +27,66 @@ serve(async (req) => {
     Question Types: ${questionTypes.join(', ')}
     Job Description: ${jobDescription || 'Not provided'}
 
-    For each question, provide:
-    1. The question text
-    2. Question type (behavioral, technical, or situational)
-    3. Difficulty level
-    4. Brief guidance on what the interviewer is looking for
+    Generate ${questionTypes.length * 3} high-quality, realistic interview questions that are actually asked for ${jobTitle} roles in ${industry || 'this industry'}.
 
-    Focus on:
-    - Real questions commonly asked for this role
-    - Industry-specific scenarios and challenges
-    - Level-appropriate complexity
-    - Current industry trends and technologies
-    
+    For EACH question, provide comprehensive insights that reveal the psychology and strategy behind it.
+
     IMPORTANT: Do NOT use markdown formatting like ### headers, ** bold, or * italics
     Return clean text in JSON format only
     
-    Return as a JSON array with this structure:
+    Return as a JSON array with this EXACT structure:
     [
       {
         "id": "unique_id",
-        "text": "Question text here?",
+        "text": "Question text exactly as an interviewer would ask it?",
         "type": "behavioral|technical|situational",
         "difficulty": "${level}",
-        "guidance": "Brief explanation of what interviewers want to hear"
+        "guidance": "What the interviewer is looking for in 1-2 sentences",
+        "whyTheyAskThis": "2-3 sentences explaining the hidden psychology: What are they REALLY testing? What underlying concerns or red flags are they checking for? How does this question help them evaluate cultural fit, skills, or potential?",
+        "redFlags": [
+          "Red flag 1: Specific behavior or response that raises concerns",
+          "Red flag 2: Another warning sign interviewers watch for",
+          "Red flag 3: Common mistake candidates make"
+        ],
+        "idealAnswerStructure": {
+          "framework": "STAR|Problem-Solution-Result|Technical Deep Dive",
+          "situation": "What to include in situation setup (1 sentence guidance)",
+          "task": "How to frame your specific responsibility (1 sentence)",
+          "action": "Key elements to emphasize in your actions (2 sentences)",
+          "result": "What kind of quantified outcome to highlight (1 sentence)"
+        },
+        "companyResearchTips": [
+          "Research their tech stack from job posting or engineering blog",
+          "Check recent company news and product launches",
+          "Review Glassdoor for common interview questions at this company"
+        ],
+        "industryTerminology": [
+          "CI/CD pipeline",
+          "Microservices architecture",
+          "Load balancing",
+          "Technical debt"
+        ],
+        "followUpQuestions": [
+          "How would you approach this differently now with what you learned?",
+          "What would you do if the same issue happened again?",
+          "How did you communicate this challenge to stakeholders?"
+        ],
+        "videoInterviewTips": {
+          "bodyLanguage": "Specific posture, gesture, or eye contact advice for video",
+          "tone": "How to modulate voice (confident but not arrogant, enthusiastic)",
+          "pacing": "When to pause for emphasis, how fast to speak",
+          "setup": "Camera angle, lighting, background recommendations"
+        }
       }
-    ]`;
+    ]
+
+    QUALITY STANDARDS:
+    • Questions must be realistic for ${level} ${jobTitle} interviews
+    • Industry terminology must be accurate for ${industry || 'the field'}
+    • Provide strategic, psychology-based insights
+    • Red flags should be specific and actionable
+    • Follow-up questions should feel natural
+    • Video tips should be concrete and helpful`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -65,7 +100,7 @@ serve(async (req) => {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Generate interview questions for this ${jobTitle} position.` }
         ],
-        max_completion_tokens: 2000,
+        max_completion_tokens: 3500,
       }),
     });
 

@@ -521,52 +521,157 @@ FORMATTING RULES:
         break
 
       case 'marketing-strategy':
-        prompt = `Create a detailed 3-phase marketing strategy for a 12-month period for:
+        prompt = `You are a senior growth marketer with 15+ years scaling startups from $0 to $10M+ ARR. You've led marketing at tech startups, e-commerce companies, and SaaS businesses. You understand customer acquisition, retention, and building sustainable growth engines.
+
+Create a COMPREHENSIVE, actionable marketing strategy worth $2,000+ of consulting value for:
+
 Business Type: ${data.businessType}
 Target Market: ${data.targetMarket}
 Budget: ${data.budget}
 Goals: ${data.goals}
-Current Stage: ${data.currentStage}
+Current Stage: ${data.currentStage || 'Early stage'}
 
-Structure your response with THREE phases covering the full 12 months:
+This strategy must include specific tactics, timelines, budget breakdowns, and success metrics.
 
-Phase 1: Foundation (Months 1-4)
-Timeline: Months 1-4
-Objectives:
-- [List 2-3 specific objectives]
+STRUCTURE - Provide ALL sections in detail:
 
-Tactics:
-- [List 3-4 specific marketing tactics]
+OVERVIEW
+• Strategic approach (2-3 sentences)
+• Primary marketing channels to focus on
+• Budget breakdown by channel (percentages)
+• Expected ROI timeline
 
-Budget Allocation: [percentage]
-Metrics to Track:
-- [List 2-3 key metrics]
+CHANNEL PLAYBOOKS
+For each of 5-7 prioritized channels, provide:
 
-Phase 2: Growth (Months 5-8)
-Timeline: Months 5-8
-Objectives:
-- [List 2-3 specific objectives]
+Channel Name (e.g., Content Marketing / SEO)
+• Monthly budget allocation: $X (X% of total)
+• Time commitment: X hours/week
+• Specific tactics:
+  - Tactic 1 with implementation details
+  - Tactic 2 with frequency and approach
+  - Tactic 3 with specific metrics
+• Required tools: [Tool name ($X/month), Tool 2]
+• Expected results:
+  - Month 3: X visitors/leads/customers
+  - Month 6: X visitors/leads/customers
+  - Month 12: X visitors/leads/customers
+• Success metrics:
+  - Metric 1 with target
+  - Metric 2 with target
 
-Tactics:
-- [List 3-4 specific marketing tactics]
+[Repeat for: Paid Ads, Social Media, Email Marketing, Partnerships, PR/Content, etc.]
 
-Budget Allocation: [percentage]
-Metrics to Track:
-- [List 2-3 key metrics]
+90-DAY LAUNCH PLAN
+Week 1:
+- Action 1
+- Action 2
+- Action 3
 
-Phase 3: Scale (Months 9-12)
-Timeline: Months 9-12
-Objectives:
-- [List 2-3 specific objectives]
+Week 2:
+- Action 1
+- Action 2
 
-Tactics:
-- [List 3-4 specific marketing tactics]
+Weeks 3-4:
+- Focus area 1
+- Focus area 2
 
-Budget Allocation: [percentage]
-Metrics to Track:
-- [List 2-3 key metrics]
+Month 2:
+- Key initiatives
+- Campaigns to launch
 
-Use plain text format without markdown. Be specific to the business type and goals provided.`
+Month 3:
+- Scaling activities
+- Optimization focus
+
+CONTENT CALENDAR (First 30 Days)
+Week 1:
+- Monday: [Content piece 1 - topic, channel]
+- Wednesday: [Content piece 2]
+- Friday: [Content piece 3]
+
+Week 2:
+[Same structure]
+
+[Continue for all 4 weeks]
+
+COMPETITOR ANALYSIS
+Competitor 1: [Name if known, or "Top competitor in X space"]
+• What they're doing well
+• Their marketing channels
+• Gaps we can exploit
+• Our differentiation
+
+[2-3 competitors total]
+
+GROWTH HACKING TACTICS
+• Low-cost tactic 1: [Specific creative approach]
+• Viral mechanism 2: [Referral or content strategy]
+• Partnership play 3: [Who to partner with and how]
+• Community hack 4: [Where to find customers cheaply]
+
+FUNNEL OPTIMIZATION
+• Top of funnel: [How to attract awareness]
+  - Target: X visitors/month
+  - Conversion to lead: X%
+• Middle of funnel: [How to nurture leads]
+  - Target: X leads/month
+  - Lead to customer rate: X%
+• Bottom of funnel: [How to close sales]
+  - Target: X customers/month
+  - Customer acquisition cost: $X
+
+METRICS & KPIs DASHBOARD
+Primary Metrics:
+• Monthly Recurring Revenue (MRR): Target $X by Month 12
+• Customer Acquisition Cost (CAC): Target $X
+• Lifetime Value (LTV): Target $X
+• LTV:CAC Ratio: Target 3:1 or higher
+• Monthly website traffic: X visitors
+• Conversion rate: X%
+• Customer churn rate: <X%
+
+A/B TESTING ROADMAP
+Month 1-2: Test [Element 1 - landing page headline]
+• Hypothesis: [What you expect]
+• Success metric: [What defines win]
+
+Month 3-4: Test [Element 2 - pricing page layout]
+[Same structure]
+
+[6-8 tests for Year 1]
+
+PARTNERSHIP STRATEGY
+• Partner type 1: [Who to target]
+  - Why: [Strategic fit]
+  - How to approach: [Outreach strategy]
+  - Expected outcome: [X referrals/month]
+
+• Partner type 2: [Influencers in X space]
+  [Same structure]
+
+BUDGET BREAKDOWN (Annual)
+• Content Marketing: $X (X%)
+• Paid Advertising: $X (X%)
+• Social Media Management: $X (X%)
+• Email Marketing Tools: $X (X%)
+• Marketing Tools & Software: $X (X%)
+• Events/Partnerships: $X (X%)
+• Contingency: $X (X%)
+Total Annual Marketing Budget: ${data.budget}
+
+REALISTIC TIMELINE
+• Months 1-3: Foundation building, slow growth
+• Months 4-6: Channel optimization, accelerating growth
+• Months 7-9: Scaling what works, pruning what doesn't
+• Months 10-12: Full-scale execution, hitting stride
+
+FORMATTING:
+• Use bullet points (•) for all lists
+• NO markdown symbols (###, **, *)
+• Specific numbers, costs, and metrics throughout
+• Actionable tactics, not vague strategies
+• Reference 2025 marketing trends and tools`
         break
 
       case 'pitch-deck':
@@ -764,7 +869,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
           { role: 'system', content: systemMessage },
           { role: 'user', content: prompt }
         ],
-        max_completion_tokens: type === 'business-plan' ? 8000 : type === 'business-foundation' ? 4000 : type === 'marketing-strategy' ? 4000 : 2000
+        max_completion_tokens: type === 'business-plan' ? 8000 : type === 'business-foundation' ? 4000 : type === 'marketing-strategy' ? 6000 : 2000
       })
     })
 
