@@ -107,6 +107,59 @@ Create a detailed lesson script for the first session including:
 - Estimated timing for each section
 ---LESSON_SCRIPT_END---
 
+---TOOLS_PLATFORMS_START---
+Create a comprehensive tools and platforms guide for delivering ${data.teachingFormat} content. Include:
+
+A. ONLINE PLATFORMS
+   • Webinar/Meeting Platforms: Compare 3-4 options (Zoom, Google Meet, Microsoft Teams, Webex) with pros/cons
+   • Course Hosting Platforms: 3-4 options (Teachable, Thinkific, Udemy, Kajabi, Podia) with features and pricing tiers
+   • Live Streaming Tools: StreamYard, Restream, OBS Studio (if applicable)
+   • Mark FREE vs PAID tiers clearly
+
+B. PHYSICAL EQUIPMENT (organized by budget)
+   STARTER SETUP (Under $100):
+   • Webcam: Logitech C920 or C922
+   • Microphone: Blue Yeti Nano, Fifine USB mic
+   • Lighting: Basic ring light (10-12")
+   • Alternative: Smartphone setup tips
+   
+   INTERMEDIATE SETUP ($100-$500):
+   • Camera: Better webcam or entry DSLR
+   • Audio: XLR microphone + audio interface
+   • Lighting: Professional ring light or softbox
+   • Accessories: Quality tripod, boom arm
+   
+   PROFESSIONAL SETUP ($500+):
+   • Camera: DSLR/mirrorless recommendations
+   • Audio: Shure SM7B or similar pro mics
+   • Lighting: 3-point lighting kit
+   • Advanced accessories
+
+C. SOFTWARE TOOLS
+   • Screen Recording: OBS Studio (FREE), Loom, Camtasia, ScreenFlow
+   • Video Editing: DaVinci Resolve (FREE), Adobe Premiere, Final Cut Pro
+   • Presentations: PowerPoint, Keynote, Canva, Prezi
+   • Digital Whiteboard: Miro, Mural, Jamboard, Explain Everything
+   • Graphics: Canva (FREE/PAID), Adobe Creative Suite
+   • Clearly mark FREE and PAID options
+
+D. SETUP TIPS & BEST PRACTICES
+   • Quick setup guide for beginners
+   • Audio quality: Room acoustics, mic placement, noise reduction
+   • Video quality: Lighting angles, camera positioning, background setup
+   • Lighting: Basic 3-point lighting explained
+   • Internet: Minimum requirements (upload/download speeds)
+   • Pre-launch checklist: Test everything before going live
+
+E. RECOMMENDED STARTER PACKAGE
+   • "Get Started Today" package based on budget
+   • Prioritize essentials vs nice-to-haves
+   • Total estimated cost
+   • Where to buy (online retailers)
+
+Tailor recommendations to the teaching format (${data.teachingFormat}) and target audience (${audience}).
+---TOOLS_PLATFORMS_END---
+
 Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`
 
       try {
@@ -123,7 +176,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
               { role: 'user', content: prompt }
             ],
             temperature: 0.8,
-            max_completion_tokens: 4000,
+            max_completion_tokens: 6000,
           })
         })
 
@@ -162,13 +215,15 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
         const courseOutline = extractSection(fullContent, '---COURSE_OUTLINE_START---', '---COURSE_OUTLINE_END---')
         const handouts = extractSection(fullContent, '---HANDOUTS_START---', '---HANDOUTS_END---')
         const lessonScript = extractSection(fullContent, '---LESSON_SCRIPT_START---', '---LESSON_SCRIPT_END---')
+        const toolsAndPlatforms = extractSection(fullContent, '---TOOLS_PLATFORMS_START---', '---TOOLS_PLATFORMS_END---')
 
         return new Response(
           JSON.stringify({
             webinarConcepts,
             courseOutline,
             handouts,
-            lessonScript
+            lessonScript,
+            toolsAndPlatforms
           }),
           { 
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },

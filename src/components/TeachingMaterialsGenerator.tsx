@@ -43,6 +43,7 @@ interface GeneratedMaterials {
   courseOutline: string;
   handouts: string;
   lessonScript: string;
+  toolsAndPlatforms: string;
 }
 
 const skillCategories = {
@@ -402,6 +403,12 @@ LESSON SCRIPTS & TALKING POINTS
 ═══════════════════════════════════════════════════════════
 
 ${generatedMaterials.lessonScript}
+
+═══════════════════════════════════════════════════════════
+TOOLS & SETUP GUIDE
+═══════════════════════════════════════════════════════════
+
+${generatedMaterials.toolsAndPlatforms}
     `.trim();
 
     const filename = `teaching-materials-${formData.fullName.replace(/\s+/g, "-").toLowerCase()}-${new Date().toISOString().split('T')[0]}.txt`;
@@ -785,11 +792,12 @@ ${generatedMaterials.lessonScript}
           </div>
 
           <Tabs defaultValue="concepts" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="concepts">Concepts</TabsTrigger>
               <TabsTrigger value="outline">Outline</TabsTrigger>
               <TabsTrigger value="handouts">Handouts</TabsTrigger>
               <TabsTrigger value="script">Script</TabsTrigger>
+              <TabsTrigger value="tools">Tools & Setup</TabsTrigger>
             </TabsList>
 
             <TabsContent value="concepts" className="space-y-4">
@@ -857,6 +865,23 @@ ${generatedMaterials.lessonScript}
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
                 <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.lessonScript}</pre>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="tools" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h4 className="text-lg font-semibold">Tools & Setup Guide</h4>
+                <Button
+                  onClick={() => downloadMaterial(generatedMaterials.toolsAndPlatforms, "tools-setup-guide.txt")}
+                  variant="outline"
+                  size="sm"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Download
+                </Button>
+              </div>
+              <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
+                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.toolsAndPlatforms}</pre>
               </div>
             </TabsContent>
           </Tabs>
