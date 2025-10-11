@@ -159,14 +159,14 @@ const Index = () => {
             {features.map((feature, index) => (
               <Link key={feature.title} to={feature.link}>
                 <Card 
-                  className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl group animate-fade-in h-full"
+                  className="bg-secondary/90 backdrop-blur-sm border-secondary hover:bg-secondary transition-all duration-300 hover:scale-105 hover:shadow-2xl group animate-fade-in h-full"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardHeader>
                     <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-white/80 text-base">
+                    <CardDescription className="text-white/90 text-base">
                       {feature.description}
                     </CardDescription>
                   </CardContent>
