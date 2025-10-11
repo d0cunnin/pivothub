@@ -190,11 +190,11 @@ export default function SideIncomeBlueprint() {
       </section>
 
       {/* Introduction Section */}
-      <section className="section-spacing-sm bg-gradient-section-1 relative overflow-hidden">
+      <section className="py-12 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
-          <div className="max-w-4xl mx-auto mb-16">
+          <div className="max-w-4xl mx-auto">
             <p className="text-lg md:text-xl text-foreground/80 leading-relaxed text-left">
-              Stop wasting time testing random side hustle ideas that don't fit your life. Your personalized Earn It Blueprint analyzes your unique situation—your skills, available time, financial goals, and risk tolerance—to recommend 3 specific income opportunities that are perfect for YOU. Whether you're a stay-at-home parent looking for flexible income, a 9-to-5er wanting extra cash without quitting your job, a retiree seeking meaningful work, or a student building financial independence, this blueprint provides a proven roadmap to launch your side income in 90 days. No generic advice. No trial and error. Just a clear, actionable plan tailored to your life, complete with templates, scripts, and week-by-week guidance. Most people who follow their blueprint earn their first dollar within 30 days and build sustainable $1,500+ monthly income streams within 4-6 months.
+              Stop wasting time testing random side hustle ideas that don't fit your life. Your personalized Earn It Blueprint analyzes your unique situation—your skills, available time, financial goals, and risk tolerance—to recommend 3 specific income opportunities that are perfect for YOU. Whether you're a stay-at-home parent looking for flexible income, a 9-to-5er wanting extra cash without quitting your job, a retiree seeking meaningful work, or a student building financial independence, this blueprint provides a proven roadmap to launch your side income in 90 days.
             </p>
           </div>
         </div>
