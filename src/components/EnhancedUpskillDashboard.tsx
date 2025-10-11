@@ -125,11 +125,11 @@ const skillCategories = [
   { name: 'Finance', count: 22, icon: '💰' }
 ];
 
-interface EnhancedReskillDashboardProps {
+interface EnhancedUpskillDashboardProps {
   onRecommendation?: (pathId: string) => void;
 }
 
-export const EnhancedReskillDashboard: React.FC<EnhancedReskillDashboardProps> = ({ 
+export const EnhancedUpskillDashboard: React.FC<EnhancedUpskillDashboardProps> = ({
   onRecommendation 
 }) => {
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
@@ -307,9 +307,9 @@ export const EnhancedReskillDashboard: React.FC<EnhancedReskillDashboardProps> =
     <div className="space-y-6">
       {/* Dashboard Header */}
       <div className="text-center space-y-4">
-        <h2 className="text-3xl font-bold">Your Reskilling Journey</h2>
+        <h2 className="text-3xl font-bold">Your Upskilling Journey</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Discover personalized learning paths based on your goals and current skills. 
+          Discover personalized learning paths based on your goals and current skills.
           Build expertise in high-demand areas and advance your career.
         </p>
       </div>

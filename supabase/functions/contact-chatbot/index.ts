@@ -11,7 +11,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ro
 1. Questions about subscription plans (Free Trial, Pro, Premium)
 2. Account management (cancellation, settings, deletion)
 3. Platform features:
-   - ReSkill: Career assessments and skills development courses
+   - Upskill: Career assessments and skills development courses
    - HireYourself: Business launch tools including business plans, pitch decks, legal docs
    - TeachIt: Teaching materials generator for educators
    - LaunchIt: Startup resources and strategy tools

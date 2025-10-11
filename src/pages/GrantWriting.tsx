@@ -142,7 +142,7 @@ const GRANT_CATEGORIES = {
     "K–12 Education": "School-based enrichment and academic improvement.",
     "Higher Education": "College access, scholarships, and institutional innovation.",
     "STEM & Career Readiness": "Workforce pipelines in science and tech fields.",
-    "Workforce & Apprenticeship": "Job training and reskilling programs.",
+    "Workforce & Apprenticeship": "Job training and upskilling programs.",
     "Digital Literacy": "Tech access and training in digital skills."
   },
   "Special Populations": {

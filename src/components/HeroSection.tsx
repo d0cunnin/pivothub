@@ -78,7 +78,7 @@ export const HeroSection = () => {
               className="text-sm px-4 py-3 flex-shrink-0"
               onClick={() => window.location.href = '/learn-a-skill'}
             >
-              Learn a Skill
+              Learn It
             </Button>
           </div>
         </div>

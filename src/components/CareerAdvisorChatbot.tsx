@@ -20,7 +20,7 @@ export const CareerAdvisorChatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and reskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
+      text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and upskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
       isBot: true,
       timestamp: new Date(),
     },
@@ -164,7 +164,7 @@ export const CareerAdvisorChatbot = () => {
     setMessages([
       {
         id: "1",
-        text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and reskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
+        text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and upskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
         isBot: true,
         timestamp: new Date(),
       },

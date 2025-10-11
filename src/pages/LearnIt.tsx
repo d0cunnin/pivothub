@@ -10,7 +10,7 @@ import { PersonalityAssessment } from "@/components/PersonalityAssessment";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { EnhancedInterviewCoach } from "@/components/EnhancedInterviewCoach";
 import { EnhancedResumeCoach } from "@/components/EnhancedResumeCoach";
-import { EnhancedReskillDashboard } from "@/components/EnhancedReskillDashboard";
+import { EnhancedUpskillDashboard } from "@/components/EnhancedUpskillDashboard";
 import { Award, BookOpen, Users, TrendingUp, Target, Star, CheckCircle, ArrowRight, Brain, Lightbulb, Zap, GraduationCap, FileText, Edit3, Briefcase, MessageSquare } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
@@ -75,10 +75,10 @@ const LearnIt = () => {
                   variant="outline" 
                   className="bg-white/10 text-white border-white hover:bg-white hover:text-primary flex items-center space-x-2 backdrop-blur-sm"
                   onClick={() => window.location.href = '/learn-a-skill'}
-                  aria-label="Go to Learn a Skill"
+                  aria-label="Go to Learn It"
                 >
                   <Award className="h-5 w-5" />
-                  <span>Learn a Skill</span>
+                  <span>Learn It</span>
                 </Button>
               </div>
             </div>
@@ -192,13 +192,13 @@ const LearnIt = () => {
         </div>
       </section>
 
-      {/* Learn a Skill Section */}
+      {/* Learn It Section */}
       <section className="py-8 bg-gradient-section-1 relative overflow-hidden">
         <div className="page-container">
           <div className="text-center mb-8">
             <div className="inline-block p-4 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm border border-white/20">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Learn a New Skill
+                Learn It
               </h2>
             </div>
           </div>

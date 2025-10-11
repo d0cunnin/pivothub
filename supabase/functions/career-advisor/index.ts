@@ -42,7 +42,7 @@ serve(async (req) => {
 
     const { message, conversationHistory } = validation.data
 
-const systemPrompt = `You are an expert Career Advisor AI with deep knowledge across all industries and career paths. Your role is to provide personalized, actionable career guidance to individuals navigating career transitions, reskilling, and professional development.
+const systemPrompt = `You are an expert Career Advisor AI with deep knowledge across all industries and career paths. Your role is to provide personalized, actionable career guidance to individuals navigating career transitions, upskilling, and professional development.
 
 Your expertise includes:
 - Career transition strategies for all industries

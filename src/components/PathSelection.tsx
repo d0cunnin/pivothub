@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import reskillIcon from "@/assets/reskill-person.jpg";
+import upskillIcon from "@/assets/reskill-person.jpg";
 import hireyourselfIcon from "@/assets/hireyourself-person.jpg";
 import jobprepIcon from "@/assets/jobprep-person.jpg";
 
@@ -80,7 +80,7 @@ export const PathSelection = () => {
             <div className="relative p-8 h-full flex flex-col">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-blue-500/10 mb-4 border border-blue-500/20 w-fit">
-                  <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">RESKILL</span>
+                  <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-wide">UPSKILL</span>
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">Relaunch Your Career</h3>
                 <p className="text-muted-foreground">Get Ready for Next Opportunity</p>
@@ -124,21 +124,21 @@ export const PathSelection = () => {
             </div>
           </Card>
 
-          {/* Learn a New Skill */}
+          {/* Learn It */}
           <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-teal-500 h-full">
             <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-emerald-600/5 group-hover:from-teal-500/10 group-hover:to-emerald-600/20 transition-all duration-500"></div>
             
             <div className="relative p-8 h-full flex flex-col">
               <div className="mb-6">
                 <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-teal-500/10 mb-4 border border-teal-500/20 w-fit">
-                  <span className="text-sm font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN</span>
+                  <span className="text-sm font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN IT</span>
                 </div>
-                <h3 className="text-2xl font-bold text-foreground">Learn a New Skill</h3>
+                <h3 className="text-2xl font-bold text-foreground">Learn It</h3>
                 <p className="text-muted-foreground">Build Digital Skills</p>
               </div>
 
               <img 
-                src={reskillIcon} 
+                src={upskillIcon} 
                 alt="Skill Learning" 
                 className="w-64 h-40 object-cover rounded-lg mb-6 mx-auto group-hover:scale-105 transition-transform duration-500"
               />

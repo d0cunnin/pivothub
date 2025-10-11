@@ -83,7 +83,7 @@ export const Header = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/learn-a-skill" className="flex w-full cursor-pointer">
-                      Learn a Skill
+                      Learn It
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -257,7 +257,7 @@ export const Header = () => {
                     className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/learn-a-skill' ? 'text-primary font-medium' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Learn a Skill
+                    Learn It
                   </Link>
                 </div>
               </div>
