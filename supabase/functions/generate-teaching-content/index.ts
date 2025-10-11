@@ -160,6 +160,78 @@ E. RECOMMENDED STARTER PACKAGE
 Tailor recommendations to the teaching format (${data.teachingFormat}) and target audience (${audience}).
 ---TOOLS_PLATFORMS_END---
 
+---MARKETING_PLAN_START---
+Create a comprehensive marketing plan to promote and sell the ${data.teachingFormat}. Include:
+
+A. TARGET AUDIENCE ANALYSIS
+   • Demographics: Age, profession, income level
+   • Pain points: Problems they need solved
+   • Where they hang out: Platforms, communities, forums
+   • What motivates them: Goals and desired outcomes
+
+B. UNIQUE VALUE PROPOSITION
+   • What makes this course/webinar different
+   • Key benefits (not just features)
+   • Transformation promised to students
+   • Social proof opportunities (testimonials, credentials)
+
+C. MARKETING CHANNELS (prioritized by effectiveness)
+   PRE-LAUNCH (Weeks 1-4):
+   • Email list building: Lead magnet ideas, landing page strategy
+   • Social media: Which platforms, content calendar (3-5 posts/week)
+   • Content marketing: Blog posts, YouTube videos, podcast appearances
+   • Partnerships: Collaborations, guest appearances, affiliate partnerships
+   
+   LAUNCH PHASE (Week of launch):
+   • Launch sequence: Email campaign timeline
+   • Social media blitz: Daily content plan
+   • Live events: Webinars, Q&A sessions, free workshops
+   • Paid advertising: Budget allocation if applicable
+   
+   POST-LAUNCH (Ongoing):
+   • Evergreen funnel: Automated email sequence
+   • Student testimonials: Collection and showcase strategy
+   • Referral program: Incentives for students to share
+   • Community building: Group, forum, or membership
+
+D. CONTENT STRATEGY
+   • 10 content ideas to attract ideal students
+   • Content formats: Videos, posts, emails, live streams
+   • SEO keywords to target (if applicable)
+   • Content calendar outline for first month
+
+E. PRICING STRATEGY
+   • Recommended price point based on value and audience
+   • Early bird discount: Amount and duration
+   • Payment plans: Options to increase accessibility
+   • Upsells/add-ons: Bonus materials, coaching, community access
+
+F. LAUNCH TIMELINE (90-day plan)
+   Week 1-4 (Pre-launch):
+   • Specific weekly goals and tasks
+   
+   Week 5-8 (Build momentum):
+   • Content creation and audience engagement
+   
+   Week 9-12 (Launch and optimize):
+   • Launch activities and post-launch follow-up
+
+G. METRICS TO TRACK
+   • Website/landing page visitors
+   • Email list growth
+   • Social media engagement rates
+   • Conversion rates
+   • Revenue targets
+
+H. QUICK-START ACTION PLAN
+   • 5 things to do THIS WEEK to start marketing
+   • Free vs paid marketing tactics
+   • Minimum budget needed (if any)
+   • Expected timeline to first sale
+
+Make the plan practical, budget-conscious, and focused on organic/low-cost strategies. Include specific action items and realistic timelines.
+---MARKETING_PLAN_END---
+
 Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`
 
       try {
@@ -176,7 +248,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
               { role: 'user', content: prompt }
             ],
             temperature: 0.8,
-            max_completion_tokens: 6000,
+            max_completion_tokens: 8000,
           })
         })
 
@@ -216,6 +288,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
         const handouts = extractSection(fullContent, '---HANDOUTS_START---', '---HANDOUTS_END---')
         const lessonScript = extractSection(fullContent, '---LESSON_SCRIPT_START---', '---LESSON_SCRIPT_END---')
         const toolsAndPlatforms = extractSection(fullContent, '---TOOLS_PLATFORMS_START---', '---TOOLS_PLATFORMS_END---')
+        const marketingPlan = extractSection(fullContent, '---MARKETING_PLAN_START---', '---MARKETING_PLAN_END---')
 
         return new Response(
           JSON.stringify({
@@ -223,7 +296,8 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
             courseOutline,
             handouts,
             lessonScript,
-            toolsAndPlatforms
+            toolsAndPlatforms,
+            marketingPlan
           }),
           { 
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },

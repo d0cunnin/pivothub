@@ -44,6 +44,7 @@ interface GeneratedMaterials {
   handouts: string;
   lessonScript: string;
   toolsAndPlatforms: string;
+  marketingPlan: string;
 }
 
 const skillCategories = {
@@ -409,6 +410,12 @@ TOOLS & SETUP GUIDE
 ═══════════════════════════════════════════════════════════
 
 ${generatedMaterials.toolsAndPlatforms}
+
+═══════════════════════════════════════════════════════════
+MARKETING PLAN
+═══════════════════════════════════════════════════════════
+
+${generatedMaterials.marketingPlan}
     `.trim();
 
     const filename = `teaching-materials-${formData.fullName.replace(/\s+/g, "-").toLowerCase()}-${new Date().toISOString().split('T')[0]}.txt`;
@@ -792,12 +799,13 @@ ${generatedMaterials.toolsAndPlatforms}
           </div>
 
           <Tabs defaultValue="concepts" className="w-full">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="concepts">Concepts</TabsTrigger>
               <TabsTrigger value="outline">Outline</TabsTrigger>
               <TabsTrigger value="handouts">Handouts</TabsTrigger>
               <TabsTrigger value="script">Script</TabsTrigger>
-              <TabsTrigger value="tools">Tools & Setup</TabsTrigger>
+              <TabsTrigger value="tools">Tools</TabsTrigger>
+              <TabsTrigger value="marketing">Marketing</TabsTrigger>
             </TabsList>
 
             <TabsContent value="concepts" className="space-y-4">
@@ -882,6 +890,23 @@ ${generatedMaterials.toolsAndPlatforms}
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
                 <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.toolsAndPlatforms}</pre>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="marketing" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h4 className="text-lg font-semibold">Marketing Plan</h4>
+                <Button
+                  onClick={() => downloadMaterial(generatedMaterials.marketingPlan, "marketing-plan.txt")}
+                  variant="outline"
+                  size="sm"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Download
+                </Button>
+              </div>
+              <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
+                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.marketingPlan}</pre>
               </div>
             </TabsContent>
           </Tabs>
