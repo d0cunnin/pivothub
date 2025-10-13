@@ -137,7 +137,6 @@ serve(async (req) => {
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_end: subscriptionEnd,
-      // If user has active subscription, trial should be inactive
       is_trial_active: hasActiveSub ? false : (subscriber?.is_trial_active || false),
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id' });
@@ -160,6 +159,7 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
+      subscription_package: subscriber?.subscription_package || null,
       subscription_end: subscriptionEnd,
       is_trial_active: hasActiveSub ? false : (subscriber?.is_trial_active || false),
       trial_end: subscriber?.trial_end || null,

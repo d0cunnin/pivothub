@@ -76,112 +76,74 @@ const Pricing = () => {
       name: "Explore Mode",
       price: "Free",
       period: "forever",
-      description: "Try everything free for 2 days, then keep limited access forever",
+      description: "Try 1 AI tool per month with limited access",
       features: [
-        "Full access to all tools (2-day trial)",
-        "Unlimited AI generations (during trial)",
-        "All premium features (during trial)",
-        "1 AI tool use per month (after trial)",
+        "1 AI tool use per month",
+        "Access to all tool categories",
         "Community access",
         "Email support"
       ],
       tier: "free",
+      package: null,
       gradient: "from-gray-500/10 to-gray-600/10",
       isFree: true
     },
     {
-      name: "Job Prep Path",
-      price: "$12",
+      name: "Assess It + Prep It + Learn It Package",
+      price: "$18",
       period: "month",
-      description: "Master the job search and land your dream role",
+      description: "Master your career journey with assessment, prep, and learning tools",
       features: [
-        "Career Assessment",
-        "Skills Assessment",
-        "Personality Assessment",
-        "Interview Coach",
-        "Interview Questions Generator",
-        "Resume & Cover Letter Coach"
+        "50 AI requests per month",
+        "Career, Skills & Personality Assessments",
+        "Interview Coach & Questions Generator",
+        "Resume & Cover Letter Coach",
+        "Course access and learning tools",
+        "Save unlimited results",
+        "Priority email support"
       ],
-      tier: "job-prep",
+      tier: "assess-prep-learn",
+      package: "assess_prep_learn",
       gradient: "from-blue-500/10 to-cyan-600/10",
       accent: "border-l-4 border-blue-500"
     },
     {
-      name: "Hire Yourself Path",
-      price: "$15",
+      name: "Build It + Teach It + Launch It Package",
+      price: "$18",
       period: "month",
-      description: "Launch and grow your own business",
+      description: "Build, teach, and launch your ventures and creative ideas",
       features: [
-        "Business Idea Generator",
-        "Name Checker",
-        "Logo Generator",
-        "Biography Generator",
-        "Legal Docs Generator",
-        "Startup Checklist",
-        "Social Media Generator",
-        "Marketing Strategy Generator",
-        "Business Mentor Chatbot",
-        "Business Plan Generator",
-        "Pitch Deck Generator",
-        "Business Resource Finder",
-        "Business Foundation Builder"
+        "50 AI requests per month",
+        "Business Idea Generator & Planning",
+        "Logo, Name & Branding Tools",
+        "Teaching Materials Generator",
+        "Launch Strategy Generator",
+        "Social Media & Marketing Tools",
+        "Save unlimited results",
+        "Priority email support"
       ],
-      tier: "hire-yourself",
+      tier: "build-teach-launch",
+      package: "build_teach_launch",
       gradient: "from-emerald-500/10 to-green-600/10",
       accent: "border-l-4 border-emerald-500"
     },
     {
-      name: "Launch It Path",
+      name: "Fund It Package",
       price: "$15",
       period: "month",
-      description: "Turn your creative idea into reality",
+      description: "Secure funding with grant writing and resource tools",
       features: [
-        "Comprehensive Launch Strategy Generator",
-        "Idea validation & market research",
-        "Step-by-step launch roadmap",
-        "Branding & marketing strategy",
-        "Monetization planning",
-        "Social media & content plan",
-        "Funding opportunity finder",
-        "Tech setup guidance"
-      ],
-      tier: "launch-it",
-      gradient: "from-cyan-500/10 to-blue-600/10",
-      accent: "border-l-4 border-cyan-500"
-    },
-    {
-      name: "Teach It Path",
-      price: "$15",
-      period: "month",
-      description: "Share your expertise through courses & webinars",
-      features: [
-        "Teaching Materials Generator",
-        "Webinar concept development",
-        "Course outline creation",
-        "Handout & resource generator",
-        "Script & presentation builder",
-        "Student engagement tools",
-        "Assessment creation"
-      ],
-      tier: "teach-it",
-      gradient: "from-green-500/10 to-lime-600/10",
-      accent: "border-l-4 border-green-500"
-    },
-    {
-      name: "Fund It Path",
-      price: "$15",
-      period: "month",
-      description: "Secure funding for your mission",
-      features: [
+        "50 AI requests per month",
         "Grant Narrative Generator",
         "Grant Finder & Search",
         "Local Resource Finder",
         "Application guidance",
         "Budget templates",
-        "Impact statement builder",
-        "Eligibility checker"
+        "Save unlimited results",
+        "Priority email support"
       ],
-      tier: "grant-writing",
+      tier: "fund-it",
+      package: "fund_it",
       gradient: "from-teal-500/10 to-cyan-600/10",
       accent: "border-l-4 border-teal-500"
     },
@@ -189,20 +151,24 @@ const Pricing = () => {
       name: "All Access Pass",
       price: "$29",
       period: "month",
-      description: "Get access to every tool, feature, and path with generous usage limits",
+      description: "Get access to every tool with generous usage limits",
       features: [
-        "Everything from all 5 paths",
-        "Generous AI usage limits",
+        "50 AI requests per month",
+        "Everything from all packages",
+        "All assessment & career tools",
+        "All business & creative tools",
+        "All funding & grant tools",
         "Priority feature access",
         "Save unlimited results",
         "Early access to new tools",
         "Priority email support"
       ],
       tier: "all-access",
+      package: "all_access",
       gradient: "from-blue-500/10 to-cyan-600/10",
       accent: "border-l-4 border-blue-500",
       isAllAccess: true,
-      savings: "Save up to $46/month compared to individual paths"
+      savings: "Save $22/month compared to individual packages"
     }
   ];
   
@@ -250,12 +216,12 @@ const Pricing = () => {
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-6">Select Your Plan</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-4">
-              Choose the plan that matches your goals. Start free or unlock full access with our premium options.
+              Choose the plan that matches your goals. Start free or unlock full access with our premium packages.
             </p>
             <p className="text-base text-muted-foreground max-w-4xl mx-auto">
-              <strong>Explore Mode</strong> gives you a 2-day free trial with full access, then 1 tool use per month forever. 
-              <strong> Path-based plans</strong> ($12-$15/month) unlock full access to specialized toolkits with generous usage limits. 
-              The <strong>All Access Pass</strong> ($29/month) includes everything from all paths with the highest usage limits, priority support, and early feature access.
+              <strong>Explore Mode</strong> gives you 1 free AI tool use per month. 
+              <strong> Package plans</strong> ($15-$18/month) unlock 50 AI requests per month across specialized toolkits. 
+              The <strong>All Access Pass</strong> ($29/month) includes everything from all packages with 50 requests/month, priority support, and early feature access.
             </p>
           </div>
           
@@ -417,9 +383,23 @@ const Pricing = () => {
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What happens after my free trial?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What are AI requests?</h3>
                   <p className="text-muted-foreground text-sm">
-                    After 2 days, you'll automatically be on the free Explore Mode with 1 tool use per month. Upgrade anytime to unlock unlimited access.
+                    Each time you use an AI-powered tool (like generating a resume, business plan, or assessment), it counts as 1 AI request. All paid plans include 50 requests per month.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">What happens if I run out of requests?</h3>
+                  <p className="text-muted-foreground text-sm">
+                    You can purchase extra credit packs (10, 25, or 50 requests) to continue using tools within your current billing month, or wait until your monthly requests reset.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">What happens after the free trial?</h3>
+                  <p className="text-muted-foreground text-sm">
+                    After your trial, you'll be on the free Explore Mode with 1 tool use per month. Upgrade anytime to unlock 50 monthly AI requests.
                   </p>
                 </div>
                 

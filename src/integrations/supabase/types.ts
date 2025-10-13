@@ -330,11 +330,18 @@ export type Database = {
       }
       subscribers_public: {
         Row: {
+          abuse_flags: number | null
+          account_status: string | null
+          ai_request_limit: number | null
           created_at: string
+          extra_credits: number | null
           id: string
           is_trial_active: boolean
+          last_request_reset: string | null
+          monthly_ai_requests: number | null
           subscribed: boolean
           subscription_end: string | null
+          subscription_package: string | null
           subscription_tier: string | null
           trial_end: string | null
           trial_start: string | null
@@ -342,11 +349,18 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          abuse_flags?: number | null
+          account_status?: string | null
+          ai_request_limit?: number | null
           created_at?: string
+          extra_credits?: number | null
           id?: string
           is_trial_active?: boolean
+          last_request_reset?: string | null
+          monthly_ai_requests?: number | null
           subscribed?: boolean
           subscription_end?: string | null
+          subscription_package?: string | null
           subscription_tier?: string | null
           trial_end?: string | null
           trial_start?: string | null
@@ -354,11 +368,18 @@ export type Database = {
           user_id: string
         }
         Update: {
+          abuse_flags?: number | null
+          account_status?: string | null
+          ai_request_limit?: number | null
           created_at?: string
+          extra_credits?: number | null
           id?: string
           is_trial_active?: boolean
+          last_request_reset?: string | null
+          monthly_ai_requests?: number | null
           subscribed?: boolean
           subscription_end?: string | null
+          subscription_package?: string | null
           subscription_tier?: string | null
           trial_end?: string | null
           trial_start?: string | null
@@ -560,6 +581,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_and_increment_ai_usage: {
+        Args: { p_user_id: string }
+        Returns: Json
+      }
       cleanup_expired_contexts: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -570,6 +595,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      reset_monthly_ai_requests: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
     }
     Enums: {

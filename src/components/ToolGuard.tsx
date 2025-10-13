@@ -23,7 +23,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   onUse,
   toolName = "this tool"
 }) => {
-  const { toolUsageCount, canUseTools, needsSignup, needsSubscription, incrementUsage } = useUsage();
+  const { remainingRequests, accountStatus, checkAndIncrementUsage } = useUsage();
   const { user, isTrialActive, trialDaysRemaining, subscribed, isAdmin } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState('');
@@ -41,25 +41,50 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
     setFormStartTime(Date.now());
   }, [showAuthModal]);
 
-  const handleToolUse = () => {
+  const handleToolUse = async () => {
     // Admins bypass all restrictions
     if (isAdmin) {
       onUse?.();
       return;
     }
 
-    if (canUseTools || user) {
-      incrementUsage();
-      onUse?.();
+    // Check if account is suspended
+    if (accountStatus === 'suspended') {
+      toast({
+        title: "Account Suspended",
+        description: "Your account has been suspended. Please contact support.",
+        variant: "destructive",
+      });
       return;
     }
 
-    if (needsSignup) {
+    // If not logged in, show signup modal
+    if (!user) {
       setShowAuthModal(true);
       return;
     }
 
-    incrementUsage();
+    // Check and increment usage
+    const result = await checkAndIncrementUsage();
+    
+    if (!result.canUse) {
+      if (result.reason === 'limit_exceeded') {
+        toast({
+          title: "Monthly Limit Reached",
+          description: "You've reached your monthly AI request limit. Purchase extra credits or upgrade your plan.",
+          variant: "destructive",
+        });
+      } else if (result.reason === 'free_limit_exceeded') {
+        toast({
+          title: "Free Limit Reached",
+          description: "You've used your 1 free tool for this month. Subscribe to continue using PivotHub tools.",
+          variant: "destructive",
+        });
+      }
+      return;
+    }
+
+    // Usage incremented successfully, execute the tool
     onUse?.();
   };
 
@@ -177,8 +202,8 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
 
   // Show usage warning if approaching limit (but not for admins)
   const showTrialBanner = !isAdmin && user && isTrialActive;
-  const showUsageWarning = !isAdmin && !user && toolUsageCount === 1;
-  const showFreeLimitWarning = !isAdmin && user && !subscribed && !isTrialActive && toolUsageCount >= 3;
+  const showUsageWarning = !isAdmin && remainingRequests <= 10 && remainingRequests > 0;
+  const showLimitReached = !isAdmin && remainingRequests === 0;
 
   return (
     <div>
@@ -200,19 +225,19 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
           <div className="flex items-center space-x-2 text-yellow-600">
             <AlertTriangle className="h-4 w-4" />
             <span className="text-sm font-medium">
-              1 use remaining before signup required
+              {remainingRequests} request{remainingRequests !== 1 ? 's' : ''} remaining this month
             </span>
           </div>
         </div>
       )}
 
-      {/* Free User Limit Warning */}
-      {showFreeLimitWarning && (
-        <div className="mb-4 p-4 bg-accent/10 border border-accent/20 rounded-lg">
-          <div className="flex items-center gap-2 text-accent">
+      {/* Limit Reached Warning */}
+      {showLimitReached && user && (
+        <div className="mb-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+          <div className="flex items-center gap-2 text-red-600">
             <AlertTriangle className="w-4 h-4" />
             <span className="text-sm font-medium">
-              {5 - toolUsageCount} use{5 - toolUsageCount !== 1 ? 's' : ''} remaining this month - Upgrade for unlimited access
+              Monthly limit reached - Purchase extra credits or upgrade your plan
             </span>
           </div>
         </div>
@@ -228,13 +253,10 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">
-              {needsSubscription ? "Upgrade Your Plan" : "Start Your Free Trial"}
+              Start Your Free Trial
             </DialogTitle>
             <DialogDescription className="text-center">
-              {needsSubscription 
-                ? "You've reached the free usage limit. Upgrade to continue accessing our tools."
-                : "Create your free account and get 3 days of unlimited access to all PivotHub tools."
-              }
+              Create your account to access all PivotHub tools with a 2-day free trial
             </DialogDescription>
           </DialogHeader>
           

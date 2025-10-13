@@ -9,6 +9,7 @@ interface AuthContextType {
   loading: boolean;
   subscribed: boolean;
   subscriptionTier: string | null;
+  subscriptionPackage: string | null;
   subscriptionEnd: string | null;
   isTrialActive: boolean;
   trialEnd: string | null;
@@ -37,6 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [subscribed, setSubscribed] = useState(false);
   const [subscriptionTier, setSubscriptionTier] = useState<string | null>(null);
+  const [subscriptionPackage, setSubscriptionPackage] = useState<string | null>(null);
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
   const [isTrialActive, setIsTrialActive] = useState<boolean>(false);
   const [trialEnd, setTrialEnd] = useState<string | null>(null);
@@ -62,6 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data) {
         setSubscribed(data.subscribed || false);
         setSubscriptionTier(data.subscription_tier || null);
+        setSubscriptionPackage(data.subscription_package || null);
         setSubscriptionEnd(data.subscription_end || null);
         setIsTrialActive(data.is_trial_active || false);
         setTrialEnd(data.trial_end || null);
@@ -190,6 +193,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
     subscribed,
     subscriptionTier,
+    subscriptionPackage,
     subscriptionEnd,
     isTrialActive,
     trialEnd,

@@ -77,3 +77,6 @@ verify_jwt = false
 
 [functions.contact-chatbot]
 verify_jwt = false
+
+[functions.purchase-extra-credits]
+verify_jwt = true

@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface UsageContextType {
-  toolUsageCount: number;
+  monthlyRequests: number;
+  remainingRequests: number;
   canUseTools: boolean;
-  needsSignup: boolean;
-  needsSubscription: boolean;
-  incrementUsage: () => void;
-  resetUsage: () => void;
+  accountStatus: 'active' | 'suspended' | 'warning';
+  checkAndIncrementUsage: () => Promise<{ canUse: boolean; reason?: string }>;
+  refreshUsage: () => Promise<void>;
 }
 
 const UsageContext = createContext<UsageContextType | undefined>(undefined);
@@ -25,44 +26,82 @@ interface UsageProviderProps {
 }
 
 export const UsageProvider: React.FC<UsageProviderProps> = ({ children }) => {
-  const [toolUsageCount, setToolUsageCount] = useState(0);
-  const { user, subscribed, isTrialActive } = useAuth();
+  const [monthlyRequests, setMonthlyRequests] = useState(0);
+  const [remainingRequests, setRemainingRequests] = useState(0);
+  const [accountStatus, setAccountStatus] = useState<'active' | 'suspended' | 'warning'>('active');
+  const { user } = useAuth();
+
+  const refreshUsage = async () => {
+    if (!user) {
+      setMonthlyRequests(0);
+      setRemainingRequests(0);
+      setAccountStatus('active');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('subscribers_public')
+        .select('monthly_ai_requests, ai_request_limit, extra_credits, account_status')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        const total = (data.ai_request_limit || 50) + (data.extra_credits || 0);
+        setMonthlyRequests(data.monthly_ai_requests || 0);
+        setRemainingRequests(Math.max(0, total - (data.monthly_ai_requests || 0)));
+        const status = data.account_status as 'active' | 'suspended' | 'warning' | null;
+        setAccountStatus(status || 'active');
+      }
+    } catch (error) {
+      console.error('Error fetching usage:', error);
+    }
+  };
 
   useEffect(() => {
-    // Load usage count from localStorage
-    const savedUsage = localStorage.getItem('tool_usage_count');
-    if (savedUsage) {
-      setToolUsageCount(parseInt(savedUsage, 10));
+    if (user) {
+      refreshUsage();
     }
-  }, []);
+  }, [user]);
 
-  const incrementUsage = () => {
-    const newCount = toolUsageCount + 1;
-    setToolUsageCount(newCount);
-    localStorage.setItem('tool_usage_count', newCount.toString());
+  const checkAndIncrementUsage = async (): Promise<{ canUse: boolean; reason?: string }> => {
+    if (!user) {
+      return { canUse: false, reason: 'not_logged_in' };
+    }
+
+    try {
+      const { data, error } = await supabase.rpc('check_and_increment_ai_usage', {
+        p_user_id: user.id
+      });
+
+      if (error) throw error;
+
+      const result = data as { can_use: boolean; reason: string; remaining: number; total_used: number };
+      
+      setMonthlyRequests(result.total_used);
+      setRemainingRequests(result.remaining);
+
+      return {
+        canUse: result.can_use,
+        reason: result.reason || undefined
+      };
+    } catch (error) {
+      console.error('Error checking usage:', error);
+      return { canUse: false, reason: 'error' };
+    }
   };
 
-  const resetUsage = () => {
-    setToolUsageCount(0);
-    localStorage.removeItem('tool_usage_count');
-  };
-
-  // Determine usage limits based on user status
-  const needsSignup = !user && toolUsageCount >= 2;
-  
-  // If user has active subscription or trial, no limitations
-  // If user is logged in but no trial/subscription, they get 5 tools per month
-  const needsSubscription = user && !subscribed && !isTrialActive && toolUsageCount >= 5;
-
-  const canUseTools = !needsSignup && !needsSubscription;
+  const canUseTools = accountStatus === 'active' && remainingRequests > 0;
 
   const value = {
-    toolUsageCount,
+    monthlyRequests,
+    remainingRequests,
     canUseTools,
-    needsSignup,
-    needsSubscription,
-    incrementUsage,
-    resetUsage
+    accountStatus,
+    checkAndIncrementUsage,
+    refreshUsage
   };
 
   return (
