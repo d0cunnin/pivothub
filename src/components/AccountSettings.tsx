@@ -9,12 +9,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { CreditCard, Calendar, AlertCircle } from "lucide-react";
+import { useUsage } from "@/contexts/UsageContext";
+import { getPackageDisplayName } from "@/utils/packageAccess";
+import { CreditCard, Calendar, AlertCircle, Zap } from "lucide-react";
 
 export const AccountSettings = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { subscribed, subscriptionTier, subscriptionEnd, isTrialActive, trialDaysRemaining, trialEnd } = useAuth();
+  const { subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd, isTrialActive, trialDaysRemaining, trialEnd } = useAuth();
+  const { monthlyRequests, remainingRequests, refreshUsage } = useUsage();
   const [isLoading, setIsLoading] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [deleteReason, setDeleteReason] = useState("");
@@ -91,9 +94,103 @@ export const AccountSettings = () => {
     }
   };
 
+  const handlePurchaseCredits = async (credits: number) => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase.functions.invoke('purchase-extra-credits', {
+        body: { credits }
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Error purchasing credits:', error);
+      toast({
+        title: "Error",
+        description: "Failed to initiate purchase",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6 max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold">Account Settings</h1>
+      
+      {/* Usage & Credits Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Zap className="h-5 w-5" />
+            Usage & Credits
+          </CardTitle>
+          <CardDescription>
+            Track your AI tool usage and manage extra credits
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50">
+            <div className="flex-1">
+              <div className="font-semibold text-2xl">
+                {monthlyRequests} <span className="text-sm font-normal text-muted-foreground">used this month</span>
+              </div>
+              <div className="text-sm text-muted-foreground mt-1">
+                {remainingRequests} requests remaining
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">Purchase Extra Credits</Label>
+            <div className="text-sm text-muted-foreground mb-3">
+              Need more AI requests this month? Purchase extra credits that roll over.
+            </div>
+            <div className="grid gap-3">
+              <Button
+                variant="outline"
+                onClick={() => handlePurchaseCredits(10)}
+                disabled={isLoading}
+                className="justify-between h-auto py-4"
+              >
+                <div className="text-left">
+                  <div className="font-semibold">10 Extra Credits</div>
+                  <div className="text-xs text-muted-foreground">Great for occasional use</div>
+                </div>
+                <span className="font-bold text-lg">$5.00</span>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handlePurchaseCredits(25)}
+                disabled={isLoading}
+                className="justify-between h-auto py-4"
+              >
+                <div className="text-left">
+                  <div className="font-semibold">25 Extra Credits</div>
+                  <div className="text-xs text-muted-foreground">Best value</div>
+                </div>
+                <span className="font-bold text-lg">$10.00</span>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => handlePurchaseCredits(50)}
+                disabled={isLoading}
+                className="justify-between h-auto py-4"
+              >
+                <div className="text-left">
+                  <div className="font-semibold">50 Extra Credits</div>
+                  <div className="text-xs text-muted-foreground">For power users</div>
+                </div>
+                <span className="font-bold text-lg">$18.00</span>
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       
       {/* Subscription Details Section */}
       <Card>
@@ -113,7 +210,7 @@ export const AccountSettings = () => {
                 <CreditCard className="h-5 w-5 mt-0.5 text-primary" />
                 <div className="flex-1">
                   <div className="font-semibold text-lg capitalize">
-                    {subscriptionTier || 'Pro'} Plan
+                    {getPackageDisplayName(subscriptionPackage)}
                   </div>
                   {subscriptionEnd && (
                     <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">

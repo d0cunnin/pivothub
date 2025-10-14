@@ -49,13 +49,11 @@ serve(async (req) => {
 
     // Define pricing based on tier
     const pricing = {
-      "job-prep": { amount: 1200, name: "Job Prep Path" },     // $12.00
-      "hire-yourself": { amount: 1500, name: "Hire Yourself Path" },        // $15.00
-      "launch-it": { amount: 1500, name: "Launch It Path" },        // $15.00
-      "teach-it": { amount: 1500, name: "Teach It Path" },        // $15.00
-      "grant-writing": { amount: 1500, name: "Grant Writing Path" },        // $15.00
-      "all-access": { amount: 2900, name: "All Access Pass" },        // $29.00
-      "side-income-blueprint": { amount: 2700, name: "Side Income Blueprint" }     // $27.00
+      "assess-prep-learn": { amount: 1800, name: "Assess It + Prep It + Learn It", package: "assess-prep-learn" },
+      "build-teach-launch": { amount: 1800, name: "Build It + Teach It + Launch It", package: "build-teach-launch" },
+      "fund-it": { amount: 1500, name: "Fund It", package: "fund-it" },
+      "all-access": { amount: 2900, name: "All Access Pass", package: "all-access" },
+      "side-income-blueprint": { amount: 2700, name: "Side Income Blueprint", package: "side-income-blueprint" }
     };
 
     const selectedPlan = pricing[tier as keyof typeof pricing];
@@ -85,7 +83,9 @@ serve(async (req) => {
       mode: isOneTimePayment ? "payment" : "subscription",
       success_url: successUrl,
       cancel_url: `${req.headers.get("origin")}/pricing?canceled=true`,
-      metadata: assessmentId ? { assessmentId, userId: user.id } : { tier },
+      metadata: assessmentId 
+        ? { assessmentId, userId: user.id } 
+        : { tier, subscription_package: selectedPlan.package || tier, userId: user.id },
     });
 
     logStep("Checkout session created", { sessionId: session.id });
