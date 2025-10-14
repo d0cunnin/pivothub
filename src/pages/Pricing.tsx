@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Coins, Zap } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +28,43 @@ const Pricing = () => {
   });
   
   const [selectedPathIndex, setSelectedPathIndex] = useState(4); // Default to All Access Pass
+  const [purchasingCredits, setPurchasingCredits] = useState(false);
+
+  const handlePurchaseCredits = async (credits: number) => {
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to purchase extra credits.",
+        variant: "destructive",
+      });
+      window.location.href = "/auth";
+      return;
+    }
+
+    setPurchasingCredits(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('purchase-extra-credits', {
+        body: { credits },
+        headers: {
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create checkout session. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setPurchasingCredits(false);
+    }
+  };
 
   const handleSubscribe = async (tier: string) => {
     if (!user) {
@@ -355,6 +392,161 @@ const Pricing = () => {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Extra Credits Section */}
+      <section className="section-spacing-sm bg-gradient-section-1">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center mb-4">
+              <Coins className="h-8 w-8 text-primary mr-3" />
+              <h2 className="text-4xl font-bold">Need More AI Requests?</h2>
+            </div>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-2">
+              Running low on monthly AI requests? Purchase extra credits anytime to keep using PivotHub tools.
+            </p>
+            <p className="text-base text-muted-foreground max-w-3xl mx-auto">
+              Extra credits are added immediately to your account and can be used within your current billing month.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* Starter Pack */}
+            <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
+              <CardHeader className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-2xl mb-2">Starter Pack</CardTitle>
+                <div className="mb-3">
+                  <span className="text-4xl font-bold text-primary">$5</span>
+                </div>
+                <CardDescription className="text-base font-medium text-foreground">
+                  10 Extra AI Requests
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Perfect for occasional extra usage
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Added instantly to your account
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Valid for current billing month
+                  </p>
+                </div>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(10)}
+                  disabled={purchasingCredits}
+                >
+                  {purchasingCredits ? "Processing..." : "Purchase 10 Credits"}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Power Pack - Highlighted */}
+            <Card className="premium-card border-2 border-primary shadow-lg hover:shadow-glow transition-all bg-gradient-to-br from-primary/10 to-secondary/10 relative">
+              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
+                <Star className="h-3 w-3 mr-1" />
+                Best Value
+              </Badge>
+              <CardHeader className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-2xl mb-2">Power Pack</CardTitle>
+                <div className="mb-3">
+                  <span className="text-4xl font-bold text-primary">$10</span>
+                </div>
+                <CardDescription className="text-base font-medium text-foreground">
+                  25 Extra AI Requests
+                </CardDescription>
+                <p className="text-xs text-primary font-semibold mt-2">
+                  Just $0.40 per request
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Best value for medium projects
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Added instantly to your account
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Valid for current billing month
+                  </p>
+                </div>
+                <Button
+                  className="w-full"
+                  onClick={() => handlePurchaseCredits(25)}
+                  disabled={purchasingCredits}
+                >
+                  {purchasingCredits ? "Processing..." : "Purchase 25 Credits"}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Pro Pack */}
+            <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-emerald-500/5 to-green-600/5">
+              <CardHeader className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-emerald-500" />
+                </div>
+                <CardTitle className="text-2xl mb-2">Pro Pack</CardTitle>
+                <div className="mb-3">
+                  <span className="text-4xl font-bold text-primary">$18</span>
+                </div>
+                <CardDescription className="text-base font-medium text-foreground">
+                  50 Extra AI Requests
+                </CardDescription>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Same as monthly subscription
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Perfect for large projects
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Added instantly to your account
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Valid for current billing month
+                  </p>
+                </div>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(50)}
+                  disabled={purchasingCredits}
+                >
+                  {purchasingCredits ? "Processing..." : "Purchase 50 Credits"}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-8">
+            <p className="text-sm text-muted-foreground">
+              💡 <strong>Note:</strong> Extra credits expire at the end of your billing month. {!user && "Sign in to purchase credits."}
+            </p>
           </div>
         </div>
       </section>
