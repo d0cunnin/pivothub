@@ -27,7 +27,7 @@ const Pricing = () => {
     tier: ''
   });
   
-  const [selectedPathIndex, setSelectedPathIndex] = useState(6); // Default to All Access Pass
+  const [selectedPathIndex, setSelectedPathIndex] = useState(4); // Default to All Access Pass
 
   const handleSubscribe = async (tier: string) => {
     if (!user) {
