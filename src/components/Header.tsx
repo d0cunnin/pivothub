@@ -112,12 +112,6 @@ export const Header = () => {
               >
                 Fund It
               </Link>
-              <Link 
-                to="/admin" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/admin' ? 'text-primary font-medium' : ''}`}
-              >
-                Admin
-              </Link>
             </div>
           </nav>
 
@@ -158,6 +152,11 @@ export const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/pricing" className="flex w-full cursor-pointer">
                       Manage Subscription
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard" className="flex w-full cursor-pointer">
+                      Dashboard
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -289,19 +288,15 @@ export const Header = () => {
               >
                 Fund It
               </Link>
-              <Link 
-                to="/admin" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/admin' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Admin
-              </Link>
               <div className="flex flex-col space-y-2 pt-4">
                 {user ? (
                   <>
                     <div className="text-sm text-muted-foreground">
                       Signed in as {user.email?.split('@')[0]}
                     </div>
+                    <Link to="/dashboard">
+                      <Button variant="ghost" className="w-full justify-start">Dashboard</Button>
+                    </Link>
                     <Link to="/pricing">
                       <Button variant="ghost" className="w-full justify-start">Manage Subscription</Button>
                     </Link>
