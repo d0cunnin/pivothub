@@ -140,7 +140,7 @@ const Index = () => {
       </section>
 
       {/* Features Section - Dark background, light text */}
-      <section className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-24 md:py-32 overflow-hidden">
+      <section id="explore-hub" className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
         <div className="absolute top-20 right-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
         <div className="absolute bottom-20 left-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl"></div>

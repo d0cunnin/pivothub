@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import heroVideo from "@/assets/hero-video.mp4";
+import { Rocket, Compass } from "lucide-react";
 
 export const HeroSection = () => {
   return (
@@ -23,62 +24,32 @@ export const HeroSection = () => {
         <div className="max-w-3xl text-white">
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Pivot Your Way to the Future
-            <span className="text-accent"> in a Digital World</span>
+            Your hub to pivot, grow, and build the future
+            <span className="text-accent"> with AI-powered tools</span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-6 text-white/90 max-w-2xl">
-            Learn, grow, and relaunch your career — all in one place.
+          <p className="text-xl md:text-2xl mb-8 text-white/90 max-w-2xl">
+            Discover AI-powered tools that help you pivot, build, earn, launch, and grow all in one place.
           </p>
           
-          <div className="flex flex-wrap gap-3 mb-8 justify-center sm:justify-start">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <Button 
               size="lg" 
               variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/assessit'}
+              className="text-base px-8 py-6 font-semibold hover:scale-105 transition-transform"
+              onClick={() => window.location.href = '/auth'}
             >
-              Assess It
+              <Rocket className="mr-2 h-5 w-5" />
+              Start Your Pivot
             </Button>
             <Button 
               size="lg" 
               variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/prepit'}
+              className="text-base px-8 py-6 font-semibold hover:scale-105 transition-transform"
+              onClick={() => document.getElementById('explore-hub')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Prep It
-            </Button>
-            <Button 
-              size="lg" 
-              variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/teachit'}
-            >
-              Teach It
-            </Button>
-            <Button 
-              size="lg" 
-              variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/launchit'}
-            >
-              Launch It
-            </Button>
-            <Button 
-              size="lg" 
-              variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/grantwriting'}
-            >
-              Fund It
-            </Button>
-            <Button 
-              size="lg" 
-              variant="heroWhite"
-              className="text-sm px-4 py-3 flex-shrink-0"
-              onClick={() => window.location.href = '/learn-a-skill'}
-            >
-              Learn It
+              <Compass className="mr-2 h-5 w-5" />
+              Explore the Hub
             </Button>
           </div>
         </div>
