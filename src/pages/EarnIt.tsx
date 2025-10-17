@@ -97,7 +97,7 @@ export default function SideIncomeBlueprint() {
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier: 'earnit' }
+        body: { tier: 'side-income-blueprint' }
       });
 
       if (error) throw error;
