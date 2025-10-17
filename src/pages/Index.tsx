@@ -115,7 +115,7 @@ const Index = () => {
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
               Your hub to pivot, grow, and build the future
-              <span className="text-accent"> with AI-powered tools</span>
+              <span className="text-yellow-300"> with AI-powered tools</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
               Discover AI-powered tools that help you pivot, build, earn, launch, and grow all in one place.
