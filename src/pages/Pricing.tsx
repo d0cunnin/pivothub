@@ -426,6 +426,9 @@ const Pricing = () => {
                 <CardDescription className="text-base font-medium text-foreground">
                   10 Extra AI Requests
                 </CardDescription>
+                <p className="text-xs text-muted-foreground mt-2">
+                  $0.50 per request
+                </p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
@@ -512,8 +515,8 @@ const Pricing = () => {
                 <CardDescription className="text-base font-medium text-foreground">
                   50 Extra AI Requests
                 </CardDescription>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Same as monthly subscription
+                <p className="text-xs text-emerald-600 font-medium mt-2">
+                  Best rate: $0.36 per request
                 </p>
               </CardHeader>
               <CardContent className="space-y-4">
