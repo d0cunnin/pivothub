@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronRight, CheckCircle } from "lucide-react";
+import { ChevronRight, CheckCircle, Rocket, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
 import reskillIcon from "@/assets/reskill-icon.jpg";
 import jobprepIcon from "@/assets/jobprep-icon.jpg";
@@ -114,20 +114,30 @@ const Index = () => {
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
-              Your Hub for Ideas, Growth, and AI-Powered Launch Tools
+              Your hub to pivot, grow, and build the future
+              <span className="text-accent"> with AI-powered tools</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
-              Discover tools that help you build, launch, and grow smarter — all in one place.
+              Discover AI-powered tools that help you pivot, build, earn, launch, and grow all in one place.
             </p>
-            <Link to="/pricing">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
                 className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
+                onClick={() => window.location.href = '/auth'}
               >
-                Get Started
-                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <Rocket className="mr-2 h-5 w-5" />
+                Start Your Pivot
               </Button>
-            </Link>
+              <Button 
+                size="lg" 
+                className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
+                onClick={() => document.getElementById('explore-hub')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                <Compass className="mr-2 h-5 w-5" />
+                Explore the Hub
+              </Button>
+            </div>
           </div>
         </div>
 
