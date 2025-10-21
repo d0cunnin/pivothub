@@ -28,7 +28,22 @@ Skills: ${data.skills}
 Interests: ${data.interests}
 Budget: ${data.budget}
 
-Provide specific, actionable business ideas that match their background. Format as simple numbered list without any markdown or special formatting. Each idea should be 1-2 sentences explaining the concept and why it fits their profile.`
+For EACH business idea, provide:
+1. Business concept and why it fits their profile (2-3 sentences)
+2. VALIDATION TOOLS to test the idea:
+   • Market Research: Google Trends (free), Answer The Public (free), SimilarWeb
+   • Competitor Analysis: SEMrush, Ahrefs, SimilarWeb
+   • Survey Tools: Typeform, SurveyMonkey, Google Forms (free)
+3. MVP BUILDING TOOLS:
+   • No-Code Platforms: Bubble, Webflow, Softr, Airtable
+   • Landing Pages: Carrd ($19/year), Unbounce, Instapage
+   • E-commerce: Shopify (14-day trial), Gumroad (digital), Etsy
+4. EARLY CUSTOMER CHANNELS:
+   • Launch Platforms: Product Hunt, BetaList, Hacker News
+   • Communities: Reddit, indie hacker forums
+5. ESTIMATED STARTUP COSTS with specific tool costs
+
+Format as simple numbered list without markdown. Each idea should include concept, validation approach, tools needed, and costs.`
         break
 
       case 'business-plan':
@@ -100,6 +115,24 @@ BUSINESS DETAILS:
 • Business Model: ${data.businessModel}
 
 This business plan must be detailed, professional, and actionable - worth $3,000+ of consulting value.
+
+=== RESOURCE RECOMMENDATIONS PROTOCOL ===
+For EVERY section, include specific tools, platforms, and resources to implement the advice:
+• MUST include tool names with pricing tiers (free, $X/month, $Y/month)
+• MUST provide website URLs when recommending platforms
+• MUST differentiate free vs paid options clearly
+• MUST organize by budget level (bootstrapped, moderate, well-funded)
+• MUST include alternative options (e.g., "Use QuickBooks ($30/month) OR Wave (free)")
+
+REQUIRED RESOURCE CATEGORIES:
+• Business Registration: LegalZoom, Incfile, state-specific websites
+• Accounting/Finance: QuickBooks, FreshBooks, Wave (free), Bench
+• Marketing: HubSpot, Mailchimp (free tier), Canva (free), Buffer, Hootsuite
+• Website Building: WordPress, Wix, Squarespace, Shopify (e-commerce)
+• CRM: Salesforce, HubSpot CRM (free), Zoho, Pipedrive
+• Project Management: Asana, Trello (free basic), Monday.com, ClickUp
+• Communication: Slack (free basic), Microsoft Teams, Zoom
+• Payment Processing: Stripe, Square, PayPal, Wise (international)
 
 =======
 STRUCTURE - Include ALL of these sections with substantial detail:
@@ -226,6 +259,16 @@ Brand Positioning:
 • Tagline and positioning statement
 • Visual identity approach
 
+MARKETING TOOLS BY CHANNEL:
+• Social Media Management: Buffer (free basic), Hootsuite ($49+/month), Later ($18+/month)
+• Design Tools: Canva (free), Adobe Creative Cloud ($55/month), Figma (free)
+• Email Marketing: Mailchimp (free <2K), ConvertKit ($9+/month), Klaviyo (email + SMS)
+• SEO Tools: Google Analytics (free), Google Search Console (free), Ahrefs ($99+/month), SEMrush ($120+/month)
+• Content Creation: Grammarly (free/$12/month), Hemingway Editor (free), Jasper AI ($39+/month)
+• CRM Systems: HubSpot CRM (free), Pipedrive ($14+/user), Salesforce ($25+/user), Zoho CRM (free tier)
+• Landing Pages: Unbounce ($90+/month), Leadpages ($37+/month), Carrd ($19/year)
+• Analytics: Google Analytics (free), Mixpanel (free tier), Amplitude (free tier)
+
 Marketing Channels (Prioritized):
 1. [Channel 1 - e.g., "Digital Marketing - SEO & Content"]
    • Specific tactics and implementation
@@ -284,6 +327,15 @@ Production/Service Delivery:
 • Scalability approach
 • Quality control measures
 • Technology stack and systems
+
+OPERATIONS TOOLS & RESOURCES:
+• Project Management: Asana (free basic), Trello (free), Monday.com ($8+/user), ClickUp (free tier)
+• Communication: Slack (free basic), Microsoft Teams, Zoom ($15/month), Google Workspace ($6-18/user)
+• Document Management: Google Drive (free 15GB), Dropbox ($12/month), Notion (free personal)
+• Accounting: QuickBooks ($30-200/month), Wave (free), FreshBooks ($17+/month), Xero ($13+/month)
+• Payment Processing: Stripe (2.9% + 30¢), Square (2.6% + 10¢), PayPal (2.9% + 30¢)
+• E-commerce Platforms: Shopify ($29-299/month), WooCommerce (free plugin), BigCommerce ($29+/month)
+• Email Marketing: Mailchimp (free <2K contacts), ConvertKit ($9+/month), SendGrid (free 100/day)
 
 Supply Chain:
 • Suppliers and vendors with backup options
@@ -586,6 +638,42 @@ Goals: ${data.goals}
 Current Stage: ${data.currentStage || 'Early stage'}
 
 This strategy must include specific tactics, timelines, budget breakdowns, and success metrics.
+
+=== MARKETING TOOLS & RESOURCES PROTOCOL ===
+For EVERY marketing channel, recommend specific tools with pricing:
+
+SOCIAL MEDIA TOOLS:
+• Scheduling: Buffer (free basic - buffer.com), Hootsuite ($49+/month - hootsuite.com), Later ($18+/month - later.com), Sprout Social ($249/month)
+• Design: Canva (free - canva.com), Adobe Creative Cloud ($55/month), Figma (free - figma.com)
+• Video Editing: CapCut (free), Adobe Premiere Pro ($21/month), Descript ($24/month)
+• Analytics: Native platform analytics (free), Sprout Social, Iconosquare ($49+/month)
+
+EMAIL MARKETING TOOLS:
+• Platforms: Mailchimp (free <2K - mailchimp.com), ConvertKit ($9+/month - convertkit.com), Klaviyo (klaviyo.com), ActiveCampaign ($29+/month)
+• Design: Canva email templates (free), Stripo (stripo.email), BEE Free (beefree.io)
+• List Building: OptinMonster ($9+/month), Sumo (free - sumo.com), Leadpages ($37+/month)
+• Deliverability Testing: Mail Tester (free - mail-tester.com), GlockApps ($79/month)
+
+SEO & CONTENT TOOLS:
+• Keyword Research: Google Keyword Planner (free), Ahrefs ($99+/month - ahrefs.com), SEMrush ($120+/month - semrush.com), Ubersuggest (free basic)
+• Writing: Grammarly (free/$12/month), Hemingway Editor (free), Jasper AI ($39+/month)
+• CMS: WordPress (free - wordpress.org), Webflow ($14+/month), Ghost ($9+/month - ghost.org)
+• Analytics: Google Analytics (free), Google Search Console (free), Ahrefs (site audits)
+
+PAID ADVERTISING TOOLS:
+• Platforms: Google Ads (ads.google.com), Facebook Ads Manager, LinkedIn Campaign Manager, TikTok Ads
+• Management: Google Ads Editor (free), AdEspresso ($49+/month), Madgicx ($29+/month)
+• Analytics: Google Analytics (free conversion tracking), Facebook Pixel (free)
+
+ANALYTICS & OPTIMIZATION:
+• Website Analytics: Google Analytics (free), Mixpanel (free tier - mixpanel.com), Amplitude (free tier - amplitude.com)
+• Heatmaps: Hotjar ($39+/month - hotjar.com), Crazy Egg ($29+/month), Microsoft Clarity (free)
+• A/B Testing: Google Optimize (free), Optimizely ($50K+/year), VWO ($199+/month)
+
+CUSTOMER RESEARCH:
+• Surveys: Typeform ($25+/month - typeform.com), SurveyMonkey (free basic), Google Forms (free)
+• User Testing: UserTesting ($49/test - usertesting.com), Hotjar recordings
+• Feedback: Intercom ($39+/month), Help Scout ($20+/user)
 
 STRUCTURE - Provide ALL sections in detail:
 
