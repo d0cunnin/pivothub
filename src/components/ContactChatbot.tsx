@@ -92,6 +92,18 @@ export const ContactChatbot = () => {
       );
 
       if (!response.ok || !response.body) {
+        if (response.status === 400) {
+          const errorData = await response.json();
+          if (errorData.error === 'inappropriate_content') {
+            toast({
+              title: "Inappropriate Content",
+              description: errorData.message || "Your message contains inappropriate content. Please keep the conversation professional.",
+              variant: "destructive",
+            });
+            return;
+          }
+        }
+        
         if (response.status === 429) {
           toast({
             title: "Rate Limit",

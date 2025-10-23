@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
@@ -14,6 +15,7 @@ interface Message {
 }
 
 export const BusinessMentorChatbot = () => {
+  const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -38,6 +40,10 @@ export const BusinessMentorChatbot = () => {
         throw new Error(error.message);
       }
 
+      if (data?.error === 'inappropriate_content') {
+        throw new Error(data.message || 'Inappropriate content detected');
+      }
+
       if (data.error) {
         throw new Error(data.error);
       }
@@ -45,6 +51,11 @@ export const BusinessMentorChatbot = () => {
       return data.response;
     } catch (error) {
       console.error('Error getting AI response:', error);
+      
+      // Check for inappropriate content error
+      if (error instanceof Error && error.message.includes('inappropriate content')) {
+        throw error;
+      }
       
       // Enhanced fallback responses based on message content
       const lowercaseMessage = message.toLowerCase();
@@ -93,6 +104,17 @@ export const BusinessMentorChatbot = () => {
       setMessages(prev => [...prev, botResponse]);
     } catch (error) {
       console.error('Error handling message:', error);
+      
+      // Check for inappropriate content
+      if (error instanceof Error && error.message.includes('inappropriate content')) {
+        toast({
+          title: "Inappropriate Content",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+      
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
         text: "I apologize, but I'm having trouble right now. Please try rephrasing your question or ask again in a moment.",

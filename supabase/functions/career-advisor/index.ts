@@ -17,6 +17,43 @@ const careerAdvisorSchema = z.object({
   conversationHistory: z.array(chatMessageSchema).max(20, "Conversation history too long").default([])
 })
 
+// Content moderation function using OpenAI Moderation API
+async function moderateContent(text: string, apiKey: string): Promise<{ flagged: boolean; categories?: string[] }> {
+  try {
+    const response = await fetch('https://api.openai.com/v1/moderations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        input: text,
+        model: 'omni-moderation-latest'
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Moderation API error:', response.status);
+      return { flagged: false }; // Fail open on API error
+    }
+
+    const data = await response.json();
+    const result = data.results?.[0];
+    
+    if (result?.flagged) {
+      const flaggedCategories = Object.keys(result.categories || {})
+        .filter(key => result.categories[key]);
+      console.log('Content flagged:', flaggedCategories);
+      return { flagged: true, categories: flaggedCategories };
+    }
+
+    return { flagged: false };
+  } catch (error) {
+    console.error('Moderation check failed:', error);
+    return { flagged: false }; // Fail open on error
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -41,6 +78,30 @@ serve(async (req) => {
     }
 
     const { message, conversationHistory } = validation.data
+
+    const openAIApiKey = Deno.env.get('relaunch_openai_key');
+    if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
+      throw new Error('OpenAI API key not configured');
+    }
+
+    // Check content moderation
+    console.log('Checking content moderation...');
+    const moderationResult = await moderateContent(message, openAIApiKey);
+    
+    if (moderationResult.flagged) {
+      console.warn('Content blocked by moderation:', moderationResult.categories);
+      return new Response(
+        JSON.stringify({ 
+          error: 'inappropriate_content',
+          message: 'Your message contains inappropriate content and cannot be processed. Please keep the conversation professional and respectful.'
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
 
 const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - CAREER ADVISOR
 
@@ -200,7 +261,7 @@ EXAMPLES OF PREMIUM VALUE:
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('relaunch_openai_key')}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

@@ -47,6 +47,10 @@ export const CareerAdvisorChatbot = () => {
         throw new Error(error.message || 'Failed to get AI response');
       }
 
+      if (data?.error === 'inappropriate_content') {
+        throw new Error(data.message || 'Inappropriate content detected');
+      }
+
       // Enhanced response validation
       const rawResponse = data?.response;
       console.log('🔍 Raw response details:', {
