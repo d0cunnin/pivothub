@@ -92,11 +92,11 @@ export const SubscriptionSuccessEmail = ({
 
         <Text style={footer}>
           Need help getting started?{' '}
-          <Link href="https://yoursite.com/contact" style={link}>
+          <Link href="https://pivothub.io/contact" style={link}>
             Contact support
           </Link>
           {' '}or visit our{' '}
-          <Link href="https://yoursite.com/pricing" style={link}>
+          <Link href="https://pivothub.io/pricing" style={link}>
             pricing page
           </Link>
           {' '}for more details.

@@ -76,7 +76,7 @@ export const PaymentFailedEmail = ({
 
         <Text style={footer}>
           Need help? Contact us or visit your{' '}
-          <Link href="https://yoursite.com/settings" style={link}>
+          <Link href="https://pivothub.io/settings" style={link}>
             account settings
           </Link>
           .

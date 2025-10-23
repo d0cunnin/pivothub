@@ -61,7 +61,7 @@ serve(async (req) => {
       displayName = profile?.display_name || email.split('@')[0];
     }
 
-    const siteUrl = Deno.env.get('SITE_URL') || 'https://yoursite.com';
+    const siteUrl = 'https://pivothub.io';
     let html = '';
     let subject = '';
 
@@ -111,7 +111,7 @@ serve(async (req) => {
 
     // Send email via Resend
     const { data, error } = await resend.emails.send({
-      from: 'PivotHub <notifications@pivothub.app>',
+      from: 'PivotHub <notifications@pivothub.io>',
       to: [email],
       subject: subject,
       html: html,

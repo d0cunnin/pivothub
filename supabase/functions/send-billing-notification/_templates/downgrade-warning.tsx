@@ -76,7 +76,7 @@ export const DowngradeWarningEmail = ({
 
         <Text style={footer}>
           Questions?{' '}
-          <Link href="https://yoursite.com/contact" style={link}>
+          <Link href="https://pivothub.io/contact" style={link}>
             Contact support
           </Link>
         </Text>
