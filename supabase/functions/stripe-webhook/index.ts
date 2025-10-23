@@ -114,6 +114,22 @@ async function handleSubscriptionCheckout(supabase: any, session: Stripe.Checkou
   const subscriptionEnd = new Date(subscription.current_period_end * 1000);
   const billingCycleStart = new Date(subscription.current_period_start * 1000);
 
+  // Get current subscriber data to check if upgrading from Explore Mode
+  const { data: currentData } = await supabase
+    .from('subscribers_public')
+    .select('monthly_ai_requests, ai_request_limit, rollover_credits, subscribed')
+    .eq('user_id', userId)
+    .single();
+
+  // Calculate leftover Explore Mode credits if upgrading from free tier
+  let preservedCredits = 0;
+  if (currentData && !currentData.subscribed) {
+    // User was on Explore Mode - preserve remaining credits
+    const exploreTotal = 5 + (currentData.rollover_credits || 0);
+    preservedCredits = Math.max(0, exploreTotal - (currentData.monthly_ai_requests || 0));
+    logStep('Preserving Explore Mode credits on upgrade', { preservedCredits });
+  }
+
   // Update subscribers_public - grant full credits immediately on first subscription
   const { error: publicError } = await supabase
     .from('subscribers_public')
@@ -124,6 +140,7 @@ async function handleSubscriptionCheckout(supabase: any, session: Stripe.Checkou
       billing_cycle_start: billingCycleStart.toISOString(),
       next_billing_date: subscriptionEnd.toISOString(),
       ai_request_limit: 50,
+      rollover_credits: preservedCredits, // Preserve Explore Mode credits on upgrade
       monthly_ai_requests: 0, // Start with full credits
       last_request_reset: new Date().toISOString(),
       grace_period_end: null, // Clear any grace period

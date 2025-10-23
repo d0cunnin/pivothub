@@ -398,7 +398,6 @@ export type Database = {
           extra_credits: number | null
           grace_period_end: string | null
           id: string
-          is_trial_active: boolean
           last_request_reset: string | null
           monthly_ai_requests: number | null
           next_billing_date: string | null
@@ -407,8 +406,6 @@ export type Database = {
           subscription_end: string | null
           subscription_package: string | null
           subscription_tier: string | null
-          trial_end: string | null
-          trial_start: string | null
           updated_at: string
           user_id: string
         }
@@ -421,7 +418,6 @@ export type Database = {
           extra_credits?: number | null
           grace_period_end?: string | null
           id?: string
-          is_trial_active?: boolean
           last_request_reset?: string | null
           monthly_ai_requests?: number | null
           next_billing_date?: string | null
@@ -430,8 +426,6 @@ export type Database = {
           subscription_end?: string | null
           subscription_package?: string | null
           subscription_tier?: string | null
-          trial_end?: string | null
-          trial_start?: string | null
           updated_at?: string
           user_id: string
         }
@@ -444,7 +438,6 @@ export type Database = {
           extra_credits?: number | null
           grace_period_end?: string | null
           id?: string
-          is_trial_active?: boolean
           last_request_reset?: string | null
           monthly_ai_requests?: number | null
           next_billing_date?: string | null
@@ -453,8 +446,6 @@ export type Database = {
           subscription_end?: string | null
           subscription_package?: string | null
           subscription_tier?: string | null
-          trial_end?: string | null
-          trial_start?: string | null
           updated_at?: string
           user_id?: string
         }

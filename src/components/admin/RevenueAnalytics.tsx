@@ -9,12 +9,11 @@ export const RevenueAnalytics = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("subscribers_public")
-        .select("subscription_tier, subscribed, is_trial_active");
+        .select("subscription_tier, subscribed");
       
       if (error) throw error;
       
-      const paidSubs = data.filter(s => s.subscribed && !s.is_trial_active);
-      const trials = data.filter(s => s.is_trial_active);
+      const paidSubs = data.filter(s => s.subscribed);
       
       const tierCounts = paidSubs.reduce((acc: Record<string, number>, sub) => {
         const tier = sub.subscription_tier || "unknown";
@@ -24,9 +23,9 @@ export const RevenueAnalytics = () => {
       
       return {
         totalPaid: paidSubs.length,
-        totalTrials: trials.length,
+        totalTrials: 0, // No longer tracking trials
         tierBreakdown: tierCounts,
-        conversionRate: trials.length > 0 ? ((paidSubs.length / (paidSubs.length + trials.length)) * 100).toFixed(1) : 0
+        conversionRate: 0 // No longer calculating conversion
       };
     }
   });

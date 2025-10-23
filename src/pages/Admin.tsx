@@ -34,8 +34,6 @@ interface UserWithSubscription {
   subscription_tier?: string;
   subscription_package?: string;
   subscription_end?: string;
-  is_trial_active: boolean;
-  trial_end?: string;
 }
 
 const Admin = () => {
@@ -62,7 +60,7 @@ const Admin = () => {
 
       const { data: subscribers } = await supabase
         .from("subscribers_public")
-        .select("user_id, subscribed, subscription_tier, subscription_package, subscription_end, trial_start, trial_end, is_trial_active, created_at, updated_at");
+        .select("user_id, subscribed, subscription_tier, subscription_package, subscription_end, created_at, updated_at");
 
       const combinedData: UserWithSubscription[] = authUsers?.users.map(user => {
         const profile = profiles?.find(p => p.id === user.id);
@@ -76,8 +74,6 @@ const Admin = () => {
           subscription_tier: subscription?.subscription_tier,
           subscription_package: subscription?.subscription_package,
           subscription_end: subscription?.subscription_end,
-          is_trial_active: subscription?.is_trial_active || false,
-          trial_end: subscription?.trial_end,
         };
       }) || [];
 
@@ -144,7 +140,7 @@ const Admin = () => {
   const stats = {
     totalUsers: users?.length || 0,
     activeSubscriptions: users?.filter(u => u.subscribed).length || 0,
-    trialUsers: users?.filter(u => u.is_trial_active).length || 0,
+    trialUsers: 0, // No longer tracking trials
   };
 
   const exportToCSV = () => {
@@ -286,9 +282,7 @@ const Admin = () => {
                               <TableCell className="font-medium">{user.email}</TableCell>
                               <TableCell>{user.display_name || "-"}</TableCell>
                               <TableCell>
-                                {user.is_trial_active ? (
-                                  <Badge variant="outline">Trial</Badge>
-                                ) : user.subscribed ? (
+                                {user.subscribed ? (
                                   <Badge>Active</Badge>
                                 ) : (
                                   <Badge variant="secondary">Free</Badge>
