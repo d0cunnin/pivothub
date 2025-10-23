@@ -53,9 +53,10 @@ serve(async (req) => {
         .from("subscribers_public")
         .insert({
           user_id: user.id,
-          trial_start: new Date().toISOString(),
-          trial_end: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
-          is_trial_active: true
+          ai_request_limit: 5,
+          monthly_ai_requests: 0,
+          last_request_reset: new Date().toISOString(),
+          account_status: 'active'
         })
         .select()
         .single();
@@ -85,13 +86,11 @@ serve(async (req) => {
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     
     if (customers.data.length === 0) {
-      logStep("No Stripe customer found, returning trial/free status");
+      logStep("No Stripe customer found, returning free tier status");
       return new Response(JSON.stringify({ 
         subscribed: false,
-        is_trial_active: subscriber?.is_trial_active || false,
-        trial_end: subscriber?.trial_end || null,
-        trial_days_remaining: subscriber?.is_trial_active && trialEnd ? 
-          Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (24 * 60 * 60 * 1000))) : 0
+        ai_request_limit: 5,
+        monthly_ai_requests: subscriber?.monthly_ai_requests || 0
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,
@@ -137,7 +136,6 @@ serve(async (req) => {
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_end: subscriptionEnd,
-      is_trial_active: hasActiveSub ? false : (subscriber?.is_trial_active || false),
       updated_at: new Date().toISOString(),
     }, { onConflict: 'user_id' });
 
@@ -151,19 +149,12 @@ serve(async (req) => {
 
     logStep("Updated database with subscription info", { subscribed: hasActiveSub, subscriptionTier });
     
-    // Calculate trial info for response
-    const finalTrialEnd = subscriber?.trial_end ? new Date(subscriber.trial_end) : null;
-    const trialDaysRemaining = subscriber?.is_trial_active && finalTrialEnd ? 
-      Math.max(0, Math.ceil((finalTrialEnd.getTime() - now.getTime()) / (24 * 60 * 60 * 1000))) : 0;
-    
     return new Response(JSON.stringify({
       subscribed: hasActiveSub,
       subscription_tier: subscriptionTier,
       subscription_package: subscriber?.subscription_package || null,
       subscription_end: subscriptionEnd,
-      is_trial_active: hasActiveSub ? false : (subscriber?.is_trial_active || false),
-      trial_end: subscriber?.trial_end || null,
-      trial_days_remaining: trialDaysRemaining
+      next_billing_date: subscriber?.next_billing_date
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,

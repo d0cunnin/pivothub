@@ -70,7 +70,7 @@ serve(async (req) => {
       );
     }
 
-    // Check if user has active paid subscription (not trial, not free)
+    // Check if user has active paid subscription (not free tier)
     const now = new Date();
     const subscriptionEnd = subscriber.subscription_end ? new Date(subscriber.subscription_end) : null;
     const isSubscriptionActive = subscriber.subscribed && subscriptionEnd && subscriptionEnd > now;
@@ -91,13 +91,13 @@ serve(async (req) => {
       );
     }
 
-    // Explicitly block trial users from purchasing credits
-    if (subscriber.is_trial_active) {
-      logStep('Trial user attempted to purchase credits');
+    // Explicitly block free tier users from purchasing credits (only paid subscribers can buy)
+    if (!subscriber.subscribed) {
+      logStep('Free tier user attempted to purchase credits');
       return new Response(
         JSON.stringify({ 
-          error: 'Extra credits are not available during trial period. Please subscribe to a paid plan first.',
-          code: 'TRIAL_NOT_ALLOWED'
+          error: 'Extra credits are not available on the free tier. Please subscribe to a paid plan first.',
+          code: 'FREE_TIER_NOT_ALLOWED'
         }),
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );

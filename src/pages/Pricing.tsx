@@ -133,9 +133,9 @@ const Pricing = () => {
       name: "Explore Mode",
       price: "Free",
       period: "forever",
-      description: "Try 3 credits per month to explore our tools",
+      description: "Get 5 credits every month to explore our tools",
       features: [
-        "3 credits per month",
+        "5 credits per month (resets monthly)",
         "Use any tool (costs vary by complexity)",
         "Access to all tool categories",
         "Community access",
@@ -272,8 +272,8 @@ const Pricing = () => {
               Choose the plan that matches your goals. Start free or unlock full access with our premium packages.
             </p>
             <p className="text-base text-muted-foreground max-w-4xl mx-auto">
-              <strong>Explore Mode</strong> gives you 1 free AI tool use per month. 
-              <strong> Package plans</strong> ($15-$18/month) unlock 50 AI requests per month across specialized toolkits. 
+              <strong>Explore Mode</strong> gives you 5 free credits per month. 
+              <strong> Package plans</strong> ($15-$18/month) unlock 50 AI requests per month across specialized toolkits.
               The <strong>All Access Pass</strong> ($29/month) includes everything from all packages with 50 requests/month, priority support, and early feature access.
             </p>
           </div>
@@ -602,9 +602,9 @@ const Pricing = () => {
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What happens after the free trial?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What is Explore Mode?</h3>
                   <p className="text-muted-foreground text-sm">
-                    After your trial, you'll be on the free Explore Mode with 1 tool use per month. Upgrade anytime to unlock 50 monthly AI requests.
+                    Explore Mode is our free tier that gives you 5 credits every month to try any of our tools. No credit card required. Credits reset on the 1st of each month.
                   </p>
                 </div>
                 

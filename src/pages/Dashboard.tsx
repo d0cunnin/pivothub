@@ -135,14 +135,12 @@ const Dashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold capitalize">
-                    {subscribed ? getPackageDisplayName(subscriptionPackage) : isTrialActive ? 'Trial' : 'Free'}
+                    {subscribed ? getPackageDisplayName(subscriptionPackage) : 'Explore Mode'}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {subscribed && subscriptionEnd
                       ? `Renews ${new Date(subscriptionEnd).toLocaleDateString()}`
-                      : isTrialActive
-                      ? `${trialDaysRemaining} days left`
-                      : 'Upgrade to access more'}
+                      : '5 free credits per month'}
                   </p>
                 </CardContent>
               </Card>

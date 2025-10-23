@@ -32,6 +32,7 @@ interface UserWithSubscription {
   display_name?: string;
   subscribed: boolean;
   subscription_tier?: string;
+  subscription_package?: string;
   subscription_end?: string;
   is_trial_active: boolean;
   trial_end?: string;
@@ -61,7 +62,7 @@ const Admin = () => {
 
       const { data: subscribers } = await supabase
         .from("subscribers_public")
-        .select("user_id, subscribed, subscription_tier, subscription_end, trial_start, trial_end, is_trial_active, created_at, updated_at");
+        .select("user_id, subscribed, subscription_tier, subscription_package, subscription_end, trial_start, trial_end, is_trial_active, created_at, updated_at");
 
       const combinedData: UserWithSubscription[] = authUsers?.users.map(user => {
         const profile = profiles?.find(p => p.id === user.id);
@@ -73,6 +74,7 @@ const Admin = () => {
           display_name: profile?.display_name,
           subscribed: subscription?.subscribed || false,
           subscription_tier: subscription?.subscription_tier,
+          subscription_package: subscription?.subscription_package,
           subscription_end: subscription?.subscription_end,
           is_trial_active: subscription?.is_trial_active || false,
           trial_end: subscription?.trial_end,
@@ -149,13 +151,13 @@ const Admin = () => {
     if (!filteredUsers) return;
     
     const csvContent = [
-      ["Email", "Name", "Status", "Tier", "Trial", "Expires"].join(","),
+      ["Email", "Name", "Status", "Tier", "Package", "Expires"].join(","),
       ...filteredUsers.map(user => [
         user.email,
         user.display_name || "",
-        user.is_trial_active ? "Trial" : user.subscribed ? "Active" : "Free",
+        user.subscribed ? "Active" : "Explore Mode",
         user.subscription_tier || "",
-        user.is_trial_active ? "Yes" : "No",
+        user.subscription_package || "None",
         user.subscription_end || ""
       ].join(","))
     ].join("\n");
