@@ -213,28 +213,63 @@ async function handleSubscriptionCancellation(supabase: any, subscription: Strip
     return;
   }
 
-  // Update subscription status - don't immediately downgrade, set grace period instead
-  const gracePeriodEnd = new Date();
-  gracePeriodEnd.setDate(gracePeriodEnd.getDate() + 7); // 7-day grace period
+  // Check if this is manual cancellation (at end of period) or failed payment
+  const isManualCancellation = subscription.cancel_at_period_end === true || subscription.canceled_at !== null;
 
-  const { error: updateError } = await supabase
-    .from('subscribers_public')
-    .update({
-      subscribed: false,
-      subscription_end: null,
-      subscription_package: null,
-      grace_period_end: gracePeriodEnd.toISOString(),
-      account_status: 'warning',
-      updated_at: new Date().toISOString(),
-    })
-    .eq('user_id', secureData.user_id);
+  if (isManualCancellation) {
+    // Manual cancellation - downgrade to Explore Mode immediately and delete rollover
+    logStep('Processing manual cancellation - downgrading to Explore Mode');
+    
+    const { error: updateError } = await supabase
+      .from('subscribers_public')
+      .update({
+        subscribed: false,
+        subscription_end: null,
+        subscription_package: null,
+        subscription_tier: null,
+        billing_cycle_start: null,
+        next_billing_date: null,
+        ai_request_limit: 5,
+        rollover_credits: 0, // Delete all rollover credits
+        monthly_ai_requests: 0,
+        grace_period_end: null,
+        account_status: 'active',
+        updated_at: new Date().toISOString()
+      })
+      .eq('user_id', secureData.user_id);
 
-  if (updateError) {
-    logStep('Error cancelling subscription', updateError);
-    throw updateError;
+    if (updateError) {
+      logStep('Error downgrading to Explore Mode', updateError);
+      throw updateError;
+    }
+
+    logStep('Manual cancellation processed - user downgraded to Explore Mode');
+  } else {
+    // Failed payment - set grace period (7 days) and warning status
+    logStep('Processing failed payment - setting grace period');
+    
+    const gracePeriodEnd = new Date();
+    gracePeriodEnd.setDate(gracePeriodEnd.getDate() + 7);
+
+    const { error: updateError } = await supabase
+      .from('subscribers_public')
+      .update({
+        subscribed: false,
+        subscription_end: null,
+        subscription_package: null,
+        grace_period_end: gracePeriodEnd.toISOString(),
+        account_status: 'warning',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', secureData.user_id);
+
+    if (updateError) {
+      logStep('Error cancelling subscription', updateError);
+      throw updateError;
+    }
+
+    logStep('Grace period set for failed payment');
   }
-
-  logStep('Subscription cancellation processed successfully');
 }
 
 async function handleExtraCredits(supabase: any, session: Stripe.Checkout.Session) {

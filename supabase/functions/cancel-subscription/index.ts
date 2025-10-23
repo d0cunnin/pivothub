@@ -110,23 +110,24 @@ serve(async (req) => {
     const subscriptionsData = await subscriptionsResponse.json();
 
     if (subscriptionsData.data && subscriptionsData.data.length > 0) {
-      // Cancel all active subscriptions
+      // Schedule cancellation at period end instead of immediate cancellation
       for (const sub of subscriptionsData.data) {
         await fetch(`https://api.stripe.com/v1/subscriptions/${sub.id}`, {
-          method: "DELETE",
+          method: "POST",
           headers: {
             "Authorization": `Bearer ${stripeKey}`,
+            "Content-Type": "application/x-www-form-urlencoded",
           },
+          body: "cancel_at_period_end=true",
         });
       }
     }
 
-    // Update subscription status in database
+    // Update subscription status to pending cancellation
     const { error: updateError } = await supabaseClient
       .from("subscribers_public")
       .update({
-        subscribed: false,
-        subscription_end: new Date().toISOString(),
+        account_status: 'pending_cancellation',
         updated_at: new Date().toISOString()
       })
       .eq("user_id", user.id);
@@ -141,7 +142,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: "Subscription cancelled successfully. You will retain access until the end of your billing period." 
+        message: `Subscription cancelled successfully. You will retain full access until ${subscription.subscription_end || 'the end of your billing period'}. All rollover credits will be removed at that time.` 
       }),
       { status: 200, headers: corsHeaders }
     );
