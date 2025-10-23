@@ -111,7 +111,7 @@ serve(async (req) => {
 
     // Send email via Resend
     const { data, error } = await resend.emails.send({
-      from: 'PivotHub <notifications@pivothub.io>',
+      from: 'PivotHub <support@pivothub.io>',
       to: [email],
       subject: subject,
       html: html,
