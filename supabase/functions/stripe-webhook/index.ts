@@ -98,6 +98,13 @@ async function handleSubscriptionCheckout(supabase: any, session: Stripe.Checkou
   }
 
   logStep('Processing subscription checkout', { userId, customerId, subscriptionPackage });
+  
+  // Get user email for notifications
+  const { data: secureData } = await supabase
+    .from('subscribers_secure')
+    .select('email')
+    .eq('user_id', userId)
+    .single();
 
   // Get subscription details
   const subscriptions = await stripe.subscriptions.list({
@@ -171,6 +178,35 @@ async function handleSubscriptionCheckout(supabase: any, session: Stripe.Checkou
   }
 
   logStep('Subscription checkout processed successfully');
+  
+  // Send welcome email
+  try {
+    const packageNames: Record<string, string> = {
+      'assess-prep-learn': 'Assess It + Prep It + Learn It',
+      'build-teach-launch': 'Build It + Teach It + Launch It',
+      'fund-it': 'Fund It',
+      'all-access': 'All Access Pass',
+    };
+
+    await supabase.functions.invoke('send-billing-notification', {
+      body: {
+        type: 'subscription_success',
+        userId: userId,
+        email: secureData?.email || (customer as any).email,
+        subscriptionPackage: packageNames[subscriptionPackage] || subscriptionPackage,
+        monthlyCredits: 50 + preservedCredits,
+        nextBillingDate: subscriptionEnd.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        }),
+      }
+    });
+    logStep('Welcome email sent');
+  } catch (emailError) {
+    logStep('Failed to send welcome email', emailError);
+    // Don't throw - email failure shouldn't block webhook processing
+  }
 }
 
 async function handleSubscriptionChange(supabase: any, subscription: Stripe.Subscription) {

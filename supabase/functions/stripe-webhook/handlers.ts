@@ -80,22 +80,35 @@ export async function handleSuccessfulPayment(supabase: any, invoice: Stripe.Inv
 
 export async function handleFailedPayment(supabase: any, invoice: Stripe.Invoice) {
   const subscriptionId = invoice.subscription as string;
+  logStep('Processing failed payment', { invoiceId: invoice.id, subscriptionId });
+
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
   const customerId = subscription.customer as string;
-  
-  const { data: secureData } = await supabase
+
+  // Find user by stripe_customer_id
+  const { data: secureData, error: secureError } = await supabase
     .from('subscribers_secure')
-    .select('user_id')
+    .select('user_id, email')
     .eq('stripe_customer_id', customerId)
     .single();
-    
-  if (!secureData) return;
-  
-  // Start 7-day grace period
+
+  if (secureError || !secureData) {
+    logStep('User not found for customer', { customerId });
+    return;
+  }
+
+  // Get subscription details
+  const { data: subscriberData } = await supabase
+    .from('subscribers_public')
+    .select('subscription_tier, subscription_package')
+    .eq('user_id', secureData.user_id)
+    .single();
+
+  // Set grace period of 7 days
   const gracePeriodEnd = new Date();
   gracePeriodEnd.setDate(gracePeriodEnd.getDate() + 7);
-  
-  await supabase
+
+  const { error: updateError } = await supabase
     .from('subscribers_public')
     .update({
       account_status: 'warning',
@@ -103,9 +116,33 @@ export async function handleFailedPayment(supabase: any, invoice: Stripe.Invoice
       updated_at: new Date().toISOString(),
     })
     .eq('user_id', secureData.user_id);
-    
-  logStep('Payment failed, grace period started', { 
-    userId: secureData.user_id,
-    gracePeriodEnd: gracePeriodEnd.toISOString()
-  });
+
+  if (updateError) {
+    logStep('Error updating grace period', updateError);
+    throw updateError;
+  }
+
+  logStep('Grace period set successfully', { userId: secureData.user_id, gracePeriodEnd });
+
+  // Send payment failed email
+  try {
+    await supabase.functions.invoke('send-billing-notification', {
+      body: {
+        type: 'payment_failed',
+        userId: secureData.user_id,
+        email: secureData.email,
+        subscriptionTier: subscriberData?.subscription_tier,
+        subscriptionPackage: subscriberData?.subscription_package,
+        gracePeriodEndDate: gracePeriodEnd.toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        }),
+      }
+    });
+    logStep('Payment failed email sent');
+  } catch (emailError) {
+    logStep('Failed to send email', emailError);
+    // Don't throw - email failure shouldn't block webhook processing
+  }
 }

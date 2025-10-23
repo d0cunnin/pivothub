@@ -593,7 +593,21 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What are AI requests?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Each time you use an AI-powered tool (like generating a resume, business plan, or assessment), it counts as 1 AI request. All paid plans include 50 requests per month.
+                    Each tool uses a certain number of credits based on complexity: High-cost tools (like teaching materials) use 5 credits, medium-cost tools (like resumes) use 2 credits, and low-cost tools (like chatbots) use 1 credit. View tool costs before using them.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
+                  <p className="text-muted-foreground text-sm">
+                    <strong>Paid plans:</strong> Credits reset on the same calendar day each month (your billing cycle date). For example, if you subscribed on the 15th, your credits reset on the 15th of each month. <strong>Explore Mode:</strong> Credits reset on the 1st of every month.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">What happens if my payment fails?</h3>
+                  <p className="text-muted-foreground text-sm">
+                    You'll receive an email notification and enter a <strong>7-day grace period</strong> with full access. If payment isn't resolved by the end date, your account automatically downgrades to Explore Mode (5 free credits/month). You can resubscribe anytime.
                   </p>
                 </div>
                 
@@ -607,14 +621,21 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What is Explore Mode?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Explore Mode is our free tier that gives you 5 credits every month to try any of our tools. No credit card required. Credits reset on the 1st of each month.
+                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month to try any of our tools. No credit card required. Unused credits roll over month-to-month. It's perfect for testing tools or occasional use.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">What happens to my credits when I cancel?</h3>
+                  <p className="text-muted-foreground text-sm">
+                    When you cancel, you keep access until your billing period ends. After that, all <strong>rollover credits are deleted</strong>, but any unused Explore Mode credits (up to 5) are preserved. If you resubscribe later, those preserved credits are added to your new plan!
                   </p>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Can I cancel anytime?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Absolutely! Cancel your subscription anytime. You'll continue to have access until the end of your billing period.
+                    Absolutely! Cancel your subscription anytime from your account settings. You'll continue to have full access until the end of your current billing period, then automatically move to Explore Mode.
                   </p>
                 </div>
               </div>
