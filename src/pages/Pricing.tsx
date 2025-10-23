@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Pricing = () => {
-  const { user, subscribed, subscriptionTier, isTrialActive } = useAuth();
+  const { user, subscribed, subscriptionTier } = useAuth();
   const { toast } = useToast();
   const [checkoutModal, setCheckoutModal] = useState<{
     open: boolean;
@@ -42,7 +42,7 @@ const Pricing = () => {
     }
 
     // Check if user has active paid subscription
-    if (!subscribed || isTrialActive) {
+    if (!subscribed) {
       toast({
         title: "Subscription Required",
         description: "Extra credits are only available for active paid subscribers. Please upgrade to a paid plan first.",
@@ -72,8 +72,6 @@ const Pricing = () => {
       
       if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
         errorMessage = "You need an active subscription to purchase extra credits";
-      } else if (error?.message?.includes('TRIAL_NOT_ALLOWED')) {
-        errorMessage = "Extra credits are not available during trial. Please subscribe first.";
       }
       
       toast({
@@ -258,9 +256,9 @@ const Pricing = () => {
               Choose Your Path
             </h1>
             <div className="text-center max-w-4xl mx-auto">
-              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Start with a free trial, then choose the path that fits your journey—or get everything with our All Access Pass.
-              </p>
+            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Start free with Explore Mode, then choose the path that fits your journey—or get everything with our All Access Pass.
+            </p>
             </div>
           </div>
         </div>
@@ -277,9 +275,9 @@ const Pricing = () => {
               Choose the plan that matches your goals. Start free or unlock full access with our premium packages.
             </p>
             <p className="text-base text-muted-foreground max-w-4xl mx-auto">
-              <strong>Explore Mode</strong> gives you 5 free credits per month. 
-              <strong> Package plans</strong> ($15-$18/month) unlock 50 AI requests per month across specialized toolkits.
-              The <strong>All Access Pass</strong> ($29/month) includes everything from all packages with 50 requests/month, priority support, and early feature access.
+              <strong>Explore Mode</strong> gives you 5 free credits per month that roll over. 
+              <strong> Package plans</strong> ($15-$18/month) include specialized toolkits with monthly credits that roll over.
+              The <strong>All Access Pass</strong> ($29/month) includes everything from all packages, priority support, and early feature access.
             </p>
           </div>
           
@@ -408,7 +406,7 @@ const Pricing = () => {
                       }
                     }}
                   >
-                    {selectedPlan.isFree ? "Start Free Trial" : `Get Started with ${selectedPlan.name}`}
+                    {selectedPlan.isFree ? "Get Started Free" : `Get Started with ${selectedPlan.name}`}
                   </Button>
                 </div>
               </CardContent>
@@ -632,7 +630,7 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Do you offer refunds?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final. Try our free trial first!
+                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final. Start with Explore Mode (free forever) to try our tools first!
                   </p>
                 </div>
                 

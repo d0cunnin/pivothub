@@ -16,7 +16,7 @@ import { CreditCard, Calendar, AlertCircle, Zap } from "lucide-react";
 export const AccountSettings = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd, isTrialActive, trialDaysRemaining, trialEnd } = useAuth();
+  const { subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd } = useAuth();
   const { monthlyRequests, remainingRequests, refreshUsage } = useUsage();
   const [isLoading, setIsLoading] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
@@ -96,7 +96,7 @@ export const AccountSettings = () => {
 
   const handlePurchaseCredits = async (credits: number) => {
     // Check subscription status
-    if (!subscribed || isTrialActive) {
+    if (!subscribed) {
       toast({
         title: "Subscription Required",
         description: "Extra credits are only available for active paid subscribers. Please upgrade your plan first.",
@@ -124,8 +124,6 @@ export const AccountSettings = () => {
       
       if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
         errorMessage = "You need an active subscription to purchase extra credits";
-      } else if (error?.message?.includes('TRIAL_NOT_ALLOWED')) {
-        errorMessage = "Extra credits are not available during trial. Please subscribe first.";
       }
       
       toast({
@@ -166,7 +164,7 @@ export const AccountSettings = () => {
           </div>
 
           {/* Only show extra credits section if user has active paid subscription */}
-          {subscribed && !isTrialActive ? (
+          {subscribed ? (
             <div className="space-y-3">
               <Label className="text-base font-semibold">Purchase Extra Credits</Label>
               <div className="text-sm text-muted-foreground mb-3">
@@ -259,21 +257,6 @@ export const AccountSettings = () => {
                     <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4" />
                       <span>Renews on {new Date(subscriptionEnd).toLocaleDateString()}</span>
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : isTrialActive ? (
-              <>
-                <AlertCircle className="h-5 w-5 mt-0.5 text-amber-500" />
-                <div className="flex-1">
-                  <div className="font-semibold text-lg">Free Trial Active</div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {trialDaysRemaining} days remaining
-                  </div>
-                  {trialEnd && (
-                    <div className="text-xs text-muted-foreground mt-1">
-                      Trial ends {new Date(trialEnd).toLocaleDateString()}
                     </div>
                   )}
                 </div>

@@ -25,7 +25,7 @@ interface UserProgress {
 }
 
 const Dashboard = () => {
-  const { user, subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd, isTrialActive, trialDaysRemaining } = useAuth();
+  const { user, subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd } = useAuth();
   const { monthlyRequests, remainingRequests, totalAvailable, rolloverCredits } = useUsage();
   const [toolUsage, setToolUsage] = useState<ToolUsage[]>([]);
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);

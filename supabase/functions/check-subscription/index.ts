@@ -67,21 +67,7 @@ serve(async (req) => {
       throw new Error(`Failed to fetch subscriber data: ${subscriberError.message}`);
     }
 
-    // Check if trial has expired and update if necessary
-    const now = new Date();
-    const trialEnd = subscriber?.trial_end ? new Date(subscriber.trial_end) : null;
-    const isTrialExpired = trialEnd && now > trialEnd;
-    
-    if (subscriber?.is_trial_active && isTrialExpired) {
-      logStep("Trial expired, updating subscriber record");
-      const { error: updateError } = await supabaseClient
-        .from("subscribers_public")
-        .update({ is_trial_active: false })
-        .eq("user_id", user.id);
-      
-      if (updateError) throw new Error(`Failed to update trial status: ${updateError.message}`);
-      subscriber.is_trial_active = false;
-    }
+    // Note: Trial system removed - all users start with Explore Mode (5 free credits/month)
 
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     

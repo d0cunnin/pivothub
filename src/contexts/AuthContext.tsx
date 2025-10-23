@@ -11,9 +11,6 @@ interface AuthContextType {
   subscriptionTier: string | null;
   subscriptionPackage: string | null;
   subscriptionEnd: string | null;
-  isTrialActive: boolean;
-  trialEnd: string | null;
-  trialDaysRemaining: number;
   isAdmin: boolean;
   refreshSubscription: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -40,9 +37,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [subscriptionTier, setSubscriptionTier] = useState<string | null>(null);
   const [subscriptionPackage, setSubscriptionPackage] = useState<string | null>(null);
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
-  const [isTrialActive, setIsTrialActive] = useState<boolean>(false);
-  const [trialEnd, setTrialEnd] = useState<string | null>(null);
-  const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
 
@@ -66,9 +60,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSubscriptionTier(data.subscription_tier || null);
         setSubscriptionPackage(data.subscription_package || null);
         setSubscriptionEnd(data.subscription_end || null);
-        setIsTrialActive(data.is_trial_active || false);
-        setTrialEnd(data.trial_end || null);
-        setTrialDaysRemaining(data.trial_days_remaining || 0);
       }
     } catch (error) {
       console.error('Error refreshing subscription:', error);
@@ -159,9 +150,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setSubscribed(false);
           setSubscriptionTier(null);
           setSubscriptionEnd(null);
-          setIsTrialActive(false);
-          setTrialEnd(null);
-          setTrialDaysRemaining(0);
           setIsAdmin(false);
         }
         
@@ -195,9 +183,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     subscriptionTier,
     subscriptionPackage,
     subscriptionEnd,
-    isTrialActive,
-    trialEnd,
-    trialDaysRemaining,
     isAdmin,
     refreshSubscription,
     signOut,

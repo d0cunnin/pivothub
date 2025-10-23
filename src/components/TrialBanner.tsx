@@ -1,15 +1,27 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Clock, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * TrialBanner component - Currently disabled as trial system has been removed.
+ * All users start with Explore Mode (5 free credits per month).
+ * This component is kept for potential future trial implementation.
+ */
 export const TrialBanner: React.FC = () => {
-  const { user, isTrialActive, trialDaysRemaining } = useAuth();
+  const { user, subscribed } = useAuth();
   const navigate = useNavigate();
 
-  // Only show for logged-in users with active trial
-  if (!user || !isTrialActive) return null;
+  // Trial system removed - users now have Explore Mode by default
+  // This component no longer displays anything
+  return null;
+
+  // Future trial implementation can be added here
+  // Uncomment below if trial system is re-implemented:
+  
+  /*
+  if (!user || subscribed) return null;
 
   return (
     <div className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-primary/20">
@@ -18,14 +30,11 @@ export const TrialBanner: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-primary">
               <Star className="w-5 h-5 fill-current" />
-              <span className="font-semibold">Free Trial Active</span>
+              <span className="font-semibold">Welcome to Explore Mode!</span>
             </div>
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span className="text-sm">
-                {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining
-              </span>
-            </div>
+            <span className="text-sm text-muted-foreground">
+              Get 5 free credits every month
+            </span>
           </div>
           <Button
             variant="outline"
@@ -33,10 +42,11 @@ export const TrialBanner: React.FC = () => {
             onClick={() => navigate('/pricing')}
             className="text-primary border-primary hover:bg-primary hover:text-primary-foreground"
           >
-            Upgrade Now
+            View Plans
           </Button>
         </div>
       </div>
     </div>
   );
+  */
 };

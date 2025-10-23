@@ -37,15 +37,19 @@ export type ToolName = string;
 
 /**
  * Check if a user's subscription package includes access to a specific tool
+ * 
+ * Note: Explore Mode (free) users have access to all tools, but usage is limited 
+ * by their 5 monthly credits. Credit limits are enforced at usage time, not access time.
  */
 export function hasToolAccess(
   subscriptionPackage: string | null | undefined,
   toolName: string,
   isSubscribed: boolean = false
 ): boolean {
-  // Free users and trial users get no access to tools
+  // Explore Mode users (free tier) have access to all tools, limited by credits
+  // Credit enforcement happens in the usage check, not here
   if (!isSubscribed || !subscriptionPackage) {
-    return false;
+    return true; // Allow access, credits will limit usage
   }
 
   // All-access package has access to everything

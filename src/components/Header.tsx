@@ -10,7 +10,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut, isAdmin, subscribed, subscriptionTier, subscriptionEnd, isTrialActive, trialDaysRemaining } = useAuth();
+  const { user, signOut, isAdmin, subscribed, subscriptionTier, subscriptionEnd } = useAuth();
 
   const handleGetStarted = () => {
     navigate('/');
@@ -137,15 +137,8 @@ export const Header = () => {
                             </span>
                           )}
                         </>
-                      ) : isTrialActive ? (
-                        <>
-                          <span className="font-medium">Free Trial</span>
-                          <span className="block mt-0.5">
-                            {trialDaysRemaining} days left
-                          </span>
-                        </>
                       ) : (
-                        <span className="font-medium">Free Plan</span>
+                        <span className="font-medium">Explore Mode</span>
                       )}
                     </div>
                   </div>

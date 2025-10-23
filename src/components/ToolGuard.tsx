@@ -26,7 +26,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   toolName = "this tool"
 }) => {
   const { remainingRequests, accountStatus, checkAndIncrementUsage } = useUsage();
-  const { user, isTrialActive, trialDaysRemaining, subscribed, isAdmin } = useAuth();
+  const { user, subscribed, isAdmin } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
@@ -220,7 +220,6 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   };
 
   // Show usage warning if approaching limit (but not for admins)
-  const showTrialBanner = !isAdmin && user && isTrialActive;
   const showUsageWarning = !isAdmin && remainingRequests <= 10 && remainingRequests > 0;
   const showLimitReached = !isAdmin && remainingRequests === 0;
   
@@ -230,18 +229,6 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
 
   return (
     <div>
-      {/* Trial Banner */}
-      {showTrialBanner && (
-        <div className="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-lg">
-          <div className="flex items-center gap-2 text-primary">
-            <AlertTriangle className="w-4 h-4" />
-            <span className="text-sm font-medium">
-              🎉 Trial Active - {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining
-            </span>
-          </div>
-        </div>
-      )}
-
       {/* Tool Cost Badge */}
       {toolName && !isAdmin && (
         <div className="mb-3 flex items-center justify-between">
