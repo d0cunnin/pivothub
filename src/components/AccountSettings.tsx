@@ -95,6 +95,17 @@ export const AccountSettings = () => {
   };
 
   const handlePurchaseCredits = async (credits: number) => {
+    // Check subscription status
+    if (!subscribed || isTrialActive) {
+      toast({
+        title: "Subscription Required",
+        description: "Extra credits are only available for active paid subscribers. Please upgrade your plan first.",
+        variant: "destructive",
+      });
+      navigate('/pricing');
+      return;
+    }
+
     try {
       setIsLoading(true);
       const { data, error } = await supabase.functions.invoke('purchase-extra-credits', {
@@ -106,11 +117,20 @@ export const AccountSettings = () => {
       if (data?.url) {
         window.location.href = data.url;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error purchasing credits:', error);
+      
+      let errorMessage = "Failed to initiate purchase";
+      
+      if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
+        errorMessage = "You need an active subscription to purchase extra credits";
+      } else if (error?.message?.includes('TRIAL_NOT_ALLOWED')) {
+        errorMessage = "Extra credits are not available during trial. Please subscribe first.";
+      }
+      
       toast({
         title: "Error",
-        description: "Failed to initiate purchase",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -145,50 +165,73 @@ export const AccountSettings = () => {
             </div>
           </div>
 
-          <div className="space-y-3">
-            <Label className="text-base font-semibold">Purchase Extra Credits</Label>
-            <div className="text-sm text-muted-foreground mb-3">
-              Need more AI requests this month? Purchase extra credits that roll over.
+          {/* Only show extra credits section if user has active paid subscription */}
+          {subscribed && !isTrialActive ? (
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Purchase Extra Credits</Label>
+              <div className="text-sm text-muted-foreground mb-3">
+                Need more AI requests this month? Purchase extra credits that roll over.
+              </div>
+              <div className="grid gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(10)}
+                  disabled={isLoading}
+                  className="justify-between h-auto py-4"
+                >
+                  <div className="text-left">
+                    <div className="font-semibold">10 Extra Credits</div>
+                    <div className="text-xs text-muted-foreground">Great for occasional use</div>
+                  </div>
+                  <span className="font-bold text-lg">$5.00</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(25)}
+                  disabled={isLoading}
+                  className="justify-between h-auto py-4"
+                >
+                  <div className="text-left">
+                    <div className="font-semibold">25 Extra Credits</div>
+                    <div className="text-xs text-muted-foreground">Best value</div>
+                  </div>
+                  <span className="font-bold text-lg">$10.00</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(50)}
+                  disabled={isLoading}
+                  className="justify-between h-auto py-4"
+                >
+                  <div className="text-left">
+                    <div className="font-semibold">50 Extra Credits</div>
+                    <div className="text-xs text-muted-foreground">For power users</div>
+                  </div>
+                  <span className="font-bold text-lg">$18.00</span>
+                </Button>
+              </div>
             </div>
-            <div className="grid gap-3">
-              <Button
-                variant="outline"
-                onClick={() => handlePurchaseCredits(10)}
-                disabled={isLoading}
-                className="justify-between h-auto py-4"
-              >
-                <div className="text-left">
-                  <div className="font-semibold">10 Extra Credits</div>
-                  <div className="text-xs text-muted-foreground">Great for occasional use</div>
+          ) : (
+            <div className="p-4 rounded-lg bg-muted/50 border border-border">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+                <div>
+                  <div className="font-semibold">Extra Credits Unavailable</div>
+                  <div className="text-sm text-muted-foreground mt-1">
+                    Extra credits are only available for active paid subscribers.
+                  </div>
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    className="mt-3"
+                    onClick={() => navigate('/pricing')}
+                  >
+                    View Subscription Plans
+                  </Button>
                 </div>
-                <span className="font-bold text-lg">$5.00</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handlePurchaseCredits(25)}
-                disabled={isLoading}
-                className="justify-between h-auto py-4"
-              >
-                <div className="text-left">
-                  <div className="font-semibold">25 Extra Credits</div>
-                  <div className="text-xs text-muted-foreground">Best value</div>
-                </div>
-                <span className="font-bold text-lg">$10.00</span>
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handlePurchaseCredits(50)}
-                disabled={isLoading}
-                className="justify-between h-auto py-4"
-              >
-                <div className="text-left">
-                  <div className="font-semibold">50 Extra Credits</div>
-                  <div className="text-xs text-muted-foreground">For power users</div>
-                </div>
-                <span className="font-bold text-lg">$18.00</span>
-              </Button>
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
       

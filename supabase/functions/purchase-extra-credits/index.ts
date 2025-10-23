@@ -52,12 +52,58 @@ serve(async (req) => {
       apiVersion: '2023-10-16',
     });
 
-    // Get user email
+    // Get user email and subscription status
     const { data: subscriber } = await supabase
       .from('subscribers_public')
       .select('*')
       .eq('user_id', user.id)
       .single();
+
+    // Validate user has active paid subscription
+    if (!subscriber) {
+      logStep('No subscriber record found');
+      return new Response(
+        JSON.stringify({ 
+          error: 'No subscription found. Please subscribe to a plan first.' 
+        }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check if user has active paid subscription (not trial, not free)
+    const now = new Date();
+    const subscriptionEnd = subscriber.subscription_end ? new Date(subscriber.subscription_end) : null;
+    const isSubscriptionActive = subscriber.subscribed && subscriptionEnd && subscriptionEnd > now;
+
+    if (!isSubscriptionActive) {
+      logStep('User does not have active paid subscription', {
+        subscribed: subscriber.subscribed,
+        subscription_end: subscriber.subscription_end,
+        is_trial_active: subscriber.is_trial_active
+      });
+      
+      return new Response(
+        JSON.stringify({ 
+          error: 'Extra credits are only available for active subscribers. Please upgrade your plan first.',
+          code: 'SUBSCRIPTION_REQUIRED'
+        }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Explicitly block trial users from purchasing credits
+    if (subscriber.is_trial_active) {
+      logStep('Trial user attempted to purchase credits');
+      return new Response(
+        JSON.stringify({ 
+          error: 'Extra credits are not available during trial period. Please subscribe to a paid plan first.',
+          code: 'TRIAL_NOT_ALLOWED'
+        }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    logStep('Subscription validated - user can purchase credits');
 
     // Get or create Stripe customer
     let customerId = subscriber?.stripe_customer_id;

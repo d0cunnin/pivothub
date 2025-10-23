@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Pricing = () => {
-  const { user, subscribed, subscriptionTier } = useAuth();
+  const { user, subscribed, subscriptionTier, isTrialActive } = useAuth();
   const { toast } = useToast();
   const [checkoutModal, setCheckoutModal] = useState<{
     open: boolean;
@@ -41,6 +41,18 @@ const Pricing = () => {
       return;
     }
 
+    // Check if user has active paid subscription
+    if (!subscribed || isTrialActive) {
+      toast({
+        title: "Subscription Required",
+        description: "Extra credits are only available for active paid subscribers. Please upgrade to a paid plan first.",
+        variant: "destructive",
+      });
+      // Scroll to subscription plans section
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     setPurchasingCredits(true);
     try {
       const { data, error } = await supabase.functions.invoke('purchase-extra-credits', {
@@ -55,10 +67,18 @@ const Pricing = () => {
       if (data?.url) {
         window.location.href = data.url;
       }
-    } catch (error) {
+    } catch (error: any) {
+      let errorMessage = "Failed to create checkout session. Please try again.";
+      
+      if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
+        errorMessage = "You need an active subscription to purchase extra credits";
+      } else if (error?.message?.includes('TRIAL_NOT_ALLOWED')) {
+        errorMessage = "Extra credits are not available during trial. Please subscribe first.";
+      }
+      
       toast({
         title: "Error",
-        description: "Failed to create checkout session. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
