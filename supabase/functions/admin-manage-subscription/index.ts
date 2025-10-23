@@ -151,7 +151,6 @@ serve(async (req) => {
           subscription_tier: tier,
           subscription_end: subscriptionEnd,
           ai_request_limit: requestLimit,
-          is_trial_active: false,
           updated_at: new Date().toISOString(),
         }, {
           onConflict: "user_id"
@@ -214,7 +213,6 @@ serve(async (req) => {
           subscribed: false,
           subscription_tier: null,
           subscription_end: null,
-          is_trial_active: false,
           updated_at: new Date().toISOString(),
         })
         .eq("user_id", userId);
