@@ -394,7 +394,7 @@ export const AccountSettings = () => {
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete your account and remove all your data from our servers, including:
                   <ul className="list-disc list-inside mt-2 space-y-1">
-                    <li>All assessments and progress</li>
+                    <li>All assessment results and progress</li>
                     <li>Course enrollments and submissions</li>
                     <li>Analytics and feedback</li>
                     <li>Subscription information</li>

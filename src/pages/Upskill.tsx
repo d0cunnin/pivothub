@@ -45,7 +45,7 @@ const Upskill = () => {
             </h1>
             <div className="text-left max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Transform your career journey with comprehensive assessments, targeted job preparation, and strategic skill-building designed for real-world success
+                Transform your career journey with comprehensive assessment tools, targeted prep resources, and strategic skill-building designed for real-world success
               </p>
             </div>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
@@ -54,8 +54,8 @@ const Upskill = () => {
                   size="lg" 
                   variant="hero" 
                   className="flex items-center space-x-2"
-                  onClick={() => window.location.href = '/assessments'}
-                  aria-label="Go to Career Assessments"
+                  onClick={() => window.location.href = '/assessit'}
+                  aria-label="Go to Assess It"
                 >
                   <Brain className="h-5 w-5" />
                   <span>Assessment</span>
@@ -94,7 +94,7 @@ const Upskill = () => {
           <div className="text-center mb-8">
             <div className="inline-block p-4 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm border border-white/20">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Career Assessments
+                Assess It
               </h2>
             </div>
           </div>
@@ -120,9 +120,9 @@ const Upskill = () => {
               <div className="flex justify-center lg:justify-start">
                 <Button 
                   variant="default"
-                  onClick={() => window.location.href = '/assessments'}
+                  onClick={() => window.location.href = '/assessit'}
                   className="shadow-lg hover:shadow-xl transition-all duration-300"
-                  aria-label="Learn more about Career Assessments"
+                  aria-label="Learn more about Assess It"
                 >
                   Learn More
                 </Button>
@@ -146,7 +146,7 @@ const Upskill = () => {
           <div className="text-center mb-8">
             <div className="inline-block p-4 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm border border-white/20">
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Job Preparation Tools
+                Prep It
               </h2>
             </div>
           </div>
@@ -172,9 +172,9 @@ const Upskill = () => {
               <div className="flex justify-center lg:justify-start">
                 <Button 
                   variant="default"
-                  onClick={() => window.location.href = '/jobprep'}
+                  onClick={() => window.location.href = '/prepit'}
                   className="shadow-lg hover:shadow-xl transition-all duration-300"
-                  aria-label="Learn more about Job Preparation Tools"
+                  aria-label="Learn more about Prep It"
                 >
                   Learn More
                 </Button>
@@ -226,7 +226,7 @@ const Upskill = () => {
                   variant="default"
                   onClick={() => window.location.href = '/learn-a-skill'}
                   className="shadow-lg hover:shadow-xl transition-all duration-300"
-                  aria-label="Learn more about Learning New Skills"
+                  aria-label="Learn more about Learn It"
                 >
                   Learn More
                 </Button>

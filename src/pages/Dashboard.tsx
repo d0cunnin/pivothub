@@ -260,7 +260,7 @@ const Dashboard = () => {
                     <div className="text-center py-8 text-muted-foreground">
                       <Award className="h-12 w-12 mx-auto mb-3 opacity-30" />
                       <p>No progress recorded yet</p>
-                      <p className="text-sm">Complete assessments to track your progress</p>
+                      <p className="text-sm">Complete assessment tools to track your progress</p>
                     </div>
                   )}
                 </CardContent>

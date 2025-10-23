@@ -51,7 +51,7 @@ const PrivacyPolicy = () => {
                   <li><strong>Personal Information:</strong> Name, email address, location, and other identifying information you voluntarily provide.</li>
                   <li><strong>Resume and Job Data:</strong> Work history, education, skills, certifications, and any other data submitted through resume, cover letter, or job-related tools.</li>
                   <li><strong>Technical Data:</strong> IP address, browser type, device information, pages visited, and time spent on the site.</li>
-                  <li><strong>User Input into AI Tools:</strong> Any data you enter into our AI-driven tools, including grant generators, resume builders, personality assessments, etc.</li>
+                  <li><strong>User Input into AI Tools:</strong> Any data you enter into our AI-driven tools, including grant generators, resume builders, personality assessment tools, etc.</li>
                 </ul>
               </div>
 
@@ -93,7 +93,7 @@ const PrivacyPolicy = () => {
                   We act solely as a conduit between users and the AI technologies embedded in our tools. Users acknowledge that:
                 </p>
                 <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                  <li>Generated content (e.g., resumes, cover letters, assessments, or grant narratives) is for informational and illustrative purposes only.</li>
+                  <li>Generated content (e.g., resumes, cover letters, assessment results, or grant narratives) is for informational and illustrative purposes only.</li>
                   <li>PivotHub is not responsible for the accuracy, suitability, originality, or legality of AI-generated content.</li>
                   <li>Users are solely responsible for reviewing, editing, and ensuring the appropriateness of any AI-generated content before use or publication.</li>
                 </ul>

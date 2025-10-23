@@ -143,7 +143,7 @@ export const UserDetailModal = ({ userId, userEmail, isOpen, onClose }: UserDeta
           <div>
             <h3 className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              Assessments Completed ({assessments?.length || 0})
+              Assessment Results Completed ({assessments?.length || 0})
             </h3>
             <div className="space-y-2">
               {assessments?.map((assessment, idx) => (
@@ -154,7 +154,7 @@ export const UserDetailModal = ({ userId, userEmail, isOpen, onClose }: UserDeta
                   </span>
                 </div>
               ))}
-              {!assessments?.length && <p className="text-sm text-muted-foreground">No assessments completed</p>}
+              {!assessments?.length && <p className="text-sm text-muted-foreground">No assessment results completed</p>}
             </div>
           </div>
         </div>

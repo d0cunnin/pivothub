@@ -153,7 +153,7 @@ const Pricing = () => {
       description: "Master your career journey with 75 monthly credits",
       features: [
         "75 credits per month",
-        "Career, Skills & Personality Assessments (1 credit each)",
+        "Career, Skills & Personality Assessment Tools (1 credit each)",
         "Interview Coach & Questions (1 credit each)",
         "Resume Analysis (2 credits)",
         "Course access (free - no credits)",
@@ -212,7 +212,7 @@ const Pricing = () => {
         "Access to all tools across all packages",
         "High-cost tools: Teaching Materials (5), Business Plans (4)",
         "Medium-cost tools: Resume Analysis (2), Marketing (3)",
-        "Low-cost tools: Chatbots (1), Assessments (1)",
+        "Low-cost tools: Chatbots (1), Assessment Tools (1)",
         "Priority support & early access",
         "Save unlimited results"
       ],
@@ -634,7 +634,7 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Which path is right for me?</h3>
                   <p className="text-muted-foreground text-sm">
-                    If you're job hunting, choose Job Prep. Starting a business? Pick Hire Yourself. Not sure? Get the All Access Pass for everything.
+                    If you're job hunting, choose Prep It. Building a business? Pick Build It. Not sure? Get the All Access Pass for everything.
                   </p>
                 </div>
               </div>

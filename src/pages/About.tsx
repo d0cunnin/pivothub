@@ -102,7 +102,7 @@ export default function About() {
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="section-header mb-6 text-white">Our Mission & Values</h2>
             <p className="section-description text-white/90">
-              Empowering individuals to navigate career transitions through comprehensive assessments, skill development, entrepreneurship support, and job preparation—all powered by AI-driven tools and expert guidance.
+              Empowering individuals to navigate career transitions through comprehensive assessment tools, skill development, entrepreneurship support, and preparation resources—all powered by AI-driven tools and expert guidance.
             </p>
           </div>
 
@@ -110,7 +110,7 @@ export default function About() {
             <div className="space-y-6">
               <h3 className="section-header text-white">Discover Your Path</h3>
               <p className="section-body-text text-white/90">
-                Start with our comprehensive career assessments to identify your strengths, skills, and ideal career direction. Whether you're pivoting to a new industry, developing new skills for emerging opportunities, or preparing to launch your own venture, our AI-powered tools provide personalized insights to guide your journey.
+                Start with our comprehensive career assessment tools to identify your strengths, skills, and ideal career direction. Whether you're pivoting to a new industry, developing new skills for emerging opportunities, or preparing to launch your own venture, our AI-powered tools provide personalized insights to guide your journey.
               </p>
             </div>
             <div className="lg:ml-4">

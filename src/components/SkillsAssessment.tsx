@@ -972,7 +972,7 @@ export const SkillsAssessment = () => {
               <h4 className="text-lg font-bold mb-2 text-blue-900">Career Development Path:</h4>
               <p className="text-sm text-blue-800 mb-3">
                 Based on your skill profile, focus on developing your strongest areas while addressing key gaps. 
-                {aiAssessment ? aiAssessment.summary : "Consider taking our Career and Personality Assessments for a complete career roadmap."}
+                {aiAssessment ? aiAssessment.summary : "Consider taking our Career and Personality Assessment Tools for a complete career roadmap."}
               </p>
               <div className="text-xs text-blue-700">
                 <strong>Pro Tip:</strong> Employers value both technical skills and soft skills. Your assessment shows areas where targeted learning can significantly boost your career prospects.

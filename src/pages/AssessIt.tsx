@@ -36,7 +36,7 @@ const AssessIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">ASSESS IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Career Assessments
+              Assess It
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Discover your strengths, skills, and perfect career path with our comprehensive assessment tools
@@ -59,7 +59,7 @@ const AssessIt = () => {
               Take Your Assessment Today
             </h2>
             <p className="text-lg text-foreground leading-relaxed mb-8">
-              Discover what's next with our three powerful assessments designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills all to help you find the best career or business path that fits who you are and where you want to go.
+              Discover what's next with our three powerful assessment tools designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills—all to help you find the best career or business path that fits who you are and where you want to go.
             </p>
           </div>
 
@@ -117,7 +117,7 @@ const AssessIt = () => {
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed mb-6">
-                These assessments are here to help you discover a career path that truly fits you and your future.
+                These assessment tools are here to help you discover a career path that truly fits you and your future.
                 You'll get clear insight into:
               </p>
               <div className="space-y-3 mb-6">
