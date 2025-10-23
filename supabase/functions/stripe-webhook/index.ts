@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import Stripe from 'https://esm.sh/stripe@14.21.0';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { handleSuccessfulPayment, handleFailedPayment } from './handlers.ts';
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
   apiVersion: '2023-10-16',
@@ -46,6 +47,20 @@ serve(async (req) => {
         await handleExtraCredits(supabase, session);
       } else if (session.mode === 'subscription') {
         await handleSubscriptionCheckout(supabase, session);
+      }
+    }
+
+    if (event.type === 'invoice.payment_succeeded') {
+      const invoice = event.data.object as Stripe.Invoice;
+      if (invoice.subscription) {
+        await handleSuccessfulPayment(supabase, invoice);
+      }
+    }
+
+    if (event.type === 'invoice.payment_failed') {
+      const invoice = event.data.object as Stripe.Invoice;
+      if (invoice.subscription) {
+        await handleFailedPayment(supabase, invoice);
       }
     }
 
@@ -97,15 +112,22 @@ async function handleSubscriptionCheckout(supabase: any, session: Stripe.Checkou
 
   const subscription = subscriptions.data[0];
   const subscriptionEnd = new Date(subscription.current_period_end * 1000);
+  const billingCycleStart = new Date(subscription.current_period_start * 1000);
 
-  // Update subscribers_public
+  // Update subscribers_public - grant full credits immediately on first subscription
   const { error: publicError } = await supabase
     .from('subscribers_public')
     .update({
       subscribed: true,
       subscription_package: subscriptionPackage,
       subscription_end: subscriptionEnd.toISOString(),
+      billing_cycle_start: billingCycleStart.toISOString(),
+      next_billing_date: subscriptionEnd.toISOString(),
       ai_request_limit: 50,
+      monthly_ai_requests: 0, // Start with full credits
+      last_request_reset: new Date().toISOString(),
+      grace_period_end: null, // Clear any grace period
+      account_status: 'active',
       updated_at: new Date().toISOString(),
     })
     .eq('user_id', userId);
@@ -152,13 +174,16 @@ async function handleSubscriptionChange(supabase: any, subscription: Stripe.Subs
   }
 
   const subscriptionEnd = new Date(subscription.current_period_end * 1000);
+  const billingCycleStart = new Date(subscription.current_period_start * 1000);
 
-  // Update subscription status
+  // Update subscription status and billing cycle dates
   const { error: updateError } = await supabase
     .from('subscribers_public')
     .update({
       subscribed: subscription.status === 'active',
       subscription_end: subscriptionEnd.toISOString(),
+      billing_cycle_start: billingCycleStart.toISOString(),
+      next_billing_date: subscriptionEnd.toISOString(),
       updated_at: new Date().toISOString(),
     })
     .eq('user_id', secureData.user_id);
@@ -188,13 +213,18 @@ async function handleSubscriptionCancellation(supabase: any, subscription: Strip
     return;
   }
 
-  // Update subscription status
+  // Update subscription status - don't immediately downgrade, set grace period instead
+  const gracePeriodEnd = new Date();
+  gracePeriodEnd.setDate(gracePeriodEnd.getDate() + 7); // 7-day grace period
+
   const { error: updateError } = await supabase
     .from('subscribers_public')
     .update({
       subscribed: false,
       subscription_end: null,
       subscription_package: null,
+      grace_period_end: gracePeriodEnd.toISOString(),
+      account_status: 'warning',
       updated_at: new Date().toISOString(),
     })
     .eq('user_id', secureData.user_id);

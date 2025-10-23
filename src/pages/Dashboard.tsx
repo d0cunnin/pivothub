@@ -26,7 +26,7 @@ interface UserProgress {
 
 const Dashboard = () => {
   const { user, subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd, isTrialActive, trialDaysRemaining } = useAuth();
-  const { monthlyRequests, remainingRequests } = useUsage();
+  const { monthlyRequests, remainingRequests, totalAvailable, rolloverCredits } = useUsage();
   const [toolUsage, setToolUsage] = useState<ToolUsage[]>([]);
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
   const [courseEnrollments, setCourseEnrollments] = useState<number>(0);
@@ -95,7 +95,7 @@ const Dashboard = () => {
     }
   };
 
-  const usagePercentage = monthlyRequests > 0 ? ((monthlyRequests / (monthlyRequests + remainingRequests)) * 100) : 0;
+  const usagePercentage = totalAvailable > 0 ? ((monthlyRequests / totalAvailable) * 100) : 0;
 
   return (
     <AuthGuard>
@@ -119,9 +119,9 @@ const Dashboard = () => {
                   <Zap className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{monthlyRequests}</div>
+                  <div className="text-2xl font-bold">{remainingRequests} / {totalAvailable}</div>
                   <p className="text-xs text-muted-foreground">
-                    {remainingRequests} remaining this month
+                    {rolloverCredits > 0 ? `(+${rolloverCredits} rolled over)` : `Used ${monthlyRequests} this month`}
                   </p>
                   <Progress value={usagePercentage} className="mt-2" />
                 </CardContent>

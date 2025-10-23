@@ -136,6 +136,7 @@ const Pricing = () => {
       description: "Get 5 credits every month to explore our tools",
       features: [
         "5 credits per month (resets monthly)",
+        "Unused credits roll over",
         "Use any tool (costs vary by complexity)",
         "Access to all tool categories",
         "Community access",
@@ -153,6 +154,7 @@ const Pricing = () => {
       description: "Master your career journey with 75 monthly credits",
       features: [
         "75 credits per month",
+        "Unused credits roll over each month",
         "Career, Skills & Personality Assessment Tools (1 credit each)",
         "Interview Coach & Questions (1 credit each)",
         "Resume Analysis (2 credits)",
@@ -172,6 +174,7 @@ const Pricing = () => {
       description: "Build, teach, and launch with 75 monthly credits",
       features: [
         "75 credits per month",
+        "Unused credits roll over each month",
         "Business Ideas & Planning (2-4 credits)",
         "Teaching Materials (5 credits)",
         "Logo & Branding (1 credit)",
@@ -191,6 +194,7 @@ const Pricing = () => {
       description: "Secure funding with 60 monthly credits",
       features: [
         "60 credits per month",
+        "Unused credits roll over each month",
         "Grant Content Generator (4 credits)",
         "Grant Finder (2 credits)",
         "Resource Finder (1 credit)",
@@ -209,6 +213,7 @@ const Pricing = () => {
       description: "Everything with 150 monthly credits",
       features: [
         "150 credits per month",
+        "Unused credits roll over each month",
         "Access to all tools across all packages",
         "High-cost tools: Teaching Materials (5), Business Plans (4)",
         "Medium-cost tools: Resume Analysis (2), Marketing (3)",

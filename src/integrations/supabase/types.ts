@@ -393,12 +393,16 @@ export type Database = {
           abuse_flags: number | null
           account_status: string | null
           ai_request_limit: number | null
+          billing_cycle_start: string | null
           created_at: string
           extra_credits: number | null
+          grace_period_end: string | null
           id: string
           is_trial_active: boolean
           last_request_reset: string | null
           monthly_ai_requests: number | null
+          next_billing_date: string | null
+          rollover_credits: number | null
           subscribed: boolean
           subscription_end: string | null
           subscription_package: string | null
@@ -412,12 +416,16 @@ export type Database = {
           abuse_flags?: number | null
           account_status?: string | null
           ai_request_limit?: number | null
+          billing_cycle_start?: string | null
           created_at?: string
           extra_credits?: number | null
+          grace_period_end?: string | null
           id?: string
           is_trial_active?: boolean
           last_request_reset?: string | null
           monthly_ai_requests?: number | null
+          next_billing_date?: string | null
+          rollover_credits?: number | null
           subscribed?: boolean
           subscription_end?: string | null
           subscription_package?: string | null
@@ -431,12 +439,16 @@ export type Database = {
           abuse_flags?: number | null
           account_status?: string | null
           ai_request_limit?: number | null
+          billing_cycle_start?: string | null
           created_at?: string
           extra_credits?: number | null
+          grace_period_end?: string | null
           id?: string
           is_trial_active?: boolean
           last_request_reset?: string | null
           monthly_ai_requests?: number | null
+          next_billing_date?: string | null
+          rollover_credits?: number | null
           subscribed?: boolean
           subscription_end?: string | null
           subscription_package?: string | null
@@ -664,7 +676,6 @@ export type Database = {
         Returns: boolean
       }
       check_and_increment_ai_usage:
-        | { Args: { p_user_id: string }; Returns: Json }
         | {
             Args: {
               p_credits_to_use?: number
@@ -673,6 +684,7 @@ export type Database = {
             }
             Returns: Json
           }
+        | { Args: { p_user_id: string }; Returns: Json }
       cleanup_expired_contexts: { Args: never; Returns: undefined }
       has_role: {
         Args: {
