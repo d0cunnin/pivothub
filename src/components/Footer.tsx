@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export const Footer = () => {
@@ -17,9 +17,6 @@ export const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
-              <Twitter className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
-              <Linkedin className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
-              <Instagram className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
             </div>
           </div>
           
@@ -67,7 +64,7 @@ export const Footer = () => {
         </div>
         
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-primary-foreground/60">
-          <p>&copy; 2024 PivotHub. All rights reserved. Empowering careers, enabling dreams.</p>
+          <p>&copy; 2025 PivotHub. All rights reserved. Empowering careers, enabling dreams.</p>
         </div>
       </div>
     </footer>
