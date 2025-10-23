@@ -113,9 +113,10 @@ const Pricing = () => {
       name: "Explore Mode",
       price: "Free",
       period: "forever",
-      description: "Try 1 AI tool per month with limited access",
+      description: "Try 3 credits per month to explore our tools",
       features: [
-        "1 AI tool use per month",
+        "3 credits per month",
+        "Use any tool (costs vary by complexity)",
         "Access to all tool categories",
         "Community access",
         "Email support"
@@ -129,13 +130,13 @@ const Pricing = () => {
       name: "Assess It + Prep It + Learn It Package",
       price: "$18",
       period: "month",
-      description: "Master your career journey with assessment, prep, and learning tools",
+      description: "Master your career journey with 75 monthly credits",
       features: [
-        "50 AI requests per month",
-        "Career, Skills & Personality Assessments",
-        "Interview Coach & Questions Generator",
-        "Resume & Cover Letter Coach",
-        "Course access and learning tools",
+        "75 credits per month",
+        "Career, Skills & Personality Assessments (1 credit each)",
+        "Interview Coach & Questions (1 credit each)",
+        "Resume Analysis (2 credits)",
+        "Course access (free - no credits)",
         "Save unlimited results",
         "Priority email support"
       ],
@@ -148,14 +149,13 @@ const Pricing = () => {
       name: "Build It + Teach It + Launch It Package",
       price: "$18",
       period: "month",
-      description: "Build, teach, and launch your ventures and creative ideas",
+      description: "Build, teach, and launch with 75 monthly credits",
       features: [
-        "50 AI requests per month",
-        "Business Idea Generator & Planning",
-        "Logo, Name & Branding Tools",
-        "Teaching Materials Generator",
-        "Launch Strategy Generator",
-        "Social Media & Marketing Tools",
+        "75 credits per month",
+        "Business Ideas & Planning (2-4 credits)",
+        "Teaching Materials (5 credits)",
+        "Logo & Branding (1 credit)",
+        "Marketing & Social Media (2-3 credits)",
         "Save unlimited results",
         "Priority email support"
       ],
@@ -168,14 +168,12 @@ const Pricing = () => {
       name: "Fund It Package",
       price: "$15",
       period: "month",
-      description: "Secure funding with grant writing and resource tools",
+      description: "Secure funding with 60 monthly credits",
       features: [
-        "50 AI requests per month",
-        "Grant Narrative Generator",
-        "Grant Finder & Search",
-        "Local Resource Finder",
-        "Application guidance",
-        "Budget templates",
+        "60 credits per month",
+        "Grant Content Generator (4 credits)",
+        "Grant Finder (2 credits)",
+        "Resource Finder (1 credit)",
         "Save unlimited results",
         "Priority email support"
       ],
@@ -188,17 +186,15 @@ const Pricing = () => {
       name: "All Access Pass",
       price: "$29",
       period: "month",
-      description: "Get access to every tool with generous usage limits",
+      description: "Everything with 150 monthly credits",
       features: [
-        "50 AI requests per month",
-        "Everything from all packages",
-        "All assessment & career tools",
-        "All business & creative tools",
-        "All funding & grant tools",
-        "Priority feature access",
-        "Save unlimited results",
-        "Early access to new tools",
-        "Priority email support"
+        "150 credits per month",
+        "Access to all tools across all packages",
+        "High-cost tools: Teaching Materials (5), Business Plans (4)",
+        "Medium-cost tools: Resume Analysis (2), Marketing (3)",
+        "Low-cost tools: Chatbots (1), Assessments (1)",
+        "Priority support & early access",
+        "Save unlimited results"
       ],
       tier: "all-access",
       package: "all_access",
@@ -424,14 +420,14 @@ const Pricing = () => {
                   <span className="text-4xl font-bold text-primary">$5</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  10 Extra AI Requests
+                  25 Extra Credits
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Perfect for occasional extra usage
+                    Great for trying premium tools
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -445,10 +441,10 @@ const Pricing = () => {
                 <Button
                   className="w-full"
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(10)}
+                  onClick={() => handlePurchaseCredits(25)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 10 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 25 Credits"}
                 </Button>
               </CardContent>
             </Card>
@@ -468,17 +464,17 @@ const Pricing = () => {
                   <span className="text-4xl font-bold text-primary">$10</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  25 Extra AI Requests
+                  75 Extra Credits
                 </CardDescription>
                 <p className="text-xs text-primary font-semibold mt-2">
-                  Just $0.40 per request
+                  Save 33% - Best Value
                 </p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Best value for medium projects
+                    Best value for regular users
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -491,10 +487,10 @@ const Pricing = () => {
                 </div>
                 <Button
                   className="w-full"
-                  onClick={() => handlePurchaseCredits(25)}
+                  onClick={() => handlePurchaseCredits(75)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 25 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 75 Credits"}
                 </Button>
               </CardContent>
             </Card>
@@ -510,14 +506,14 @@ const Pricing = () => {
                   <span className="text-4xl font-bold text-primary">$18</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  50 Extra AI Requests
+                  150 Extra Credits
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Perfect for large projects
+                    Power user pack - Save 40%
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -531,10 +527,10 @@ const Pricing = () => {
                 <Button
                   className="w-full"
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(50)}
+                  onClick={() => handlePurchaseCredits(150)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 50 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 150 Credits"}
                 </Button>
               </CardContent>
             </Card>

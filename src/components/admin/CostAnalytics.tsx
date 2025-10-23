@@ -27,13 +27,13 @@ export function CostAnalytics() {
   const loadAnalytics = async () => {
     try {
       const { data, error } = await supabase
-        .from('admin_cost_analysis')
+        .from('admin_cost_analysis' as any)
         .select('*')
         .order('profit_margin', { ascending: true });
 
       if (error) throw error;
       if (data) {
-        setAnalytics(data);
+        setAnalytics(data as any);
       }
     } catch (error) {
       console.error('Error loading cost analytics:', error);

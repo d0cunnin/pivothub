@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Lock, Mail, Eye, EyeOff, AlertTriangle, Check, X } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, AlertTriangle, Check, X, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import { getToolCreditCost, getToolCostTier } from "@/utils/toolCreditWeights";
 
 interface ToolGuardProps {
   children: React.ReactNode;
@@ -64,20 +66,33 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
       return;
     }
 
+    // Get credit cost for this tool
+    const creditCost = getToolCreditCost(toolName || 'generic');
+    
+    // Check if user has enough credits
+    if (remainingRequests < creditCost) {
+      toast({
+        title: "Insufficient Credits",
+        description: `This tool requires ${creditCost} credit${creditCost > 1 ? 's' : ''}, but you only have ${remainingRequests} remaining.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Check and increment usage
-    const result = await checkAndIncrementUsage();
+    const result = await checkAndIncrementUsage(toolName || 'generic');
     
     if (!result.canUse) {
       if (result.reason === 'limit_exceeded') {
         toast({
           title: "Monthly Limit Reached",
-          description: "You've reached your monthly AI request limit. Purchase extra credits or upgrade your plan.",
+          description: "You've reached your monthly credit limit. Purchase extra credits or upgrade your plan.",
           variant: "destructive",
         });
       } else if (result.reason === 'free_limit_exceeded') {
         toast({
           title: "Free Limit Reached",
-          description: "You've used your 1 free tool for this month. Subscribe to continue using PivotHub tools.",
+          description: "You've used your 3 free credits for this month. Subscribe to continue using PivotHub tools.",
           variant: "destructive",
         });
       }
@@ -85,6 +100,10 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
     }
 
     // Usage incremented successfully, execute the tool
+    toast({
+      title: "Tool Activated",
+      description: `${result.creditsCharged} credit${result.creditsCharged! > 1 ? 's' : ''} used. ${remainingRequests - result.creditsCharged!} credits remaining.`,
+    });
     onUse?.();
   };
 
@@ -204,6 +223,10 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   const showTrialBanner = !isAdmin && user && isTrialActive;
   const showUsageWarning = !isAdmin && remainingRequests <= 10 && remainingRequests > 0;
   const showLimitReached = !isAdmin && remainingRequests === 0;
+  
+  // Get tool cost info
+  const toolCreditCost = toolName ? getToolCreditCost(toolName) : 1;
+  const toolCostTier = toolName ? getToolCostTier(toolName) : 'low';
 
   return (
     <div>
@@ -219,13 +242,27 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
         </div>
       )}
 
+      {/* Tool Cost Badge */}
+      {toolName && !isAdmin && (
+        <div className="mb-3 flex items-center justify-between">
+          <Badge variant={toolCostTier === 'free' ? 'outline' : toolCostTier === 'low' ? 'secondary' : 'default'} className="gap-1">
+            <Zap className="h-3 w-3" />
+            {toolCreditCost} credit{toolCreditCost !== 1 ? 's' : ''}
+            {toolCostTier === 'high' && ' (Premium)'}
+          </Badge>
+          <span className="text-sm text-muted-foreground">
+            {remainingRequests} credits remaining
+          </span>
+        </div>
+      )}
+
       {/* Usage Warning Banner */}
       {showUsageWarning && (
         <div className="mb-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
           <div className="flex items-center space-x-2 text-yellow-600">
             <AlertTriangle className="h-4 w-4" />
             <span className="text-sm font-medium">
-              {remainingRequests} request{remainingRequests !== 1 ? 's' : ''} remaining this month
+              {remainingRequests} credit{remainingRequests !== 1 ? 's' : ''} remaining this month
             </span>
           </div>
         </div>

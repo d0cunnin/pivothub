@@ -15,27 +15,9 @@ export interface AnalyticsData {
 export const useAnalytics = () => {
   const trackUsage = async (data: AnalyticsData) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      const analyticsRecord = {
-        user_id: user?.id || null,
-        tool_name: data.toolName,
-        input_data: data.inputData,
-        input_quality_score: data.inputQualityScore,
-        response_data: data.responseData,
-        response_quality_score: data.responseQualityScore,
-        model_used: data.modelUsed,
-        response_time_ms: data.responseTimeMs,
-        session_id: data.sessionId || uuidv4()
-      };
-
-      const { error } = await supabase
-        .from('tool_usage_analytics')
-        .insert(analyticsRecord);
-
-      if (error) {
-        console.error('Analytics tracking error:', error);
-      }
+      // Analytics tracking is now handled automatically by check_and_increment_ai_usage
+      // This function is kept for backwards compatibility but doesn't insert to DB
+      console.log('Tool usage tracked:', data.toolName);
     } catch (error) {
       console.error('Error in trackUsage:', error);
     }

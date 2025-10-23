@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { getToolCreditCost } from '@/utils/toolCreditWeights';
 
 interface UsageContextType {
   monthlyRequests: number;
   remainingRequests: number;
   canUseTools: boolean;
   accountStatus: 'active' | 'suspended' | 'warning';
-  checkAndIncrementUsage: () => Promise<{ canUse: boolean; reason?: string }>;
+  checkAndIncrementUsage: (toolName?: string) => Promise<{ canUse: boolean; reason?: string; creditsCharged?: number }>;
   refreshUsage: () => Promise<void>;
 }
 
@@ -66,26 +67,38 @@ export const UsageProvider: React.FC<UsageProviderProps> = ({ children }) => {
     }
   }, [user]);
 
-  const checkAndIncrementUsage = async (): Promise<{ canUse: boolean; reason?: string }> => {
+  const checkAndIncrementUsage = async (toolName: string = 'generic'): Promise<{ canUse: boolean; reason?: string; creditsCharged?: number }> => {
     if (!user) {
       return { canUse: false, reason: 'not_logged_in' };
     }
 
+    // Get credit cost for this tool
+    const creditCost = getToolCreditCost(toolName);
+
     try {
       const { data, error } = await supabase.rpc('check_and_increment_ai_usage', {
-        p_user_id: user.id
+        p_user_id: user.id,
+        p_tool_name: toolName,
+        p_credits_to_use: creditCost
       });
 
       if (error) throw error;
 
-      const result = data as { can_use: boolean; reason: string; remaining: number; total_used: number };
+      const result = data as { 
+        can_use: boolean; 
+        reason: string; 
+        remaining: number; 
+        total_used: number;
+        credits_charged: number;
+      };
       
       setMonthlyRequests(result.total_used);
       setRemainingRequests(result.remaining);
 
       return {
         canUse: result.can_use,
-        reason: result.reason || undefined
+        reason: result.reason || undefined,
+        creditsCharged: result.credits_charged
       };
     } catch (error) {
       console.error('Error checking usage:', error);

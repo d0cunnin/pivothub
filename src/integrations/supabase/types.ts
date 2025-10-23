@@ -458,41 +458,32 @@ export type Database = {
       }
       tool_usage_analytics: {
         Row: {
-          created_at: string
+          created_at: string | null
+          credits_used: number
+          estimated_cost_usd: number | null
+          estimated_tokens: number | null
           id: string
-          input_data: Json
-          input_quality_score: number | null
-          model_used: string | null
-          response_data: Json | null
-          response_quality_score: number | null
-          response_time_ms: number | null
-          session_id: string | null
+          month_year: string | null
           tool_name: string
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          credits_used: number
+          estimated_cost_usd?: number | null
+          estimated_tokens?: number | null
           id?: string
-          input_data?: Json
-          input_quality_score?: number | null
-          model_used?: string | null
-          response_data?: Json | null
-          response_quality_score?: number | null
-          response_time_ms?: number | null
-          session_id?: string | null
+          month_year?: string | null
           tool_name: string
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          credits_used?: number
+          estimated_cost_usd?: number | null
+          estimated_tokens?: number | null
           id?: string
-          input_data?: Json
-          input_quality_score?: number | null
-          model_used?: string | null
-          response_data?: Json | null
-          response_quality_score?: number | null
-          response_time_ms?: number | null
-          session_id?: string | null
+          month_year?: string | null
           tool_name?: string
           user_id?: string
         }
@@ -578,17 +569,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      admin_cost_analysis: {
+        Row: {
+          email: string | null
+          month_year: string | null
+          monthly_revenue: number | null
+          profit_margin: number | null
+          subscribed: boolean | null
+          subscription_package: string | null
+          total_cost_usd: number | null
+          total_credits: number | null
+        }
+        Relationships: []
+      }
+      monthly_usage_summary: {
+        Row: {
+          month_year: string | null
+          total_cost_usd: number | null
+          total_credits: number | null
+          total_uses: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      check_and_increment_ai_usage: {
-        Args: { p_user_id: string }
-        Returns: Json
-      }
-      cleanup_expired_contexts: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      check_and_increment_ai_usage:
+        | { Args: { p_user_id: string }; Returns: Json }
+        | {
+            Args: {
+              p_credits_to_use?: number
+              p_tool_name?: string
+              p_user_id: string
+            }
+            Returns: Json
+          }
+      cleanup_expired_contexts: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -596,10 +612,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      reset_monthly_ai_requests: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      reset_monthly_ai_requests: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

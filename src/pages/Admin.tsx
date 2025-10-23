@@ -24,6 +24,7 @@ import { AuditLogViewer } from "@/components/admin/AuditLogViewer";
 import { ActivityFeed } from "@/components/admin/ActivityFeed";
 import { AssessmentAnalytics } from "@/components/admin/AssessmentAnalytics";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
+import { CostAnalytics } from "@/components/admin/CostAnalytics";
 
 interface UserWithSubscription {
   id: string;
@@ -185,6 +186,7 @@ const Admin = () => {
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="users">Users</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="cost">Cost Analysis</TabsTrigger>
               <TabsTrigger value="activity">Activity</TabsTrigger>
               <TabsTrigger value="system">System</TabsTrigger>
             </TabsList>
@@ -317,6 +319,10 @@ const Admin = () => {
             <TabsContent value="analytics" className="space-y-6">
               <AnalyticsDashboard />
               <AssessmentAnalytics />
+            </TabsContent>
+
+            <TabsContent value="cost" className="space-y-6">
+              <CostAnalytics />
             </TabsContent>
 
             <TabsContent value="activity" className="space-y-6">
