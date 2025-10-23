@@ -50,6 +50,66 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_user_id: string
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: string | null
+          target_user_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          admin_user_id: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          target_user_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          target_user_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      admin_rate_limits: {
+        Row: {
+          action_count: number
+          action_type: string
+          admin_user_id: string
+          created_at: string
+          id: string
+          window_start: string
+        }
+        Insert: {
+          action_count?: number
+          action_type: string
+          admin_user_id: string
+          created_at?: string
+          id?: string
+          window_start?: string
+        }
+        Update: {
+          action_count?: number
+          action_type?: string
+          admin_user_id?: string
+          created_at?: string
+          id?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       assessment_results: {
         Row: {
           action_plan: Json | null
@@ -594,6 +654,15 @@ export type Database = {
       }
     }
     Functions: {
+      check_admin_rate_limit: {
+        Args: {
+          p_action_type: string
+          p_admin_user_id: string
+          p_max_actions?: number
+          p_window_minutes?: number
+        }
+        Returns: boolean
+      }
       check_and_increment_ai_usage:
         | { Args: { p_user_id: string }; Returns: Json }
         | {
