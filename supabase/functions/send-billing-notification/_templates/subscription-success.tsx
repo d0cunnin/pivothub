@@ -144,7 +144,7 @@ const text = {
 
 const successBox = {
   backgroundColor: '#d1fae5',
-  border: '2px solid '#10b981',
+  border: '2px solid #10b981',
   borderRadius: '8px',
   margin: '24px 40px',
   padding: '20px',
