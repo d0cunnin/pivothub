@@ -171,7 +171,246 @@ Return as a JSON object with this EXACT structure:
     "remoteOptions": "Which recommendations work well remotely",
     "relocationWorth": "Whether relocation would significantly help (if applicable)"
   },
-  "generalAdvice": "Personalized career development advice based on their complete assessment (3-4 sentences)"
+  "generalAdvice": "Personalized career development advice based on their complete assessment (3-4 sentences)",
+  "dayInTheLife": {
+    "morning": "7am-12pm: Detailed realistic morning activities",
+    "afternoon": "12pm-5pm: Core work responsibilities",
+    "evening": "5pm+: How work ends, overtime expectations, on-call duties",
+    "weeklyRhythm": "Monday vs Friday typical differences",
+    "surprisingRealities": [
+      "60% of day is documentation/admin, not just [core task]",
+      "Collaboration takes more time than solo work",
+      "Daily tools: Slack, Asana, Excel"
+    ],
+    "honestChallenges": ["Physical demands", "Emotional toll", "Common frustrations"]
+  },
+  "entryPathways": {
+    "traditionalPath": {
+      "requirement": "Bachelor's degree in [field]",
+      "duration": "4 years",
+      "cost": "$40k-$120k",
+      "outcome": "Broadest career options"
+    },
+    "alternativePathways": [
+      {
+        "path": "Community college + transfer",
+        "duration": "2+2 years",
+        "cost": "$20k-$60k total",
+        "outcome": "Same degree, lower cost",
+        "bestFor": "Budget-conscious learners"
+      },
+      {
+        "path": "Trade/vocational school",
+        "duration": "6-18 months",
+        "cost": "$5k-$20k",
+        "outcome": "Specific certification for entry jobs",
+        "bestFor": "Fast entry with hands-on learning"
+      },
+      {
+        "path": "Apprenticeship program",
+        "duration": "2-4 years",
+        "cost": "Paid while learning ($30k-$50k earned)",
+        "outcome": "Journeyman certification + work experience",
+        "bestFor": "Earn while you learn"
+      },
+      {
+        "path": "Online bootcamp/self-taught",
+        "duration": "3-12 months intensive",
+        "cost": "$500-$15k",
+        "outcome": "Portfolio-based entry (no formal degree)",
+        "bestFor": "Career changers, self-motivated learners"
+      }
+    ],
+    "noExperienceEntry": "Yes - 45% entered without direct experience through [pathway]",
+    "startingRoles": [
+      {
+        "jobTitle": "Junior [Role] / [Role] Assistant",
+        "hiring": "Entry-level, no experience required",
+        "salaryRange": "$35k-$48k",
+        "responsibilities": "Support senior staff, learn fundamentals"
+      }
+    ]
+  },
+  "beginnerRoadmap": {
+    "phase1Exploration": {
+      "duration": "30 days",
+      "goal": "Test genuine interest before committing",
+      "week1": [
+        "🔍 Watch 5 'Day in the Life' YouTube videos",
+        "📚 Read 3 articles about career realities",
+        "📝 Write 5 excitements and 3 concerns"
+      ],
+      "week2": [
+        "🎓 Take 1 free intro course (Coursera/YouTube)",
+        "👥 Join 1 Reddit/Facebook community and lurk",
+        "🗣️ LinkedIn message for 15-min informational chat"
+      ],
+      "week3": [
+        "👀 Shadow someone in role for 2-4 hours",
+        "🛠️ Do beginner micro-project [specific example]",
+        "✅ Rate excitement 1-10"
+      ],
+      "week4": [
+        "If 7+: Research 3 training programs",
+        "If 4-6: Explore 2 related career paths",
+        "If 1-3: Pivot to alternative suggestions"
+      ]
+    },
+    "nextDecisionPoint": "End of 30 days: Commit OR pivot"
+  },
+  "prosAndChallenges": {
+    "pros": [
+      {
+        "benefit": "Job security",
+        "detail": "15% growth projected over 5 years",
+        "evidence": "Bureau of Labor Statistics"
+      },
+      {
+        "benefit": "Clear advancement path",
+        "detail": "Junior→Mid(2-3yr)→Senior(5-7yr)→Mgmt(10+yr)",
+        "evidence": "Standard career ladder"
+      },
+      {
+        "benefit": "Work flexibility",
+        "detail": "60% offer hybrid or remote",
+        "evidence": "Indeed analysis"
+      },
+      {
+        "benefit": "Meaningful impact",
+        "detail": "See direct results affecting [customers/patients]",
+        "evidence": "Practitioner testimonials"
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Physical demands",
+        "reality": "Standing 6-8 hrs/day, lifting 20-40 lbs",
+        "mitigation": "Good footwear, proper lifting technique",
+        "dealbreaker": "Chronic back/knee issues may not be sustainable"
+      },
+      {
+        "challenge": "Emotional toll",
+        "reality": "Frustrated customers, high-pressure situations",
+        "mitigation": "Develop thick skin, stress management",
+        "dealbreaker": "Highly sensitive to criticism = draining"
+      },
+      {
+        "challenge": "Schedule realities",
+        "reality": "Night shifts, weekends, on-call availability",
+        "mitigation": "Negotiate after proving yourself (6-12 months)",
+        "dealbreaker": "Rigid family commitments need upfront discussion"
+      },
+      {
+        "challenge": "Earnings plateau",
+        "reality": "Without management, salary tops at $75k-$85k",
+        "mitigation": "Specialize, freelance, or move to leadership",
+        "dealbreaker": "Want $150k+ = need manager/executive path"
+      }
+    ]
+  },
+  "fitIndicators": {
+    "youWillThrive": [
+      "You value [stability/creativity/autonomy] - this provides that",
+      "Energized by [people/solo work/variety] - matches daily reality",
+      "Your strengths [from assessment] align with requirements",
+      "Okay with [tradeoff] to get [benefit]"
+    ],
+    "youMightStruggle": [
+      "You hate [specific thing] - 30% of job, unavoidable",
+      "You need [high income/autonomy/novelty] - takes years",
+      "Your [trait] clashes with [job requirement]"
+    ],
+    "successStories": [
+      {
+        "profile": "Former retail, no degree, single parent",
+        "pathway": "6-month bootcamp while working part-time",
+        "outcome": "$62k junior analyst, promoted after 18 months",
+        "keyFactor": "Retail communication + relentless networking",
+        "timeline": "14 months decision → first offer"
+      },
+      {
+        "profile": "College grad unrelated field, career changer at 30",
+        "pathway": "Self-taught via courses + 3 portfolio projects",
+        "outcome": "$70k mid-size company",
+        "keyFactor": "Portfolio demonstrated capability",
+        "timeline": "9 months learning + 2 months job search"
+      }
+    ]
+  },
+  "redFlags": {
+    "careerRedFlags": [
+      {
+        "warning": "Field declining in [region/industry segment]",
+        "alternative": "Focus on [growing sub-specialty]"
+      },
+      {
+        "warning": "Automation risk: [tasks] being replaced",
+        "alternative": "Focus on human-centered: communication, creativity, strategy"
+      }
+    ],
+    "personalRedFlags": [
+      {
+        "warning": "Your assessment shows you value [X] but career provides opposite",
+        "honestAdvice": "You'll feel unfulfilled - consider [alternative]"
+      }
+    ],
+    "employerRedFlags": [
+      {
+        "redFlag": "Job says 'We're like a family' or 'Work hard, play hard'",
+        "meaning": "Poor work-life boundaries, burnout culture",
+        "advice": "Ask: 'What does work-life balance look like here?'"
+      },
+      {
+        "redFlag": "High turnover (check Glassdoor)",
+        "meaning": "Management issues, poor culture, unrealistic expectations",
+        "advice": "Ask: 'How long has your team been together?'"
+      }
+    ]
+  },
+  "realityCheck": {
+    "commonMisconceptions": [
+      {
+        "myth": "Need 4-year degree to enter",
+        "reality": "62% entered via bootcamp/trade school/self-teaching",
+        "source": "Industry workforce survey 2024"
+      },
+      {
+        "myth": "All glamorous/creative work",
+        "reality": "60% admin (emails, docs, meetings), 40% core work",
+        "source": "Time-tracking study of 200 professionals"
+      },
+      {
+        "myth": "Get rich quick",
+        "reality": "Entry $40k-$55k, 3yr $60k-$75k, 7yr $80k-$110k, mgmt $120k+",
+        "source": "BLS + Glassdoor"
+      }
+    ],
+    "incomeTimeline": {
+      "year1": "$38k-$50k (varies by location/pathway)",
+      "year3": "$55k-$70k with experience",
+      "year5": "$70k-$90k with specialization/leadership",
+      "year10": "$90k-$140k if advancing to senior/management",
+      "ceiling": "IC: $85k-$110k | Management: $120k-$180k+ | Executive: $200k+"
+    },
+    "timeInvestment": {
+      "learning": "6-18 months education/training",
+      "jobSearch": "2-6 months to land first role",
+      "proficiency": "2-3 years to feel confident",
+      "advancement": "5-7 years to senior, 10+ to leadership"
+    },
+    "isThisRightForYou": {
+      "exploreIf": [
+        "Assessment shows strong alignment with [strengths]",
+        "Willing to invest 6-18 months with uncertain outcome",
+        "Value [benefit] over [tradeoff]"
+      ],
+      "reconsiderIf": [
+        "Core values conflict with [job reality]",
+        "Not willing to [specific unavoidable requirement]",
+        "Have [constraint] making path extremely difficult"
+      ]
+    }
+  }
 }`;
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -180,13 +419,12 @@ Return as a JSON object with this EXACT structure:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'gpt-5-2025-08-07',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
         ],
-        temperature: 0.7,
-        max_tokens: 2000,
+        max_completion_tokens: 4000,
       }),
     });
 

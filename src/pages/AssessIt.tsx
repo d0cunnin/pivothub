@@ -36,7 +36,7 @@ const AssessIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">ASSESS IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Assess It
+              Take one of our assessments
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Discover your strengths, skills, and perfect career path with our comprehensive assessment tools

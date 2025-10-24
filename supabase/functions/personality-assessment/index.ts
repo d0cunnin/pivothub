@@ -54,13 +54,38 @@ serve(async (req) => {
       },
       "careerCompatibility": [
         {
-          "role": "Product Manager",
-          "industry": "Technology / SaaS",
-          "compatibilityScore": 87,
-          "fitReason": "2-3 sentences explaining why their personality fits this role perfectly",
-          "successFactors": ["Strong analytical skills", "Collaborative nature", "Data-driven decision making"],
-          "challenges": ["May need to develop executive presence", "Practice quick decision-making under pressure"],
-          "examples": ["Senior Product Manager at tech startups", "Product Lead at SaaS companies", "Technical Product Owner"]
+          "specificRole": "Case Manager (not just 'Human Services')",
+          "industry": "Healthcare / Social Services",
+          "compatibilityScore": 89,
+          "fitReason": "Your empathy + organizational skills + moderate structure preference = perfect for managing patient caseloads",
+          "workCulture": {
+            "bestFit": "Mission-driven nonprofits or community health centers",
+            "worstFit": "High-pressure corporate healthcare with profit-first mentality"
+          },
+          "remoteVsOffice": "Hybrid works best - need human connection but also focused case documentation time",
+          "softSkillAdvantage": "Your active listening means clients trust you faster = better outcomes",
+          "burnoutRisk": "Moderate - manage by setting boundaries and not taking work stress home",
+          "thriveStrategy": "To succeed: 1) Advocate for manageable caseloads, 2) Find peer support group, 3) Celebrate small client wins",
+          "salaryRange": "$42k-$58k entry, $65k-$85k experienced",
+          "entryPath": "Bachelor's in Social Work or related + 1-2 years experience",
+          "examples": ["Hospital Case Manager", "Community Health Worker", "Patient Navigator"]
+        },
+        {
+          "specificRole": "UX Researcher",
+          "industry": "Technology / Product Design",
+          "compatibilityScore": 84,
+          "fitReason": "Your analytical thinking + empathy + curiosity about human behavior = UX research sweet spot",
+          "workCulture": {
+            "bestFit": "User-centric product companies (not just tech for tech's sake)",
+            "worstFit": "Fast-moving startups where research is rushed or ignored"
+          },
+          "remoteVsOffice": "Fully remote works well - research can be done asynchronously",
+          "softSkillAdvantage": "Your ability to see multiple perspectives helps uncover user pain points others miss",
+          "burnoutRisk": "Low - if you work at company that values research. High if research is ignored.",
+          "thriveStrategy": "To succeed: 1) Find companies with established UX culture, 2) Communicate findings in business terms, 3) Build cross-functional relationships",
+          "salaryRange": "$65k-$90k entry, $95k-$140k experienced",
+          "entryPath": "Psychology/HCI degree OR bootcamp + portfolio of research projects",
+          "examples": ["UX Researcher", "User Experience Analyst", "Product Researcher"]
         }
       ],
       "workEnvironmentAnalysis": {
@@ -160,7 +185,216 @@ serve(async (req) => {
       "communicationStyle": "Overall natural communication style with strengths and areas for development",
       "leadershipStyle": "Natural leadership approach and how to develop it further",
       "tips": ["Actionable career tip 1", "Tip 2", "Tip 3"],
-      "summary": "Comprehensive 4-5 sentence summary of their personality, career fit, key strengths to leverage, areas for development, and strategic career guidance"
+      "summary": "Comprehensive 4-5 sentence summary of their personality, career fit, key strengths to leverage, areas for development, and strategic career guidance",
+      "networkingApproach": {
+        "basedOnYourPersonality": "You scored [high/low] in extroversion = you're an [Introvert Connector|Extrovert Networker]",
+        "naturalStyle": "1-on-1 deep conversations > large events with shallow interactions",
+        "doThis": [
+          {
+            "strategy": "Start with 1-on-1 coffee chats, not conferences",
+            "why": "Less draining for introverts, allows deep conversation",
+            "howTo": "LinkedIn: 'I'd love to learn about your career path. 15-min coffee?'"
+          },
+          {
+            "strategy": "Use async networking (LinkedIn, email) before in-person",
+            "why": "Gives time to craft thoughtful messages",
+            "howTo": "Comment on 3 posts per day, then DM after building rapport"
+          },
+          {
+            "strategy": "Attend small workshops (5-15 people), not conferences (100+)",
+            "why": "Manageable group size, easier to contribute",
+            "howTo": "Search Eventbrite/Meetup for 'workshop' not 'conference'"
+          }
+        ],
+        "avoidThis": [
+          "Don't force 'working the room' at massive events - exhausts you",
+          "Don't judge networking by extrovert standards - 5 deep > 50 shallow",
+          "Don't network when burned out - quality needs energy"
+        ],
+        "strengthToLeverage": "Your listening skills make people feel heard - networking SUPERPOWER",
+        "weeklyGoal": "2-3 meaningful interactions (not 20 superficial)"
+      },
+      "communicationStyle": {
+        "naturalPattern": "Thoughtful Analyzer (listen first, speak when valuable)",
+        "inMeetings": {
+          "tendency": "Prefer listening first, then speaking",
+          "strength": "Contributions are well-thought-out",
+          "challenge": "Others speak first, you miss chance",
+          "tactic": "Aim to speak within first 5 min even just to ask clarifying question"
+        },
+        "inEmails": {
+          "tendency": "Thorough, considerate, sometimes over-explain",
+          "strength": "Clear communication reduces back-and-forth",
+          "challenge": "Executives prefer brevity - long emails get skimmed",
+          "tactic": "Use TL;DR at top: 'Bottom line: [key point]. Details below.'"
+        },
+        "inConflict": {
+          "tendency": "Avoid direct confrontation, hope issues resolve",
+          "strength": "Maintain relationships, keep harmony",
+          "challenge": "Unaddressed issues fester and explode later",
+          "tactic": "Script: 'I need to discuss something bothering me. When can we talk?'"
+        },
+        "withManagers": {
+          "tendency": "Wait for feedback rather than asking",
+          "strength": "Low-maintenance, self-directed",
+          "challenge": "May not know if meeting expectations",
+          "tactic": "Monthly: 'How am I doing? What should I improve?'"
+        },
+        "publicSpeaking": {
+          "comfortLevel": "Moderate anxiety but can do with prep",
+          "developmentPath": [
+            "Start: Present to your team (safe environment)",
+            "Build: Join Toastmasters for structured practice",
+            "Grow: Present at small meetups or lunch-and-learns"
+          ]
+        }
+      },
+      "workEnvironmentFit": {
+        "whereYouThrive": [
+          {
+            "environment": "Collaborative but not chaotic",
+            "reason": "Value teamwork but need focused work time",
+            "redFlag": "Open office with constant interruptions drains you",
+            "greenFlag": "Hybrid office with dedicated quiet zones"
+          },
+          {
+            "environment": "Clear expectations with autonomy in execution",
+            "reason": "Want to know goals but hate micromanagement",
+            "redFlag": "Manager who hovers or asks for hourly updates",
+            "greenFlag": "OKR-based culture - clear goals, you figure out how"
+          },
+          {
+            "environment": "Stable teams with low drama",
+            "reason": "You invest in relationships, churn is exhausting",
+            "redFlag": "High turnover, constant re-orgs",
+            "greenFlag": "Team together 2+ years, low Glassdoor complaints"
+          }
+        ],
+        "whereYouStruggle": [
+          {
+            "environment": "High-pressure sales with aggressive quotas",
+            "reason": "Your personality is collaborative, not competitive cutthroat",
+            "alternative": "Customer success or account management instead"
+          },
+          {
+            "environment": "Constant pivots and ambiguity ('startup chaos')",
+            "reason": "You prefer some structure - too much ambiguity is stressful",
+            "alternative": "Series B+ startups or established scale-ups with processes"
+          },
+          {
+            "environment": "Face time culture (in-office for show)",
+            "reason": "You value work-life balance and output over hours logged",
+            "alternative": "Results-oriented remote-first companies"
+          }
+        ],
+        "interviewQuestions": {
+          "toAsk": [
+            "What does work-life balance look like for this team?",
+            "How long has team been together? Typical tenure?",
+            "Describe management style - hands-on or autonomous?",
+            "What does success look like in first 90 days?"
+          ],
+          "greenFlags": [
+            "Clear answers with specific examples",
+            "Manager says: 'I trust my team to manage their time'",
+            "Team together 2+ years"
+          ],
+          "redFlags": [
+            "'We're like a family' (poor boundaries)",
+            "'Work hard, play hard' (burnout culture)",
+            "Vague answers to work-life balance"
+          ]
+        }
+      },
+      "negotiationStyle": {
+        "yourApproach": "Collaborative problem-solver, data-driven, not aggressive",
+        "strengths": [
+          "Prepare thoroughly with market research",
+          "Frame negotiation as mutual benefit, not combat",
+          "Stay calm under pressure"
+        ],
+        "challenges": [
+          "May under-sell yourself to avoid seeming greedy",
+          "Might accept first offer to avoid confrontation",
+          "May apologize when stating needs"
+        ],
+        "salaryScript": {
+          "opening": "Based on market research and my skill level, I'm targeting $X-$Y. How does that align?",
+          "tone": "Confident, collaborative, not apologetic - problem-solving together",
+          "practiceThis": "Say your number out loud 10 times to friend - remove apologetic language"
+        },
+        "counterofferResponse": {
+          "ifLowball": "I appreciate the offer. Based on [skills/market data], I was expecting closer to $X. Is there flexibility?",
+          "ifReasonable": "Thank you. Before I accept, could we discuss [benefits/PTO/signing bonus/equity]?",
+          "ifPerfect": "This aligns well. I'd like [24-48 hours] to review full offer and get back to you."
+        },
+        "remember": "Negotiating is normal and expected - 85% of employers expect it and respect it"
+      },
+      "careerPivotReadiness": {
+        "stayInCurrentRole": {
+          "if": "Undervalued but like team and company",
+          "action": "Talk to manager: 'I'd like to discuss my growth path and compensation'",
+          "timeline": "Give them 3-6 months to address, then re-evaluate"
+        },
+        "internalMove": {
+          "if": "Want growth/change but love company culture",
+          "action": "Research internal transfer process, talk to people in target role",
+          "timeline": "Typically 12-18 months in current role before internal move",
+          "benefit": "Keep benefits, relationships, institutional knowledge"
+        },
+        "externalMove": {
+          "if": "Burned out, misaligned with values, or hit ceiling",
+          "action": "Update LinkedIn, start networking, apply to 5-10 roles/week",
+          "timeline": "3-6 month job search is normal - don't panic",
+          "caution": "Don't quit without offer unless financially secure 6+ months"
+        },
+        "entrepreneurship": {
+          "fitAssessment": "Your personality suggests [high/moderate/low] fit for entrepreneurship",
+          "reasoning": "You [have/lack] risk tolerance, [thrive/struggle] with ambiguity, [strong/weak] self-motivation",
+          "recommendation": "Consider: Franchise (structure) | Freelancing (controlled risk) | Startup (high risk)",
+          "preparation": "Build 6-12 month runway savings, test as side hustle first"
+        }
+      },
+      "stressManagement": {
+        "yourTriggers": [
+          "Unclear expectations and ambiguous goals",
+          "Lack of control over outcomes",
+          "Interpersonal conflict or toxic dynamics",
+          "Constant interruptions preventing deep work"
+        ],
+        "earlyWarning": [
+          "Sunday evening dread lasting 3+ weeks",
+          "Procrastinating on tasks you used to enjoy",
+          "Physical symptoms: headaches, insomnia, stomach issues",
+          "Withdrawing from team or becoming cynical"
+        ],
+        "copingStrategies": {
+          "boundaries": [
+            "No work emails after 7pm or weekends",
+            "Block 2-hour focus time on calendar daily",
+            "Practice saying no: 'I can't take that on right now'"
+          ],
+          "dailyReset": [
+            "15-min walk after work to transition",
+            "5-min meditation or breathing exercise",
+            "Write down 3 wins at end of day"
+          ],
+          "weeklyReset": [
+            "Sunday evening: Plan week, set 3 priorities",
+            "Mid-week: 30-min check-in with yourself",
+            "Friday: Close all loops, don't carry stress to weekend"
+          ]
+        },
+        "whenToLeave": {
+          "signs": [
+            "Dread Mondays for 3+ months straight",
+            "Physical health declining despite stress management",
+            "Values misalignment: Company does things you find unethical",
+            "No growth path and hit skill/salary ceiling"
+          ],
+          "action": "Start job search immediately - easier to find job while employed"
+        }
+      }
     }
 
     QUALITY STANDARDS:
