@@ -277,14 +277,42 @@ const Pricing = () => {
         <div className="page-container">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-6">Select Your Plan</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-4">
-              Choose the plan that matches your goals. Start free or unlock full access with our premium packages.
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
+              Choose the plan that matches your goals. Start free or unlock full access with a paid subscription.
             </p>
-            <p className="text-base text-muted-foreground max-w-4xl mx-auto">
-              <strong>Explore Mode</strong> gives you 5 free credits per month that reset on your signup anniversary (no rollover). 
-              <strong> Package plans</strong> ($15-$18/month) include specialized toolkits with monthly credits that roll over (capped at 2× your monthly limit).
-              The <strong>All Access Pass</strong> ($29/month) includes everything from all packages, priority support, and early feature access.
-            </p>
+            
+            <div className="text-base text-muted-foreground max-w-4xl mx-auto text-left space-y-6">
+              <div>
+                <h3 className="text-lg font-bold text-foreground mb-4">PivotHub Pricing Overview</h3>
+              </div>
+              
+              <div>
+                <h4 className="font-bold text-foreground mb-2">Explore Mode (Free)</h4>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>5 free credits each month</li>
+                  <li>Credits reset on your signup anniversary</li>
+                  <li>No rollover</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="font-bold text-foreground mb-2">Package Plans ($15–$18 per month)</h4>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Access to specialized toolkits</li>
+                  <li>Monthly credits included</li>
+                  <li>Unused credits roll over (up to 2× your monthly limit)</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="font-bold text-foreground mb-2">All Access Pass ($29 per month)</h4>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Access to every toolkit on the platform</li>
+                  <li>Largest monthly credit bundle</li>
+                  <li>Priority support</li>
+                </ul>
+              </div>
+            </div>
           </div>
           
           <div className="max-w-4xl mx-auto space-y-6">
