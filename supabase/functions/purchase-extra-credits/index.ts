@@ -44,8 +44,8 @@ serve(async (req) => {
     const { credits } = await req.json();
     logStep('Credits requested', credits);
 
-    if (![10, 25, 50].includes(credits)) {
-      throw new Error('Invalid credit amount. Must be 10, 25, or 50.');
+    if (![20, 40, 60].includes(credits)) {
+      throw new Error('Invalid credit amount. Must be 20, 40, or 60.');
     }
 
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
@@ -127,9 +127,9 @@ serve(async (req) => {
 
     // Pricing for extra credits
     const pricing: Record<number, number> = {
-      10: 500,  // $5.00
-      25: 1000, // $10.00
-      50: 1800  // $18.00
+      20: 500,  // $5.00
+      40: 1000, // $10.00
+      60: 1500  // $15.00
     };
 
     const amount = pricing[credits];

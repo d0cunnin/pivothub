@@ -473,7 +473,7 @@ const Pricing = () => {
                   <span className="text-4xl font-bold text-primary">$5</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  25 Extra Credits
+                  20 Extra Credits
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -494,10 +494,10 @@ const Pricing = () => {
                 <Button
                   className="w-full"
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(25)}
+                  onClick={() => handlePurchaseCredits(20)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 25 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 20 Credits"}
                 </Button>
               </CardContent>
             </Card>
@@ -517,11 +517,8 @@ const Pricing = () => {
                   <span className="text-4xl font-bold text-primary">$10</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  75 Extra Credits
+                  40 Extra Credits
                 </CardDescription>
-                <p className="text-xs text-primary font-semibold mt-2">
-                  Save 33% - Best Value
-                </p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
@@ -540,10 +537,10 @@ const Pricing = () => {
                 </div>
                 <Button
                   className="w-full"
-                  onClick={() => handlePurchaseCredits(75)}
+                  onClick={() => handlePurchaseCredits(40)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 75 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 40 Credits"}
                 </Button>
               </CardContent>
             </Card>
@@ -556,17 +553,17 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Pro Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$18</span>
+                  <span className="text-4xl font-bold text-primary">$15</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  150 Extra Credits
+                  60 Extra Credits
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Power user pack - Save 40%
+                    Power user pack
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -580,10 +577,10 @@ const Pricing = () => {
                 <Button
                   className="w-full"
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(150)}
+                  onClick={() => handlePurchaseCredits(60)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 150 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 60 Credits"}
                 </Button>
               </CardContent>
             </Card>
