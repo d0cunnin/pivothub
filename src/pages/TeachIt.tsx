@@ -29,7 +29,7 @@ const TeachIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">TEACH IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Teach It
+              Monetize your knowledge
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               Transform your expertise into engaging webinars and online courses. Turn your knowledge into income by teaching others what you know best.

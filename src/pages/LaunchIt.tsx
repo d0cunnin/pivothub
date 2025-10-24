@@ -171,7 +171,7 @@ const LaunchIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">LAUNCH IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Launch It
+              Take it to the public
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               Generate a complete, customized launch strategy for your project, product, or business idea. From concept to market, we'll help you create a winning plan.

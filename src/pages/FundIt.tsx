@@ -368,7 +368,7 @@ const FundIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">FUND IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Fund It
+              Access grant funding
             </h1>
             <div className="text-left max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>

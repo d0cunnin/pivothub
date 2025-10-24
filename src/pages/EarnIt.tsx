@@ -166,7 +166,7 @@ export default function SideIncomeBlueprint() {
               <span className="text-3xl font-bold text-white tracking-wider">EARN IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Your Personalized Earn It Blueprint
+              Create income pathways
             </h1>
             <div className="text-center max-w-4xl mx-auto">
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>

@@ -35,7 +35,7 @@ const PrepIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">PREP IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Prep It Tools
+              Get job-ready
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Master your job search with AI-powered coaching, interview preparation, and professional document optimization
