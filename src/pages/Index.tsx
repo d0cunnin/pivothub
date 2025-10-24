@@ -135,7 +135,7 @@ const Index = () => {
               Your path forward starts here.
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
-              Discover AI-powered tools that help you pivot, build, earn, launch, and grow all in one place.
+              Practical tools, step-by-step guidance, and strategies to help you pivot into your next opportunity with clarity and confidence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
