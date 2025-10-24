@@ -28,22 +28,24 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'schedule-it': 2,                // ~3,000 tokens output
   'host-it': 4,                    // ~8,000 tokens output
   
-  // LOW COST TOOLS (1 credit) - Simple queries or chatbot interactions
+  // LOW COST TOOLS (1 credit) - Chatbot interactions only
   'career-advisor': 1,             // Chatbot, ~1,500 tokens per message
   'business-mentor': 1,            // Chatbot, ~1,500 tokens per message
   'contact-chatbot': 1,            // Simple queries
-  'interview-questions': 1,        // ~1,500 tokens output
-  'business-resources': 1,         // Search + formatting
-  'grant-resources': 1,            // Search + formatting
-  'name-checker': 1,               // API calls only
-  'logo-generator': 1,             // Runware API (not OpenAI)
-  'startup-checklist': 1,          // Simple generation
   
-  // ASSESSMENT TOOLS (1 credit) - One-time assessments
-  'career-assessment': 1,
-  'skills-assessment': 1,
-  'personality-assessment': 1,
-  'side-income-assessment': 1,
+  // MEDIUM COST TOOLS (2 credits) - Non-chatbot tools
+  'interview-questions': 2,        // ~1,500 tokens output
+  'business-resources': 2,         // Search + formatting
+  'grant-resources': 2,            // Search + formatting
+  'name-checker': 2,               // API calls only
+  'logo-generator': 2,             // Runware API (not OpenAI)
+  'startup-checklist': 2,          // Simple generation
+  
+  // ASSESSMENT TOOLS (2 credits) - One-time assessments
+  'career-assessment': 2,
+  'skills-assessment': 2,
+  'personality-assessment': 2,
+  'side-income-assessment': 2,
   
   // LEARNING (0 credits) - No AI generation
   'learn-a-skill': 0,              // Video content only, no AI

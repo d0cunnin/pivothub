@@ -10,17 +10,17 @@ interface Tool {
 const toolsByCategory: Record<string, Tool[]> = {
   'Build It (Business Tools)': [
     { name: 'Business Idea Generator', credits: 2 },
-    { name: 'Business Name Checker', credits: 1 },
+    { name: 'Business Name Checker', credits: 2 },
     { name: 'Business Foundation Builder', credits: 2 },
     { name: 'Business Plan Generator', credits: 4 },
     { name: 'Marketing Strategy Generator', credits: 3 },
     { name: 'Pitch Deck Generator', credits: 3 },
-    { name: 'Logo Generator', credits: 1 },
+    { name: 'Logo Generator', credits: 2 },
     { name: 'Legal Documents Generator', credits: 3 },
-    { name: 'Startup Checklist', credits: 1 },
+    { name: 'Startup Checklist', credits: 2 },
     { name: 'Social Media Content Generator', credits: 2 },
     { name: 'Business Mentor Chatbot', credits: 1, note: 'per message' },
-    { name: 'Business Resources Finder', credits: 1 },
+    { name: 'Business Resources Finder', credits: 2 },
   ],
   'Launch It (Go-to-Market)': [
     { name: 'Launch Strategy Generator', credits: 3 },
@@ -33,7 +33,7 @@ const toolsByCategory: Record<string, Tool[]> = {
   ],
   'Prep It (Career Tools)': [
     { name: 'Career Advisor Chatbot', credits: 1, note: 'per message' },
-    { name: 'Interview Questions Coach', credits: 1 },
+    { name: 'Interview Questions Coach', credits: 2 },
     { name: 'Interview Feedback Coach', credits: 2 },
     { name: 'Resume & Cover Letter Coach', credits: 2 },
   ],
@@ -43,16 +43,16 @@ const toolsByCategory: Record<string, Tool[]> = {
   'Fund It (Grant Tools)': [
     { name: 'Grant Finder', credits: 2 },
     { name: 'Grant Application Writer', credits: 4 },
-    { name: 'Grant Resources Finder', credits: 1 },
+    { name: 'Grant Resources Finder', credits: 2 },
   ],
   'Earn It (Side Income)': [
-    { name: 'Side Income Assessment', credits: 1 },
+    { name: 'Side Income Assessment', credits: 2 },
     { name: 'Side Income Blueprint Report', credits: 0, note: 'Included after assessment' },
   ],
   'Assess It (Self-Discovery)': [
-    { name: 'Career Assessment', credits: 1 },
-    { name: 'Skills Assessment', credits: 1 },
-    { name: 'Personality Assessment', credits: 1 },
+    { name: 'Career Assessment', credits: 2 },
+    { name: 'Skills Assessment', credits: 2 },
+    { name: 'Personality Assessment', credits: 2 },
   ],
   'Learn It (Skills Development)': [
     { name: 'Video Courses', credits: 0, note: 'Included with all plans' },
