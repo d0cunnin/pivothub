@@ -59,7 +59,7 @@ export const Footer = () => {
         </div>
         
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-primary-foreground/60">
-          <p>&copy; 2025 PivotHub. All rights reserved. Empowering careers, enabling dreams.</p>
+          <p>&copy; 2025 PivotHub. All rights reserved. Progress starts here.</p>
         </div>
       </div>
     </footer>
