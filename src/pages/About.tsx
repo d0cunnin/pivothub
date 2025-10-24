@@ -172,7 +172,7 @@ export default function About() {
               <img 
                 src={dandreaBolden}
                 alt="D'Andrea Bolden, MA - Founder & CEO of Bold AI Solutions" 
-                className="w-full max-w-md mx-auto aspect-square object-cover rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                className="w-full max-w-md mx-auto aspect-[3/4] object-cover object-top rounded-xl shadow-lg hover:shadow-xl transition-shadow"
               />
             </div>
             <div className="space-y-6">
