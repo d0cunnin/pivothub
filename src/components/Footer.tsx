@@ -5,20 +5,22 @@ export const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-4 gap-4 md:ml-auto md:max-w-5xl">
+        <div className="grid md:grid-cols-[auto_1fr] gap-8 items-start">
           <div className="space-y-4">
             <img 
               src="/lovable-uploads/e9310b7d-2004-432c-a5dc-11828a70f8e7.png" 
               alt="PivotHub Logo" 
               className="h-12 w-auto"
             />
-            <p className="text-sm text-primary-foreground/80 leading-tight">
+            <p className="text-sm text-primary-foreground/80 leading-tight max-w-xs">
               Practical tools and step-by-step guidance to help you assess your skills, learn new ones, and pivot into your next opportunity with confidence.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
             </div>
           </div>
+          
+          <div className="grid md:grid-cols-3 gap-6 md:ml-auto md:max-w-3xl">
           
           <div>
             <h4 className="font-semibold mb-4">Discovery & Growth</h4>
@@ -52,6 +54,7 @@ export const Footer = () => {
               <li><Link to="/terms" className="hover:text-accent transition-colors">Terms & Conditions</Link></li>
               <li><Link to="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link></li>
             </ul>
+          </div>
           </div>
         </div>
         
