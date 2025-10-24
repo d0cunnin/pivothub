@@ -29,8 +29,8 @@ const PrepIt = () => {
         <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
         <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
         
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-left max-w-5xl mx-auto">
+      <div className="container mx-auto px-6 lg:px-8 relative z-10">
+        <div className="text-center max-w-5xl mx-auto">
             <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
               <span className="text-3xl font-bold text-white tracking-wider">PREP IT</span>
             </div>

@@ -61,11 +61,9 @@ const BuildIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
               Start your business
             </h1>
-            <div className="text-left max-w-4xl mx-auto">
-              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Build your ideas from scratch with step-by-step guidance and AI-powered support.
-              </p>
-            </div>
+          <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
+            Build your ideas from scratch with step-by-step guidance and AI-powered support.
+          </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Button 
                 variant="hero" 
