@@ -47,7 +47,7 @@ const toolsByCategory: Record<string, Tool[]> = {
   ],
   'Earn It (Side Income)': [
     { name: 'Side Income Assessment', credits: 1 },
-    { name: 'Side Income Blueprint Report', credits: 0, note: 'Free after assessment' },
+    { name: 'Side Income Blueprint Report', credits: 0, note: 'Included after assessment' },
   ],
   'Assess It (Self-Discovery)': [
     { name: 'Career Assessment', credits: 1 },
@@ -55,7 +55,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Personality Assessment', credits: 1 },
   ],
   'Learn It (Skills Development)': [
-    { name: 'Video Courses', credits: 0, note: 'Always FREE' },
+    { name: 'Video Courses', credits: 0, note: 'Included with all plans' },
   ],
 };
 

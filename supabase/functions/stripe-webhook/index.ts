@@ -232,16 +232,98 @@ async function handleSubscriptionChange(supabase: any, subscription: Stripe.Subs
   const subscriptionEnd = new Date(subscription.current_period_end * 1000);
   const billingCycleStart = new Date(subscription.current_period_start * 1000);
 
-  // Update subscription status and billing cycle dates
+  // Get subscription package from price metadata
+  const priceId = subscription.items.data[0]?.price.id;
+  let newPackage: string | null = null;
+  
+  if (priceId) {
+    try {
+      const price = await stripe.prices.retrieve(priceId);
+      newPackage = (price.metadata?.subscription_package as string) || null;
+      logStep('Retrieved package from price metadata', { priceId, newPackage });
+    } catch (error) {
+      logStep('Error retrieving price metadata', error);
+    }
+  }
+
+  // Get current user data to check for package changes
+  const { data: currentData, error: fetchError } = await supabase
+    .from('subscribers_public')
+    .select('subscription_package, ai_request_limit, monthly_ai_requests, rollover_credits')
+    .eq('user_id', secureData.user_id)
+    .single();
+
+  if (fetchError) {
+    logStep('Error fetching current user data', fetchError);
+    return;
+  }
+
+  // Determine new credit limit based on package
+  const creditLimits: Record<string, number> = {
+    'assess-prep-learn': 60,
+    'build-teach-launch': 100,
+    'fund-it': 60,
+    'all-access': 150,
+  };
+
+  let newCreditLimit = currentData.ai_request_limit;
+  let additionalCredits = 0;
+
+  // Check if package changed
+  if (newPackage && newPackage !== currentData.subscription_package) {
+    const oldLimit = currentData.ai_request_limit;
+    newCreditLimit = creditLimits[newPackage] || oldLimit;
+    
+    logStep('Package change detected', {
+      oldPackage: currentData.subscription_package,
+      newPackage: newPackage,
+      oldLimit: oldLimit,
+      newLimit: newCreditLimit
+    });
+
+    // On upgrade, optionally add prorated credits
+    if (newCreditLimit > oldLimit) {
+      // Calculate remaining days in billing cycle
+      const now = new Date();
+      const totalDays = Math.ceil((subscriptionEnd.getTime() - billingCycleStart.getTime()) / (1000 * 60 * 60 * 24));
+      const remainingDays = Math.ceil((subscriptionEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+      
+      // Prorate the credit difference based on remaining days
+      const creditDifference = newCreditLimit - oldLimit;
+      additionalCredits = Math.floor((creditDifference * remainingDays) / totalDays);
+      
+      logStep('Prorating credits on upgrade', {
+        totalDays,
+        remainingDays,
+        creditDifference,
+        additionalCredits
+      });
+    }
+  }
+
+  // Update subscription status, billing cycle dates, and credit limits
+  const updateData: any = {
+    subscribed: subscription.status === 'active',
+    subscription_end: subscriptionEnd.toISOString(),
+    billing_cycle_start: billingCycleStart.toISOString(),
+    next_billing_date: subscriptionEnd.toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+
+  // Add package and credit limit updates if package changed
+  if (newPackage && newPackage !== currentData.subscription_package) {
+    updateData.subscription_package = newPackage;
+    updateData.ai_request_limit = newCreditLimit;
+    
+    // Add prorated credits to rollover if upgrading
+    if (additionalCredits > 0) {
+      updateData.rollover_credits = (currentData.rollover_credits || 0) + additionalCredits;
+    }
+  }
+
   const { error: updateError } = await supabase
     .from('subscribers_public')
-    .update({
-      subscribed: subscription.status === 'active',
-      subscription_end: subscriptionEnd.toISOString(),
-      billing_cycle_start: billingCycleStart.toISOString(),
-      next_billing_date: subscriptionEnd.toISOString(),
-      updated_at: new Date().toISOString(),
-    })
+    .update(updateData)
     .eq('user_id', secureData.user_id);
 
   if (updateError) {
@@ -249,7 +331,10 @@ async function handleSubscriptionChange(supabase: any, subscription: Stripe.Subs
     throw updateError;
   }
 
-  logStep('Subscription change processed successfully');
+  logStep('Subscription change processed successfully', { 
+    packageChanged: newPackage !== currentData.subscription_package,
+    creditsAdded: additionalCredits 
+  });
 }
 
 async function handleSubscriptionCancellation(supabase: any, subscription: Stripe.Subscription) {

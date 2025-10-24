@@ -168,6 +168,28 @@ const FAQ = () => {
                     Yes! You can upgrade, downgrade, or switch to a different path anytime. Changes take effect immediately.
                   </AccordionContent>
                 </AccordionItem>
+
+                <AccordionItem value="item-plan-changes">
+                  <AccordionTrigger className="text-left">
+                    What happens if I upgrade or downgrade mid-cycle?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    <p className="mb-3">
+                      <strong>Upgrades:</strong> Your new credit limit takes effect immediately. 
+                      You'll keep any unused credits from your previous plan (subject to rollover caps) 
+                      plus gain access to your new monthly credit allowance.
+                    </p>
+                    <p className="mb-3">
+                      <strong>Downgrades:</strong> Your new credit limit takes effect immediately. 
+                      Any credits you've already used in the current cycle remain deducted. 
+                      You'll have access to your new (lower) monthly credit allowance going forward.
+                    </p>
+                    <p>
+                      Your billing anniversary date remains the same - the next charge will be 
+                      at your new plan's rate on your original billing date.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
               </Accordion>
             </div>
 
