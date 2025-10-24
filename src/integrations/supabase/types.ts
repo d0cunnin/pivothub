@@ -644,19 +644,6 @@ export type Database = {
       }
     }
     Views: {
-      admin_cost_analysis: {
-        Row: {
-          email: string | null
-          month_year: string | null
-          monthly_revenue: number | null
-          profit_margin: number | null
-          subscribed: boolean | null
-          subscription_package: string | null
-          total_cost_usd: number | null
-          total_credits: number | null
-        }
-        Relationships: []
-      }
       monthly_usage_summary: {
         Row: {
           month_year: string | null
@@ -689,6 +676,19 @@ export type Database = {
           }
         | { Args: { p_user_id: string }; Returns: Json }
       cleanup_expired_contexts: { Args: never; Returns: undefined }
+      get_admin_cost_analysis: {
+        Args: never
+        Returns: {
+          email: string
+          month_year: string
+          monthly_revenue: number
+          profit_margin: number
+          subscribed: boolean
+          subscription_package: string
+          total_cost_usd: number
+          total_credits: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

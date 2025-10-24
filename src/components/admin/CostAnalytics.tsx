@@ -27,9 +27,7 @@ export function CostAnalytics() {
   const loadAnalytics = async () => {
     try {
       const { data, error } = await supabase
-        .from('admin_cost_analysis' as any)
-        .select('*')
-        .order('profit_margin', { ascending: true });
+        .rpc('get_admin_cost_analysis');
 
       if (error) throw error;
       if (data) {
