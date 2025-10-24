@@ -25,7 +25,7 @@ const FAQS: string[] = [
   "How do I update billing or cancel?",
   "Where can I view pricing and plans?",
   "How do I contact support?",
-  "Is there a free trial?",
+  "What is Explore Mode?",
 ];
 
 export const ContactChatbot = () => {
