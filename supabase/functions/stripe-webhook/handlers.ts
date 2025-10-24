@@ -36,7 +36,7 @@ export async function handleSuccessfulPayment(supabase: any, invoice: Stripe.Inv
   // Get current subscriber data to calculate rollover
   const { data: currentData, error: fetchError } = await supabase
     .from('subscribers_public')
-    .select('monthly_ai_requests, ai_request_limit, extra_credits, rollover_credits')
+    .select('monthly_ai_requests, ai_request_limit, extra_credits, rollover_credits, subscription_start_date')
     .eq('user_id', secureData.user_id)
     .single();
   
@@ -45,24 +45,35 @@ export async function handleSuccessfulPayment(supabase: any, invoice: Stripe.Inv
     throw fetchError;
   }
   
-  // Calculate rollover: unused credits from last cycle
-  const totalLastCycle = (currentData.ai_request_limit || 50) + (currentData.extra_credits || 0) + (currentData.rollover_credits || 0);
+  // Calculate rollover with 2× cap
+  const monthlyLimit = currentData.ai_request_limit || 50;
+  const totalLastCycle = monthlyLimit + (currentData.extra_credits || 0) + (currentData.rollover_credits || 0);
   const unusedCredits = Math.max(0, totalLastCycle - (currentData.monthly_ai_requests || 0));
+  const cappedRollover = Math.min(unusedCredits, monthlyLimit * 2);
   
-  // Reset credits with rollover
+  logStep('Rollover calculation', { 
+    unusedCredits, 
+    monthlyLimit, 
+    cappedRollover,
+    maxAllowed: monthlyLimit * 2 
+  });
+  
+  // Reset credits with capped rollover
   const { error: updateError } = await supabase
     .from('subscribers_public')
     .update({
-      monthly_ai_requests: 0, // Reset usage
-      rollover_credits: unusedCredits, // Carry forward unused credits
+      monthly_ai_requests: 0,
+      rollover_credits: cappedRollover,
       billing_cycle_start: currentPeriodStart.toISOString(),
       next_billing_date: currentPeriodEnd.toISOString(),
       last_request_reset: new Date().toISOString(),
       subscription_end: currentPeriodEnd.toISOString(),
       subscribed: true,
-      grace_period_end: null, // Clear grace period if any
+      grace_period_end: null,
+      payment_retry_count: 0,
       account_status: 'active',
       updated_at: new Date().toISOString(),
+      subscription_start_date: currentData.subscription_start_date || currentPeriodStart.toISOString()
     })
     .eq('user_id', secureData.user_id);
     
@@ -71,9 +82,9 @@ export async function handleSuccessfulPayment(supabase: any, invoice: Stripe.Inv
     throw updateError;
   }
   
-  logStep('Credits reset successfully with rollover', { 
+  logStep('Credits reset with capped rollover', { 
     userId: secureData.user_id,
-    rolloverCredits: unusedCredits,
+    rolloverCredits: cappedRollover,
     nextBillingDate: currentPeriodEnd 
   });
 }
@@ -100,19 +111,33 @@ export async function handleFailedPayment(supabase: any, invoice: Stripe.Invoice
   // Get subscription details
   const { data: subscriberData } = await supabase
     .from('subscribers_public')
-    .select('subscription_tier, subscription_package')
+    .select('subscription_tier, subscription_package, payment_retry_count, grace_period_end')
     .eq('user_id', secureData.user_id)
     .single();
 
-  // Set grace period of 7 days
-  const gracePeriodEnd = new Date();
-  gracePeriodEnd.setDate(gracePeriodEnd.getDate() + 7);
+  const currentRetryCount = subscriberData?.payment_retry_count || 0;
+  const newRetryCount = currentRetryCount + 1;
+
+  // Set or reuse existing grace period
+  const gracePeriodEnd = subscriberData?.grace_period_end 
+    ? new Date(subscriberData.grace_period_end)
+    : (() => {
+        const date = new Date();
+        date.setDate(date.getDate() + 7);
+        return date;
+      })();
+
+  logStep('Payment failure details', {
+    retryAttempt: newRetryCount,
+    gracePeriodEnd: gracePeriodEnd.toISOString()
+  });
 
   const { error: updateError } = await supabase
     .from('subscribers_public')
     .update({
       account_status: 'warning',
       grace_period_end: gracePeriodEnd.toISOString(),
+      payment_retry_count: newRetryCount,
       updated_at: new Date().toISOString(),
     })
     .eq('user_id', secureData.user_id);
@@ -122,7 +147,11 @@ export async function handleFailedPayment(supabase: any, invoice: Stripe.Invoice
     throw updateError;
   }
 
-  logStep('Grace period set successfully', { userId: secureData.user_id, gracePeriodEnd });
+  logStep('Grace period updated', { 
+    userId: secureData.user_id, 
+    gracePeriodEnd,
+    retryCount: newRetryCount 
+  });
 
   // Send payment failed email
   try {
@@ -133,6 +162,7 @@ export async function handleFailedPayment(supabase: any, invoice: Stripe.Invoice
         email: secureData.email,
         subscriptionTier: subscriberData?.subscription_tier,
         subscriptionPackage: subscriberData?.subscription_package,
+        retryAttempt: newRetryCount,
         gracePeriodEndDate: gracePeriodEnd.toLocaleDateString('en-US', { 
           month: 'long', 
           day: 'numeric', 

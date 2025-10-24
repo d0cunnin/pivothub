@@ -396,15 +396,18 @@ export type Database = {
           billing_cycle_start: string | null
           created_at: string
           extra_credits: number | null
+          free_tier_start_date: string | null
           grace_period_end: string | null
           id: string
           last_request_reset: string | null
           monthly_ai_requests: number | null
           next_billing_date: string | null
+          payment_retry_count: number | null
           rollover_credits: number | null
           subscribed: boolean
           subscription_end: string | null
           subscription_package: string | null
+          subscription_start_date: string | null
           subscription_tier: string | null
           updated_at: string
           user_id: string
@@ -416,15 +419,18 @@ export type Database = {
           billing_cycle_start?: string | null
           created_at?: string
           extra_credits?: number | null
+          free_tier_start_date?: string | null
           grace_period_end?: string | null
           id?: string
           last_request_reset?: string | null
           monthly_ai_requests?: number | null
           next_billing_date?: string | null
+          payment_retry_count?: number | null
           rollover_credits?: number | null
           subscribed?: boolean
           subscription_end?: string | null
           subscription_package?: string | null
+          subscription_start_date?: string | null
           subscription_tier?: string | null
           updated_at?: string
           user_id: string
@@ -436,15 +442,18 @@ export type Database = {
           billing_cycle_start?: string | null
           created_at?: string
           extra_credits?: number | null
+          free_tier_start_date?: string | null
           grace_period_end?: string | null
           id?: string
           last_request_reset?: string | null
           monthly_ai_requests?: number | null
           next_billing_date?: string | null
+          payment_retry_count?: number | null
           rollover_credits?: number | null
           subscribed?: boolean
           subscription_end?: string | null
           subscription_package?: string | null
+          subscription_start_date?: string | null
           subscription_tier?: string | null
           updated_at?: string
           user_id?: string

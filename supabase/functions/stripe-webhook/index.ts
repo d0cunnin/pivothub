@@ -128,12 +128,13 @@ async function handleSubscriptionCheckout(supabase: any, session: Stripe.Checkou
     .eq('user_id', userId)
     .single();
 
-  // Calculate leftover Explore Mode credits if upgrading from free tier
+  // Calculate leftover Explore Mode credits if upgrading from free tier (NO rollover)
   let preservedCredits = 0;
   if (currentData && !currentData.subscribed) {
-    // User was on Explore Mode - preserve remaining credits
-    const exploreTotal = 5 + (currentData.rollover_credits || 0);
+    // User was on Explore Mode - preserve remaining credits (capped at 100)
+    const exploreTotal = 5;
     preservedCredits = Math.max(0, exploreTotal - (currentData.monthly_ai_requests || 0));
+    preservedCredits = Math.min(preservedCredits, 50 * 2); // Cap at 2× monthly limit
     logStep('Preserving Explore Mode credits on upgrade', { preservedCredits });
   }
 
@@ -144,13 +145,15 @@ async function handleSubscriptionCheckout(supabase: any, session: Stripe.Checkou
       subscribed: true,
       subscription_package: subscriptionPackage,
       subscription_end: subscriptionEnd.toISOString(),
+      subscription_start_date: billingCycleStart.toISOString(), // Track anniversary
       billing_cycle_start: billingCycleStart.toISOString(),
       next_billing_date: subscriptionEnd.toISOString(),
       ai_request_limit: 50,
-      rollover_credits: preservedCredits, // Preserve Explore Mode credits on upgrade
-      monthly_ai_requests: 0, // Start with full credits
+      rollover_credits: preservedCredits,
+      monthly_ai_requests: 0,
       last_request_reset: new Date().toISOString(),
-      grace_period_end: null, // Clear any grace period
+      payment_retry_count: 0,
+      grace_period_end: null,
       account_status: 'active',
       updated_at: new Date().toISOString(),
     })
@@ -252,7 +255,12 @@ async function handleSubscriptionChange(supabase: any, subscription: Stripe.Subs
 async function handleSubscriptionCancellation(supabase: any, subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
 
-  logStep('Processing subscription cancellation', { customerId });
+  logStep('Processing subscription cancellation/deletion', { 
+    customerId,
+    canceledAt: subscription.canceled_at,
+    cancelAtPeriodEnd: subscription.cancel_at_period_end,
+    currentPeriodEnd: subscription.current_period_end
+  });
 
   // Find user by stripe_customer_id
   const { data: secureData, error: secureError } = await supabase
@@ -266,63 +274,49 @@ async function handleSubscriptionCancellation(supabase: any, subscription: Strip
     return;
   }
 
-  // Check if this is manual cancellation (at end of period) or failed payment
-  const isManualCancellation = subscription.cancel_at_period_end === true || subscription.canceled_at !== null;
+  // Manual cancellation: Set anniversary 30 days after billing cycle ends
+  const currentPeriodEnd = new Date(subscription.current_period_end * 1000);
+  const now = new Date();
+  
+  // Calculate next reset date (30 days after billing cycle ends)
+  const nextResetDate = new Date(currentPeriodEnd);
+  nextResetDate.setMonth(nextResetDate.getMonth() + 1);
+  
+  logStep('Downgrading to Explore Mode with 5 credits');
+  
+  const { error: updateError } = await supabase
+    .from('subscribers_public')
+    .update({
+      subscribed: false,
+      subscription_end: null,
+      subscription_package: null,
+      subscription_tier: null,
+      subscription_start_date: null,
+      billing_cycle_start: null,
+      next_billing_date: null,
+      ai_request_limit: 5,
+      rollover_credits: 0,
+      monthly_ai_requests: 0, // User starts with 5 available
+      extra_credits: 0,
+      free_tier_start_date: nextResetDate.toISOString(), // Anniversary 30 days after billing ends
+      last_request_reset: currentPeriodEnd.toISOString(),
+      payment_retry_count: 0,
+      grace_period_end: null,
+      account_status: 'active',
+      updated_at: now.toISOString()
+    })
+    .eq('user_id', secureData.user_id);
 
-  if (isManualCancellation) {
-    // Manual cancellation - downgrade to Explore Mode immediately and delete rollover
-    logStep('Processing manual cancellation - downgrading to Explore Mode');
-    
-    const { error: updateError } = await supabase
-      .from('subscribers_public')
-      .update({
-        subscribed: false,
-        subscription_end: null,
-        subscription_package: null,
-        subscription_tier: null,
-        billing_cycle_start: null,
-        next_billing_date: null,
-        ai_request_limit: 5,
-        rollover_credits: 0, // Delete all rollover credits
-        monthly_ai_requests: 0,
-        grace_period_end: null,
-        account_status: 'active',
-        updated_at: new Date().toISOString()
-      })
-      .eq('user_id', secureData.user_id);
-
-    if (updateError) {
-      logStep('Error downgrading to Explore Mode', updateError);
-      throw updateError;
-    }
-
-    logStep('Manual cancellation processed - user downgraded to Explore Mode');
-  } else {
-    // Failed payment - set grace period (7 days) and warning status
-    logStep('Processing failed payment - setting grace period');
-    
-    const gracePeriodEnd = new Date();
-    gracePeriodEnd.setDate(gracePeriodEnd.getDate() + 7);
-
-    const { error: updateError } = await supabase
-      .from('subscribers_public')
-      .update({
-        subscribed: false,
-        subscription_end: null,
-        subscription_package: null,
-        grace_period_end: gracePeriodEnd.toISOString(),
-        account_status: 'warning',
-        updated_at: new Date().toISOString(),
-      })
-      .eq('user_id', secureData.user_id);
-
-    if (updateError) {
-      logStep('Error cancelling subscription', updateError);
-      throw updateError;
-    }
-
-    logStep('Grace period set for failed payment');
+  if (updateError) {
+    logStep('Error downgrading to Explore Mode', updateError);
+    throw updateError;
   }
+
+  logStep('User downgraded to Explore Mode', { 
+    userId: secureData.user_id,
+    billingCycleEnd: currentPeriodEnd.toISOString(),
+    nextAnniversaryDate: nextResetDate.toISOString()
+  });
 }
 
 async function handleExtraCredits(supabase: any, session: Stripe.Checkout.Session) {

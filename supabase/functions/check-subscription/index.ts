@@ -56,6 +56,7 @@ serve(async (req) => {
           ai_request_limit: 5,
           monthly_ai_requests: 0,
           last_request_reset: new Date().toISOString(),
+          free_tier_start_date: new Date().toISOString(), // Track anniversary for monthly reset
           account_status: 'active'
         })
         .select()

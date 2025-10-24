@@ -133,8 +133,8 @@ const Pricing = () => {
       period: "forever",
       description: "Get 5 credits every month to explore our tools",
       features: [
-        "5 credits per month (resets monthly)",
-        "Unused credits roll over",
+        "5 credits per month (resets on signup anniversary)",
+        "Credits reset monthly (no rollover)",
         "Use any tool (costs vary by complexity)",
         "Access to all tool categories",
         "Community access",
@@ -275,8 +275,8 @@ const Pricing = () => {
               Choose the plan that matches your goals. Start free or unlock full access with our premium packages.
             </p>
             <p className="text-base text-muted-foreground max-w-4xl mx-auto">
-              <strong>Explore Mode</strong> gives you 5 free credits per month that roll over. 
-              <strong> Package plans</strong> ($15-$18/month) include specialized toolkits with monthly credits that roll over.
+              <strong>Explore Mode</strong> gives you 5 free credits per month that reset on your signup anniversary (no rollover). 
+              <strong> Package plans</strong> ($15-$18/month) include specialized toolkits with monthly credits that roll over (capped at 2× your monthly limit).
               The <strong>All Access Pass</strong> ($29/month) includes everything from all packages, priority support, and early feature access.
             </p>
           </div>
@@ -600,14 +600,21 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
                   <p className="text-muted-foreground text-sm">
-                    <strong>Paid plans:</strong> Credits reset on the same calendar day each month (your billing cycle date). For example, if you subscribed on the 15th, your credits reset on the 15th of each month. <strong>Explore Mode:</strong> Credits reset on the 1st of every month.
+                    <strong>Paid plans:</strong> Credits reset on the same calendar day each month (your billing anniversary). For example, if you subscribed on January 31st, your credits reset on the 31st (or last day) of every month. <strong>Explore Mode:</strong> Credits reset based on your signup date. If you signed up on the 15th, credits reset on the 15th of every month.
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="font-semibold text-foreground mb-2">How does credit rollover work?</h3>
+                  <p className="text-muted-foreground text-sm">
+                    <strong>Paid plans:</strong> Unused credits roll over month-to-month, but rollover is capped at <strong>2× your monthly credit allotment</strong>. For example, with 50 credits/month, you can store up to 100 credits maximum. If you have 90 credits when your plan renews, you'll receive only 10 credits (not the full 50) to stay at the 100 credit cap. <strong>Explore Mode:</strong> No rollover—credits reset to 5 each month.
                   </p>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What happens if my payment fails?</h3>
                   <p className="text-muted-foreground text-sm">
-                    You'll receive an email notification and enter a <strong>7-day grace period</strong> with full access. If payment isn't resolved by the end date, your account automatically downgrades to Explore Mode (5 free credits/month). You can resubscribe anytime.
+                    If a payment fails, you enter a <strong>7-day grace period</strong> during which Stripe automatically retries charging your card (on Day 2 and Day 5). If payment succeeds during this time, your subscription continues normally with no disruption. If all retry attempts fail after 7 days, you'll be downgraded to Explore Mode with <strong>5 credits</strong>, and your new anniversary date will be the date of the downgrade.
                   </p>
                 </div>
                 
@@ -621,14 +628,14 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What is Explore Mode?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month to try any of our tools. No credit card required. Unused credits roll over month-to-month. It's perfect for testing tools or occasional use.
+                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month based on your signup anniversary date. For example, if you sign up on January 15th, your credits reset on the 15th of every month. Unused credits do NOT roll over—they reset to 5 each month. No credit card required. Perfect for testing tools or occasional use.
                   </p>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What happens to my credits when I cancel?</h3>
                   <p className="text-muted-foreground text-sm">
-                    When you cancel, you keep access until your billing period ends. After that, all <strong>rollover credits are deleted</strong>, but any unused Explore Mode credits (up to 5) are preserved. If you resubscribe later, those preserved credits are added to your new plan!
+                    When you cancel a paid subscription, you retain full access until the end of your current billing period. At the end of the period, you'll be downgraded to Explore Mode with <strong>5 credits</strong>. Your new Explore Mode anniversary will be set to 30 days after your billing cycle ends. For example, if your billing cycle ends on March 15th, you'll get 5 credits immediately and they'll reset on April 15th, May 15th, June 15th, etc.
                   </p>
                 </div>
                 
