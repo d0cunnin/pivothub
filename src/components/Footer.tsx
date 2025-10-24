@@ -20,7 +20,7 @@ export const Footer = () => {
             </div>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6 md:justify-self-end md:mr-20">
+          <div className="grid md:grid-cols-3 gap-6 md:place-self-center md:w-full md:max-w-3xl">
           
           <div>
             <h4 className="font-semibold mb-4">Discovery & Growth</h4>
