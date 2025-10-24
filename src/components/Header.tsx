@@ -65,12 +65,11 @@ export const Header = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
-                    <Link 
-                      to="/learnit"
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${['/learnit', '/assessit', '/prepit', '/learn-a-skill'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                    <span 
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/learnit', '/assessit', '/prepit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
                       Upskill
-                    </Link>
+                    </span>
                     <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
                       <ChevronDown className="h-4 w-4" />
                     </button>
@@ -88,7 +87,7 @@ export const Header = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/learn-a-skill" className="flex w-full cursor-pointer">
+                    <Link to="/learnit" className="flex w-full cursor-pointer">
                       Learn It
                     </Link>
                   </DropdownMenuItem>
@@ -138,8 +137,8 @@ export const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
               <Link 
-                to="/grantwriting" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
+                to="/fundit" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/fundit' ? 'text-primary font-medium' : ''}`}
               >
                 Fund It
               </Link>
@@ -260,13 +259,11 @@ export const Header = () => {
                 Pricing
               </Link>
               <div className="space-y-2">
-                <Link 
-                  to="/learnit"
-                  className={`font-medium hover:text-primary transition-colors ${['/learnit', '/assessit', '/prepit', '/learn-a-skill'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
-                  onClick={() => setIsMenuOpen(false)}
+                <span 
+                  className={`font-medium hover:text-primary transition-colors ${['/learnit', '/assessit', '/prepit'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
                 >
                   Upskill
-                </Link>
+                </span>
                 <div className="pl-4 space-y-2">
                   <Link 
                     to="/assessit" 
@@ -283,8 +280,8 @@ export const Header = () => {
                     Prep It
                   </Link>
                   <Link 
-                    to="/learn-a-skill" 
-                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/learn-a-skill' ? 'text-primary font-medium' : ''}`}
+                    to="/learnit" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/learnit' ? 'text-primary font-medium' : ''}`}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Learn It
@@ -336,8 +333,8 @@ export const Header = () => {
                 </div>
               </div>
                <Link
-                to="/grantwriting" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
+                to="/fundit" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/fundit' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 Fund It

@@ -64,7 +64,7 @@ const BeforeYouStart = () => {
       title: "Fund It",
       description: "Fund It helps you find pathways to financial support. It includes guidance on grants, sponsorships, and community-based funding. It also includes a grant proposal writer to help you prepare a professional application.",
       cta: "Find Funding",
-      link: "/grantwriting",
+      link: "/fundit",
       color: "text-emerald-600"
     },
     {
@@ -88,7 +88,7 @@ const BeforeYouStart = () => {
       title: "Learn It",
       description: "Learn It provides short micro courses that teach practical skills you can apply immediately. These lessons support your development and help you grow into your next step with confidence.",
       cta: "Start Learning",
-      link: "/learn-a-skill",
+      link: "/learnit",
       color: "text-rose-600"
     }
   ];
@@ -100,7 +100,7 @@ const BeforeYouStart = () => {
     'interview-questions': 'Interview Questions',
     'interview-feedback': 'Interview Feedback',
     'resume-analyzer': 'Resume Analyzer',
-    'learn-a-skill': 'Learn a Skill',
+    'learnit': 'Learn It',
     'business-mentor': 'Business Mentor',
     'business-plan': 'Business Plan',
     'business-idea': 'Business Idea',

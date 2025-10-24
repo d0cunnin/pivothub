@@ -162,7 +162,7 @@ export const PathSelection = () => {
                 ))}
               </div>
 
-              <Link to="/upskill" className="mt-auto">
+              <Link to="/learnit" className="mt-auto">
                 <Button 
                   variant="default" 
                   size="lg" 

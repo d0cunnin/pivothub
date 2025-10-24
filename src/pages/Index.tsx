@@ -33,7 +33,7 @@ const Index = () => {
       icon: reskillIcon,
       title: "Fund It",
       description: "Explore funding options and strategies.",
-      link: "/grantwriting"
+      link: "/fundit"
     },
     {
       icon: hireyourselfIcon,

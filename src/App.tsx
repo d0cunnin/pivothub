@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UsageProvider } from "@/contexts/UsageContext";
 import Index from "./pages/Index";
-import Upskill from "./pages/Upskill";
 import BuildIt from "./pages/BuildIt";
 import About from "./pages/About";
 import TeachIt from "./pages/TeachIt";
@@ -16,12 +15,12 @@ import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import AssessIt from "./pages/AssessIt";
 import PrepIt from "./pages/PrepIt";
-import LearnASkill from "./pages/LearnASkill";
+import LearnIt from "./pages/LearnIt";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Auth from "./pages/Auth";
 import Pricing from "./pages/Pricing";
-import GrantWriting from "./pages/GrantWriting";
+import FundIt from "./pages/FundIt";
 import FreelancerMarketplace from "./pages/FreelancerMarketplace";
 import FreelancerOnboarding from "./pages/FreelancerOnboarding";
 import ClientOnboarding from "./pages/ClientOnboarding";
@@ -57,12 +56,11 @@ const App = () => (
           <Route path="/scheduleit" element={<ScheduleIt />} />
           <Route path="/hostit" element={<HostIt />} />
           <Route path="/before-you-start" element={<BeforeYouStart />} />
-            <Route path="/learnit" element={<Upskill />} />
+            <Route path="/learnit" element={<LearnIt />} />
             <Route path="/assessit" element={<AssessIt />} />
             <Route path="/prepit" element={<PrepIt />} />
-            <Route path="/learn-a-skill" element={<LearnASkill />} />
             <Route path="/buildit" element={<BuildIt />} />
-            <Route path="/grantwriting" element={<GrantWriting />} />
+            <Route path="/fundit" element={<FundIt />} />
             <Route path="/freelancer-marketplace" element={<FreelancerMarketplace />} />
             <Route path="/freelancer-onboarding" element={<FreelancerOnboarding />} />
             <Route path="/client-onboarding" element={<ClientOnboarding />} />

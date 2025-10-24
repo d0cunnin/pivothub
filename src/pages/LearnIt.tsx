@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Clock, BookOpen, TrendingUp, Target, Code } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
-const LearnASkill = () => {
+const LearnIt = () => {
   const miniCourses = [
     {
       title: "AI & Technology Essentials",
@@ -111,4 +111,4 @@ const LearnASkill = () => {
   );
 };
 
-export default LearnASkill;
+export default LearnIt;

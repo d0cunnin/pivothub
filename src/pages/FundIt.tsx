@@ -162,7 +162,7 @@ const GRANT_CATEGORIES = {
   }
 };
 
-const GrantWriting = () => {
+const FundIt = () => {
   const [activeTab, setActiveTab] = useState('generator');
   const [formData, setFormData] = useState<GrantFormData>({
     organizationName: '',
@@ -1144,4 +1144,4 @@ const GrantWriting = () => {
   );
 };
 
-export default GrantWriting;
+export default FundIt;

@@ -280,7 +280,7 @@ const Dashboard = () => {
                     </Link>
                   </Button>
                   <Button variant="outline" asChild className="h-auto py-4 flex-col gap-2">
-                    <Link to="/learn-a-skill">
+                    <Link to="/learnit">
                       <BookOpen className="h-6 w-6" />
                       <span>Browse Courses</span>
                     </Link>
