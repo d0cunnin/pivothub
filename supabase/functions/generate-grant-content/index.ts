@@ -25,11 +25,26 @@ const grantDataSchema = z.object({
 });
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "generate-grant-content",
+      cost: 4,
+      requireAuth: true,
+      maxReqsPerMinute: 20
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const rawBody = await req.json();
     
     // Validate input
@@ -261,27 +276,6 @@ QUALITY STANDARDS:
       };
     }
 
-    return new Response(
-      JSON.stringify(grantContent),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200
-      }
-    );
-
-  } catch (error) {
-    console.error('Error generating grant content:', error);
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    return new Response(
-      JSON.stringify({ error: errorMessage }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
-    const jsonResponse = {
-      proposal: grantProposal,
-      letterOfIntent: letterOfIntent
-    };
-
     await logRequest({
       endpoint: "generate-grant-content",
       userId,
@@ -291,10 +285,14 @@ QUALITY STANDARDS:
       requestDurationMs: Date.now() - startTime
     });
 
-    return new Response(JSON.stringify(jsonResponse), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify(grantContent),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200
+      }
+    );
+
   } catch (error: any) {
     console.error('Error in generate-grant-content:', error);
     
