@@ -1,11 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
 
 // Validation schema for personality assessment
 const personalityAssessmentSchema = z.object({
@@ -22,11 +18,34 @@ serve(async (req) => {
   }
 
   try {
+    // Apply security guard
+    const guardResult = await guard(req, {
+      endpoint: 'personality-assessment',
+      cost: 2,
+      requireAuth: true,
+      requireCaptcha: false,
+      maxReqsPerMinute: 10
+    });
+
+    const { supabase, userId, ip, startTime } = guardResult;
+    
+    // Parse and validate request body
     const rawBody = await req.json();
     
     // Validate input
     const validation = personalityAssessmentSchema.safeParse(rawBody);
     if (!validation.success) {
+      await logRequest(supabase, {
+        userId,
+        endpoint: 'personality-assessment',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: 'Invalid input',
+        requestDurationMs: Date.now() - startTime
+      });
+      
       return new Response(
         JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -451,6 +470,17 @@ serve(async (req) => {
     let personality;
     try {
       personality = JSON.parse(data.choices[0].message.content);
+      
+      // Log success
+      await logRequest(supabase, {
+        userId,
+        endpoint: 'personality-assessment',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 2,
+        success: true,
+        requestDurationMs: Date.now() - startTime
+      });
     } catch (parseError) {
       // Fallback personality analysis if JSON parsing fails
       personality = {
@@ -499,6 +529,12 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Error analyzing personality assessment:', error);
+    
+    // Handle guard errors (thrown as Response objects)
+    if (error instanceof Response) {
+      return error;
+    }
+    
     const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(
       JSON.stringify({ error: errorMessage }),

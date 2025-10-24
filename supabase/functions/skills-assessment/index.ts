@@ -1,11 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
 
 // Input validation schema
 const skillsAssessmentSchema = z.object({
@@ -25,11 +21,34 @@ serve(async (req) => {
   }
 
   try {
+    // Apply security guard
+    const guardResult = await guard(req, {
+      endpoint: 'skills-assessment',
+      cost: 2,
+      requireAuth: true,
+      requireCaptcha: false,
+      maxReqsPerMinute: 10
+    });
+
+    const { supabase, userId, ip, startTime } = guardResult;
+    
+    // Parse and validate request body
     const requestBody = await req.json();
     
     // Validate input
     const validation = skillsAssessmentSchema.safeParse(requestBody);
     if (!validation.success) {
+      await logRequest(supabase, {
+        userId,
+        endpoint: 'skills-assessment',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: 'Invalid input',
+        requestDurationMs: Date.now() - startTime
+      });
+      
       return new Response(
         JSON.stringify({ 
           error: "Invalid input", 
@@ -685,6 +704,17 @@ Analyze the user's responses comprehensively to create a professional-grade skil
     let assessment;
     try {
       assessment = JSON.parse(data.choices[0].message.content);
+      
+      // Log success
+      await logRequest(supabase, {
+        userId,
+        endpoint: 'skills-assessment',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 2,
+        success: true,
+        requestDurationMs: Date.now() - startTime
+      });
     } catch (parseError) {
       // Fallback assessment if JSON parsing fails
       assessment = {
@@ -715,6 +745,12 @@ Analyze the user's responses comprehensively to create a professional-grade skil
 
   } catch (error) {
     console.error('Error analyzing skills assessment:', error);
+    
+    // Handle guard errors (thrown as Response objects)
+    if (error instanceof Response) {
+      return error;
+    }
+    
     const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(
       JSON.stringify({ error: errorMessage }),
