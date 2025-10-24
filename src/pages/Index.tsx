@@ -13,9 +13,45 @@ const Index = () => {
   const features = [
     {
       icon: reskillIcon,
+      title: "Assess It",
+      description: "Assess, improve, and grow with confidence.",
+      link: "/assessit"
+    },
+    {
+      icon: reskillIcon,
+      title: "Learn It",
+      description: "Upskill with courses designed to advance your career.",
+      link: "/learnit"
+    },
+    {
+      icon: jobprepIcon,
+      title: "Prep It",
+      description: "Prepare for career success with expert guidance.",
+      link: "/prepit"
+    },
+    {
+      icon: hireyourselfIcon,
+      title: "Earn It",
+      description: "Discover the right income opportunities for your lifestyle.",
+      link: "/earnit"
+    },
+    {
+      icon: reskillIcon,
       title: "Teach It",
       description: "Monetize your expertise by teaching others what you know best.",
       link: "/teachit"
+    },
+    {
+      icon: reskillIcon,
+      title: "Host It",
+      description: "Create and manage events that bring people together.",
+      link: "/hostit"
+    },
+    {
+      icon: reskillIcon,
+      title: "Schedule It",
+      description: "Organize your time and appointments with ease.",
+      link: "/scheduleit"
     },
     {
       icon: reskillIcon,
@@ -34,24 +70,6 @@ const Index = () => {
       title: "Fund It",
       description: "Explore funding options and strategies.",
       link: "/fundit"
-    },
-    {
-      icon: hireyourselfIcon,
-      title: "Earn It",
-      description: "Discover the right income opportunities for your lifestyle.",
-      link: "/earnit"
-    },
-    {
-      icon: jobprepIcon,
-      title: "Prep It",
-      description: "Prepare for career success.",
-      link: "/prepit"
-    },
-    {
-      icon: reskillIcon,
-      title: "Assess It",
-      description: "Assess, improve, and grow with confidence.",
-      link: "/assessit"
     }
   ];
 
