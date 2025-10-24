@@ -587,7 +587,7 @@ const Pricing = () => {
           </div>
 
           <div className="text-center mt-8">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               💡 <strong>Note:</strong> Extra credits expire at the end of your billing month. {!user && "Sign in to purchase credits."}
             </p>
           </div>
