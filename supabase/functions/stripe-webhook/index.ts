@@ -14,29 +14,103 @@ const logStep = (step: string, details?: any) => {
   console.log(`[STRIPE-WEBHOOK] ${step}${detailsStr}`);
 };
 
+// Whitelist of accepted event types
+const ACCEPTED_EVENT_TYPES = [
+  'checkout.session.completed',
+  'invoice.payment_succeeded',
+  'invoice.payment_failed',
+  'customer.subscription.created',
+  'customer.subscription.updated',
+  'customer.subscription.deleted',
+];
+
 serve(async (req) => {
   const signature = req.headers.get('Stripe-Signature');
+  
+  // Support dual-secret rotation for zero-downtime updates
+  const webhookSecretV2 = Deno.env.get('STRIPE_WEBHOOK_SECRET_V2');
   const webhookSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET');
+  const secrets = [webhookSecretV2, webhookSecret].filter(Boolean);
 
-  if (!signature || !webhookSecret) {
-    return new Response('Missing signature or webhook secret', { status: 400 });
+  if (!signature || secrets.length === 0) {
+    logStep('Missing signature or webhook secret');
+    return new Response('Webhook configuration error', { status: 500 });
   }
 
   try {
     const body = await req.text();
-    const event = await stripe.webhooks.constructEventAsync(
-      body,
-      signature,
-      webhookSecret,
-      undefined,
-      cryptoProvider
-    );
+    
+    // Try each secret (supports rotation)
+    let event: Stripe.Event | null = null;
+    let lastError: Error | null = null;
+    let signatureValid = false;
+    
+    for (const secret of secrets) {
+      try {
+        event = await stripe.webhooks.constructEventAsync(
+          body,
+          signature,
+          secret,
+          undefined,
+          cryptoProvider
+        );
+        signatureValid = true;
+        logStep('Webhook signature verified', { eventType: event.type, eventId: event.id });
+        break;
+      } catch (err) {
+        lastError = err;
+        continue;
+      }
+    }
+
+    if (!event) {
+      logStep('Signature verification failed with all secrets', { error: lastError?.message });
+      return new Response(`Webhook signature verification failed`, { status: 400 });
+    }
+
+    // Validate event type whitelist
+    if (!ACCEPTED_EVENT_TYPES.includes(event.type)) {
+      logStep('Event type not in whitelist', { eventType: event.type });
+      return new Response(`Event type ${event.type} not accepted`, { status: 400 });
+    }
+
+    // Optional: Reject events older than 15 minutes (prevents old event replay)
+    const eventAge = Date.now() - (event.created * 1000);
+    const MAX_EVENT_AGE = 15 * 60 * 1000; // 15 minutes
+    if (eventAge > MAX_EVENT_AGE) {
+      logStep('Event too old', { eventAge: eventAge / 1000, eventId: event.id });
+      return new Response('Event timestamp too old', { status: 400 });
+    }
 
     logStep('Received event', { type: event.type });
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Check for duplicate event (replay protection)
+    const { data: existingEvent } = await supabase
+      .from('processed_stripe_events')
+      .select('event_id')
+      .eq('event_id', event.id)
+      .single();
+
+    if (existingEvent) {
+      logStep('Duplicate event ignored', { eventId: event.id });
+      
+      // Log duplicate attempt
+      await supabase.from('webhook_audit_log').insert({
+        event_id: event.id,
+        event_type: event.type,
+        signature_valid: true,
+        processing_status: 'duplicate',
+      });
+      
+      return new Response(JSON.stringify({ received: true, duplicate: true }), {
+        headers: { 'Content-Type': 'application/json' },
+        status: 200,
+      });
+    }
 
     // Handle subscription events
     if (event.type === 'checkout.session.completed') {
@@ -74,12 +148,47 @@ serve(async (req) => {
       await handleSubscriptionCancellation(supabase, subscription);
     }
 
+    // Mark event as processed (idempotency)
+    await supabase.from('processed_stripe_events').insert({
+      event_id: event.id,
+      event_type: event.type,
+      processed_successfully: true,
+    });
+
+    // Log successful processing
+    await supabase.from('webhook_audit_log').insert({
+      event_id: event.id,
+      event_type: event.type,
+      signature_valid: true,
+      processing_status: 'success',
+    });
+
+    logStep('Webhook processed successfully', { eventType: event.type, eventId: event.id });
+
     return new Response(JSON.stringify({ received: true }), {
       headers: { 'Content-Type': 'application/json' },
       status: 200,
     });
   } catch (error) {
     logStep('ERROR', { message: error instanceof Error ? error.message : String(error) });
+    
+    // Log failed processing
+    try {
+      const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+      const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
+      
+      await supabase.from('webhook_audit_log').insert({
+        event_id: 'unknown',
+        event_type: 'unknown',
+        signature_valid: false,
+        processing_status: 'failed',
+        error_message: error instanceof Error ? error.message : String(error),
+      });
+    } catch (auditErr) {
+      logStep('Failed to log audit', auditErr);
+    }
+    
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
