@@ -100,12 +100,37 @@ export const Header = () => {
               >
                 Teach It
               </Link>
-              <Link 
-                to="/launchit" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/launchit' ? 'text-primary font-medium' : ''}`}
-              >
-                Launch It
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="flex items-center space-x-1">
+                    <span 
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/launchit', '/scheduleit', '/hostit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                    >
+                      Plan It
+                    </span>
+                    <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
+                  <DropdownMenuItem asChild>
+                    <Link to="/launchit" className="flex w-full cursor-pointer">
+                      Launch It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/scheduleit" className="flex w-full cursor-pointer">
+                      Schedule It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/hostit" className="flex w-full cursor-pointer">
+                      Host It
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Link 
                 to="/grantwriting" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}
@@ -267,13 +292,36 @@ export const Header = () => {
               >
                 Teach It
               </Link>
-               <Link 
-                to="/launchit" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/launchit' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Launch It
-              </Link>
+              <div className="space-y-2">
+                <span 
+                  className={`font-medium hover:text-primary transition-colors ${['/launchit', '/scheduleit', '/hostit'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
+                >
+                  Plan It
+                </span>
+                <div className="pl-4 space-y-2">
+                  <Link 
+                    to="/launchit" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/launchit' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Launch It
+                  </Link>
+                  <Link 
+                    to="/scheduleit" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/scheduleit' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Schedule It
+                  </Link>
+                  <Link 
+                    to="/hostit" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/hostit' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Host It
+                  </Link>
+                </div>
+              </div>
                <Link
                 to="/grantwriting" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/grantwriting' ? 'text-primary font-medium' : ''}`}

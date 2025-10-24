@@ -24,6 +24,8 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'interview-feedback': 2,         // ~3,000 tokens with analysis
   'business-foundation': 2,        // ~3,000 tokens output
   'grant-finder': 2,               // API calls + formatting
+  'schedule-it': 2,                // ~3,000 tokens output
+  'host-it': 4,                    // ~8,000 tokens output
   
   // LOW COST TOOLS (1 credit) - Simple queries or chatbot interactions
   'career-advisor': 1,             // Chatbot, ~1,500 tokens per message

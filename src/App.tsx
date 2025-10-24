@@ -31,6 +31,8 @@ import Admin from "./pages/Admin";
 import EarnIt from "./pages/EarnIt";
 import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
+import ScheduleIt from "./pages/ScheduleIt";
+import HostIt from "./pages/HostIt";
 
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -51,6 +53,8 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/teachit" element={<TeachIt />} />
             <Route path="/launchit" element={<LaunchIt />} />
+            <Route path="/scheduleit" element={<ScheduleIt />} />
+            <Route path="/hostit" element={<HostIt />} />
             <Route path="/learnit" element={<Upskill />} />
             <Route path="/assessit" element={<AssessIt />} />
             <Route path="/prepit" element={<PrepIt />} />
