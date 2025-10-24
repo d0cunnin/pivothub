@@ -281,14 +281,14 @@ const Pricing = () => {
               Choose the plan that matches your goals. Start free or unlock full access with a paid subscription.
             </p>
             
-            <div className="text-base text-muted-foreground max-w-4xl mx-auto text-left space-y-6">
+            <div className="text-base text-muted-foreground max-w-4xl mx-auto text-center space-y-6">
               <div>
                 <h3 className="text-lg font-bold text-foreground mb-4">PivotHub Pricing Overview</h3>
               </div>
               
               <div>
                 <h4 className="font-bold text-foreground mb-2">Explore Mode (Free)</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
+                <ul className="list-disc list-inside space-y-1">
                   <li>5 free credits each month</li>
                   <li>Credits reset on your signup anniversary</li>
                   <li>No rollover</li>
@@ -297,7 +297,7 @@ const Pricing = () => {
               
               <div>
                 <h4 className="font-bold text-foreground mb-2">Package Plans ($15–$18 per month)</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
+                <ul className="list-disc list-inside space-y-1">
                   <li>Access to specialized toolkits</li>
                   <li>Monthly credits included</li>
                   <li>Unused credits roll over (up to 2× your monthly limit)</li>
@@ -306,7 +306,7 @@ const Pricing = () => {
               
               <div>
                 <h4 className="font-bold text-foreground mb-2">All Access Pass ($29 per month)</h4>
-                <ul className="list-disc list-inside space-y-1 ml-4">
+                <ul className="list-disc list-inside space-y-1">
                   <li>Access to every toolkit on the platform</li>
                   <li>Largest monthly credit bundle</li>
                   <li>Priority support</li>
