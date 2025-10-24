@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -140,61 +141,73 @@ const BeforeYouStart = () => {
         <Header />
 
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10">
-          <div className="container mx-auto px-4 md:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-in">
-              <Badge variant="secondary" className="text-sm md:text-base px-4 py-2">
-                <Compass className="w-4 h-4 mr-2 inline" />
-                Getting Started Guide
-              </Badge>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
+        <section className="py-20 bg-primary relative overflow-hidden">
+          {/* Background Image with Overlay */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${heroImage})` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
+          </div>
+          
+          {/* Decorative Elements */}
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+          <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+          
+          <div className="container mx-auto px-6 lg:px-8 relative z-10">
+            <div className="text-center max-w-5xl mx-auto">
+              <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+                <span className="text-3xl font-bold text-white tracking-wider">BEFORE YOU GET STARTED</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
                 Before You Get Started
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-                Learn how PivotHub works and find the right tool for your journey.
+              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
+                Learn how PivotHub works and discover which tools are right for your journey. Get guidance on starting your path to income, clarity, career, or business growth.
               </p>
             </div>
           </div>
         </section>
 
         {/* Section 1: Introduction */}
-        <section className="py-16 md:py-20 bg-background">
-          <div className="container mx-auto px-4 md:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">
-                Welcome to PivotHub
+                What Is PivotHub?
               </h2>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                This platform was created to give you guided steps that help you move from where you are now into your next stage of income, clarity, career, or business growth. You do not have to figure everything out at once. You only need the next right step, and each tool in PivotHub is designed to help you reach that next step with structure and ease.
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                PivotHub is a comprehensive platform designed to help you achieve income, career clarity, or business growth. Whether you're looking to upskill, prepare for your next career move, earn extra income, teach others, build a business, or find funding, we have the tools to guide you every step of the way.
               </p>
             </div>
           </div>
         </section>
 
         {/* Section 2: How PivotHub Works */}
-        <section className="py-16 md:py-20 bg-muted/30">
-          <div className="container mx-auto px-4 md:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">
+        <section className="py-20 bg-accent">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
                 How PivotHub Works
               </h2>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                PivotHub is organized into tools that match different parts of your journey. Some tools are designed to help you start earning. Some help you build a business idea. Some help you prepare for employment. Others help you launch, host events, or get funded. You do not need every tool right away. You only need the one that fits the stage you are currently in.
+              <p className="text-lg text-white/90 leading-relaxed">
+                Our platform offers different tools to support specific goals. Each tool is designed to give you actionable guidance and results quickly.
               </p>
             </div>
           </div>
         </section>
 
         {/* Section 3: The Tools */}
-        <section className="py-16 md:py-20 bg-background">
-          <div className="container mx-auto px-4 md:px-6 lg:px-8">
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-foreground">
                 The Tools
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tools.map((tool, index) => (
-                  <Card key={index} className="flex flex-col hover:shadow-lg transition-shadow duration-300">
+                  <Card key={index} className="premium-card flex flex-col hover:shadow-lg transition-elegant hover:scale-105">
                     <CardHeader>
                       <div className="flex items-center gap-3 mb-2">
                         <tool.icon className={`w-8 h-8 ${tool.color}`} />
@@ -217,19 +230,22 @@ const BeforeYouStart = () => {
         </section>
 
         {/* Section 4: If You Are Unsure Where to Start */}
-        <section className="py-16 md:py-20 bg-muted/30">
-          <div className="container mx-auto px-4 md:px-6 lg:px-8">
+        <section className="py-20 bg-primary relative overflow-hidden">
+          <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+          
+          <div className="container mx-auto px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">
-                If You Are Unsure Where to Start
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+                Not Sure Where to Start?
               </h2>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
-                If you are not sure which tool to begin with, start with Assess It. It will help you understand your current stage and direct you toward the best next step.
+              <p className="text-lg text-white/90 mb-8">
+                If you're unsure which tool is right for you, we recommend starting with <strong>Assess It</strong>. This tool helps you understand your skills, goals, and the best path forward.
               </p>
-              <Button variant="default" size="lg" asChild>
+              <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
                 <Link to="/assessit">
                   <Target className="w-5 h-5 mr-2" />
-                  Begin Assessment
+                  Start with Assess It
                 </Link>
               </Button>
             </div>
@@ -237,14 +253,14 @@ const BeforeYouStart = () => {
         </section>
 
         {/* Section 5: Subscription Visibility */}
-        <section className="py-16 md:py-20 bg-background">
-          <div className="container mx-auto px-4 md:px-6 lg:px-8">
+        <section className="py-20 bg-accent">
+          <div className="container mx-auto px-6 lg:px-8">
             <div className="max-w-5xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-foreground">
+              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-white">
                 What Is Included in Each Tier
               </h2>
-              <div className="space-y-8">
-                <Card>
+              <div className="space-y-6">
+                <Card className="premium-card">
                   <CardHeader>
                     <CardTitle className="text-2xl">Explore Mode</CardTitle>
                     <CardDescription>5 free credits per month to try any tool</CardDescription>
@@ -256,7 +272,7 @@ const BeforeYouStart = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="premium-card">
                   <CardHeader>
                     <CardTitle className="text-2xl">Assess It + Prep It + Learn It Package</CardTitle>
                   </CardHeader>
@@ -267,7 +283,7 @@ const BeforeYouStart = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="premium-card">
                   <CardHeader>
                     <CardTitle className="text-2xl">Build It + Teach It + Launch It Package</CardTitle>
                   </CardHeader>
@@ -278,7 +294,7 @@ const BeforeYouStart = () => {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="premium-card">
                   <CardHeader>
                     <CardTitle className="text-2xl">Fund It Package</CardTitle>
                   </CardHeader>
@@ -289,7 +305,7 @@ const BeforeYouStart = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-primary">
+                <Card className="premium-card border-primary">
                   <CardHeader>
                     <CardTitle className="text-2xl">All Access Pass</CardTitle>
                     <CardDescription>Unlimited access to every tool</CardDescription>
@@ -303,7 +319,7 @@ const BeforeYouStart = () => {
               </div>
 
               <div className="mt-12 text-center">
-                <Button variant="outline" size="lg" asChild>
+                <Button variant="hero" size="lg" asChild>
                   <Link to="/pricing">View Pricing Details</Link>
                 </Button>
               </div>
