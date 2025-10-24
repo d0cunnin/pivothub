@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import heroImage from "@/assets/hero-image.jpg";
+import dandreaBolden from "@/assets/dandrea-bolden.jpg";
 
 export default function About() {
   return (
@@ -159,6 +160,39 @@ export default function About() {
             <p className="section-body-text text-white/90 mb-6">
               Since July 2025, we've been helping professionals navigate career transitions with confidence. Whether you're seeking your next job opportunity, launching a business, teaching your expertise, or securing grant funding, PivotHub provides the comprehensive tools, AI-powered guidance, and supportive community you need to pivot successfully into your future.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* The Visionary */}
+      <section className="section-spacing bg-white">
+        <div className="page-container">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="lg:mr-4">
+              <img 
+                src={dandreaBolden}
+                alt="D'Andrea Bolden, MA - Founder & CEO of Bold AI Solutions" 
+                className="w-full max-w-md mx-auto aspect-square object-cover rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+              />
+            </div>
+            <div className="space-y-6">
+              <h2 className="section-header">The Visionary</h2>
+              <div className="space-y-2">
+                <h3 className="text-2xl font-semibold text-primary">D'Andrea Bolden, MA</h3>
+                <p className="text-lg text-muted-foreground">Founder & CEO, Bold AI Solutions</p>
+              </div>
+              <div className="space-y-4">
+                <p className="section-body-text">
+                  D'Andrea Bolden is an entrepreneur, nonprofit leader, and technology strategist with more than 17 years of corporate experience. She holds a bachelor's degree in psychology and chemistry (minor), a master's degree in counseling, a master's degree in medical sciences, and a certification in AI Development.
+                </p>
+                <p className="section-body-text">
+                  Beyond her corporate background, D'Andrea has built and led community-focused initiatives through entrepreneurship and the nonprofit sectors, developing programs that support workforce readiness, skills development, and access to opportunity.
+                </p>
+                <p className="section-body-text">
+                  She is the founder of Bold AI Solutions, through which PivotHub was created as a platform designed to help individuals pivot forward with practical tools, structure, and pathways for growth.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
