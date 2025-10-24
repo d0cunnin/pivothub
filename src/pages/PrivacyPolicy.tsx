@@ -124,7 +124,7 @@ const PrivacyPolicy = () => {
               <div>
                 <h3 className="text-xl font-semibold mb-4">7. Children's Privacy</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Our site is not intended for children under the age of 13. We do not knowingly collect information from anyone under 13 years of age.
+                  Our website is not intended for anyone under the legal adult age of 18 years old. We do not knowingly collect information from anyone under 18 years of age. If we discover that we have inadvertently collected personal information from someone under 18, we will delete that information promptly.
                 </p>
               </div>
 
