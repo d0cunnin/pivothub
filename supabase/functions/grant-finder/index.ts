@@ -1,11 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 // Validation schema
 const grantFinderSchema = z.object({
@@ -15,13 +11,18 @@ const grantFinderSchema = z.object({
   fundingAmount: z.string().max(200),
   businessStage: z.string().max(200),
   category: z.string().max(200).optional(),
-  subcategory: z.string().max(200).optional()
+  subcategory: z.string().max(200).optional(),
+  captchaToken: z.string().optional(),
 });
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
+
+  let startTime = Date.now();
+  let ip = 'unknown';
+  let userId: string | null = null;
 
   try {
     const rawBody = await req.json();
@@ -36,6 +37,19 @@ serve(async (req) => {
     }
     
     const { businessType, industry, location, fundingAmount, businessStage, category, subcategory } = validation.data;
+
+    // Apply security guard
+    const guardResult = await guard(req, {
+      endpoint: 'grant-finder',
+      cost: 2, // 2 credits per grant search
+      requireAuth: true,
+      requireCaptcha: false,
+      maxReqsPerMinute: 20 // Lower limit for expensive operations
+    });
+
+    startTime = guardResult.startTime;
+    ip = guardResult.ip;
+    userId = guardResult.userId;
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {
@@ -254,6 +268,17 @@ QUALITY STANDARDS:
       ];
     }
 
+    // Log successful request
+    await logRequest(guardResult.supabase, {
+      userId,
+      endpoint: 'grant-finder',
+      ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
+      creditsCharged: 2,
+      success: true,
+      requestDurationMs: Date.now() - startTime
+    });
+
     return new Response(
       JSON.stringify({ grants }),
       {
@@ -264,6 +289,12 @@ QUALITY STANDARDS:
 
   } catch (error) {
     console.error('Error finding grants:', error);
+    
+    // Handle guard errors (Response objects)
+    if (error instanceof Response) {
+      return error;
+    }
+    
     const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(
       JSON.stringify({ error: errorMessage }),

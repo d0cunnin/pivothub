@@ -40,64 +40,70 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.generate-business-content]
-verify_jwt = false
+verify_jwt = true
 
 [functions.career-advisor]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-logo]
-verify_jwt = false
+verify_jwt = true
 
 [functions.interview-questions]
-verify_jwt = false
+verify_jwt = true
 
 [functions.social-media-content]
-verify_jwt = false
+verify_jwt = true
 
 [functions.skills-assessment]
-verify_jwt = false
+verify_jwt = true
 
 [functions.career-assessment]
-verify_jwt = false
+verify_jwt = true
 
 [functions.personality-assessment]
-verify_jwt = false
+verify_jwt = true
 
 [functions.grant-finder]
-verify_jwt = false
+verify_jwt = true
 
 [functions.name-checker]
-verify_jwt = false
+verify_jwt = true
+
+[functions.get-course-material]
+verify_jwt = true
 
 [functions.startup-checklist]
-verify_jwt = false
+verify_jwt = true
 
 [functions.business-resources]
-verify_jwt = false
+verify_jwt = true
 
 [functions.interview-feedback]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-grant-content]
-verify_jwt = false
+verify_jwt = true
 
 [functions.grant-resources]
-verify_jwt = false
+verify_jwt = true
 
 [functions.business-mentor]
-verify_jwt = false
+verify_jwt = true
 
 [functions.send-assessment-results]
 verify_jwt = false
 
 [functions.generate-teaching-content]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-launch-strategy]
-verify_jwt = false
+verify_jwt = true
 
 [functions.contact-chatbot]
 verify_jwt = false
+
+[functions.resume-analyzer]
+verify_jwt = true
 
 [functions.purchase-extra-credits]
 verify_jwt = true

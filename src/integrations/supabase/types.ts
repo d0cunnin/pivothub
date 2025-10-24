@@ -110,6 +110,66 @@ export type Database = {
         }
         Relationships: []
       }
+      api_ip_usage: {
+        Row: {
+          count: number
+          endpoint: string
+          ip: unknown
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          endpoint: string
+          ip: unknown
+          window_start: string
+        }
+        Update: {
+          count?: number
+          endpoint?: string
+          ip?: unknown
+          window_start?: string
+        }
+        Relationships: []
+      }
+      api_request_log: {
+        Row: {
+          created_at: string | null
+          credits_charged: number | null
+          endpoint: string
+          error_message: string | null
+          id: string
+          ip_address: unknown
+          request_duration_ms: number | null
+          success: boolean
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          credits_charged?: number | null
+          endpoint: string
+          error_message?: string | null
+          id?: string
+          ip_address: unknown
+          request_duration_ms?: number | null
+          success: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          credits_charged?: number | null
+          endpoint?: string
+          error_message?: string | null
+          id?: string
+          ip_address?: unknown
+          request_duration_ms?: number | null
+          success?: boolean
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       assessment_results: {
         Row: {
           action_plan: Json | null
@@ -785,6 +845,10 @@ export type Database = {
           }
         | { Args: { p_user_id: string }; Returns: Json }
       cleanup_expired_contexts: { Args: never; Returns: undefined }
+      floor_to_window: {
+        Args: { seconds: number; ts: string }
+        Returns: string
+      }
       get_admin_cost_analysis: {
         Args: never
         Returns: {
@@ -812,6 +876,15 @@ export type Database = {
             Returns: boolean
           }
       reset_monthly_ai_requests: { Args: never; Returns: undefined }
+      throttle_ip: {
+        Args: {
+          p_endpoint: string
+          p_ip: string
+          p_max_reqs: number
+          p_window_seconds: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

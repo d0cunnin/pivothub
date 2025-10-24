@@ -1,14 +1,20 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 const logStep = (step: string, data?: any) => {
   console.log(`[ADMIN-MANAGE] ${step}`, data || '');
 };
+
+// Admin action validation schema
+const adminManageSchema = z.object({
+  action: z.enum(['grant', 'revoke', 'extend']),
+  userId: z.string().uuid(),
+  tier: z.enum(['Basic', 'Premium', 'Enterprise']).optional(),
+  duration: z.enum(['1-month', '3-months', '6-months', '1-year', 'lifetime']).optional(),
+  notes: z.string().max(1000).optional()
+});
 
 interface GrantAccessRequest {
   action: "grant" | "revoke" | "extend";
@@ -23,52 +29,73 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  let startTime = Date.now();
+  let ip = 'unknown';
+  let adminId: string | null = null;
+
   try {
     logStep('Starting admin subscription management');
-    
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-    );
-    
-    // Get IP address and user agent for audit logging
-    const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
-    const userAgent = req.headers.get('user-agent') || 'unknown';
 
-    // Get the requesting user
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      throw new Error("Missing authorization header");
+    // Parse and validate input
+    const requestData = await req.json();
+    const validation = adminManageSchema.safeParse(requestData);
+
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.issues }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    // Apply security guard (no credit cost for admins)
+    const guardResult = await guard(req, {
+      endpoint: 'admin-manage-subscription',
+      cost: 0,
+      requireAuth: true,
+      requireCaptcha: false,
+      maxReqsPerMinute: 60
+    });
 
-    if (authError || !user) {
-      throw new Error("Unauthorized");
+    startTime = guardResult.startTime;
+    ip = guardResult.ip;
+    adminId = guardResult.userId;
+
+    // Check if user has admin role using has_role function
+    const { data: isAdmin, error: roleError } = await guardResult.supabase.rpc('has_role', {
+      _user_id: adminId,
+      _role: 'admin'
+    });
+
+    if (roleError || !isAdmin) {
+      await logRequest(guardResult.supabase, {
+        userId: adminId,
+        endpoint: 'admin-manage-subscription',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: 'Forbidden: Admin access required',
+        requestDurationMs: Date.now() - startTime
+      });
+
+      return new Response(
+        JSON.stringify({ error: 'Forbidden: Admin access required' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
-    
-    logStep('User authenticated', user.id);
 
-    // Check if user is admin
-    const { data: adminRole, error: roleError } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .eq("role", "admin")
-      .maybeSingle();
+    logStep('Admin verified:', adminId);
 
-    if (roleError || !adminRole) {
-      logStep('Admin check failed', { userId: user.id, roleError });
-      throw new Error("Admin access required");
-    }
-    
-    logStep('Admin verified', user.id);
-    
+    // Use validated data
+    const requestBody = validation.data as GrantAccessRequest;
+    const { action, userId, tier, duration, notes } = requestBody;
+
+    logStep('Admin action initiated', { action, userId, tier, duration, adminId });
+
     // Check rate limit (max 100 admin actions per hour)
-    const { data: rateLimitCheck, error: rateLimitError } = await supabase
+    const { data: rateLimitCheck, error: rateLimitError } = await guardResult.supabase
       .rpc('check_admin_rate_limit', {
-        p_admin_user_id: user.id,
+        p_admin_user_id: adminId,
         p_action_type: 'subscription_management',
         p_max_actions: 100,
         p_window_minutes: 60
@@ -79,7 +106,7 @@ serve(async (req) => {
     }
     
     if (rateLimitCheck === false) {
-      logStep('Rate limit exceeded for admin', user.id);
+      logStep('Rate limit exceeded for admin', adminId);
       return new Response(
         JSON.stringify({ 
           error: 'Rate limit exceeded. You have performed too many admin actions. Please try again later.',
@@ -89,13 +116,14 @@ serve(async (req) => {
       );
     }
 
-    const requestBody: GrantAccessRequest = await req.json();
-    const { action, userId, tier, duration, notes } = requestBody;
-
-    logStep('Admin action initiated', { action, userId, tier, duration, adminId: user.id });
+    // Use service role for database operations
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
 
     // Get current subscription state for audit log
-    const { data: currentSub } = await supabase
+    const { data: currentSub } = await supabaseAdmin
       .from("subscribers_public")
       .select("*")
       .eq("user_id", userId)
@@ -139,11 +167,11 @@ serve(async (req) => {
       if (tier === "Enterprise") requestLimit = 250;
 
       // Get user email for subscribers table
-      const { data: authUser } = await supabase.auth.admin.getUserById(userId);
+      const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(userId);
       const email = authUser.user?.email || "";
 
       // Upsert subscription
-      const { error: upsertError } = await supabase
+      const { error: upsertError } = await supabaseAdmin
         .from("subscribers_public")
         .upsert({
           user_id: userId,
@@ -171,8 +199,8 @@ serve(async (req) => {
         ai_request_limit: requestLimit
       };
       
-      await supabase.from('admin_audit_log').insert({
-        admin_user_id: user.id,
+      await supabaseAdmin.from('admin_audit_log').insert({
+        admin_user_id: adminId,
         action: `grant_subscription_${tier}_${duration}`,
         target_user_id: userId,
         details: {
@@ -181,23 +209,34 @@ serve(async (req) => {
           notes: notes,
           duration: duration
         },
-        ip_address: ipAddress,
-        user_agent: userAgent
+        ip_address: ip,
+        user_agent: req.headers.get('user-agent') || 'unknown'
       });
       
       logStep('Audit log created');
 
       // Also log to legacy audit table for compatibility
-      await supabase
+      await supabaseAdmin
         .from("subscription_audit_log")
         .insert({
           user_id: userId,
-          admin_id: user.id,
+          admin_id: adminId,
           action: action,
           previous_state: currentSub,
           new_state: newState,
           notes: notes || null,
         });
+
+      // Log successful request
+      await logRequest(guardResult.supabase, {
+        userId: adminId,
+        endpoint: 'admin-manage-subscription',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: true,
+        requestDurationMs: Date.now() - startTime
+      });
 
       return new Response(
         JSON.stringify({ success: true, message: "Access granted successfully" }),
@@ -207,7 +246,7 @@ serve(async (req) => {
         }
       );
     } else if (action === "revoke") {
-      const { error: updateError } = await supabase
+      const { error: updateError } = await supabaseAdmin
         .from("subscribers_public")
         .update({
           subscribed: false,
@@ -227,8 +266,8 @@ serve(async (req) => {
       // Create audit log entry
       const newState = { subscribed: false };
       
-      await supabase.from('admin_audit_log').insert({
-        admin_user_id: user.id,
+      await supabaseAdmin.from('admin_audit_log').insert({
+        admin_user_id: adminId,
         action: 'revoke_subscription',
         target_user_id: userId,
         details: {
@@ -236,21 +275,32 @@ serve(async (req) => {
           new_state: newState,
           notes: notes
         },
-        ip_address: ipAddress,
-        user_agent: userAgent
+        ip_address: ip,
+        user_agent: req.headers.get('user-agent') || 'unknown'
       });
 
       // Also log to legacy audit table
-      await supabase
+      await supabaseAdmin
         .from("subscription_audit_log")
         .insert({
           user_id: userId,
-          admin_id: user.id,
+          admin_id: adminId,
           action: action,
           previous_state: currentSub,
           new_state: newState,
           notes: notes || null,
         });
+
+      // Log successful request
+      await logRequest(guardResult.supabase, {
+        userId: adminId,
+        endpoint: 'admin-manage-subscription',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: true,
+        requestDurationMs: Date.now() - startTime
+      });
 
       return new Response(
         JSON.stringify({ success: true, message: "Access revoked successfully" }),
@@ -264,6 +314,12 @@ serve(async (req) => {
     throw new Error("Invalid action");
   } catch (error: any) {
     logStep('Error in admin-manage-subscription', error);
+    
+    // Handle guard errors (Response objects)
+    if (error instanceof Response) {
+      return error;
+    }
+
     return new Response(
       JSON.stringify({ error: error.message }),
       {

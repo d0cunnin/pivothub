@@ -1,21 +1,31 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
-// Validation schema
+// Validation schema with strict limits
 const nameCheckerSchema = z.object({
-  businessName: z.string().min(1).max(300)
+  businessName: z.string()
+    .min(2, "Name too short")
+    .max(50, "Name too long - maximum 50 characters")
+    .regex(/^[a-zA-Z0-9\s\-_&'.]+$/, "Only letters, numbers, spaces, and basic punctuation allowed"),
+  captchaToken: z.string().optional(),
 });
+
+// DNS query limits to prevent abuse
+const MAX_DOMAIN_VARIANTS = 6;
+const MAX_TLD_CHECKS = 5;
+const MAX_DNS_QUERIES = 10;
+const DNS_TIMEOUT_MS = 3000;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
+
+  let startTime = Date.now();
+  let ip = 'unknown';
+  let userId: string | null = null;
 
   try {
     const rawBody = await req.json();
@@ -31,6 +41,19 @@ serve(async (req) => {
     
     const { businessName } = validation.data;
 
+    // Apply security guard
+    const guardResult = await guard(req, {
+      endpoint: 'name-checker',
+      cost: 2, // 2 credits per name check
+      requireAuth: true,
+      requireCaptcha: false,
+      maxReqsPerMinute: 20
+    });
+
+    startTime = guardResult.startTime;
+    ip = guardResult.ip;
+    userId = guardResult.userId;
+
     // Clean up the business name for domain checking
     const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '');
     const variations = [
@@ -40,30 +63,42 @@ serve(async (req) => {
       cleanName + 'llc',
       cleanName + 'app',
       cleanName + 'online'
-    ];
+    ].slice(0, MAX_DOMAIN_VARIANTS); // Limit variations
 
-    // Check domain availability for common TLDs
-    const tlds = ['.com', '.net', '.org', '.io', '.co'];
+    // Check domain availability for common TLDs (LIMITED)
+    const tlds = ['.com', '.net', '.org', '.io', '.co'].slice(0, MAX_TLD_CHECKS);
     const domainChecks = [];
+    let dnsQueryCount = 0;
 
     for (const variation of variations) {
+      if (dnsQueryCount >= MAX_DNS_QUERIES) break;
+
       for (const tld of tlds) {
+        if (dnsQueryCount >= MAX_DNS_QUERIES) break;
+
         const domain = variation + tld;
         try {
-          // Simple DNS lookup to check if domain exists
-          const response = await fetch(`https://dns.google/resolve?name=${domain}&type=A`, {
+          dnsQueryCount++;
+
+          // DNS lookup with timeout using Google's DNS API (more reliable than Deno.resolveDns)
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('DNS timeout')), DNS_TIMEOUT_MS)
+          );
+          
+          const dnsPromise = fetch(`https://dns.google/resolve?name=${domain}&type=A`, {
             method: 'GET',
             headers: { 'Accept': 'application/dns-json' }
-          });
-          const dnsData = await response.json();
+          }).then(res => res.json());
+
+          const dnsData = await Promise.race([dnsPromise, timeoutPromise]) as any;
           
           domainChecks.push({
             domain,
             available: dnsData.Status !== 0 || !dnsData.Answer,
-            price: '$12.99/year' // Approximate pricing
+            price: '$12.99/year'
           });
         } catch (error) {
-          // If DNS lookup fails, assume available (cautious approach)
+          // If DNS lookup fails or times out, assume available
           domainChecks.push({
             domain,
             available: true,
@@ -255,6 +290,17 @@ QUALITY STANDARDS:
       }
     }
 
+    // Log successful request
+    await logRequest(guardResult.supabase, {
+      userId,
+      endpoint: 'name-checker',
+      ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
+      creditsCharged: 2,
+      success: true,
+      requestDurationMs: Date.now() - startTime
+    });
+
     return new Response(
       JSON.stringify({
         businessName,
@@ -275,8 +321,14 @@ QUALITY STANDARDS:
       }
     );
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error checking name availability:', error);
+    
+    // Handle guard errors (Response objects)
+    if (error instanceof Response) {
+      return error;
+    }
+
     const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(
       JSON.stringify({ error: errorMessage }),
