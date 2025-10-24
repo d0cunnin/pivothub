@@ -1,5 +1,17 @@
 project_id = "fkvjsgqjgissolpdqbdh"
 
+[functions.process-expired-grace-periods]
+verify_jwt = false
+
+[functions.process-expired-grace-periods.schedule]
+cron = "0 */6 * * *"
+
+[functions.reset-free-tier-credits]
+verify_jwt = false
+
+[functions.reset-free-tier-credits.schedule]
+cron = "0 0 * * *"
+
 [functions.create-checkout]
 verify_jwt = true
 

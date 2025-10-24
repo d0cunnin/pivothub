@@ -299,6 +299,91 @@ async function handleSubscriptionChange(supabase: any, subscription: Stripe.Subs
         additionalCredits
       });
     }
+
+    // DOWNGRADE: Enforce rollover cap and truncate credits
+    if (newCreditLimit < oldLimit) {
+      const newRolloverCap = newCreditLimit * 2;
+      
+      // Calculate current available credits
+      const usedThisCycle = currentData.monthly_ai_requests || 0;
+      const remainingMonthly = Math.max(0, oldLimit - usedThisCycle);
+      const currentRollover = currentData.rollover_credits || 0;
+      const extraCredits = currentData.extra_credits || 0;
+      const totalAvailable = remainingMonthly + currentRollover + extraCredits;
+      
+      logStep('Downgrade detected', {
+        oldLimit,
+        newLimit: newCreditLimit,
+        totalAvailable,
+        newRolloverCap,
+        willTruncate: totalAvailable > newRolloverCap
+      });
+      
+      // If current credits exceed new rollover cap, truncate
+      if (totalAvailable > newRolloverCap) {
+        const creditsToLose = totalAvailable - newRolloverCap;
+        
+        // Distribute truncation: first from extra_credits, then rollover, then monthly
+        let newExtraCredits = extraCredits;
+        let newRollover = currentRollover;
+        let newMonthlyUsed = usedThisCycle;
+        
+        if (extraCredits >= creditsToLose) {
+          newExtraCredits = extraCredits - creditsToLose;
+        } else {
+          newExtraCredits = 0;
+          const remaining = creditsToLose - extraCredits;
+          
+          if (currentRollover >= remaining) {
+            newRollover = currentRollover - remaining;
+          } else {
+            newRollover = 0;
+            // Force monthly usage to create deficit
+            newMonthlyUsed = usedThisCycle + (remaining - currentRollover);
+          }
+        }
+        
+        // Store truncation values to be applied in updateData
+        additionalCredits = -(creditsToLose); // Negative to indicate removal
+        updateData.extra_credits = newExtraCredits;
+        updateData.rollover_credits = newRollover;
+        updateData.monthly_ai_requests = newMonthlyUsed;
+        
+        logStep('Credits truncated on downgrade', {
+          creditsLost: creditsToLose,
+          newExtraCredits,
+          newRollover,
+          newMonthlyUsed
+        });
+        
+        // Send downgrade notification email (after update)
+        const userId = secureData.user_id;
+        try {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('email')
+            .eq('id', userId)
+            .single();
+
+          if (profileData?.email) {
+            await supabase.functions.invoke('send-billing-notification', {
+              body: {
+                type: 'downgrade_credits_truncated',
+                userId,
+                email: profileData.email,
+                oldPackage: currentData.subscription_package,
+                newPackage,
+                creditsLost: creditsToLose,
+                remainingCredits: newRolloverCap,
+              },
+            });
+            logStep('Downgrade credits truncated email sent');
+          }
+        } catch (emailError) {
+          logStep('Failed to send downgrade email', emailError);
+        }
+      }
+    }
   }
 
   // Update subscription status, billing cycle dates, and credit limits

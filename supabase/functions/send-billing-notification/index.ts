@@ -6,6 +6,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { PaymentFailedEmail } from './_templates/payment-failed.tsx';
 import { DowngradeWarningEmail } from './_templates/downgrade-warning.tsx';
 import { SubscriptionSuccessEmail } from './_templates/subscription-success.tsx';
+import { DowngradeCreditsTruncatedEmail } from './_templates/downgrade-credits-truncated.tsx';
+import { AutoDowngradeFailedPaymentEmail } from './_templates/auto-downgrade-failed-payment.tsx';
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') as string);
 
@@ -19,7 +21,7 @@ const logStep = (step: string, data?: any) => {
 };
 
 interface EmailRequest {
-  type: 'payment_failed' | 'downgrade_warning' | 'subscription_success';
+  type: 'payment_failed' | 'downgrade_warning' | 'subscription_success' | 'downgrade_credits_truncated' | 'auto_downgrade';
   userId: string;
   email: string;
   userName?: string;
@@ -29,6 +31,10 @@ interface EmailRequest {
   downgradeDate?: string;
   monthlyCredits?: number;
   nextBillingDate?: string;
+  oldPackage?: string;
+  newPackage?: string;
+  creditsLost?: number;
+  remainingCredits?: number;
 }
 
 serve(async (req) => {
@@ -101,6 +107,31 @@ serve(async (req) => {
             monthlyCredits: requestBody.monthlyCredits || 150,
             nextBillingDate: requestBody.nextBillingDate || 'in 1 month',
             dashboardUrl: `${siteUrl}/dashboard`,
+          })
+        );
+        break;
+
+      case 'downgrade_credits_truncated':
+        subject = '⚠️ Your PivotHub Plan Has Changed';
+        html = await renderAsync(
+          React.createElement(DowngradeCreditsTruncatedEmail, {
+            userName: displayName,
+            oldPackage: requestBody.oldPackage || 'Previous Plan',
+            newPackage: requestBody.newPackage || 'New Plan',
+            creditsLost: requestBody.creditsLost || 0,
+            remainingCredits: requestBody.remainingCredits || 0,
+            dashboardUrl: `${siteUrl}/dashboard`,
+          })
+        );
+        break;
+
+      case 'auto_downgrade':
+        subject = '⚠️ Your PivotHub Subscription Has Been Downgraded';
+        html = await renderAsync(
+          React.createElement(AutoDowngradeFailedPaymentEmail, {
+            userName: displayName,
+            subscriptionPackage: subscriptionPackage || 'Premium',
+            resubscribeUrl: `${siteUrl}/pricing`,
           })
         );
         break;
