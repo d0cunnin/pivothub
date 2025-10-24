@@ -1,10 +1,32 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Validation schema
+const grantDataSchema = z.object({
+  organizationName: z.string().min(1).max(300),
+  projectTitle: z.string().min(1).max(300),
+  projectDescription: z.string().min(1).max(5000),
+  grantAmountRequested: z.string().max(100),
+  purposeOfFunds: z.string().max(2000),
+  targetPopulation: z.string().max(1000),
+  projectGoals: z.string().max(2000),
+  projectTimeline: z.string().max(1000),
+  communityImpact: z.string().max(2000),
+  sustainabilityPlan: z.string().max(2000),
+  organizationBackground: z.string().max(2000),
+  contactPersonName: z.string().max(200),
+  contactTitle: z.string().max(200),
+  contactEmail: z.string().email().max(200),
+  contactPhone: z.string().max(50),
+  additionalInformation: z.string().max(2000).optional(),
+  grantRequirements: z.string().max(2000).optional()
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,7 +34,18 @@ serve(async (req) => {
   }
 
   try {
-    const grantData = await req.json();
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = grantDataSchema.safeParse(rawBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const grantData = validation.data;
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {

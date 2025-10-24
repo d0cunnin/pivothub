@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("resendemail-key"));
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -22,13 +23,36 @@ interface AssessmentEmailRequest {
   analysis: any;
 }
 
+// Validation schema
+const assessmentEmailSchema = z.object({
+  email: z.string().email().max(255),
+  name: z.string().min(1).max(200),
+  assessmentType: z.string().min(1).max(100),
+  results: z.any(),
+  analysis: z.any()
+});
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { email, name, assessmentType, results, analysis }: AssessmentEmailRequest = await req.json();
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = assessmentEmailSchema.safeParse(rawBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    
+    const { email, name, assessmentType, results, analysis }: AssessmentEmailRequest = validation.data;
 
     console.log(`Sending ${assessmentType} assessment results to ${email}`);
 

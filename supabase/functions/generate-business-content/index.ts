@@ -1,9 +1,16 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
+
+// Validation schema
+const businessContentSchema = z.object({
+  type: z.enum(['business-ideas', 'business-plan', 'pitch-deck', 'legal-docs', 'biography']),
+  data: z.record(z.any()).refine((obj) => Object.keys(obj).length <= 50, "Data must contain at most 50 fields")
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -11,7 +18,18 @@ serve(async (req) => {
   }
 
   try {
-    const { type, data } = await req.json()
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = businessContentSchema.safeParse(rawBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const { type, data } = validation.data;
     
     const openaiApiKey = Deno.env.get('relaunch_openai_key')
     if (!openaiApiKey) {

@@ -1,10 +1,18 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Validation schema
+const grantResourcesSchema = z.object({
+  location: z.string().min(1).max(300),
+  category: z.string().max(200).optional(),
+  subcategory: z.string().max(200).optional()
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,7 +20,18 @@ serve(async (req) => {
   }
 
   try {
-    const { location, category, subcategory } = await req.json();
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = grantResourcesSchema.safeParse(rawBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const { location, category, subcategory } = validation.data;
     
     const googleApiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
     

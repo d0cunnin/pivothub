@@ -1,10 +1,20 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Validation schema
+const interviewQuestionsSchema = z.object({
+  jobTitle: z.string().min(1).max(200),
+  industry: z.string().max(200).optional(),
+  level: z.string().max(100),
+  questionTypes: z.array(z.string()).min(1).max(10),
+  jobDescription: z.string().max(5000).optional()
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,7 +22,18 @@ serve(async (req) => {
   }
 
   try {
-    const { jobTitle, industry, level, questionTypes, jobDescription } = await req.json();
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = interviewQuestionsSchema.safeParse(rawBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    const { jobTitle, industry, level, questionTypes, jobDescription } = validation.data;
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {

@@ -1,10 +1,16 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Validation schema
+const nameCheckerSchema = z.object({
+  businessName: z.string().min(1).max(300)
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,11 +18,18 @@ serve(async (req) => {
   }
 
   try {
-    const { businessName } = await req.json();
+    const rawBody = await req.json();
     
-    if (!businessName || businessName.trim().length === 0) {
-      throw new Error('Business name is required');
+    // Validate input
+    const validation = nameCheckerSchema.safeParse(rawBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
+    
+    const { businessName } = validation.data;
 
     // Clean up the business name for domain checking
     const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '');
