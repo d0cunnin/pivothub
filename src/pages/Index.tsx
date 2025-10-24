@@ -124,10 +124,12 @@ const Index = () => {
               <Button 
                 size="lg" 
                 className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
-                onClick={() => window.location.href = '/auth'}
+                asChild
               >
-                <Rocket className="mr-2 h-5 w-5" />
-                Start Your Pivot
+                <Link to="/before-you-start">
+                  <Rocket className="mr-2 h-5 w-5" />
+                  Before You Start
+                </Link>
               </Button>
               <Button 
                 size="lg" 
