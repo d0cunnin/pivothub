@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -575,100 +576,53 @@ const Pricing = () => {
         price={checkoutModal.price}
       />
 
-      {/* FAQ Section */}
+      {/* Common Questions Section */}
       <section className="section-spacing-sm bg-gradient-section-1">
         <div className="page-container">
           <div className="content-width max-w-4xl mx-auto">
-            <h2 className="section-header text-center mb-12">Frequently Asked Questions</h2>
+            <h2 className="section-header text-center mb-12">Common Questions</h2>
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Can I switch between paths?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What is Explore Mode?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Yes! You can upgrade, downgrade, or switch to a different path anytime. Changes take effect immediately.
+                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month based on your signup anniversary date. No credit card required. Perfect for testing tools or occasional use.
                   </p>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What are AI requests?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Each tool uses a certain number of credits based on complexity: High-cost tools (like teaching materials) use 5 credits, medium-cost tools (like resumes) use 2 credits, and low-cost tools (like chatbots) use 1 credit. View tool costs before using them.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    <strong>Paid plans:</strong> Credits reset on the same calendar day each month (your billing anniversary). For example, if you subscribed on January 31st, your credits reset on the 31st (or last day) of every month. <strong>Explore Mode:</strong> Credits reset based on your signup date. If you signed up on the 15th, credits reset on the 15th of every month.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">How does credit rollover work?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    <strong>Paid plans:</strong> Unused credits roll over month-to-month, but rollover is capped at <strong>2× your monthly credit allotment</strong>. For example, with 50 credits/month, you can store up to 100 credits maximum. If you have 90 credits when your plan renews, you'll receive only 10 credits (not the full 50) to stay at the 100 credit cap. <strong>Explore Mode:</strong> No rollover—credits reset to 5 each month.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">What happens if my payment fails?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    If a payment fails, you enter a <strong>7-day grace period</strong> during which Stripe automatically retries charging your card (on Day 2 and Day 5). If payment succeeds during this time, your subscription continues normally with no disruption. If all retry attempts fail after 7 days, you'll be downgraded to Explore Mode with <strong>5 credits</strong>, and your new anniversary date will be the date of the downgrade.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">What happens if I run out of requests?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    You can purchase extra credit packs (10, 25, or 50 requests) to continue using tools within your current billing month, or wait until your monthly requests reset.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">What is Explore Mode?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month based on your signup anniversary date. For example, if you sign up on January 15th, your credits reset on the 15th of every month. Unused credits do NOT roll over—they reset to 5 each month. No credit card required. Perfect for testing tools or occasional use.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">What happens to my credits when I cancel?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    When you cancel a paid subscription, you retain full access until the end of your current billing period. At the end of the period, you'll be downgraded to Explore Mode with <strong>5 credits</strong>. Your new Explore Mode anniversary will be set to 30 days after your billing cycle ends. For example, if your billing cycle ends on March 15th, you'll get 5 credits immediately and they'll reset on April 15th, May 15th, June 15th, etc.
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Can I cancel anytime?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    Absolutely! Cancel your subscription anytime from your account settings. You'll continue to have full access until the end of your current billing period, then automatically move to Explore Mode.
+                    Each tool uses a certain number of credits based on complexity: High-cost tools use 5 credits, medium-cost tools use 2 credits, and low-cost tools use 1 credit.
                   </p>
                 </div>
               </div>
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What payment methods do you accept?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
                   <p className="text-muted-foreground text-sm">
-                    We accept all major credit cards through our secure payment processor, Stripe.
+                    <strong>Paid plans:</strong> On your billing anniversary each month. <strong>Explore Mode:</strong> On your signup anniversary each month.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Do you offer refunds?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">Can I switch between paths?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final. Start with Explore Mode (free forever) to try our tools first!
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Which path is right for me?</h3>
-                  <p className="text-muted-foreground text-sm">
-                    If you're job hunting, choose Prep It. Building a business? Pick Build It. Not sure? Get the All Access Pass for everything.
+                    Yes! You can upgrade, downgrade, or switch to a different path anytime. Changes take effect immediately.
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* View All FAQs CTA */}
+            <div className="text-center mt-12">
+              <Link to="/faq">
+                <Button size="lg" variant="outline">
+                  View All Frequently Asked Questions →
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

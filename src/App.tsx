@@ -20,6 +20,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Auth from "./pages/Auth";
 import Pricing from "./pages/Pricing";
+import FAQ from "./pages/FAQ";
 import FundIt from "./pages/FundIt";
 import FreelancerMarketplace from "./pages/FreelancerMarketplace";
 import FreelancerOnboarding from "./pages/FreelancerOnboarding";
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/teachit" element={<TeachIt />} />
             <Route path="/launchit" element={<LaunchIt />} />
           <Route path="/scheduleit" element={<ScheduleIt />} />

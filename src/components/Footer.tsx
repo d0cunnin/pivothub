@@ -48,6 +48,7 @@ export const Footer = () => {
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
               <li><Link to="/about" className="hover:text-accent transition-colors">About Us</Link></li>
+              <li><Link to="/faq" className="hover:text-accent transition-colors">FAQs</Link></li>
               <li><Link to="/contact" className="hover:text-accent transition-colors">Contact Us</Link></li>
               <li><a href="https://discord.gg/hbT6yvDg" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Community</a></li>
               <li><Link to="/blog" className="hover:text-accent transition-colors">Blog</Link></li>
