@@ -5,7 +5,7 @@ export const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-5 gap-8">
+        <div className="grid md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <img 
               src="/lovable-uploads/e9310b7d-2004-432c-a5dc-11828a70f8e7.png" 
@@ -13,7 +13,7 @@ export const Footer = () => {
               className="h-12 w-auto"
             />
             <p className="text-sm text-primary-foreground/80 leading-tight">
-              Learn, grow, relaunch your career, or connect with top tech talent — all in one place. PivotHub gives you the tools, training, and talent connections to pivot forward.
+              Practical tools and step-by-step guidance to help you assess your skills, learn new ones, and pivot into your next opportunity with confidence.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-5 w-5 hover:text-accent cursor-pointer transition-colors" />
@@ -21,32 +21,24 @@ export const Footer = () => {
           </div>
           
           <div>
-            <h4 className="font-semibold mb-4">Learn It</h4>
+            <h4 className="font-semibold mb-4">Discovery & Growth</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link to="/learnit" className="hover:text-accent transition-colors">Skills Assessment</Link></li>
-              <li><Link to="/learnit" className="hover:text-accent transition-colors">Career Assessment</Link></li>
-              <li><Link to="/learnit" className="hover:text-accent transition-colors">Personality Test</Link></li>
-              <li><Link to="/learnit" className="hover:text-accent transition-colors">Career Guidance</Link></li>
+              <li><Link to="/assessit" className="hover:text-accent transition-colors">Assess It</Link></li>
+              <li><Link to="/learnit" className="hover:text-accent transition-colors">Learn It</Link></li>
+              <li><Link to="/prepit" className="hover:text-accent transition-colors">Prep It</Link></li>
+              <li><Link to="/earnit" className="hover:text-accent transition-colors">Earn It</Link></li>
             </ul>
           </div>
           
           <div>
-            <h4 className="font-semibold mb-4">Build It</h4>
+            <h4 className="font-semibold mb-4">Build & Launch</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link to="/buildit" className="hover:text-accent transition-colors">Business Planning</Link></li>
-              <li><Link to="/buildit" className="hover:text-accent transition-colors">Business Ideas</Link></li>
+              <li><Link to="/buildit" className="hover:text-accent transition-colors">Build It</Link></li>
               <li><Link to="/fundit" className="hover:text-accent transition-colors">Fund It</Link></li>
-              <li><Link to="/buildit" className="hover:text-accent transition-colors">Pitch Decks</Link></li>
-            </ul>
-          </div>
-          
-          <div>
-            <h4 className="font-semibold mb-4">Talent Marketplace</h4>
-            <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link to="/freelancer-marketplace" className="hover:text-accent transition-colors">Find Freelancers</Link></li>
-              <li><Link to="/freelancer-onboarding" className="hover:text-accent transition-colors">Join as Freelancer</Link></li>
-              <li><Link to="/client-onboarding" className="hover:text-accent transition-colors">Post a Project</Link></li>
-              <li><Link to="/freelancer-marketplace" className="hover:text-accent transition-colors">Browse Services</Link></li>
+              <li><Link to="/launchit" className="hover:text-accent transition-colors">Launch It</Link></li>
+              <li><Link to="/teachit" className="hover:text-accent transition-colors">Teach It</Link></li>
+              <li><Link to="/hostit" className="hover:text-accent transition-colors">Host It</Link></li>
+              <li><Link to="/scheduleit" className="hover:text-accent transition-colors">Schedule It</Link></li>
             </ul>
           </div>
           
