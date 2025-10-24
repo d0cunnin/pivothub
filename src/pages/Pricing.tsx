@@ -159,7 +159,6 @@ const Pricing = () => {
         "Interview Questions Coach (2 credits), Interview Feedback Coach (2 credits)",
         "Resume Analysis (2 credits)",
         "Course access (free - no credits)",
-        "Save unlimited results",
         "Priority email support"
       ],
       tier: "assess-prep-learn",
@@ -182,7 +181,6 @@ const Pricing = () => {
         "Logo & Branding (2 credits)",
         "Marketing & Social Media (2-3 credits)",
         "Schedule It & Host It tools (2-4 credits)",
-        "Save unlimited results",
         "Priority email support"
       ],
       tier: "build-teach-launch",
@@ -202,7 +200,6 @@ const Pricing = () => {
         "Grant Finder (2 credits)",
         "Resource Finder (2 credits)",
         "Side Income Assessment (2 credits)",
-        "Save unlimited results",
         "Priority email support"
       ],
       tier: "fund-it",
@@ -222,8 +219,7 @@ const Pricing = () => {
         "High-cost tools: Teaching Materials (5), Business Plans (4)",
         "Medium-cost tools: Resume Analysis (2), Marketing (3)",
         "Chatbots (1 credit per message), All other tools (2+ credits)",
-        "Priority support & early access",
-        "Save unlimited results"
+        "Priority support & early access"
       ],
       tier: "all-access",
       package: "all_access",
