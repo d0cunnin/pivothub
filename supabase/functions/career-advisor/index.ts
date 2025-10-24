@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts"
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts"
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -55,11 +51,26 @@ async function moderateContent(text: string, apiKey: string): Promise<{ flagged:
 }
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "career-advisor",
+      cost: 1,
+      requireAuth: true,
+      maxReqsPerMinute: 40
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const requestBody = await req.json()
     
     // Validate input
@@ -293,6 +304,15 @@ EXAMPLES OF PREMIUM VALUE:
       .replace(/\s{2,}/g, ' ') // Clean up extra spaces
       .trim()
 
+    await logRequest({
+      endpoint: "career-advisor",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 1,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ response: sanitizedResponse }),
       { 
@@ -304,6 +324,16 @@ EXAMPLES OF PREMIUM VALUE:
     )
   } catch (error) {
     console.error('Error in career-advisor function:', error)
+    
+    await logRequest({
+      endpoint: "career-advisor",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      requestDurationMs: Date.now() - startTime
+    });
     
     return new Response(
       JSON.stringify({ 

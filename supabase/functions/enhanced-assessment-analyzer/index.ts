@@ -1,11 +1,15 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+// Validation schema
+const assessmentAnalyzerSchema = z.object({
+  assessmentType: z.enum(['career', 'skills', 'personality']),
+  responses: z.record(z.any()),
+  userProfile: z.record(z.any()).optional()
+});
 
 const openAIApiKey = Deno.env.get('relaunch_openai_key');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -14,21 +18,38 @@ const supabaseServiceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 const supabase = createClient(supabaseUrl!, supabaseServiceRoleKey!);
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId: string | null = null;
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { assessmentType, responses, userProfile } = await req.json();
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "enhanced-assessment-analyzer",
+      cost: 3,
+      requireAuth: true,
+      maxReqsPerMinute: 30
+    });
     
-    // Get the authorization header for user context
-    const authHeader = req.headers.get('authorization');
-    let userId = null;
+    userId = guardResult.userId;
+    ip = guardResult.ip;
     
-    if (authHeader) {
-      const { data: { user } } = await supabase.auth.getUser(authHeader.replace('Bearer ', ''));
-      userId = user?.id;
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = assessmentAnalyzerSchema.safeParse(rawBody);
+    if (!validation.success) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
+    
+    const { assessmentType, responses, userProfile } = validation.data;
 
     console.log(`Processing ${assessmentType} assessment for user ${userId}`);
 
@@ -95,6 +116,15 @@ serve(async (req) => {
       }
     }
 
+    await logRequest({
+      endpoint: "enhanced-assessment-analyzer",
+      userId: userId || 'unknown',
+      ip,
+      success: true,
+      creditsCharged: 3,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(JSON.stringify(analysis), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -102,6 +132,17 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in enhanced-assessment-analyzer:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    await logRequest({
+      endpoint: "enhanced-assessment-analyzer",
+      userId: userId || 'unknown',
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(JSON.stringify({ error: errorMessage }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

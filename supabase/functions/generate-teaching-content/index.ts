@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 // Validation schema
 const teachingContentSchema = z.object({
@@ -13,11 +9,26 @@ const teachingContentSchema = z.object({
 });
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "generate-teaching-content",
+      cost: 5,
+      requireAuth: true,
+      maxReqsPerMinute: 20
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const rawBody = await req.json();
     
     // Validate input
@@ -307,6 +318,15 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
         const toolsAndPlatforms = extractSection(fullContent, '---TOOLS_PLATFORMS_START---', '---TOOLS_PLATFORMS_END---')
         const marketingPlan = extractSection(fullContent, '---MARKETING_PLAN_START---', '---MARKETING_PLAN_END---')
 
+        await logRequest({
+          endpoint: "generate-teaching-content",
+          userId,
+          ip,
+          success: true,
+          creditsCharged: 5,
+          requestDurationMs: Date.now() - startTime
+        });
+        
         return new Response(
           JSON.stringify({
             webinarConcepts,
@@ -526,6 +546,17 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
   } catch (error) {
     console.error('Error generating teaching content:', error)
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    await logRequest({
+      endpoint: "generate-teaching-content",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ error: errorMessage }),
       { 

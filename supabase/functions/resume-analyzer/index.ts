@@ -1,28 +1,48 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+// Validation schema
+const resumeAnalyzerSchema = z.object({
+  resumeText: z.string().min(50, "Resume text must be at least 50 characters"),
+  jobDescription: z.string().max(5000).optional(),
+  targetRole: z.string().max(200).optional()
+});
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
-    const { resumeText, jobDescription, targetRole } = await req.json();
-
-    if (!resumeText || resumeText.trim().length < 50) {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "resume-analyzer",
+      cost: 2,
+      requireAuth: true,
+      maxReqsPerMinute: 30
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = resumeAnalyzerSchema.safeParse(rawBody);
+    if (!validation.success) {
       return new Response(
-        JSON.stringify({ error: 'Resume text is required and must be at least 50 characters' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+    
+    const { resumeText, jobDescription, targetRole } = validation.data;
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {
@@ -383,6 +403,15 @@ QUALITY STANDARDS:
       };
     }
 
+    await logRequest({
+      endpoint: "resume-analyzer",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 2,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ analysis }),
       {
@@ -394,6 +423,17 @@ QUALITY STANDARDS:
   } catch (error) {
     console.error('Error analyzing resume:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    await logRequest({
+      endpoint: "resume-analyzer",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ error: errorMessage }),
       {

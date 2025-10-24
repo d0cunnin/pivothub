@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 // Validation schema
 const businessContentSchema = z.object({
@@ -13,11 +9,26 @@ const businessContentSchema = z.object({
 });
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "generate-business-content",
+      cost: 4,
+      requireAuth: true,
+      maxReqsPerMinute: 20
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const rawBody = await req.json();
     
     // Validate input
@@ -1051,6 +1062,15 @@ Keep each section concise and actionable. Use plain text without markdown.`
       .replace(/\n{3,}/g, '\n\n')
       .trim()
 
+    await logRequest({
+      endpoint: "generate-business-content",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 4,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ content, type }),
       { 
@@ -1062,6 +1082,17 @@ Keep each section concise and actionable. Use plain text without markdown.`
   } catch (error) {
     console.error('Error generating content:', error)
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    await logRequest({
+      endpoint: "generate-business-content",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ error: errorMessage }),
       { 

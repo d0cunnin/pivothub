@@ -1,11 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -56,12 +52,27 @@ async function moderateContent(text: string, apiKey: string): Promise<{ flagged:
 }
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "business-mentor",
+      cost: 1,
+      requireAuth: true,
+      maxReqsPerMinute: 40
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const requestBody = await req.json();
     
     // Validate input
@@ -331,6 +342,15 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
       .replace(/\*(.+?)\*/g, '$1')
       .trim();
 
+    await logRequest({
+      endpoint: "business-mentor",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 1,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(JSON.stringify({ 
       response: sanitizedResponse 
     }), {
@@ -339,6 +359,16 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
     
   } catch (error) {
     console.error('Error in business-mentor function:', error);
+    
+    await logRequest({
+      endpoint: "business-mentor",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      requestDurationMs: Date.now() - startTime
+    });
     
     // Provide helpful fallback response
     const fallbackResponse = "I apologize, but I'm having trouble connecting right now. Here's some general advice: Start by clearly defining your target customer and their biggest pain point. Focus on solving one problem really well before expanding. Would you like to share more about your specific business challenge so I can provide more targeted guidance when the connection is restored?";

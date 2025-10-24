@@ -1,11 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 // Validation schema
 const socialMediaSchema = z.object({
@@ -16,11 +12,26 @@ const socialMediaSchema = z.object({
 });
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "social-media-content",
+      cost: 2,
+      requireAuth: true,
+      maxReqsPerMinute: 25
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const rawBody = await req.json();
     
     // Validate input
@@ -214,6 +225,15 @@ QUALITY STANDARDS:
       ];
     }
 
+    await logRequest({
+      endpoint: "social-media-content",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 2,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ contentIdeas }),
       {
@@ -225,6 +245,17 @@ QUALITY STANDARDS:
   } catch (error) {
     console.error('Error generating social media content:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    await logRequest({
+      endpoint: "social-media-content",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ error: errorMessage }),
       {

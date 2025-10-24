@@ -1,11 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 // Validation schema
 const grantDataSchema = z.object({
@@ -281,6 +277,44 @@ QUALITY STANDARDS:
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500
+    const jsonResponse = {
+      proposal: grantProposal,
+      letterOfIntent: letterOfIntent
+    };
+
+    await logRequest({
+      endpoint: "generate-grant-content",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 4,
+      requestDurationMs: Date.now() - startTime
+    });
+
+    return new Response(JSON.stringify(jsonResponse), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200,
+    });
+  } catch (error: any) {
+    console.error('Error in generate-grant-content:', error);
+    
+    await logRequest({
+      endpoint: "generate-grant-content",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage: error.message || 'Unknown error',
+      requestDurationMs: Date.now() - startTime
+    });
+    
+    return new Response(
+      JSON.stringify({
+        error: error.message || 'An error occurred generating grant content'
+      }),
+      { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500 
       }
     );
   }

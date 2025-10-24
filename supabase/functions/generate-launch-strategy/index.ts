@@ -1,11 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 // Validation schema
 const launchStrategySchema = z.object({
@@ -21,11 +17,26 @@ const launchStrategySchema = z.object({
 });
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "generate-launch-strategy",
+      cost: 3,
+      requireAuth: true,
+      maxReqsPerMinute: 25
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const rawBody = await req.json();
     
     // Validate input
@@ -461,6 +472,15 @@ FORMATTING RULES:
       .replace(/#{1,6}\s/g, '')
       .replace(/\n{3,}/g, '\n\n');
 
+    await logRequest({
+      endpoint: "generate-launch-strategy",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 3,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ strategy }),
       {
@@ -472,6 +492,17 @@ FORMATTING RULES:
   } catch (error) {
     console.error('Error generating launch strategy:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    await logRequest({
+      endpoint: "generate-launch-strategy",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
       JSON.stringify({ error: errorMessage }),
       {

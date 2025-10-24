@@ -1,25 +1,52 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+// Validation schema
+const logoGeneratorSchema = z.object({
+  businessName: z.string().min(1).max(200),
+  industry: z.string().min(1).max(200),
+  style: z.string().min(1).max(100),
+  colors: z.string().max(200).optional(),
+  fonts: z.string().max(200).optional(),
+  textDesired: z.string().max(100).optional(),
+  additionalPrompt: z.string().max(500).optional()
+});
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { businessName, industry, style, colors, fonts, textDesired, additionalPrompt } = await req.json();
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "generate-logo",
+      cost: 2,
+      requireAuth: true,
+      maxReqsPerMinute: 20
+    });
     
-    if (!businessName || !industry || !style) {
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
+    const rawBody = await req.json();
+    
+    // Validate input
+    const validation = logoGeneratorSchema.safeParse(rawBody);
+    if (!validation.success) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields: businessName, industry, and style are required' }),
+        JSON.stringify({ error: 'Invalid input', details: validation.error.format() }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+    
+    const { businessName, industry, style, colors, fonts, textDesired, additionalPrompt } = validation.data;
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
@@ -116,17 +143,36 @@ serve(async (req) => {
 
     console.log('Generated logos:', logos.filter(l => l.imageURL).length, 'successful');
 
+    await logRequest({
+      endpoint: "generate-logo",
+      userId,
+      ip,
+      success: true,
+      creditsCharged: 2,
+      requestDurationMs: Date.now() - startTime
+    });
+
     return new Response(
       JSON.stringify({ logos }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
-    console.error('Error in generate-logo function:', error);
+    console.error('Error generating logo:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    await logRequest({
+      endpoint: "generate-logo",
+      userId,
+      ip,
+      success: false,
+      creditsCharged: 0,
+      errorMessage,
+      requestDurationMs: Date.now() - startTime
+    });
+    
     return new Response(
-      JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred'
-      }),
+      JSON.stringify({ error: errorMessage }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
