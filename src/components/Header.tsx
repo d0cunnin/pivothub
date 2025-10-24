@@ -145,7 +145,7 @@ export const Header = () => {
             </div>
           </nav>
 
-          <div className="hidden lg:flex space-x-2 flex-shrink-0 ml-6">
+          <div className="hidden lg:flex space-x-2 flex-shrink-0 ml-4">
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
