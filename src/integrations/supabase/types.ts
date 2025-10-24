@@ -146,6 +146,30 @@ export type Database = {
         }
         Relationships: []
       }
+      checkout_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          session_type: string
+          stripe_session_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          session_type: string
+          stripe_session_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          session_type?: string
+          stripe_session_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       conversation_context: {
         Row: {
           context_data: Json
@@ -227,6 +251,27 @@ export type Database = {
           id?: string
           lesson_id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      processed_stripe_events: {
+        Row: {
+          event_id: string
+          event_type: string
+          processed_successfully: boolean
+          received_at: string
+        }
+        Insert: {
+          event_id: string
+          event_type: string
+          processed_successfully?: boolean
+          received_at?: string
+        }
+        Update: {
+          event_id?: string
+          event_type?: string
+          processed_successfully?: boolean
+          received_at?: string
         }
         Relationships: []
       }
@@ -387,6 +432,13 @@ export type Database = {
             columns: ["assessment_id"]
             isOneToOne: true
             referencedRelation: "side_income_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "side_income_reports_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: true
+            referencedRelation: "v_side_income_assessments"
             referencedColumns: ["id"]
           },
         ]
@@ -642,6 +694,36 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_audit_log: {
+        Row: {
+          error_message: string | null
+          event_id: string
+          event_type: string
+          id: string
+          processing_status: string
+          received_at: string
+          signature_valid: boolean
+        }
+        Insert: {
+          error_message?: string | null
+          event_id: string
+          event_type: string
+          id?: string
+          processing_status: string
+          received_at?: string
+          signature_valid: boolean
+        }
+        Update: {
+          error_message?: string | null
+          event_id?: string
+          event_type?: string
+          id?: string
+          processing_status?: string
+          received_at?: string
+          signature_valid?: boolean
+        }
+        Relationships: []
+      }
     }
     Views: {
       monthly_usage_summary: {
@@ -651,6 +733,33 @@ export type Database = {
           total_credits: number | null
           total_uses: number | null
           user_id: string | null
+        }
+        Relationships: []
+      }
+      v_side_income_assessments: {
+        Row: {
+          assessment_data: Json | null
+          created_at: string | null
+          id: string | null
+          payment_status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          assessment_data?: Json | null
+          created_at?: string | null
+          id?: string | null
+          payment_status?: never
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          assessment_data?: Json | null
+          created_at?: string | null
+          id?: string | null
+          payment_status?: never
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -689,13 +798,19 @@ export type Database = {
           total_credits: number
         }[]
       }
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
+      get_my_payment_status: {
+        Args: { assessment_id: string }
+        Returns: string
       }
+      has_role:
+        | { Args: { _role: string }; Returns: boolean }
+        | {
+            Args: {
+              _role: Database["public"]["Enums"]["app_role"]
+              _user_id: string
+            }
+            Returns: boolean
+          }
       reset_monthly_ai_requests: { Args: never; Returns: undefined }
     }
     Enums: {
