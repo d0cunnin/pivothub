@@ -162,7 +162,7 @@ const BeforeYouStart = () => {
                 <span className="text-3xl font-bold text-white tracking-wider">BEFORE YOU GET STARTED</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-                This page is your starting point.
+                Your Pivot Forward Starts Now
               </h1>
               <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
                 Learn how PivotHub works and discover which tools are right for your journey. Get guidance on starting your path to income, clarity, career, or business growth.
