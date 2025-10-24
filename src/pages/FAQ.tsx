@@ -132,7 +132,7 @@ const FAQ = () => {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     <p className="mb-3">
-                      Earn It is now included in all subscription tiers! The Side Income Assessment 
+                      Earn It (Side Income Blueprint) is included in <strong>all paid subscription tiers</strong> and available in Explore Mode! The Side Income Assessment 
                       uses <strong>2 credits</strong> to analyze your skills, experience, and goals. 
                       After completing the assessment, your personalized blueprint report is generated 
                       <strong> for free</strong>.

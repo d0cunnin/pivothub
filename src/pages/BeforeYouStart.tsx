@@ -98,6 +98,7 @@ const BeforeYouStart = () => {
     'career-assessment': 'Career Assessment',
     'skills-assessment': 'Skills Assessment',
     'personality-assessment': 'Personality Assessment',
+    'side-income-assessment': 'Side Income Assessment',
     'interview-questions': 'Interview Questions',
     'interview-feedback': 'Interview Feedback',
     'resume-analyzer': 'Resume Analyzer',

@@ -150,7 +150,7 @@ const Pricing = () => {
       name: "Assess It + Prep It + Learn It Package",
       price: "$18",
       period: "month",
-      description: "Master your career journey with 75 monthly credits",
+      description: "Master your career journey and explore side income opportunities with 75 monthly credits",
       features: [
         "75 credits per month",
         "Unused credits roll over each month",
@@ -171,7 +171,7 @@ const Pricing = () => {
       name: "Build It + Teach It + Launch It Package",
       price: "$18",
       period: "month",
-      description: "Build, teach, and launch with 75 monthly credits",
+      description: "Build your business, teach online, and create side income streams with 75 monthly credits",
       features: [
         "75 credits per month",
         "Unused credits roll over each month",
@@ -194,7 +194,7 @@ const Pricing = () => {
       name: "Fund It Package",
       price: "$15",
       period: "month",
-      description: "Secure funding with 60 monthly credits",
+      description: "Secure funding and launch side income streams with 60 monthly credits",
       features: [
         "60 credits per month",
         "Unused credits roll over each month",
