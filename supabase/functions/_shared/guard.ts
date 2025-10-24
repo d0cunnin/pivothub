@@ -180,6 +180,54 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
     console.error('Throttle check failed:', e);
   }
 
+  // Per-user rate limiting (5 requests per minute per endpoint)
+  if (requireAuth && userId) {
+    try {
+      const { error: userThrottleError } = await supabase.rpc('throttle_user', {
+        p_user_id: userId,
+        p_endpoint: endpoint,
+        p_window_seconds: WINDOW_SECONDS,
+        p_max_reqs: 5
+      });
+
+      if (userThrottleError) {
+        if (userThrottleError.message.includes('USER_RATE_LIMIT_EXCEEDED')) {
+          await logRequest(supabase, {
+            userId,
+            endpoint,
+            ip,
+            userAgent: req.headers.get('user-agent') || 'unknown',
+            creditsCharged: 0,
+            success: false,
+            errorMessage: 'Per-user rate limit exceeded (5/min)',
+            requestDurationMs: Date.now() - startTime
+          });
+          
+          throw new Response(
+            JSON.stringify({ 
+              error: 'Rate limit exceeded', 
+              message: 'You can make up to 5 requests per minute to this tool. Please wait before trying again.',
+              retryAfter: 60
+            }),
+            { 
+              status: 429,
+              headers: { 
+                ...corsHeaders, 
+                'Content-Type': 'application/json', 
+                'Retry-After': '60' 
+              }
+            }
+          );
+        }
+        throw userThrottleError;
+      }
+    } catch (e) {
+      if (e instanceof Response) throw e;
+      // If per-user throttle check fails, log but don't block request
+      console.error('User throttle check failed:', e);
+    }
+  }
+
   // Credit deduction (if cost > 0 and user is authenticated)
   if (cost > 0 && userId) {
     const { data, error: creditError } = await supabase.rpc(

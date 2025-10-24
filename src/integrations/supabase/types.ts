@@ -170,6 +170,27 @@ export type Database = {
         }
         Relationships: []
       }
+      api_user_usage: {
+        Row: {
+          count: number
+          endpoint: string
+          user_id: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          endpoint: string
+          user_id: string
+          window_start: string
+        }
+        Update: {
+          count?: number
+          endpoint?: string
+          user_id?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       assessment_results: {
         Row: {
           action_plan: Json | null
@@ -875,6 +896,15 @@ export type Database = {
           p_endpoint: string
           p_ip: string
           p_max_reqs: number
+          p_window_seconds: number
+        }
+        Returns: undefined
+      }
+      throttle_user: {
+        Args: {
+          p_endpoint: string
+          p_max_reqs: number
+          p_user_id: string
           p_window_seconds: number
         }
         Returns: undefined
