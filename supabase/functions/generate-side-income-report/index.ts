@@ -44,10 +44,14 @@ serve(async (req) => {
   }
 
   try {
-    const { assessmentId } = await req.json();
+    const { assessmentId, userId } = await req.json();
 
     if (!assessmentId) {
       throw new Error('Assessment ID is required');
+    }
+
+    if (!userId) {
+      throw new Error('User ID is required');
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -56,21 +60,19 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Fetch the assessment
+    // Fetch the assessment - enforce user ownership for security
     const { data: assessment, error: fetchError } = await supabase
       .from('side_income_assessments')
       .select('*')
       .eq('id', assessmentId)
+      .eq('user_id', userId)
       .single();
 
     if (fetchError || !assessment) {
-      throw new Error('Assessment not found');
+      throw new Error('Assessment not found or access denied');
     }
 
-    // Check if payment is completed (accept both 'paid' and 'completed' status)
-    if (assessment.payment_status !== 'paid' && assessment.payment_status !== 'completed') {
-      throw new Error('Payment required to generate report');
-    }
+    // Credits already deducted when assessment was created - no additional checks needed
 
     // Check if report already exists
     const { data: existingReport } = await supabase

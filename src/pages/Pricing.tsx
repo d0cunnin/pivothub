@@ -155,6 +155,7 @@ const Pricing = () => {
         "75 credits per month",
         "Unused credits roll over each month",
         "Career, Skills & Personality Assessment Tools (2 credits each)",
+        "Side Income Assessment (2 credits)",
         "Interview Questions Coach (2 credits), Interview Feedback Coach (2 credits)",
         "Resume Analysis (2 credits)",
         "Course access (free - no credits)",
@@ -175,6 +176,7 @@ const Pricing = () => {
         "75 credits per month",
         "Unused credits roll over each month",
         "Business Ideas & Planning (2-4 credits)",
+        "Side Income Assessment (2 credits)",
         "Launch Strategy Generator (3 credits)",
         "Teaching Materials (5 credits)",
         "Logo & Branding (2 credits)",
@@ -199,6 +201,7 @@ const Pricing = () => {
         "Grant Content Generator (4 credits)",
         "Grant Finder (2 credits)",
         "Resource Finder (2 credits)",
+        "Side Income Assessment (2 credits)",
         "Save unlimited results",
         "Priority email support"
       ],
