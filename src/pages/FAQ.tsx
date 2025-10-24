@@ -126,6 +126,31 @@ const FAQ = () => {
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="item-earnit">
+                  <AccordionTrigger className="text-left">
+                    How does Earn It (Side Income Blueprint) work?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    <p className="mb-3">
+                      Earn It is now included in all subscription tiers! The Side Income Assessment 
+                      uses <strong>1 credit</strong> to analyze your skills, experience, and goals. 
+                      After completing the assessment, your personalized blueprint report is generated 
+                      <strong> for free</strong>.
+                    </p>
+                    <p className="mb-3">
+                      <strong>Available with:</strong>
+                    </p>
+                    <ul className="list-disc pl-6 space-y-1 mb-3">
+                      <li><strong>Explore Mode (Free):</strong> 5 credits/month - perfect for trying Earn It</li>
+                      <li><strong>Paid Plans:</strong> 60-150 credits/month - use anytime</li>
+                    </ul>
+                    <p>
+                      You can take the assessment multiple times to refine your side income strategy 
+                      as your situation evolves (1 credit per assessment).
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="item-6">
                   <AccordionTrigger className="text-left">
                     What happens if I run out of requests?

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,19 +15,19 @@ import heroImage from "@/assets/hero-image.jpg";
 
 export default function SideIncomeBlueprint() {
   const { user } = useAuth();
+  const { remainingRequests } = useUsage();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState<'intro' | 'assessment' | 'report'>('intro');
   const [assessmentId, setAssessmentId] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [hasPaid, setHasPaid] = useState(false);
 
   const handleAssessmentComplete = useCallback(async (assessmentData: any) => {
-    if (!user || !hasPaid) {
+    if (!user) {
       toast({
-        title: "Payment required",
-        description: "Please complete payment before submitting assessment",
+        title: "Authentication required",
+        description: "Please sign in to save your assessment",
         variant: "destructive"
       });
       return;
@@ -39,7 +40,7 @@ export default function SideIncomeBlueprint() {
         .insert({
           user_id: user.id,
           assessment_data: assessmentData,
-          payment_status: 'completed'
+          credits_used: 1
         })
         .select()
         .single();
@@ -58,63 +59,40 @@ export default function SideIncomeBlueprint() {
     } finally {
       setLoading(false);
     }
-  }, [user, hasPaid, toast]);
+  }, [user, toast]);
 
-  // Check if returning from successful payment
+  // Check if assessment already completed (from URL parameter)
   useEffect(() => {
-    const success = searchParams.get('success');
-    const session_id = searchParams.get('session_id');
-    
-    if (success === 'true' && session_id) {
-      setHasPaid(true);
-      setStep('assessment');
-      toast({
-        title: "Payment successful!",
-        description: "Please complete the assessment to get your blueprint.",
-      });
-      return;
-    }
-
-    // Check if assessment already completed
     const assessmentParam = searchParams.get('assessment');
     if (assessmentParam) {
       setAssessmentId(assessmentParam);
       setStep('report');
     }
-  }, [searchParams, toast]);
+  }, [searchParams]);
 
-  const handleStartCheckout = async () => {
+  const handleStartAssessment = async () => {
     if (!user) {
       toast({
         title: "Sign in required",
-        description: "Please sign in to purchase your blueprint",
+        description: "Please sign in to take the assessment",
         variant: "destructive"
       });
       navigate("/auth?redirect=/earnit");
       return;
     }
 
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier: 'side-income-blueprint' }
-      });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
+    // Check if user has enough credits
+    if (remainingRequests < 1) {
       toast({
-        title: "Error",
-        description: "Failed to start checkout. Please try again.",
+        title: "Insufficient Credits",
+        description: "You need at least 1 credit to take the Side Income Assessment. Upgrade your plan or wait for your monthly reset.",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
+      navigate("/pricing");
+      return;
     }
+
+    setStep('assessment');
   };
 
   if (step === 'report') {
@@ -219,22 +197,27 @@ export default function SideIncomeBlueprint() {
               </div>
             </div>
             <p className="text-lg text-white/90 mb-12 text-left">
-              Three simple steps from payment to personalized plan
+              Two simple steps to your personalized income plan
             </p>
 
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
               <Card className="bg-white p-8">
                 <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
                   1
                 </div>
-                <CardTitle className="text-xl mb-4 text-center text-foreground">Secure Payment</CardTitle>
+                <CardTitle className="text-xl mb-4 text-center text-foreground">Complete Assessment</CardTitle>
                 <CardContent className="p-0 space-y-3">
                   <p className="text-foreground text-sm leading-relaxed">
-                    <strong>One-time $27 payment</strong> via secure Stripe checkout. Payment is required first to prevent spam and ensure we're serving serious entrepreneurs. Your information is protected with 256-bit encryption, the same security banks use.
+                    <strong>15-20 minute assessment</strong> (uses <strong>1 credit</strong>) that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
                   </p>
                   <p className="text-foreground text-sm leading-relaxed">
-                    After payment, you'll immediately access the assessment portal. No monthly fees, no hidden charges—just a single payment for lifetime access to your blueprint.
+                    <strong>Pro tip:</strong> The more detailed your answers, the more personalized your recommendations. Our AI analyzes 50+ data points to match you with the perfect opportunities. Take your time and be honest—there are no wrong answers.
                   </p>
+                  <div className="mt-4 p-3 bg-primary/10 rounded-lg">
+                    <p className="text-xs text-foreground font-medium">
+                      ✓ Available with Explore Mode (5 free credits) or any paid plan
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -242,29 +225,19 @@ export default function SideIncomeBlueprint() {
                 <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
                   2
                 </div>
-                <CardTitle className="text-xl mb-4 text-center text-foreground">Complete Assessment</CardTitle>
-                <CardContent className="p-0 space-y-3">
-                  <p className="text-foreground text-sm leading-relaxed">
-                    <strong>15-20 minute assessment</strong> that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
-                  </p>
-                  <p className="text-foreground text-sm leading-relaxed">
-                    <strong>Pro tip:</strong> The more detailed your answers, the more personalized your recommendations. Our AI analyzes 50+ data points to match you with the perfect opportunities. Take your time and be honest—there are no wrong answers.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white p-8">
-                <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
-                  3
-                </div>
                 <CardTitle className="text-xl mb-4 text-center text-foreground">Get Your Blueprint</CardTitle>
                 <CardContent className="p-0 space-y-3">
                   <p className="text-foreground text-sm leading-relaxed">
-                    <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. No waiting, no manual review—your custom plan is generated immediately and available in your account dashboard.
+                    <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. No waiting, no manual review—your custom plan is generated <strong>completely free</strong> after completing the assessment.
                   </p>
                   <p className="text-foreground text-sm leading-relaxed">
-                    Access your blueprint anytime, from any device. Download it as PDF, revisit action steps, and update your progress as you build your side income. <strong>Lifetime access included.</strong>
+                    Access your blueprint anytime, from any device. Download it as PDF, revisit action steps, and update your progress as you build your side income. <strong>Lifetime access to your results.</strong>
                   </p>
+                  <div className="mt-4 p-3 bg-success/10 rounded-lg">
+                    <p className="text-xs text-foreground font-medium">
+                      ✓ Blueprint report generation is FREE after assessment
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -281,7 +254,7 @@ export default function SideIncomeBlueprint() {
                 Ready to Build Your Side Income?
               </h2>
               <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Stop guessing and start with a clear, personalized plan. Join 1,000+ people who've launched sustainable side income with their Earn It Blueprint.
+                Stop guessing and start with a clear, personalized plan. Get your custom blueprint using just 1 AI credit from your plan.
               </p>
 
               <div className="flex flex-wrap justify-center gap-6 mb-8">
@@ -299,43 +272,45 @@ export default function SideIncomeBlueprint() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">Lifetime Access</span>
+                  <span className="text-sm">Blueprint Report FREE</span>
                 </div>
               </div>
 
               <div className="mb-8">
-                <span className="text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">$27</span>
-                <span className="text-muted-foreground ml-2 text-lg">one-time payment</span>
+                <div className="inline-block p-6 bg-gradient-card rounded-2xl border-2 border-primary/20">
+                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">1 Credit</span>
+                  <p className="text-sm text-muted-foreground mt-2">Assessment only • Blueprint report generated free</p>
+                </div>
               </div>
 
               <Button 
                 size="lg" 
-                onClick={handleStartCheckout}
+                onClick={handleStartAssessment}
                 disabled={loading}
                 className="text-lg px-16 py-7 shadow-glow hover:scale-105 transition-elegant mb-6"
               >
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Processing...
+                    Loading...
                   </>
                 ) : (
-                  'Get Your Blueprint Now'
+                  'Start Your Assessment (1 Credit)'
                 )}
               </Button>
 
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-primary">🔒</span>
-                  <span>Secure payment via Stripe • No recurring fees</span>
+                  <span className="text-primary">✓</span>
+                  <span>Available with Explore Mode (Free) or any paid plan</span>
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-primary">⚡</span>
-                  <span>Instant delivery • 15-minute assessment • Lifetime access</span>
+                  <span>Instant delivery • 15-minute assessment • Lifetime access to results</span>
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-primary">💰</span>
-                  <span>Less than a meal out for a complete side income roadmap</span>
+                  <span>Blueprint report is completely free after assessment completion</span>
                 </div>
               </div>
             </div>

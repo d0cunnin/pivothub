@@ -175,9 +175,11 @@ const Pricing = () => {
         "75 credits per month",
         "Unused credits roll over each month",
         "Business Ideas & Planning (2-4 credits)",
+        "Launch Strategy Generator (3 credits)",
         "Teaching Materials (5 credits)",
         "Logo & Branding (1 credit)",
         "Marketing & Social Media (2-3 credits)",
+        "Schedule It & Host It tools (2-4 credits)",
         "Save unlimited results",
         "Priority email support"
       ],

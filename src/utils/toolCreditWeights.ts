@@ -16,6 +16,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'pitch-deck': 3,                 // ~6,000 tokens output
   'marketing-strategy': 3,         // ~6,000 tokens output
   'legal-docs': 3,                 // ~6,000 tokens output
+  'launch-strategy': 3,            // ~6,000 tokens output
   
   // MEDIUM COST TOOLS (2 credits) - Moderate generation with 2000-5000 output tokens
   'business-idea': 2,              // ~4,000 tokens output
@@ -46,6 +47,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   
   // LEARNING (0 credits) - No AI generation
   'learn-a-skill': 0,              // Video content only, no AI
+  'side-income-report': 0,         // Free - generated after assessment
 };
 
 export function getToolCreditCost(toolName: string): number {

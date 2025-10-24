@@ -330,8 +330,9 @@ export type Database = {
         Row: {
           assessment_data: Json
           created_at: string
+          credits_used: number | null
           id: string
-          payment_status: string
+          payment_status: string | null
           stripe_session_id: string | null
           updated_at: string
           user_id: string
@@ -339,8 +340,9 @@ export type Database = {
         Insert: {
           assessment_data?: Json
           created_at?: string
+          credits_used?: number | null
           id?: string
-          payment_status?: string
+          payment_status?: string | null
           stripe_session_id?: string | null
           updated_at?: string
           user_id: string
@@ -348,8 +350,9 @@ export type Database = {
         Update: {
           assessment_data?: Json
           created_at?: string
+          credits_used?: number | null
           id?: string
-          payment_status?: string
+          payment_status?: string | null
           stripe_session_id?: string | null
           updated_at?: string
           user_id?: string

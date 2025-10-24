@@ -22,6 +22,15 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Business Mentor Chatbot', credits: 1, note: 'per message' },
     { name: 'Business Resources Finder', credits: 1 },
   ],
+  'Launch It (Go-to-Market)': [
+    { name: 'Launch Strategy Generator', credits: 3 },
+  ],
+  'Schedule It (Time Management)': [
+    { name: 'Schedule Builder', credits: 2, note: 'Coming Soon' },
+  ],
+  'Host It (Event Planning)': [
+    { name: 'Event Planning Generator', credits: 4, note: 'Coming Soon' },
+  ],
   'Prep It (Career Tools)': [
     { name: 'Career Advisor Chatbot', credits: 1, note: 'per message' },
     { name: 'Interview Questions Coach', credits: 1 },
@@ -38,20 +47,14 @@ const toolsByCategory: Record<string, Tool[]> = {
   ],
   'Earn It (Side Income)': [
     { name: 'Side Income Assessment', credits: 1 },
-    { name: 'Side Income Blueprint Report', credits: 0, note: 'Separate one-time purchase' },
+    { name: 'Side Income Blueprint Report', credits: 0, note: 'Free after assessment' },
   ],
-  'Schedule It (Time Management)': [
-    { name: 'Schedule Builder', credits: 2 },
-  ],
-  'Host It (Event Planning)': [
-    { name: 'Event Planning Generator', credits: 4 },
-  ],
-  'Assess It (Assessment Tools)': [
+  'Assess It (Self-Discovery)': [
     { name: 'Career Assessment', credits: 1 },
     { name: 'Skills Assessment', credits: 1 },
     { name: 'Personality Assessment', credits: 1 },
   ],
-  'Learn It (Education)': [
+  'Learn It (Skills Development)': [
     { name: 'Video Courses', credits: 0, note: 'Always FREE' },
   ],
 };

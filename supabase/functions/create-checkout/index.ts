@@ -52,19 +52,11 @@ serve(async (req) => {
       "assess-prep-learn": { amount: 1800, name: "Assess It + Prep It + Learn It", package: "assess-prep-learn" },
       "build-teach-launch": { amount: 1800, name: "Build It + Teach It + Launch It", package: "build-teach-launch" },
       "fund-it": { amount: 1500, name: "Fund It", package: "fund-it" },
-      "all-access": { amount: 2900, name: "All Access Pass", package: "all-access" },
-      "side-income-blueprint": { amount: 2700, name: "Side Income Blueprint", package: "side-income-blueprint" }
+      "all-access": { amount: 2900, name: "All Access Pass", package: "all-access" }
     };
 
     const selectedPlan = pricing[tier as keyof typeof pricing];
     if (!selectedPlan) throw new Error("Invalid subscription tier");
-
-    // Determine if it's a one-time payment or subscription
-    const isOneTimePayment = tier === 'side-income-blueprint';
-    
-    const successUrl = isOneTimePayment && assessmentId
-      ? `${req.headers.get("origin")}/side-income-blueprint?assessment=${assessmentId}&success=true`
-      : `${req.headers.get("origin")}/pricing?success=true`;
     
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -75,17 +67,15 @@ serve(async (req) => {
             currency: "usd",
             product_data: { name: selectedPlan.name },
             unit_amount: selectedPlan.amount,
-            ...(isOneTimePayment ? {} : { recurring: { interval: "month" } }),
+            recurring: { interval: "month" },
           },
           quantity: 1,
         },
       ],
-      mode: isOneTimePayment ? "payment" : "subscription",
-      success_url: successUrl,
+      mode: "subscription",
+      success_url: `${req.headers.get("origin")}/pricing?success=true`,
       cancel_url: `${req.headers.get("origin")}/pricing?canceled=true`,
-      metadata: assessmentId 
-        ? { assessmentId, userId: user.id } 
-        : { tier, subscription_package: selectedPlan.package || tier, userId: user.id },
+      metadata: { tier, subscription_package: selectedPlan.package || tier, userId: user.id },
     });
 
     logStep("Checkout session created", { sessionId: session.id });

@@ -346,6 +346,17 @@ const BeforeYouStart = () => {
               
               <CreditCostTable />
               
+              <div className="mt-6 p-4 bg-purple-50 rounded-lg border border-purple-100">
+                <h4 className="font-semibold text-purple-900 mb-2 flex items-center gap-2">
+                  <span className="text-xl">💰</span> About Earn It (Side Income)
+                </h4>
+                <p className="text-sm text-purple-800">
+                  Earn It was previously a separate $27 purchase. It's now included in all plans! 
+                  The assessment uses just 1 credit, and your blueprint report is completely free 
+                  after assessment completion. Available to all users, including Explore Mode (Free).
+                </p>
+              </div>
+              
               <div className="mt-10 grid md:grid-cols-2 gap-6">
                 <div className="p-6 bg-blue-50 rounded-xl border border-blue-100">
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-blue-900">
