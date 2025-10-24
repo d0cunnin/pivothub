@@ -346,17 +346,6 @@ const BeforeYouStart = () => {
               
               <CreditCostTable />
               
-              <div className="mt-6 p-4 bg-purple-50 rounded-lg border border-purple-100">
-                <h4 className="font-semibold text-purple-900 mb-2 flex items-center gap-2">
-                  <span className="text-xl">💰</span> About Earn It (Side Income)
-                </h4>
-                <p className="text-sm text-purple-800">
-                  Earn It was previously a separate $27 purchase. It's now included in all plans! 
-                  The assessment uses just 1 credit, and your blueprint report is completely free 
-                  after assessment completion. Available to all users, including Explore Mode (Free).
-                </p>
-              </div>
-              
               <div className="mt-10 grid md:grid-cols-2 gap-6">
                 <div className="p-6 bg-blue-50 rounded-xl border border-blue-100">
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-blue-900">
@@ -364,8 +353,8 @@ const BeforeYouStart = () => {
                   </h3>
                   <ul className="space-y-2 text-sm text-blue-800">
                     <li>✓ You get 5 credits per month (resets on your signup anniversary)</li>
-                    <li>✓ Start with assessments (1 credit each) to find your best path</li>
-                    <li>✓ Use chatbots (1 credit) for ongoing guidance</li>
+                    <li>✓ Start with assessments (2 credits each) to find your best path</li>
+                    <li>✓ Use chatbots (1 credit per message) for ongoing guidance</li>
                     <li>✓ Save high-cost tools for when you upgrade</li>
                     <li>✓ No rollover—credits reset each month</li>
                   </ul>

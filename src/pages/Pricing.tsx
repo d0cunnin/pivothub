@@ -154,8 +154,8 @@ const Pricing = () => {
       features: [
         "75 credits per month",
         "Unused credits roll over each month",
-        "Career, Skills & Personality Assessment Tools (1 credit each)",
-        "Interview Coach & Questions (1 credit each)",
+        "Career, Skills & Personality Assessment Tools (2 credits each)",
+        "Interview Questions Coach (2 credits), Interview Feedback Coach (2 credits)",
         "Resume Analysis (2 credits)",
         "Course access (free - no credits)",
         "Save unlimited results",
@@ -177,7 +177,7 @@ const Pricing = () => {
         "Business Ideas & Planning (2-4 credits)",
         "Launch Strategy Generator (3 credits)",
         "Teaching Materials (5 credits)",
-        "Logo & Branding (1 credit)",
+        "Logo & Branding (2 credits)",
         "Marketing & Social Media (2-3 credits)",
         "Schedule It & Host It tools (2-4 credits)",
         "Save unlimited results",
@@ -198,7 +198,7 @@ const Pricing = () => {
         "Unused credits roll over each month",
         "Grant Content Generator (4 credits)",
         "Grant Finder (2 credits)",
-        "Resource Finder (1 credit)",
+        "Resource Finder (2 credits)",
         "Save unlimited results",
         "Priority email support"
       ],
@@ -218,7 +218,7 @@ const Pricing = () => {
         "Access to all tools across all packages",
         "High-cost tools: Teaching Materials (5), Business Plans (4)",
         "Medium-cost tools: Resume Analysis (2), Marketing (3)",
-        "Low-cost tools: Chatbots (1), Assessment Tools (1)",
+        "Chatbots (1 credit per message), All other tools (2+ credits)",
         "Priority support & early access",
         "Save unlimited results"
       ],
@@ -596,7 +596,7 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What are AI requests?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Each tool uses a certain number of credits based on complexity: High-cost tools use 5 credits, medium-cost tools use 2 credits, and low-cost tools use 1 credit.
+                    Each tool uses a certain number of credits based on complexity: High-cost tools use 5 credits, medium-cost tools use 2 credits, and chatbots use 1 credit per message. All other tools use 2+ credits.
                   </p>
                 </div>
               </div>

@@ -77,7 +77,7 @@ const FAQ = () => {
                     What are AI requests?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Each tool uses a certain number of credits based on complexity: High-cost tools (like teaching materials) use 5 credits, medium-cost tools (like resumes) use 2 credits, and low-cost tools (like chatbots) use 1 credit. View tool costs before using them.
+                    Each tool uses a certain number of credits based on complexity: High-cost tools (like teaching materials) use 5 credits, medium-cost tools (like resumes) use 2 credits, and chatbots use 1 credit per message. All other tools use 2 or more credits. View tool costs before using them.
                     <p className="text-sm mt-3">
                       📊 <strong>Want to see the full breakdown?</strong> Check out "How many credits does each tool cost?" below for a complete list.
                     </p>
@@ -116,10 +116,10 @@ const FAQ = () => {
                       <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/20">
                         <h4 className="font-semibold mb-2">💡 Smart Credit Tips:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
-                          <li>• <strong>Explore Mode users:</strong> Start with low-cost tools (1 credit) to maximize your 5 monthly credits</li>
+                          <li>• <strong>Explore Mode users:</strong> Start with chatbots (1 credit per message) or assessments (2 credits) to maximize your 5 monthly credits</li>
                           <li>• <strong>Paid users:</strong> Take advantage of rollover—unused credits carry over (up to 2× your monthly limit)</li>
                           <li>• <strong>High-value tools:</strong> Save Business Plan Generator (4 credits) and Teaching Materials (5 credits) for when you're ready to create final deliverables</li>
-                          <li>• <strong>Chatbots:</strong> Use Career Advisor and Business Mentor freely—they're only 1 credit per conversation</li>
+                          <li>• <strong>Chatbots:</strong> Use Career Advisor and Business Mentor freely—they're only 1 credit per message</li>
                         </ul>
                       </div>
                     </div>
@@ -133,7 +133,7 @@ const FAQ = () => {
                   <AccordionContent className="text-muted-foreground">
                     <p className="mb-3">
                       Earn It is now included in all subscription tiers! The Side Income Assessment 
-                      uses <strong>1 credit</strong> to analyze your skills, experience, and goals. 
+                      uses <strong>2 credits</strong> to analyze your skills, experience, and goals. 
                       After completing the assessment, your personalized blueprint report is generated 
                       <strong> for free</strong>.
                     </p>
@@ -146,7 +146,7 @@ const FAQ = () => {
                     </ul>
                     <p>
                       You can take the assessment multiple times to refine your side income strategy 
-                      as your situation evolves (1 credit per assessment).
+                      as your situation evolves (2 credits per assessment).
                     </p>
                   </AccordionContent>
                 </AccordionItem>

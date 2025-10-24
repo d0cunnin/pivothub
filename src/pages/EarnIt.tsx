@@ -40,7 +40,7 @@ export default function SideIncomeBlueprint() {
         .insert({
           user_id: user.id,
           assessment_data: assessmentData,
-          credits_used: 1
+          credits_used: 2
         })
         .select()
         .single();
@@ -82,10 +82,10 @@ export default function SideIncomeBlueprint() {
     }
 
     // Check if user has enough credits
-    if (remainingRequests < 1) {
+    if (remainingRequests < 2) {
       toast({
         title: "Insufficient Credits",
-        description: "You need at least 1 credit to take the Side Income Assessment. Upgrade your plan or wait for your monthly reset.",
+        description: "You need at least 2 credits to take the Side Income Assessment. Upgrade your plan or wait for your monthly reset.",
         variant: "destructive"
       });
       navigate("/pricing");
@@ -208,7 +208,7 @@ export default function SideIncomeBlueprint() {
                 <CardTitle className="text-xl mb-4 text-center text-foreground">Complete Assessment</CardTitle>
                 <CardContent className="p-0 space-y-3">
                   <p className="text-foreground text-sm leading-relaxed">
-                    <strong>15-20 minute assessment</strong> (uses <strong>1 credit</strong>) that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
+                    <strong>15-20 minute assessment</strong> (uses <strong>2 credits</strong>) that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
                   </p>
                   <p className="text-foreground text-sm leading-relaxed">
                     <strong>Pro tip:</strong> The more detailed your answers, the more personalized your recommendations. Our AI analyzes 50+ data points to match you with the perfect opportunities. Take your time and be honest—there are no wrong answers.
@@ -254,7 +254,7 @@ export default function SideIncomeBlueprint() {
                 Ready to Build Your Side Income?
               </h2>
               <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Stop guessing and start with a clear, personalized plan. Get your custom blueprint using just 1 AI credit from your plan.
+                Stop guessing and start with a clear, personalized plan. Get your custom blueprint using just 2 AI credits from your plan.
               </p>
 
               <div className="flex flex-wrap justify-center gap-6 mb-8">
@@ -278,7 +278,7 @@ export default function SideIncomeBlueprint() {
 
               <div className="mb-8">
                 <div className="inline-block p-6 bg-gradient-card rounded-2xl border-2 border-primary/20">
-                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">1 Credit</span>
+                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">2 Credits</span>
                   <p className="text-sm text-muted-foreground mt-2">Assessment only • Blueprint report generated free</p>
                 </div>
               </div>
@@ -295,7 +295,7 @@ export default function SideIncomeBlueprint() {
                     Loading...
                   </>
                 ) : (
-                  'Start Your Assessment (1 Credit)'
+                  'Start Your Assessment (2 Credits)'
                 )}
               </Button>
 

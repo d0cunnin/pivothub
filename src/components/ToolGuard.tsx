@@ -224,8 +224,8 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   const showLimitReached = !isAdmin && remainingRequests === 0;
   
   // Get tool cost info
-  const toolCreditCost = toolName ? getToolCreditCost(toolName) : 1;
-  const toolCostTier = toolName ? getToolCostTier(toolName) : 'low';
+  const toolCreditCost = toolName ? getToolCreditCost(toolName) : 2;
+  const toolCostTier = toolName ? getToolCostTier(toolName) : 'medium';
 
   return (
     <div>
