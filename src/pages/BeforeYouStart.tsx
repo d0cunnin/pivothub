@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { CreditCostTable } from "@/components/CreditCostTable";
 import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -322,6 +323,55 @@ const BeforeYouStart = () => {
                 <Button variant="hero" size="lg" asChild>
                   <Link to="/pricing">View Pricing Details</Link>
                 </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Understanding Tool Costs Section */}
+        <section className="py-20 bg-gradient-to-br from-white via-accent/5 to-white">
+          <div className="container mx-auto px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
+                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                    Understanding Tool Costs
+                  </h2>
+                </div>
+                <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                  Each tool uses a different number of credits based on how much AI processing is required. 
+                  Here's what you need to know to make the most of your credits:
+                </p>
+              </div>
+              
+              <CreditCostTable />
+              
+              <div className="mt-10 grid md:grid-cols-2 gap-6">
+                <div className="p-6 bg-blue-50 rounded-xl border border-blue-100">
+                  <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-blue-900">
+                    <span className="text-2xl">💡</span> For Explore Mode Users
+                  </h3>
+                  <ul className="space-y-2 text-sm text-blue-800">
+                    <li>✓ You get 5 credits per month (resets on your signup anniversary)</li>
+                    <li>✓ Start with assessments (1 credit each) to find your best path</li>
+                    <li>✓ Use chatbots (1 credit) for ongoing guidance</li>
+                    <li>✓ Save high-cost tools for when you upgrade</li>
+                    <li>✓ No rollover—credits reset each month</li>
+                  </ul>
+                </div>
+                
+                <div className="p-6 bg-purple-50 rounded-xl border border-purple-100">
+                  <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-purple-900">
+                    <span className="text-2xl">⚡</span> For Paid Plan Users
+                  </h3>
+                  <ul className="space-y-2 text-sm text-purple-800">
+                    <li>✓ Credits reset on your billing anniversary each month</li>
+                    <li>✓ Unused credits roll over (capped at 2× your monthly limit)</li>
+                    <li>✓ Use high-cost tools freely—you have the credits!</li>
+                    <li>✓ Build credit reserves during slow months</li>
+                    <li>✓ Mix high and low-cost tools based on your needs</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { CreditCostTable } from "@/components/CreditCostTable";
 import {
   Accordion,
   AccordionContent,
@@ -11,6 +13,11 @@ import {
 } from "@/components/ui/accordion";
 
 const FAQ = () => {
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-primary">
       <Helmet>
@@ -24,9 +31,9 @@ const FAQ = () => {
       <section className="section-spacing-sm bg-gradient-section-1">
         <div className="page-container">
           <div className="content-width max-w-4xl mx-auto text-center">
-            <h1 className="page-header mb-4">Frequently Asked Questions</h1>
+            <h1 className="page-header mb-4">Your Questions, Answered</h1>
             <p className="text-lg text-muted-foreground">
-              Everything you need to know about PivotHub pricing, credits, and subscriptions
+              Find clear answers about pricing, credits, billing, and everything in between
             </p>
           </div>
         </div>
@@ -71,6 +78,9 @@ const FAQ = () => {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     Each tool uses a certain number of credits based on complexity: High-cost tools (like teaching materials) use 5 credits, medium-cost tools (like resumes) use 2 credits, and low-cost tools (like chatbots) use 1 credit. View tool costs before using them.
+                    <p className="text-sm mt-3">
+                      📊 <strong>Want to see the full breakdown?</strong> Check out "How many credits does each tool cost?" below for a complete list.
+                    </p>
                   </AccordionContent>
                 </AccordionItem>
 
@@ -89,6 +99,30 @@ const FAQ = () => {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     <strong>Paid plans:</strong> Unused credits roll over month-to-month, but rollover is capped at <strong>2× your monthly credit allotment</strong>. For example, with 50 credits/month, you can store up to 100 credits maximum. If you have 90 credits when your plan renews, you'll receive only 10 credits (not the full 50) to stay at the 100 credit cap. <strong>Explore Mode:</strong> No rollover—credits reset to 5 each month.
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="item-cost-breakdown">
+                  <AccordionTrigger className="text-left">
+                    How many credits does each tool cost?
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4">
+                      <p className="text-muted-foreground">
+                        Different tools require different amounts of AI processing. 
+                        Here's the complete breakdown of credit costs for every tool in PivotHub:
+                      </p>
+                      <CreditCostTable />
+                      <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/20">
+                        <h4 className="font-semibold mb-2">💡 Smart Credit Tips:</h4>
+                        <ul className="text-sm text-muted-foreground space-y-1">
+                          <li>• <strong>Explore Mode users:</strong> Start with low-cost tools (1 credit) to maximize your 5 monthly credits</li>
+                          <li>• <strong>Paid users:</strong> Take advantage of rollover—unused credits carry over (up to 2× your monthly limit)</li>
+                          <li>• <strong>High-value tools:</strong> Save Business Plan Generator (4 credits) and Teaching Materials (5 credits) for when you're ready to create final deliverables</li>
+                          <li>• <strong>Chatbots:</strong> Use Career Advisor and Business Mentor freely—they're only 1 credit per conversation</li>
+                        </ul>
+                      </div>
+                    </div>
                   </AccordionContent>
                 </AccordionItem>
 
