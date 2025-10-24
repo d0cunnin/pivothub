@@ -93,7 +93,7 @@ const Index = () => {
 
   const testimonials = [
     {
-      name: "Sarah M.",
+      name: "Shayla R.",
       role: "Entrepreneur",
       quote: "PivotHub gave me the clarity and tools I needed to launch my business. The AI-guided steps made everything feel achievable."
     },
@@ -114,7 +114,7 @@ const Index = () => {
       <Header />
 
       {/* Hero Section - White background with video, dark text */}
-      <section className="relative bg-background py-24 md:py-32 overflow-hidden">
+      <section className="relative bg-background py-16 md:py-24 overflow-hidden">
         {/* Background Video */}
         <video
           autoPlay
@@ -169,7 +169,7 @@ const Index = () => {
       </section>
 
       {/* Features Section - Dark background, light text */}
-      <section id="explore-hub" className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-24 md:py-32 overflow-hidden">
+      <section id="explore-hub" className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
         <div className="absolute top-20 right-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
         <div className="absolute bottom-20 left-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl"></div>
@@ -214,7 +214,7 @@ const Index = () => {
       </section>
 
       {/* How It Works Section - White background */}
-      <section className="relative bg-white py-24 md:py-32 overflow-hidden">
+      <section className="relative bg-white py-16 md:py-24 overflow-hidden">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
@@ -300,7 +300,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section - Dark background */}
-      <section className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-24 md:py-32 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
@@ -350,7 +350,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section - Aqua/gradient background */}
-      <section className="relative bg-gradient-to-br from-accent to-secondary py-24 md:py-32 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-accent to-secondary py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.1] bg-[size:20px_20px]"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
