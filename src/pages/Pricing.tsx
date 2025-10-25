@@ -211,9 +211,9 @@ const Pricing = () => {
       name: "All Access Pass",
       price: "$29",
       period: "month",
-      description: "Everything with 150 monthly credits",
+      description: "Everything with 125 monthly credits",
       features: [
-        "150 credits per month",
+        "125 credits per month",
         "Unused credits roll over each month",
         "Access to all tools across all packages",
         "High-cost tools: Teaching Materials (5), Business Plans (4)",

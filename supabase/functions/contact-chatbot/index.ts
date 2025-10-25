@@ -53,7 +53,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    - Assess It + Prep It + Learn It Package: $18/month, 75 credits
    - Build It + Teach It + Launch It Package: $18/month, 75 credits
    - Fund It Package: $15/month, 60 credits
-   - All Access Pass: $29/month, 150 credits (most popular - includes everything)
+   - All Access Pass: $29/month, 125 credits (most popular - includes everything)
    - All paid plans include credit rollover (up to 2× monthly limit)
    - Extra credits available: $5 for 20, $10 for 40, $15 for 60 (paid subscribers only)
 

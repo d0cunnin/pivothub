@@ -142,7 +142,7 @@ const FAQ = () => {
                     </p>
                     <ul className="list-disc pl-6 space-y-1 mb-3">
                       <li><strong>Explore Mode (Free):</strong> 5 credits/month - perfect for trying Earn It</li>
-                      <li><strong>Paid Plans:</strong> 60-150 credits/month - use anytime</li>
+                      <li><strong>Paid Plans:</strong> 60-125 credits/month - use anytime</li>
                     </ul>
                     <p>
                       You can take the assessment multiple times to refine your side income strategy 

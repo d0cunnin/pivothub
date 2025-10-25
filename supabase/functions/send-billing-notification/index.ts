@@ -104,7 +104,7 @@ serve(async (req) => {
             userName: displayName,
             subscriptionTier: subscriptionTier || 'Premium',
             subscriptionPackage: subscriptionPackage || 'All Access Pass',
-            monthlyCredits: requestBody.monthlyCredits || 150,
+            monthlyCredits: requestBody.monthlyCredits || 125,
             nextBillingDate: requestBody.nextBillingDate || 'in 1 month',
             dashboardUrl: `${siteUrl}/dashboard`,
           })
