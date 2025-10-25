@@ -877,6 +877,15 @@ export type Database = {
           total_credits: number
         }[]
       }
+      get_my_billing_profile: {
+        Args: never
+        Returns: {
+          created_at: string
+          email_masked: string
+          updated_at: string
+          user_id: string
+        }[]
+      }
       get_my_payment_status: {
         Args: { assessment_id: string }
         Returns: string
@@ -890,6 +899,7 @@ export type Database = {
             }
             Returns: boolean
           }
+      mask_email: { Args: { p_email: string }; Returns: string }
       reset_monthly_ai_requests: { Args: never; Returns: undefined }
       throttle_ip: {
         Args: {
