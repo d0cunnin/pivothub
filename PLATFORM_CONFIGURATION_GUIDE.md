@@ -172,6 +172,131 @@ After completing Phase 1-5 implementation:
 
 ---
 
+## Public Endpoints Security Analysis
+
+### Intentionally Public Endpoints
+
+The following edge functions are configured as public (`verify_jwt = false`) for legitimate operational reasons:
+
+#### **Scheduled Jobs (Cron):**
+- **`process-expired-grace-periods`** - Automated job running every 6 hours
+  - Purpose: Processes subscription grace periods and downgrades
+  - Protection: No user input; internal processing only
+  - Status: ✅ Secure (no external access needed)
+
+- **`reset-free-tier-credits`** - Automated job running daily
+  - Purpose: Resets monthly AI request limits for free-tier users
+  - Protection: No user input; internal processing only
+  - Status: ✅ Secure (no external access needed)
+
+#### **Payment Webhooks:**
+- **`stripe-webhook`** - Receives Stripe payment events
+  - Purpose: Processes subscription payments and updates
+  - Protection: HMAC signature verification with `stripe_webhook_secret`
+  - Validation: Request timestamp, signature validation, replay attack prevention
+  - Status: ✅ Secure (webhook signing enforced)
+
+#### **Contact & Support:**
+- **`send-contact-email`** - Public contact form submission
+  - Purpose: Allows visitors to contact support without authentication
+  - Protection: Zod schema validation, HTML escaping, Resend rate limiting
+  - Validation: Email format, content length limits, XSS prevention
+  - Status: ✅ Secure (appropriate for public contact forms)
+  - Recommendation: Consider adding CAPTCHA for spam prevention
+
+- **`contact-chatbot`** - Public support chatbot
+  - Purpose: Provides AI-powered customer support to visitors
+  - Protection: Content moderation via Lovable AI, AI gateway rate limiting
+  - Validation: Input sanitization, response moderation
+  - Status: ⚠️ Medium Risk (potential cost accumulation if abused)
+  - Recommendation: Monitor usage patterns and consider IP-based rate limiting
+
+#### **Email Services:**
+- **`send-assessment-results`** - Emails assessment results to users
+  - Purpose: Sends assessment reports via email after completion
+  - Protection: Zod validation on inputs, content moderation
+  - Validation: Email format, assessment ID ownership
+  - Status: ✅ Secure (no sensitive data exposure)
+
+### Recently Secured Endpoints
+
+The following endpoints were previously public but have been secured with JWT authentication:
+
+#### **`generate-side-income-report`** ✅ **SECURED**
+- **Previous Risk:** Public access allowed anyone to generate expensive AI reports
+- **Security Issue:** Accepted `assessmentId` parameter without authentication
+- **Improvements Applied:**
+  - ✅ Enabled JWT authentication (`verify_jwt = true`)
+  - ✅ Added Zod validation for `assessmentId` (UUID format enforcement)
+  - ✅ Uses authenticated user ID from JWT instead of request body
+  - ✅ Prevents unauthorized report generation
+  - ✅ Blocks assessment ID enumeration attacks
+
+#### **`get-course-video`** ✅ **SECURED**
+- **Previous Issue:** Manual JWT validation in code while config said public
+- **Security Issue:** Configuration inconsistency (verify_jwt = false but manual auth)
+- **Improvements Applied:**
+  - ✅ Enabled JWT authentication in config (`verify_jwt = true`)
+  - ✅ Removed redundant manual JWT validation code
+  - ✅ Simplified implementation (Supabase handles auth automatically)
+  - ✅ Consistent security configuration
+
+### Public Endpoint Monitoring
+
+Monitor public endpoints for suspicious activity:
+
+```sql
+-- Check public endpoint usage patterns
+SELECT 
+  endpoint,
+  COUNT(*) as request_count,
+  COUNT(DISTINCT ip_address) as unique_ips,
+  AVG(response_time_ms) as avg_response_time,
+  SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) as error_count
+FROM public.api_request_log
+WHERE created_at > now() - interval '24 hours'
+  AND endpoint IN (
+    'send-contact-email',
+    'contact-chatbot',
+    'send-assessment-results'
+  )
+GROUP BY endpoint
+ORDER BY request_count DESC;
+```
+
+```sql
+-- Detect potential abuse patterns
+SELECT 
+  ip_address,
+  endpoint,
+  COUNT(*) as request_count,
+  MIN(created_at) as first_request,
+  MAX(created_at) as last_request
+FROM public.api_request_log
+WHERE created_at > now() - interval '1 hour'
+  AND endpoint IN ('send-contact-email', 'contact-chatbot')
+GROUP BY ip_address, endpoint
+HAVING COUNT(*) > 50  -- Flag IPs making >50 requests/hour
+ORDER BY request_count DESC;
+```
+
+### Recommended Actions
+
+**High Priority:**
+- ✅ **COMPLETED:** Secure `generate-side-income-report` with JWT auth + input validation
+- ✅ **COMPLETED:** Fix `get-course-video` config inconsistency
+
+**Medium Priority:**
+- ⚠️ Consider adding IP-based rate limiting to `contact-chatbot` using `guard.ts`
+- ⚠️ Consider CAPTCHA on `send-contact-email` for spam prevention
+- ⚠️ Monitor public endpoint usage patterns weekly
+
+**Low Priority:**
+- Monitor webhook signature validation success rates
+- Review public endpoint error rates for anomalies
+
+---
+
 ## Monitoring Recommendations
 
 ### 1. Monitor Moderation Logs

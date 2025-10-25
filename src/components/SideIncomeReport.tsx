@@ -52,8 +52,13 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
   const generateReport = async () => {
     setGenerating(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const { data, error } = await supabase.functions.invoke('generate-side-income-report', {
-        body: { assessmentId }
+        body: { assessmentId },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`
+        }
       });
 
       if (error) throw error;
