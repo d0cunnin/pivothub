@@ -16,12 +16,14 @@ export interface ModerationResult {
  * @param text - The text content to moderate
  * @param functionName - Name of the function calling moderation (for logging)
  * @param userId - Optional user ID for tracking
+ * @param riskLevel - 'high' (fail-closed) or 'medium' (fail-open) for API errors
  * @returns ModerationResult with flagged status and categories
  */
 export async function moderateContent(
   text: string,
   functionName: string,
-  userId?: string
+  userId?: string,
+  riskLevel: 'high' | 'medium' = 'medium'
 ): Promise<ModerationResult> {
   // Truncate text to 32k characters for OpenAI moderation API limit
   const truncatedText = text.slice(0, 32000);
@@ -43,9 +45,16 @@ export async function moderateContent(
       const errorText = await response.text();
       console.error(`OpenAI Moderation API error (${response.status}):`, errorText);
       
-      // Fail-safe: On API error, allow the request to proceed but log the failure
-      await logModeration(truncatedText, functionName, userId, false, ['api_error']);
-      return { flagged: false, categories: ['api_error'] };
+      // Risk-based failure mode
+      if (riskLevel === 'high') {
+        // Fail-closed: Block request for high-risk functions
+        await logModeration(truncatedText, functionName, userId, true, ['moderation_service_unavailable']);
+        return { flagged: true, categories: ['moderation_service_unavailable'] };
+      } else {
+        // Fail-open: Allow request to proceed for medium-risk functions
+        await logModeration(truncatedText, functionName, userId, false, ['api_error']);
+        return { flagged: false, categories: ['api_error'] };
+      }
     }
 
     const data = await response.json();
@@ -53,8 +62,15 @@ export async function moderateContent(
     
     if (!result) {
       console.error('No moderation result returned from OpenAI');
-      await logModeration(truncatedText, functionName, userId, false, ['no_result']);
-      return { flagged: false, categories: ['no_result'] };
+      
+      // Risk-based failure mode
+      if (riskLevel === 'high') {
+        await logModeration(truncatedText, functionName, userId, true, ['moderation_error']);
+        return { flagged: true, categories: ['moderation_error'] };
+      } else {
+        await logModeration(truncatedText, functionName, userId, false, ['no_result']);
+        return { flagged: false, categories: ['no_result'] };
+      }
     }
 
     const flagged = result.flagged || false;
@@ -76,9 +92,16 @@ export async function moderateContent(
   } catch (error) {
     console.error('Error in moderateContent:', error);
     
-    // Fail-safe: Allow request on error to maintain availability
-    await logModeration(truncatedText, functionName, userId, false, ['exception']);
-    return { flagged: false, categories: ['exception'] };
+    // Risk-based failure mode
+    if (riskLevel === 'high') {
+      // Fail-closed: Block request for high-risk functions
+      await logModeration(truncatedText, functionName, userId, true, ['moderation_error']);
+      return { flagged: true, categories: ['moderation_error'] };
+    } else {
+      // Fail-open: Allow request to proceed for medium-risk functions
+      await logModeration(truncatedText, functionName, userId, false, ['exception']);
+      return { flagged: false, categories: ['exception'] };
+    }
   }
 }
 

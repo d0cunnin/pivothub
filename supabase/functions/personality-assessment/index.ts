@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
+import { moderateContent } from "../_shared/moderation.ts";
 
 // Validation schema for personality assessment
 const personalityAssessmentSchema = z.object({
@@ -53,6 +54,37 @@ serve(async (req) => {
     }
     
     const { responses } = validation.data;
+    
+    // Moderate content before processing (high-risk: fail-closed)
+    const moderationInput = JSON.stringify(responses).slice(0, 10000);
+    const moderationResult = await moderateContent(moderationInput, 'personality-assessment', userId, 'high');
+    
+    // Check for service unavailability
+    if (moderationResult.categories?.includes('moderation_service_unavailable') || 
+        moderationResult.categories?.includes('moderation_error')) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content safety check temporarily unavailable. Please try again in a few moments.',
+          code: 'MODERATION_SERVICE_UNAVAILABLE'
+        }), 
+        { 
+          status: 503, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    
+    // Check for policy violation
+    if (moderationResult.flagged) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content violates safety policies',
+          message: 'Your submission contains inappropriate content. PivotHub provides ethical personality assessment services only.',
+          categories: moderationResult.categories 
+        }), 
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {

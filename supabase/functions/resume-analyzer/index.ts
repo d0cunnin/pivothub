@@ -45,10 +45,26 @@ serve(async (req) => {
     
     const { resumeText, jobDescription, targetRole } = validation.data;
     
-    // Moderate content before processing
-    const moderationInput = `${resumeText} ${jobDescription || ''} ${targetRole || ''}`;
-    const moderationResult = await moderateContent(moderationInput, 'resume-analyzer', userId);
+    // Moderate content before processing (high-risk: fail-closed)
+    const moderationInput = `${resumeText} ${jobDescription || ''} ${targetRole || ''}`.slice(0, 10000);
+    const moderationResult = await moderateContent(moderationInput, 'resume-analyzer', userId, 'high');
     
+    // Check for service unavailability
+    if (moderationResult.categories?.includes('moderation_service_unavailable') || 
+        moderationResult.categories?.includes('moderation_error')) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content safety check temporarily unavailable. Please try again in a few moments.',
+          code: 'MODERATION_SERVICE_UNAVAILABLE'
+        }), 
+        { 
+          status: 503, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    
+    // Check for policy violation
     if (moderationResult.flagged) {
       return new Response(
         JSON.stringify({ 

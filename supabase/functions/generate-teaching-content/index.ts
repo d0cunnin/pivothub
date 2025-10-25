@@ -44,10 +44,26 @@ serve(async (req) => {
     const { type, data } = validation.data;
     console.log('Received request:', { type, data })
     
-    // Moderate content before processing
-    const moderationInput = JSON.stringify(data).slice(0, 10000); // Limit to 10k chars
-    const moderationResult = await moderateContent(moderationInput, 'generate-teaching-content', userId);
+    // Moderate content before processing (high-risk: fail-closed)
+    const moderationInput = JSON.stringify(data).slice(0, 10000);
+    const moderationResult = await moderateContent(moderationInput, 'generate-teaching-content', userId, 'high');
     
+    // Check for service unavailability
+    if (moderationResult.categories?.includes('moderation_service_unavailable') || 
+        moderationResult.categories?.includes('moderation_error')) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content safety check temporarily unavailable. Please try again in a few moments.',
+          code: 'MODERATION_SERVICE_UNAVAILABLE'
+        }), 
+        { 
+          status: 503, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    
+    // Check for policy violation
     if (moderationResult.flagged) {
       return new Response(
         JSON.stringify({ 

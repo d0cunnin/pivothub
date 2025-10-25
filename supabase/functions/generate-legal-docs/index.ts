@@ -1,18 +1,29 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { moderateContent } from "../_shared/moderation.ts";
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 
 serve(async (req) => {
+  const startTime = Date.now();
+  let userId = 'unknown';
+  let ip = 'unknown';
+  
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
+    // Apply guard for auth, rate limit, and credit deduction
+    const guardResult = await guard(req, {
+      endpoint: "generate-legal-docs",
+      cost: 3,
+      requireAuth: true,
+      maxReqsPerMinute: 20
+    });
+    
+    userId = guardResult.userId;
+    ip = guardResult.ip;
+    
     const { docType, businessName, businessType, state, industry, specifics } = await req.json();
 
     if (!docType || !businessName || !state) {
@@ -25,10 +36,26 @@ serve(async (req) => {
       );
     }
     
-    // Moderate content before processing
-    const moderationInput = `${businessName} ${businessType || ''} ${industry || ''} ${specifics || ''}`;
-    const moderationResult = await moderateContent(moderationInput, 'generate-legal-docs');
+    // Moderate content before processing (high-risk: fail-closed)
+    const moderationInput = `${businessName} ${businessType || ''} ${industry || ''} ${specifics || ''}`.slice(0, 10000);
+    const moderationResult = await moderateContent(moderationInput, 'generate-legal-docs', userId, 'high');
     
+    // Check for service unavailability
+    if (moderationResult.categories?.includes('moderation_service_unavailable') || 
+        moderationResult.categories?.includes('moderation_error')) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content safety check temporarily unavailable. Please try again in a few moments.',
+          code: 'MODERATION_SERVICE_UNAVAILABLE'
+        }), 
+        { 
+          status: 503, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+    
+    // Check for policy violation
     if (moderationResult.flagged) {
       return new Response(
         JSON.stringify({ 
