@@ -335,6 +335,48 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_plans: {
+        Row: {
+          credit_limit: number
+          currency: string
+          display_name: string
+          effective_from: string
+          features: Json
+          is_active: boolean
+          plan_code: string
+          price_cents: number
+          rollover_cap_multiplier: number
+          stripe_price_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          credit_limit?: number
+          currency?: string
+          display_name: string
+          effective_from?: string
+          features?: Json
+          is_active?: boolean
+          plan_code: string
+          price_cents: number
+          rollover_cap_multiplier?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          credit_limit?: number
+          currency?: string
+          display_name?: string
+          effective_from?: string
+          features?: Json
+          is_active?: boolean
+          plan_code?: string
+          price_cents?: number
+          rollover_cap_multiplier?: number
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       processed_stripe_events: {
         Row: {
           event_id: string
@@ -808,6 +850,36 @@ export type Database = {
           total_credits: number | null
           total_uses: number | null
           user_id: string | null
+        }
+        Relationships: []
+      }
+      v_public_pricing: {
+        Row: {
+          credit_limit: number | null
+          currency: string | null
+          display_name: string | null
+          features: Json | null
+          plan_code: string | null
+          price_cents: number | null
+          rollover_cap_multiplier: number | null
+        }
+        Insert: {
+          credit_limit?: number | null
+          currency?: string | null
+          display_name?: string | null
+          features?: Json | null
+          plan_code?: string | null
+          price_cents?: number | null
+          rollover_cap_multiplier?: number | null
+        }
+        Update: {
+          credit_limit?: number | null
+          currency?: string | null
+          display_name?: string | null
+          features?: Json | null
+          plan_code?: string | null
+          price_cents?: number | null
+          rollover_cap_multiplier?: number | null
         }
         Relationships: []
       }
