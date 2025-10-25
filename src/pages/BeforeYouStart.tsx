@@ -165,7 +165,7 @@ const BeforeYouStart = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
                 Your Pivot Forward Starts Now
               </h1>
-              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
                 Learn how PivotHub works and discover which tools are right for your journey. Get guidance on starting your path to income, clarity, career, or business growth.
               </p>
             </div>
@@ -176,10 +176,10 @@ const BeforeYouStart = () => {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground">
                 What Is PivotHub?
               </h2>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
                 PivotHub is a comprehensive platform designed to help you achieve income, career clarity, or business growth. Whether you're looking to upskill, prepare for your next career move, earn extra income, teach others, build a business, or find funding, we have the tools to guide you every step of the way.
               </p>
             </div>
@@ -190,10 +190,10 @@ const BeforeYouStart = () => {
         <section className="py-20 bg-accent">
           <div className="container mx-auto px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
                 How PivotHub Works
               </h2>
-              <p className="text-lg text-white/90 leading-relaxed">
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
                 Our platform offers different tools to support specific goals. Each tool is designed to give you actionable guidance and results quickly.
               </p>
             </div>
@@ -204,7 +204,7 @@ const BeforeYouStart = () => {
         <section className="py-20 bg-white">
           <div className="container mx-auto px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-foreground">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center text-foreground">
                 The Tools
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -217,7 +217,7 @@ const BeforeYouStart = () => {
                       </div>
                     </CardHeader>
                     <CardContent className="flex-1 flex flex-col gap-4">
-                      <CardDescription className="text-sm leading-relaxed flex-1">
+                      <CardDescription className="text-base md:text-lg leading-relaxed flex-1">
                         {tool.description}
                       </CardDescription>
                       <Button variant="default" size="lg" className="w-full" asChild>
@@ -238,10 +238,10 @@ const BeforeYouStart = () => {
           
           <div className="container mx-auto px-6 lg:px-8 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
                 Not Sure Where to Start?
               </h2>
-              <p className="text-lg text-white/90 mb-8">
+              <p className="text-xl md:text-2xl text-white/90 mb-8">
                 If you're unsure which tool is right for you, we recommend starting with <strong>Assess It</strong>. This tool helps you understand your skills, goals, and the best path forward.
               </p>
               <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
@@ -258,7 +258,7 @@ const BeforeYouStart = () => {
         <section className="py-20 bg-accent">
           <div className="container mx-auto px-6 lg:px-8">
             <div className="max-w-5xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-white">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center text-white">
                 What Is Included in Each Tier
               </h2>
               <div className="space-y-6">
@@ -268,7 +268,7 @@ const BeforeYouStart = () => {
                     <CardDescription>5 free credits per month to try any tool</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base md:text-lg text-muted-foreground">
                       All tools available with credit limitations
                     </p>
                   </CardContent>
@@ -279,7 +279,7 @@ const BeforeYouStart = () => {
                     <CardTitle className="text-2xl">Assess It + Prep It + Learn It Package</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base md:text-lg text-muted-foreground">
                       {getToolsList('assess-prep-learn')}
                     </p>
                   </CardContent>
@@ -290,7 +290,7 @@ const BeforeYouStart = () => {
                     <CardTitle className="text-2xl">Build It + Teach It + Launch It Package</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base md:text-lg text-muted-foreground">
                       {getToolsList('build-teach-launch')}
                     </p>
                   </CardContent>
@@ -301,7 +301,7 @@ const BeforeYouStart = () => {
                     <CardTitle className="text-2xl">Fund It Package</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base md:text-lg text-muted-foreground">
                       {getToolsList('fund-it')}
                     </p>
                   </CardContent>
@@ -313,7 +313,7 @@ const BeforeYouStart = () => {
                     <CardDescription>Unlimited access to every tool</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base md:text-lg text-muted-foreground">
                       {getToolsList('all-access')}
                     </p>
                   </CardContent>
@@ -335,11 +335,11 @@ const BeforeYouStart = () => {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
                 <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-                  <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                     Understanding Tool Costs
                   </h2>
                 </div>
-                <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+                <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
                   Each tool uses a different number of credits based on how much AI processing is required. 
                   Here's what you need to know to make the most of your credits:
                 </p>
@@ -352,7 +352,7 @@ const BeforeYouStart = () => {
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-blue-900">
                     <span className="text-2xl">💡</span> For Explore Mode Users
                   </h3>
-                  <ul className="space-y-2 text-sm text-blue-800">
+                  <ul className="space-y-2 text-base text-blue-800">
                     <li>✓ You get 5 credits per month (resets on your signup anniversary)</li>
                     <li>✓ Start with assessments (2 credits each) to find your best path</li>
                     <li>✓ Use chatbots (1 credit per message) for ongoing guidance</li>
@@ -365,7 +365,7 @@ const BeforeYouStart = () => {
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-purple-900">
                     <span className="text-2xl">⚡</span> For Paid Plan Users
                   </h3>
-                  <ul className="space-y-2 text-sm text-purple-800">
+                  <ul className="space-y-2 text-base text-purple-800">
                     <li>✓ Credits reset on your billing anniversary each month</li>
                     <li>✓ Unused credits roll over (capped at 2× your monthly limit)</li>
                     <li>✓ Use high-cost tools freely—you have the credits!</li>
