@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -32,6 +33,23 @@ serve(async (req) => {
     }
     
     const { location, category, subcategory } = validation.data;
+    
+    // Content moderation for user input (medium risk - fail open)
+    const moderationText = `${category || ''} ${subcategory || ''}`;
+    if (moderationText.trim()) {
+      const moderationResult = await moderateContent(moderationText, 'grant-resources', undefined, 'medium');
+      
+      if (moderationResult.flagged) {
+        console.warn('Grant resources input flagged by moderation:', moderationResult.categories);
+        return new Response(
+          JSON.stringify({ 
+            error: 'Content policy violation detected',
+            details: 'Your input contains content that violates our policies. Please revise and try again.' 
+          }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
     
     const googleApiKey = Deno.env.get('GOOGLE_PLACES_API_KEY');
     

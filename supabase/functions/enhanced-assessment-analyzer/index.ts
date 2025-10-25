@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 // Validation schema
 const assessmentAnalyzerSchema = z.object({
@@ -52,6 +53,21 @@ serve(async (req) => {
     const { assessmentType, responses, userProfile } = validation.data;
 
     console.log(`Processing ${assessmentType} assessment for user ${userId}`);
+    
+    // Content moderation (medium risk - fail open)
+    const moderationText = JSON.stringify(responses);
+    const moderationResult = await moderateContent(moderationText, 'enhanced-assessment-analyzer', userId, 'medium');
+    
+    if (moderationResult.flagged) {
+      console.warn('Content flagged by moderation:', moderationResult.categories);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content policy violation detected',
+          details: 'Your assessment responses contain content that violates our policies. Please revise and try again.' 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     const systemPrompt = getSystemPromptForAssessment(assessmentType);
     
