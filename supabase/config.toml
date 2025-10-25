@@ -1,5 +1,8 @@
 project_id = "fkvjsgqjgissolpdqbdh"
 
+[functions.check-admin-role]
+verify_jwt = true
+
 [functions.process-expired-grace-periods]
 verify_jwt = false
 

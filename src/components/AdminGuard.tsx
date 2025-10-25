@@ -24,18 +24,13 @@ export const AdminGuard = ({ children }: AdminGuardProps) => {
       }
 
       try {
-        const { data, error } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", user.id)
-          .eq("role", "admin")
-          .maybeSingle();
+        const { data, error } = await supabase.functions.invoke('check-admin-role');
 
         if (error) {
           console.error("Error checking admin role:", error);
           setIsAdmin(false);
         } else {
-          setIsAdmin(!!data);
+          setIsAdmin(data?.isAdmin === true);
         }
       } catch (error) {
         console.error("Error in admin check:", error);
