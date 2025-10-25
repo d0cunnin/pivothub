@@ -335,6 +335,36 @@ export type Database = {
         }
         Relationships: []
       }
+      moderation_log: {
+        Row: {
+          categories: Json | null
+          created_at: string | null
+          flagged: boolean
+          function_name: string
+          id: string
+          input_text: string
+          user_id: string | null
+        }
+        Insert: {
+          categories?: Json | null
+          created_at?: string | null
+          flagged: boolean
+          function_name: string
+          id?: string
+          input_text: string
+          user_id?: string | null
+        }
+        Update: {
+          categories?: Json | null
+          created_at?: string | null
+          flagged?: boolean
+          function_name?: string
+          id?: string
+          input_text?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       pricing_plans: {
         Row: {
           credit_limit: number
