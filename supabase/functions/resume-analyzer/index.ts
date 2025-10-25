@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 // Validation schema
 const resumeAnalyzerSchema = z.object({
@@ -43,6 +44,21 @@ serve(async (req) => {
     }
     
     const { resumeText, jobDescription, targetRole } = validation.data;
+    
+    // Moderate content before processing
+    const moderationInput = `${resumeText} ${jobDescription || ''} ${targetRole || ''}`;
+    const moderationResult = await moderateContent(moderationInput, 'resume-analyzer', userId);
+    
+    if (moderationResult.flagged) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content violates safety policies',
+          message: 'Your submission contains inappropriate content. Please revise and try again.',
+          categories: moderationResult.categories 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     const openAIApiKey = Deno.env.get('relaunch_openai_key');
     if (!openAIApiKey) {

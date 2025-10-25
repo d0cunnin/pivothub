@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -21,6 +22,21 @@ serve(async (req) => {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
+      );
+    }
+    
+    // Moderate content before processing
+    const moderationInput = `${businessName} ${businessType || ''} ${industry || ''} ${specifics || ''}`;
+    const moderationResult = await moderateContent(moderationInput, 'generate-legal-docs');
+    
+    if (moderationResult.flagged) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content violates safety policies',
+          message: 'Your submission contains inappropriate content. PivotHub provides ethical legal document generation only.',
+          categories: moderationResult.categories 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
     

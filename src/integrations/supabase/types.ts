@@ -601,7 +601,9 @@ export type Database = {
           free_tier_start_date: string | null
           grace_period_end: string | null
           id: string
+          last_flag_date: string | null
           last_request_reset: string | null
+          moderation_flags: number | null
           monthly_ai_requests: number | null
           next_billing_date: string | null
           payment_retry_count: number | null
@@ -624,7 +626,9 @@ export type Database = {
           free_tier_start_date?: string | null
           grace_period_end?: string | null
           id?: string
+          last_flag_date?: string | null
           last_request_reset?: string | null
+          moderation_flags?: number | null
           monthly_ai_requests?: number | null
           next_billing_date?: string | null
           payment_retry_count?: number | null
@@ -647,7 +651,9 @@ export type Database = {
           free_tier_start_date?: string | null
           grace_period_end?: string | null
           id?: string
+          last_flag_date?: string | null
           last_request_reset?: string | null
+          moderation_flags?: number | null
           monthly_ai_requests?: number | null
           next_billing_date?: string | null
           payment_retry_count?: number | null

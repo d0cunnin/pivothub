@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 // Validation schema
 const businessContentSchema = z.object({
@@ -41,6 +42,21 @@ serve(async (req) => {
     }
     
     const { type, data } = validation.data;
+    
+    // Moderate content before processing
+    const moderationInput = JSON.stringify(data).slice(0, 10000); // Limit to 10k chars
+    const moderationResult = await moderateContent(moderationInput, 'generate-business-content', userId);
+    
+    if (moderationResult.flagged) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content violates safety policies',
+          message: 'Your submission contains inappropriate content. PivotHub provides ethical business planning services only.',
+          categories: moderationResult.categories 
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     const openaiApiKey = Deno.env.get('relaunch_openai_key')
     if (!openaiApiKey) {
