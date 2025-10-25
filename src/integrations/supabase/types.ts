@@ -889,6 +889,33 @@ export type Database = {
         }
         Relationships: []
       }
+      v_assessment_summary: {
+        Row: {
+          assessment_type: string | null
+          created_at: string | null
+          id: string | null
+          score: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          assessment_type?: string | null
+          created_at?: string | null
+          id?: string | null
+          score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          assessment_type?: string | null
+          created_at?: string | null
+          id?: string | null
+          score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       v_public_pricing: {
         Row: {
           credit_limit: number | null
@@ -945,6 +972,38 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      v_subscribers_masked: {
+        Row: {
+          created_at: string | null
+          email_masked: string | null
+          has_stripe_account: boolean | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email_masked?: never
+          has_stripe_account?: never
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email_masked?: never
+          has_stripe_account?: never
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscribers_secure_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "subscribers_public"
+            referencedColumns: ["user_id"]
+          },
+        ]
       }
     }
     Functions: {

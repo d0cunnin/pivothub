@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 const resend = new Resend(Deno.env.get("resendemail-key"));
 
@@ -62,6 +63,24 @@ const handler = async (req: Request): Promise<Response> => {
     const { name, email, subject, message } = validation.data;
 
     console.log("Sending contact email:", { name, email, subject });
+    
+    // Content moderation for contact form (medium risk - fail open)
+    const moderationText = `${name} ${subject} ${message}`;
+    const moderationResult = await moderateContent(moderationText, 'send-contact-email', undefined, 'medium');
+    
+    if (moderationResult.flagged) {
+      console.warn('Contact form content flagged by moderation:', moderationResult.categories);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content policy violation detected',
+          details: 'Your message contains content that violates our policies. Please revise and try again.' 
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
     const emailResponse = await resend.emails.send({
       from: "PivotHub Contact <noreply@pivothub.io>",

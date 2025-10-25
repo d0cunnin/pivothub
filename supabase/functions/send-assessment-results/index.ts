@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 const resend = new Resend(Deno.env.get("resendemail-key"));
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -55,6 +56,24 @@ const handler = async (req: Request): Promise<Response> => {
     const { email, name, assessmentType, results, analysis }: AssessmentEmailRequest = validation.data;
 
     console.log(`Sending ${assessmentType} assessment results to ${email}`);
+    
+    // Content moderation for user-generated assessment content (medium risk - fail open)
+    const moderationText = JSON.stringify(analysis);
+    const moderationResult = await moderateContent(moderationText, 'send-assessment-results', undefined, 'medium');
+    
+    if (moderationResult.flagged) {
+      console.warn('Assessment content flagged by moderation:', moderationResult.categories);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Content policy violation detected',
+          details: 'Assessment content contains inappropriate material and cannot be emailed.' 
+        }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
 
     const emailContent = generateEmailContent(assessmentType, analysis, name);
     
