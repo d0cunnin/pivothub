@@ -35,7 +35,7 @@ const HostIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Plan Your Event
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               From idea to execution - your complete event playbook. Coordinate in-person, virtual, or hybrid events with complete planning for logistics, tech, speakers, sponsors, promotion, and post-event strategy.
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>

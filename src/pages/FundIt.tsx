@@ -370,7 +370,7 @@ const FundIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
               Access grant funding
             </h1>
-          <p className="text-lg md:text-xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
+          <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
             Generate professional grant proposals and letters of intent with AI assistance
           </p>
           </div>
@@ -384,7 +384,7 @@ const FundIt = () => {
           {/* Fund It Tools Section */}
           <section className="mb-12">
             <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">
                 Funding & Research Tools
               </h2>
               <p className="text-lg text-foreground leading-relaxed max-w-3xl mx-auto">

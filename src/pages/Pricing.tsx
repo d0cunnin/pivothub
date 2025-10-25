@@ -258,7 +258,7 @@ const Pricing = () => {
               Choose Your Path
             </h1>
             <div className="text-center max-w-4xl mx-auto">
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Start free with Explore Mode, then choose the path that fits your journey—or get everything with our All Access Pass.
             </p>
             </div>

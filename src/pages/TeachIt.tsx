@@ -31,7 +31,7 @@ const TeachIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Monetize your knowledge
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               Transform your expertise into engaging webinars and online courses. Turn your knowledge into income by teaching others what you know best.
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -54,7 +54,7 @@ const TeachIt = () => {
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-8">
             <div>
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Why Teach Online?
                 </h2>
               </div>
@@ -91,7 +91,7 @@ const TeachIt = () => {
         <div className="page-container">
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 How to Get Started
               </h2>
             </div>

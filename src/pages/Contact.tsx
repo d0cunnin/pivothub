@@ -82,7 +82,7 @@ const Contact = () => {
                 Get in Touch
               </h1>
               <div className="text-left max-w-4xl mx-auto">
-                <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
                   Have questions about our career development or business launch programs? 
                   We're here to help you on your journey to success.
                 </p>

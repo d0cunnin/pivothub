@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
               Privacy Policy
             </h1>
-            <p className="text-lg md:text-xl text-white/90 font-light leading-relaxed">
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light leading-relaxed">
               Your privacy is important to us. Learn how we collect, use, and protect your information.
             </p>
           </div>

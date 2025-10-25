@@ -38,7 +38,7 @@ const AssessIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Choose an Assessment
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Discover your strengths, skills, and perfect career path with our comprehensive assessment tools
             </p>
             
@@ -55,7 +55,7 @@ const AssessIt = () => {
       <section id="take-your-assessment-today" className="py-12 bg-white relative overflow-hidden">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4">
               Take Your Assessment Today
             </h2>
             <p className="text-lg text-foreground leading-relaxed mb-8">
@@ -112,7 +112,7 @@ const AssessIt = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Find Your Perfect Learning Path
                 </h2>
               </div>

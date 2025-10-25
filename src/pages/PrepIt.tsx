@@ -37,7 +37,7 @@ const PrepIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Get job-ready
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Master your job search with AI-powered coaching, interview preparation, and professional document optimization
             </p>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
@@ -99,7 +99,7 @@ const PrepIt = () => {
           {/* Header Section */}
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 Get Personalized Career Guidance
               </h2>
             </div>
@@ -151,7 +151,7 @@ const PrepIt = () => {
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 Interview Questions Coach
               </h2>
             </div>
@@ -201,7 +201,7 @@ const PrepIt = () => {
         <div className="page-container">
           <div className="text-center max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
-              <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                 Resume & Cover Letter Coach
               </h2>
             </div>

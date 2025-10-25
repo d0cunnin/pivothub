@@ -147,7 +147,7 @@ export default function SideIncomeBlueprint() {
               Create income pathways
             </h1>
             <div className="text-center max-w-4xl mx-auto">
-              <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
                 Get a custom plan to build sustainable side income based on your unique situation, skills, and goals
               </p>
             </div>
@@ -170,7 +170,7 @@ export default function SideIncomeBlueprint() {
         <div className="page-container">
           <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto mb-8">
             <div>
-              <p className="text-lg md:text-xl text-foreground leading-relaxed text-left">
+              <p className="text-xl md:text-2xl text-foreground leading-relaxed text-left">
                 Stop wasting time on side hustle ideas that do not fit your life. The Earn It Blueprint helps you discover three income opportunities that align with your skills, time, financial goals, and comfort level. It gives you a clear roadmap to start earning within 90 days whether you are a stay-at-home parent, working professional, retiree, or student.
               </p>
             </div>
@@ -191,7 +191,7 @@ export default function SideIncomeBlueprint() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   How It Works
                 </h2>
               </div>
@@ -323,7 +323,7 @@ export default function SideIncomeBlueprint() {
         <div className="page-container">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">What's Included in Your Blueprint</h2>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">What's Included in Your Blueprint</h2>
             </div>
             <p className="text-lg text-white mb-12 text-left">
               Everything you need to launch your side income in 90 days or less
@@ -430,7 +430,7 @@ export default function SideIncomeBlueprint() {
         <div className="page-container">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Frequently Asked Questions</h2>
             </div>
             <p className="text-lg text-foreground/80 mb-12 text-left">
               Everything you need to know before getting started

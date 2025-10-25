@@ -173,7 +173,7 @@ const LaunchIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Take it to the public
             </h1>
-            <p className="text-lg md:text-xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               Generate a complete, customized launch strategy for your project, product, or business idea. From concept to market, we'll help you create a winning plan.
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -196,7 +196,7 @@ const LaunchIt = () => {
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-12 max-w-6xl mx-auto">
             <div>
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-                <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
                   Create Your Launch Strategy
                 </h2>
               </div>

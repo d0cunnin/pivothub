@@ -344,7 +344,7 @@ export default function FreelancerMarketplace() {
       <section className="section-spacing bg-gradient-hero">
         <div className="page-container">
           <div className="content-width text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Ready to Pivot Forward?
             </h2>
             <p className="text-xl text-white/90 mb-8">
