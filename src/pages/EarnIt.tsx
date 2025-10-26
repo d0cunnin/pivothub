@@ -139,9 +139,9 @@ export default function SideIncomeBlueprint() {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Make Money Online Fast: Side Income Ideas After Job Loss | PivotHub</title>
-        <meta name="description" content="Need income now? Discover legitimate side income opportunities, freelance work, and online business ideas. Take our assessment to find the best income strategy for you." />
-        <meta property="og:title" content="Make Money Online: Side Income After Job Loss | PivotHub" />
+        <title>Side Income Blueprint | Discover Income Opportunities | PivotHub</title>
+        <meta name="description" content="Discover personalized side income opportunities that match your skills, time, and goals. From freelancing to side businesses - find what works for your lifestyle." />
+        <meta property="og:title" content="Side Income Blueprint | PivotHub" />
         <meta property="og:description" content="Discover personalized side income opportunities that match your skills and schedule." />
         <link rel="canonical" href="https://pivothub.lovable.app/earnit" />
       </Helmet>
@@ -170,11 +170,11 @@ export default function SideIncomeBlueprint() {
               <span className="text-3xl font-bold text-white tracking-wider">EARN IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Need Income Now? We've Got You Covered.
+              Discover Income Opportunities That Fit Your Life
             </h1>
             <div className="text-center max-w-4xl mx-auto">
               <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Discover legitimate ways to make money online while you job search. From freelancing to side businesses - find what works for your situation.
+                From freelancing to side businesses - discover legitimate ways to earn extra income that align with your skills, schedule, and goals.
               </p>
               <p className="text-lg text-white/80 mb-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
                 Get a custom plan based on your unique situation, skills, and goals

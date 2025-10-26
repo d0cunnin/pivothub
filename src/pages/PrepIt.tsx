@@ -20,10 +20,10 @@ const PrepIt = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Job Preparation Services: Resume & Interview Coaching After Layoff | PivotHub</title>
-        <meta name="description" content="Master your job search after a layoff. AI-powered resume optimization, interview coaching, and career advisor support. Land your next role faster with expert guidance." />
-        <meta property="og:title" content="Job Preparation Services After Layoff | PivotHub" />
-        <meta property="og:description" content="75% of users land interviews within 30 days using our AI resume optimization and interview coaching." />
+        <title>Job Preparation Services: Resume & Interview Coaching | PivotHub</title>
+        <meta name="description" content="Prepare for your next employment opportunity with AI-powered resume optimization, interview coaching, and career advisor support. Get expert guidance for career success." />
+        <meta property="og:title" content="Job Preparation Services | PivotHub" />
+        <meta property="og:description" content="Get expert career coaching with AI-powered resume optimization and interview preparation." />
         <link rel="canonical" href="https://pivothub.lovable.app/prepit" />
       </Helmet>
       
@@ -53,13 +53,10 @@ const PrepIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">PREP IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Get Job-Ready After a Layoff
+              Prepare for Your Next Employment Opportunity
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              75% of users land interviews within 30 days using our AI resume optimization and interview coaching
-            </p>
-            <p className="text-lg text-white/80 mb-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              Turn your job loss into a career upgrade
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Polish your resume, master interviews, and get personalized career guidance with our AI-powered coaching tools
             </p>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
