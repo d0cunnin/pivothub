@@ -29,10 +29,10 @@ export default function About() {
               <span className="text-3xl font-bold text-white tracking-wider">ABOUT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Turning vision into movement
+              Our Story + Visionary
             </h1>
           <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
-            Empowering careers and transforming lives through innovation, mentorship, and opportunity
+            A Safe Place to Land and a Plan to Move Forward
           </p>
           </div>
         </div>
