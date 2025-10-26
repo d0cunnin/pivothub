@@ -36,7 +36,7 @@ const ScheduleIt = () => {
               Build Your Life Schedule
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              A schedule built around your life, not one that ignores it. Create realistic time blocks within your actual available hours—no aspirational 5am routines unless that's actually when you're free.
+              A schedule built around your life, not one that ignores it.
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Button 

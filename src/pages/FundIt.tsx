@@ -371,7 +371,7 @@ const FundIt = () => {
               Access grant funding
             </h1>
           <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
-            Generate professional grant proposals and letters of intent with AI assistance
+            Get Help with Your Next Grant Funding Opportunity
           </p>
           </div>
         </div>

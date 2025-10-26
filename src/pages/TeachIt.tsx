@@ -32,7 +32,7 @@ const TeachIt = () => {
               Monetize your knowledge
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              Transform your expertise into engaging webinars and online courses. Turn your knowledge into income by teaching others what you know best.
+              Turn your knowledge into income by teaching others what you know best.
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Button 
