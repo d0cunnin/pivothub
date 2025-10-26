@@ -8,7 +8,7 @@ const ScheduleIt = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
-        <title>Schedule It - Build Your Work Schedule | PivotHub</title>
+        <title>Schedule It - Build Your Life Schedule | PivotHub</title>
         <meta name="description" content="Create a realistic weekly schedule that fits your actual life commitments, energy patterns, and business goals." />
       </Helmet>
       
@@ -33,7 +33,7 @@ const ScheduleIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">SCHEDULE IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Build Your Work Schedule
+              Build Your Life Schedule
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               A schedule built around your life, not one that ignores it. Create realistic time blocks within your actual available hours—no aspirational 5am routines unless that's actually when you're free.
