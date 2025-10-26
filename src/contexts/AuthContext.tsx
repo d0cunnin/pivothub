@@ -105,9 +105,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const checkAdminStatus = async () => {
     if (!user) {
+      console.log('[AuthContext] No user, setting isAdmin to false');
       setIsAdmin(false);
       return;
     }
+
+    console.log('[AuthContext] Checking admin status for user:', user.id, user.email);
 
     try {
       const { data, error } = await supabase
@@ -118,14 +121,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .maybeSingle();
 
       if (error) {
-        console.error('Error checking admin status:', error);
+        console.error('[AuthContext] Error checking admin status:', error);
         setIsAdmin(false);
         return;
       }
 
-      setIsAdmin(!!data);
+      const isUserAdmin = !!data;
+      console.log('[AuthContext] Admin check result:', isUserAdmin, 'data:', data);
+      setIsAdmin(isUserAdmin);
     } catch (error) {
-      console.error('Error in admin check:', error);
+      console.error('[AuthContext] Error in admin check:', error);
       setIsAdmin(false);
     }
   };

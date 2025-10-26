@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 
 interface AdminGuardProps {
@@ -9,47 +8,25 @@ interface AdminGuardProps {
 }
 
 export const AdminGuard = ({ children }: AdminGuardProps) => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const checkAdminRole = async () => {
-      if (authLoading) return;
+    if (authLoading) return;
 
-      if (!user) {
-        navigate("/auth");
-        return;
-      }
+    if (!user) {
+      console.log('[AdminGuard] No user, redirecting to auth');
+      navigate("/auth");
+      return;
+    }
 
-      try {
-        const { data, error } = await supabase.functions.invoke('check-admin-role');
-
-        if (error) {
-          console.error("Error checking admin role:", error);
-          setIsAdmin(false);
-        } else {
-          setIsAdmin(data?.isAdmin === true);
-        }
-      } catch (error) {
-        console.error("Error in admin check:", error);
-        setIsAdmin(false);
-      } finally {
-        setChecking(false);
-      }
-    };
-
-    checkAdminRole();
-  }, [user, authLoading, navigate]);
-
-  useEffect(() => {
-    if (!checking && isAdmin === false) {
+    if (!isAdmin) {
+      console.log('[AdminGuard] User is not admin, redirecting to home');
       navigate("/");
     }
-  }, [checking, isAdmin, navigate]);
+  }, [user, authLoading, isAdmin, navigate]);
 
-  if (authLoading || checking) {
+  if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -57,7 +34,7 @@ export const AdminGuard = ({ children }: AdminGuardProps) => {
     );
   }
 
-  if (!isAdmin) {
+  if (!user || !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
         <div className="max-w-md w-full bg-card border border-border rounded-lg p-6 text-center space-y-4">

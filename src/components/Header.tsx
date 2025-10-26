@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Menu, X, ChevronDown, User, LogOut } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { TrialBanner } from '@/components/TrialBanner';
@@ -11,6 +11,16 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut, isAdmin, subscribed, subscriptionTier, subscriptionEnd } = useAuth();
+
+  useEffect(() => {
+    console.log('[Header] Auth state changed:', { 
+      hasUser: !!user, 
+      userEmail: user?.email,
+      isAdmin, 
+      subscribed, 
+      subscriptionTier 
+    });
+  }, [user, isAdmin, subscribed, subscriptionTier]);
 
   const handleGetStarted = () => {
     navigate('/');
