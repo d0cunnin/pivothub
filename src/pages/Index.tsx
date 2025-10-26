@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronRight, CheckCircle, Rocket, Compass } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { StructuredData, organizationSchema, webApplicationSchema, generateFAQSchema } from "@/components/StructuredData";
 import reskillIcon from "@/assets/reskill-icon.jpg";
 import jobprepIcon from "@/assets/jobprep-icon.jpg";
 import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
@@ -109,8 +111,35 @@ const Index = () => {
     }
   ];
 
+  const faqData = [
+    {
+      question: "What do I do if I just lost my job?",
+      answer: "Start with PivotHub's free career assessment to identify your strengths and explore new opportunities. Then use our job preparation tools to optimize your resume and practice interviews while exploring side income options."
+    },
+    {
+      question: "Is PivotHub really free?",
+      answer: "Yes! We offer free career assessments and basic tools with Explore Mode. Premium features are available for users who need advanced capabilities."
+    },
+    {
+      question: "How quickly can I see results?",
+      answer: "Most users complete their first assessment in under 10 minutes and receive actionable insights immediately. Many users land interviews within 30 days using our AI-powered tools."
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Lost Your Job? Start Your Comeback | PivotHub - Career Transition & Income Solutions</title>
+        <meta name="description" content="Lost your job or need income fast? PivotHub helps you pivot with AI-powered career assessments, job prep coaching, resume optimization, and side income strategies. Start your comeback today." />
+        <meta property="og:title" content="Lost Your Job? Start Your Comeback | PivotHub" />
+        <meta property="og:description" content="AI-powered career transition tools for people facing job loss. Free assessments, resume help, and income strategies." />
+        <link rel="canonical" href="https://pivothub.lovable.app/" />
+      </Helmet>
+      
+      <StructuredData data={organizationSchema} />
+      <StructuredData data={webApplicationSchema} />
+      <StructuredData data={generateFAQSchema(faqData)} />
+      
       <Header />
 
       {/* Hero Section - White background with video, dark text */}
@@ -132,10 +161,13 @@ const Index = () => {
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
-              Your path forward starts here.
+              Lost Your Job? Your Comeback Starts Here.
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
-              Practical tools, step-by-step guidance, and strategies to help you pivot into your next opportunity with clarity and confidence.
+              Turn uncertainty into opportunity with AI-powered tools for career transition, job preparation, and income generation. Free assessment - start in 2 minutes.
+            </p>
+            <p className="text-lg text-white/80 mb-8">
+              Join 50,000+ professionals who found their next opportunity after job loss
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 

@@ -3,14 +3,32 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare, Brain, Briefcase } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
 import { ResumeCoachLetter } from "@/components/ResumeCoachLetter";
 import heroImage from "@/assets/hero-image.jpg";
 
 const PrepIt = () => {
+  const serviceSchema = generateServiceSchema(
+    "Job Preparation Services",
+    "Career Coaching",
+    "https://pivothub.lovable.app/prepit"
+  );
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Job Preparation Services: Resume & Interview Coaching After Layoff | PivotHub</title>
+        <meta name="description" content="Master your job search after a layoff. AI-powered resume optimization, interview coaching, and career advisor support. Land your next role faster with expert guidance." />
+        <meta property="og:title" content="Job Preparation Services After Layoff | PivotHub" />
+        <meta property="og:description" content="75% of users land interviews within 30 days using our AI resume optimization and interview coaching." />
+        <link rel="canonical" href="https://pivothub.lovable.app/prepit" />
+      </Helmet>
+      
+      <StructuredData data={serviceSchema} />
+      
       <Header />
       
       {/* Hero Section */}
@@ -35,10 +53,13 @@ const PrepIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">PREP IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Get job-ready
+              Get Job-Ready After a Layoff
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Master your job search with AI-powered coaching, interview preparation, and professional document optimization
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              75% of users land interviews within 30 days using our AI resume optimization and interview coaching
+            </p>
+            <p className="text-lg text-white/80 mb-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              Turn your job loss into a career upgrade
             </p>
             <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">

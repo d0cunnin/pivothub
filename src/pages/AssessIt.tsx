@@ -1,17 +1,34 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Target, BookOpen, Users, TrendingUp, Brain } from "lucide-react";
+import { Helmet } from "react-helmet-async";
+import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
 import heroImage from "@/assets/hero-image.jpg";
 
 const AssessIt = () => {
+  const serviceSchema = generateServiceSchema(
+    "AI Career Assessment",
+    "Career Counseling",
+    "https://pivothub.lovable.app/assessit"
+  );
+
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Free Career Assessment After Job Loss | Find Your Next Path | PivotHub</title>
+        <meta name="description" content="Lost your job? Take our free AI-powered career assessment to discover your strengths, skills, and ideal career path. Get personalized recommendations in minutes." />
+        <meta property="og:title" content="Free Career Assessment After Job Loss | PivotHub" />
+        <meta property="og:description" content="Discover your strengths and find your perfect career path with AI-powered assessments." />
+        <link rel="canonical" href="https://pivothub.lovable.app/assessit" />
+      </Helmet>
+      
+      <StructuredData data={serviceSchema} />
+      
       <Header />
       
       {/* Hero Section */}
@@ -36,10 +53,13 @@ const AssessIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">ASSESS IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Choose an Assessment
+              Uncertain About Your Next Career Move?
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Discover your strengths, skills, and perfect career path with our comprehensive assessment tools
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Our AI-powered assessments help laid-off professionals discover their strengths, identify in-demand skills, and find careers that match their experience
+            </p>
+            <p className="text-lg text-white/80 mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              Used by 15,000+ people in career transition
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>

@@ -5,6 +5,8 @@ import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Helmet } from "react-helmet-async";
+import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -22,6 +24,12 @@ export default function SideIncomeBlueprint() {
   const [step, setStep] = useState<'intro' | 'assessment' | 'report'>('intro');
   const [assessmentId, setAssessmentId] = useState<string>("");
   const [loading, setLoading] = useState(false);
+
+  const serviceSchema = generateServiceSchema(
+    "Side Income Assessment",
+    "Financial Counseling",
+    "https://pivothub.lovable.app/earnit"
+  );
 
   const handleAssessmentComplete = useCallback(async (assessmentData: any) => {
     if (!user) {
@@ -98,6 +106,10 @@ export default function SideIncomeBlueprint() {
   if (step === 'report') {
     return (
       <div className="min-h-screen bg-background">
+        <Helmet>
+          <title>Your Side Income Blueprint | PivotHub</title>
+          <meta name="description" content="Your personalized side income strategy and action plan." />
+        </Helmet>
         <Header />
         <SideIncomeReport assessmentId={assessmentId} />
         <Footer />
@@ -108,6 +120,10 @@ export default function SideIncomeBlueprint() {
   if (step === 'assessment') {
     return (
       <div className="min-h-screen bg-background">
+        <Helmet>
+          <title>Side Income Assessment | PivotHub</title>
+          <meta name="description" content="Take our assessment to discover personalized side income opportunities." />
+        </Helmet>
         <Header />
         <div className="container mx-auto px-4 py-8">
           <SideIncomeAssessment 
@@ -122,6 +138,16 @@ export default function SideIncomeBlueprint() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Helmet>
+        <title>Make Money Online Fast: Side Income Ideas After Job Loss | PivotHub</title>
+        <meta name="description" content="Need income now? Discover legitimate side income opportunities, freelance work, and online business ideas. Take our assessment to find the best income strategy for you." />
+        <meta property="og:title" content="Make Money Online: Side Income After Job Loss | PivotHub" />
+        <meta property="og:description" content="Discover personalized side income opportunities that match your skills and schedule." />
+        <link rel="canonical" href="https://pivothub.lovable.app/earnit" />
+      </Helmet>
+      
+      <StructuredData data={serviceSchema} />
+      
       <Header />
       
       {/* Hero Section */}
@@ -144,11 +170,14 @@ export default function SideIncomeBlueprint() {
               <span className="text-3xl font-bold text-white tracking-wider">EARN IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Create income pathways
+              Need Income Now? We've Got You Covered.
             </h1>
             <div className="text-center max-w-4xl mx-auto">
-              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Get a custom plan to build sustainable side income based on your unique situation, skills, and goals
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Discover legitimate ways to make money online while you job search. From freelancing to side businesses - find what works for your situation.
+              </p>
+              <p className="text-lg text-white/80 mb-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                Get a custom plan based on your unique situation, skills, and goals
               </p>
             </div>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
