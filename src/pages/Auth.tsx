@@ -10,6 +10,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, Eye, EyeOff, Check, X } from "lucide-react";
+import { z } from 'zod';
+
+// Password validation schema
+const passwordSchema = z.string()
+  .min(10, "Password must be at least 10 characters")
+  .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Must contain at least one number")
+  .regex(/[^A-Za-z0-9]/, "Must contain at least one special character");
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -33,28 +42,6 @@ const Auth = () => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // Check if this is a new Google OAuth user without signup intent
-        const signupIntent = localStorage.getItem('google_signup_intent');
-        const userMetadata = session.user.user_metadata;
-        
-        // Check if user was created very recently (within last 10 seconds)
-        const userCreatedAt = new Date(session.user.created_at).getTime();
-        const isNewUser = Date.now() - userCreatedAt < 10000;
-        
-        // If user is brand new and came from sign-in (not sign-up), deny access
-        if (isNewUser && !signupIntent && userMetadata.iss === 'https://accounts.google.com') {
-          await supabase.auth.signOut();
-          localStorage.removeItem('google_signup_intent');
-          toast({
-            title: "Sign Up Required",
-            description: "Please sign up before signing in with Google.",
-            variant: "destructive",
-          });
-          return;
-        }
-        
-        // Clear signup intent flag
-        localStorage.removeItem('google_signup_intent');
         navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
       }
     };
@@ -62,7 +49,7 @@ const Auth = () => {
     
     // Track form start time for bot detection
     setFormStartTime(Date.now());
-  }, [navigate, redirectPath, toast]);
+  }, [navigate, redirectPath]);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,9 +88,21 @@ const Auth = () => {
         return;
       }
 
+      // Validate password complexity
+      const passwordValidation = passwordSchema.safeParse(password);
+      if (!passwordValidation.success) {
+        toast({
+          title: "Password requirements not met",
+          description: passwordValidation.error.errors[0].message,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const redirectUrl = redirectPath === '/' 
-        ? `${window.location.origin}/`
-        : `${window.location.origin}/${redirectPath}`;
+        ? `${window.location.origin}/auth/callback`
+        : `${window.location.origin}/auth/callback?redirect=${redirectPath}`;
         
       const { error } = await supabase.auth.signUp({
         email,
@@ -139,21 +138,16 @@ const Auth = () => {
   const handleGoogleSignIn = async (isSignUp: boolean = false) => {
     setLoading(true);
     try {
-      // Store signup intent
-      if (isSignUp) {
-        localStorage.setItem('google_signup_intent', 'true');
-      } else {
-        localStorage.removeItem('google_signup_intent');
-      }
-      
-      const redirectUrl = redirectPath === '/' 
-        ? `${window.location.origin}/`
-        : `${window.location.origin}/${redirectPath}`;
+      const redirectUrl = `${window.location.origin}/auth/callback`;
         
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: redirectUrl
+          redirectTo: redirectUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
         }
       });
 
@@ -180,18 +174,67 @@ const Auth = () => {
     setLoading(true);
 
     try {
+      // Check if account is locked BEFORE attempting login
+      const { data: lockoutCheck } = await supabase
+        .rpc('check_account_lockout', { p_email: email });
+      
+      if (lockoutCheck && typeof lockoutCheck === 'object' && 'locked' in lockoutCheck && lockoutCheck.locked) {
+        const lockData = lockoutCheck as { locked: boolean; locked_until: string };
+        const lockedUntil = new Date(lockData.locked_until);
+        const minutesRemaining = Math.ceil(
+          (lockedUntil.getTime() - Date.now()) / 60000
+        );
+        
+        toast({
+          title: "Account Locked",
+          description: `Too many failed attempts. Please try again in ${minutesRemaining} minutes.`,
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
+        // Record failed attempt
+        await supabase.rpc('record_failed_login', {
+          p_email: email,
+          p_ip: '0.0.0.0', // Client IP not accessible from browser
+          p_user_agent: navigator.userAgent
         });
+        
+        // Check remaining attempts
+        const { data: newCheck } = await supabase
+          .rpc('check_account_lockout', { p_email: email });
+        
+        if (newCheck && typeof newCheck === 'object' && 'locked' in newCheck && newCheck.locked) {
+          toast({
+            title: "Account Locked",
+            description: "Too many failed attempts. Account locked for 30 minutes.",
+            variant: "destructive",
+          });
+        } else if (newCheck && typeof newCheck === 'object' && 'remaining_attempts' in newCheck) {
+          const attemptsData = newCheck as { remaining_attempts: number };
+          toast({
+            title: "Invalid Credentials",
+            description: `${attemptsData.remaining_attempts} attempts remaining before lockout.`,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
       } else {
+        // Success - clear any failed attempts
+        await supabase.rpc('clear_account_lockout', { p_email: email });
+        
         toast({
           title: "Success",
           description: "Welcome back!",
@@ -405,6 +448,49 @@ const Auth = () => {
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
+                  
+                  {/* Password Strength Indicator */}
+                  {password && (
+                    <div className="mt-2 space-y-2">
+                      <div className="flex gap-1">
+                        {[1,2,3,4,5].map(i => {
+                          const checks = {
+                            length: password.length >= 10,
+                            uppercase: /[A-Z]/.test(password),
+                            lowercase: /[a-z]/.test(password),
+                            number: /[0-9]/.test(password),
+                            special: /[^A-Za-z0-9]/.test(password)
+                          };
+                          const strength = Object.values(checks).filter(Boolean).length;
+                          return (
+                            <div 
+                              key={i} 
+                              className={`h-1 flex-1 rounded transition-colors ${
+                                i <= strength ? 'bg-primary' : 'bg-muted'
+                              }`} 
+                            />
+                          );
+                        })}
+                      </div>
+                      <ul className="text-xs space-y-1">
+                        <li className={password.length >= 10 ? 'text-primary' : 'text-muted-foreground'}>
+                          {password.length >= 10 ? '✓' : '○'} At least 10 characters
+                        </li>
+                        <li className={/[A-Z]/.test(password) ? 'text-primary' : 'text-muted-foreground'}>
+                          {/[A-Z]/.test(password) ? '✓' : '○'} One uppercase letter
+                        </li>
+                        <li className={/[a-z]/.test(password) ? 'text-primary' : 'text-muted-foreground'}>
+                          {/[a-z]/.test(password) ? '✓' : '○'} One lowercase letter
+                        </li>
+                        <li className={/[0-9]/.test(password) ? 'text-primary' : 'text-muted-foreground'}>
+                          {/[0-9]/.test(password) ? '✓' : '○'} One number
+                        </li>
+                        <li className={/[^A-Za-z0-9]/.test(password) ? 'text-primary' : 'text-muted-foreground'}>
+                          {/[^A-Za-z0-9]/.test(password) ? '✓' : '○'} One special character
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
                 <Button type="submit" className="w-full" disabled={loading || !emailsMatch}>
                   {loading ? "Creating Account..." : "Create Account"}

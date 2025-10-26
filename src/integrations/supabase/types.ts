@@ -227,6 +227,54 @@ export type Database = {
         }
         Relationships: []
       }
+      auth_failed_attempts: {
+        Row: {
+          attempted_at: string | null
+          email: string
+          id: string
+          ip_address: unknown
+          user_agent: string | null
+        }
+        Insert: {
+          attempted_at?: string | null
+          email: string
+          id?: string
+          ip_address: unknown
+          user_agent?: string | null
+        }
+        Update: {
+          attempted_at?: string | null
+          email?: string
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      auth_lockouts: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          locked_until: string
+          reason: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          locked_until: string
+          reason?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          locked_until?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
       checkout_sessions: {
         Row: {
           created_at: string
@@ -590,6 +638,33 @@ export type Database = {
           },
         ]
       }
+      storage_access_audit: {
+        Row: {
+          access_granted: boolean
+          attempted_at: string | null
+          bucket_id: string
+          id: string
+          object_name: string
+          user_id: string
+        }
+        Insert: {
+          access_granted: boolean
+          attempted_at?: string | null
+          bucket_id: string
+          id?: string
+          object_name: string
+          user_id: string
+        }
+        Update: {
+          access_granted?: boolean
+          attempted_at?: string | null
+          bucket_id?: string
+          id?: string
+          object_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscribers_public: {
         Row: {
           abuse_flags: number | null
@@ -916,6 +991,15 @@ export type Database = {
         }
         Relationships: []
       }
+      v_failed_login_monitoring: {
+        Row: {
+          attempt_count: number | null
+          email: string | null
+          ip_addresses: string[] | null
+          last_attempt: string | null
+        }
+        Relationships: []
+      }
       v_public_pricing: {
         Row: {
           credit_limit: number | null
@@ -973,6 +1057,17 @@ export type Database = {
         }
         Relationships: []
       }
+      v_storage_access_monitoring: {
+        Row: {
+          access_attempts: number | null
+          bucket_id: string | null
+          denied_count: number | null
+          granted_count: number | null
+          last_attempt: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
       v_subscribers_masked: {
         Row: {
           created_at: string | null
@@ -1005,8 +1100,27 @@ export type Database = {
           },
         ]
       }
+      v_suspicious_credit_usage: {
+        Row: {
+          request_count: number | null
+          tool_name: string | null
+          total_cost: number | null
+          total_credits: number | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
+      v_webhook_failures: {
+        Row: {
+          event_type: string | null
+          failure_count: number | null
+          last_failure: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      check_account_lockout: { Args: { p_email: string }; Returns: Json }
       check_admin_rate_limit: {
         Args: {
           p_action_type: string
@@ -1027,6 +1141,7 @@ export type Database = {
           }
         | { Args: { p_user_id: string }; Returns: Json }
       cleanup_expired_contexts: { Args: never; Returns: undefined }
+      clear_account_lockout: { Args: { p_email: string }; Returns: undefined }
       floor_to_window: {
         Args: { seconds: number; ts: string }
         Returns: string
@@ -1067,6 +1182,10 @@ export type Database = {
             Returns: boolean
           }
       mask_email: { Args: { p_email: string }; Returns: string }
+      record_failed_login: {
+        Args: { p_email: string; p_ip: unknown; p_user_agent?: string }
+        Returns: undefined
+      }
       reset_monthly_ai_requests: { Args: never; Returns: undefined }
       throttle_ip: {
         Args: {

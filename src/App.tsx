@@ -34,6 +34,7 @@ import Dashboard from "./pages/Dashboard";
 import ScheduleIt from "./pages/ScheduleIt";
 import HostIt from "./pages/HostIt";
 import BeforeYouStart from "./pages/BeforeYouStart";
+import AuthCallback from "./pages/AuthCallback";
 
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -51,6 +52,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/teachit" element={<TeachIt />} />

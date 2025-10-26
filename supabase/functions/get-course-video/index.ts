@@ -12,11 +12,35 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Get authorization header to extract user
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Supabase automatically validates JWT when verify_jwt = true
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+    
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
+
+    // Get authenticated user
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Parse request body
     const { videoPath } = await req.json();
@@ -31,13 +55,33 @@ Deno.serve(async (req) => {
       );
     }
 
+    // Log access attempt
+    await supabaseAdmin
+      .from('storage_access_audit')
+      .insert({
+        user_id: user.id,
+        bucket_id: 'course-media',
+        object_name: videoPath,
+        access_granted: true
+      });
+
     // Generate signed URL for the video (expires in 1 hour)
-    const { data: signedUrl, error: urlError } = await supabase.storage
+    const { data: signedUrl, error: urlError } = await supabaseAdmin.storage
       .from('course-media')
       .createSignedUrl(videoPath, 3600); // 1 hour expiry
 
     if (urlError) {
       console.error('Error creating signed URL:', urlError);
+      
+      // Update audit log
+      await supabaseAdmin
+        .from('storage_access_audit')
+        .update({ access_granted: false })
+        .eq('user_id', user.id)
+        .eq('object_name', videoPath)
+        .order('attempted_at', { ascending: false })
+        .limit(1);
+      
       return new Response(
         JSON.stringify({ error: 'Failed to generate video URL' }),
         { 
