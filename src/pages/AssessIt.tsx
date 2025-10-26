@@ -55,11 +55,8 @@ const AssessIt = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Uncertain About Your Next Career Move?
             </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Our AI-powered assessments help laid-off professionals discover their strengths, identify in-demand skills, and find careers that match their experience
-            </p>
-            <p className="text-lg text-white/80 mb-8 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-              Used by 15,000+ people in career transition
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Our AI-powered assessments help professionals discover their strengths, identify in-demand skills, and find careers that match their experience
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
