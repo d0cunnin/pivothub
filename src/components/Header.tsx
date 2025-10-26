@@ -39,22 +39,16 @@ export const Header = () => {
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-8">
             <div className="flex items-center space-x-6 xl:space-x-8 text-sm">
               <Link
-                to="/before-you-start" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/before-you-start' ? 'text-primary font-medium' : ''}`}
-              >
-                Before You Start
-              </Link>
-              <Link
                 to="/about" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
               >
                 About
               </Link>
-              <Link 
-                to="/earnit" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/earnit' ? 'text-primary font-medium' : ''}`}
+              <Link
+                to="/before-you-start" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/before-you-start' ? 'text-primary font-medium' : ''}`}
               >
-                Earn It
+                Before You Start
               </Link>
               <Link 
                 to="/pricing" 
@@ -93,6 +87,12 @@ export const Header = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              <Link 
+                to="/earnit" 
+                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/earnit' ? 'text-primary font-medium' : ''}`}
+              >
+                Earn It
+              </Link>
               <Link 
                 to="/buildit" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/buildit' ? 'text-primary font-medium' : ''}`}
@@ -231,25 +231,18 @@ export const Header = () => {
           <div className="lg:hidden mt-4 py-4 border-t border-border">
             <nav className="flex flex-col space-y-4">
               <Link
-                to="/before-you-start" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/before-you-start' ? 'text-primary font-medium' : ''}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Before You Start
-              </Link>
-              <Link
                 to="/about" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
-              <Link 
-                to="/earnit" 
-                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/earnit' ? 'text-primary font-medium' : ''}`}
+              <Link
+                to="/before-you-start" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/before-you-start' ? 'text-primary font-medium' : ''}`}
                 onClick={() => setIsMenuOpen(false)}
               >
-                Earn It
+                Before You Start
               </Link>
               <Link 
                 to="/pricing" 
@@ -288,6 +281,13 @@ export const Header = () => {
                   </Link>
                 </div>
               </div>
+              <Link 
+                to="/earnit" 
+                className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/earnit' ? 'text-primary font-medium' : ''}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Earn It
+              </Link>
               <Link 
                 to="/buildit" 
                 className={`text-foreground hover:text-primary transition-colors ${location.pathname === '/buildit' ? 'text-primary font-medium' : ''}`}
@@ -339,7 +339,7 @@ export const Header = () => {
               >
                 Fund It
               </Link>
-              <div className="flex flex-col space-y-2 pt-4">
+              <div className="flex flex-col space-y-4 pt-4">
                 {user ? (
                   <>
                     <div className="text-sm text-muted-foreground">
