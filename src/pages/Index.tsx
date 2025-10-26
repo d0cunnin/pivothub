@@ -161,13 +161,10 @@ const Index = () => {
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
-              Lost Your Job? Your Comeback Starts Here.
+              Your hub to pivot, grow, and build the future with AI-powered tools
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
-              Turn uncertainty into opportunity with AI-powered tools for career transition, job preparation, and income generation. Free assessment - start in 2 minutes.
-            </p>
-            <p className="text-lg text-white/80 mb-8">
-              Join 50,000+ professionals who found their next opportunity after job loss
+            <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+              Discover the AI-powered tools designed to help you upskill, launch ideas, and unlock new opportunities.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
