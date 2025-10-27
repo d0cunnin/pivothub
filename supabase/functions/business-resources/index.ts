@@ -178,16 +178,122 @@ serve(async (req) => {
       return fallbackResponse();
     }
 
-    // Format the results
-    const resources = formatGooglePlacesResults(allPlaces, location);
+    // Phase 2: Add AI-powered strategic guidance with Gemini 2.5 Flash
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
-    return new Response(
-      JSON.stringify({ resources }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200
+    if (!LOVABLE_API_KEY) {
+      console.warn('Lovable API key missing - returning unenhanced Google Places results');
+      const resources = formatGooglePlacesResults(allPlaces, location);
+      return new Response(
+        JSON.stringify({ resources }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+    }
+
+    // Build AI prompt with business context + Google Places data
+    const aiPrompt = `You are a strategic business resource advisor. Analyze these local resources for a specific entrepreneur.
+
+**Business Profile:**
+- Business Type: ${businessType}
+- Industry: ${industry}
+- Stage: ${stage}
+- Location: ${location}
+- Specific Needs: ${specificNeeds || 'General business support'}
+
+**Available Resources (from Google Places):**
+${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
+  place_id: p.details?.place_id,
+  name: p.details?.name,
+  types: p.details?.types,
+  rating: p.details?.rating,
+  address: p.details?.formatted_address
+})), null, 2)}
+
+**Your Tasks:**
+1. Rank each resource by relevance (1-10 scale) for THIS specific business profile
+2. For EACH resource, write:
+   - **Why Valuable** (2-3 sentences): Explain why this resource matters for their situation
+   - **When to Engage** (1 sentence): Best timing/stage to contact them (e.g., "Ideal for: pre-launch validation phase")
+   - **Questions to Ask** (2-3 questions): Strategic questions they should ask when reaching out
+3. Identify the **TOP 2** resources they should prioritize contacting first
+4. Write a **Strategic Summary** (3-4 sentences): How to leverage these resources for maximum impact
+
+**CRITICAL: Return ONLY valid JSON (no markdown, no code fences):**
+{
+  "rankedResources": [
+    {
+      "place_id": "exact_google_place_id_string",
+      "relevanceScore": 8,
+      "whyValuable": "...",
+      "whenToEngage": "...",
+      "questionsToAsk": ["...", "...", "..."]
+    }
+  ],
+  "topTwoPriority": ["place_id_1", "place_id_2"],
+  "strategicSummary": "..."
+}`;
+
+    try {
+      console.log('Invoking Gemini 2.5 Flash for AI enhancement...');
+      const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            { 
+              role: 'system', 
+              content: 'You are an expert business resource strategist. Always return valid JSON without markdown formatting.' 
+            },
+            { role: 'user', content: aiPrompt }
+          ],
+          max_tokens: 2000
+        })
+      });
+
+      if (!aiResponse.ok) {
+        const errorText = await aiResponse.text();
+        console.error(`AI API error (${aiResponse.status}):`, errorText);
+        throw new Error(`AI API returned ${aiResponse.status}`);
       }
-    );
+
+      const aiData = await aiResponse.json();
+      let aiContent = aiData.choices[0].message.content;
+      
+      // Strip markdown code fences if present
+      aiContent = aiContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      
+      console.log('AI response received, parsing JSON...');
+      const aiInsights = JSON.parse(aiContent);
+      
+      // Merge AI insights with Google Places data
+      const enhancedResources = formatEnhancedResults(
+        allPlaces, 
+        aiInsights, 
+        location, 
+        businessType, 
+        industry, 
+        stage
+      );
+      
+      console.log('Successfully enhanced results with AI insights');
+      return new Response(
+        JSON.stringify({ resources: enhancedResources }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+
+    } catch (aiError) {
+      console.error('AI enhancement failed, falling back to unenhanced Google Places results:', aiError);
+      // Graceful degradation: return Google Places data without AI enhancement
+      const resources = formatGooglePlacesResults(allPlaces, location);
+      return new Response(
+        JSON.stringify({ resources }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+    }
 
   } catch (error) {
     console.error('Error finding business resources:', error);
@@ -251,6 +357,118 @@ function formatGooglePlacesResults(places: any[], location: string) {
     totalResources,
     recommendedFirst: activeCategories[0]?.resources.slice(0, 2).map(r => r.id) || [],
     summary: `Found ${totalResources} verified local business resources in ${location} using Google Places data.`
+  };
+}
+
+function formatEnhancedResults(
+  places: any[], 
+  aiInsights: any, 
+  location: string, 
+  businessType: string, 
+  industry: string, 
+  stage: string
+) {
+  const categories = [
+    {
+      category: "Business Support Centers",
+      description: "Local organizations providing business guidance and support",
+      resources: [] as any[]
+    },
+    {
+      category: "Coworking & Incubators",
+      description: "Workspace and incubation programs for entrepreneurs",
+      resources: [] as any[]
+    },
+    {
+      category: "Mentorship & Education",
+      description: "Business mentoring and entrepreneurship programs",
+      resources: [] as any[]
+    }
+  ];
+
+  // Create lookup map for AI insights by place_id
+  const insightsMap = new Map(
+    aiInsights.rankedResources.map((r: any) => [r.place_id, r])
+  );
+
+  places.forEach((place, index) => {
+    const details = place.details;
+    const placeId = details?.place_id;
+    const query = place.searchKeyword?.toLowerCase() || place.name.toLowerCase();
+    
+    // Get AI insights for this place
+    const aiData = insightsMap.get(placeId) || {};
+    
+    // Determine category
+    let targetCategory = categories[0]; // Default: Business Support Centers
+    if (query.includes('cowork') || query.includes('incubat') || query.includes('accelerator')) {
+      targetCategory = categories[1];
+    } else if (query.includes('score') || query.includes('mentor') || query.includes('chamber')) {
+      targetCategory = categories[2];
+    }
+
+    const resource = {
+      id: placeId || `place_${index + 1}`,
+      name: details?.name || place.name,
+      type: place.searchKeyword?.includes('SBDC') ? 'Business Development Center' :
+            place.searchKeyword?.includes('SCORE') ? 'Business Mentoring' :
+            place.searchKeyword?.includes('incubat') ? 'Incubator' :
+            place.searchKeyword?.includes('cowork') ? 'Coworking Space' :
+            'Business Support',
+      
+      // Use AI-enhanced description if available, otherwise use Google data
+      description: aiData.whyValuable || 
+                   `${details?.name || place.name} provides business support and resources for entrepreneurs in ${location}.`,
+      
+      url: details?.website || '',
+      cost: 'Contact for details',
+      rating: details?.rating || 0,
+      
+      pros: ['Real local organization', 'Professional support', 'Verified by Google'],
+      cons: ['Contact for availability'],
+      
+      bestFor: aiData.whenToEngage || 'Local entrepreneurs and small businesses',
+      location: details?.formatted_address || location,
+      contactInfo: details?.formatted_phone_number || 'Contact via website',
+      
+      // AI-enhanced fields
+      relevanceScore: aiData.relevanceScore || 5,
+      questionsToAsk: aiData.questionsToAsk || [],
+      isTopPick: aiInsights.topTwoPriority?.includes(placeId) || false
+    };
+
+    targetCategory.resources.push(resource);
+  });
+
+  // Sort resources within each category by AI relevance score (highest first)
+  categories.forEach(cat => {
+    cat.resources.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
+  });
+
+  const totalResources = categories.reduce((sum, cat) => sum + cat.resources.length, 0);
+  const activeCategories = categories.filter(cat => cat.resources.length > 0);
+
+  return {
+    categories: activeCategories,
+    totalResources,
+    
+    // Recommended first steps (top 2 AI-prioritized resources)
+    recommendedFirst: activeCategories
+      .flatMap(cat => cat.resources)
+      .filter(r => r.isTopPick)
+      .slice(0, 2)
+      .map(r => r.id),
+    
+    // AI-generated strategic summary
+    summary: aiInsights.strategicSummary || 
+             `Found ${totalResources} verified business resources in ${location}. Connect with local organizations for personalized support.`,
+    
+    // Include business context in response
+    businessContext: {
+      businessType,
+      industry,
+      stage
+    }
   };
 }
 

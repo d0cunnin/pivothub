@@ -34,7 +34,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   
   // MEDIUM COST TOOLS (2 credits) - Non-chatbot tools
   'interview-questions': 2,        // ~1,500 tokens output
-  'business-resources': 2,         // Search + formatting
+  'business-resources': 3,         // Google Places + AI guidance (Gemini Flash)
   'grant-resources': 2,            // Search + formatting
   'name-checker': 2,               // API calls only
   'logo-generator': 2,             // Runware API (not OpenAI)

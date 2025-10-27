@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { MapPin, ExternalLink, Phone, Clock, Star } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { MapPin, ExternalLink, Phone, Clock, Star, ChevronDown, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+
 interface BusinessResource {
   id: string;
   name: string;
@@ -17,6 +20,10 @@ interface BusinessResource {
   hours: string;
   rating: number;
   services: string[];
+  relevanceScore?: number;
+  questionsToAsk?: string[];
+  isTopPick?: boolean;
+  bestFor?: string;
 }
 
 export const BusinessResourceFinder = () => {
@@ -24,6 +31,7 @@ export const BusinessResourceFinder = () => {
   const [resourceType, setResourceType] = useState("all");
   const [isSearching, setIsSearching] = useState(false);
   const [resources, setResources] = useState<BusinessResource[]>([]);
+  const [strategicSummary, setStrategicSummary] = useState<string>("");
 
   const searchResources = async () => {
     console.log("BusinessResourceFinder button clicked!");
@@ -63,22 +71,27 @@ export const BusinessResourceFinder = () => {
       data.resources.categories.forEach((category: any) => {
         category.resources.forEach((resource: any) => {
           transformedResources.push({
-            id: idCounter.toString(),
+            id: resource.id || idCounter.toString(),
             name: resource.name,
             type: category.category,
             description: resource.description,
-            address: `${zipCode} Area`, // Simplified for demo
+            address: resource.location || `${zipCode} Area`,
             phone: resource.contactInfo || '(555) 123-4567',
             website: resource.url,
             hours: 'Mon-Fri 9AM-5PM',
             rating: resource.rating || 4.5,
-            services: resource.pros.slice(0, 4) || ['Business Support']
+            services: resource.pros?.slice(0, 4) || ['Business Support'],
+            relevanceScore: resource.relevanceScore,
+            questionsToAsk: resource.questionsToAsk,
+            isTopPick: resource.isTopPick,
+            bestFor: resource.bestFor
           });
           idCounter++;
         });
       });
 
       setResources(transformedResources.slice(0, 6)); // Limit results
+      setStrategicSummary(data.resources.summary || "");
     } catch (error) {
       console.error('Error finding resources:', error);
       // Fallback to mock resources
@@ -174,26 +187,57 @@ export const BusinessResourceFinder = () => {
 
       {resources.length > 0 && (
         <div className="space-y-4 mt-6">
+          {strategicSummary && (
+            <Card className="border-primary/20 bg-primary/5">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-2">
+                  <Sparkles className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-2">AI Strategic Summary</h4>
+                    <p className="text-sm text-muted-foreground">{strategicSummary}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
           <h3 className="text-lg font-semibold">Local Business Resources</h3>
           {resources.map((resource) => (
             <Card key={resource.id} className="border">
               <CardContent className="p-4">
                 <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h4 className="font-semibold text-foreground">{resource.name}</h4>
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
-                      {resource.type}
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <div>
+                      <h4 className="font-semibold text-foreground">{resource.name}</h4>
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded">
+                        {resource.type}
+                      </span>
+                    </div>
+                    {resource.isTopPick && (
+                      <Badge variant="default" className="ml-2">
+                        ⭐ Top Pick
+                      </Badge>
+                    )}
                   </div>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm">{resource.rating}</span>
-                  </div>
+                  {resource.rating > 0 && (
+                    <div className="flex items-center gap-1">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      <span className="text-sm">{resource.rating}</span>
+                    </div>
+                  )}
                 </div>
                 
                 <p className="text-sm text-muted-foreground mb-3">{resource.description}</p>
                 
-                <div className="space-y-2 text-xs">
+                {resource.bestFor && (
+                  <div className="mb-3 p-2 bg-muted/50 rounded">
+                    <p className="text-xs font-medium text-foreground">
+                      <span className="text-primary">Best For:</span> {resource.bestFor}
+                    </p>
+                  </div>
+                )}
+                
+                <div className="space-y-2 text-xs mb-3">
                   <div className="flex items-center gap-2">
                     <MapPin className="h-3 w-3" />
                     <span>{resource.address}</span>
@@ -208,7 +252,7 @@ export const BusinessResourceFinder = () => {
                   </div>
                 </div>
                 
-                <div className="flex flex-wrap gap-1 mt-3 mb-3">
+                <div className="flex flex-wrap gap-1 mb-3">
                   {resource.services.map((service, index) => (
                     <span key={index} className="text-xs bg-muted px-2 py-1 rounded">
                       {service}
@@ -216,12 +260,39 @@ export const BusinessResourceFinder = () => {
                   ))}
                 </div>
                 
+                {resource.questionsToAsk && resource.questionsToAsk.length > 0 && (
+                  <Collapsible className="mb-3">
+                    <CollapsibleTrigger className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+                      <span>💡 Strategic Questions to Ask</span>
+                      <ChevronDown className="h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="mt-2">
+                      <ul className="space-y-1 text-sm text-muted-foreground pl-4">
+                        {resource.questionsToAsk.map((question, idx) => (
+                          <li key={idx} className="list-disc">{question}</li>
+                        ))}
+                      </ul>
+                    </CollapsibleContent>
+                  </Collapsible>
+                )}
+                
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <ExternalLink className="h-3 w-3 mr-1" />
-                    Visit Website
-                  </Button>
-                  <Button variant="outline" size="sm">
+                  {resource.website && (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1"
+                      onClick={() => window.open(resource.website, '_blank')}
+                    >
+                      <ExternalLink className="h-3 w-3 mr-1" />
+                      Visit Website
+                    </Button>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => window.location.href = `tel:${resource.phone}`}
+                  >
                     <Phone className="h-3 w-3 mr-1" />
                     Call
                   </Button>
