@@ -24,7 +24,6 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'resume-analyzer': 2,            // ~3,000 tokens with feedback
   'interview-feedback': 2,         // ~3,000 tokens with analysis
   'business-foundation': 2,        // ~3,000 tokens output
-  'grant-finder': 2,               // API calls + formatting
   'schedule-it': 2,                // ~3,000 tokens output
   'host-it': 4,                    // ~8,000 tokens output
   
