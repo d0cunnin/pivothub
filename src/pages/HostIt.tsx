@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-image.jpg";
 import { Helmet } from "react-helmet-async";
+import { HostItWizard } from "@/components/HostItWizard";
 
 const HostIt = () => {
   return (
@@ -52,16 +53,11 @@ const HostIt = () => {
         </div>
       </section>
 
-      {/* Tool Section - Placeholder */}
+      {/* Event Wizard */}
       <section id="event-form" className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4">Event Planner Coming Soon</h2>
-            <p className="text-muted-foreground mb-8">
-              This tool will guide you through planning in-person, virtual, or hybrid events with logistics, 
-              promotion, speakers, sponsors, and post-event strategy. Cost: 4 credits per generation.
-            </p>
-            {/* HostIt component will go here */}
+          <div className="max-w-4xl mx-auto">
+            <HostItWizard />
           </div>
         </div>
       </section>
