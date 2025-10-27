@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Helmet } from 'react-helmet-async';
+import { ToolGuard } from "@/components/ToolGuard";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -255,7 +256,9 @@ const BuildIt = () => {
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <BusinessResourceFinder />
+              <ToolGuard toolName="business-resources">
+                <BusinessResourceFinder />
+              </ToolGuard>
             </div>
           </div>
         </div>

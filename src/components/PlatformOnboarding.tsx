@@ -3,7 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, ArrowRight, ArrowLeft, Sparkles } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { CheckCircle2, ArrowRight, ArrowLeft, Sparkles, Lightbulb } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -200,6 +201,16 @@ export const PlatformOnboarding = ({ open, onOpenChange }: PlatformOnboardingPro
             ))}
           </div>
 
+          {/* Educational Callout for Last Phase */}
+          {isLastPhase && (
+            <Alert className="bg-primary/5 border-primary/20">
+              <Lightbulb className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-sm">
+                <strong>Not sure where to start?</strong> Our Getting Started Guide will help you choose the right path based on your goals and experience level.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {/* Navigation */}
           <div className="flex justify-between items-center pt-4 border-t">
             <Button
@@ -216,10 +227,18 @@ export const PlatformOnboarding = ({ open, onOpenChange }: PlatformOnboardingPro
             </span>
 
             {isLastPhase ? (
-              <Button onClick={handleComplete}>
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                Get Started
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={handleComplete}>
+                  Skip to Dashboard
+                </Button>
+                <Button onClick={() => {
+                  handleComplete();
+                  navigate('/before-you-start');
+                }}>
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                  Read Getting Started Guide
+                </Button>
+              </div>
             ) : (
               <Button onClick={() => setCurrentPhase(currentPhase + 1)}>
                 Next
