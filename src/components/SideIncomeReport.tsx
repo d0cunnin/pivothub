@@ -6,6 +6,7 @@ import { Loader2, Download, ArrowRight, DollarSign, Clock, TrendingUp } from "lu
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { generateSideIncomeReportPDF } from "@/lib/pdf-generator";
 
 interface SideIncomeReportProps {
   assessmentId: string;
@@ -81,16 +82,22 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
   };
 
   const downloadReport = () => {
-    const reportText = JSON.stringify(report, null, 2);
-    const blob = new Blob([reportText], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'earnit-blueprint.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      const pdf = generateSideIncomeReportPDF(report);
+      pdf.save(`pivothub-side-income-blueprint-${new Date().toISOString().split('T')[0]}.pdf`);
+      
+      toast({
+        title: "PDF Downloaded",
+        description: "Your blueprint has been saved as a PDF",
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   if (loading || generating) {
@@ -138,7 +145,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
         </div>
         <Button onClick={downloadReport} variant="outline">
           <Download className="mr-2 h-4 w-4" />
-          Download
+          Download PDF
         </Button>
       </div>
 
