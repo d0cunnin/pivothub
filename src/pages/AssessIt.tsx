@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Target, BookOpen, Users, TrendingUp, Brain } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
+import { ToolGuard } from "@/components/ToolGuard";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
@@ -60,9 +61,15 @@ const AssessIt = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <CareerAssessment />
-              <SkillsAssessment />
-              <PersonalityAssessment />
+              <ToolGuard toolName="career-assessment">
+                <CareerAssessment />
+              </ToolGuard>
+              <ToolGuard toolName="skills-assessment">
+                <SkillsAssessment />
+              </ToolGuard>
+              <ToolGuard toolName="personality-assessment">
+                <PersonalityAssessment />
+              </ToolGuard>
             </div>
           </div>
         </div>
@@ -90,7 +97,9 @@ const AssessIt = () => {
                 Discover your ideal career path based on your interests, values, and goals. Get personalized recommendations for roles that align with your aspirations.
               </p>
               <div className="mt-auto">
-                <CareerAssessment />
+                <ToolGuard toolName="career-assessment">
+                  <CareerAssessment />
+                </ToolGuard>
               </div>
             </Card>
 
@@ -103,7 +112,9 @@ const AssessIt = () => {
                 Evaluate your current skill level and identify areas for improvement. Get a detailed roadmap for skill development and certification.
               </p>
               <div className="mt-auto">
-                <SkillsAssessment />
+                <ToolGuard toolName="skills-assessment">
+                  <SkillsAssessment />
+                </ToolGuard>
               </div>
             </Card>
 
@@ -116,7 +127,9 @@ const AssessIt = () => {
                 Understand your personality traits and work style preferences. Learn how to leverage your natural strengths in your career.
               </p>
               <div className="mt-auto">
-                <PersonalityAssessment />
+                <ToolGuard toolName="personality-assessment">
+                  <PersonalityAssessment />
+                </ToolGuard>
               </div>
             </Card>
           </div>

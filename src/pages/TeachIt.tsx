@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ToolGuard } from "@/components/ToolGuard";
 import TeachingMaterialsGenerator from "@/components/TeachingMaterialsGenerator";
 import heroImage from "@/assets/hero-image.jpg";
 
@@ -147,7 +148,9 @@ const TeachIt = () => {
           </div>
           
           <div className="animate-fade-in-scale">
-            <TeachingMaterialsGenerator />
+            <ToolGuard toolName="teaching-materials">
+              <TeachingMaterialsGenerator />
+            </ToolGuard>
           </div>
         </div>
       </section>

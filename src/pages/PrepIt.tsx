@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare, Brain, Briefcase } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
+import { ToolGuard } from "@/components/ToolGuard";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
 import { ResumeCoachLetter } from "@/components/ResumeCoachLetter";
@@ -160,7 +161,9 @@ const PrepIt = () => {
             </div>
           </div>
           
-          <CareerAdvisorChatbot />
+          <ToolGuard toolName="career-advisor">
+            <CareerAdvisorChatbot />
+          </ToolGuard>
         </div>
       </section>
 
@@ -210,7 +213,9 @@ const PrepIt = () => {
             </div>
           </div>
           
-          <InterviewQuestionsCoach />
+          <ToolGuard toolName="interview-questions">
+            <InterviewQuestionsCoach />
+          </ToolGuard>
         </div>
       </section>
 
@@ -260,7 +265,9 @@ const PrepIt = () => {
             </div>
           </div>
           
-          <ResumeCoachLetter />
+          <ToolGuard toolName="resume-analyzer">
+            <ResumeCoachLetter />
+          </ToolGuard>
         </div>
       </section>
 

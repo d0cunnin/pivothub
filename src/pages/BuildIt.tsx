@@ -154,15 +154,21 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <BusinessIdeaGenerator />
+              <ToolGuard toolName="business-idea">
+                <BusinessIdeaGenerator />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <NameChecker />
+              <ToolGuard toolName="name-checker">
+                <NameChecker />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <BusinessFoundationBuilder />
+              <ToolGuard toolName="business-foundation">
+                <BusinessFoundationBuilder />
+              </ToolGuard>
             </div>
           </div>
         </div>
@@ -184,15 +190,21 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <BusinessPlanGenerator />
+              <ToolGuard toolName="business-plan">
+                <BusinessPlanGenerator />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <MarketingStrategyGenerator />
+              <ToolGuard toolName="marketing-strategy">
+                <MarketingStrategyGenerator />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <PitchDeckGenerator />
+              <ToolGuard toolName="pitch-deck">
+                <PitchDeckGenerator />
+              </ToolGuard>
             </div>
           </div>
         </div>
@@ -214,19 +226,27 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <LogoGenerator />
+              <ToolGuard toolName="logo-generator">
+                <LogoGenerator />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <BiographyGenerator />
+              <ToolGuard toolName="biography">
+                <BiographyGenerator />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <LegalDocsGenerator />
+              <ToolGuard toolName="legal-docs">
+                <LegalDocsGenerator />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
-              <StartupChecklist />
+              <ToolGuard toolName="startup-checklist">
+                <StartupChecklist />
+              </ToolGuard>
             </div>
           </div>
         </div>
@@ -248,11 +268,15 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <SocialMediaGenerator />
+              <ToolGuard toolName="social-media">
+                <SocialMediaGenerator />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <BusinessMentorChatbot />
+              <ToolGuard toolName="business-mentor">
+                <BusinessMentorChatbot />
+              </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
