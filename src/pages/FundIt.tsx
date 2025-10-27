@@ -15,6 +15,10 @@ import { toast } from 'sonner';
 import heroImage from "@/assets/hero-image.jpg";
 import { generateGrantProposalPDF } from '@/lib/pdf-templates/grant-template';
 import { Helmet } from 'react-helmet-async';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useUsage } from '@/contexts/UsageContext';
+import { AuthGuard } from '@/components/AuthGuard';
 
 interface GrantFormData {
   organizationName: string;
@@ -100,6 +104,8 @@ const GRANT_RESEARCH_RESOURCES = [
 ];
 
 const FundIt = () => {
+  const { session } = useAuth();
+  const { remainingRequests, checkAndIncrementUsage } = useUsage();
   const [formData, setFormData] = useState<GrantFormData>({
     organizationName: '',
     projectTitle: '',
@@ -200,29 +206,60 @@ const FundIt = () => {
       return;
     }
 
+    // Verify authentication
+    if (!session) {
+      toast.error('Please log in to generate grant documents', {
+        description: 'Authentication is required to use this feature.'
+      });
+      return;
+    }
+
+    // Check credit availability (4 credits required)
+    if (remainingRequests < 4) {
+      toast.error('Insufficient Credits', {
+        description: 'You need 4 credits to generate grant documents. Please purchase more credits from your account settings.'
+      });
+      return;
+    }
+
     setIsGenerating(true);
     
     try {
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/generate-grant-content', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+      // Use secure Supabase client with automatic auth header injection
+      const { data, error } = await supabase.functions.invoke('generate-grant-content', {
+        body: formData
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to generate grant content');
+      if (error) {
+        // Handle specific error types
+        if (error.message?.includes('JWT') || error.message?.includes('auth')) {
+          toast.error('Session Expired', {
+            description: 'Please log in again to continue.'
+          });
+        } else if (error.message?.includes('credits') || error.message?.includes('limit')) {
+          toast.error('Insufficient Credits', {
+            description: "You don't have enough credits for this operation."
+          });
+        } else if (error.message?.includes('rate limit')) {
+          toast.error('Rate Limit Exceeded', {
+            description: 'Please wait a moment before trying again.'
+          });
+        } else {
+          throw error;
+        }
+        return;
       }
 
-      const { proposal, letterOfIntent } = await response.json();
+      const { proposal, letterOfIntent } = data;
       
       setGeneratedProposal(proposal);
       setGeneratedLOI(letterOfIntent);
       toast.success('AI-powered grant documents generated successfully!');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating grant content:', error);
-      toast.error('Failed to generate grant content. Please try again.');
+      toast.error('Failed to generate grant content', {
+        description: error.message || 'Please try again.'
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -256,7 +293,8 @@ const FundIt = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <AuthGuard>
+      <div className="min-h-screen bg-background">
       <Helmet>
         <title>Fund It - Grant Writing & Research Tools | PivotHub</title>
         <meta name="description" content="Generate professional grant proposals and letters of intent with AI assistance. Access curated grant research resources for federal, state, foundation, and corporate grants." />
@@ -944,6 +982,7 @@ const FundIt = () => {
 
       <Footer />
     </div>
+    </AuthGuard>
   );
 };
 

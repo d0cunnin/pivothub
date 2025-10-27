@@ -375,5 +375,14 @@ export function generateGrantProposalPDF(
   // Add footers to all pages
   addFooter();
 
+  // Validate PDF size before returning (max 5MB)
+  const pdfOutput = doc.output('arraybuffer');
+  const pdfSize = pdfOutput.byteLength;
+  const maxSize = 5 * 1024 * 1024; // 5MB limit
+  
+  if (pdfSize > maxSize) {
+    throw new Error('Generated PDF exceeds maximum size limit (5MB). Please reduce content length.');
+  }
+
   return doc;
 }
