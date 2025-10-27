@@ -22,7 +22,19 @@ const grantDataSchema = z.object({
   contactEmail: z.string().email().max(200),
   contactPhone: z.string().max(50),
   additionalInformation: z.string().max(2000).optional(),
-  grantRequirements: z.string().max(2000).optional()
+  grantRequirements: z.string().max(2000).optional(),
+  // Budget fields (optional)
+  budgetPersonnel: z.string().max(100).optional(),
+  budgetEquipment: z.string().max(100).optional(),
+  budgetSupplies: z.string().max(100).optional(),
+  budgetTravel: z.string().max(100).optional(),
+  budgetContractual: z.string().max(100).optional(),
+  budgetOther: z.string().max(100).optional(),
+  budgetIndirect: z.string().max(100).optional(),
+  budgetIndirectRate: z.string().max(20).optional(),
+  matchingFunds: z.string().max(100).optional(),
+  matchingFundsSource: z.string().max(500).optional(),
+  budgetNotes: z.string().max(2000).optional(),
 });
 
 serve(async (req) => {
@@ -170,6 +182,22 @@ GRANT APPLICATION DETAILS:
 - Additional Information: ${grantData.additionalInformation}
 - Specific Grant Requirements: ${grantData.grantRequirements}
 
+BUDGET INFORMATION:
+Amount Requested: $${grantData.grantAmountRequested}
+
+${grantData.budgetPersonnel || grantData.budgetEquipment || grantData.budgetSupplies || grantData.budgetTravel || grantData.budgetContractual || grantData.budgetOther || grantData.budgetIndirect ? `
+DETAILED BUDGET BREAKDOWN PROVIDED:
+- Personnel: ${grantData.budgetPersonnel || 'Not specified'}
+- Equipment: ${grantData.budgetEquipment || 'Not specified'}
+- Supplies: ${grantData.budgetSupplies || 'Not specified'}
+- Travel: ${grantData.budgetTravel || 'Not specified'}
+- Contractual Services: ${grantData.budgetContractual || 'Not specified'}
+- Other Direct Costs: ${grantData.budgetOther || 'Not specified'}
+- Indirect Costs (${grantData.budgetIndirectRate || 'F&A'}%): ${grantData.budgetIndirect || 'Not specified'}
+${grantData.matchingFunds ? `- Matching Funds: ${grantData.matchingFunds}${grantData.matchingFundsSource ? ` (Source: ${grantData.matchingFundsSource})` : ''}` : ''}
+${grantData.budgetNotes ? `Budget Notes: ${grantData.budgetNotes}` : ''}
+` : 'No detailed budget provided - please estimate reasonable allocation across typical grant categories'}
+
 === WRITING MISSION ===
 Create two documents:
 1. COMPREHENSIVE GRANT PROPOSAL (1500-2000 words)
@@ -218,10 +246,49 @@ GRANT PROPOSAL STRUCTURE:
    - Past successes with similar projects
    - Financial stability
    
-7. Budget Narrative (100-150 words if not separate document)
-   - Major budget categories with justification
-   - Cost-effectiveness demonstration
-   - Leveraging and matching funds
+7. Budget Narrative & Summary (200-400 words)
+   
+   IF DETAILED BUDGET PROVIDED:
+   - Create comprehensive budget table with all line items provided
+   - Write 2-3 paragraphs justifying major expenses with specific details
+   - Explain cost-effectiveness and demonstrate value for money
+   - Address matching funds strategy if applicable
+   - Reference indirect cost rate and calculation method
+   - Show how budget aligns with project activities and timeline
+   
+   IF ONLY TOTAL AMOUNT PROVIDED (NO LINE ITEMS):
+   - Estimate reasonable allocation across typical grant categories:
+     * Personnel (40-60% of total)
+     * Equipment/Supplies (15-25%)
+     * Travel/Training (5-10%)
+     * Indirect Costs (10-20%)
+   - Provide generic justification for each category
+   - Note: "Detailed line-item budget available upon request"
+   
+   BUDGET TABLE FORMAT (use this exact format):
+   
+   BUDGET SUMMARY
+   ═══════════════════════════════════════════════════
+   Category                              Amount
+   ───────────────────────────────────────────────────
+   Personnel                            $XX,XXX
+   Equipment                            $XX,XXX
+   Supplies & Materials                  $X,XXX
+   Travel                                $X,XXX
+   Contractual Services                  $X,XXX
+   Other Direct Costs                    $X,XXX
+   Indirect Costs (XX%)                  $X,XXX
+   ───────────────────────────────────────────────────
+   TOTAL PROJECT COST:                  $XX,XXX
+   ${grantData.matchingFunds ? 'Less Matching Funds:                ($X,XXX)' : ''}
+   ═══════════════════════════════════════════════════
+   AMOUNT REQUESTED:                    $XX,XXX
+   
+   BUDGET JUSTIFICATION:
+   [2-3 detailed paragraphs explaining major line items, cost-effectiveness, 
+   value proposition, and how budget supports project goals. If detailed budget 
+   was provided, reference specific costs and justify them. If not, explain 
+   estimated allocation rationale.]
 
 LETTER OF INTENT STRUCTURE:
 1. Opening (2-3 sentences)

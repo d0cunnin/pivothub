@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { FileText, Send, Download, ExternalLink } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { FileText, Send, Download, ExternalLink, Calculator, DollarSign } from 'lucide-react';
 import { toast } from 'sonner';
 import heroImage from "@/assets/hero-image.jpg";
 import { generateGrantProposalPDF } from '@/lib/pdf-templates/grant-template';
@@ -35,6 +36,18 @@ interface GrantFormData {
   additionalInformation: string;
   grantRequirements: string;
   otherDetails: string;
+  // Budget fields (optional but recommended)
+  budgetPersonnel?: string;
+  budgetEquipment?: string;
+  budgetSupplies?: string;
+  budgetTravel?: string;
+  budgetContractual?: string;
+  budgetOther?: string;
+  budgetIndirect?: string;
+  budgetIndirectRate?: string;
+  matchingFunds?: string;
+  matchingFundsSource?: string;
+  budgetNotes?: string;
 }
 
 // Grant Research Resources
@@ -107,6 +120,17 @@ const FundIt = () => {
     additionalInformation: '',
     grantRequirements: '',
     otherDetails: '',
+    budgetPersonnel: '',
+    budgetEquipment: '',
+    budgetSupplies: '',
+    budgetTravel: '',
+    budgetContractual: '',
+    budgetOther: '',
+    budgetIndirect: '',
+    budgetIndirectRate: '',
+    matchingFunds: '',
+    matchingFundsSource: '',
+    budgetNotes: '',
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -115,6 +139,59 @@ const FundIt = () => {
 
   const handleInputChange = (field: keyof GrantFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  // Calculate total budget from all budget fields
+  const calculateTotalBudget = () => {
+    const budgetFields = [
+      formData.budgetPersonnel,
+      formData.budgetEquipment,
+      formData.budgetSupplies,
+      formData.budgetTravel,
+      formData.budgetContractual,
+      formData.budgetOther,
+      formData.budgetIndirect,
+    ];
+    
+    const total = budgetFields.reduce((sum, field) => {
+      const value = parseFloat(field?.replace(/[^0-9.]/g, '') || '0');
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+    
+    return total;
+  };
+
+  // Format currency for display
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  // Calculate budget difference and determine color
+  const getBudgetComparison = () => {
+    const totalBudget = calculateTotalBudget();
+    const requestedAmount = parseFloat(formData.grantAmountRequested?.replace(/[^0-9.]/g, '') || '0');
+    
+    if (!requestedAmount || !totalBudget) return null;
+    
+    const difference = totalBudget - requestedAmount;
+    const percentageDiff = Math.abs(difference / requestedAmount) * 100;
+    
+    let colorClass = 'text-green-600';
+    if (percentageDiff > 20) colorClass = 'text-red-600';
+    else if (percentageDiff > 10) colorClass = 'text-yellow-600';
+    
+    return {
+      totalBudget,
+      requestedAmount,
+      difference,
+      percentageDiff,
+      colorClass,
+    };
   };
 
   const generateGrantDocuments = async () => {
@@ -501,7 +578,236 @@ const FundIt = () => {
                       />
                     </div>
 
-                    <Button 
+                    {/* Budget Breakdown Section */}
+                    <Accordion type="single" collapsible className="w-full border rounded-lg">
+                      <AccordionItem value="budget" className="border-0">
+                        <AccordionTrigger className="px-4 hover:no-underline">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                              <Calculator className="h-4 w-4 text-primary" />
+                            </div>
+                            <div className="flex flex-col items-start">
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold">Budget Breakdown</span>
+                                <Badge variant="secondary" className="text-xs">Highly Recommended</Badge>
+                              </div>
+                              <span className="text-xs text-muted-foreground font-normal">
+                                Provide detailed budget for more accurate proposal
+                              </span>
+                            </div>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4">
+                          <div className="space-y-4 pt-2">
+                            {/* Budget Calculator Display */}
+                            {(() => {
+                              const comparison = getBudgetComparison();
+                              const totalBudget = calculateTotalBudget();
+                              
+                              return totalBudget > 0 || formData.grantAmountRequested ? (
+                                <div className="bg-muted/50 p-4 rounded-lg space-y-2">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-sm font-medium">Budget Calculator</span>
+                                  </div>
+                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                                    <div>
+                                      <span className="text-muted-foreground">Calculated Total:</span>
+                                      <p className="font-semibold text-lg">{formatCurrency(totalBudget)}</p>
+                                    </div>
+                                    <div>
+                                      <span className="text-muted-foreground">Requested Amount:</span>
+                                      <p className="font-semibold text-lg">
+                                        {formData.grantAmountRequested ? formatCurrency(parseFloat(formData.grantAmountRequested.replace(/[^0-9.]/g, '') || '0')) : '$0'}
+                                      </p>
+                                    </div>
+                                    {comparison && (
+                                      <div>
+                                        <span className="text-muted-foreground">Difference:</span>
+                                        <p className={`font-semibold text-lg ${comparison.colorClass}`}>
+                                          {comparison.difference >= 0 ? '+' : ''}{formatCurrency(comparison.difference)}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                  {comparison && comparison.percentageDiff > 10 && (
+                                    <p className="text-xs text-muted-foreground mt-2">
+                                      ⓘ Budget should generally match requested amount (currently {comparison.percentageDiff.toFixed(1)}% difference)
+                                    </p>
+                                  )}
+                                </div>
+                              ) : null;
+                            })()}
+
+                            <p className="text-sm text-muted-foreground">
+                              Enter detailed budget information below. Leave blank if you want AI to estimate budget allocation.
+                            </p>
+
+                            {/* Personnel Costs */}
+                            <div className="space-y-2">
+                              <Label htmlFor="budgetPersonnel">
+                                Personnel Costs
+                                <span className="text-xs text-muted-foreground ml-2">(Salaries, benefits, contractors)</span>
+                              </Label>
+                              <Input
+                                id="budgetPersonnel"
+                                value={formData.budgetPersonnel}
+                                onChange={(e) => handleInputChange('budgetPersonnel', e.target.value)}
+                                placeholder="$50,000"
+                                className="h-10"
+                              />
+                            </div>
+
+                            {/* Equipment Costs */}
+                            <div className="space-y-2">
+                              <Label htmlFor="budgetEquipment">
+                                Equipment Costs
+                                <span className="text-xs text-muted-foreground ml-2">(Purchases over $5,000 per unit)</span>
+                              </Label>
+                              <Input
+                                id="budgetEquipment"
+                                value={formData.budgetEquipment}
+                                onChange={(e) => handleInputChange('budgetEquipment', e.target.value)}
+                                placeholder="$10,000"
+                                className="h-10"
+                              />
+                            </div>
+
+                            {/* Supplies & Materials */}
+                            <div className="space-y-2">
+                              <Label htmlFor="budgetSupplies">
+                                Supplies & Materials
+                                <span className="text-xs text-muted-foreground ml-2">(Consumable items under $5,000)</span>
+                              </Label>
+                              <Input
+                                id="budgetSupplies"
+                                value={formData.budgetSupplies}
+                                onChange={(e) => handleInputChange('budgetSupplies', e.target.value)}
+                                placeholder="$5,000"
+                                className="h-10"
+                              />
+                            </div>
+
+                            {/* Travel Costs */}
+                            <div className="space-y-2">
+                              <Label htmlFor="budgetTravel">
+                                Travel Costs
+                                <span className="text-xs text-muted-foreground ml-2">(Transportation, lodging, per diem)</span>
+                              </Label>
+                              <Input
+                                id="budgetTravel"
+                                value={formData.budgetTravel}
+                                onChange={(e) => handleInputChange('budgetTravel', e.target.value)}
+                                placeholder="$3,000"
+                                className="h-10"
+                              />
+                            </div>
+
+                            {/* Contractual Services */}
+                            <div className="space-y-2">
+                              <Label htmlFor="budgetContractual">
+                                Contractual/Consultant Services
+                                <span className="text-xs text-muted-foreground ml-2">(External consultants, vendors)</span>
+                              </Label>
+                              <Input
+                                id="budgetContractual"
+                                value={formData.budgetContractual}
+                                onChange={(e) => handleInputChange('budgetContractual', e.target.value)}
+                                placeholder="$8,000"
+                                className="h-10"
+                              />
+                            </div>
+
+                            {/* Other Direct Costs */}
+                            <div className="space-y-2">
+                              <Label htmlFor="budgetOther">
+                                Other Direct Costs
+                                <span className="text-xs text-muted-foreground ml-2">(Participant support, publication fees)</span>
+                              </Label>
+                              <Input
+                                id="budgetOther"
+                                value={formData.budgetOther}
+                                onChange={(e) => handleInputChange('budgetOther', e.target.value)}
+                                placeholder="$2,000"
+                                className="h-10"
+                              />
+                            </div>
+
+                            {/* Indirect Costs */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="budgetIndirect">
+                                  Indirect Costs (F&A)
+                                  <span className="text-xs text-muted-foreground ml-2">(Administrative overhead)</span>
+                                </Label>
+                                <Input
+                                  id="budgetIndirect"
+                                  value={formData.budgetIndirect}
+                                  onChange={(e) => handleInputChange('budgetIndirect', e.target.value)}
+                                  placeholder="$7,500"
+                                  className="h-10"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="budgetIndirectRate">Indirect Rate (%)</Label>
+                                <Input
+                                  id="budgetIndirectRate"
+                                  value={formData.budgetIndirectRate}
+                                  onChange={(e) => handleInputChange('budgetIndirectRate', e.target.value)}
+                                  placeholder="15"
+                                  className="h-10"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Matching Funds */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="matchingFunds">
+                                  Matching Funds
+                                  <span className="text-xs text-muted-foreground ml-2">(Non-grant funds committed)</span>
+                                </Label>
+                                <Input
+                                  id="matchingFunds"
+                                  value={formData.matchingFunds}
+                                  onChange={(e) => handleInputChange('matchingFunds', e.target.value)}
+                                  placeholder="$5,000"
+                                  className="h-10"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="matchingFundsSource">Matching Funds Source</Label>
+                                <Input
+                                  id="matchingFundsSource"
+                                  value={formData.matchingFundsSource}
+                                  onChange={(e) => handleInputChange('matchingFundsSource', e.target.value)}
+                                  placeholder="Organization reserves, donations"
+                                  className="h-10"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Budget Notes */}
+                            <div className="space-y-2">
+                              <Label htmlFor="budgetNotes">
+                                Budget Notes (Optional)
+                                <span className="text-xs text-muted-foreground ml-2">(Additional budget justification or context)</span>
+                              </Label>
+                              <Textarea
+                                id="budgetNotes"
+                                value={formData.budgetNotes}
+                                onChange={(e) => handleInputChange('budgetNotes', e.target.value)}
+                                placeholder="Explain unique budget items or special considerations..."
+                                rows={3}
+                                className="resize-none"
+                              />
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+
+                    <Button
                       onClick={generateGrantDocuments} 
                       disabled={isGenerating}
                       className="w-full h-11"
