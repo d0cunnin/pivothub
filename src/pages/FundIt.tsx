@@ -18,7 +18,7 @@ import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useUsage } from '@/contexts/UsageContext';
-import { AuthGuard } from '@/components/AuthGuard';
+import { ToolGuard } from '@/components/ToolGuard';
 
 interface GrantFormData {
   organizationName: string;
@@ -206,22 +206,6 @@ const FundIt = () => {
       return;
     }
 
-    // Verify authentication
-    if (!session) {
-      toast.error('Please log in to generate grant documents', {
-        description: 'Authentication is required to use this feature.'
-      });
-      return;
-    }
-
-    // Check credit availability (4 credits required)
-    if (remainingRequests < 4) {
-      toast.error('Insufficient Credits', {
-        description: 'You need 4 credits to generate grant documents. Please purchase more credits from your account settings.'
-      });
-      return;
-    }
-
     setIsGenerating(true);
     
     try {
@@ -293,8 +277,7 @@ const FundIt = () => {
   };
 
   return (
-    <AuthGuard>
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
       <Helmet>
         <title>Fund It - Grant Writing & Research Tools | PivotHub</title>
         <meta name="description" content="Generate professional grant proposals and letters of intent with AI assistance. Access curated grant research resources for federal, state, foundation, and corporate grants." />
@@ -845,24 +828,29 @@ const FundIt = () => {
                       </AccordionItem>
                     </Accordion>
 
-                    <Button
-                      onClick={generateGrantDocuments} 
-                      disabled={isGenerating}
-                      className="w-full h-11"
-                      size="lg"
+                    <ToolGuard 
+                      onUse={generateGrantDocuments}
+                      toolName="grant-content"
                     >
-                      {isGenerating ? (
-                        <>
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                          Generating Documents...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="h-4 w-4 mr-2" />
-                          Generate Grant Documents
-                        </>
-                      )}
-                    </Button>
+                      <Button
+                        onClick={() => {}} 
+                        disabled={isGenerating}
+                        className="w-full h-11"
+                        size="lg"
+                      >
+                        {isGenerating ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Generating Documents...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4 mr-2" />
+                            Generate Grant Documents (4 Credits)
+                          </>
+                        )}
+                      </Button>
+                    </ToolGuard>
                   </CardContent>
                 </Card>
               </div>
@@ -982,7 +970,6 @@ const FundIt = () => {
 
       <Footer />
     </div>
-    </AuthGuard>
   );
 };
 
