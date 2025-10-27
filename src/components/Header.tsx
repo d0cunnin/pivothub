@@ -10,7 +10,7 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut, isAdmin, subscribed, subscriptionTier, subscriptionEnd } = useAuth();
+  const { user, signOut, isAdmin, subscribed, subscriptionTier, subscriptionEnd, checkAdminStatus } = useAuth();
 
   useEffect(() => {
     console.log('[Header] Auth state changed:', { 
@@ -21,6 +21,12 @@ export const Header = () => {
       subscriptionTier 
     });
   }, [user, isAdmin, subscribed, subscriptionTier]);
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => checkAdminStatus(), 0);
+    }
+  }, [user, checkAdminStatus]);
 
   const handleGetStarted = () => {
     navigate('/');
@@ -157,16 +163,29 @@ export const Header = () => {
 
           <div className="hidden lg:flex space-x-2 flex-shrink-0 ml-4">
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-2">
-                    <User className="h-4 w-4" />
-                    <span>Account</span>
-                  </Button>
-                </DropdownMenuTrigger>
+              <>
+                {isAdmin && (
+                  <Link to="/admin">
+                    <Button variant="outline" className="border-primary text-primary hover:bg-primary/10">
+                      Admin
+                    </Button>
+                  </Link>
+                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center space-x-2">
+                      <User className="h-4 w-4" />
+                      <span>Account</span>
+                    </Button>
+                  </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-card border border-border shadow-lg z-50">
                   <div className="px-2 py-2 text-sm border-b mb-1">
-                    <div className="font-medium text-foreground">Subscription</div>
+                    <div className="font-medium text-foreground flex items-center justify-between">
+                      <span>Subscription</span>
+                      {isAdmin && (
+                        <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">Admin</span>
+                      )}
+                    </div>
                     <div className="text-muted-foreground text-xs mt-1">
                       {subscribed ? (
                         <>
@@ -215,6 +234,7 @@ export const Header = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+              </>
             ) : (
               <>
                 <Link to="/auth">
@@ -355,6 +375,13 @@ export const Header = () => {
                     <div className="text-sm text-muted-foreground">
                       Signed in as {user.email?.split('@')[0]}
                     </div>
+                    {isAdmin && (
+                      <Link to="/admin">
+                        <Button variant="ghost" className="w-full justify-start font-medium text-primary">
+                          Admin Dashboard
+                        </Button>
+                      </Link>
+                    )}
                     <Link to="/dashboard">
                       <Button variant="ghost" className="w-full justify-start">Dashboard</Button>
                     </Link>
@@ -367,11 +394,6 @@ export const Header = () => {
                     <Link to="/contact">
                       <Button variant="ghost" className="w-full justify-start">Contact</Button>
                     </Link>
-                    {isAdmin && (
-                      <Link to="/admin">
-                        <Button variant="ghost" className="w-full justify-start font-medium text-primary">Admin Dashboard</Button>
-                      </Link>
-                    )}
                     <Button variant="outline" onClick={signOut} className="w-full">
                       Sign Out
                     </Button>
