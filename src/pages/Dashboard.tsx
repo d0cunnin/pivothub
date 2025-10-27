@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { AuthGuard } from "@/components/AuthGuard";
+import { PlatformOnboarding } from "@/components/PlatformOnboarding";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
@@ -31,12 +32,37 @@ const Dashboard = () => {
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
   const [courseEnrollments, setCourseEnrollments] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     if (user) {
       loadDashboardData();
+      checkOnboarding();
     }
   }, [user]);
+
+  const checkOnboarding = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('onboarding_completed')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error checking onboarding:', error);
+        return;
+      }
+
+      if (!data || !data.onboarding_completed) {
+        setShowOnboarding(true);
+      }
+    } catch (error) {
+      console.error('Error checking onboarding:', error);
+    }
+  };
 
   const loadDashboardData = async () => {
     try {
@@ -99,6 +125,7 @@ const Dashboard = () => {
 
   return (
     <AuthGuard>
+      <PlatformOnboarding open={showOnboarding} onOpenChange={setShowOnboarding} />
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background to-primary/5">
         <Header />
         <main className="flex-1 pt-24 pb-16">
