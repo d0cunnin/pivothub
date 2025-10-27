@@ -196,10 +196,10 @@ const Pricing = () => {
       features: [
         "60 credits per month",
         "Unused credits roll over each month",
-        "Grant Content Generator (4 credits)",
-        "Grant Finder (2 credits)",
-        "Resource Finder (2 credits)",
+        "LOI & Grant Proposal Generator (4 credits)",
+        "Grant Resources (curated external links - free)",
         "Side Income Assessment (2 credits)",
+        "Side Income Blueprint Report (free after assessment)",
         "Priority email support"
       ],
       tier: "fund-it",

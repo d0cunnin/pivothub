@@ -30,10 +30,8 @@ export const PACKAGE_TOOLS = {
     'host-it',
   ],
   'fund-it': [
-    'grant-finder',
-    'grant-content',
-    'grant-resources',
-    'side-income-assessment',
+    'grant-content',        // LOI & Grant Proposal Generator (4 credits)
+    'side-income-assessment', // Side Income Assessment (2 credits)
   ],
   'all-access': ['all'],
 };

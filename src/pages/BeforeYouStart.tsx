@@ -63,8 +63,8 @@ const BeforeYouStart = () => {
     {
       icon: Banknote,
       title: "Fund It",
-      description: "Fund It helps you find pathways to financial support. It includes guidance on grants, sponsorships, and community-based funding. It also includes a grant proposal writer to help you prepare a professional application.",
-      cta: "Find Funding",
+      description: "Fund It provides AI-powered tools to create professional grant proposals and letters of intent. Access curated grant research resources to find federal, state, foundation, and corporate funding opportunities.",
+      cta: "Get Grant Tools",
       link: "/fundit",
       color: "text-emerald-600"
     },
@@ -116,9 +116,7 @@ const BeforeYouStart = () => {
     'social-media': 'Social Media',
     'teaching-materials': 'Teaching Materials',
     'startup-checklist': 'Startup Checklist',
-    'grant-finder': 'Grant Finder',
-    'grant-content': 'Grant Content',
-    'grant-resources': 'Grant Resources'
+    'grant-content': 'LOI & Grant Proposal Generator',
   };
 
   const getToolsList = (packageKey: string) => {
