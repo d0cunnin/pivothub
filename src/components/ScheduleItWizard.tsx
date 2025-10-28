@@ -398,7 +398,7 @@ export function ScheduleItWizard() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                This will use 2 credits to generate your personalized schedule using AI.
+                This will use 3 credits to generate your personalized schedule using AI.
               </AlertDescription>
             </Alert>
 

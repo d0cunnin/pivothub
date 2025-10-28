@@ -60,6 +60,10 @@ You must return ONLY valid JSON in this exact format:
     { "hex": "#3B82F6", "name": "Sky Blue" },
     { "hex": "#10B981", "name": "Emerald Green" }
   ],
+  "eventItinerary": [
+    { "time": "9:00 AM", "activity": "Registration & Welcome", "duration": "30 min" },
+    { "time": "9:30 AM", "activity": "Opening Keynote", "duration": "45 min" }
+  ],
   "marketingTimeline": {
     "week1-2": {
       "phase": "Pre-launch & Teaser",
@@ -120,7 +124,7 @@ You must return ONLY valid JSON in this exact format:
   }
 }
 
-Keep titles engaging and relevant to the category. Use professional color palettes that match the event type. Make marketing actions specific and actionable.`;
+If the user requests an itinerary (includeItinerary: true), create a detailed time-by-time schedule with realistic timings in the eventItinerary array. Otherwise, omit the eventItinerary field completely. Keep titles engaging and relevant to the category. Use professional color palettes that match the event type. Make marketing actions specific and actionable.`;
 
     const userPrompt = `Create a comprehensive event plan:
 
@@ -146,8 +150,9 @@ ${formData.specificRequirements || 'None specified'}
 - Email list: ${formData.emailListSize || 'None'}
 - Marketing budget: ${formData.marketingBudget || 'None'}
 - Timeline to event: ${formData.timelineToEvent || 'Not specified'}
+- Include detailed itinerary: ${formData.includeItinerary ? 'Yes' : 'No'}
 
-Generate event titles, description, color palette, and 6-week marketing timeline.`;
+Generate event titles, description, color palette${formData.includeItinerary ? ', event itinerary,' : ''} and 6-week marketing timeline.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

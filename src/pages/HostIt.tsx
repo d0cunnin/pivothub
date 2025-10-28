@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-image.jpg";
 import { Helmet } from "react-helmet-async";
 import { HostItWizard } from "@/components/HostItWizard";
+import { ToolGuard } from "@/components/ToolGuard";
 
 const HostIt = () => {
   return (
@@ -57,7 +58,9 @@ const HostIt = () => {
       <section id="event-form" className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <HostItWizard />
+            <ToolGuard toolName="host-it">
+              <HostItWizard />
+            </ToolGuard>
           </div>
         </div>
       </section>

@@ -14,19 +14,25 @@ import { generateEventPlanPDF } from '@/lib/pdf-templates/event-template';
 import { generateGoogleCalendarUrl, generateOutlookUrl, downloadICSFile } from '@/lib/calendar-utils';
 
 const EVENT_CATEGORIES = [
-  'Church / Ministry',
-  'Men\'s Events',
+  'Business Events',
+  'Author Events / Book Signings / Book Tours',
+  'Workshops',
+  'Masterclasses',
+  'Conferences',
+  'Youth Events (Camps, Conferences, VBS, Tournaments)',
+  'Church / Ministry Events',
+  'Fundraisers / Galas / Banquets',
+  'Creative Arts (Concerts, Live Recordings, Artist Showcases)',
+  'Brunches / Networking Events',
+  'Marriage Events',
+  'Parenting Events',
   'Women\'s Events',
-  'Nonprofit',
-  'Business / Entrepreneurship',
+  'Men\'s Events',
+  'Retreats',
   'Education / Training',
   'Mental Health & Wellness',
-  'Music & Creative Arts',
-  'Youth / Camps',
   'Sports',
-  'Gala / Banquet',
-  'Author / Book Events',
-  'Retreats',
+  'Nonprofit',
 ];
 
 interface EventFormData {
@@ -58,6 +64,7 @@ interface EventFormData {
   emailListSize: string;
   marketingBudget: string;
   timelineToEvent: string;
+  includeItinerary: boolean;
 }
 
 export function HostItWizard() {
@@ -82,6 +89,7 @@ export function HostItWizard() {
     emailListSize: '',
     marketingBudget: '',
     timelineToEvent: '',
+    includeItinerary: false,
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -90,7 +98,7 @@ export function HostItWizard() {
 
   const totalSteps = 6;
 
-  const handleInputChange = (field: keyof EventFormData, value: string | string[]) => {
+  const handleInputChange = (field: keyof EventFormData, value: string | string[] | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -458,6 +466,20 @@ export function HostItWizard() {
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="flex items-center space-x-2 pt-4">
+              <Checkbox
+                id="includeItinerary"
+                checked={formData.includeItinerary}
+                onCheckedChange={(checked) => handleInputChange('includeItinerary', checked === true)}
+              />
+              <Label htmlFor="includeItinerary" className="text-sm cursor-pointer">
+                Include detailed event itinerary in the plan
+              </Label>
+            </div>
+            <p className="text-xs text-muted-foreground ml-6">
+              Add a time-by-time event schedule (adds 1-2 pages to PDF)
+            </p>
           </div>
         );
 

@@ -29,6 +29,7 @@ interface EventPlanData {
   eventDescription: string;
   colorPalette: ColorPalette[];
   marketingTimeline: MarketingTimeline;
+  eventItinerary?: Array<{ time: string; activity: string; duration: string }>;
 }
 
 export function generateEventPlanPDF(
@@ -143,6 +144,39 @@ export function generateEventPlanPDF(
     yPos += 5;
   });
   yPos += 5;
+
+  // Event Itinerary (if included)
+  if (eventPlan.eventItinerary && eventPlan.eventItinerary.length > 0) {
+    checkPageBreak(40);
+    
+    doc.setFillColor(59, 130, 246);
+    doc.rect(margin, yPos, maxWidth, 8, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Event Itinerary', margin + 3, yPos + 5.5);
+    doc.setTextColor(0, 0, 0);
+    yPos += 12;
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    
+    eventPlan.eventItinerary.forEach((item: any) => {
+      checkPageBreak(15);
+      
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${item.time} - ${item.activity}`, margin + 3, yPos);
+      yPos += 5;
+      
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+      doc.text(`Duration: ${item.duration}`, margin + 6, yPos);
+      doc.setTextColor(0, 0, 0);
+      yPos += 8;
+    });
+    
+    yPos += 5;
+  }
 
   // Color Palette
   checkPageBreak(50);

@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
     const guardResult = await guard(req, {
       endpoint: "generate-schedule",
       requireAuth: true,
-      cost: 2,
+      cost: 3,
       bodyLimit: 10000,
     });
 
@@ -24,23 +24,38 @@ Deno.serve(async (req) => {
     const formData = await req.json();
 
     // System prompt optimized for realistic scheduling
-    const systemPrompt = `You are an expert life coach and productivity consultant specializing in creating realistic, sustainable schedules. Generate a personalized weekly schedule based on the user's inputs.
+    const systemPrompt = `You are an expert life coach and productivity consultant specializing in creating realistic, sustainable schedules. Generate a personalized weekly schedule based on the user's inputs that addresses ALL aspects of their life.
+
+IMPORTANT: Your schedule MUST include time blocks for these key life domains:
+1. Work / Career - Primary employment and career development
+2. Business / Entrepreneurship - Side business, startups, ventures
+3. Marriage / Relationship - Quality time with spouse/partner
+4. Children / Parenting - Active parenting, homework help, activities
+5. Family Time - Extended family, family meals, traditions
+6. Fitness / Exercise - Physical activity, gym, sports
+7. Faith / Spiritual Life - Prayer, worship, meditation, spiritual practices
+8. Health & Wellness - Medical appointments, mental health, self-care
+9. Study / Learning - Formal education, skill development, courses
+10. Personal Development - Reading, journaling, coaching, therapy
+11. Creativity - Creative hobbies, artistic expression, projects
+12. Rest & Recovery - Sleep, downtime, relaxation, sabbath
 
 Key principles:
 - Respect energy patterns (don't schedule deep work during low-energy times)
 - Include buffer time between activities (10-15 minutes)
-- Balance work/life/rest - avoid burnout
+- Balance ALL life domains - avoid neglecting any area
 - Be realistic - don't overschedule
 - Respect non-negotiable time blocks
 - Provide specific time blocks (e.g., "Monday 6:00 AM - 8:00 AM: Side Business - Content Creation")
-- Include recommendations for sustainability
+- Include recommendations for long-term sustainability
+- Consider the user's family commitments, marriage, faith, and personal wellbeing
 
 Return ONLY valid JSON in this exact format:
 {
   "weeklySchedule": {
     "monday": [
-      { "time": "6:00 AM - 8:00 AM", "activity": "Side Business - Content Creation", "category": "side-business" },
-      { "time": "8:00 AM - 9:00 AM", "activity": "Morning Routine", "category": "personal" }
+      { "time": "6:00 AM - 8:00 AM", "activity": "Side Business - Content Creation", "category": "business" },
+      { "time": "8:00 AM - 9:00 AM", "activity": "Morning Routine & Family Breakfast", "category": "family" }
     ],
     "tuesday": [...],
     "wednesday": [...],
@@ -53,15 +68,20 @@ Return ONLY valid JSON in this exact format:
     "totalCommittedHours": 40,
     "totalAvailableHours": 168,
     "sideBusinessHours": 15,
-    "personalTime": 30,
+    "familyTime": 20,
+    "personalDevelopment": 5,
+    "fitnessHours": 4,
+    "faithTime": 3,
+    "restHours": 56,
     "recommendations": [
       "Start with 2 hours per day for your side business",
-      "Schedule breaks every 90 minutes during deep work"
+      "Schedule 30 minutes daily for marriage quality time",
+      "Block Friday evenings for family time"
     ]
   }
 }
 
-Categories must be: "work", "personal", "side-business", or "rest"`;
+Categories must be one of: "work", "business", "marriage", "children", "family", "fitness", "faith", "health", "study", "personal-development", "creativity", "rest"`;
 
     const userPrompt = `Create a weekly schedule based on these details:
 
@@ -148,7 +168,7 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
         endpoint: "generate-schedule",
         userId,
         success: true,
-        creditsCharged: 2,
+        creditsCharged: 3,
         durationMs: Date.now() - startTime,
       })
     );
