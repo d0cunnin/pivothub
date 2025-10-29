@@ -2,6 +2,8 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -233,16 +235,33 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
   "strategicSummary": "..."
 }`;
 
+    // Initialize OpenAI model config (use GPT-4o for text generation)
+    const OPENAI_KEY = Deno.env.get('relaunch_openai_key');
+    if (!OPENAI_KEY) {
+      console.warn('OpenAI API key missing - returning unenhanced Google Places results');
+      const resources = formatGooglePlacesResults(allPlaces, location);
+      return new Response(
+        JSON.stringify({ resources }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+    }
+
+    const modelConfig = {
+      model: 'gpt-4o',
+      apiKey: OPENAI_KEY,
+      endpoint: 'https://api.openai.com/v1/chat/completions'
+    };
+
     try {
-      console.log('Invoking Gemini 2.5 Flash for AI enhancement...');
-      const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      console.log('Invoking OpenAI for AI enhancement...');
+      const aiResponse = await fetch(modelConfig.endpoint, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Authorization': `Bearer ${modelConfig.apiKey}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
+          model: modelConfig.model,
           messages: [
             { 
               role: 'system', 

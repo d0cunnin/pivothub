@@ -1,7 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { guard, corsHeaders } from "../_shared/guard.ts";
-
-const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+import { guard, corsHeaders, deductCreditsOnSuccess, logRequest } from "../_shared/guard.ts";
+import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -15,11 +14,12 @@ Deno.serve(async (req) => {
     const guardResult = await guard(req, {
       endpoint: "generate-schedule",
       requireAuth: true,
-      cost: 3,
+      cost: 0, // Credits deducted after successful generation
       bodyLimit: 10000,
     });
 
-    userId = guardResult.userId;
+    userId = guardResult.userId!;
+    const { supabase, ip } = guardResult;
 
     const formData = await req.json();
 
@@ -111,14 +111,18 @@ Categories must be one of: "work", "business", "marriage", "children", "family",
 
 Generate a realistic weekly schedule that respects all constraints and energy patterns.`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Get AI model based on user subscription (OpenAI only for text)
+    const modelConfig = await getModelForUser(supabase, userId, 'text');
+    validateProvider('text', modelConfig.model);
+
+    const response = await fetch(modelConfig.endpoint, {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
+        "Authorization": `Bearer ${modelConfig.apiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: modelConfig.model,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
@@ -129,55 +133,100 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
     });
 
     if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Payment required, please add funds to your Lovable AI workspace." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      throw new Error(`AI API error: ${response.status}`);
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: `AI API error: ${response.status}`,
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(JSON.stringify({ 
+        ok: false, 
+        message: "This action did not use credits. Try again." 
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const aiData = await response.json();
     const content = aiData.choices[0]?.message?.content;
 
     if (!content) {
-      throw new Error("No content in AI response");
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: "No content in AI response",
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(JSON.stringify({ 
+        ok: false, 
+        message: "This action did not use credits. Try again." 
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // Parse JSON from response
     let scheduleData;
     try {
-      // Remove markdown code blocks if present
       const jsonString = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       scheduleData = JSON.parse(jsonString);
     } catch (parseError) {
       console.error("JSON parse error:", parseError, "Content:", content);
-      throw new Error("Failed to parse AI response");
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: "Failed to parse AI response",
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(JSON.stringify({ 
+        ok: false, 
+        message: "This action did not use credits. Try again." 
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // Log successful request
-    await import("../_shared/guard.ts").then(({ logRequest }) =>
-      logRequest({
-        endpoint: "generate-schedule",
-        userId,
-        success: true,
-        creditsCharged: 3,
-        durationMs: Date.now() - startTime,
-      })
-    );
+    // SUCCESS - Deduct credits after successful generation
+    await deductCreditsOnSuccess(supabase, userId, "generate-schedule", 3, `schedule-${userId}-${Date.now()}`);
 
-    return new Response(JSON.stringify(scheduleData), {
+    // Log successful request
+    await logRequest(supabase, {
+      userId,
+      endpoint: "generate-schedule",
+      ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
+      creditsCharged: 3,
+      success: true,
+      requestDurationMs: Date.now() - startTime
+    });
+
+    return new Response(JSON.stringify({ ok: true, ...scheduleData }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: any) {
     console.error("Error in generate-schedule:", error);
+    
+    if (error instanceof Response) {
+      return error;
+    }
 
     // Log failed request
     await import("../_shared/guard.ts").then(({ logRequest }) =>

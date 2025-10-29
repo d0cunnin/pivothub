@@ -228,37 +228,90 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
     }
   }
 
-  // Credit deduction (if cost > 0 and user is authenticated)
-  if (cost > 0 && userId) {
-    const { data, error: creditError } = await supabase.rpc(
-      'check_and_increment_ai_usage',
-      {
-        p_user_id: userId,
-        p_tool_name: endpoint,
-        p_credits_to_use: cost
-      }
-    );
+  // CREDIT DEDUCTION REMOVED FROM GUARD
+  // Credits are now deducted AFTER successful generation using deductCreditsOnSuccess()
+  // This prevents charging users for failed requests
 
-    if (creditError || !data?.can_use) {
-      await logRequest(supabase, {
-        userId,
-        endpoint,
-        ip,
-        userAgent: req.headers.get('user-agent') || 'unknown',
-        creditsCharged: 0,
-        success: false,
-        errorMessage: data?.reason || 'Insufficient credits',
-        requestDurationMs: Date.now() - startTime
-      });
-      
-      const message = data?.reason === 'limit_exceeded' 
-        ? 'Credit limit exceeded - Please upgrade your plan'
-        : 'Insufficient credits';
-      throw new Response(message, { status: 402 });
+  return { supabase, userId, ip, startTime };
+}
+
+/**
+ * Deduct credits AFTER successful generation
+ * Only call this after AI output has been successfully generated
+ * 
+ * @param requestHash - Optional hash for idempotency (prevents double-charging)
+ */
+export async function deductCreditsOnSuccess(
+  supabase: SupabaseClient,
+  userId: string,
+  endpoint: string,
+  cost: number,
+  requestHash?: string
+): Promise<void> {
+  if (cost === 0) return;
+
+  // Create service role client for admin checks
+  const serviceClient = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+  );
+
+  // Check if user is admin (skip credit deduction for QA testing)
+  const { data: roleData } = await serviceClient
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .eq('role', 'admin')
+    .maybeSingle();
+
+  if (roleData) {
+    console.log('[CREDITS] Admin user - skipping credit deduction');
+    return;
+  }
+
+  // Check for duplicate request (idempotency)
+  if (requestHash) {
+    const { data: existingRequest } = await serviceClient
+      .from('credit_deduction_log')
+      .select('request_hash')
+      .eq('request_hash', requestHash)
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (existingRequest) {
+      console.log('[CREDITS] Duplicate request detected - skipping deduction');
+      return;
     }
   }
 
-  return { supabase, userId, ip, startTime };
+  // Deduct credits
+  const { data, error } = await supabase.rpc(
+    'check_and_increment_ai_usage',
+    {
+      p_user_id: userId,
+      p_tool_name: endpoint,
+      p_credits_to_use: cost
+    }
+  );
+
+  if (error || !data?.can_use) {
+    console.error('[CREDITS] Post-generation deduction failed:', error);
+    // Log but don't block (user already got output)
+  }
+
+  // Log deduction for audit trail
+  if (requestHash) {
+    await serviceClient
+      .from('credit_deduction_log')
+      .insert({
+        user_id: userId,
+        endpoint,
+        credits_deducted: cost,
+        request_hash: requestHash,
+        deducted_at: new Date().toISOString()
+      })
+      .catch(err => console.error('[CREDITS] Failed to log deduction:', err));
+  }
 }
 
 // Helper to log successful/failed requests

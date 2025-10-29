@@ -277,10 +277,10 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">
-              Start Your Free Trial
+              Start Your Free Account
             </DialogTitle>
             <DialogDescription className="text-center">
-              Create your account to access all PivotHub tools with a 2-day free trial
+              Create your account to access PivotHub tools with 5 free credits per month
             </DialogDescription>
           </DialogHeader>
           

@@ -359,6 +359,33 @@ export type Database = {
         }
         Relationships: []
       }
+      credit_deduction_log: {
+        Row: {
+          credits_deducted: number
+          deducted_at: string | null
+          endpoint: string
+          id: string
+          request_hash: string | null
+          user_id: string | null
+        }
+        Insert: {
+          credits_deducted: number
+          deducted_at?: string | null
+          endpoint: string
+          id?: string
+          request_hash?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          credits_deducted?: number
+          deducted_at?: string | null
+          endpoint?: string
+          id?: string
+          request_hash?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed_at: string
@@ -922,6 +949,84 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          ai_credits_remaining: number | null
+          ai_credits_total: number | null
+          ai_credits_used: number | null
+          ai_usage_month: number | null
+          ai_usage_year: number | null
+          billing_cycle_start: string | null
+          created_at: string | null
+          display_name: string | null
+          email: string
+          grace_period_end: string | null
+          id: string
+          last_login: string | null
+          next_billing_date: string | null
+          onboarding_completed: boolean | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscribed: boolean | null
+          subscription_end: string | null
+          subscription_package: string | null
+          subscription_start: string | null
+          subscription_status: string | null
+          subscription_tier: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          ai_credits_remaining?: number | null
+          ai_credits_total?: number | null
+          ai_credits_used?: number | null
+          ai_usage_month?: number | null
+          ai_usage_year?: number | null
+          billing_cycle_start?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          email: string
+          grace_period_end?: string | null
+          id: string
+          last_login?: string | null
+          next_billing_date?: string | null
+          onboarding_completed?: boolean | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscribed?: boolean | null
+          subscription_end?: string | null
+          subscription_package?: string | null
+          subscription_start?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          ai_credits_remaining?: number | null
+          ai_credits_total?: number | null
+          ai_credits_used?: number | null
+          ai_usage_month?: number | null
+          ai_usage_year?: number | null
+          billing_cycle_start?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          email?: string
+          grace_period_end?: string | null
+          id?: string
+          last_login?: string | null
+          next_billing_date?: string | null
+          onboarding_completed?: boolean | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscribed?: boolean | null
+          subscription_end?: string | null
+          subscription_package?: string | null
+          subscription_start?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }

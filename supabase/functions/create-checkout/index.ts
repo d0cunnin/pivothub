@@ -32,6 +32,37 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
+    // CRITICAL: Ensure user record exists in public.users before checkout
+    const { data: userData, error: userCheckError } = await supabaseClient
+      .from('users')
+      .select('id, email')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (!userData) {
+      logStep("User not found in public.users, creating record");
+      
+      // Create user record idempotently
+      const { error: insertError } = await supabaseClient
+        .from('users')
+        .insert({
+          id: user.id,
+          email: user.email,
+          subscription_tier: 'explore',
+          ai_credits_remaining: 5,
+          ai_credits_total: 5
+        });
+      
+      if (insertError && insertError.code !== '23505') { // Ignore duplicate key errors
+        logStep("Failed to create user record", { error: insertError });
+        throw new Error("User record creation failed. Please try again.");
+      }
+      
+      logStep("User record created successfully");
+    } else {
+      logStep("User record exists", { userData });
+    }
+
     const { tier, assessmentId } = await req.json();
     logStep("Request received", { tier, assessmentId });
 
