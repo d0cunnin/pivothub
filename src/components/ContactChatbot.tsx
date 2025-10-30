@@ -69,13 +69,14 @@ export const ContactChatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm PivotHub's support assistant. I can help you with:\n\n• Account & subscription questions\n• Platform navigation\n• Pricing & billing\n• Tool explanations\n• Contact information\n\nClick a quick action, select an FAQ, or type your question!",
+      content: "Hi! I'm PivotHub's support assistant. I can help you with:\n\n• Account & subscription questions\n• Platform navigation\n• Pricing & billing\n• Tool explanations\n• Contact information\n\nClick a quick action, select an FAQ, or type your question!\n\n💡 Want personalized follow-up? Share your email anytime by typing 'my email is [your@email.com]'",
       timestamp: new Date(),
     },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -109,6 +110,27 @@ export const ContactChatbot = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+
+    // Check if user is providing their email
+    const emailMatch = finalInput.match(/(?:my email is |email:|contact me at )?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i);
+    
+    if (emailMatch) {
+      const email = emailMatch[1];
+      setUserEmail(email);
+      
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          { 
+            role: "assistant", 
+            content: `Thanks! I've saved ${email} for follow-up. Our support team can reach you there if needed.\n\nHow else can I help you today?`,
+            timestamp: new Date() 
+          },
+        ]);
+        setIsLoading(false);
+      }, 300);
+      return;
+    }
 
     // Simulate brief typing delay for better UX
     setTimeout(() => {
@@ -194,7 +216,9 @@ For personalized support, please contact:
 📞 269.998.4203
 🕒 Mon-Fri, 9 AM - 6 PM EST
 
-Try clicking an FAQ button or asking about: pricing, credits, tools, cancellation, support, or password reset.`;
+Try clicking an FAQ button or asking about: pricing, credits, tools, cancellation, support, or password reset.
+
+💡 Want us to follow up? Share your email by typing "my email is [your@email.com]"`;
   };
 
   return (
@@ -304,6 +328,11 @@ Try clicking an FAQ button or asking about: pricing, credits, tools, cancellatio
 
           {/* Input */}
           <div className="p-6 pt-4 border-t">
+            {userEmail && (
+              <div className="mb-2 text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+                📧 Follow-up email: {userEmail}
+              </div>
+            )}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -322,6 +351,9 @@ Try clicking an FAQ button or asking about: pricing, credits, tools, cancellatio
                 <Send className="h-4 w-4" />
               </Button>
             </form>
+            <p className="text-xs text-muted-foreground mt-2">
+              No account needed • Free support • No credits used
+            </p>
           </div>
         </SheetContent>
       </Sheet>
