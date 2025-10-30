@@ -93,7 +93,9 @@ export const ContactChatbot = () => {
   };
 
   const handleFaqClick = (question: string) => {
-    // Send the FAQ question to the assistant for an automatic response
+    console.log("FAQ clicked:", question);
+    // Clear any existing input and send the FAQ question
+    setInput("");
     handleSend(question);
   };
 
@@ -148,10 +150,12 @@ export const ContactChatbot = () => {
   // Static response matcher - no AI, no API, no credits
   const getStaticResponse = (userInput: string): string => {
     const input = userInput.toLowerCase().trim();
+    console.log("Looking for response to:", input);
 
     // Direct FAQ match
     for (const [question, answer] of Object.entries(FAQ_RESPONSES)) {
       if (input === question.toLowerCase()) {
+        console.log("Found exact match:", question);
         return answer;
       }
     }
