@@ -61,13 +61,13 @@ const AssessIt = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <ToolGuard toolName="career-assessment">
+              <ToolGuard toolName="career-assessment" showCreditInfo={false}>
                 <CareerAssessment />
               </ToolGuard>
-              <ToolGuard toolName="skills-assessment">
+              <ToolGuard toolName="skills-assessment" showCreditInfo={false}>
                 <SkillsAssessment />
               </ToolGuard>
-              <ToolGuard toolName="personality-assessment">
+              <ToolGuard toolName="personality-assessment" showCreditInfo={false}>
                 <PersonalityAssessment />
               </ToolGuard>
             </div>

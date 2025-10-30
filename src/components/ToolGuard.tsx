@@ -18,12 +18,14 @@ interface ToolGuardProps {
   children: React.ReactNode;
   onUse?: () => void;
   toolName?: string;
+  showCreditInfo?: boolean;
 }
 
 export const ToolGuard: React.FC<ToolGuardProps> = ({ 
   children, 
   onUse,
-  toolName = "this tool"
+  toolName = "this tool",
+  showCreditInfo = true
 }) => {
   const { remainingRequests, accountStatus, checkAndIncrementUsage } = useUsage();
   const { user, subscribed, isAdmin } = useAuth();
@@ -207,7 +209,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
   return (
     <div>
       {/* Tool Cost Badge */}
-      {toolName && !isAdmin && (
+      {showCreditInfo && toolName && !isAdmin && (
         <div className="mb-3 flex items-center justify-between">
           <Badge variant={toolCostTier === 'free' ? 'outline' : toolCostTier === 'low' ? 'secondary' : 'default'} className="gap-1">
             <Zap className="h-3 w-3" />
