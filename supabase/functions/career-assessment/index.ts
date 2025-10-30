@@ -100,7 +100,7 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    console.log('Processing career assessment with OpenAI gpt-4.1 model...');
+    console.log('Processing career assessment with OpenAI GPT-5 model...');
 
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - CAREER ASSESSMENT
 
@@ -475,7 +475,7 @@ Return as a JSON object with this EXACT structure:
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
         ],
-        max_completion_tokens: 4000,
+        max_completion_tokens: 6000,
       }),
     });
 

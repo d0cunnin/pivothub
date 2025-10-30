@@ -334,7 +334,7 @@ QUALITY STANDARDS:
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
         ],
-        max_completion_tokens: 4500,
+        max_completion_tokens: 6000,
       }),
     });
 

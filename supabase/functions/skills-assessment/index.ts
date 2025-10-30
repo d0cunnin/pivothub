@@ -723,7 +723,7 @@ Analyze the user's responses comprehensively to create a professional-grade skil
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze these skill assessment responses and provide comprehensive career development recommendations following the detailed structure provided.` }
         ],
-        max_completion_tokens: 4000,
+        max_completion_tokens: 8000,
       }),
     });
 

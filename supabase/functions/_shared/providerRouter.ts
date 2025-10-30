@@ -38,10 +38,10 @@ export async function getModelForUser(
   const isPaid = userData?.subscribed === true && 
                  userData?.subscription_tier !== 'explore';
 
-  // Use GPT-5 for paid users, GPT-4o for free users
+  // Use GPT-5 for all users (paid and free)
   return {
     provider: 'openai',
-    model: isPaid ? 'gpt-5' : 'gpt-4o',
+    model: 'gpt-5-2025-08-07',
     apiKey: Deno.env.get('relaunch_openai_key')!,
     endpoint: 'https://api.openai.com/v1/chat/completions'
   };

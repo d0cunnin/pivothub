@@ -384,7 +384,7 @@ QUALITY STANDARDS:
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Please analyze this resume comprehensively following the detailed structure. Provide professional-grade feedback.` }
         ],
-        max_completion_tokens: 4000,
+        max_completion_tokens: 5000,
       }),
     });
 

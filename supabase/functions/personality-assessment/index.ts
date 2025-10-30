@@ -489,7 +489,7 @@ serve(async (req) => {
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze these personality assessment responses and provide comprehensive executive-level career insights following the detailed structure.` }
         ],
-        max_completion_tokens: 4000,
+        max_completion_tokens: 6000,
       }),
     });
 

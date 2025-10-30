@@ -271,7 +271,7 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Please analyze this interview answer and provide detailed, expert-level feedback following the comprehensive structure.` }
         ],
-        max_completion_tokens: 3500,
+        max_completion_tokens: 5000,
       }),
     });
 

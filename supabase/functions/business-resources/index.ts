@@ -247,7 +247,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
     }
 
     const modelConfig = {
-      model: 'gpt-4o',
+      model: 'gpt-5-2025-08-07',
       apiKey: OPENAI_KEY,
       endpoint: 'https://api.openai.com/v1/chat/completions'
     };
@@ -269,7 +269,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
             },
             { role: 'user', content: aiPrompt }
           ],
-          max_tokens: 2000
+          max_completion_tokens: 4000
         })
       });
 

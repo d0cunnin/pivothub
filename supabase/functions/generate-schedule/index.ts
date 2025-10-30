@@ -127,8 +127,7 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        temperature: 0.7,
-        max_tokens: 3000,
+        max_completion_tokens: 5000,
       }),
     });
 

@@ -308,7 +308,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
               { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
               { role: 'user', content: prompt }
             ],
-            max_completion_tokens: 10000,
+            max_completion_tokens: 7000,
           })
         })
 
