@@ -69,7 +69,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
     // Get credit cost for this tool
     const creditCost = getToolCreditCost(toolName || 'generic');
     
-    // Check if user has enough credits
+    // Pre-check: ensure user has enough credits (no deduction yet)
     if (remainingRequests < creditCost) {
       toast({
         title: "Insufficient Credits",
@@ -79,31 +79,8 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
       return;
     }
 
-    // Check and increment usage
-    const result = await checkAndIncrementUsage(toolName || 'generic');
-    
-    if (!result.canUse) {
-      if (result.reason === 'limit_exceeded') {
-        toast({
-          title: "Monthly Limit Reached",
-          description: "You've reached your monthly credit limit. Purchase extra credits or upgrade your plan.",
-          variant: "destructive",
-        });
-      } else if (result.reason === 'free_limit_exceeded') {
-        toast({
-          title: "Free Limit Reached",
-          description: "You've used your 3 free credits for this month. Subscribe to continue using PivotHub tools.",
-          variant: "destructive",
-        });
-      }
-      return;
-    }
-
-    // Usage incremented successfully, execute the tool
-    toast({
-      title: "Tool Activated",
-      description: `${result.creditsCharged} credit${result.creditsCharged! > 1 ? 's' : ''} used. ${remainingRequests - result.creditsCharged!} credits remaining.`,
-    });
+    // All checks passed - call the tool's generation function
+    // Credits will be deducted by backend after successful AI generation
     onUse?.();
   };
 
@@ -268,7 +245,14 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
       )}
 
       {/* Wrap the tool component */}
-      <div onClick={handleToolUse}>
+      <div onClick={(e) => {
+        // Only trigger if click is on an element with data-toolguard-trigger="true"
+        const target = e.target as HTMLElement;
+        if (!target.closest('[data-toolguard-trigger="true"]')) {
+          return;
+        }
+        handleToolUse();
+      }}>
         {children}
       </div>
 

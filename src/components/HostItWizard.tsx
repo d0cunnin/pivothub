@@ -504,6 +504,7 @@ export function HostItWizard() {
             </Alert>
 
             <Button
+              data-toolguard-trigger="true"
               onClick={generateEventPlan}
               disabled={isGenerating}
               className="w-full"

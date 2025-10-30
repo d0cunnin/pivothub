@@ -833,6 +833,7 @@ const FundIt = () => {
                       toolName="grant-content"
                     >
                       <Button
+                        data-toolguard-trigger="true"
                         onClick={() => {}} 
                         disabled={isGenerating}
                         className="w-full h-11"

@@ -403,6 +403,7 @@ export function ScheduleItWizard() {
             </Alert>
 
             <Button
+              data-toolguard-trigger="true"
               onClick={generateSchedule}
               disabled={isGenerating}
               className="w-full"

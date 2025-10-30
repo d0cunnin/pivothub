@@ -771,6 +771,7 @@ ${generatedMaterials.marketingPlan}
           </div>
 
           <Button
+            data-toolguard-trigger="true"
             onClick={generateMaterials}
             disabled={isGenerating}
             className="w-full"
