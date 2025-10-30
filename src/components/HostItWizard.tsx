@@ -50,20 +50,27 @@ interface EventFormData {
   eventName: string;
   startDate: string;
   endDate: string;
-  attendanceRange: string;
   budget: string;
   targetAudience: string;
   
   // Step 4
   primaryGoals: string[];
-  specificRequirements: string;
+  eventDetails: string;
+  numberOfSpeakers: string;
+  speakerTopics: string;
   registrationType: string;
+  eventCost: string;
+  tierDetails: string;
   
   // Step 5
   existingChannels: string;
   emailListSize: string;
   marketingBudget: string;
   timelineToEvent: string;
+  needsSponsorshipPacket: boolean;
+  sponsorshipMission: string;
+  sponsorshipGoals: string;
+  targetSponsorTypes: string;
   includeItinerary: boolean;
 }
 
@@ -79,16 +86,23 @@ export function HostItWizard() {
     eventName: '',
     startDate: '',
     endDate: '',
-    attendanceRange: '',
     budget: '',
     targetAudience: '',
     primaryGoals: [],
-    specificRequirements: '',
+    eventDetails: '',
+    numberOfSpeakers: '',
+    speakerTopics: '',
     registrationType: '',
+    eventCost: '',
+    tierDetails: '',
     existingChannels: '',
     emailListSize: '',
     marketingBudget: '',
     timelineToEvent: '',
+    needsSponsorshipPacket: false,
+    sponsorshipMission: '',
+    sponsorshipGoals: '',
+    targetSponsorTypes: '',
     includeItinerary: false,
   });
 
@@ -317,22 +331,6 @@ export function HostItWizard() {
             </div>
 
             <div>
-              <Label htmlFor="attendanceRange">Expected Attendance Range</Label>
-              <Select value={formData.attendanceRange} onValueChange={(val) => handleInputChange('attendanceRange', val)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1-50">1-50</SelectItem>
-                  <SelectItem value="51-100">51-100</SelectItem>
-                  <SelectItem value="101-250">101-250</SelectItem>
-                  <SelectItem value="251-500">251-500</SelectItem>
-                  <SelectItem value="500+">500+</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
               <Label htmlFor="budget">Budget Range</Label>
               <Select value={formData.budget} onValueChange={(val) => handleInputChange('budget', val)}>
                 <SelectTrigger>
@@ -382,13 +380,35 @@ export function HostItWizard() {
             </div>
 
             <div>
-              <Label htmlFor="specificRequirements">Specific Requirements</Label>
+              <Label htmlFor="eventDetails">Event Details</Label>
               <Textarea
-                id="specificRequirements"
-                value={formData.specificRequirements}
-                onChange={(e) => handleInputChange('specificRequirements', e.target.value)}
-                placeholder="Speakers, sponsors, vendors, entertainment, etc."
-                rows={4}
+                id="eventDetails"
+                value={formData.eventDetails}
+                onChange={(e) => handleInputChange('eventDetails', e.target.value)}
+                placeholder="General event details, vendors, entertainment, etc."
+                rows={3}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="numberOfSpeakers">Number of Speakers</Label>
+              <Input
+                id="numberOfSpeakers"
+                type="number"
+                value={formData.numberOfSpeakers}
+                onChange={(e) => handleInputChange('numberOfSpeakers', e.target.value)}
+                placeholder="e.g., 3"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="speakerTopics">Speaker Topics</Label>
+              <Textarea
+                id="speakerTopics"
+                value={formData.speakerTopics}
+                onChange={(e) => handleInputChange('speakerTopics', e.target.value)}
+                placeholder="What topics will speakers cover?"
+                rows={2}
               />
             </div>
 
@@ -406,6 +426,31 @@ export function HostItWizard() {
                 </SelectContent>
               </Select>
             </div>
+
+            {formData.registrationType === 'paid' && (
+              <div>
+                <Label htmlFor="eventCost">Event Cost</Label>
+                <Input
+                  id="eventCost"
+                  value={formData.eventCost}
+                  onChange={(e) => handleInputChange('eventCost', e.target.value)}
+                  placeholder="e.g., $50 per person"
+                />
+              </div>
+            )}
+
+            {formData.registrationType === 'tiered' && (
+              <div>
+                <Label htmlFor="tierDetails">Tier Details</Label>
+                <Textarea
+                  id="tierDetails"
+                  value={formData.tierDetails}
+                  onChange={(e) => handleInputChange('tierDetails', e.target.value)}
+                  placeholder="Describe each tier: name, price, and what makes it different"
+                  rows={4}
+                />
+              </div>
+            )}
           </div>
         );
 
@@ -467,6 +512,55 @@ export function HostItWizard() {
               </Select>
             </div>
 
+            <div className="border-t pt-4 mt-4">
+              <div className="flex items-center space-x-2 mb-4">
+                <Checkbox
+                  id="needsSponsorshipPacket"
+                  checked={formData.needsSponsorshipPacket}
+                  onCheckedChange={(checked) => handleInputChange('needsSponsorshipPacket', checked === true)}
+                />
+                <Label htmlFor="needsSponsorshipPacket" className="cursor-pointer">
+                  I need a sponsorship packet
+                </Label>
+              </div>
+
+              {formData.needsSponsorshipPacket && (
+                <div className="space-y-3 ml-6">
+                  <div>
+                    <Label htmlFor="sponsorshipMission">Event Mission/Purpose</Label>
+                    <Textarea
+                      id="sponsorshipMission"
+                      value={formData.sponsorshipMission}
+                      onChange={(e) => handleInputChange('sponsorshipMission', e.target.value)}
+                      placeholder="Why are you hosting this event? What impact will it have?"
+                      rows={2}
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="sponsorshipGoals">Sponsorship Goals</Label>
+                    <Textarea
+                      id="sponsorshipGoals"
+                      value={formData.sponsorshipGoals}
+                      onChange={(e) => handleInputChange('sponsorshipGoals', e.target.value)}
+                      placeholder="e.g., Raise $50,000 for youth programs"
+                      rows={2}
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="targetSponsorTypes">Target Sponsor Types</Label>
+                    <Input
+                      id="targetSponsorTypes"
+                      value={formData.targetSponsorTypes}
+                      onChange={(e) => handleInputChange('targetSponsorTypes', e.target.value)}
+                      placeholder="e.g., Local businesses, corporations, faith-based organizations"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="flex items-center space-x-2 pt-4">
               <Checkbox
                 id="includeItinerary"
@@ -492,8 +586,14 @@ export function HostItWizard() {
               <p><strong>Category:</strong> {formData.eventCategory}</p>
               <p><strong>Format:</strong> {formData.eventFormat}</p>
               <p><strong>Date:</strong> {formData.startDate || 'Not specified'}</p>
-              <p><strong>Attendance:</strong> {formData.attendanceRange || 'Not specified'}</p>
               <p><strong>Budget:</strong> {formData.budget || 'Not specified'}</p>
+              {formData.numberOfSpeakers && <p><strong>Speakers:</strong> {formData.numberOfSpeakers}</p>}
+              {formData.registrationType === 'paid' && formData.eventCost && (
+                <p><strong>Cost:</strong> {formData.eventCost}</p>
+              )}
+              {formData.needsSponsorshipPacket && (
+                <p><strong>Sponsorship Packet:</strong> Included</p>
+              )}
             </div>
 
             <Alert>

@@ -64,6 +64,14 @@ You must return ONLY valid JSON in this exact format:
     { "time": "9:00 AM", "activity": "Registration & Welcome", "duration": "30 min" },
     { "time": "9:30 AM", "activity": "Opening Keynote", "duration": "45 min" }
   ],
+  "sponsorshipPacket": {
+    "introLetter": "Personalized letter to potential sponsors explaining the event mission and impact...",
+    "tiers": [
+      { "name": "Platinum", "amount": "$10,000", "benefits": ["Logo on stage", "VIP seating for 10", "Speaking opportunity", "Website feature", "Social media mentions"] },
+      { "name": "Gold", "amount": "$5,000", "benefits": ["Logo on materials", "VIP seating for 5", "Website listing", "Social media mentions"] },
+      { "name": "Silver", "amount": "$2,500", "benefits": ["Logo on materials", "Website listing", "Event program mention"] }
+    ]
+  },
   "marketingTimeline": {
     "week1-2": {
       "phase": "Pre-launch & Teaser",
@@ -124,7 +132,7 @@ You must return ONLY valid JSON in this exact format:
   }
 }
 
-If the user requests an itinerary (includeItinerary: true), create a detailed time-by-time schedule with realistic timings in the eventItinerary array. Otherwise, omit the eventItinerary field completely. Keep titles engaging and relevant to the category. Use professional color palettes that match the event type. Make marketing actions specific and actionable.`;
+If the user requests an itinerary (includeItinerary: true), create a detailed time-by-time schedule with realistic timings in the eventItinerary array. Otherwise, omit the eventItinerary field completely. If the user requests a sponsorship packet (needsSponsorshipPacket: true), include a comprehensive sponsorshipPacket with an introductory letter and 3-5 sponsorship tiers with amounts and specific benefits. Otherwise, omit the sponsorshipPacket field. Keep titles engaging and relevant to the category. Use professional color palettes that match the event type. Make marketing actions specific and actionable.`;
 
     const userPrompt = `Create a comprehensive event plan:
 
@@ -133,8 +141,9 @@ If the user requests an itinerary (includeItinerary: true), create a detailed ti
 - Format: ${formData.eventFormat}
 - Event Name: ${formData.eventName || 'Generate title options'}
 - Date: ${formData.startDate || 'TBD'} to ${formData.endDate || 'TBD'}
-- Expected Attendance: ${formData.attendanceRange || 'Not specified'}
 - Budget: ${formData.budget || 'Not specified'}
+- Venue Capacity: ${formData.venueCapacity || 'Not specified'}
+- Expected Virtual Attendees: ${formData.expectedAttendees || 'Not specified'}
 
 **Target Audience:**
 ${formData.targetAudience || 'General audience'}
@@ -142,17 +151,36 @@ ${formData.targetAudience || 'General audience'}
 **Goals:**
 ${formData.primaryGoals?.join(', ') || 'Not specified'}
 
-**Requirements:**
-${formData.specificRequirements || 'None specified'}
+**Event Details:**
+${formData.eventDetails || 'None specified'}
+
+**Speaker Information:**
+- Number of Speakers: ${formData.numberOfSpeakers || 'Not specified'}
+- Speaker Topics: ${formData.speakerTopics || 'Not specified'}
+
+**Registration:**
+- Type: ${formData.registrationType || 'Not specified'}
+${formData.registrationType === 'paid' && formData.eventCost ? `- Event Cost: ${formData.eventCost}` : ''}
+${formData.registrationType === 'tiered' && formData.tierDetails ? `- Tier Details: ${formData.tierDetails}` : ''}
 
 **Marketing Resources:**
 - Existing channels: ${formData.existingChannels || 'None'}
 - Email list: ${formData.emailListSize || 'None'}
 - Marketing budget: ${formData.marketingBudget || 'None'}
 - Timeline to event: ${formData.timelineToEvent || 'Not specified'}
+
+**Sponsorship:**
+${formData.needsSponsorshipPacket ? `
+- Include Sponsorship Packet: Yes
+- Mission: ${formData.sponsorshipMission || 'Not specified'}
+- Goals: ${formData.sponsorshipGoals || 'Not specified'}
+- Target Sponsors: ${formData.targetSponsorTypes || 'Not specified'}
+` : '- Include Sponsorship Packet: No'}
+
+**Additional Requests:**
 - Include detailed itinerary: ${formData.includeItinerary ? 'Yes' : 'No'}
 
-Generate event titles, description, color palette${formData.includeItinerary ? ', event itinerary,' : ''} and 6-week marketing timeline.`;
+Generate event titles, description, color palette${formData.includeItinerary ? ', event itinerary,' : ''}${formData.needsSponsorshipPacket ? ', sponsorship packet,' : ''} and 6-week marketing timeline.`;
 
     // Get AI model based on user subscription (OpenAI only for text)
     const modelConfig = await getModelForUser(supabase, userId, 'text');

@@ -23,6 +23,17 @@ interface MarketingTimeline {
   [key: string]: WeeklyActions;
 }
 
+interface SponsorshipTier {
+  name: string;
+  amount: string;
+  benefits: string[];
+}
+
+interface SponsorshipPacket {
+  introLetter: string;
+  tiers: SponsorshipTier[];
+}
+
 interface EventPlanData {
   platformRecommendations: PlatformRecommendation[];
   eventTitles: string[];
@@ -30,6 +41,7 @@ interface EventPlanData {
   colorPalette: ColorPalette[];
   marketingTimeline: MarketingTimeline;
   eventItinerary?: Array<{ time: string; activity: string; duration: string }>;
+  sponsorshipPacket?: SponsorshipPacket;
 }
 
 export function generateEventPlanPDF(
@@ -209,6 +221,68 @@ export function generateEventPlanPDF(
     yPos += 12;
   });
   yPos += 5;
+
+  // Sponsorship Packet
+  if (eventPlan.sponsorshipPacket) {
+    checkPageBreak(50);
+    doc.addPage();
+    yPos = margin;
+    
+    doc.setFillColor(59, 130, 246);
+    doc.rect(margin, yPos, maxWidth, 8, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Sponsorship Packet', margin + 3, yPos + 5.5);
+    doc.setTextColor(0, 0, 0);
+    yPos += 15;
+    
+    // Intro Letter
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Letter to Potential Sponsors', margin + 3, yPos);
+    yPos += 7;
+    
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    const letterLines = doc.splitTextToSize(eventPlan.sponsorshipPacket.introLetter, maxWidth - 6);
+    letterLines.forEach((line: string) => {
+      checkPageBreak(5);
+      doc.text(line, margin + 3, yPos);
+      yPos += 5;
+    });
+    yPos += 10;
+    
+    // Sponsorship Tiers
+    checkPageBreak(30);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Sponsorship Tiers', margin + 3, yPos);
+    yPos += 10;
+    
+    eventPlan.sponsorshipPacket.tiers.forEach((tier) => {
+      checkPageBreak(40);
+      
+      // Tier header
+      doc.setFillColor(245, 245, 245);
+      doc.rect(margin, yPos, maxWidth, 8, 'F');
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${tier.name} - ${tier.amount}`, margin + 3, yPos + 5.5);
+      yPos += 10;
+      
+      // Benefits
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      tier.benefits.forEach((benefit: string) => {
+        checkPageBreak(6);
+        doc.text(`• ${benefit}`, margin + 6, yPos);
+        yPos += 5;
+      });
+      yPos += 5;
+    });
+    yPos += 10;
+  }
 
   // Marketing Timeline
   checkPageBreak(50);
