@@ -21,6 +21,25 @@ interface ToolGuardProps {
   showCreditInfo?: boolean;
 }
 
+interface CreditBadgeProps {
+  toolName: string;
+  isAdmin?: boolean;
+}
+
+export const CreditBadge: React.FC<CreditBadgeProps> = ({ toolName, isAdmin = false }) => {
+  if (isAdmin) return null;
+  
+  const toolCost = getToolCreditCost(toolName);
+  const toolCostTier = getToolCostTier(toolName);
+  
+  return (
+    <Badge variant={toolCostTier === 'free' ? 'outline' : toolCostTier === 'low' ? 'secondary' : 'default'} className="gap-1 shrink-0">
+      <Zap className="h-3 w-3" />
+      {toolCost} {toolCost === 1 ? 'credit' : 'credits'}
+    </Badge>
+  );
+};
+
 export const ToolGuard: React.FC<ToolGuardProps> = ({ 
   children, 
   onUse,

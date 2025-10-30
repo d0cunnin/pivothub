@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Target, BookOpen, Users, TrendingUp, Brain } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
-import { ToolGuard } from "@/components/ToolGuard";
+import { ToolGuard, CreditBadge } from "@/components/ToolGuard";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
@@ -92,12 +92,15 @@ const AssessIt = () => {
               <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Target className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Career Assessment</h3>
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h3 className="text-2xl font-bold text-foreground">Career Assessment</h3>
+                <CreditBadge toolName="career-assessment" />
+              </div>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Discover your ideal career path based on your interests, values, and goals. Get personalized recommendations for roles that align with your aspirations.
               </p>
               <div className="mt-auto">
-                <ToolGuard toolName="career-assessment">
+                <ToolGuard toolName="career-assessment" showCreditInfo={false}>
                   <CareerAssessment />
                 </ToolGuard>
               </div>
@@ -107,12 +110,15 @@ const AssessIt = () => {
               <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Skills Assessment</h3>
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h3 className="text-2xl font-bold text-foreground">Skills Assessment</h3>
+                <CreditBadge toolName="skills-assessment" />
+              </div>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Evaluate your current skill level and identify areas for improvement. Get a detailed roadmap for skill development and certification.
               </p>
               <div className="mt-auto">
-                <ToolGuard toolName="skills-assessment">
+                <ToolGuard toolName="skills-assessment" showCreditInfo={false}>
                   <SkillsAssessment />
                 </ToolGuard>
               </div>
@@ -122,12 +128,15 @@ const AssessIt = () => {
               <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                 <Brain className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-4">Personality Assessment</h3>
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h3 className="text-2xl font-bold text-foreground">Personality Assessment</h3>
+                <CreditBadge toolName="personality-assessment" />
+              </div>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Understand your personality traits and work style preferences. Learn how to leverage your natural strengths in your career.
               </p>
               <div className="mt-auto">
-                <ToolGuard toolName="personality-assessment">
+                <ToolGuard toolName="personality-assessment" showCreditInfo={false}>
                   <PersonalityAssessment />
                 </ToolGuard>
               </div>
