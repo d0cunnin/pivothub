@@ -24,28 +24,32 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'resume-analyzer': 2,            // ~3,000 tokens with feedback
   'interview-feedback': 2,         // ~3,000 tokens with analysis
   'business-foundation': 2,        // ~3,000 tokens output
-  'schedule-it': 3,                // ~3,000-4,500 tokens output
-  'host-it': 4,                    // ~8,000 tokens output
-  'biography': 2,                  // ~3,000 tokens output
+  'schedule-it': 2,                // ~3,000 tokens output (Schedule It)
+  'host-it': 4,                    // ~8,000 tokens output (Host It)
+  'biography': 2,                  // ~3,000 tokens output (Business Biography)
+  
+  // FREE TOOLS (0 credits) - No AI generation
+  'contact-chatbot': 0,            // Static logic only, no AI
+  'business-resources': 0,         // Google Places API only, no AI
   
   // LOW COST TOOLS (1 credit) - Chatbot interactions only
   'career-advisor': 1,             // Chatbot, ~1,500 tokens per message
   'business-mentor': 1,            // Chatbot, ~1,500 tokens per message
-  'contact-chatbot': 1,            // Simple queries
   
   // MEDIUM COST TOOLS (2 credits) - Non-chatbot tools
-  'interview-questions': 2,        // ~1,500 tokens output
-  'business-resources': 3,         // Google Places + AI guidance (Gemini Flash)
-  'grant-resources': 2,            // Search + formatting
-  'name-checker': 2,               // API calls only
-  'logo-generator': 2,             // Runware API (not OpenAI)
-  'startup-checklist': 2,          // Simple generation
+  'interview-questions': 2,        // ~1,500 tokens output (Prep It)
+  'grant-resources': 2,            // Search + formatting (Fund It)
+  'name-checker': 2,               // API calls only (Build It)
+  'logo-generator': 2,             // Image generation (Build It)
+  'startup-checklist': 2,          // Simple generation (Build It)
   
-  // ASSESSMENT TOOLS (2 credits) - One-time assessments
+  // ASSESSMENT TOOLS (2 credits) - One-time assessments (Assess It)
   'career-assessment': 2,
   'skills-assessment': 2,
   'personality-assessment': 2,
-  'side-income-assessment': 2,
+  
+  // EARN IT ASSESSMENT (3 credits total)
+  'side-income-assessment': 3,     // Full Earn It assessment
   
   // LEARNING (0 credits) - No AI generation
   'learn-a-skill': 0,              // Video content only, no AI
