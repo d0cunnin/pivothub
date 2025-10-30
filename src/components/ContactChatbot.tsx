@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageCircle, Send, X, Loader2, Settings, CreditCard, DollarSign } from "lucide-react";
+import { MessageCircle, Send, X, Loader2, Settings, CreditCard, DollarSign, ChevronDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useNavigate } from "react-router-dom";
 
 interface Message {
@@ -254,7 +255,7 @@ Try clicking an FAQ button or asking about: pricing, credits, tools, cancellatio
             </div>
           </SheetHeader>
 
-          <ScrollArea ref={scrollRef} className="flex-1 p-6">
+          <ScrollArea ref={scrollRef} className="flex-1 p-6 min-h-[300px]">
             <div className="space-y-4">
               {messages.map((message, index) => (
                 <div
@@ -291,9 +292,9 @@ Try clicking an FAQ button or asking about: pricing, credits, tools, cancellatio
           </ScrollArea>
 
           {/* Quick Actions */}
-          <div className="px-6 py-3 border-t border-b bg-muted/30">
+          <div className="px-6 py-2 border-t border-b bg-muted/30">
             <p className="text-xs text-muted-foreground mb-2">Quick Actions</p>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               {QUICK_ACTIONS.map((action) => {
                 const Icon = action.icon;
                 return (
@@ -302,7 +303,7 @@ Try clicking an FAQ button or asking about: pricing, credits, tools, cancellatio
                     onClick={() => handleQuickAction(action.action)}
                     variant="outline"
                     size="sm"
-                    className="text-xs"
+                    className="text-xs flex-1"
                   >
                     <Icon className="h-3 w-3 mr-1" />
                     {action.label}
@@ -313,22 +314,29 @@ Try clicking an FAQ button or asking about: pricing, credits, tools, cancellatio
           </div>
 
           {/* FAQs */}
-          <div className="px-6 py-3 border-b bg-muted/20">
-            <p className="text-xs text-muted-foreground mb-2">FAQs</p>
-            <div className="flex flex-wrap gap-2">
-              {FAQS.map((q) => (
-                <Button
-                  key={q}
-                  onClick={() => handleFaqClick(q)}
-                  variant="secondary"
-                  size="sm"
-                  className="text-xs"
-                >
-                  {q}
-                </Button>
-              ))}
+          <Collapsible defaultOpen={false}>
+            <div className="px-6 py-2 border-b bg-muted/20">
+              <CollapsibleTrigger className="flex items-center justify-between w-full text-left">
+                <p className="text-xs text-muted-foreground">FAQs</p>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {FAQS.map((q) => (
+                    <Button
+                      key={q}
+                      onClick={() => handleFaqClick(q)}
+                      variant="secondary"
+                      size="sm"
+                      className="text-xs"
+                    >
+                      {q}
+                    </Button>
+                  ))}
+                </div>
+              </CollapsibleContent>
             </div>
-          </div>
+          </Collapsible>
 
           {/* Input */}
           <div className="p-6 pt-4 border-t">
