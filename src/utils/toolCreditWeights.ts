@@ -48,8 +48,8 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'skills-assessment': 2,
   'personality-assessment': 2,
   
-  // EARN IT ASSESSMENT (3 credits total)
-  'side-income-assessment': 3,     // Full Earn It assessment
+  // EARN IT ASSESSMENT (5 credits total)
+  'side-income-assessment': 5,     // Comprehensive side income blueprint (~10,000 tokens output)
   
   // LEARNING (0 credits) - No AI generation
   'learn-a-skill': 0,              // Video content only, no AI
