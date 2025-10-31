@@ -230,7 +230,7 @@ const PrepIt = () => {
             </div>
             <div className="text-left max-w-4xl mx-auto mb-6">
               <p className="text-lg text-foreground leading-relaxed mb-4">
-                Get expert analysis from a professional with 15+ years in HR and recruiting. Transform your resume from generic job duties into powerful, results-oriented statements that command attention and bypass AI filters. Learn to write achievements like "Saved company $500,000 by analyzing data and finding errors" or "Wrote 55 documents ensuring compliance with regulatory bodies, avoiding $2M+ in fines."
+                Analyze your resume and transform generic job duties into powerful, results-oriented statements that bypass AI filters. Learn to write quantifiable achievements like "Saved company $500,000 by analyzing data and finding errors" or "Wrote 55 documents ensuring compliance with regulatory bodies, avoiding $2M+ in fines."
               </p>
               
               <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-6">

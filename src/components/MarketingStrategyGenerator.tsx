@@ -424,7 +424,7 @@ export const MarketingStrategyGenerator = () => {
         <h3 className="text-xl font-bold text-foreground">🎯 Professional Marketing Strategy Generator</h3>
       </div>
       
-      <p className="text-sm text-muted-foreground mb-6">Get a world-class marketing strategy created by a specialist with 25+ years of experience and a $200M portfolio. Designed for beginners—step-by-step guidance that works when implemented. Includes psychology-based customer personas, messaging framework, 52-week rollout plan, and ad creative ideas. Download as PDF with full disclaimer.</p>
+      <p className="text-sm text-muted-foreground mb-6">Generate a comprehensive marketing strategy designed for beginners with step-by-step guidance. Includes psychology-based customer personas, messaging framework, 52-week rollout plan, and ad creative ideas. Download as PDF with full disclaimer.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

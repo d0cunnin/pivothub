@@ -426,9 +426,9 @@ export const ResumeCoachLetter = () => {
             <div className="space-y-6">
               <div>
                 <h3 className="text-lg font-semibold mb-4">📄 Resume & Cover Letter Optimization</h3>
-                <p className="text-muted-foreground mb-6">
-                  Get expert analysis from a professional with 15+ years in HR and recruiting. Transform job duties into results-oriented achievements that command attention and bypass AI filters. Download your optimization guide as PDF.
-                </p>
+      <p className="text-muted-foreground mb-6">
+        Analyze your resume and cover letter with detailed feedback. Transform job duties into results-oriented achievements that bypass AI filters and improve your interview callback rate. Download your optimization guide as PDF.
+      </p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">

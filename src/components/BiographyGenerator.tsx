@@ -237,10 +237,7 @@ export const BiographyGenerator = () => {
       </div>
       
       <p className="text-sm text-muted-foreground mb-6">
-        Written by a technical writer with 25+ years of experience crafting executive-level biographies and organizational statements. 
-        Get multiple bio lengths (100, 250, 500 words) for founder and business, plus vision and mission statements. 
-        Perfect for investor materials, websites, press releases, and speaking engagements. 
-        All content follows strict executive writing standards: no contractions, no em-dashes, polished and professional.
+        Generate professional founder and business biographies in multiple lengths (100, 250, 500 words), plus vision and mission statements. Perfect for investor materials, websites, press releases, and speaking engagements. All content follows executive writing standards: no contractions, no em-dashes, polished and professional.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">

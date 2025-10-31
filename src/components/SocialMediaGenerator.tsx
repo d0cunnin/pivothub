@@ -188,9 +188,7 @@ export const SocialMediaGenerator = () => {
       </div>
       
       <p className="text-sm text-muted-foreground mb-6">
-        Unlock viral-ready content! Get a complete 30-day calendar with platform-specific posts, 
-        scroll-stopping hooks, strategic hashtags, visual suggestions, and optimal posting times. 
-        Created by a social media guru who understands what goes viral on every platform.
+        Generate a complete 30-day social media content calendar with platform-specific posts, scroll-stopping hooks, strategic hashtags, visual suggestions, and optimal posting times optimized for engagement.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
