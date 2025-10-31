@@ -179,12 +179,360 @@ print(a + b)`,
                 <AccordionItem value="python-basics">
                   <AccordionTrigger>Python Basics</AccordionTrigger>
                   <AccordionContent>
-                    <div className="space-y-3 text-muted-foreground">
-                      <p><strong className="text-foreground">Strings:</strong> Text enclosed in quotes. Example: "Hello"</p>
-                      <p><strong className="text-foreground">Variables:</strong> Containers that store data. Example: name = "Alex"</p>
-                      <p><strong className="text-foreground">Integers:</strong> Whole numbers. Example: 25</p>
-                      <p><strong className="text-foreground">Floats:</strong> Decimal numbers. Example: 3.14</p>
-                      <p><strong className="text-foreground">Comments:</strong> Notes that start with #. Computers ignore them.</p>
+                    <div className="space-y-6 text-muted-foreground">
+                      {/* Introduction */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Introduction</h3>
+                        <p>Welcome to your first lesson in Python!</p>
+                        <p className="mt-2">Python is a beginner-friendly programming language that's used everywhere — from building websites and apps to powering artificial intelligence systems.</p>
+                        <p className="mt-2">In this section, you'll learn the building blocks of Python so you can start understanding how programs think and work.</p>
+                      </div>
+
+                      {/* What You'll Learn */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">What You'll Learn</h3>
+                        <ul className="list-disc pl-6 space-y-1">
+                          <li>How to write and run Python code</li>
+                          <li>What variables, strings, integers, and floats are</li>
+                          <li>How to use comments to take notes in your code</li>
+                          <li>How to do math in Python</li>
+                          <li>How to write simple functions</li>
+                          <li>How to work with lists, tuples, and dictionaries</li>
+                          <li>How to use Python Turtle to draw simple graphics</li>
+                        </ul>
+                      </div>
+
+                      {/* Getting Started */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Getting Started</h3>
+                        <p>When you open a coding platform (like Replit or Python Tutor), you'll see a blank space — that's called your code editor.</p>
+                        <p className="mt-2">Every line you type is executed in order — so the position and spacing (called indentation) matter.</p>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>print("Hello, world!")</code>
+                        </pre>
+                        <p className="mt-2">This prints text on the screen.</p>
+                        <p className="mt-1">If you forget the parentheses or quotation marks, Python will give you an error.</p>
+                      </div>
+
+                      {/* Variables */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Variables</h3>
+                        <p>A variable is like a labeled box that stores information.</p>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`name = "Alex"
+age = 25
+height = 5.9`}</code>
+                        </pre>
+                        <ul className="mt-3 list-disc pl-6 space-y-1">
+                          <li><code className="text-foreground">name</code> stores a string ("Alex")</li>
+                          <li><code className="text-foreground">age</code> stores an integer (25)</li>
+                          <li><code className="text-foreground">height</code> stores a float (5.9)</li>
+                        </ul>
+                        <p className="mt-3">You can print your variables like this:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`print(name)
+print(age)
+print(height)`}</code>
+                        </pre>
+                      </div>
+
+                      {/* Comments */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Comments</h3>
+                        <p>Comments are notes you add to explain what your code is doing.</p>
+                        <p className="mt-2">They start with a # symbol, and Python ignores them when running the program.</p>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`# This program says hello to the user
+name = "Alex"  # Storing the user's name
+print("Hello, " + name)`}</code>
+                        </pre>
+                        <p className="mt-3 font-medium text-foreground">Tips for Good Comments:</p>
+                        <ul className="mt-2 space-y-1">
+                          <li>✅ Use them to explain why something is written, not just what it does</li>
+                          <li>✅ Comments make your code easier for others (and your future self) to understand</li>
+                        </ul>
+                      </div>
+
+                      {/* Math in Python */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Math in Python</h3>
+                        <p>Python can handle all kinds of math.</p>
+                        <div className="mt-3 overflow-x-auto">
+                          <table className="w-full border-collapse border border-accent/20">
+                            <thead>
+                              <tr className="bg-background/50">
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Operation</th>
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Symbol</th>
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Example</th>
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Output</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Addition</td>
+                                <td className="border border-accent/20 p-2"><code className="text-foreground">+</code></td>
+                                <td className="border border-accent/20 p-2"><code>5 + 3</code></td>
+                                <td className="border border-accent/20 p-2"><code>8</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Subtraction</td>
+                                <td className="border border-accent/20 p-2"><code className="text-foreground">-</code></td>
+                                <td className="border border-accent/20 p-2"><code>9 - 4</code></td>
+                                <td className="border border-accent/20 p-2"><code>5</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Multiplication</td>
+                                <td className="border border-accent/20 p-2"><code className="text-foreground">*</code></td>
+                                <td className="border border-accent/20 p-2"><code>7 * 2</code></td>
+                                <td className="border border-accent/20 p-2"><code>14</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Division</td>
+                                <td className="border border-accent/20 p-2"><code className="text-foreground">/</code></td>
+                                <td className="border border-accent/20 p-2"><code>8 / 2</code></td>
+                                <td className="border border-accent/20 p-2"><code>4.0</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Exponent</td>
+                                <td className="border border-accent/20 p-2"><code className="text-foreground">**</code></td>
+                                <td className="border border-accent/20 p-2"><code>3 ** 2</code></td>
+                                <td className="border border-accent/20 p-2"><code>9</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Modulus (Remainder)</td>
+                                <td className="border border-accent/20 p-2"><code className="text-foreground">%</code></td>
+                                <td className="border border-accent/20 p-2"><code>10 % 3</code></td>
+                                <td className="border border-accent/20 p-2"><code>1</code></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <p className="mt-3">You can store results in variables:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`x = 10
+y = 3
+result = x % y
+print(result)`}</code>
+                        </pre>
+                      </div>
+
+                      {/* Strings */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Strings</h3>
+                        <p>Strings are text wrapped in quotes — single or double quotes both work.</p>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`greeting = "Hello"
+name = "Alex"
+message = greeting + ", " + name + "!"
+print(message)`}</code>
+                        </pre>
+                        <p className="mt-2 font-medium text-foreground">Output:</p>
+                        <pre className="mt-1 p-3 bg-background/50 border border-accent/20 rounded">
+                          <code>Hello, Alex!</code>
+                        </pre>
+                        <p className="mt-3 font-medium text-foreground">Tips:</p>
+                        <ul className="mt-2 space-y-1">
+                          <li>✅ Use + to join (concatenate) strings</li>
+                          <li>✅ Strings can also be formatted like this: <code className="text-foreground">print(f"Hello, {'{name}'}!")</code></li>
+                        </ul>
+                      </div>
+
+                      {/* Integers and Floats */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Integers and Floats</h3>
+                        <ul className="list-disc pl-6 space-y-2">
+                          <li><strong className="text-foreground">Integers (int):</strong> Whole numbers (no decimals). Example: 25</li>
+                          <li><strong className="text-foreground">Floats (float):</strong> Numbers with decimals. Example: 3.14</li>
+                        </ul>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`price = 9.99  # float
+quantity = 3  # integer
+total = price * quantity
+print(total)`}</code>
+                        </pre>
+                        <p className="mt-2 font-medium text-foreground">Output:</p>
+                        <pre className="mt-1 p-3 bg-background/50 border border-accent/20 rounded">
+                          <code>29.97</code>
+                        </pre>
+                        <p className="mt-3">✅ <strong className="text-foreground">Tip:</strong> Python automatically knows if a number is an integer or float based on how you write it.</p>
+                      </div>
+
+                      {/* Functions */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Functions</h3>
+                        <p>A function is a reusable piece of code that performs a task.</p>
+                        <p className="mt-2">You "define" it using the <code className="text-foreground">def</code> keyword.</p>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`def greet_user(name):
+    print("Welcome, " + name + "!")
+
+greet_user("Alex")`}</code>
+                        </pre>
+                        <p className="mt-2 font-medium text-foreground">Output:</p>
+                        <pre className="mt-1 p-3 bg-background/50 border border-accent/20 rounded">
+                          <code>Welcome, Alex!</code>
+                        </pre>
+                        <p className="mt-3 font-medium text-foreground">Tips:</p>
+                        <ul className="mt-2 space-y-1">
+                          <li>✅ Always indent the code inside your function by 4 spaces</li>
+                          <li>✅ Use functions to keep your code organized and reusable</li>
+                        </ul>
+                      </div>
+
+                      {/* Lists, Tuples, and Dictionaries */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Lists, Tuples, and Dictionaries</h3>
+                        <div className="mt-3 overflow-x-auto">
+                          <table className="w-full border-collapse border border-accent/20">
+                            <thead>
+                              <tr className="bg-background/50">
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Type</th>
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Description</th>
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Example</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td className="border border-accent/20 p-2"><strong className="text-foreground">List</strong></td>
+                                <td className="border border-accent/20 p-2">Ordered collection that can change (mutable)</td>
+                                <td className="border border-accent/20 p-2"><code>colors = ["red", "blue", "green"]</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2"><strong className="text-foreground">Tuple</strong></td>
+                                <td className="border border-accent/20 p-2">Ordered collection that cannot change (immutable)</td>
+                                <td className="border border-accent/20 p-2"><code>coordinates = (10, 20)</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2"><strong className="text-foreground">Dictionary</strong></td>
+                                <td className="border border-accent/20 p-2">Key-value pairs (like a mini database)</td>
+                                <td className="border border-accent/20 p-2"><code>{`person = {"name": "Alex", "age": 25}`}</code></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`colors = ["red", "blue", "green"]
+print(colors[1])  # prints "blue"
+
+person = {"name": "Alex", "age": 25}
+print(person["name"])  # prints "Alex"`}</code>
+                        </pre>
+                        <p className="mt-3 font-medium text-foreground">Tips:</p>
+                        <ul className="mt-2 space-y-1">
+                          <li>✅ Use lists when you need to change or add items</li>
+                          <li>✅ Use tuples for data that should stay fixed</li>
+                          <li>✅ Use dictionaries when you need to label information clearly</li>
+                        </ul>
+                      </div>
+
+                      {/* Python Turtle */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Python Turtle — Visual Learning</h3>
+                        <p>Python has a built-in module called Turtle, which lets you draw pictures using code.</p>
+                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`import turtle
+
+t = turtle.Turtle()
+t.forward(100)
+t.right(90)
+t.forward(100)
+
+turtle.done()`}</code>
+                        </pre>
+                        <p className="mt-3 font-medium text-foreground">Explanation:</p>
+                        <ul className="mt-2 list-disc pl-6 space-y-1">
+                          <li><code className="text-foreground">turtle.Turtle()</code> creates your "pen"</li>
+                          <li><code className="text-foreground">forward(100)</code> moves it 100 pixels</li>
+                          <li><code className="text-foreground">right(90)</code> turns it 90 degrees</li>
+                        </ul>
+                        <p className="mt-2">✅ You can combine commands to draw shapes or write your name.</p>
+                      </div>
+
+                      {/* Quick Reference */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Quick Reference</h3>
+                        <div className="mt-3 overflow-x-auto">
+                          <table className="w-full border-collapse border border-accent/20">
+                            <thead>
+                              <tr className="bg-background/50">
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Concept</th>
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Description</th>
+                                <th className="border border-accent/20 p-2 text-left text-foreground">Example</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td className="border border-accent/20 p-2">String</td>
+                                <td className="border border-accent/20 p-2">Text in quotes</td>
+                                <td className="border border-accent/20 p-2"><code>"Hello"</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Variable</td>
+                                <td className="border border-accent/20 p-2">Container for data</td>
+                                <td className="border border-accent/20 p-2"><code>name = "Alex"</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Integer</td>
+                                <td className="border border-accent/20 p-2">Whole number</td>
+                                <td className="border border-accent/20 p-2"><code>25</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Float</td>
+                                <td className="border border-accent/20 p-2">Decimal number</td>
+                                <td className="border border-accent/20 p-2"><code>3.14</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Comment</td>
+                                <td className="border border-accent/20 p-2">Note for humans</td>
+                                <td className="border border-accent/20 p-2"><code># This is a comment</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Function</td>
+                                <td className="border border-accent/20 p-2">Reusable code block</td>
+                                <td className="border border-accent/20 p-2"><code>def greet(): print("Hi")</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">List</td>
+                                <td className="border border-accent/20 p-2">Changeable collection</td>
+                                <td className="border border-accent/20 p-2"><code>colors = ["red", "blue"]</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Tuple</td>
+                                <td className="border border-accent/20 p-2">Unchangeable collection</td>
+                                <td className="border border-accent/20 p-2"><code>point = (2, 3)</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Dictionary</td>
+                                <td className="border border-accent/20 p-2">Key-value mapping</td>
+                                <td className="border border-accent/20 p-2"><code>{`person = {"name": "Alex"}`}</code></td>
+                              </tr>
+                              <tr>
+                                <td className="border border-accent/20 p-2">Turtle</td>
+                                <td className="border border-accent/20 p-2">Drawing module</td>
+                                <td className="border border-accent/20 p-2"><code>import turtle</code></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* Next Steps */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">Next Steps</h3>
+                        <ul className="space-y-2">
+                          <li>✅ Try editing the examples above — change names, numbers, or text</li>
+                          <li>✅ Always save and run your code after each small change</li>
+                          <li>✅ Remember: every expert coder started right here</li>
+                        </ul>
+                      </div>
                     </div>
                   </AccordionContent>
                 </AccordionItem>
