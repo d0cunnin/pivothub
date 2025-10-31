@@ -230,7 +230,7 @@ const PrepIt = () => {
             </div>
             <div className="text-left max-w-4xl mx-auto mb-6">
               <p className="text-lg text-foreground leading-relaxed mb-4">
-                Transform your resume from generic job duties into powerful, results-oriented statements that get noticed by hiring managers.
+                Get expert analysis from a professional with 15+ years in HR and recruiting. Transform your resume from generic job duties into powerful, results-oriented statements that command attention and bypass AI filters. Learn to write achievements like "Saved company $500,000 by analyzing data and finding errors" or "Wrote 55 documents ensuring compliance with regulatory bodies, avoiding $2M+ in fines."
               </p>
               
               <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-6">
@@ -245,22 +245,22 @@ const PrepIt = () => {
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <TrendingUp className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Results-Oriented</h4>
-                <p className="text-sm text-muted-foreground">Transform duties into quantifiable achievements with metrics</p>
+                <h4 className="font-semibold text-foreground mb-1">Results-Oriented Writing</h4>
+                <p className="text-sm text-muted-foreground">Transform duties into quantifiable achievements with specific metrics and business impact</p>
               </div>
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <FileText className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Professional Analysis</h4>
-                <p className="text-sm text-muted-foreground">Get detailed feedback on language, formatting, and content</p>
+                <h4 className="font-semibold text-foreground mb-1">ATS Bypass Expertise</h4>
+                <p className="text-sm text-muted-foreground">Optimize for applicant tracking systems with keyword matching and formatting that gets past AI filters</p>
               </div>
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <Edit3 className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">Custom Cover Letters</h4>
-                <p className="text-sm text-muted-foreground">Generate tailored cover letters for specific job applications</p>
+                <h4 className="font-semibold text-foreground mb-1">PDF Export</h4>
+                <p className="text-sm text-muted-foreground">Download professional optimization guide and interview preparation materials as PDF</p>
               </div>
             </div>
           </div>
