@@ -36,7 +36,7 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
+    const stripe = new Stripe(Deno.env.get("stripe_restrictedkey_payments") || "", { apiVersion: "2023-10-16" });
     // First check if user has subscriber record, create if not exists
     const { data: subscriberData, error: subscriberError } = await supabaseClient
       .from("subscribers_public")

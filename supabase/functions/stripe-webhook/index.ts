@@ -3,7 +3,7 @@ import Stripe from 'https://esm.sh/stripe@14.21.0';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { handleSuccessfulPayment, handleFailedPayment } from './handlers.ts';
 
-const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
+const stripe = new Stripe(Deno.env.get('stripe_restrictedkey_payments') || '', {
   apiVersion: '2023-10-16',
 });
 

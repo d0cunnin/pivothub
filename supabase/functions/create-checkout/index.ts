@@ -66,7 +66,7 @@ serve(async (req) => {
     const { tier, assessmentId } = await req.json();
     logStep("Request received", { tier, assessmentId });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
+    const stripe = new Stripe(Deno.env.get("stripe_restrictedkey_payments") || "", { apiVersion: "2023-10-16" });
     
     // Check if customer exists
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });

@@ -50,7 +50,7 @@ serve(async (req) => {
     const customerId = secureData.stripe_customer_id;
     logStep("Retrieved Stripe customer ID from secure storage", { customerId });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { apiVersion: "2023-10-16" });
+    const stripe = new Stripe(Deno.env.get("stripe_restrictedkey_payments") || "", { apiVersion: "2023-10-16" });
 
     const origin = req.headers.get("origin") || "http://localhost:3000";
     const portalSession = await stripe.billingPortal.sessions.create({

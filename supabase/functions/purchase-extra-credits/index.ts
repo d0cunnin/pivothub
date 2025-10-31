@@ -48,7 +48,7 @@ serve(async (req) => {
       throw new Error('Invalid credit amount. Must be 20, 40, or 60.');
     }
 
-    const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
+    const stripe = new Stripe(Deno.env.get('stripe_restrictedkey_payments') || '', {
       apiVersion: '2023-10-16',
     });
 
