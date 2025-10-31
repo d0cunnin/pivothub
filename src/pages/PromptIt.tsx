@@ -20,30 +20,6 @@ const PromptIt = () => {
   const [userPrompt, setUserPrompt] = useState("");
   const [feedback, setFeedback] = useState<{ analysis: string; improvedPrompt: string; explanation: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [usageCount, setUsageCount] = useState<number | null>(null);
-
-  // Load usage count on mount
-  useEffect(() => {
-    if (user) {
-      loadUsageCount();
-    }
-  }, [user]);
-
-  const loadUsageCount = async () => {
-    if (!user) return;
-    
-    const { data } = await supabase
-      .from('tool_usage_analytics')
-      .select('credits_used')
-      .eq('user_id', user.id)
-      .eq('tool_name', 'prompt-it');
-    
-    const total = data?.reduce((sum, record) => sum + record.credits_used, 0) || 0;
-    setUsageCount(total);
-  };
-
-  const freeUsesRemaining = Math.max(0, 2 - (usageCount || 0));
-  const isPaidTier = freeUsesRemaining === 0;
 
   const handleAnalyze = async () => {
     if (!user) {
@@ -75,7 +51,6 @@ const PromptIt = () => {
       if (error) throw error;
 
       setFeedback(data);
-      await loadUsageCount(); // Refresh usage count
       toast.success("Prompt analyzed successfully!");
     } catch (error: any) {
       console.error('Error analyzing prompt:', error);
@@ -119,7 +94,7 @@ const PromptIt = () => {
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Badge variant="secondary" className="text-lg px-6 py-2">
-                2 Free Uses • Then 1 Credit Per Use
+                5 Credits for 5 Uses
               </Badge>
             </div>
           </div>
@@ -207,34 +182,48 @@ const PromptIt = () => {
                     </div>
                   </AccordionContent>
                 </AccordionItem>
+
+                <AccordionItem value="what-is-use">
+                  <AccordionTrigger>What is a "Use"?</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p className="font-semibold text-foreground text-lg">1 Use = 1 Complete Analysis</p>
+                      <p>Each time you:</p>
+                      <ul className="list-disc pl-6 space-y-1">
+                        <li>Type a prompt</li>
+                        <li>Click "Analyze Prompt"</li>
+                        <li>Receive AI feedback (analysis, improved prompt, and explanation)</li>
+                      </ul>
+                      <p className="mt-4">...that counts as <strong className="text-foreground">1 use</strong> and costs <strong className="text-foreground">1 credit</strong>.</p>
+                      <p className="mt-2 font-semibold text-accent">5 credits = 5 complete prompt analyses</p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
               </Accordion>
             </CardContent>
           </Card>
 
-          {/* Usage Counter */}
+          {/* Credit Information */}
           <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-accent/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-accent" />
-                Usage Tracker
+                Your Credits
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between">
+              <div className="space-y-4">
                 <div>
-                  {isPaidTier ? (
-                    <p className="text-muted-foreground">
-                      You're using the paid tier. Each analysis costs 1 credit.
-                    </p>
-                  ) : (
-                    <p className="text-muted-foreground">
-                      Free uses remaining: <span className="font-bold text-accent">{freeUsesRemaining} / 2</span>
-                    </p>
-                  )}
+                  <p className="text-muted-foreground mb-1">
+                    Each analysis costs <span className="font-bold text-foreground">1 credit</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    (5 credits for 5 uses)
+                  </p>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Your Credits</p>
-                  <p className="text-2xl font-bold text-accent">{remainingRequests}</p>
+                <div className="pt-4 border-t border-border/50">
+                  <p className="text-sm text-muted-foreground mb-2">Total Credits Available</p>
+                  <p className="text-3xl font-bold text-accent">{remainingRequests}</p>
                 </div>
               </div>
             </CardContent>
