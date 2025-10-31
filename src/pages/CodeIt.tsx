@@ -143,6 +143,87 @@ print(a + b)`,
 
       <main id="code-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="code-it">
+          {/* Understanding Coding Section */}
+          <Card className="mb-12 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle>Understanding Coding</CardTitle>
+              <CardDescription>Learn the fundamentals of programming</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="what-is-coding">
+                  <AccordionTrigger>What is Coding?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      Coding is writing instructions for computers. Just like you follow a recipe to bake a cake, computers follow code to complete tasks. 
+                      Code is written in special languages that computers understand, like Python, JavaScript, or Java.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="languages">
+                  <AccordionTrigger>What are Programming Languages?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground mb-3">
+                      Programming languages are special ways to communicate with computers. Each language has its own rules (syntax) and purpose:
+                    </p>
+                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+                      <li><strong className="text-foreground">Python:</strong> Great for beginners, used for AI, data, and automation</li>
+                      <li><strong className="text-foreground">JavaScript:</strong> Powers interactive websites and web apps</li>
+                      <li><strong className="text-foreground">Java:</strong> Used for Android apps and enterprise software</li>
+                      <li><strong className="text-foreground">HTML/CSS:</strong> Structure and style websites</li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="python-basics">
+                  <AccordionTrigger>Python Basics</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p><strong className="text-foreground">Strings:</strong> Text enclosed in quotes. Example: "Hello"</p>
+                      <p><strong className="text-foreground">Variables:</strong> Containers that store data. Example: name = "Alex"</p>
+                      <p><strong className="text-foreground">Integers:</strong> Whole numbers. Example: 25</p>
+                      <p><strong className="text-foreground">Floats:</strong> Decimal numbers. Example: 3.14</p>
+                      <p><strong className="text-foreground">Comments:</strong> Notes that start with #. Computers ignore them.</p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="math">
+                  <AccordionTrigger>Doing Math with Code</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground mb-3">Computers are great at math! Here's how:</p>
+                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+                      <li><strong className="text-foreground">+</strong> Addition: 5 + 3 = 8</li>
+                      <li><strong className="text-foreground">-</strong> Subtraction: 10 - 4 = 6</li>
+                      <li><strong className="text-foreground">*</strong> Multiplication: 3 * 7 = 21</li>
+                      <li><strong className="text-foreground">/</strong> Division: 20 / 4 = 5</li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="json">
+                  <AccordionTrigger>How JSON Works</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground mb-3">
+                      JSON (JavaScript Object Notation) is a way to organize and share data. Think of it like a digital filing system:
+                    </p>
+                    <pre className="bg-background/50 p-4 rounded-lg overflow-x-auto border border-accent/20 mb-3">
+                      <code className="text-sm">{`{
+  "person": "Sam",
+  "age": 30,
+  "hobbies": ["reading", "gaming", "cooking"]
+}`}</code>
+                    </pre>
+                    <p className="text-muted-foreground">
+                      This shows a person's name, age, and hobbies in a clear, structured format that computers can easily read and understand.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+
           {/* Static Examples */}
           <div className="mb-12">
             <h2 className="text-3xl font-bold mb-6 text-center">Python Examples</h2>
@@ -233,115 +314,6 @@ print(a + b)`,
             </CardContent>
           </Card>
 
-          {/* Collapsible Lesson */}
-          <Card className="bg-gradient-card/30 backdrop-blur-sm border border-white/10">
-            <CardHeader>
-              <CardTitle>Understanding Coding</CardTitle>
-              <CardDescription>Learn the fundamentals of programming</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="what-is-coding">
-                  <AccordionTrigger>What is Coding?</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground">
-                      Coding is writing instructions for computers. Just like you follow a recipe to bake a cake, computers follow code to complete tasks. 
-                      Code is written in special languages that computers understand, like Python, JavaScript, or Java.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="languages">
-                  <AccordionTrigger>What are Programming Languages?</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground mb-3">
-                      Programming languages are special ways to communicate with computers. Each language has its own rules (syntax) and purpose:
-                    </p>
-                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                      <li><strong className="text-foreground">Python:</strong> Great for beginners, used for AI, data, and automation</li>
-                      <li><strong className="text-foreground">JavaScript:</strong> Powers interactive websites and web apps</li>
-                      <li><strong className="text-foreground">Java:</strong> Used for Android apps and enterprise software</li>
-                      <li><strong className="text-foreground">HTML/CSS:</strong> Structure and style websites</li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="python-basics">
-                  <AccordionTrigger>Python Basics</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-3 text-muted-foreground">
-                      <p><strong className="text-foreground">Strings:</strong> Text enclosed in quotes. Example: "Hello"</p>
-                      <p><strong className="text-foreground">Variables:</strong> Containers that store data. Example: name = "Alex"</p>
-                      <p><strong className="text-foreground">Integers:</strong> Whole numbers. Example: 25</p>
-                      <p><strong className="text-foreground">Floats:</strong> Decimal numbers. Example: 3.14</p>
-                      <p><strong className="text-foreground">Comments:</strong> Notes that start with #. Computers ignore them.</p>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="math">
-                  <AccordionTrigger>Doing Math with Code</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground mb-3">Computers are great at math! Here's how:</p>
-                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                      <li><strong className="text-foreground">+</strong> Addition: 5 + 3 = 8</li>
-                      <li><strong className="text-foreground">-</strong> Subtraction: 10 - 4 = 6</li>
-                      <li><strong className="text-foreground">*</strong> Multiplication: 3 * 7 = 21</li>
-                      <li><strong className="text-foreground">/</strong> Division: 20 / 4 = 5</li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="json">
-                  <AccordionTrigger>How JSON Works</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground mb-3">
-                      JSON (JavaScript Object Notation) is a way to organize and share data. Think of it like a digital filing system:
-                    </p>
-                    <pre className="bg-background/50 p-4 rounded-lg overflow-x-auto border border-accent/20 mb-3">
-                      <code className="text-sm">{`{
-  "person": "Sam",
-  "age": 30,
-  "hobbies": ["reading", "gaming", "cooking"]
-}`}</code>
-                    </pre>
-                    <p className="text-muted-foreground">
-                      This shows a person's name, age, and hobbies in a clear, structured format that computers can easily read and understand.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="practice">
-                  <AccordionTrigger>Where to Practice Coding for Free</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 text-muted-foreground">
-                      <div>
-                        <p className="font-semibold text-foreground mb-2">Replit.com Tutorial</p>
-                        <ol className="list-decimal pl-6 space-y-2">
-                          <li>Go to <a href="https://replit.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline inline-flex items-center gap-1">replit.com <ExternalLink className="h-3 w-3" /></a></li>
-                          <li>Click "Sign up" and create a free account</li>
-                          <li>Once logged in, click "+ Create Repl"</li>
-                          <li>Choose "Python" as your language</li>
-                          <li>Give your project a name (e.g., "My First Code")</li>
-                          <li>Click "Create Repl"</li>
-                          <li>Write your Python code in the editor</li>
-                          <li>Click "Run" to see your code in action!</li>
-                        </ol>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground mb-2">Other Free Resources:</p>
-                        <ul className="list-disc pl-6 space-y-2">
-                          <li><a href="https://codecademy.com" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline inline-flex items-center gap-1">Codecademy <ExternalLink className="h-3 w-3" /></a> - Interactive coding lessons</li>
-                          <li><a href="https://freecodecamp.org" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline inline-flex items-center gap-1">freeCodeCamp <ExternalLink className="h-3 w-3" /></a> - Full curriculum and projects</li>
-                          <li><a href="https://python.org/shell" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline inline-flex items-center gap-1">Python.org Shell <ExternalLink className="h-3 w-3" /></a> - Quick Python practice</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
         </ToolGuard>
       </main>
 

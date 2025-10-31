@@ -141,6 +141,111 @@ const DeployIt = () => {
             </AlertDescription>
           </Alert>
 
+          {/* Understanding AI Agents Section */}
+          <Card className="mb-12 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle>Understanding AI Agents</CardTitle>
+              <CardDescription>Learn the fundamentals of AI agents</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="what-is-agent">
+                  <AccordionTrigger>What is an AI Agent?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      An AI agent is like a smart assistant that can do tasks for you automatically. Think of it as a robot helper that understands instructions, 
+                      makes decisions, and takes actions on your behalf. Unlike simple chatbots that just answer questions, AI agents can actually DO things - 
+                      like managing your calendar, organizing files, sending emails, or analyzing data.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="how-work">
+                  <AccordionTrigger>How AI Agents Work (Step-by-Step)</AccordionTrigger>
+                  <AccordionContent>
+                    <ol className="list-decimal pl-6 space-y-2 text-muted-foreground">
+                      <li><strong className="text-foreground">You give it a goal:</strong> "Organize my inbox by priority"</li>
+                      <li><strong className="text-foreground">Agent understands:</strong> AI reads your instruction and figures out what needs to be done</li>
+                      <li><strong className="text-foreground">Agent plans:</strong> It breaks the task into smaller steps (read emails, categorize them, move to folders)</li>
+                      <li><strong className="text-foreground">Agent acts:</strong> It connects to your email and performs the actions</li>
+                      <li><strong className="text-foreground">Agent reports back:</strong> "Done! I organized 47 emails into 3 folders"</li>
+                    </ol>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="use-cases">
+                  <AccordionTrigger>Example Use Cases</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4 text-muted-foreground">
+                      <div>
+                        <p className="font-semibold text-foreground">Education:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Tutor Agent: Answers student questions and creates practice quizzes</li>
+                          <li>Research Assistant: Finds and summarizes academic papers</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Business:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Customer Service Agent: Handles support tickets automatically</li>
+                          <li>Sales Assistant: Schedules meetings and follows up with leads</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Content Creation:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Social Media Manager: Posts content on schedule and responds to comments</li>
+                          <li>Writing Assistant: Drafts blog posts based on your outline</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="safety">
+                  <AccordionTrigger>Safety, Privacy, and Ethics Checklist</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p className="font-semibold text-foreground">Before deploying your agent, check:</p>
+                      <ul className="list-disc pl-6 space-y-2">
+                        <li><strong className="text-foreground">Data Privacy:</strong> What information does your agent access? Is it sensitive?</li>
+                        <li><strong className="text-foreground">Permissions:</strong> Only give your agent access to what it needs</li>
+                        <li><strong className="text-foreground">Transparency:</strong> Make sure users know they're talking to an AI</li>
+                        <li><strong className="text-foreground">Monitoring:</strong> Regularly check what your agent is doing</li>
+                        <li><strong className="text-foreground">Limits:</strong> Set boundaries on what actions it can take without asking you first</li>
+                        <li><strong className="text-foreground">Backup:</strong> Have a way to stop or override the agent if needed</li>
+                      </ul>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="troubleshooting">
+                  <AccordionTrigger>Troubleshooting & Improvement Tips</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4 text-muted-foreground">
+                      <div>
+                        <p className="font-semibold text-foreground">Agent not understanding instructions?</p>
+                        <p>→ Make your instructions more specific and add examples</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Agent making mistakes?</p>
+                        <p>→ Review its actions and adjust the safety rules or permissions</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Agent too slow?</p>
+                        <p>→ Simplify the task or break it into smaller steps</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Want to improve results?</p>
+                        <p>→ Give the agent clear examples of good vs. bad outputs</p>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+
           {/* Input Form */}
           <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
             <CardHeader>
@@ -285,110 +390,6 @@ const DeployIt = () => {
             </Card>
           )}
 
-          {/* Collapsible Lesson */}
-          <Card className="bg-gradient-card/30 backdrop-blur-sm border border-white/10">
-            <CardHeader>
-              <CardTitle>Understanding AI Agents</CardTitle>
-              <CardDescription>Learn the fundamentals of AI agents</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="what-is-agent">
-                  <AccordionTrigger>What is an AI Agent?</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground">
-                      An AI agent is like a smart assistant that can do tasks for you automatically. Think of it as a robot helper that understands instructions, 
-                      makes decisions, and takes actions on your behalf. Unlike simple chatbots that just answer questions, AI agents can actually DO things - 
-                      like managing your calendar, organizing files, sending emails, or analyzing data.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="how-work">
-                  <AccordionTrigger>How AI Agents Work (Step-by-Step)</AccordionTrigger>
-                  <AccordionContent>
-                    <ol className="list-decimal pl-6 space-y-2 text-muted-foreground">
-                      <li><strong className="text-foreground">You give it a goal:</strong> "Organize my inbox by priority"</li>
-                      <li><strong className="text-foreground">Agent understands:</strong> AI reads your instruction and figures out what needs to be done</li>
-                      <li><strong className="text-foreground">Agent plans:</strong> It breaks the task into smaller steps (read emails, categorize them, move to folders)</li>
-                      <li><strong className="text-foreground">Agent acts:</strong> It connects to your email and performs the actions</li>
-                      <li><strong className="text-foreground">Agent reports back:</strong> "Done! I organized 47 emails into 3 folders"</li>
-                    </ol>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="use-cases">
-                  <AccordionTrigger>Example Use Cases</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 text-muted-foreground">
-                      <div>
-                        <p className="font-semibold text-foreground">Education:</p>
-                        <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Tutor Agent: Answers student questions and creates practice quizzes</li>
-                          <li>Research Assistant: Finds and summarizes academic papers</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Business:</p>
-                        <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Customer Service Agent: Handles support tickets automatically</li>
-                          <li>Sales Assistant: Schedules meetings and follows up with leads</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Content Creation:</p>
-                        <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Social Media Manager: Posts content on schedule and responds to comments</li>
-                          <li>Writing Assistant: Drafts blog posts based on your outline</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="safety">
-                  <AccordionTrigger>Safety, Privacy, and Ethics Checklist</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-3 text-muted-foreground">
-                      <p className="font-semibold text-foreground">Before deploying your agent, check:</p>
-                      <ul className="list-disc pl-6 space-y-2">
-                        <li><strong className="text-foreground">Data Privacy:</strong> What information does your agent access? Is it sensitive?</li>
-                        <li><strong className="text-foreground">Permissions:</strong> Only give your agent access to what it needs</li>
-                        <li><strong className="text-foreground">Transparency:</strong> Make sure users know they're talking to an AI</li>
-                        <li><strong className="text-foreground">Monitoring:</strong> Regularly check what your agent is doing</li>
-                        <li><strong className="text-foreground">Limits:</strong> Set boundaries on what actions it can take without asking you first</li>
-                        <li><strong className="text-foreground">Backup:</strong> Have a way to stop or override the agent if needed</li>
-                      </ul>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="troubleshooting">
-                  <AccordionTrigger>Troubleshooting & Improvement Tips</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 text-muted-foreground">
-                      <div>
-                        <p className="font-semibold text-foreground">Agent not understanding instructions?</p>
-                        <p>→ Make your instructions more specific and add examples</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Agent making mistakes?</p>
-                        <p>→ Review its actions and adjust the safety rules or permissions</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Agent too slow?</p>
-                        <p>→ Simplify the task or break it into smaller agents</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Want to improve results?</p>
-                        <p>→ Give your agent feedback on what it did well and what needs improvement</p>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
         </ToolGuard>
       </main>
 
