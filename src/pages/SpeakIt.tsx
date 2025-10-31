@@ -516,7 +516,7 @@ const SpeakIt = () => {
                     <div>
                       <Label>Target Venues *</Label>
                       <div className="space-y-2 mt-2">
-                        {['Schools', 'Prisons', 'Juvenile Programs', 'Ministries', 'Corporations', 'Universities', 'Associations'].map((venue) => (
+                        {['Schools', 'Prisons', 'Juvenile Programs', 'Ministries', 'Corporations', 'Universities', 'Associations', 'Conferences'].map((venue) => (
                           <div key={venue} className="flex items-center space-x-2">
                             <Checkbox
                               checked={targetVenues.includes(venue)}
