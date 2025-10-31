@@ -133,7 +133,7 @@ USER PROFILE:
 
 SPEAKER DETAILS:
 - Speaking Goals: ${speakerData?.speakingGoals.join(', ')}
-- Speaking Topics: ${speakerData?.speakingTopics.map(t => \`"\${t.title}" - \${t.description}\`).join(' | ')}
+- Speaking Topics: ${speakerData?.speakingTopics.map(t => `"${t.title}" - ${t.description}`).join(' | ')}
 - Target Venues: ${speakerData?.targetVenues.join(', ')}
 - Pricing Level: ${speakerData?.pricingLevel}
 - Availability: ${speakerData?.availability}
