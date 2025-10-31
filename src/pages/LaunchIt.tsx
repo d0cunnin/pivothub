@@ -98,7 +98,7 @@ const LaunchIt = () => {
     "Social media and content plan",
     "Funding or grant opportunities",
     "Tech setup or automation",
-    "Legal, licensing, or compliance checklist",
+    "Licensing or compliance checklist",
     "Product development resources",
   ];
 
