@@ -33,6 +33,9 @@ const PLATFORMS = [
 export const SocialMediaGenerator = () => {
   const [businessName, setBusinessName] = useState('');
   const [businessNiche, setBusinessNiche] = useState('');
+  const [creatorType, setCreatorType] = useState('');
+  const [targetAudience, setTargetAudience] = useState('');
+  const [contentFocus, setContentFocus] = useState('');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['instagram', 'linkedin']);
   const [tone, setTone] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -47,8 +50,8 @@ export const SocialMediaGenerator = () => {
   };
 
   const generateContent = async () => {
-    if (selectedPlatforms.length === 0) {
-      toast.error('Please select at least one platform');
+    if (!businessName || !businessNiche || !creatorType || !targetAudience || !contentFocus || selectedPlatforms.length === 0) {
+      toast.error('Please fill in all required fields');
       return;
     }
 
@@ -62,6 +65,9 @@ export const SocialMediaGenerator = () => {
         body: JSON.stringify({
           businessName,
           businessNiche,
+          creatorType,
+          targetAudience,
+          contentFocus,
           platforms: selectedPlatforms,
           tone
         }),
@@ -178,10 +184,14 @@ export const SocialMediaGenerator = () => {
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <Share2 className="h-5 w-5 text-secondary" />
-        <h3 className="text-xl font-bold text-foreground">Social Media Content Generator</h3>
+        <h3 className="text-xl font-bold text-foreground">🔥 Viral Social Media Content Generator</h3>
       </div>
       
-      <p className="text-sm text-muted-foreground mb-6">Generate a complete 30-day content calendar with platform-specific posts, captions, hashtags, and visual suggestions. Perfect for planning your social media strategy ahead of time.</p>
+      <p className="text-sm text-muted-foreground mb-6">
+        Unlock viral-ready content! Get a complete 30-day calendar with platform-specific posts, 
+        scroll-stopping hooks, strategic hashtags, visual suggestions, and optimal posting times. 
+        Created by a social media guru who understands what goes viral on every platform.
+      </p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
@@ -203,6 +213,57 @@ export const SocialMediaGenerator = () => {
             value={businessNiche}
             onChange={(e) => setBusinessNiche(e.target.value)}
             placeholder="e.g., Specialty coffee roaster and café serving local community with ethically sourced beans and artisan pastries"
+            rows={3}
+            required
+            className="mt-2"
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="creatorType" className="text-sm font-medium">What describes you best? *</Label>
+          <Select value={creatorType} onValueChange={setCreatorType} required>
+            <SelectTrigger className="mt-2">
+              <SelectValue placeholder="Select your creator type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="new-creator">New Social Media Content Creator</SelectItem>
+              <SelectItem value="business-owner">Business Owner</SelectItem>
+              <SelectItem value="author">Author / Writer</SelectItem>
+              <SelectItem value="musician">Singer / Musician</SelectItem>
+              <SelectItem value="artist">Visual Artist / Designer</SelectItem>
+              <SelectItem value="coach">Coach / Consultant</SelectItem>
+              <SelectItem value="influencer">Influencer / Personality</SelectItem>
+              <SelectItem value="nonprofit">Nonprofit / Social Cause</SelectItem>
+              <SelectItem value="educator">Educator / Teacher</SelectItem>
+              <SelectItem value="fitness">Fitness / Wellness Professional</SelectItem>
+              <SelectItem value="other">Other Professional</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <Label htmlFor="targetAudience" className="text-sm font-medium">Target Audience *</Label>
+          <Textarea
+            id="targetAudience"
+            value={targetAudience}
+            onChange={(e) => setTargetAudience(e.target.value)}
+            placeholder="e.g., Women ages 25-45 interested in sustainable living and wellness, middle to upper income, environmentally conscious"
+            rows={3}
+            required
+            className="mt-2"
+          />
+          <p className="text-xs text-muted-foreground mt-1">
+            Describe your ideal audience: demographics, interests, pain points, goals
+          </p>
+        </div>
+
+        <div>
+          <Label htmlFor="contentFocus" className="text-sm font-medium">What type of content do you create? *</Label>
+          <Textarea
+            id="contentFocus"
+            value={contentFocus}
+            onChange={(e) => setContentFocus(e.target.value)}
+            placeholder="e.g., Educational content about personal finance, behind-the-scenes of music production, motivational fitness tips, book recommendations and author interviews"
             rows={3}
             required
             className="mt-2"
