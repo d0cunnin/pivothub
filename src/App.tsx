@@ -19,6 +19,7 @@ import Courses from "./pages/Courses";
 import PromptIt from "./pages/PromptIt";
 import CodeIt from "./pages/CodeIt";
 import DeployIt from "./pages/DeployIt";
+import CreateIt from "./pages/CreateIt";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Auth from "./pages/Auth";
@@ -69,6 +70,7 @@ const App = () => (
             <Route path="/promptit" element={<PromptIt />} />
             <Route path="/codeit" element={<CodeIt />} />
             <Route path="/deployit" element={<DeployIt />} />
+            <Route path="/createit" element={<CreateIt />} />
             <Route path="/learnit" element={<Courses />} /> {/* Redirect old route */}
             <Route path="/assessit" element={<AssessIt />} />
             <Route path="/prepit" element={<PrepIt />} />

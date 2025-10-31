@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
-import { Check, Star, Coins, Zap } from "lucide-react";
+import { Check, Star, Coins, Zap, AlertCircle } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -424,6 +425,16 @@ const Pricing = () => {
             </p>
           </div>
 
+          {/* Subscription Requirement Alert */}
+          <Alert className="mb-8 bg-amber-50 border-amber-200 max-w-4xl mx-auto">
+            <AlertCircle className="h-4 w-4 text-amber-600" />
+            <AlertTitle className="text-amber-900">Paid Subscription Required</AlertTitle>
+            <AlertDescription className="text-amber-800">
+              Extra credits are only available to active paid subscribers (Starter, Pro, or All-Access plans).
+              Free tier users must upgrade to purchase additional credits.
+            </AlertDescription>
+          </Alert>
+
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {/* Starter Pack */}
             <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
@@ -551,7 +562,7 @@ const Pricing = () => {
 
           <div className="text-center mt-8">
             <p className="text-base text-muted-foreground">
-              💡 <strong>Note:</strong> Extra credits expire at the end of your billing month. {!user && "Sign in to purchase credits."}
+              💡 <strong>Note:</strong> Extra credits are only available for paid subscribers and expire at the end of your billing month. {!user && "Sign in to purchase credits."}
             </p>
           </div>
         </div>

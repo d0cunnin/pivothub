@@ -61,6 +61,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'prompt-it': 1,                  // ~1,500 tokens (2 free uses, then 1 credit per use)
   'code-it': 1,                    // ~1,200 tokens output (explain code)
   'deploy-it': 20,                 // ~1,500 tokens output (AI agent blueprint) - complex agent planning
+  'create-it-blueprint': 70,       // ~15,000 tokens output (comprehensive platform blueprint with tech stack, integrations, implementation guide)
 };
 
 export function getToolCreditCost(toolName: string): number {

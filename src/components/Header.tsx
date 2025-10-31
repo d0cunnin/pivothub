@@ -103,7 +103,7 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
                     <span 
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/courses', '/promptit', '/codeit', '/deployit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/courses', '/createit', '/promptit', '/codeit', '/deployit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
                       Learn It
                     </span>
@@ -126,6 +126,11 @@ export const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/deployit" className="flex w-full cursor-pointer">
                       Deploy It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/createit" className="flex w-full cursor-pointer">
+                      Create It
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -342,13 +347,6 @@ export const Header = () => {
                   <div className="space-y-2">
                     <div className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Learn It</div>
                     <Link 
-                      to="/courses" 
-                      className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/courses' ? 'text-primary font-medium' : ''}`}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      Courses
-                    </Link>
-                    <Link 
                       to="/promptit" 
                       className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/promptit' ? 'text-primary font-medium' : ''}`}
                       onClick={() => setIsMenuOpen(false)}
@@ -368,6 +366,20 @@ export const Header = () => {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Deploy It
+                    </Link>
+                    <Link 
+                      to="/createit" 
+                      className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/createit' ? 'text-primary font-medium' : ''}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Create It
+                    </Link>
+                    <Link 
+                      to="/courses" 
+                      className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/courses' ? 'text-primary font-medium' : ''}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Courses
                     </Link>
                   </div>
                 </div>
