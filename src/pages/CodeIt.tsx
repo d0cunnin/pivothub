@@ -218,23 +218,41 @@ print(a + b)`,
                       {/* Variables */}
                       <div>
                         <h3 className="text-lg font-semibold text-foreground mb-2">Variables</h3>
-                        <p>A variable is like a labeled box that stores information.</p>
-                        <p className="mt-3 font-medium text-foreground">Example:</p>
+                        <p>A variable is like a labeled box that stores information. You can put different kinds of data in it, and you can change what's inside at any time.</p>
+                        
+                        <p className="mt-4 font-medium text-foreground">How to Name Variables:</p>
+                        <ul className="mt-2 list-disc pl-6 space-y-1">
+                          <li>Must start with a letter or underscore (_)</li>
+                          <li>Can contain letters, numbers, and underscores</li>
+                          <li>Cannot contain spaces or special characters</li>
+                          <li>Case-sensitive (<code className="text-foreground">name</code> is different from <code className="text-foreground">Name</code>)</li>
+                          <li>Cannot use Python keywords (like <code className="text-foreground">print</code>, <code className="text-foreground">if</code>, <code className="text-foreground">for</code>)</li>
+                          <li>Use descriptive names (good: <code className="text-foreground">user_age</code>, bad: <code className="text-foreground">x</code>)</li>
+                        </ul>
+
+                        <p className="mt-4 font-medium text-foreground">Creating Variables:</p>
                         <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
                           <code>{`name = "Alex"
 age = 25
-height = 5.9`}</code>
+city = "Portland"`}</code>
                         </pre>
-                        <ul className="mt-3 list-disc pl-6 space-y-1">
-                          <li><code className="text-foreground">name</code> stores a string ("Alex")</li>
-                          <li><code className="text-foreground">age</code> stores an integer (25)</li>
-                          <li><code className="text-foreground">height</code> stores a float (5.9)</li>
-                        </ul>
-                        <p className="mt-3">You can print your variables like this:</p>
+
+                        <p className="mt-4 font-medium text-foreground">Using Variables:</p>
+                        <p className="mt-2">You can print your variables to see what's inside:</p>
                         <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
-                          <code>{`print(name)
-print(age)
-print(height)`}</code>
+                          <code>{`print(name)     # Prints: Alex
+print(age)      # Prints: 25
+print(city)     # Prints: Portland`}</code>
+                        </pre>
+
+                        <p className="mt-4 font-medium text-foreground">Updating Variables:</p>
+                        <p className="mt-2">You can change what's stored in a variable at any time:</p>
+                        <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
+                          <code>{`age = 25
+print(age)      # Prints: 25
+
+age = 26
+print(age)      # Prints: 26`}</code>
                         </pre>
                       </div>
 
