@@ -128,6 +128,89 @@ const PromptIt = () => {
 
       <main id="prompt-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="prompt-it">
+          {/* Collapsible Lesson: Prompt Engineering Basics */}
+          <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle>Prompt Engineering Basics</CardTitle>
+              <CardDescription>Learn the fundamentals of effective AI prompting</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="what-is-prompt">
+                  <AccordionTrigger>What is a Prompt?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      A prompt is an instruction you give to AI. Think of it like asking a question to a very knowledgeable assistant. 
+                      The clearer and more specific your question, the better the answer you'll receive. A good prompt includes context, 
+                      desired format, tone, and any specific requirements.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="structure">
+                  <AccordionTrigger>Role + Task + Context + Tone Structure</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p><strong className="text-foreground">Role:</strong> Who should the AI be? (e.g., "You are a professional marketing consultant")</p>
+                      <p><strong className="text-foreground">Task:</strong> What do you want? (e.g., "Write a LinkedIn post")</p>
+                      <p><strong className="text-foreground">Context:</strong> What's the situation? (e.g., "for small business owners about teamwork")</p>
+                      <p><strong className="text-foreground">Tone:</strong> How should it sound? (e.g., "motivational and encouraging")</p>
+                      <p className="mt-4"><strong className="text-foreground">Example:</strong> "You are a professional marketing consultant. Write a motivational LinkedIn post for small business owners about how teamwork drives growth. Use an encouraging and actionable tone."</p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="when-to-use">
+                  <AccordionTrigger>When to Use Examples, Formatting, or Constraints</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p><strong className="text-foreground">Examples:</strong> Show the AI what you want. "Write it like this: [example]"</p>
+                      <p><strong className="text-foreground">Formatting:</strong> Specify structure. "Use 3 bullet points" or "Keep it under 100 words"</p>
+                      <p><strong className="text-foreground">Constraints:</strong> Set boundaries. "Don't use jargon" or "Avoid technical terms"</p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="mistakes">
+                  <AccordionTrigger>Common Prompt Mistakes</AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+                      <li><strong className="text-foreground">Too vague:</strong> "Write something about business" → Be specific!</li>
+                      <li><strong className="text-foreground">No context:</strong> AI doesn't know your audience or purpose</li>
+                      <li><strong className="text-foreground">Missing tone:</strong> Results may not match your brand voice</li>
+                      <li><strong className="text-foreground">No format specified:</strong> You might get a wall of text instead of bullets</li>
+                      <li><strong className="text-foreground">Assuming AI knows everything:</strong> Provide background information</li>
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="samples">
+                  <AccordionTrigger>Prompt Samples by Use Case</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4 text-muted-foreground">
+                      <div>
+                        <p className="font-semibold text-foreground">LinkedIn Post:</p>
+                        <p className="bg-background/50 p-3 rounded mt-2">"Write a 150-word LinkedIn post for entrepreneurs about overcoming failure. Use an inspirational tone with 3 key takeaways."</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Email Copy:</p>
+                        <p className="bg-background/50 p-3 rounded mt-2">"Write a professional follow-up email to a client who requested a proposal last week. Tone should be polite, brief, and action-oriented."</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Technical Documentation:</p>
+                        <p className="bg-background/50 p-3 rounded mt-2">"Explain how APIs work to a non-technical audience. Use simple analogies, avoid jargon, and keep it under 200 words."</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Research Summary:</p>
+                        <p className="bg-background/50 p-3 rounded mt-2">"Summarize the key findings of this article: [paste article]. Use bullet points and highlight 3 main takeaways."</p>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+
           {/* Usage Counter */}
           <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-accent/20">
             <CardHeader>
@@ -229,88 +312,6 @@ const PromptIt = () => {
             </Card>
           </div>
 
-          {/* Collapsible Lesson: Prompt Engineering Basics */}
-          <Card className="bg-gradient-card/30 backdrop-blur-sm border border-white/10">
-            <CardHeader>
-              <CardTitle>Prompt Engineering Basics</CardTitle>
-              <CardDescription>Learn the fundamentals of effective AI prompting</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="what-is-prompt">
-                  <AccordionTrigger>What is a Prompt?</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground">
-                      A prompt is an instruction you give to AI. Think of it like asking a question to a very knowledgeable assistant. 
-                      The clearer and more specific your question, the better the answer you'll receive. A good prompt includes context, 
-                      desired format, tone, and any specific requirements.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="structure">
-                  <AccordionTrigger>Role + Task + Context + Tone Structure</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-3 text-muted-foreground">
-                      <p><strong className="text-foreground">Role:</strong> Who should the AI be? (e.g., "You are a professional marketing consultant")</p>
-                      <p><strong className="text-foreground">Task:</strong> What do you want? (e.g., "Write a LinkedIn post")</p>
-                      <p><strong className="text-foreground">Context:</strong> What's the situation? (e.g., "for small business owners about teamwork")</p>
-                      <p><strong className="text-foreground">Tone:</strong> How should it sound? (e.g., "motivational and encouraging")</p>
-                      <p className="mt-4"><strong className="text-foreground">Example:</strong> "You are a professional marketing consultant. Write a motivational LinkedIn post for small business owners about how teamwork drives growth. Use an encouraging and actionable tone."</p>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="when-to-use">
-                  <AccordionTrigger>When to Use Examples, Formatting, or Constraints</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-3 text-muted-foreground">
-                      <p><strong className="text-foreground">Examples:</strong> Show the AI what you want. "Write it like this: [example]"</p>
-                      <p><strong className="text-foreground">Formatting:</strong> Specify structure. "Use 3 bullet points" or "Keep it under 100 words"</p>
-                      <p><strong className="text-foreground">Constraints:</strong> Set boundaries. "Don't use jargon" or "Avoid technical terms"</p>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="mistakes">
-                  <AccordionTrigger>Common Prompt Mistakes</AccordionTrigger>
-                  <AccordionContent>
-                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                      <li><strong className="text-foreground">Too vague:</strong> "Write something about business" → Be specific!</li>
-                      <li><strong className="text-foreground">No context:</strong> AI doesn't know your audience or purpose</li>
-                      <li><strong className="text-foreground">Missing tone:</strong> Results may not match your brand voice</li>
-                      <li><strong className="text-foreground">No format specified:</strong> You might get a wall of text instead of bullets</li>
-                      <li><strong className="text-foreground">Assuming AI knows everything:</strong> Provide background information</li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="samples">
-                  <AccordionTrigger>Prompt Samples by Use Case</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 text-muted-foreground">
-                      <div>
-                        <p className="font-semibold text-foreground">LinkedIn Post:</p>
-                        <p className="bg-background/50 p-3 rounded mt-2">"Write a 150-word LinkedIn post for entrepreneurs about overcoming failure. Use an inspirational tone with 3 key takeaways."</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Email Copy:</p>
-                        <p className="bg-background/50 p-3 rounded mt-2">"Write a professional follow-up email to a client who requested a proposal last week. Tone should be polite, brief, and action-oriented."</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Technical Documentation:</p>
-                        <p className="bg-background/50 p-3 rounded mt-2">"Explain how APIs work to a non-technical audience. Use simple analogies, avoid jargon, and keep it under 200 words."</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Research Summary:</p>
-                        <p className="bg-background/50 p-3 rounded mt-2">"Summarize the key findings of this article: [paste article]. Use bullet points and highlight 3 main takeaways."</p>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
         </ToolGuard>
       </main>
 

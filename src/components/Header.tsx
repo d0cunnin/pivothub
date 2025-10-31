@@ -114,11 +114,6 @@ export const Header = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
                   <DropdownMenuItem asChild>
-                    <Link to="/courses" className="flex w-full cursor-pointer">
-                      Courses
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
                     <Link to="/promptit" className="flex w-full cursor-pointer">
                       Prompt It
                     </Link>
@@ -131,6 +126,11 @@ export const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/deployit" className="flex w-full cursor-pointer">
                       Deploy It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/courses" className="flex w-full cursor-pointer">
+                      Courses
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
