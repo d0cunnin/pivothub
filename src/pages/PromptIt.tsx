@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -23,11 +23,11 @@ const PromptIt = () => {
   const [usageCount, setUsageCount] = useState<number | null>(null);
 
   // Load usage count on mount
-  useState(() => {
+  useEffect(() => {
     if (user) {
       loadUsageCount();
     }
-  });
+  }, [user]);
 
   const loadUsageCount = async () => {
     if (!user) return;
