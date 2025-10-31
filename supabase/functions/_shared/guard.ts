@@ -46,7 +46,7 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
   // CORS validation
   const origin = req.headers.get('origin') || '';
   const isAllowedOrigin = ALLOWED_ORIGINS.some(allowed => 
-    origin.startsWith(allowed) || origin.includes('lovable.app')
+    origin.startsWith(allowed) || origin.includes('lovable.app') || origin.includes('lovableproject.com')
   );
 
   if (origin && !isAllowedOrigin) {
