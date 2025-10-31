@@ -7,7 +7,7 @@ import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Compass, Target, BookOpen, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap } from "lucide-react";
+import { Compass, Target, BookOpen, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic } from "lucide-react";
 import { PACKAGE_TOOLS } from "@/utils/packageAccess";
 
 const BeforeYouStart = () => {
@@ -75,6 +75,14 @@ const BeforeYouStart = () => {
       cta: "Plan My Event",
       link: "/hostit",
       color: "text-orange-600"
+    },
+    {
+      icon: Mic,
+      title: "Speak It",
+      description: "Speak It helps you launch your voice—whether from the stage as a public speaker or through the mic as a podcaster. Build your brand, create media kits, and develop rollout strategies for either path.",
+      cta: "Launch My Voice",
+      link: "/speakit",
+      color: "text-rose-600"
     },
     {
       icon: Briefcase,

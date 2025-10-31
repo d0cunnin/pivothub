@@ -33,6 +33,7 @@ import Settings from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import ScheduleIt from "./pages/ScheduleIt";
 import HostIt from "./pages/HostIt";
+import SpeakIt from "./pages/SpeakIt";
 import BeforeYouStart from "./pages/BeforeYouStart";
 import AuthCallback from "./pages/AuthCallback";
 
@@ -56,9 +57,10 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/teachit" element={<TeachIt />} />
-            <Route path="/launchit" element={<LaunchIt />} />
+          <Route path="/launchit" element={<LaunchIt />} />
           <Route path="/scheduleit" element={<ScheduleIt />} />
           <Route path="/hostit" element={<HostIt />} />
+          <Route path="/speakit" element={<SpeakIt />} />
           <Route path="/before-you-start" element={<BeforeYouStart />} />
             <Route path="/learnit" element={<LearnIt />} />
             <Route path="/assessit" element={<AssessIt />} />

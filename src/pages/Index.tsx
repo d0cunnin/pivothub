@@ -72,6 +72,12 @@ const Index = () => {
       title: "Fund It",
       description: "Explore funding options and strategies.",
       link: "/fundit"
+    },
+    {
+      icon: reskillIcon,
+      title: "Speak It",
+      description: "Launch your voice as a speaker or podcaster with professional guidance.",
+      link: "/speakit"
     }
   ];
 

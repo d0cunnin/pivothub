@@ -125,7 +125,7 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
                     <span 
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/launchit', '/scheduleit', '/hostit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/launchit', '/scheduleit', '/hostit', '/speakit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
                       Plan It
                     </span>
@@ -148,6 +148,11 @@ export const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/hostit" className="flex w-full cursor-pointer">
                       Host It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/speakit" className="flex w-full cursor-pointer">
+                      Speak It
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -334,7 +339,7 @@ export const Header = () => {
               </Link>
               <div className="space-y-2">
                 <span 
-                  className={`font-medium hover:text-primary transition-colors ${['/launchit', '/scheduleit', '/hostit'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
+                  className={`font-medium hover:text-primary transition-colors ${['/launchit', '/scheduleit', '/hostit', '/speakit'].includes(location.pathname) ? 'text-primary' : 'text-foreground'}`}
                 >
                   Plan It
                 </span>
@@ -359,6 +364,13 @@ export const Header = () => {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Host It
+                  </Link>
+                  <Link 
+                    to="/speakit" 
+                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/speakit' ? 'text-primary font-medium' : ''}`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Speak It
                   </Link>
                 </div>
               </div>

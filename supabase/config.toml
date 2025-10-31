@@ -119,3 +119,6 @@ verify_jwt = false
 
 [functions.tech-readiness-assessment]
 verify_jwt = true
+
+[functions.speak-it]
+verify_jwt = true
