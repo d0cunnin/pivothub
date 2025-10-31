@@ -346,7 +346,7 @@ const FundIt = () => {
                   <li>• Customized content for your organization</li>
                   <li>• Letter of Intent generation</li>
                   <li>• Download as professional PDF</li>
-                  <li>• Cost: 4 credits per generation</li>
+                  <li>• Cost: 5 credits per generation</li>
                 </ul>
               </CardContent>
             </Card>
@@ -385,7 +385,7 @@ const FundIt = () => {
                           id="grantAmountRequested"
                           value={formData.grantAmountRequested}
                           onChange={(e) => handleInputChange('grantAmountRequested', e.target.value)}
-                          placeholder="50000"
+                          placeholder=""
                           type="number"
                           className="h-10"
                         />
@@ -674,7 +674,7 @@ const FundIt = () => {
                                 id="budgetPersonnel"
                                 value={formData.budgetPersonnel}
                                 onChange={(e) => handleInputChange('budgetPersonnel', e.target.value)}
-                                placeholder="$50,000"
+                                placeholder=""
                                 className="h-10"
                               />
                             </div>
@@ -689,7 +689,7 @@ const FundIt = () => {
                                 id="budgetEquipment"
                                 value={formData.budgetEquipment}
                                 onChange={(e) => handleInputChange('budgetEquipment', e.target.value)}
-                                placeholder="$10,000"
+                                placeholder=""
                                 className="h-10"
                               />
                             </div>
@@ -704,7 +704,7 @@ const FundIt = () => {
                                 id="budgetSupplies"
                                 value={formData.budgetSupplies}
                                 onChange={(e) => handleInputChange('budgetSupplies', e.target.value)}
-                                placeholder="$5,000"
+                                placeholder=""
                                 className="h-10"
                               />
                             </div>
@@ -719,7 +719,7 @@ const FundIt = () => {
                                 id="budgetTravel"
                                 value={formData.budgetTravel}
                                 onChange={(e) => handleInputChange('budgetTravel', e.target.value)}
-                                placeholder="$3,000"
+                                placeholder=""
                                 className="h-10"
                               />
                             </div>
@@ -734,7 +734,7 @@ const FundIt = () => {
                                 id="budgetContractual"
                                 value={formData.budgetContractual}
                                 onChange={(e) => handleInputChange('budgetContractual', e.target.value)}
-                                placeholder="$8,000"
+                                placeholder=""
                                 className="h-10"
                               />
                             </div>
@@ -749,7 +749,7 @@ const FundIt = () => {
                                 id="budgetOther"
                                 value={formData.budgetOther}
                                 onChange={(e) => handleInputChange('budgetOther', e.target.value)}
-                                placeholder="$2,000"
+                                placeholder=""
                                 className="h-10"
                               />
                             </div>
@@ -765,7 +765,7 @@ const FundIt = () => {
                                   id="budgetIndirect"
                                   value={formData.budgetIndirect}
                                   onChange={(e) => handleInputChange('budgetIndirect', e.target.value)}
-                                  placeholder="$7,500"
+                                  placeholder=""
                                   className="h-10"
                                 />
                               </div>
@@ -775,7 +775,7 @@ const FundIt = () => {
                                   id="budgetIndirectRate"
                                   value={formData.budgetIndirectRate}
                                   onChange={(e) => handleInputChange('budgetIndirectRate', e.target.value)}
-                                  placeholder="15"
+                                  placeholder=""
                                   className="h-10"
                                 />
                               </div>
@@ -792,7 +792,7 @@ const FundIt = () => {
                                   id="matchingFunds"
                                   value={formData.matchingFunds}
                                   onChange={(e) => handleInputChange('matchingFunds', e.target.value)}
-                                  placeholder="$5,000"
+                                  placeholder=""
                                   className="h-10"
                                 />
                               </div>
@@ -847,7 +847,7 @@ const FundIt = () => {
                         ) : (
                           <>
                             <Send className="h-4 w-4 mr-2" />
-                            Generate Grant Documents (4 Credits)
+                            Generate Grant Documents (5 Credits)
                           </>
                         )}
                       </Button>

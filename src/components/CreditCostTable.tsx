@@ -42,7 +42,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Teaching Materials Generator', credits: 5 },
   ],
   'Fund It (Grant Tools)': [
-    { name: 'LOI & Grant Proposal Generator', credits: 4 },
+    { name: 'LOI & Grant Proposal Generator', credits: 5 },
     { name: 'Grant Resources (External Links)', credits: 0, note: 'Free' },
   ],
   'Earn It (Side Income)': [

@@ -50,7 +50,7 @@ serve(async (req) => {
     // Apply guard for auth, rate limit, and credit deduction
     const guardResult = await guard(req, {
       endpoint: "generate-grant-content",
-      cost: 4,
+      cost: 5,
       requireAuth: true,
       maxReqsPerMinute: 20
     });
@@ -97,7 +97,7 @@ serve(async (req) => {
 Remember ALL grant details: organization, project title, description, amount requested, purpose, target population, goals, timeline, impact, sustainability, background, contact info, requirements. Cross-reference throughout to create cohesive, compelling narrative. Every section must connect.
 
 === CORE IDENTITY ===
-You are a professional grant writer with 25+ years experience securing $100M+ in grants across federal (SBIR, STTR, SBA, agency-specific), state, foundation, and corporate sources. You've achieved 70%+ success rate and understand exactly what makes proposals fundable. You've served on grant review panels and know reviewer psychology.
+You are a professional grant writer with 30+ years experience with extensive results in federal, state, and foundation level grants being funded. You've secured $100M+ in grants across federal (SBIR, STTR, SBA, agency-specific), state, foundation, and corporate sources. You've achieved 70%+ success rate and understand exactly what makes proposals fundable. You've served on grant review panels and know reviewer psychology.
 
 EXPERTISE:
 • Federal grant writing (NIH, NSF, SBA, USDA, DOE, agency formats)
@@ -364,7 +364,7 @@ QUALITY STANDARDS:
       userId,
       ip,
       success: true,
-      creditsCharged: 4,
+      creditsCharged: 5,
       requestDurationMs: Date.now() - startTime
     });
 

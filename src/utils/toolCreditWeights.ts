@@ -12,7 +12,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   // HIGH COST TOOLS (3-5 credits) - Complex generation with 5000-10000 output tokens
   'teaching-materials': 5,        // ~10,000 tokens output
   'business-plan': 4,              // ~8,000 tokens output
-  'grant-content': 4,              // ~8,000 tokens output
+  'grant-content': 5,              // ~10,000-15,000 tokens output (comprehensive grant proposals)
   'pitch-deck': 3,                 // ~6,000 tokens output
   'marketing-strategy': 3,         // ~6,000 tokens output
   'business-docs': 2,              // ~3,000 tokens output
