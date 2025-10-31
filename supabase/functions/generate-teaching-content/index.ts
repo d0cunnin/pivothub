@@ -81,7 +81,42 @@ serve(async (req) => {
     }
 
     let prompt = ''
-    const systemMessage = 'You are a senior instructional designer and curriculum expert with 20+ years creating courses, webinars, and educational programs across corporate training, higher education, and online learning platforms. You understand adult learning principles, engagement strategies, assessment design, and modern educational technology. You specialize in helping subject matter experts transform their knowledge into profitable teaching businesses. Provide responses in clean, plain text format without any markdown formatting. Use simple bullet points (•) if lists are needed.'
+    const systemMessage = `=== COURSE MONETIZATION EXPERT IDENTITY ===
+You are a COURSE CREATOR LEGEND with:
+- 20+ years creating profitable courses, workshops, webinars, and masterclasses
+- Track record of building $1M+ courses from scratch
+- Helped 500+ creators monetize their expertise, with some earning $2M+ annually
+- Deep expertise in course design, instructional psychology, and revenue optimization
+- Master of strategic positioning, pricing psychology, and student acquisition
+- Know how to package knowledge into organized, strategic, and highly effective learning experiences that SELL
+
+=== MONETIZATION MINDSET ===
+Every material you create must focus on:
+- How to price and position the course for maximum revenue
+- Strategies to acquire students cost-effectively
+- Upsell and backend revenue opportunities
+- Creating irresistible course offers that convert
+- Building a profitable teaching business, not just a curriculum
+- Packaging expertise in a way that students are eager to pay for
+
+=== INSTRUCTIONAL EXCELLENCE ===
+You understand:
+- Adult learning principles and engagement psychology
+- Course completion optimization (students finish what they start)
+- Assessment design that drives results
+- Modern educational technology and platforms
+- Community building for student retention and referrals
+- Transformational course outcomes that generate testimonials
+
+=== OUTPUT QUALITY STANDARDS ===
+- Organized, strategic, and immediately actionable
+- Beginner-friendly for instructors with no teaching experience
+- Professional formatting ready for printing or PDF export
+- Revenue and profitability metrics included
+- Specific pricing recommendations with justifications
+- Marketing angles that position the instructor as the expert
+
+Provide responses in clean, plain text format without markdown formatting. Use simple bullet points for lists.`
 
     // Handle all-materials type first
     if (type === 'all-materials') {
@@ -127,45 +162,140 @@ ${data.additionalNotes ? `- Additional Goals: ${data.additionalNotes}` : ''}
 Generate ALL FOUR of the following materials in a single response. Format your response EXACTLY as shown below with clear section markers:
 
 ---WEBINAR_CONCEPTS_START---
-Generate 3-5 compelling webinar/course topic ideas that align with the instructor's expertise and target audience. Each concept should include:
-- A catchy title
-- Brief description (2-3 sentences)
-- Key value proposition
-- Who it's best for
+Generate 3-5 compelling webinar/course topic ideas that align with the instructor's expertise, target audience, AND monetization potential. Each concept should include:
+- A catchy, benefit-driven title that sells the transformation
+- Brief description highlighting the pain point solved (2-3 sentences)
+- Key value proposition: What makes this irresistible?
+- Who it's best for (specific avatar)
+- REVENUE POTENTIAL: Pricing recommendation ($X per student) with justification
+- MARKET DEMAND: Why this topic sells well right now
+- COMPETITION ANALYSIS: How to differentiate from other courses
+- UPSELL OPPORTUNITIES: Backend products or services to offer (1-on-1 coaching, certification, mastermind, etc.)
 ---WEBINAR_CONCEPTS_END---
 
 ---COURSE_OUTLINE_START---
-Create a detailed course outline with:
-- Course title and overview
-- 4-6 modules/sessions with:
-  * Module title
-  * Learning objectives (3-4 per module)
-  * Key topics covered
-  * Estimated duration
-  * Activities or assignments
+Create a detailed course outline optimized for BOTH learning outcomes AND monetization. Include:
+
+COURSE PACKAGING:
+- Course title (benefit-driven, not feature-driven)
+- Course tagline/subtitle that sells the transformation
+- Target audience avatar with pain points
+- Transformation promise: "Before" state vs "After" state
+- Unique positioning: Why choose THIS course over competitors?
+
+PRICING STRATEGY:
+- Recommended pricing tier (Budget/Standard/Premium)
+- Price point recommendation with rationale ($X-$Y range)
+- Payment plan options (installments, subscriptions)
+- Early bird discount strategy
+- Bundle opportunities (what to include for more revenue)
+
+COURSE STRUCTURE (4-6 modules):
+For each module:
+- Module title (transformation-focused)
+- Learning objectives (3-4 per module)
+- Key topics covered
+- Estimated duration
+- Activities or assignments
+- Completion milestone (small win to celebrate)
+
+REVENUE OPTIMIZATION:
+- Total course duration and perceived value
+- Completion rate optimization strategies
+- Testimonial collection points
+- Upsell triggers (when to offer advanced content or coaching)
+
+BACKEND MONETIZATION:
+- Advanced modules to sell separately
+- Certification program potential ($X additional)
+- Group coaching add-on ($X/month)
+- Done-for-you templates or services ($X)
 ---COURSE_OUTLINE_END---
 
 ---HANDOUTS_START---
-Design handouts and resources including:
-- Quick reference guides
-- Worksheets with exercises
-- Resource lists (tools, books, websites)
-- Practice activities
-- Checklists
-Format these as ready-to-use materials.
+Design handouts and resources that enhance learning AND position the instructor as the expert. Include:
+
+STUDENT HANDOUTS:
+- Quick reference guides (cheat sheets students love to share)
+- Worksheets with exercises (creates transformation proof)
+- Resource lists (tools, books, websites with affiliate potential)
+- Practice activities that generate results students can screenshot
+- Checklists that guide students step-by-step
+- Templates that save students hours (high perceived value)
+
+INSTRUCTOR MATERIALS:
+- Printable instructor guide with lesson-by-lesson breakdown
+- Talking points and examples for each topic
+- Student engagement prompts (questions to ask, polls to run)
+- Common student objections and how to address them
+- FAQ section based on typical student questions
+
+BRANDING & POSITIONING:
+- Professional header/footer design recommendations
+- Instructor bio section emphasizing expertise and results
+- Testimonial template for students to fill out
+- Social proof sections (student wins, case studies)
+- Call-to-action for next steps (advanced course, coaching, community)
+
+MONETIZATION ELEMENTS:
+- Bonus content sections that can be gated (email capture)
+- Upgrade prompts to premium tier
+- Referral incentive language
+
+Format these as ready-to-use, professional materials suitable for PDF export or printing.
 ---HANDOUTS_END---
 
 ---LESSON_SCRIPT_START---
-Create a detailed lesson script for the first session including:
-- Opening hook (2-3 minutes)
-- Introduction and learning objectives
-- Main content sections with:
-  * Key talking points
-  * Examples to share
-  * Questions to ask
-  * Interactive elements
-- Closing and call-to-action
-- Estimated timing for each section
+Create a detailed lesson script for the FIRST SESSION optimized for engagement, transformation, AND setting up future sales. Include:
+
+OPENING (5 minutes):
+- Hook that grabs attention immediately (story, shocking stat, bold claim)
+- Instructor introduction (credibility without bragging)
+- Course overview: transformation promise
+- Social proof: Previous student wins or testimonials
+- "What to expect" from this course
+
+INTRODUCTION (5-10 minutes):
+- Why this topic matters now (urgency, relevance)
+- Common myths or mistakes people make
+- The cost of inaction (what happens if they don't learn this)
+- The opportunity (what becomes possible when they master this)
+- Learning objectives for session 1
+- Quick win promised by end of session
+
+MAIN CONTENT SECTIONS (30-40 minutes):
+Break into 3-4 teaching segments. For each segment:
+- Key concept explained simply
+- Real-world example or case study
+- Story or analogy to make it memorable
+- Student interaction: Question or activity
+- Action item students can implement immediately
+- Timing notes (X minutes per section)
+
+ENGAGEMENT STRATEGIES:
+- Poll questions to ask at specific points
+- Chat prompts to drive discussion
+- Reflection moments (pause and think)
+
+TRANSFORMATION PROOF:
+- Mini-exercise that produces a quick win
+- Before/after comparison students can see
+- Milestone celebration (you just did X!)
+
+CLOSING & NEXT STEPS (5-10 minutes):
+- Recap key takeaways (3-5 bullets)
+- Celebrate progress made in session 1
+- Preview next session (create anticipation)
+- Homework assignment with clear deliverable
+- Q&A session guidelines
+- Upsell mention (if applicable): "For those wanting to go deeper, I offer..."
+
+MONETIZATION TOUCHPOINTS:
+- Soft mention of advanced content or coaching
+- Testimonial ask: "If you loved today, I'd appreciate a quick review"
+- Community invitation: "Join our private group for daily support"
+
+Estimated total timing: ${data.duration}
 ---LESSON_SCRIPT_END---
 
 ---TOOLS_PLATFORMS_START---
@@ -222,75 +352,172 @@ Tailor recommendations to the teaching format (${data.teachingFormat}) and targe
 ---TOOLS_PLATFORMS_END---
 
 ---MARKETING_PLAN_START---
-Create a comprehensive marketing plan to promote and sell the ${data.teachingFormat}. Include:
+Create a comprehensive marketing plan to SELL and SCALE the ${data.teachingFormat} profitably. Include:
 
 A. TARGET AUDIENCE ANALYSIS
-   • Demographics: Age, profession, income level
-   • Pain points: Problems they need solved
-   • Where they hang out: Platforms, communities, forums
-   • What motivates them: Goals and desired outcomes
+- Demographics: Age, profession, income level, location
+- Psychographics: Values, fears, desires, identity
+- Pain points: Specific problems they're desperate to solve
+- Current situation: Where they are now (Before state)
+- Desired outcome: Where they want to be (After state)
+- Willingness to pay: Price sensitivity and perceived value
+- Where they hang out: Platforms, communities, forums, influencers they follow
+- What language they use: Words and phrases they resonate with
 
-B. UNIQUE VALUE PROPOSITION
-   • What makes this course/webinar different
-   • Key benefits (not just features)
-   • Transformation promised to students
-   • Social proof opportunities (testimonials, credentials)
+B. UNIQUE VALUE PROPOSITION & POSITIONING
+- Market positioning: How you're different from competitors
+- Unique selling points (USPs): Top 3 reasons to choose this course
+- Transformation promise: Specific, measurable outcome
+- Proof elements: Credentials, results, testimonials, case studies
+- Risk reversal: Guarantees or refund policies
+- Scarcity/urgency: Why buy now vs later
 
-C. MARKETING CHANNELS (prioritized by effectiveness)
-   PRE-LAUNCH (Weeks 1-4):
-   • Email list building: Lead magnet ideas, landing page strategy
-   • Social media: Which platforms, content calendar (3-5 posts/week)
-   • Content marketing: Blog posts, YouTube videos, podcast appearances
-   • Partnerships: Collaborations, guest appearances, affiliate partnerships
-   
-   LAUNCH PHASE (Week of launch):
-   • Launch sequence: Email campaign timeline
-   • Social media blitz: Daily content plan
-   • Live events: Webinars, Q&A sessions, free workshops
-   • Paid advertising: Budget allocation if applicable
-   
-   POST-LAUNCH (Ongoing):
-   • Evergreen funnel: Automated email sequence
-   • Student testimonials: Collection and showcase strategy
-   • Referral program: Incentives for students to share
-   • Community building: Group, forum, or membership
+C. PRICING & REVENUE STRATEGY
+- Recommended price point: $X with rationale
+- Pricing psychology: Why this price converts
+- Payment options: Full pay vs installments (e.g., 3 x $X/month)
+- Early bird discount: $X off for first Y students (creates urgency)
+- Launch pricing: Special introductory rate, then increase to $X
+- Bundle pricing: Course + coaching = $X (upsell)
+- Revenue goals: X students @ $Y = $Z total revenue
+- Break-even analysis: How many students to cover costs
+- Profit margins: After platform fees, marketing costs, time investment
 
-D. CONTENT STRATEGY
-   • 10 content ideas to attract ideal students
-   • Content formats: Videos, posts, emails, live streams
-   • SEO keywords to target (if applicable)
-   • Content calendar outline for first month
+D. MARKETING CHANNELS (prioritized by ROI)
+PRE-LAUNCH (4-6 Weeks Before):
+Week 1-2:
+- Build email list: Create lead magnet (free mini-course, checklist, webinar)
+- Landing page: High-converting opt-in page
+- Social media accounts: Set up profiles on 2-3 platforms where audience hangs out
+- Content calendar: Plan 30 days of content
+- Goal: 100-500 email subscribers before launch
 
-E. PRICING STRATEGY
-   • Recommended price point based on value and audience
-   • Early bird discount: Amount and duration
-   • Payment plans: Options to increase accessibility
-   • Upsells/add-ons: Bonus materials, coaching, community access
+Week 3-4:
+- Email nurture sequence: 5-7 emails building trust and authority
+- Social media content: 3-5 posts/week showcasing expertise
+- Free value content: Blog posts, YouTube videos, podcast guest appearances
+- Community engagement: Comment in relevant groups, answer questions
+- Partnerships: Reach out to 5-10 influencers/affiliates for collaboration
+- Goal: Warm up audience, build anticipation
 
-F. LAUNCH TIMELINE (90-day plan)
-   Week 1-4 (Pre-launch):
-   • Specific weekly goals and tasks
-   
-   Week 5-8 (Build momentum):
-   • Content creation and audience engagement
-   
-   Week 9-12 (Launch and optimize):
-   • Launch activities and post-launch follow-up
+Week 5-6:
+- Launch announcement: Course coming soon, early bird offer
+- Behind-the-scenes content: Course creation process, sneak peeks
+- Live Q&A or webinar: Free training that leads to course offer
+- Testimonial collection: From beta testers or previous students
+- Countdown content: 7 days, 5 days, 3 days, 1 day to launch
+- Goal: Pre-sell 10-50 spots
+
+LAUNCH PHASE (Launch Week):
+Day 1: Doors open email + social media announcement
+Day 2: Reminder + student testimonial
+Day 3: Case study or success story
+Day 4: Address objections (FAQ email)
+Day 5: Scarcity push (early bird ending soon)
+Day 6: Last call (price going up tomorrow)
+Day 7: Doors closed (no more enrollments until next cohort)
+
+POST-LAUNCH (Ongoing - Evergreen Funnel):
+- Automated email funnel: Welcome → Value → Offer → Scarcity → Close
+- Webinar funnel: Automated webinar selling course 24/7
+- YouTube SEO strategy: Rank for keywords audience searches
+- Paid ads: Facebook, Google, YouTube ads to evergreen funnel
+- Affiliate program: Recruit 20-100 affiliates promoting course
+- Student testimonials: Collect and showcase wins regularly
+- Referral program: "Refer a friend, get $X off next course"
+- Goal: 10-50 students/month on autopilot
+
+E. CONTENT STRATEGY (Authority Building)
+10 Content Ideas to Attract Ideal Students:
+1. [Content idea 1 based on instructor expertise]
+2-10. [More ideas...]
+
+Content Formats:
+- Long-form YouTube videos (10-20 min teaching valuable concepts)
+- Short-form social media (TikTok, Reels, Shorts - 30-60 sec hooks)
+- Email newsletter (weekly value emails)
+- Blog posts (SEO-optimized for Google traffic)
+- Podcast episodes (guest appearances or own show)
+
+F. LAUNCH TIMELINE (12-Week Plan to First $10K)
+Week 1-4 (Foundation):
+- Set up landing page and email capture
+- Create lead magnet (free mini-course)
+- Build email list to 100-500 people
+- Daily social media content
+- Identify 10 potential affiliate partners
+
+Week 5-8 (Build Momentum):
+- Launch beta version to 10-20 students (50% off)
+- Collect testimonials and refine course
+- Guest on 3-5 podcasts
+- Create 10-15 YouTube videos
+- Finalize sales page and course platform
+
+Week 9-10 (Pre-Launch):
+- Announce launch date
+- Run free challenge or webinar
+- Email daily (value-driven content)
+- Behind-the-scenes content
+- Build hype and anticipation
+
+Week 11 (Launch Week):
+- Open cart with early bird pricing
+- Email 2-3x per day
+- Live Q&A sessions
+- Daily social media posts
+- Close cart after 7 days
+
+Week 12 (Post-Launch):
+- Deliver course content
+- Collect student wins
+- Set up evergreen funnel
+- Plan next launch
 
 G. METRICS TO TRACK
-   • Website/landing page visitors
-   • Email list growth
-   • Social media engagement rates
-   • Conversion rates
-   • Revenue targets
+- Email list growth: [Goal: +X/week]
+- Email open rate: [Goal: 30-40%]
+- Landing page conversion: [Goal: 30-50%]
+- Sales page conversion: [Goal: 3-5%]
+- Revenue: [Goal: $X in Year 1]
+- Customer acquisition cost (CAC): [Goal: $X per student]
+- Lifetime value (LTV): [Goal: $X per student]
 
-H. QUICK-START ACTION PLAN
-   • 5 things to do THIS WEEK to start marketing
-   • Free vs paid marketing tactics
-   • Minimum budget needed (if any)
-   • Expected timeline to first sale
+H. BUDGET & COST BREAKDOWN
+Startup Costs (One-Time):
+- Course hosting platform: $X/month or $X/year
+- Email marketing software: $X/month
+- Landing page builder: $X/month
+Total startup: $X
 
-Make the plan practical, budget-conscious, and focused on organic/low-cost strategies. Include specific action items and realistic timelines.
+Monthly Operating Costs:
+- Software subscriptions: $X/month
+- Paid advertising (optional): $X/month
+- Affiliate commissions: 20-30% of sales
+Total monthly: $X
+
+Revenue Projection (Year 1):
+- Launch 1 (Month 3): X students @ $Y = $Z
+- Launch 2 (Month 6): X students @ $Y = $Z
+- Evergreen sales (Months 4-12): X students/month @ $Y = $Z
+Total Year 1 Revenue: $X
+Net Profit (after expenses): $X
+
+I. QUICK-START ACTION PLAN (This Week)
+Day 1: Set up course hosting platform and landing page
+Day 2: Set up email marketing software and write welcome sequence
+Day 3: Create 10 social media post ideas and schedule first week
+Day 4: Outline course modules and create simple sales page
+Day 5: Record lead magnet content and reach out to 3 affiliate partners
+Day 6: Test email automation and checkout process
+Day 7: Launch lead magnet and start building email list
+
+J. EXPECTED TIMELINE TO FIRST SALE
+Scenario 1 (Fast Track - Warm Audience): 1-4 weeks
+Scenario 2 (Medium - Cold Audience): 6-12 weeks
+Scenario 3 (Slow Build - Evergreen): 3-6 months
+
+Make the plan practical, budget-conscious, and focused on PROFITABILITY. Include specific action items, realistic timelines, and revenue projections.
 ---MARKETING_PLAN_END---
 
 Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`

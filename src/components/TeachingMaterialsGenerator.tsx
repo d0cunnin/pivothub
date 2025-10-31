@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Download, X } from "lucide-react";
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 interface SkillEntry {
   category: string;
@@ -374,7 +376,7 @@ const TeachingMaterialsGenerator = () => {
     URL.revokeObjectURL(url);
   };
 
-  const downloadAllMaterials = () => {
+  const downloadAllMaterialsAsText = () => {
     if (!generatedMaterials) return;
 
     const allContent = `
@@ -422,10 +424,176 @@ ${generatedMaterials.marketingPlan}
     downloadMaterial(allContent, filename);
   };
 
+  const downloadAllMaterialsAsPDF = () => {
+    if (!generatedMaterials) return;
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
+    let yPos = margin;
+
+    const addFooter = (pageNum: number) => {
+      doc.setFontSize(8);
+      doc.setTextColor(100);
+      const disclaimerText = "This teaching content is provided for educational and instructional purposes. PivotHub does not guarantee specific revenue or student outcomes.";
+      const wrapped = doc.splitTextToSize(disclaimerText, pageWidth - 40);
+      doc.text(wrapped, pageWidth / 2, pageHeight - 20, { align: 'center' });
+      doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+    };
+
+    const checkPageBreak = (spaceNeeded: number) => {
+      if (yPos + spaceNeeded > pageHeight - 35) {
+        addFooter(doc.getNumberOfPages());
+        doc.addPage();
+        yPos = margin;
+        return true;
+      }
+      return false;
+    };
+
+    const addText = (text: string, fontSize: number = 10, isBold: boolean = false) => {
+      doc.setFontSize(fontSize);
+      doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+      doc.setTextColor(0);
+      const lines = doc.splitTextToSize(text, pageWidth - 2 * margin);
+      
+      for (const line of lines) {
+        checkPageBreak(fontSize * 0.5);
+        doc.text(line, margin, yPos);
+        yPos += fontSize * 0.5;
+      }
+    };
+
+    // Cover Page
+    doc.setFillColor(41, 128, 185);
+    doc.rect(0, 0, pageWidth, 100, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(32);
+    doc.text('TEACHING MATERIALS', pageWidth / 2, 40, { align: 'center' });
+    doc.setFontSize(20);
+    doc.text('Course Monetization Package', pageWidth / 2, 55, { align: 'center' });
+    doc.setFontSize(16);
+    doc.text(formData.fullName, pageWidth / 2, 75, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2, 90, { align: 'center' });
+
+    yPos = 120;
+    doc.setTextColor(0);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('INSTRUCTOR PROFILE', margin, yPos);
+    yPos += 10;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    const skillsText = formData.skills.map(s => `${s.category}: ${s.specificSkill} (${s.proficiency})`).join(', ');
+    addText(`Name: ${formData.fullName}`, 10);
+    addText(`Skills: ${skillsText}`, 10);
+    addText(`Education: ${formData.educationLevel} ${formData.major ? `in ${formData.major}` : ''}`, 10);
+    addText(`Teaching Format: ${formData.teachingFormat}`, 10);
+    addText(`Target Audience: ${formData.targetAudience.join(', ')}`, 10);
+    addText(`Duration: ${formData.duration}`, 10);
+    
+    addFooter(1);
+
+    // Section 1: Webinar Concepts
+    doc.addPage();
+    yPos = margin;
+    doc.setFillColor(41, 128, 185);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setTextColor(255);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('WEBINAR / COURSE CONCEPTS', pageWidth / 2, 13, { align: 'center' });
+    yPos = 30;
+    doc.setTextColor(0);
+    addText(generatedMaterials.webinarConcepts, 10);
+    addFooter(2);
+
+    // Section 2: Course Outline
+    doc.addPage();
+    yPos = margin;
+    doc.setFillColor(41, 128, 185);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setTextColor(255);
+    doc.setFontSize(18);
+    doc.text('COURSE OUTLINE & MODULES', pageWidth / 2, 13, { align: 'center' });
+    yPos = 30;
+    doc.setTextColor(0);
+    addText(generatedMaterials.courseOutline, 10);
+    addFooter(3);
+
+    // Section 3: Handouts
+    doc.addPage();
+    yPos = margin;
+    doc.setFillColor(41, 128, 185);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setTextColor(255);
+    doc.setFontSize(18);
+    doc.text('HANDOUTS & RESOURCES', pageWidth / 2, 13, { align: 'center' });
+    yPos = 30;
+    doc.setTextColor(0);
+    addText(generatedMaterials.handouts, 10);
+    addFooter(4);
+
+    // Section 4: Lesson Script
+    doc.addPage();
+    yPos = margin;
+    doc.setFillColor(41, 128, 185);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setTextColor(255);
+    doc.setFontSize(18);
+    doc.text('LESSON SCRIPTS & TALKING POINTS', pageWidth / 2, 13, { align: 'center' });
+    yPos = 30;
+    doc.setTextColor(0);
+    addText(generatedMaterials.lessonScript, 10);
+    addFooter(5);
+
+    // Section 5: Tools & Platforms
+    doc.addPage();
+    yPos = margin;
+    doc.setFillColor(41, 128, 185);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setTextColor(255);
+    doc.setFontSize(18);
+    doc.text('TOOLS & SETUP GUIDE', pageWidth / 2, 13, { align: 'center' });
+    yPos = 30;
+    doc.setTextColor(0);
+    addText(generatedMaterials.toolsAndPlatforms, 10);
+    addFooter(6);
+
+    // Section 6: Marketing Plan
+    doc.addPage();
+    yPos = margin;
+    doc.setFillColor(41, 128, 185);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setTextColor(255);
+    doc.setFontSize(18);
+    doc.text('MARKETING PLAN', pageWidth / 2, 13, { align: 'center' });
+    yPos = 30;
+    doc.setTextColor(0);
+    addText(generatedMaterials.marketingPlan, 10);
+    addFooter(7);
+
+    const filename = `teaching-materials-${formData.fullName.replace(/\s+/g, "-").toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(filename);
+    
+    toast({
+      title: "PDF Downloaded!",
+      description: "Your complete teaching materials package has been saved as a PDF."
+    });
+  };
+
   return (
     <div className="space-y-6">
       <Card className="p-6 bg-card/50 backdrop-blur-sm border-primary/20">
-        <h3 className="text-2xl font-bold mb-6 text-foreground">Monetize Teaching Others What You Know</h3>
+        <h3 className="text-2xl font-bold mb-6 text-foreground">💰 Create $1M+ Courses from Your Expertise</h3>
+        <p className="text-base text-muted-foreground mb-6">
+          Built by a course creator with 20+ years experience building $1M+ courses from workshops, webinars, and masterclasses. 
+          Helped 500+ creators monetize their expertise, with some earning $2M+ annually selling online courses. 
+          Get organized, strategic, and effective teaching materials designed to maximize revenue.
+        </p>
         
         <div className="space-y-6">
           {/* Full Name */}
@@ -793,10 +961,16 @@ ${generatedMaterials.marketingPlan}
         <Card className="p-6 bg-card/50 backdrop-blur-sm border-primary/20">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-2xl font-bold text-foreground">Your Teaching Materials</h3>
-            <Button onClick={downloadAllMaterials} variant="outline">
-              <Download className="mr-2 h-4 w-4" />
-              Download All
-            </Button>
+            <div className="flex gap-3">
+              <Button onClick={downloadAllMaterialsAsPDF} variant="default" size="sm" className="shadow-lg">
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF
+              </Button>
+              <Button onClick={downloadAllMaterialsAsText} variant="outline" size="sm">
+                <Download className="mr-2 h-4 w-4" />
+                Download Text
+              </Button>
+            </div>
           </div>
 
           <Tabs defaultValue="concepts" className="w-full">

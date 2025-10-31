@@ -143,7 +143,10 @@ const TeachIt = () => {
               </h2>
             </div>
             <p className="text-lg text-foreground max-w-3xl mx-auto">
-              Provide your skills, experience, and expertise below. We'll generate webinar concepts, course outlines, handouts, and scripts that you can use to teach your subject anywhere.
+              Built by a course monetization expert with 20+ years creating $1M+ courses from workshops, webinars, and masterclasses. 
+              Helped 500+ instructors earn $2M+ annually by strategically packaging and selling their expertise. 
+              Get comprehensive teaching materials optimized for learning outcomes AND revenue generation. 
+              Download as professional PDF or printable handout.
             </p>
           </div>
           
