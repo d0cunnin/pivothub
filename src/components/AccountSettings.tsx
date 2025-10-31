@@ -173,39 +173,39 @@ export const AccountSettings = () => {
               <div className="grid gap-3">
                 <Button
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(10)}
-                  disabled={isLoading}
-                  className="justify-between h-auto py-4"
-                >
-                  <div className="text-left">
-                    <div className="font-semibold">10 Extra Credits</div>
-                    <div className="text-xs text-muted-foreground">Great for occasional use</div>
-                  </div>
-                  <span className="font-bold text-lg">$5.00</span>
-                </Button>
-                <Button
-                  variant="outline"
                   onClick={() => handlePurchaseCredits(25)}
                   disabled={isLoading}
                   className="justify-between h-auto py-4"
                 >
                   <div className="text-left">
                     <div className="font-semibold">25 Extra Credits</div>
-                    <div className="text-xs text-muted-foreground">Best value</div>
+                    <div className="text-xs text-muted-foreground">Starter Pack - Perfect for occasional needs</div>
                   </div>
                   <span className="font-bold text-lg">$10.00</span>
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(50)}
+                  onClick={() => handlePurchaseCredits(70)}
                   disabled={isLoading}
                   className="justify-between h-auto py-4"
                 >
                   <div className="text-left">
-                    <div className="font-semibold">50 Extra Credits</div>
-                    <div className="text-xs text-muted-foreground">For power users</div>
+                    <div className="font-semibold">70 Extra Credits</div>
+                    <div className="text-xs text-muted-foreground">Boost Pack - Best value for active users</div>
                   </div>
-                  <span className="font-bold text-lg">$18.00</span>
+                  <span className="font-bold text-lg">$25.00</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(150)}
+                  disabled={isLoading}
+                  className="justify-between h-auto py-4"
+                >
+                  <div className="text-left">
+                    <div className="font-semibold">150 Extra Credits</div>
+                    <div className="text-xs text-muted-foreground">Power Pack - Maximum credits for heavy usage</div>
+                  </div>
+                  <span className="font-bold text-lg">$50.00</span>
                 </Button>
               </div>
             </div>

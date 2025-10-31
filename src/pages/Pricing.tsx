@@ -147,86 +147,57 @@ const Pricing = () => {
       isFree: true
     },
     {
-      name: "Assess It + Prep It + Learn It Package",
-      price: "$18",
+      name: "Starter",
+      price: "$19",
       period: "month",
-      description: "Master your career journey and explore side income opportunities with 75 monthly credits",
+      description: "Perfect for getting started with 40 monthly credits",
       features: [
-        "75 credits per month",
-        "Unused credits roll over each month",
-        "Career, Skills & Personality Assessment Tools (2 credits each)",
-        "Side Income Assessment (2 credits)",
-        "Interview Questions Coach (2 credits), Interview Feedback Coach (2 credits)",
-        "Resume Analysis (2 credits)",
-        "Course access (free - no credits)",
-        "Priority email support"
+        "40 credits per month",
+        "Unused credits roll over (up to 2× monthly limit)",
+        "Access to all tools",
+        "Email support",
+        "Community access"
       ],
-      tier: "assess-prep-learn",
-      package: "assess_prep_learn",
+      tier: "starter",
+      package: "starter",
       gradient: "from-blue-500/10 to-cyan-600/10",
       accent: "border-l-4 border-blue-500"
     },
     {
-      name: "Build It + Teach It + Launch It Package",
-      price: "$18",
+      name: "Pro",
+      price: "$39",
       period: "month",
-      description: "Build your business, teach online, and create side income streams with 75 monthly credits",
+      description: "Ideal for regular users with 100 monthly credits",
       features: [
-        "75 credits per month",
-        "Unused credits roll over each month",
-        "Business Ideas & Planning (2-4 credits)",
-        "Side Income Assessment (2 credits)",
-        "Launch Strategy Generator (3 credits)",
-        "Teaching Materials (5 credits)",
-        "Logo & Branding (2 credits)",
-        "Marketing & Social Media (2-3 credits)",
-        "Schedule It & Host It tools (2-4 credits)",
-        "Priority email support"
+        "100 credits per month",
+        "Unused credits roll over (up to 2× monthly limit)",
+        "Access to all tools",
+        "Priority email support",
+        "Early access to new features"
       ],
-      tier: "build-teach-launch",
-      package: "build_teach_launch",
+      tier: "pro",
+      package: "pro",
       gradient: "from-emerald-500/10 to-green-600/10",
       accent: "border-l-4 border-emerald-500"
     },
     {
-      name: "Fund It Package",
-      price: "$15",
+      name: "All-Access",
+      price: "$79",
       period: "month",
-      description: "Secure funding and launch side income streams with 60 monthly credits",
+      description: "Everything you need with 250 monthly credits",
       features: [
-        "60 credits per month",
-        "Unused credits roll over each month",
-        "LOI & Grant Proposal Generator (4 credits)",
-        "Grant Resources (curated external links - free)",
-        "Side Income Assessment (2 credits)",
-        "Side Income Blueprint Report (free after assessment)",
-        "Priority email support"
-      ],
-      tier: "fund-it",
-      package: "fund_it",
-      gradient: "from-teal-500/10 to-cyan-600/10",
-      accent: "border-l-4 border-teal-500"
-    },
-    {
-      name: "All Access Pass",
-      price: "$29",
-      period: "month",
-      description: "Everything with 125 monthly credits",
-      features: [
-        "125 credits per month",
-        "Unused credits roll over each month",
-        "Access to all tools across all packages",
-        "High-cost tools: Teaching Materials (5), Business Plans (4)",
-        "Medium-cost tools: Resume Analysis (2), Marketing (3)",
-        "Chatbots (1 credit per message), All other tools (2+ credits)",
-        "Priority support & early access"
+        "250 credits per month",
+        "Unused credits roll over (up to 2× monthly limit)",
+        "Access to all tools",
+        "Priority support",
+        "Early access to new features",
+        "Dedicated account manager"
       ],
       tier: "all-access",
       package: "all_access",
       gradient: "from-blue-500/10 to-cyan-600/10",
       accent: "border-l-4 border-blue-500",
-      isAllAccess: true,
-      savings: "Save $22/month compared to individual packages"
+      isAllAccess: true
     }
   ];
   
@@ -411,14 +382,6 @@ const Pricing = () => {
                   </div>
                 </div>
                 
-                {selectedPlan.isAllAccess && selectedPlan.savings && (
-                  <div className="bg-primary/5 rounded-lg p-4 text-center">
-                    <p className="text-sm text-muted-foreground">
-                      {selectedPlan.savings}
-                    </p>
-                  </div>
-                )}
-                
                 <div className="pt-6">
                   <Button
                     className="w-full"
@@ -470,17 +433,17 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Starter Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$5</span>
+                  <span className="text-4xl font-bold text-primary">$10</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  20 Extra Credits
+                  25 Extra Credits
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Great for trying premium tools
+                    Perfect for occasional needs
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -494,15 +457,15 @@ const Pricing = () => {
                 <Button
                   className="w-full"
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(20)}
+                  onClick={() => handlePurchaseCredits(25)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 20 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 25 Credits"}
                 </Button>
               </CardContent>
             </Card>
 
-            {/* Power Pack - Highlighted */}
+            {/* Boost Pack - Highlighted */}
             <Card className="premium-card border-2 border-primary shadow-lg hover:shadow-glow transition-all bg-gradient-to-br from-primary/10 to-secondary/10 relative">
               <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
                 <Star className="h-3 w-3 mr-1" />
@@ -512,19 +475,19 @@ const Pricing = () => {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mx-auto mb-4">
                   <Zap className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="text-2xl mb-2">Power Pack</CardTitle>
+                <CardTitle className="text-2xl mb-2">Boost Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$10</span>
+                  <span className="text-4xl font-bold text-primary">$25</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  40 Extra Credits
+                  70 Extra Credits
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Best value for regular users
+                    Perfect for active users
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -537,33 +500,33 @@ const Pricing = () => {
                 </div>
                 <Button
                   className="w-full"
-                  onClick={() => handlePurchaseCredits(40)}
+                  onClick={() => handlePurchaseCredits(70)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 40 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 70 Credits"}
                 </Button>
               </CardContent>
             </Card>
 
-            {/* Pro Pack */}
+            {/* Power Pack */}
             <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-emerald-500/5 to-green-600/5">
               <CardHeader className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 mx-auto mb-4">
                   <Zap className="h-8 w-8 text-emerald-500" />
                 </div>
-                <CardTitle className="text-2xl mb-2">Pro Pack</CardTitle>
+                <CardTitle className="text-2xl mb-2">Power Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$15</span>
+                  <span className="text-4xl font-bold text-primary">$50</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
-                  60 Extra Credits
+                  150 Extra Credits
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2 text-sm text-muted-foreground">
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Power user pack
+                    Maximum credits for heavy usage
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
@@ -577,10 +540,10 @@ const Pricing = () => {
                 <Button
                   className="w-full"
                   variant="outline"
-                  onClick={() => handlePurchaseCredits(60)}
+                  onClick={() => handlePurchaseCredits(150)}
                   disabled={purchasingCredits}
                 >
-                  {purchasingCredits ? "Processing..." : "Purchase 60 Credits"}
+                  {purchasingCredits ? "Processing..." : "Purchase 150 Credits"}
                 </Button>
               </CardContent>
             </Card>

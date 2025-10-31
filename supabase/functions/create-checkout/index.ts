@@ -80,10 +80,9 @@ serve(async (req) => {
 
     // Define pricing based on tier
     const pricing = {
-      "assess-prep-learn": { amount: 1800, name: "Assess It + Prep It + Learn It", package: "assess-prep-learn" },
-      "build-teach-launch": { amount: 1800, name: "Build It + Teach It + Launch It", package: "build-teach-launch" },
-      "fund-it": { amount: 1500, name: "Fund It", package: "fund-it" },
-      "all-access": { amount: 2900, name: "All Access Pass", package: "all-access" }
+      "starter": { amount: 1900, name: "Starter", package: "starter" },
+      "pro": { amount: 3900, name: "Pro", package: "pro" },
+      "all-access": { amount: 7900, name: "All-Access", package: "all_access" }
     };
 
     const selectedPlan = pricing[tier as keyof typeof pricing];
