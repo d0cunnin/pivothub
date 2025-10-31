@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Presentation, Download, Eye, Play } from "lucide-react";
+import { Presentation, Download, Eye, Play, FileText } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { PitchDeckPresentation } from './PitchDeckPresentation';
+import jsPDF from 'jspdf';
 
 interface PitchData {
   companyName: string;
@@ -71,7 +72,7 @@ export const PitchDeckGenerator = () => {
     }
   };
 
-  const exportPitchDeck = () => {
+  const exportAsText = () => {
     let content = `INVESTOR PITCH DECK\n`;
     content += `Company: ${formData.companyName || 'Your Company'}\n`;
     content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
@@ -93,6 +94,78 @@ export const PitchDeckGenerator = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const exportAsPDF = () => {
+    const pdf = new jsPDF('landscape', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 20;
+    const contentWidth = pageWidth - (margin * 2);
+
+    slides.forEach((slide, index) => {
+      if (index > 0) {
+        pdf.addPage();
+      }
+
+      // Add subtle background color
+      pdf.setFillColor(249, 250, 251);
+      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+
+      // Add company branding header
+      if (logoPreview) {
+        try {
+          pdf.addImage(logoPreview, 'PNG', margin, 10, 20, 20);
+        } catch (e) {
+          console.error('Error adding logo:', e);
+        }
+      }
+      
+      pdf.setFontSize(10);
+      pdf.setTextColor(100, 116, 139);
+      pdf.text(formData.companyName || 'Company Name', pageWidth - margin, 15, { align: 'right' });
+
+      // Slide title
+      pdf.setFontSize(24);
+      pdf.setTextColor(51, 65, 85);
+      pdf.setFont('helvetica', 'bold');
+      const titleY = 45;
+      pdf.text(slide.title, margin, titleY, { maxWidth: contentWidth });
+
+      // Slide content
+      pdf.setFontSize(14);
+      pdf.setTextColor(71, 85, 105);
+      pdf.setFont('helvetica', 'normal');
+      const contentY = titleY + 15;
+      
+      const lines = slide.content.split('\n').filter(line => line.trim());
+      let currentY = contentY;
+      
+      lines.forEach((line, lineIndex) => {
+        if (currentY > pageHeight - 40) return; // Prevent overflow
+        
+        const cleanLine = line.replace(/^[•\-\*]\s*/, '');
+        const wrappedLines = pdf.splitTextToSize(cleanLine, contentWidth - 10);
+        
+        // Bullet point
+        pdf.setFontSize(16);
+        pdf.text('•', margin, currentY);
+        
+        // Content
+        pdf.setFontSize(14);
+        pdf.text(wrappedLines, margin + 8, currentY, { maxWidth: contentWidth - 10 });
+        
+        currentY += (wrappedLines.length * 8) + 5;
+      });
+
+      // Footer with page number
+      pdf.setFontSize(10);
+      pdf.setTextColor(148, 163, 184);
+      pdf.text(`${index + 1} / ${slides.length}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+      pdf.text(new Date().toLocaleDateString(), pageWidth - margin, pageHeight - 10, { align: 'right' });
+    });
+
+    pdf.save(`pitch-deck-${formData.companyName.replace(/\s+/g, '-').toLowerCase() || 'startup'}-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
   // Keyboard navigation for presentation
@@ -276,12 +349,12 @@ export const PitchDeckGenerator = () => {
     <Card className="p-8">
       <div className="flex items-center gap-2 mb-6">
         <Presentation className="h-6 w-6 text-primary" />
-        <h3 className="text-2xl font-bold text-foreground">Pitch Deck Generator</h3>
+        <h3 className="text-2xl font-bold text-foreground">💼 Professional Pitch Deck Generator</h3>
       </div>
       <p className="text-muted-foreground mb-2">
-        Create a compelling investor pitch deck for your startup
+        Created by a professional pitch deck creator and venture capitalist who knows exactly what investors want to hear
       </p>
-      <p className="text-sm text-muted-foreground mb-6">Create a professional investor pitch deck with all essential slides. Perfect for fundraising meetings and investor presentations.</p>
+      <p className="text-sm text-muted-foreground mb-6">Generate a compelling investor pitch deck with content focused on investor decision-making criteria. Export as PDF or text, ready for Canva, Google Slides, or PowerPoint.</p>
       <div className="space-y-6">
         {/* Branding Section */}
         <Card className="p-4 bg-muted/30">
@@ -438,7 +511,40 @@ export const PitchDeckGenerator = () => {
           />
         </div>
 
-        <Button 
+        <div className="space-y-2">
+          <Label htmlFor="competition">Competition</Label>
+          <Textarea
+            id="competition"
+            placeholder="Who are your main competitors? What makes you different?"
+            value={formData.competition}
+            onChange={(e) => handleInputChange("competition", e.target.value)}
+            rows={2}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="useOfFunds">Use of Funds</Label>
+          <Textarea
+            id="useOfFunds"
+            placeholder="How will you allocate the funding? (e.g., 40% product development, 30% marketing, 20% hiring, 10% operations)"
+            value={formData.useOfFunds}
+            onChange={(e) => handleInputChange("useOfFunds", e.target.value)}
+            rows={2}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="teamBackground">Team Background</Label>
+          <Textarea
+            id="teamBackground"
+            placeholder="Key team members, their credentials, relevant experience, and why this team can execute"
+            value={formData.teamBackground}
+            onChange={(e) => handleInputChange("teamBackground", e.target.value)}
+            rows={2}
+          />
+        </div>
+
+        <Button
           onClick={generatePitchDeck}
           disabled={isGenerating}
           size="lg"
@@ -464,10 +570,18 @@ export const PitchDeckGenerator = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={exportPitchDeck}
+                  onClick={exportAsPDF}
                 >
                   <Download className="h-4 w-4 mr-2" />
-                  Export
+                  Download PDF
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={exportAsText}
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  Download Text
                 </Button>
               </div>
             </div>

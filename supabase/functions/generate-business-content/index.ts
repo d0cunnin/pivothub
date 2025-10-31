@@ -22,7 +22,7 @@ serve(async (req) => {
     // Apply guard for auth, rate limit, and credit deduction
     const guardResult = await guard(req, {
       endpoint: "generate-business-content",
-      cost: 4,
+      cost: 3,
       requireAuth: true,
       maxReqsPerMinute: 20
     });
@@ -878,16 +878,28 @@ FORMATTING:
         break
 
       case 'pitch-deck':
-        prompt = `Create EXACTLY 10 pitch deck slides with SHORT BULLET POINTS ONLY.
+        prompt = `PIVOTHUB PROFESSIONAL PITCH DECK CREATOR & VENTURE CAPITALIST
 
-CRITICAL FORMATTING RULES:
-- Each slide MUST have 3-5 bullet points maximum
-- Each bullet point MUST be 10-15 words or less
-- NO paragraphs, NO long explanations, NO narrative text
-- Format each bullet with • symbol
-- Keep language concise and impactful
+=== DUAL IDENTITY ===
+You are BOTH:
+1. A professional pitch deck designer who has created 500+ decks that raised $2B+
+2. A venture capitalist who has evaluated 10,000+ pitches and funded 200+ startups
 
-INPUT DATA:
+You understand EXACTLY what investors want to hear and how they make funding decisions.
+
+=== INVESTOR DECISION CRITERIA ===
+Every slide must answer investor questions:
+• Problem: Is this a real, urgent problem worth solving?
+• Solution: Is this solution defensible and scalable?
+• Market: Is the market large enough ($1B+ TAM) and growing fast?
+• Business Model: Will this make money and scale efficiently?
+• Competition: Why will this win against competitors?
+• Go-to-Market: Can they acquire customers profitably?
+• Financials: What's the return potential (10x+) and timeline?
+• Team: Can this team execute against top competitors?
+• Exit: How will investors make money (acquisition, IPO)?
+
+=== INPUT DATA ===
 Company: ${data.companyName}
 Presenter: ${data.presenterName || 'N/A'}
 Problem: ${data.problem}
@@ -901,67 +913,83 @@ Use of Funds: ${data.useOfFunds}
 Team: ${data.teamBackground}
 Traction: ${data.traction}
 
-Generate EXACTLY these 10 slides in this format:
+=== SLIDE CONTENT RULES ===
+• 3-5 bullets per slide maximum
+• Each bullet 10-15 words
+• Use investor-friendly metrics (TAM/SAM/SOM, CAC, LTV, burn rate, runway)
+• Focus on traction, scalability, defensibility
+• Emphasize competitive advantages and moats
+• Show clear path to 10x+ returns
+• Use concrete numbers and percentages
+• Highlight team credentials and domain expertise
 
-[Title / Cover]
+=== GENERATE EXACTLY 10 SLIDES ===
+
+[Title Slide]
 • ${data.companyName}
-• Presenter: ${data.presenterName || 'Name'}
-• [One sentence tagline/value proposition]
+• [One compelling tagline that hooks investors - 10 words max]
+• Presented by: ${data.presenterName || 'Founder Name'}
 
 [Problem]
-• [Key problem point 1 - max 15 words]
-• [Key problem point 2 - max 15 words]
-• [Key problem point 3 - max 15 words]
+• [Quantify the problem - include market pain point with numbers]
+• [Why existing solutions fail - specific inefficiency or gap]
+• [Market timing - why now is the perfect time]
+• [Cost of inaction - what happens if problem persists]
 
 [Solution]
-• [How you solve it - point 1]
-• [How you solve it - point 2]
-• [How you solve it - point 3]
-• [Key differentiator]
+• [Core innovation - what makes this breakthrough]
+• [How it solves the problem 10x better than alternatives]
+• [Proprietary technology or unfair advantage]
+• [Early validation - pilot results, LOIs, user feedback]
 
 [Market Opportunity]
-• Total addressable market: [size from input]
-• [Growth rate or trend]
-• [Target segment details]
-• [Market validation point]
-
-[Product / Technology]
-• [Core product feature 1]
-• [Core product feature 2]
-• [Technology advantage]
-• [Current development stage]
+• TAM: [Total Addressable Market size from input or estimate]
+• SAM: [Serviceable Addressable Market - realistic segment]
+• [Market growth rate - CAGR percentage if available]
+• [Target customers - specific segment and why they'll pay]
 
 [Business Model]
-• Revenue model: [from input]
-• [Pricing strategy point]
-• [Customer acquisition approach]
-• [Unit economics highlight]
+• Revenue model: ${data.businessModel}
+• [Unit economics - CAC, LTV, payback period, margins]
+• [Pricing strategy - how it compares to competitors]
+• [Path to profitability - when break-even expected]
 
-[Go-to-Market Strategy]
-• [Channel strategy point 1]
-• [Channel strategy point 2]
-• [Partnership approach]
-• [Timeline milestone]
+[Competitors]
+• Key competitors: ${data.competition || 'Mention 2-3 direct competitors'}
+• [Our defensible moat - why hard to replicate]
+• [Competitive advantage #1 - specific metric or feature]
+• [Competitive advantage #2 - technology, team, or network effects]
 
-[Competition / Differentiation]
-• Key competitors: [from input]
-• [Our unique advantage 1]
-• [Our unique advantage 2]
-• [Defensibility point]
+[Go-to-Market Plan]
+• [Primary customer acquisition channel - specific strategy]
+• [Secondary channel - diversification approach]
+• [Strategic partnerships - if any secured or planned]
+• [Expansion roadmap - geographic or segment milestones]
 
-[Financials / Traction]
-• Current traction: [from input]
-• [Key metric or milestone]
-• [Revenue projection or funding]
-• [Use of funds summary]
+[Ask/Use of Funds]
+• Raising: ${data.fundingAmount}
+• [Allocation #1 - percentage to product/engineering]
+• [Allocation #2 - percentage to sales/marketing]
+• [Key milestones this funding enables - 3-6 months out]
 
-[Team & Ask / Closing]
-• Team: [from input - key credentials]
-• Funding ask: [from input]
-• [What funding will achieve]
-• [Contact or call to action]
+[Financials and Exit Strategy]
+• Current traction: ${data.traction || 'Mention users, revenue, or growth rate'}
+• [Revenue projection - ARR or GMV target in 12-24 months]
+• [Path to $100M+ revenue - key inflection points]
+• [Exit strategy - acquisition targets or IPO timeline]
 
-Use ONLY bullet points with • symbol. NO paragraphs.`
+[Team]
+• ${data.teamBackground || 'Founders with proven track record in [domain]'}
+• [Key team strength #1 - domain expertise, exits, or technical credentials]
+• [Key team strength #2 - complementary skills or network]
+• [Advisors or investors - if notable names involved]
+
+CRITICAL: 
+• Use ONLY bullet points with • symbol
+• NO paragraphs or long explanations
+• Focus on metrics, traction, and scalability
+• Emphasize what investors care about: returns, timing, team, moat
+• Make every word count - this is a 10-minute pitch`
         break
 
       case 'biography':
@@ -1099,7 +1127,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
       userId,
       ip,
       success: true,
-      creditsCharged: 4,
+      creditsCharged: 3,
       requestDurationMs: Date.now() - startTime
     });
     
