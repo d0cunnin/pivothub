@@ -122,3 +122,12 @@ verify_jwt = true
 
 [functions.speak-it]
 verify_jwt = true
+
+[functions.prompt-it]
+verify_jwt = true
+
+[functions.code-it]
+verify_jwt = true
+
+[functions.deploy-it]
+verify_jwt = true

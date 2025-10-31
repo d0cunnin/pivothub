@@ -1,0 +1,400 @@
+import { useState } from "react";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Bot, AlertTriangle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useUsage } from "@/contexts/UsageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import heroImage from "@/assets/hero-image.jpg";
+import { ToolGuard } from "@/components/ToolGuard";
+
+const DeployIt = () => {
+  const { user } = useAuth();
+  const { checkAndIncrementUsage } = useUsage();
+  const [formData, setFormData] = useState({
+    agentName: "",
+    purpose: "",
+    whoItHelps: "",
+    tone: "",
+    tools: [] as string[],
+    safetyRules: ""
+  });
+  const [blueprint, setBlueprint] = useState<{ blueprint: string; tips: string; resources: string[] } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const toneOptions = [
+    "Professional",
+    "Friendly",
+    "Casual",
+    "Formal",
+    "Empathetic",
+    "Humorous",
+    "Encouraging"
+  ];
+
+  const toolOptions = [
+    "Gmail",
+    "Google Drive",
+    "Google Calendar",
+    "Slack",
+    "Microsoft Teams",
+    "Notion",
+    "Trello",
+    "GitHub"
+  ];
+
+  const handleGenerate = async () => {
+    if (!user) {
+      toast.error("Please sign in to use Deploy It");
+      return;
+    }
+
+    if (!formData.agentName || !formData.purpose || !formData.whoItHelps) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setIsLoading(true);
+    setBlueprint(null);
+
+    try {
+      const canUse = await checkAndIncrementUsage('deploy-it');
+      if (!canUse) {
+        toast.error("Insufficient credits. Please upgrade or purchase credits.");
+        setIsLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('deploy-it', {
+        body: formData
+      });
+
+      if (error) throw error;
+
+      setBlueprint(data);
+      toast.success("Agent blueprint generated successfully!");
+    } catch (error: any) {
+      console.error('Error generating blueprint:', error);
+      toast.error(error.message || "Failed to generate blueprint");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="py-20 bg-primary relative overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
+        </div>
+        
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
+        
+        <div className="container mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+              <span className="text-3xl font-bold text-white tracking-wider">DEPLOY IT</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
+              Build Your Own AI Agent
+            </h1>
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
+              Design and plan your AI agent through OpenAI's Agent Builder
+            </p>
+            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <Badge variant="secondary" className="text-lg px-6 py-2">
+                6 Credits per use
+              </Badge>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main id="deploy-content" className="flex-grow container mx-auto px-4 py-12">
+        <ToolGuard toolName="deploy-it">
+          {/* Caution Banner */}
+          <Alert className="mb-8 border-yellow-500/50 bg-yellow-500/10">
+            <AlertTriangle className="h-4 w-4 text-yellow-500" />
+            <AlertDescription className="text-yellow-600 dark:text-yellow-400">
+              <strong>⚠️ Caution:</strong> Best suited for users who are comfortable with technology and developer tools. 
+              You do not need to code, but you should know basic tech terms and feel comfortable following step-by-step instructions. 
+              If you are brand new to AI, start with <strong>Prompt It</strong> and <strong>Code It</strong> first.
+            </AlertDescription>
+          </Alert>
+
+          {/* Input Form */}
+          <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Bot className="h-5 w-5 text-accent" />
+                Design Your AI Agent
+              </CardTitle>
+              <CardDescription>Fill in the details to create a custom blueprint for your AI agent</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="agentName">Agent Name / Purpose *</Label>
+                <Input
+                  id="agentName"
+                  placeholder="e.g., Email Organizer"
+                  value={formData.agentName}
+                  onChange={(e) => setFormData({ ...formData, agentName: e.target.value })}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="purpose">What it should do *</Label>
+                <Textarea
+                  id="purpose"
+                  placeholder="e.g., Sort my emails into folders and summarize them every morning"
+                  value={formData.purpose}
+                  onChange={(e) => setFormData({ ...formData, purpose: e.target.value })}
+                  className="min-h-[100px]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="whoItHelps">Who it helps *</Label>
+                <Input
+                  id="whoItHelps"
+                  placeholder="e.g., Busy professionals, students, small business owners"
+                  value={formData.whoItHelps}
+                  onChange={(e) => setFormData({ ...formData, whoItHelps: e.target.value })}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="tone">Tone / Personality</Label>
+                <Select value={formData.tone} onValueChange={(value) => setFormData({ ...formData, tone: value })}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a tone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {toneOptions.map(tone => (
+                      <SelectItem key={tone} value={tone.toLowerCase()}>{tone}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Tools to connect (optional)</Label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {toolOptions.map(tool => (
+                    <Button
+                      key={tool}
+                      variant={formData.tools.includes(tool) ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => {
+                        const newTools = formData.tools.includes(tool)
+                          ? formData.tools.filter(t => t !== tool)
+                          : [...formData.tools, tool];
+                        setFormData({ ...formData, tools: newTools });
+                      }}
+                    >
+                      {tool}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="safetyRules">Safety rules or limits</Label>
+                <Textarea
+                  id="safetyRules"
+                  placeholder="e.g., Never delete emails without asking, only access work emails"
+                  value={formData.safetyRules}
+                  onChange={(e) => setFormData({ ...formData, safetyRules: e.target.value })}
+                  className="min-h-[80px]"
+                />
+              </div>
+
+              <Button 
+                onClick={handleGenerate} 
+                disabled={isLoading || !formData.agentName || !formData.purpose || !formData.whoItHelps}
+                size="lg"
+                className="w-full"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating Blueprint...
+                  </>
+                ) : (
+                  <>
+                    <Bot className="mr-2 h-4 w-4" />
+                    Generate Agent Blueprint
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* AI Output Section */}
+          {blueprint && (
+            <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-accent/20">
+              <CardHeader>
+                <CardTitle className="text-accent">Your Custom AI Agent Blueprint</CardTitle>
+                <CardDescription>Follow these steps to create your agent in OpenAI's Agent Builder</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-lg mb-3">Step-by-Step Plan</h3>
+                  <div className="prose prose-sm max-w-none text-muted-foreground whitespace-pre-wrap bg-background/50 p-6 rounded-lg border border-accent/20">
+                    {blueprint.blueprint}
+                  </div>
+                </div>
+
+                {blueprint.tips && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-3 text-accent">💡 Tips</h3>
+                    <p className="text-muted-foreground whitespace-pre-wrap">{blueprint.tips}</p>
+                  </div>
+                )}
+
+                {blueprint.resources && blueprint.resources.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-3 text-accent">📚 Resources</h3>
+                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+                      {blueprint.resources.map((resource, index) => (
+                        <li key={index}>{resource}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Collapsible Lesson */}
+          <Card className="bg-gradient-card/30 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle>Understanding AI Agents</CardTitle>
+              <CardDescription>Learn the fundamentals of AI agents</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="what-is-agent">
+                  <AccordionTrigger>What is an AI Agent?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      An AI agent is like a smart assistant that can do tasks for you automatically. Think of it as a robot helper that understands instructions, 
+                      makes decisions, and takes actions on your behalf. Unlike simple chatbots that just answer questions, AI agents can actually DO things - 
+                      like managing your calendar, organizing files, sending emails, or analyzing data.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="how-work">
+                  <AccordionTrigger>How AI Agents Work (Step-by-Step)</AccordionTrigger>
+                  <AccordionContent>
+                    <ol className="list-decimal pl-6 space-y-2 text-muted-foreground">
+                      <li><strong className="text-foreground">You give it a goal:</strong> "Organize my inbox by priority"</li>
+                      <li><strong className="text-foreground">Agent understands:</strong> AI reads your instruction and figures out what needs to be done</li>
+                      <li><strong className="text-foreground">Agent plans:</strong> It breaks the task into smaller steps (read emails, categorize them, move to folders)</li>
+                      <li><strong className="text-foreground">Agent acts:</strong> It connects to your email and performs the actions</li>
+                      <li><strong className="text-foreground">Agent reports back:</strong> "Done! I organized 47 emails into 3 folders"</li>
+                    </ol>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="use-cases">
+                  <AccordionTrigger>Example Use Cases</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4 text-muted-foreground">
+                      <div>
+                        <p className="font-semibold text-foreground">Education:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Tutor Agent: Answers student questions and creates practice quizzes</li>
+                          <li>Research Assistant: Finds and summarizes academic papers</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Business:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Customer Service Agent: Handles support tickets automatically</li>
+                          <li>Sales Assistant: Schedules meetings and follows up with leads</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Content Creation:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Social Media Manager: Posts content on schedule and responds to comments</li>
+                          <li>Writing Assistant: Drafts blog posts based on your outline</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="safety">
+                  <AccordionTrigger>Safety, Privacy, and Ethics Checklist</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p className="font-semibold text-foreground">Before deploying your agent, check:</p>
+                      <ul className="list-disc pl-6 space-y-2">
+                        <li><strong className="text-foreground">Data Privacy:</strong> What information does your agent access? Is it sensitive?</li>
+                        <li><strong className="text-foreground">Permissions:</strong> Only give your agent access to what it needs</li>
+                        <li><strong className="text-foreground">Transparency:</strong> Make sure users know they're talking to an AI</li>
+                        <li><strong className="text-foreground">Monitoring:</strong> Regularly check what your agent is doing</li>
+                        <li><strong className="text-foreground">Limits:</strong> Set boundaries on what actions it can take without asking you first</li>
+                        <li><strong className="text-foreground">Backup:</strong> Have a way to stop or override the agent if needed</li>
+                      </ul>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="troubleshooting">
+                  <AccordionTrigger>Troubleshooting & Improvement Tips</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4 text-muted-foreground">
+                      <div>
+                        <p className="font-semibold text-foreground">Agent not understanding instructions?</p>
+                        <p>→ Make your instructions more specific and add examples</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Agent making mistakes?</p>
+                        <p>→ Review its actions and adjust the safety rules or permissions</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Agent too slow?</p>
+                        <p>→ Simplify the task or break it into smaller agents</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Want to improve results?</p>
+                        <p>→ Give your agent feedback on what it did well and what needs improvement</p>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </CardContent>
+          </Card>
+        </ToolGuard>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default DeployIt;

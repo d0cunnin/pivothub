@@ -76,7 +76,7 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
                     <span 
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/learnit', '/assessit', '/prepit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/assessit', '/prepit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
                       Upskill
                     </span>
@@ -96,9 +96,41 @@ export const Header = () => {
                       Prep It
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/learnit" className="flex w-full cursor-pointer">
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="flex items-center space-x-1">
+                    <span 
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/courses', '/promptit', '/codeit', '/deployit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                    >
                       Learn It
+                    </span>
+                    <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
+                  <DropdownMenuItem asChild>
+                    <Link to="/courses" className="flex w-full cursor-pointer">
+                      Courses
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/promptit" className="flex w-full cursor-pointer">
+                      Prompt It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/codeit" className="flex w-full cursor-pointer">
+                      Code It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/deployit" className="flex w-full cursor-pointer">
+                      Deploy It
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -307,13 +339,37 @@ export const Header = () => {
                   >
                     Prep It
                   </Link>
-                  <Link 
-                    to="/learnit" 
-                    className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/learnit' ? 'text-primary font-medium' : ''}`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Learn It
-                  </Link>
+                  <div className="space-y-2">
+                    <div className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Learn It</div>
+                    <Link 
+                      to="/courses" 
+                      className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/courses' ? 'text-primary font-medium' : ''}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Courses
+                    </Link>
+                    <Link 
+                      to="/promptit" 
+                      className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/promptit' ? 'text-primary font-medium' : ''}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Prompt It
+                    </Link>
+                    <Link 
+                      to="/codeit" 
+                      className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/codeit' ? 'text-primary font-medium' : ''}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Code It
+                    </Link>
+                    <Link 
+                      to="/deployit" 
+                      className={`block text-foreground hover:text-primary transition-colors ${location.pathname === '/deployit' ? 'text-primary font-medium' : ''}`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Deploy It
+                    </Link>
+                  </div>
                 </div>
               </div>
               <Link 

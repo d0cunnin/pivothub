@@ -56,6 +56,11 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   // LEARNING (0 credits) - No AI generation
   'learn-a-skill': 0,              // Video content only, no AI
   'side-income-report': 0,         // Free - generated after assessment
+  
+  // LEARN IT TOOLS
+  'prompt-it': 2,                  // ~1,500 tokens (2 free uses, then 5 credits for 10 uses)
+  'code-it': 1,                    // ~1,200 tokens output (explain code)
+  'deploy-it': 6,                  // ~1,500 tokens output (AI agent blueprint)
 };
 
 export function getToolCreditCost(toolName: string): number {

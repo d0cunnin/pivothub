@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Clock, BookOpen, TrendingUp, Target, Code } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
-const LearnIt = () => {
+const Courses = () => {
   const miniCourses = [
     {
       title: "AI & Technology Essentials",
@@ -53,7 +53,7 @@ const LearnIt = () => {
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
             <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">LEARN IT</span>
+              <span className="text-3xl font-bold text-white tracking-wider">COURSES</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Build new skills
@@ -141,4 +141,4 @@ const LearnIt = () => {
   );
 };
 
-export default LearnIt;
+export default Courses;

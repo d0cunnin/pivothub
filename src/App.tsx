@@ -15,7 +15,10 @@ import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import AssessIt from "./pages/AssessIt";
 import PrepIt from "./pages/PrepIt";
-import LearnIt from "./pages/LearnIt";
+import Courses from "./pages/Courses";
+import PromptIt from "./pages/PromptIt";
+import CodeIt from "./pages/CodeIt";
+import DeployIt from "./pages/DeployIt";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Auth from "./pages/Auth";
@@ -62,7 +65,11 @@ const App = () => (
           <Route path="/hostit" element={<HostIt />} />
           <Route path="/speakit" element={<SpeakIt />} />
           <Route path="/before-you-start" element={<BeforeYouStart />} />
-            <Route path="/learnit" element={<LearnIt />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/promptit" element={<PromptIt />} />
+            <Route path="/codeit" element={<CodeIt />} />
+            <Route path="/deployit" element={<DeployIt />} />
+            <Route path="/learnit" element={<Courses />} /> {/* Redirect old route */}
             <Route path="/assessit" element={<AssessIt />} />
             <Route path="/prepit" element={<PrepIt />} />
             <Route path="/buildit" element={<BuildIt />} />
