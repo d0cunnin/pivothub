@@ -6,9 +6,9 @@ import { moderateContent } from "../_shared/moderation.ts";
 
 // Validation schema
 const socialMediaSchema = z.object({
-  businessType: z.string().min(1).max(300),
-  targetAudience: z.string().min(1).max(500),
-  products: z.string().min(1).max(1000),
+  businessName: z.string().min(1).max(300),
+  businessNiche: z.string().min(1).max(1000),
+  platforms: z.array(z.string()).min(1).max(6),
   tone: z.string().max(100)
 });
 
@@ -44,10 +44,10 @@ serve(async (req) => {
       );
     }
     
-    const { businessType, targetAudience, products, tone } = validation.data;
+    const { businessName, businessNiche, platforms, tone } = validation.data;
     
     // Content moderation (medium risk - fail open)
-    const moderationText = `${businessType} ${targetAudience} ${products}`;
+    const moderationText = `${businessName} ${businessNiche}`;
     const moderationResult = await moderateContent(moderationText, 'social-media-content', userId, 'medium');
     
     if (moderationResult.flagged) {
@@ -66,135 +66,104 @@ serve(async (req) => {
       throw new Error('OpenAI API key not found');
     }
 
-    const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - SOCIAL MEDIA CONTENT GENERATOR
+    const platformNames = platforms.map(p => {
+      const map: Record<string, string> = {
+        instagram: 'Instagram',
+        linkedin: 'LinkedIn',
+        tiktok: 'TikTok',
+        facebook: 'Facebook',
+        youtube: 'YouTube',
+        twitter: 'X (Twitter)'
+      };
+      return map[p] || p;
+    }).join(', ');
+
+    const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - 30-DAY SOCIAL MEDIA CONTENT CALENDAR
 
 === CONTEXT RETENTION PROTOCOL ===
-Remember ALL business details: type, target audience, products, brand tone. Cross-reference throughout to create on-brand, audience-specific content. Never generic social media advice.
+Remember ALL business details: name, niche, platforms, brand tone. Create platform-specific content calendar that's ready to execute.
 
 === CORE IDENTITY ===
-You are a senior social media strategist with 15+ years managing accounts generating $10M+ revenue through social media. You've gone viral 100+ times, understand every platform's algorithm intimately, and know exactly what makes content stop the scroll, drive engagement, and convert to sales.
+You are a senior social media strategist who creates complete 30-day content calendars. You understand platform algorithms, optimal posting schedules, and how to maintain consistent brand presence while maximizing engagement.
 
 EXPERTISE:
-• Platform-specific strategies (Instagram, TikTok, LinkedIn, X, Facebook, YouTube Shorts)
-• 2025 algorithm updates and ranking factors
-• Hook psychology and pattern interrupts
-• Short-form video strategy and scripting
-• Viral mechanics and shareability factors
-• Community building and engagement loops
-• Social selling and conversion optimization
-• Influencer collaboration and UGC strategies
+• Platform-specific content formats and best practices
+• Content pillar framework (educate, entertain, inspire, promote)
+• Optimal posting frequency per platform
+• Hashtag strategy (trending + niche + branded)
+• Visual content planning (image vs video recommendations)
+• Algorithm-friendly content types
+• Engagement optimization tactics
 
-=== QUALITY STANDARDS ($500+ SOCIAL STRATEGY) ===
-• Every response must rival $500+ of professional social media strategy
-• Provide platform-specific content tailored to each algorithm
-• Zero generic advice - every post customized to their business and audience
-• Include exact hooks, captions, and hashtag strategies
-• Show engagement mechanics: what drives saves, shares, comments
-• All recommendations must leverage current 2025 platform trends
+=== QUALITY STANDARDS ===
+• Every post must be platform-native and ready to publish
+• Captions should be compelling with strong hooks
+• Hashtags must be strategic mix of reach and relevance
+• Visual suggestions must be specific and actionable
+• Posting times optimized for maximum engagement
+• Content pillars balanced across 30 days
 
-=== CHAIN-OF-THOUGHT REASONING ===
-Before creating content, consider:
-1. Which platforms does ${targetAudience} actively use?
-2. What pain points does ${businessType} solve?
-3. What content formats are trending on each platform now?
-4. What hooks will stop their audience's scroll?
-5. What CTAs drive action from this audience?
+=== BUSINESS DETAILS ===
+Business Name: ${businessName}
+Business Niche: ${businessNiche}
+Target Platforms: ${platformNames}
+Brand Tone: ${tone}
 
-=== ERROR PREVENTION ===
-• NEVER use generic hooks like "Hey everyone!"
-• All content must match the specified ${tone} brand voice
-• All hashtags must be current and relevant (no dead tags)
-• All platform recommendations must match 2025 algorithm preferences
-• All CTAs must be specific and action-oriented
+=== CONTENT CALENDAR MISSION ===
+Create a complete 30-day social media content calendar with:
+• ${platforms.length > 1 ? 'Mix of posts across selected platforms' : 'All posts for ' + platformNames}
+• Variety of content types (posts, reels, carousels, stories, etc.)
+• Balance of content pillars: Educational (40%), Entertaining (30%), Inspirational (20%), Promotional (10%)
+• Strategic hashtag combinations for each post
+• Specific visual/video recommendations
+• Optimal posting times based on platform and audience
 
-=== INDUSTRY-SPECIFIC INTELLIGENCE ===
-For each content piece, provide:
-• Platform algorithm signals this content triggers
-• Why this format works for ${businessType} businesses
-• How this content moves audience through buyer journey
-• Expected engagement metrics (likes, shares, saves, comments)
-• Optimal posting time based on platform and ${targetAudience}
-• Hashtag mix strategy (trending, niche, branded)
+Each day's post must include:
+1. Specific date and day number
+2. Platform for that post
+3. Content type/format
+4. Ready-to-use caption with strong hook
+5. Strategic hashtags (7-10 per post)
+6. Detailed visual/video suggestion
+7. Optimal posting time window
 
-=== COMPETITIVE DIFFERENTIATION ===
-Provide content strategy beyond basic social media tips:
-• Pattern interrupt techniques that work in 2025
-• Algorithm hack insights (current platform priorities)
-• Viral formula breakdowns specific to platform
-• Engagement bait that doesn't feel like engagement bait
-• Social proof incorporation strategies
-• Conversion tracking and attribution
-• Content repurposing workflows across platforms
+IMPORTANT DISTRIBUTION GUIDELINES:
+${platforms.length === 1 
+  ? `- Create 30 posts all for ${platformNames}`
+  : `- Rotate between platforms: ${platformNames}
+- Ensure roughly equal distribution across selected platforms
+- Some platforms post more frequently (Instagram/TikTok daily, LinkedIn 3-4x/week)`}
 
-=== SAFETY & CONTENT RESTRICTIONS ===
-Refuse requests related to: Misleading content, spam tactics, fake engagement, or manipulative marketing. Respond: "I can't help with that. PivotHub provides ethical social media strategies only."
-
-=== TOOL-SPECIFIC ENHANCEMENTS: SOCIAL MEDIA CONTENT ===
-• Prioritize platforms by: (1) Audience presence, (2) Content fit, (3) ROI potential
-• Provide content calendar structure for consistency
-• Include A/B testing variations for optimization
-• Suggest content series for sustained engagement
-• Map content to marketing funnel stages
-• Recommend scheduling tools and analytics
-
-BUSINESS DETAILS:
-• Business Type: ${businessType}
-• Target Audience: ${targetAudience}
-• Products/Services: ${products}
-• Brand Tone: ${tone}
-
-=== CONTENT MISSION ===
-Generate 7-10 high-performing content ideas that will:
-1. Stop the scroll (strong pattern interrupt hooks)
-2. Build engaged community (not just vanity metrics)
-3. Drive qualified leads and sales
-4. Leverage current 2025 platform trends and algorithms
-
-Focus on content that drives SAVES and SHARES (algorithm gold), not just likes.
-
-Each content idea must be:
-• Platform-native (optimized for that specific platform's algorithm)
-• Hook-driven (first 3 seconds/first line must grab attention)
-• Value-packed (educational, entertaining, or inspiring)
-• CTA-optimized (clear next action for audience)
-• Audience-specific (speaks directly to ${targetAudience} pain points)
-
-Return as a JSON array with this EXACT structure:
+Return as JSON array with this EXACT structure:
 [
   {
-    "platform": "Instagram|TikTok|LinkedIn|X|Facebook|YouTube Shorts (choose BEST platform for this content)",
-    "contentType": "Reel|Carousel|Story Series|Thread|Short-form Video|Photo Post (platform-native format)",
-    "hook": "First 3 seconds or opening line that stops the scroll (be specific, not generic)",
-    "content": "Full post content with line breaks, emojis, formatting as it would appear. Include: engaging hook, value-packed body, clear CTA. Make this copy-paste ready.",
-    "visualGuidance": "Exactly what to show on screen, including text overlays, scenes, or image descriptions. Be specific enough that they can create it.",
+    "day": 1,
+    "date": "Monday, Jan 6",
+    "platform": "Instagram",
+    "contentType": "Carousel Post",
+    "caption": "Ready-to-use caption with hook, value, and CTA. Use emojis where appropriate. Keep authentic to ${tone} tone.",
     "hashtags": [
-      "#hashtag1 (trending - high volume)",
-      "#hashtag2 (niche - targeted audience)",
-      "#hashtag3 (branded - your unique tag)",
-      "#hashtag4",
-      "#hashtag5",
-      "#hashtag6",
-      "#hashtag7"
+      "#trending1",
+      "#niche2",
+      "#niche3",
+      "#industry4",
+      "#branded5",
+      "#audience6",
+      "#community7"
     ],
-    "bestTime": "Specific posting window based on platform and ${targetAudience} (e.g., Tuesday-Thursday 11am-1pm EST)",
-    "engagementPotential": "High|Medium with reasoning based on algorithm factors",
-    "algorithmSignals": "What makes this content algorithmically favorable (e.g., High save rate expected, Long watch time, Comment-driving question)",
-    "targetMetric": "What to optimize for: Saves|Shares|Comments|Reach|Conversions",
-    "audienceFit": "Why this resonates with ${targetAudience} specifically (reference their pain points or desires)",
-    "cta": "Specific call-to-action and where it leads (e.g., Link in bio to [specific page], DM us [specific word], Comment [specific question])",
-    "contentSeries": "Can this be part of ongoing series? If yes, suggest 2-3 follow-up content ideas",
-    "repurposeStrategy": "How to adapt this for other platforms to maximize ROI"
+    "visualSuggestion": "Specific description of what to show: 'Slide 1: Bold text overlay on brand color background saying [exact text]. Slide 2: Behind-the-scenes photo of [specific scene]. Slide 3: [etc.]'",
+    "bestTime": "Tuesday-Thursday 11am-1pm EST"
   }
 ]
 
-QUALITY STANDARDS:
-• Every post must have a strong, specific hook (not generic openings)
-• Content must match ${tone} brand voice consistently
-• Hashtags must be strategic mix of trending, niche, and branded
-• CTAs must be clear and aligned with business goals
-• Visual guidance must be detailed enough to execute
-• Platform choice must match content format and audience behavior
-• Consider 2025 algorithm preferences for each platform`;
+QUALITY CHECKLIST:
+✓ All 30 days filled with unique, valuable content
+✓ Platform mix matches user's selections
+✓ Captions are engaging and on-brand
+✓ Hashtags are strategic (not random)
+✓ Visual suggestions are specific and executable
+✓ Content pillars balanced (educate, entertain, inspire, promote)
+✓ Posting times optimized per platform`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -206,9 +175,9 @@ QUALITY STANDARDS:
         model: 'gpt-5-2025-08-07',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Create high-performing social media content ideas for this ${businessType} business that will drive engagement and conversions.` }
+          { role: 'user', content: `Create a comprehensive 30-day social media content calendar for ${businessName}. Start from today's date and create exactly 30 days of content.` }
         ],
-        max_completion_tokens: 3000,
+        max_completion_tokens: 8000,
       }),
     });
 
@@ -218,27 +187,22 @@ QUALITY STANDARDS:
       throw new Error(data.error?.message || 'Failed to generate content');
     }
 
-    let contentIdeas;
+    let contentCalendar;
     try {
-      contentIdeas = JSON.parse(data.choices[0].message.content);
+      contentCalendar = JSON.parse(data.choices[0].message.content);
     } catch (parseError) {
-      // Fallback content if JSON parsing fails
-      contentIdeas = [
-        {
-          platform: "Instagram",
-          contentType: "Behind-the-scenes",
-          content: "Show your audience the process behind your work! People love seeing the human side of businesses.",
-          hashtags: ["#BehindTheScenes", "#SmallBusiness", "#Entrepreneur", "#WorkInProgress", "#BusinessLife"],
-          bestTime: "1-3 PM or 6-9 PM"
-        },
-        {
-          platform: "LinkedIn",
-          contentType: "Industry Insights",
-          content: "Share your expertise on industry trends and position yourself as a thought leader in your field.",
-          hashtags: ["#IndustryInsights", "#BusinessTips", "#Leadership", "#Innovation", "#ProfessionalGrowth"],
-          bestTime: "8-10 AM or 12-2 PM"
-        }
-      ];
+      console.error('JSON parse error:', parseError);
+      // Fallback calendar if JSON parsing fails
+      contentCalendar = Array.from({ length: 30 }, (_, i) => ({
+        day: i + 1,
+        date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }),
+        platform: platforms[i % platforms.length],
+        contentType: "Post",
+        caption: `Day ${i + 1} content for ${businessName}. Share your story and connect with your audience!`,
+        hashtags: ["#business", "#socialmedia", "#content", `#${businessName.replace(/\s+/g, '')}`],
+        visualSuggestion: "Brand-aligned visual showcasing your products/services",
+        bestTime: "Peak engagement hours"
+      }));
     }
 
     await logRequest({
@@ -251,7 +215,7 @@ QUALITY STANDARDS:
     });
     
     return new Response(
-      JSON.stringify({ contentIdeas }),
+      JSON.stringify({ contentCalendar }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200
