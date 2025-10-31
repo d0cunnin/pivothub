@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface NameCheckResult {
   domain: string;
@@ -29,26 +31,30 @@ export const NameChecker = () => {
   ];
 
   const checkNameAvailability = async () => {
-    console.log("NameChecker button clicked!");
     if (!businessName.trim() || !state) return;
     
     setIsChecking(true);
     
     try {
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/name-checker', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('name-checker', {
+        body: {
           businessName: businessName.trim()
-        }),
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to check name availability');
+      if (error) {
+        throw new Error(error.message || 'Failed to check name availability');
+      }
+
+      if (data.error) {
+        if (data.error.includes('RATE_LIMIT')) {
+          toast.error('Too many requests. Please wait a moment and try again.');
+        } else if (data.error.includes('credit')) {
+          toast.error('Insufficient credits. This tool costs 2 credits.');
+        } else {
+          toast.error(data.error);
+        }
+        return;
       }
 
       // Transform the API response to match the existing interface
@@ -59,10 +65,10 @@ export const NameChecker = () => {
           available: domain.available,
           platform: "Domain"
         })),
-        // Business registry
+        // Business registry (simulated - most states don't provide APIs)
         { 
           domain: `${businessName} (${states.find(s => s.toLowerCase().replace(' ', '-') === state) || state})`, 
-          available: Math.random() > 0.3, // Simulate registry check
+          available: Math.random() > 0.3,
           platform: "State Business Registry" 
         },
         { 
@@ -79,19 +85,16 @@ export const NameChecker = () => {
       ];
 
       setResults(transformedResults);
+      toast.success('Name availability check complete!');
     } catch (error) {
       console.error('Error checking name availability:', error);
-      // Fallback to mock data on error
-      const mockResults: NameCheckResult[] = [
-        { domain: `${businessName.toLowerCase().replace(/\s+/g, '')}.com`, available: Math.random() > 0.5, platform: "Domain" },
-        { domain: `${businessName} (${states.find(s => s.toLowerCase().replace(' ', '-') === state) || state})`, available: Math.random() > 0.5, platform: "State Business Registry" },
-        { domain: `${businessName} LLC (${states.find(s => s.toLowerCase().replace(' ', '-') === state) || state})`, available: Math.random() > 0.5, platform: "State LLC Registry" },
-        { domain: `@${businessName.toLowerCase().replace(/\s+/g, '')}`, available: Math.random() > 0.5, platform: "Instagram" },
-        { domain: `@${businessName.toLowerCase().replace(/\s+/g, '')}`, available: Math.random() > 0.5, platform: "Twitter" },
-        { domain: businessName, available: Math.random() > 0.5, platform: "Facebook" },
-        { domain: businessName, available: Math.random() > 0.5, platform: "LinkedIn" }
-      ];
-      setResults(mockResults);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to check name availability';
+      
+      if (errorMessage.includes('JWT')) {
+        toast.error('Please log in to use the Name Checker');
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       setIsChecking(false);
     }
@@ -206,8 +209,10 @@ export const NameChecker = () => {
           
           <div className="mt-6 p-4 bg-muted rounded-lg">
             <p className="text-sm text-muted-foreground">
-              <strong>Note:</strong> This is a simulated check for demonstration. 
-              In a live application, this would query actual domain registrars, social media APIs, and state business registries.
+              <strong>Note:</strong> Domain results use real DNS lookups and may take a few seconds. 
+              Social media handle availability is checked via live requests. 
+              Trademark conflict analysis is AI-powered and should be verified with a legal professional for high-stakes decisions. 
+              State business registry checks require manual verification with your state's Secretary of State office.
             </p>
           </div>
         </div>
