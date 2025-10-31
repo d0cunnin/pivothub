@@ -67,7 +67,7 @@ export const SupabaseUsageMonitor = () => {
           <div>
             <CardTitle className="flex items-center gap-2">
               <Database className="h-5 w-5 text-primary" />
-              Supabase Free Tier Usage Monitor
+              Supabase Usage Monitor
               {criticalMetrics.length > 0 && (
                 <Badge variant="destructive" className="ml-2">
                   {criticalMetrics.length} Alert{criticalMetrics.length > 1 ? "s" : ""}
@@ -97,8 +97,8 @@ export const SupabaseUsageMonitor = () => {
               <Alert variant="destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <AlertDescription>
-                  <strong>Action Required:</strong> {criticalMetrics.length} metric{criticalMetrics.length > 1 ? "s are" : " is"} approaching or exceeding free tier limits.
-                  Consider upgrading to avoid service disruption.
+                  <strong>Action Required:</strong> {criticalMetrics.length} metric{criticalMetrics.length > 1 ? "s are" : " is"} approaching or exceeding plan limits.
+                  Consider upgrading your Supabase plan to avoid service disruption.
                 </AlertDescription>
               </Alert>
             )}
@@ -208,7 +208,7 @@ export const SupabaseUsageMonitor = () => {
             {/* Info Footer */}
             <div className="pt-4 border-t">
               <p className="text-xs text-muted-foreground">
-                📊 Monitoring Supabase free tier limits. For detailed analytics, visit{" "}
+                📊 Monitoring Supabase usage limits. For detailed analytics, visit{" "}
                 <a 
                   href="https://supabase.com/dashboard/project/fkvjsgqjgissolpdqbdh" 
                   target="_blank" 
