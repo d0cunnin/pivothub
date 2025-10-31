@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Presentation, Download, Eye, Play, FileText } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Presentation, Download, Eye, Play, FileText, Info } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { PitchDeckPresentation } from './PitchDeckPresentation';
@@ -349,12 +350,20 @@ export const PitchDeckGenerator = () => {
     <Card className="p-8">
       <div className="flex items-center gap-2 mb-6">
         <Presentation className="h-6 w-6 text-primary" />
-        <h3 className="text-2xl font-bold text-foreground">💼 Professional Pitch Deck Generator</h3>
+        <h3 className="text-2xl font-bold text-foreground">💼 Professional Pitch Deck Content Generator</h3>
       </div>
       <p className="text-muted-foreground mb-2">
         Created by a professional pitch deck creator and venture capitalist who knows exactly what investors want to hear
       </p>
       <p className="text-sm text-muted-foreground mb-6">Generate a compelling investor pitch deck with content focused on investor decision-making criteria. Export as PDF or text, ready for Canva, Google Slides, or PowerPoint.</p>
+      
+      <Alert className="mb-6">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          <strong>💡 New to This?</strong> If you don't have answers for these inputs yet, we recommend completing the <strong>Business Foundation Builder</strong> first (found in Step 1 above). It will help you develop all the core business information needed for a compelling pitch deck.
+        </AlertDescription>
+      </Alert>
+
       <div className="space-y-6">
         {/* Branding Section */}
         <Card className="p-4 bg-muted/30">

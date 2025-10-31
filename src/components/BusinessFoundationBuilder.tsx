@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Target, Download, Sparkles, HelpCircle } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -291,6 +292,13 @@ export const BusinessFoundationBuilder = () => {
       <p className="text-sm text-muted-foreground mb-6">
         Create your vision, mission, problem statement, solution, target audience, market size, business model, and go-to-market strategy - all the foundational elements you need before diving into detailed planning.
       </p>
+
+      <Alert className="mb-6">
+        <Sparkles className="h-4 w-4" />
+        <AlertDescription>
+          <strong>💡 Pro Tip:</strong> The answers you provide here will give you the foundational content needed for the Pitch Deck Content Generator. Complete this first to have all your business details ready when creating your investor pitch deck.
+        </AlertDescription>
+      </Alert>
 
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">

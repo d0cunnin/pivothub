@@ -14,7 +14,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Business Foundation Builder', credits: 2 },
     { name: 'Business Plan Generator', credits: 4 },
     { name: 'Marketing Strategy Generator', credits: 3 },
-    { name: 'Pitch Deck Generator', credits: 3 },
+    { name: 'Pitch Deck Content Generator', credits: 3 },
     { name: 'Logo Generator', credits: 2 },
     { name: 'Biography Generator', credits: 3 },
     { name: 'Legal Documents Generator', credits: 3 },
