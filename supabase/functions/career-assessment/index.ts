@@ -94,13 +94,13 @@ serve(async (req) => {
       );
     }
     
-    const openAIApiKey = Deno.env.get('relaunch_openai_key');
-    if (!openAIApiKey) {
-      console.error('OpenAI API key not found');
-      throw new Error('OpenAI API key not found');
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      console.error('Lovable API key not found');
+      throw new Error('Lovable API key not found');
     }
 
-    console.log('Processing career assessment with OpenAI GPT-5 model...');
+    console.log('Processing career assessment with Lovable AI (Gemini 2.5 Flash model)...');
 
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - CAREER ASSESSMENT
 
@@ -463,27 +463,42 @@ Return as a JSON object with this EXACT structure:
     }
   }
 }`;
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
         ],
-        max_completion_tokens: 6000,
       }),
     });
 
     const data = await response.json();
     
     if (!response.ok) {
-      console.error('OpenAI API error:', data);
-      throw new Error(data.error?.message || 'Failed to analyze career assessment');
+      const errorDetails = {
+        status: response.status,
+        statusText: response.statusText,
+        error: data.error
+      };
+      console.error('Lovable AI API error:', errorDetails);
+      
+      // Return specific error message based on status code
+      let userMessage = 'Failed to analyze career assessment';
+      if (response.status === 401) {
+        userMessage = 'API authentication failed. Please contact support.';
+      } else if (response.status === 429) {
+        userMessage = 'Rate limit exceeded. Please try again in a few minutes.';
+      } else if (response.status === 402) {
+        userMessage = 'API credits exhausted. Please contact support.';
+      }
+      
+      throw new Error(userMessage);
     }
 
     console.log('Successfully received OpenAI response');
@@ -503,27 +518,58 @@ Return as a JSON object with this EXACT structure:
         requestDurationMs: Date.now() - startTime
       });
     } catch (parseError) {
-      // Fallback analysis if JSON parsing fails
+      console.error('Failed to parse AI response, generating fallback analysis from actual responses');
+      
+      // Calculate which areas had highest scores from responses
+      const areaScores = Object.entries(responses).map(([area, scores]) => ({
+        area,
+        totalScore: Array.isArray(scores) 
+          ? scores.reduce((sum: number, val: any) => sum + Number(val), 0)
+          : 0,
+        avgScore: Array.isArray(scores)
+          ? scores.reduce((sum: number, val: any) => sum + Number(val), 0) / scores.length
+          : 0
+      })).sort((a, b) => b.totalScore - a.totalScore);
+
+      const topAreas = areaScores.slice(0, 5);
+
+      // Map area IDs to career titles
+      const areaToCareer: Record<string, string> = {
+        'healthcare': 'Healthcare Professional',
+        'trades': 'Skilled Trades Specialist',
+        'stem': 'STEM Professional',
+        'social-services': 'Social Services Worker',
+        'finance': 'Financial Analyst',
+        'law-safety': 'Public Safety Officer',
+        'customer-service': 'Customer Success Manager',
+        'education': 'Education Professional',
+        'entrepreneurship': 'Entrepreneur / Business Owner',
+        'nonprofit': 'Nonprofit Program Manager',
+        'real-estate': 'Real Estate Professional',
+        'marketing-sales': 'Marketing / Sales Professional',
+        'human-resources': 'HR Specialist'
+      };
+
       analysis = {
-        recommendations: [
-          {
-            title: "Project Manager",
-            fitScore: 85,
-            description: "Lead cross-functional teams to deliver projects on time and within budget",
-            whyGoodFit: "Strong organizational and communication skills align well with project management",
-            requiredSkills: ["Project management", "Leadership", "Communication", "Problem-solving"],
-            education: "Bachelor's degree preferred, PMP certification beneficial",
-            salaryRange: "$65k-$95k",
-            marketOutlook: "Growing",
-            transitionTime: "3-6 months",
-            challenges: ["Learning project management methodologies", "Building leadership experience"],
-            nextSteps: ["Complete PMP certification", "Gain experience with project management tools"]
-          }
-        ],
-        summary: "You show strong potential for leadership and organizational roles that require strategic thinking and people management.",
-        keyStrengths: ["Communication", "Problem-solving", "Adaptability", "Team collaboration"],
-        developmentAreas: ["Technical skills", "Industry expertise", "Leadership experience"],
-        generalAdvice: "Focus on building leadership skills and gaining relevant certifications to transition into management roles."
+        recommendations: topAreas.map(area => ({
+          title: areaToCareer[area.area] || area.area,
+          fitScore: Math.round((area.avgScore / 5) * 100),
+          description: `Based on your assessment responses, you showed strong interest in ${area.area}`,
+          whyGoodFit: `Your responses indicate ${area.avgScore >= 4 ? 'strong' : 'moderate'} alignment with this field`,
+          requiredSkills: ['To be determined - full AI analysis unavailable'],
+          skillsTheyHave: ['Assessment data available'],
+          skillGaps: ['Further research needed'],
+          education: 'Varies by specific role',
+          salaryRange: '$45k-$85k (varies widely)',
+          marketOutlook: 'Contact a career counselor for detailed outlook',
+          transitionTime: '3-12 months depending on background',
+          challenges: ['Further research needed'],
+          nextSteps: ['Research specific roles in this field', 'Speak with a career advisor']
+        })),
+        summary: `Based on your responses, you showed the strongest interest in: ${topAreas.map(a => a.area).join(', ')}. Note: This is a basic analysis - full AI assessment was unavailable.`,
+        keyStrengths: ['Assessment data available - AI analysis needed for detailed insights'],
+        developmentAreas: ['Speak with career counselor for personalized analysis'],
+        generalAdvice: 'We recommend scheduling a career counseling session to dive deeper into these results.'
       };
     }
 

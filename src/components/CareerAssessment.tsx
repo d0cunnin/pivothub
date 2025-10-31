@@ -312,7 +312,18 @@ export const CareerAssessment = () => {
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Career assessment error:', error);
+        // Show toast notification to user
+        import('@/hooks/use-toast').then(({ toast }) => {
+          toast({
+            title: "Assessment Analysis Incomplete",
+            description: "We encountered an issue analyzing your results. You'll receive basic recommendations instead of the full AI analysis.",
+            variant: "destructive",
+          });
+        });
+        throw error;
+      }
       
       if (data && data.analysis) {
         // Transform AI response to match existing interface
