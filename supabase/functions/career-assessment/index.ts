@@ -94,13 +94,13 @@ serve(async (req) => {
       );
     }
     
-    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!lovableApiKey) {
-      console.error('Lovable API key not found');
-      throw new Error('Lovable API key not found');
+    const openAIApiKey = Deno.env.get('relaunch_openai_key');
+    if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
+      throw new Error('OpenAI API key not found');
     }
 
-    console.log('Processing career assessment with Lovable AI (Gemini 2.5 Flash model)...');
+    console.log('Processing career assessment with OpenAI GPT-5...');
 
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - CAREER ASSESSMENT
 
@@ -463,14 +463,15 @@ Return as a JSON object with this EXACT structure:
     }
   }
 }`;
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
+        'Authorization': `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'gpt-5-2025-08-07',
+        max_completion_tokens: 16000,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
@@ -486,16 +487,16 @@ Return as a JSON object with this EXACT structure:
         statusText: response.statusText,
         error: data.error
       };
-      console.error('Lovable AI API error:', errorDetails);
+      console.error('OpenAI API error:', errorDetails);
       
       // Return specific error message based on status code
-      let userMessage = 'Failed to analyze career assessment';
+      let userMessage = 'Failed to analyze career assessment with OpenAI';
       if (response.status === 401) {
-        userMessage = 'API authentication failed. Please contact support.';
+        userMessage = 'OpenAI API authentication failed. Please contact support.';
       } else if (response.status === 429) {
         userMessage = 'Rate limit exceeded. Please try again in a few minutes.';
       } else if (response.status === 402) {
-        userMessage = 'API credits exhausted. Please contact support.';
+        userMessage = 'Payment required. Please contact support.';
       }
       
       throw new Error(userMessage);

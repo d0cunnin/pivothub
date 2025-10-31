@@ -798,15 +798,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "subscribers_secure_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "subscribers_public"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       subscription_audit_log: {
         Row: {
@@ -1198,15 +1190,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "subscribers_secure_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "subscribers_public"
-            referencedColumns: ["user_id"]
-          },
-        ]
+        Relationships: []
       }
       v_suspicious_credit_usage: {
         Row: {
