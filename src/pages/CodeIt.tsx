@@ -264,13 +264,13 @@ print(age)      # Prints: 26`}</code>
                         <p className="mt-3 font-medium text-foreground">Example:</p>
                         <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
                           <code>{`# This program says hello to the user
-name = "Alex"  # Storing the user's name
+name = "Sam"  # Storing the user's name
 print("Hello, " + name)`}</code>
                         </pre>
                         <p className="mt-3 font-medium text-foreground">Tips for Good Comments:</p>
-                        <ul className="mt-2 space-y-1">
-                          <li>✅ Use them to explain why something is written, not just what it does</li>
-                          <li>✅ Comments make your code easier for others (and your future self) to understand</li>
+                        <ul className="mt-2 list-disc pl-6 space-y-1">
+                          <li>Use them to explain why something is written, not just what it does</li>
+                          <li>Comments make your code easier for others (and your future self) to understand</li>
                         </ul>
                       </div>
 
@@ -335,6 +335,10 @@ y = 3
 result = x % y
 print(result)`}</code>
                         </pre>
+                        <div className="mt-2 p-3 bg-accent/10 border border-accent/30 rounded">
+                          <p className="text-sm font-medium text-foreground mb-1">Output:</p>
+                          <code className="text-foreground">1</code>
+                        </div>
                       </div>
 
                       {/* Strings */}
@@ -343,19 +347,19 @@ print(result)`}</code>
                         <p>Strings are text wrapped in quotes — single or double quotes both work.</p>
                         <p className="mt-3 font-medium text-foreground">Example:</p>
                         <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
-                          <code>{`greeting = "Hello"
-name = "Alex"
-message = greeting + ", " + name + "!"
+                          <code>{`hobby = "coding"
+language = "Python"
+message = "I love " + hobby + " with " + language + "!"
 print(message)`}</code>
                         </pre>
                         <p className="mt-2 font-medium text-foreground">Output:</p>
                         <pre className="mt-1 p-3 bg-background/50 border border-accent/20 rounded">
-                          <code>Hello, Alex!</code>
+                          <code>I love coding with Python!</code>
                         </pre>
                         <p className="mt-3 font-medium text-foreground">Tips:</p>
-                        <ul className="mt-2 space-y-1">
-                          <li>✅ Use + to join (concatenate) strings</li>
-                          <li>✅ Strings can also be formatted like this: <code className="text-foreground">print(f"Hello, {'{name}'}!")</code></li>
+                        <ul className="mt-2 list-disc pl-6 space-y-1">
+                          <li>Use + to join (concatenate) strings</li>
+                          <li>Strings can also be formatted like this: <code className="text-foreground">print(f"I love {'{hobby}'}!")</code></li>
                         </ul>
                       </div>
 
@@ -377,7 +381,9 @@ print(total)`}</code>
                         <pre className="mt-1 p-3 bg-background/50 border border-accent/20 rounded">
                           <code>29.97</code>
                         </pre>
-                        <p className="mt-3">✅ <strong className="text-foreground">Tip:</strong> Python automatically knows if a number is an integer or float based on how you write it.</p>
+                        <ul className="mt-3 list-disc pl-6">
+                          <li><strong className="text-foreground">Tip:</strong> Python automatically knows if a number is an integer or float based on how you write it.</li>
+                        </ul>
                       </div>
 
                       {/* Functions */}
@@ -387,19 +393,20 @@ print(total)`}</code>
                         <p className="mt-2">You "define" it using the <code className="text-foreground">def</code> keyword.</p>
                         <p className="mt-3 font-medium text-foreground">Example:</p>
                         <pre className="mt-2 p-3 bg-background/50 border border-accent/20 rounded overflow-x-auto">
-                          <code>{`def greet_user(name):
-    print("Welcome, " + name + "!")
+                          <code>{`def calculate_total(price, quantity):
+    total = price * quantity
+    print("Total cost: $" + str(total))
 
-greet_user("Alex")`}</code>
+calculate_total(15.99, 3)`}</code>
                         </pre>
                         <p className="mt-2 font-medium text-foreground">Output:</p>
                         <pre className="mt-1 p-3 bg-background/50 border border-accent/20 rounded">
-                          <code>Welcome, Alex!</code>
+                          <code>Total cost: $47.97</code>
                         </pre>
                         <p className="mt-3 font-medium text-foreground">Tips:</p>
-                        <ul className="mt-2 space-y-1">
-                          <li>✅ Always indent the code inside your function by 4 spaces</li>
-                          <li>✅ Use functions to keep your code organized and reusable</li>
+                        <ul className="mt-2 list-disc pl-6 space-y-1">
+                          <li>Always indent the code inside your function by 4 spaces</li>
+                          <li>Use functions to keep your code organized and reusable</li>
                         </ul>
                       </div>
 
@@ -439,14 +446,14 @@ greet_user("Alex")`}</code>
                           <code>{`colors = ["red", "blue", "green"]
 print(colors[1])  # prints "blue"
 
-person = {"name": "Alex", "age": 25}
-print(person["name"])  # prints "Alex"`}</code>
+student = {"name": "Taylor", "grade": 92}
+print(student["name"])  # prints "Taylor"`}</code>
                         </pre>
                         <p className="mt-3 font-medium text-foreground">Tips:</p>
-                        <ul className="mt-2 space-y-1">
-                          <li>✅ Use lists when you need to change or add items</li>
-                          <li>✅ Use tuples for data that should stay fixed</li>
-                          <li>✅ Use dictionaries when you need to label information clearly</li>
+                        <ul className="mt-2 list-disc pl-6 space-y-1">
+                          <li>Use lists when you need to change or add items</li>
+                          <li>Use tuples for data that should stay fixed</li>
+                          <li>Use dictionaries when you need to label information clearly</li>
                         </ul>
                       </div>
 
@@ -471,7 +478,9 @@ turtle.done()`}</code>
                           <li><code className="text-foreground">forward(100)</code> moves it 100 pixels</li>
                           <li><code className="text-foreground">right(90)</code> turns it 90 degrees</li>
                         </ul>
-                        <p className="mt-2">✅ You can combine commands to draw shapes or write your name.</p>
+                        <ul className="mt-2 list-disc pl-6">
+                          <li>You can combine commands to draw shapes or write your name.</li>
+                        </ul>
                       </div>
 
                       {/* Quick Reference */}
@@ -495,7 +504,7 @@ turtle.done()`}</code>
                               <tr>
                                 <td className="border border-accent/20 p-2">Variable</td>
                                 <td className="border border-accent/20 p-2">Container for data</td>
-                                <td className="border border-accent/20 p-2"><code>name = "Alex"</code></td>
+                                <td className="border border-accent/20 p-2"><code>name = "Sam"</code></td>
                               </tr>
                               <tr>
                                 <td className="border border-accent/20 p-2">Integer</td>
@@ -530,7 +539,7 @@ turtle.done()`}</code>
                               <tr>
                                 <td className="border border-accent/20 p-2">Dictionary</td>
                                 <td className="border border-accent/20 p-2">Key-value mapping</td>
-                                <td className="border border-accent/20 p-2"><code>{`person = {"name": "Alex"}`}</code></td>
+                                <td className="border border-accent/20 p-2"><code>{`student = {"name": "Taylor"}`}</code></td>
                               </tr>
                               <tr>
                                 <td className="border border-accent/20 p-2">Turtle</td>
@@ -545,10 +554,10 @@ turtle.done()`}</code>
                       {/* Next Steps */}
                       <div>
                         <h3 className="text-lg font-semibold text-foreground mb-2">Next Steps</h3>
-                        <ul className="space-y-2">
-                          <li>✅ Try editing the examples above — change names, numbers, or text</li>
-                          <li>✅ Always save and run your code after each small change</li>
-                          <li>✅ Remember: every expert coder started right here</li>
+                        <ul className="list-disc pl-6 space-y-2">
+                          <li>Try editing the examples above — change names, numbers, or text</li>
+                          <li>Always save and run your code after each small change</li>
+                          <li>Remember: every expert coder started right here</li>
                         </ul>
                       </div>
                     </div>
