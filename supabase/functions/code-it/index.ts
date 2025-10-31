@@ -23,7 +23,7 @@ serve(async (req) => {
     });
   }
 
-  const { supabase, userId, ipAddress, requestStart } = guardResult;
+  const { supabase, userId, ip, startTime } = guardResult;
 
   try {
     const { code } = await req.json();
@@ -80,9 +80,7 @@ Format your response as JSON with these keys:
       supabase,
       userId,
       '/code-it',
-      1,
-      ipAddress,
-      requestStart
+      1
     );
 
     return new Response(JSON.stringify(result), {
