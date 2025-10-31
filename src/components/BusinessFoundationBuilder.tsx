@@ -61,7 +61,7 @@ export const BusinessFoundationBuilder = () => {
   // Demographics state
   const [demographics, setDemographics] = useState({
     gender: [] as string[],
-    ageRange: "",
+    ageRange: [] as string[],
     maritalStatus: [] as string[],
     lgbtqia: false,
     religiousAffiliation: [] as string[],
@@ -86,8 +86,8 @@ export const BusinessFoundationBuilder = () => {
     if (demographics.gender.length > 0) {
       profile += `Gender: ${demographics.gender.join(", ")}. `;
     }
-    if (demographics.ageRange) {
-      profile += `Age: ${demographics.ageRange}. `;
+    if (demographics.ageRange.length > 0) {
+      profile += `Age: ${demographics.ageRange.join(", ")}. `;
     }
     if (demographics.maritalStatus.length > 0) {
       profile += `Marital Status: ${demographics.maritalStatus.join(", ")}. `;
@@ -407,16 +407,21 @@ export const BusinessFoundationBuilder = () => {
               {/* Age Range */}
               <div className="space-y-2">
                 <Label className="text-sm font-semibold">Age Range</Label>
-                <RadioGroup value={demographics.ageRange} onValueChange={(value) => setDemographics(prev => ({ ...prev, ageRange: value }))}>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {["18-24", "25-34", "35-44", "45-54", "55-64", "65+"].map(option => (
-                      <div key={option} className="flex items-center space-x-2">
-                        <RadioGroupItem value={option} id={`age-${option}`} />
-                        <label htmlFor={`age-${option}`} className="text-sm cursor-pointer">{option}</label>
-                      </div>
-                    ))}
-                  </div>
-                </RadioGroup>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {["18-24", "25-34", "35-44", "45-54", "55-64", "65+"].map(option => (
+                    <div key={option} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`age-${option}`}
+                        checked={demographics.ageRange.includes(option)}
+                        onCheckedChange={() => setDemographics(prev => ({
+                          ...prev,
+                          ageRange: toggleArrayValue(prev.ageRange, option)
+                        }))}
+                      />
+                      <label htmlFor={`age-${option}`} className="text-sm cursor-pointer">{option}</label>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Marital Status */}
