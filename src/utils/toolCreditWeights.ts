@@ -43,10 +43,11 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'logo-generator': 2,             // Image generation (Build It)
   'startup-checklist': 2,          // Simple generation (Build It)
   
-  // ASSESSMENT TOOLS (2 credits) - One-time assessments (Assess It)
+  // ASSESSMENT TOOLS (2 credits) - One-time comprehensive assessments (Assess It)
   'career-assessment': 2,
   'skills-assessment': 2,
   'personality-assessment': 2,
+  'tech-readiness-assessment': 2,    // Timed 50-question test with adaptive sequencing, GPT-5 report (~3,000 tokens)
   
   // EARN IT ASSESSMENT (5 credits total)
   'side-income-assessment': 5,     // Comprehensive side income blueprint (~10,000 tokens output)

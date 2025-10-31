@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface EmailResultsPromptProps {
-  assessmentType: 'career' | 'skills' | 'personality';
+  assessmentType: 'career' | 'skills' | 'personality' | 'tech-readiness';
   results: any;
   onEmailSent?: () => void;
   onSkip?: () => void;
@@ -73,6 +73,7 @@ export const EmailResultsPrompt = ({
       case 'career': return 'Career Assessment';
       case 'skills': return 'Skills Assessment';
       case 'personality': return 'Personality Assessment';
+      case 'tech-readiness': return 'Tech Readiness Assessment';
       default: return 'Assessment';
     }
   };

@@ -53,6 +53,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Career Assessment', credits: 2 },
     { name: 'Skills Assessment', credits: 2 },
     { name: 'Personality Assessment', credits: 2 },
+    { name: 'Tech Readiness Assessment', credits: 2, note: 'Timed test with PDF report' },
   ],
   'Learn It (Skills Development)': [
     { name: 'Video Courses', credits: 0, note: 'Included with all plans' },

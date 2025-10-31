@@ -2,13 +2,14 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Target, BookOpen, Users, TrendingUp, Brain } from "lucide-react";
+import { Target, BookOpen, Users, TrendingUp, Brain, Monitor } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
 import { ToolGuard, CreditBadge } from "@/components/ToolGuard";
 import { CareerAssessment } from "@/components/CareerAssessment";
 import { SkillsAssessment } from "@/components/SkillsAssessment";
 import { PersonalityAssessment } from "@/components/PersonalityAssessment";
+import { TechReadinessAssessment } from "@/components/TechReadinessAssessment";
 import heroImage from "@/assets/hero-image.jpg";
 
 const AssessIt = () => {
@@ -57,7 +58,7 @@ const AssessIt = () => {
               Uncertain About Your Next Career Move?
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Our AI-powered assessments help professionals discover their strengths, identify in-demand skills, and find careers that match their experience
+              Our AI-powered assessments help professionals discover their strengths, identify in-demand skills, evaluate tech career readiness, and find careers that match their experience
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -69,6 +70,9 @@ const AssessIt = () => {
               </ToolGuard>
               <ToolGuard toolName="personality-assessment" showCreditInfo={false}>
                 <PersonalityAssessment />
+              </ToolGuard>
+              <ToolGuard toolName="tech-readiness-assessment" showCreditInfo={false}>
+                <TechReadinessAssessment />
               </ToolGuard>
             </div>
           </div>
@@ -138,6 +142,24 @@ const AssessIt = () => {
               <div className="mt-auto">
                 <ToolGuard toolName="personality-assessment" showCreditInfo={false}>
                   <PersonalityAssessment />
+                </ToolGuard>
+              </div>
+            </Card>
+
+            <Card className="p-8 bg-gradient-card/40 backdrop-blur-sm border border-white/20 hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
+              <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Monitor className="h-8 w-8 text-white" />
+              </div>
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h3 className="text-2xl font-bold text-foreground">Tech Readiness Assessment</h3>
+                <CreditBadge toolName="tech-readiness-assessment" />
+              </div>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Timed 50-question assessment (100 minutes) evaluating your readiness for technology careers. Get your Tech Compatibility Score with personalized pathway recommendations and downloadable PDF report.
+              </p>
+              <div className="mt-auto">
+                <ToolGuard toolName="tech-readiness-assessment" showCreditInfo={false}>
+                  <TechReadinessAssessment />
                 </ToolGuard>
               </div>
             </Card>
