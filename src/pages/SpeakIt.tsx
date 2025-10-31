@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Mic, Podcast, Download, Loader2, Plus, X } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import heroVideo from "@/assets/hero-video.mp4";
+import heroImage from "@/assets/hero-image.jpg";
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { ToolGuard } from '@/components/ToolGuard';
@@ -268,55 +268,48 @@ const SpeakIt = () => {
       <div className="min-h-screen flex flex-col bg-background">
         <Header />
         
-        {/* Video Hero Section */}
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-          {/* Background Video */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
+        {/* Hero Section */}
+        <section className="py-20 bg-primary relative overflow-hidden">
+          {/* Background Image with Overlay */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${heroImage})` }}
           >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
-          
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-          
-          {/* Content */}
-          <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Launch Your Voice
-            </h1>
-            <p className="text-lg md:text-xl mb-8 text-white/90">
-              Professional launch strategies for speakers and podcasters
-            </p>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
           </div>
           
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+          {/* Decorative Elements */}
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+          <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+          <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
+          
+          <div className="container mx-auto px-6 lg:px-8 relative z-10">
+            <div className="text-center max-w-5xl mx-auto">
+              <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+                <span className="text-3xl font-bold text-white tracking-wider">SPEAK IT</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
+                Launch Your Voice
+              </h1>
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
+                Professional launch strategies for speakers and podcasters
+              </p>
+              <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                <Button 
+                  variant="hero" 
+                  size="lg" 
+                  className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg"
+                  onClick={() => document.getElementById('speak-content')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  Start Your Journey
+                </Button>
+              </div>
             </div>
           </div>
         </section>
         
-        <main className="flex-grow container mx-auto px-4 py-12">
-          {/* Hero Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gradient">
-              Speak It — Launch Your Voice
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-6">
-              Whether you want to share your message from the stage or your story through the mic, 
-              Speak It helps you create a complete, professional launch plan. Speakers and podcasters 
-              build influence differently—this tool gives each the strategy, structure, and resources they need.
-            </p>
-            <Badge variant="secondary" className="text-lg px-4 py-2">
-              3 Credits
-            </Badge>
-          </div>
+        <main id="speak-content" className="flex-grow container mx-auto px-4 py-12">
 
           {/* Path Toggle */}
           <Card className="mb-8">
