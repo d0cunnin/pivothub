@@ -80,7 +80,7 @@ serve(async (req) => {
     }
 
     let prompt = ''
-    let systemMessage = 'You are an expert business consultant and content creator. IMPORTANT: Provide responses in clean, plain text format without any markdown formatting, headers (#), or special characters. Use simple bullet points (•) if lists are needed. Avoid using symbols like ###, ##, **, *, or other markdown syntax.'
+    let systemMessage = 'You are a PROFESSIONAL TECHNICAL WRITER with 25+ years of experience crafting executive-level biographies, vision statements, and mission statements for Fortune 500 executives, founders, and organizations. Your writing is polished, professional, and appropriate for investor materials, board presentations, and high-stakes communications. CRITICAL WRITING STANDARDS: 1) Use ONLY executive-level language, 2) NEVER use em-dashes (—), 3) NEVER use contractions (write "do not" instead of "don\'t"), 4) Maintain formal, professional tone unless otherwise specified. Provide responses in clean, plain text format without markdown formatting.'
 
     switch (type) {
       case 'business-ideas':
@@ -1158,28 +1158,103 @@ CRITICAL:
         break
 
       case 'biography':
-        prompt = `Create a professional founder biography, vision statement, and mission statement for:
-Founder: ${data.founderName}
+        const toneGuidance = data.tone === 'faith-based' 
+          ? 'Incorporate faith-based language and values naturally. Reference purpose, calling, stewardship, and service.' 
+          : data.tone === 'friendly' 
+          ? 'Use warm, approachable language while maintaining professionalism. Be conversational but not casual.' 
+          : 'Use formal, corporate language appropriate for executive communications and investor materials.';
+        
+        prompt = `You are a technical writer with 25+ years of experience writing executive-level biographies and organizational statements. Create professional content for:
+
+FOUNDER INFORMATION:
+Name: ${data.founderName}
 Background: ${data.background}
 Business Type: ${data.businessType}
 Goals: ${data.goals}
-Founded: ${data.dateOfFormation}
-Products/Services: ${data.productsServices}
-Traction: ${data.traction}
-Achievements: ${data.achievements}
+${data.dateOfFormation ? `Founded: ${data.dateOfFormation}` : ''}
+${data.productsServices ? `Products/Services: ${data.productsServices}` : ''}
+${data.traction ? `Traction: ${data.traction}` : ''}
+${data.achievements ? `Achievements: ${data.achievements}` : ''}
 
-CRITICAL: Format your response EXACTLY as shown below with [SECTION] markers:
+TONE: ${data.tone || 'formal'}
+${toneGuidance}
 
-[BIOGRAPHY]
-Write a compelling 2-3 paragraph founder biography here in plain text.
+CRITICAL WRITING STANDARDS:
+1. Executive-level writing appropriate for investor decks, board materials, and press releases
+2. NEVER use em-dashes (—) - use commas, periods, or semicolons instead
+3. NEVER use contractions - write "do not" instead of "don't", "cannot" instead of "can't"
+4. Use active voice and strong verbs
+5. Focus on achievements, impact, and credibility
+6. Be specific with numbers, dates, and measurable accomplishments when provided
+7. Avoid clichés and buzzwords (e.g., "passionate", "game-changer", "synergy")
+8. Write in third person for bios
+
+FORMAT YOUR RESPONSE EXACTLY AS SHOWN BELOW WITH SECTION MARKERS:
+
+[FOUNDER_BIO_100]
+Write a 100-word founder biography. Include: name, current role, key expertise area, and one major accomplishment. This is for social media profiles, event bios, and brief introductions.
+
+Target: 90-110 words
+Style: Concise, punchy, highlights only the most impressive credentials
+
+[FOUNDER_BIO_250]
+Write a 250-word founder biography. Include: professional background, career highlights, expertise areas, 2-3 major achievements, current role, and what drives their work. This is for conference speaker bios, website "About" pages, and podcast introductions.
+
+Target: 240-260 words
+Style: Balanced detail, establishes credibility, shows trajectory
+
+[FOUNDER_BIO_500]
+Write a 500-word founder biography. Include: early career background, professional journey with key milestones, major achievements with specific metrics/dates, expertise and philosophy, current role and responsibilities, industry recognition or awards, and what sets them apart. This is for investor materials, detailed press releases, and award submissions.
+
+Target: 480-520 words
+Style: Comprehensive, narrative-driven, executive-level detail
+
+[BUSINESS_BIO_100]
+Write a 100-word company/business biography. Include: what the company does, who it serves, and its unique value proposition. This is for directory listings, email signatures, and brief company descriptions.
+
+Target: 90-110 words
+Style: Clear, direct, value-focused
+
+[BUSINESS_BIO_200]
+Write a 200-word company/business biography. Include: company founding story (when and why), products/services offered, target market, key differentiators, traction/milestones, and current market position. This is for pitch decks, partnership materials, and website "About Us" sections.
+
+Target: 190-210 words
+Style: Establishes credibility, shows momentum, positions against competitors
+
+[BUSINESS_BIO_500]
+Write a 500-word company/business biography. Include: founding story with context (problem identified, solution created), comprehensive product/service description, target market and customer profile, competitive advantages with specifics, traction and growth metrics (customers, revenue, team size if provided), industry recognition or partnerships, team expertise, and future vision. This is for investor decks, loan applications, and detailed press releases.
+
+Target: 480-520 words
+Style: Comprehensive narrative, data-driven, investor-ready
 
 [VISION]
-Write a concise vision statement here in plain text (1-2 paragraphs).
+Write a powerful 2-3 sentence vision statement that describes the aspirational future the business/founder is working toward. Answer: "What world are we trying to create?" or "What does success look like 10 years from now?" Vision statements should inspire and set a bold direction.
+
+Examples of strong vision statements:
+- "To be Earth's most customer-centric company" (Amazon)
+- "A world where everyone has access to clean water" (charity:water)
+- "To create a better everyday life for many people" (IKEA)
+
+Style: Aspirational, future-focused, inspiring, memorable
 
 [MISSION]
-Write a clear mission statement here in plain text (1-2 paragraphs).
+Write a clear 2-3 sentence mission statement that defines the business's purpose, what it does, how it serves customers, and what makes it different. Answer: "Why do we exist?" and "What do we do daily to achieve our vision?" Mission statements should be actionable and guide decision-making.
 
-Do NOT include the section labels in your output, only the content for each section.`
+Examples of strong mission statements:
+- "To organize the world's information and make it universally accessible and useful" (Google)
+- "To accelerate the world's transition to sustainable energy" (Tesla)
+- "To inspire and nurture the human spirit, one person, one cup, and one neighborhood at a time" (Starbucks)
+
+Style: Clear, actionable, purpose-driven, differentiating
+
+REMEMBER:
+- NO em-dashes (—)
+- NO contractions (don't, can't, won't, etc.)
+- Executive-level writing throughout
+- Use specific numbers, dates, and metrics when provided in the input
+- Third person for all bios
+- Avoid generic praise - focus on measurable impact
+- Do NOT include the section labels like [FOUNDER_BIO_100] in your output - only output the content for each section`
         break
 
       case 'social-media':

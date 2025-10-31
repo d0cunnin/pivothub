@@ -26,7 +26,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'business-foundation': 2,        // ~3,000 tokens output
   'schedule-it': 2,                // ~3,000 tokens output (Schedule It)
   'host-it': 4,                    // ~8,000 tokens output (Host It)
-  'biography': 2,                  // ~3,000 tokens output (Business Biography)
+  'biography': 3,                  // ~4,500 tokens output (7 bio versions + statements)
   
   // FREE TOOLS (0 credits) - No AI generation
   'contact-chatbot': 0,            // Static logic only, no AI
