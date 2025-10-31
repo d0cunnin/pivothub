@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Rocket, AlertCircle, Code, Zap, Info, Sparkles, ChevronRight } from "lucide-react";
+import { AlertCircle, Zap, Info, ChevronRight } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import heroImage from "@/assets/hero-image.jpg";
 
 export default function CreateIt() {
   const { user } = useAuth();
@@ -21,47 +22,79 @@ export default function CreateIt() {
         <meta name="description" content="Design and build your own AI-powered app or platform with comprehensive blueprints and step-by-step guidance." />
       </Helmet>
       
-      <div className="min-h-screen flex flex-col bg-gradient-to-b from-background to-secondary/10">
+      <div className="min-h-screen flex flex-col">
         <Header />
         
-        <main className="flex-grow container mx-auto px-4 py-12">
-          {/* Hero Section */}
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Rocket className="h-12 w-12 text-primary" />
-              <h1 className="text-4xl md:text-5xl font-bold gradient-text">
-                Create It
-              </h1>
-            </div>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-6">
-              Build Your AI-Powered App or Platform
+        {/* Hero Section */}
+        <section className="relative h-[500px] flex items-center justify-center overflow-hidden">
+          {/* Background Image with Overlay */}
+          <div className="absolute inset-0">
+            <img 
+              src={heroImage} 
+              alt="Create It Hero" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80" />
+          </div>
+          
+          {/* Decorative Elements */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+          <div className="absolute top-20 left-10 w-32 h-32 bg-accent/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl" />
+          
+          {/* Content */}
+          <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <Badge className="mb-6 bg-white/15 text-white border-white/30 hover:bg-white/20">
+              CREATE IT
+            </Badge>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+              Build Your AI-Powered Platform
+            </h1>
+            <p className="text-xl md:text-2xl text-white/90 mb-8">
+              Get a comprehensive blueprint to design and launch your own app or platform
             </p>
             <div className="flex items-center justify-center gap-3">
               <Badge variant="secondary" className="text-lg px-4 py-2">
                 <Zap className="h-4 w-4 mr-2" />
                 70 Credits
               </Badge>
-              <Badge variant="outline" className="text-lg px-4 py-2 bg-amber-50 border-amber-200 text-amber-800">
+              <Badge className="text-lg px-4 py-2 bg-amber-500/90 text-white border-0 hover:bg-amber-600/90">
                 🚧 Coming Soon
               </Badge>
             </div>
           </div>
+        </section>
+        
+        <main className="flex-grow container mx-auto px-4 py-12">
+          {/* Integration Setup Section */}
+          <Card className="mb-8 max-w-4xl mx-auto border-primary/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl">
+                🔌 Complete Integration Setup Included
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">
+                Create It provides step-by-step instructions for setting up all necessary integrations for your specific app type. We handle the technical decisions so you can focus on building.
+              </p>
+            </CardContent>
+          </Card>
 
           {/* Coming Soon Notice */}
           <Alert className="mb-8 bg-blue-50 border-blue-200 max-w-4xl mx-auto">
             <Info className="h-5 w-5 text-blue-600" />
             <AlertTitle className="text-blue-900 text-lg">Feature In Development</AlertTitle>
             <AlertDescription className="text-blue-800">
-              Create It is currently being built and will launch soon! This powerful feature will help you design and build your own AI-powered platform with comprehensive blueprints, tech stack recommendations, and step-by-step implementation guides.
+              Create It is currently being built and will launch soon! This powerful feature will help you design and build your own AI-powered platform with comprehensive blueprints and step-by-step implementation guides.
               <div className="mt-3 font-medium">
                 📋 What you'll get:
                 <ul className="list-disc list-inside mt-2 space-y-1 text-sm">
                   <li>Complete platform concept analysis and validation</li>
-                  <li>Recommended tech stack (frontend, backend, AI, payments)</li>
+                  <li>Prescribed tech stack based on your app type</li>
                   <li>Step-by-step build guide tailored to your skill level</li>
-                  <li>Integration setup instructions (Stripe, Supabase, OpenAI, etc.)</li>
+                  <li>Integration setup instructions</li>
                   <li>Monetization strategy and launch timeline</li>
-                  <li>Downloadable blueprint PDF with prompt-ready instructions</li>
+                  <li>Downloadable blueprint PDF with detailed guidance</li>
                 </ul>
               </div>
             </AlertDescription>
@@ -86,9 +119,9 @@ export default function CreateIt() {
                       <li><strong>Significant Time Investment:</strong> Building a platform can take weeks or months depending on complexity and your skill level.</li>
                       <li><strong>Technical Comfort Required:</strong> You should be comfortable using AI tools, following technical instructions, and learning new platforms.</li>
                       <li><strong>Guidance, Not Hosting:</strong> PivotHub provides blueprints and strategies, not direct code deployment or hosting services.</li>
-                      <li><strong>Third-Party Tools:</strong> Your app will be built using no-code or low-code tools of your choice (e.g., Lovable, Supabase, Webflow).</li>
+                      <li><strong>Implementation:</strong> You'll receive detailed instructions for building your platform.</li>
                       <li><strong>Self-Paced Implementation:</strong> You'll receive a detailed plan, but execution is entirely up to you.</li>
-                      <li><strong>Costs May Apply:</strong> While we recommend affordable tools, some platforms may require paid subscriptions.</li>
+                      <li><strong>Costs May Apply:</strong> Some recommended platforms may require paid subscriptions.</li>
                     </ul>
                   </AccordionContent>
                 </AccordionItem>
@@ -96,53 +129,11 @@ export default function CreateIt() {
             </CardContent>
           </Card>
 
-          {/* Preview: What You'll Build Section */}
-          <div className="max-w-4xl mx-auto mb-12">
-            <h2 className="text-3xl font-bold text-center mb-8">What You Can Build</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="border-primary/20 hover:border-primary/40 transition-colors">
-                <CardHeader>
-                  <Code className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle className="text-lg">SaaS Platforms</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Build subscription-based software with user management, payments, and AI features.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-primary/20 hover:border-primary/40 transition-colors">
-                <CardHeader>
-                  <Sparkles className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle className="text-lg">AI-Powered Tools</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Create intelligent applications using OpenAI, Gemini, or other AI APIs.
-                  </p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border-primary/20 hover:border-primary/40 transition-colors">
-                <CardHeader>
-                  <Rocket className="h-8 w-8 text-primary mb-2" />
-                  <CardTitle className="text-lg">Web Apps</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Design productivity, education, health, or community platforms.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
           {/* CTA Section */}
           <div className="text-center max-w-2xl mx-auto">
             <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
               <CardContent className="pt-6">
-                <h3 className="text-2xl font-bold mb-4">Ready to Build Your Platform?</h3>
+                <h3 className="text-2xl font-bold mb-4">Ready to Turn Your App Idea Into Reality?</h3>
                 <p className="text-muted-foreground mb-6">
                   Sign up for a PivotHub account and get notified when Create It launches.
                 </p>
