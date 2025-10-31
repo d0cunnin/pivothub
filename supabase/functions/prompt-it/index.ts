@@ -17,13 +17,17 @@ serve(async (req) => {
     });
   } catch (err) {
     console.error('Guard error:', err);
-    return new Response(JSON.stringify({ error: err.message }), {
+    // Guard throws Response objects with proper status codes
+    if (err instanceof Response) {
+      return err;
+    }
+    return new Response(JSON.stringify({ error: err.message || 'Guard check failed' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  const { supabase, userId, ipAddress, requestStart } = guardResult;
+  const { supabase, userId, ip, startTime } = guardResult;
 
   try {
     const { prompt } = await req.json();
@@ -81,9 +85,7 @@ Format your response as JSON with these keys:
       supabase,
       userId,
       '/prompt-it',
-      2,
-      ipAddress,
-      requestStart
+      2
     );
 
     return new Response(JSON.stringify(result), {
