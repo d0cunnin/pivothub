@@ -28,7 +28,7 @@ const Pricing = () => {
     tier: ''
   });
   
-  const [selectedPathIndex, setSelectedPathIndex] = useState(4); // Default to All Access Pass
+  const [selectedPathIndex, setSelectedPathIndex] = useState(3); // Default to All-Access (index 3)
   const [purchasingCredits, setPurchasingCredits] = useState(false);
 
   const handlePurchaseCredits = async (credits: number) => {
