@@ -354,9 +354,9 @@ const FundIt = () => {
 
           {/* Grant Generator Form and Results */}
           <section className="mb-16">
-            <div className="grid lg:grid-cols-5 gap-8">
+            <div className="flex flex-col gap-8">
               {/* Form Section */}
-              <div className="lg:col-span-3">
+              <div className="max-w-5xl mx-auto w-full">
                 <Card className="h-fit">
                   <CardHeader className="pb-6">
                     <CardTitle className="flex items-center gap-2 text-xl">
@@ -857,7 +857,7 @@ const FundIt = () => {
               </div>
 
               {/* Results Section */}
-              <div className="lg:col-span-2">
+              <div className="max-w-5xl mx-auto w-full">
                 {(generatedProposal || generatedLOI) && (
                   <Card className="h-fit sticky top-8">
                     <CardHeader className="pb-4">
