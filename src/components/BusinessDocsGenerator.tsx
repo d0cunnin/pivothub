@@ -13,7 +13,7 @@ interface LegalDocument {
   linkText?: string;
 }
 
-export const LegalDocsGenerator = () => {
+export const BusinessDocsGenerator = () => {
   const [businessStructure, setBusinessStructure] = useState('');
   const [state, setState] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -252,7 +252,7 @@ export const LegalDocsGenerator = () => {
   };
 
   const downloadDocumentList = () => {
-    let content = `LEGAL DOCUMENTS CHECKLIST\n`;
+    let content = `BUSINESS DOCUMENTS CHECKLIST\n`;
     content += `Business Structure: ${businessStructure.replace('-', ' ').toUpperCase()}\n`;
     content += `State: ${state.replace('-', ' ').toUpperCase()}\n`;
     content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
@@ -288,14 +288,14 @@ export const LegalDocsGenerator = () => {
     }
 
     content += `\n${'='.repeat(80)}\n`;
-    content += `DISCLAIMER: This is general information only. Consult with a qualified attorney\n`;
-    content += `or business advisor for specific legal requirements in your jurisdiction.\n`;
+    content += `DISCLAIMER: This is general information only and not legal advice. Consult with\n`;
+    content += `a qualified attorney for specific legal requirements in your jurisdiction.\n`;
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `legal-documents-${businessStructure}-${state}-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = `business-documents-${businessStructure}-${state}-${new Date().toISOString().split('T')[0]}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -316,10 +316,10 @@ export const LegalDocsGenerator = () => {
     <Card className="p-8 shadow-soft">
       <div className="flex items-center gap-2 mb-6">
         <Scale className="h-5 w-5 text-secondary" />
-        <h3 className="text-xl font-bold text-foreground">Legal Documents Generator</h3>
+        <h3 className="text-xl font-bold text-foreground">Business Documents Generator</h3>
       </div>
       
-      <p className="text-sm text-muted-foreground mb-6">Generate a list of required legal documents for your business structure and state. Know exactly what paperwork you need to file.</p>
+      <p className="text-sm text-muted-foreground mb-6">Generate a list of required business documents for your business structure and state. Know exactly what paperwork you need to file.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>
@@ -368,7 +368,7 @@ export const LegalDocsGenerator = () => {
       {documents.length > 0 && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="font-semibold text-foreground">Required Legal Documents</h4>
+            <h4 className="font-semibold text-foreground">Required Business Documents</h4>
             <Button 
               onClick={downloadDocumentList}
               variant="outline"
@@ -422,7 +422,7 @@ export const LegalDocsGenerator = () => {
           </div>
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <p className="text-sm text-blue-700 dark:text-blue-300">
-              <strong>Disclaimer:</strong> This is general information only. Consult with a qualified attorney or business advisor for specific legal requirements in your jurisdiction.
+              <strong>Disclaimer:</strong> This checklist provides general guidance on commonly required business documents. This is not legal advice. Requirements vary by jurisdiction, industry, and business activities. Always verify current requirements with official sources and consult with a qualified attorney or business advisor for your specific situation.
             </p>
           </div>
         </div>

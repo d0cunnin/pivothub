@@ -9,7 +9,7 @@ import { BusinessIdeaGenerator } from "@/components/BusinessIdeaGenerator";
 import { NameChecker } from "@/components/NameChecker";
 import { LogoGenerator } from "@/components/LogoGenerator";
 import { BiographyGenerator } from "@/components/BiographyGenerator";
-import { LegalDocsGenerator } from "@/components/LegalDocsGenerator";
+import { BusinessDocsGenerator } from "@/components/BusinessDocsGenerator";
 import { StartupChecklist } from "@/components/StartupChecklist";
 import { SocialMediaGenerator } from "@/components/SocialMediaGenerator";
 import { MarketingStrategyGenerator } from "@/components/MarketingStrategyGenerator";
@@ -117,8 +117,8 @@ const BuildIt = () => {
               },
               {
                 step: "3",
-                title: "Legal & Branding",
-                description: "Set up your business legally and create your brand identity"
+                title: "Documents & Branding",
+                description: "Get your business documents organized and create your brand identity"
               },
               {
                 step: "4",
@@ -216,11 +216,11 @@ const BuildIt = () => {
           <div className="text-center mb-12">
             <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                Step 3: Legal & Branding
+                Step 3: Documents & Branding
               </h2>
             </div>
             <p className="text-lg text-white">
-              Set up your business legally and create your brand identity
+              Get your business documents organized and create your brand identity
             </p>
           </div>
           
@@ -238,8 +238,8 @@ const BuildIt = () => {
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <ToolGuard toolName="legal-docs">
-                <LegalDocsGenerator />
+              <ToolGuard toolName="business-docs">
+                <BusinessDocsGenerator />
               </ToolGuard>
             </div>
             

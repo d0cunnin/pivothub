@@ -15,7 +15,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'grant-content': 4,              // ~8,000 tokens output
   'pitch-deck': 3,                 // ~6,000 tokens output
   'marketing-strategy': 3,         // ~6,000 tokens output
-  'legal-docs': 3,                 // ~6,000 tokens output
+  'business-docs': 3,              // ~6,000 tokens output
   'launch-strategy': 3,            // ~6,000 tokens output
   
   // MEDIUM COST TOOLS (2 credits) - Moderate generation with 2000-5000 output tokens
