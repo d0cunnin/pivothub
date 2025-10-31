@@ -233,11 +233,11 @@ export const BiographyGenerator = () => {
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <User className="h-5 w-5 text-secondary" />
-        <h3 className="text-xl font-bold text-foreground">✍️ Professional Biography & Statement Package</h3>
+        <h3 className="text-xl font-bold text-foreground">✍️ Biography and Statement Maker</h3>
       </div>
       
       <p className="text-sm text-muted-foreground mb-6">
-        Generate professional founder and business biographies in multiple lengths (100, 250, 500 words), plus vision and mission statements. Perfect for investor materials, websites, press releases, and speaking engagements. All content follows executive writing standards: no contractions, no em-dashes, polished and professional.
+        Create professional biographies for founders and businesses in multiple lengths (100, 250, 500 words), plus vision and mission statements.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
