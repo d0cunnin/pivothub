@@ -60,7 +60,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   // LEARN IT TOOLS
   'prompt-it': 1,                  // ~1,500 tokens (2 free uses, then 1 credit per use)
   'code-it': 1,                    // ~1,200 tokens output (explain code)
-  'deploy-it': 10,                 // ~1,500 tokens output (AI agent blueprint)
+  'deploy-it': 20,                 // ~1,500 tokens output (AI agent blueprint) - complex agent planning
 };
 
 export function getToolCreditCost(toolName: string): number {

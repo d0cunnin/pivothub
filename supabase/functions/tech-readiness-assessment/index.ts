@@ -93,9 +93,9 @@ serve(async (req) => {
     }
 
     // Generate personalized report with GPT-5
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY is not configured');
+    const OPENAI_API_KEY = Deno.env.get('relaunch_openai_key');
+    if (!OPENAI_API_KEY) {
+      throw new Error('OpenAI API key is not configured');
     }
 
     const systemPrompt = `You are a Tech Career Assessment Expert analyzing a candidate's readiness for technology careers.
@@ -207,10 +207,10 @@ OUTPUT FORMAT (JSON only, no additional text):
   ]
 }`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Authorization': `Bearer ${OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -225,7 +225,7 @@ OUTPUT FORMAT (JSON only, no additional text):
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('AI gateway error:', response.status, errorText);
+      console.error('OpenAI API error:', response.status, errorText);
       throw new Error('Failed to generate tech readiness report');
     }
 
