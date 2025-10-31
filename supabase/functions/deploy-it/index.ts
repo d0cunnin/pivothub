@@ -11,19 +11,23 @@ serve(async (req) => {
   try {
     guardResult = await guard(req, {
       endpoint: '/deploy-it',
-      cost: 6,
+      cost: 10,
       requireAuth: true,
       requireCaptcha: false
     });
   } catch (err) {
     console.error('Guard error:', err);
-    return new Response(JSON.stringify({ error: err.message }), {
+    // Guard throws Response objects with proper status codes
+    if (err instanceof Response) {
+      return err;
+    }
+    return new Response(JSON.stringify({ error: err.message || 'Guard check failed' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
-  const { supabase, userId, ipAddress, requestStart } = guardResult;
+  const { supabase, userId, ip, startTime } = guardResult;
 
   try {
     const { agentName, purpose, whoItHelps, tone, tools, safetyRules } = await req.json();
@@ -92,9 +96,7 @@ Format your response as JSON with these keys:
       supabase,
       userId,
       '/deploy-it',
-      6,
-      ipAddress,
-      requestStart
+      10
     );
 
     return new Response(JSON.stringify(result), {

@@ -11,7 +11,7 @@ serve(async (req) => {
   try {
     guardResult = await guard(req, {
       endpoint: '/prompt-it',
-      cost: 2,
+      cost: 1,
       requireAuth: true,
       requireCaptcha: false
     });
@@ -85,7 +85,7 @@ Format your response as JSON with these keys:
       supabase,
       userId,
       '/prompt-it',
-      2
+      1
     );
 
     return new Response(JSON.stringify(result), {

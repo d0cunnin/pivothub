@@ -119,7 +119,7 @@ const PromptIt = () => {
             </p>
             <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Badge variant="secondary" className="text-lg px-6 py-2">
-                2 Free Uses • Then 5 Credits for 10 Uses
+                2 Free Uses • Then 1 Credit Per Use
               </Badge>
             </div>
           </div>
@@ -224,7 +224,7 @@ const PromptIt = () => {
                 <div>
                   {isPaidTier ? (
                     <p className="text-muted-foreground">
-                      You're using the paid tier. Each analysis costs 1 credit (10 uses for 5 credits).
+                      You're using the paid tier. Each analysis costs 1 credit.
                     </p>
                   ) : (
                     <p className="text-muted-foreground">
