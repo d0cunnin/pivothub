@@ -100,6 +100,43 @@ export default function CreateIt() {
             </AlertDescription>
           </Alert>
 
+          {/* Technical Requirements Disclaimer */}
+          <Alert className="mb-8 bg-amber-50 border-amber-200 max-w-4xl mx-auto">
+            <AlertCircle className="h-5 w-5 text-amber-600" />
+            <AlertTitle className="text-amber-900 text-lg">Technical Requirements</AlertTitle>
+            <AlertDescription className="text-amber-800">
+              <p className="mb-3">
+                <strong>Create It is designed for tech-comfortable users</strong> who can handle technical implementation and troubleshooting. 
+                You will need to be able to:
+              </p>
+              <ul className="list-disc pl-6 space-y-2 mb-4">
+                <li>Understand basic technical terminology (APIs, integrations, databases, hosting)</li>
+                <li>Follow detailed technical documentation and implementation guides</li>
+                <li>Set up and configure development tools and platforms</li>
+                <li>Troubleshoot technical issues independently using resources and documentation</li>
+                <li>Navigate developer platforms and configure technical settings</li>
+                <li>Commit to a sustained building effort over weeks or months</li>
+              </ul>
+              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-md">
+                <p className="font-semibold mb-2">
+                  🚫 This is NOT for beginners:
+                </p>
+                <p className="mb-2">
+                  If you feel lost when dealing with technology or prefer guided, step-by-step support, 
+                  this tool may be too advanced for you.
+                </p>
+                <p>
+                  <strong>Recommended alternative:</strong> Start with <strong>Prompt It</strong> and <strong>Code It</strong>{" "}
+                  to build foundational skills first before attempting Create It.
+                </p>
+              </div>
+              <p className="mt-4 text-sm">
+                <strong>Note:</strong> You will receive a comprehensive blueprint, but <strong>building your platform requires 
+                technical knowledge, sustained effort, and the ability to learn and troubleshoot independently.</strong>
+              </p>
+            </AlertDescription>
+          </Alert>
+
           {/* Disclaimers Section */}
           <Card className="mb-8 max-w-4xl mx-auto border-amber-200 bg-amber-50/50">
             <CardHeader>
