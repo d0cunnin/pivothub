@@ -346,8 +346,12 @@ const FundIt = () => {
                   <li>• Customized content for your organization</li>
                   <li>• Letter of Intent generation</li>
                   <li>• Download as professional PDF</li>
-                  <li>• Cost: 5 credits per generation</li>
                 </ul>
+                <div className="flex items-center justify-center mt-4">
+                  <Badge variant="secondary" className="text-lg px-6 py-2">
+                    5 Credits
+                  </Badge>
+                </div>
               </CardContent>
             </Card>
           </section>

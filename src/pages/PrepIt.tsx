@@ -161,7 +161,7 @@ const PrepIt = () => {
             </div>
           </div>
           
-          <ToolGuard toolName="career-advisor">
+          <ToolGuard toolName="career-advisor" showCreditInfo={true}>
             <CareerAdvisorChatbot />
           </ToolGuard>
         </div>
@@ -213,7 +213,7 @@ const PrepIt = () => {
             </div>
           </div>
           
-          <ToolGuard toolName="interview-questions">
+          <ToolGuard toolName="interview-questions" showCreditInfo={true}>
             <InterviewQuestionsCoach />
           </ToolGuard>
         </div>
@@ -265,7 +265,7 @@ const PrepIt = () => {
             </div>
           </div>
           
-          <ToolGuard toolName="resume-analyzer">
+          <ToolGuard toolName="resume-analyzer" showCreditInfo={true}>
             <ResumeCoachLetter />
           </ToolGuard>
         </div>

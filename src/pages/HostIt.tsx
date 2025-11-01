@@ -5,6 +5,7 @@ import heroImage from "@/assets/hero-image.jpg";
 import { Helmet } from "react-helmet-async";
 import { HostItWizard } from "@/components/HostItWizard";
 import { ToolGuard } from "@/components/ToolGuard";
+import { Badge } from "@/components/ui/badge";
 
 const HostIt = () => {
   return (
@@ -55,6 +56,11 @@ const HostIt = () => {
               >
                 Get Started
               </Button>
+            </div>
+            <div className="animate-fade-in mt-4" style={{ animationDelay: "0.5s" }}>
+              <Badge variant="secondary" className="text-lg px-6 py-2">
+                4 Credits
+              </Badge>
             </div>
           </div>
         </div>

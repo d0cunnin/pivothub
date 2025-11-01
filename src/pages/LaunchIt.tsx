@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
+import { Badge } from "@/components/ui/badge";
 
 const LaunchIt = () => {
   const [formData, setFormData] = useState({
@@ -185,6 +186,11 @@ const LaunchIt = () => {
               >
                 Get Started Now
               </Button>
+            </div>
+            <div className="animate-fade-in mt-4" style={{ animationDelay: '0.5s' }}>
+              <Badge variant="secondary" className="text-lg px-6 py-2">
+                3 Credits
+              </Badge>
             </div>
           </div>
         </div>

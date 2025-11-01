@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ToolGuard } from "@/components/ToolGuard";
 import TeachingMaterialsGenerator from "@/components/TeachingMaterialsGenerator";
 import heroImage from "@/assets/hero-image.jpg";
+import { Badge } from "@/components/ui/badge";
 
 const TeachIt = () => {
   return (
@@ -44,6 +45,11 @@ const TeachIt = () => {
               >
                 Get Started Now
               </Button>
+            </div>
+            <div className="animate-fade-in mt-4" style={{ animationDelay: '0.5s' }}>
+              <Badge variant="secondary" className="text-lg px-6 py-2">
+                5 Credits
+              </Badge>
             </div>
           </div>
         </div>
