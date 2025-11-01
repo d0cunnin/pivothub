@@ -229,15 +229,22 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
     <div>
       {/* Tool Cost Badge */}
       {showCreditInfo && toolName && !isAdmin && (
-        <div className="mb-3 flex items-center justify-between">
-          <Badge variant={toolCostTier === 'free' ? 'outline' : toolCostTier === 'low' ? 'secondary' : 'default'} className="gap-1">
-            <Zap className="h-3 w-3" />
-            {toolCreditCost} credit{toolCreditCost !== 1 ? 's' : ''}
-            {toolCostTier === 'high' && ' (Premium)'}
-          </Badge>
-          <span className="text-sm text-muted-foreground">
-            {remainingRequests} credits remaining
-          </span>
+        <div className="mb-6 flex justify-center">
+          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-4">
+              <Badge 
+                variant={toolCostTier === 'free' ? 'outline' : toolCostTier === 'low' ? 'secondary' : 'default'} 
+                className="gap-2 text-base px-4 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0"
+              >
+                <Zap className="h-4 w-4" />
+                <span className="font-semibold">{toolCreditCost} credit{toolCreditCost !== 1 ? 's' : ''} required</span>
+              </Badge>
+              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {remainingRequests} credits remaining
+              </span>
+            </div>
+          </div>
         </div>
       )}
 

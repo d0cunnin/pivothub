@@ -51,11 +51,6 @@ const ScheduleIt = () => {
                 Get Started
               </Button>
             </div>
-            <div className="animate-fade-in mt-4" style={{ animationDelay: '0.5s' }}>
-              <Badge variant="secondary" className="text-lg px-6 py-2">
-                2 Credits
-              </Badge>
-            </div>
           </div>
         </div>
       </section>
@@ -64,7 +59,7 @@ const ScheduleIt = () => {
       <section id="schedule-form" className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <ToolGuard toolName="schedule-it">
+            <ToolGuard toolName="schedule-it" showCreditInfo={true}>
               <ScheduleItWizard />
             </ToolGuard>
           </div>
