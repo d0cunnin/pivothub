@@ -24,7 +24,8 @@ const ALLOWED_ORIGINS = [
   'http://localhost:8080',
   'https://fkvjsgqjgissolpdqbdh.supabase.co',
   'https://www.pivothub.io',
-  'https://pivothub.io'
+  'https://pivothub.io',
+  'https://app.pivothub.io'
 ];
 
 const WINDOW_SECONDS = 60;
