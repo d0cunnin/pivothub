@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Mic, Podcast, Download, Loader2, Plus, X } from 'lucide-react';
+import { Mic, Podcast, Download, Loader2, Plus, X, Zap } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import heroImage from "@/assets/hero-image.jpg";
 import { supabase } from '@/integrations/supabase/client';
@@ -305,16 +305,18 @@ const SpeakIt = () => {
                   Start Your Journey
                 </Button>
               </div>
-              <div className="animate-fade-in mt-4" style={{ animationDelay: '0.5s' }}>
-                <Badge variant="secondary" className="text-lg px-6 py-2">
-                  3 Credits
-                </Badge>
-              </div>
             </div>
           </div>
         </section>
         
         <main id="speak-content" className="flex-grow container mx-auto px-4 py-12">
+          {/* Credit Badge */}
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              3 Credits
+            </Badge>
+          </div>
 
           {/* Path Toggle */}
           <Card className="mb-8">

@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
-import { FileText, Send, Download, ExternalLink, Calculator, DollarSign } from 'lucide-react';
+import { FileText, Send, Download, ExternalLink, Calculator, DollarSign, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import heroImage from "@/assets/hero-image.jpg";
 import { generateGrantProposalPDF } from '@/lib/pdf-templates/grant-template';
@@ -347,17 +347,20 @@ const FundIt = () => {
                   <li>• Letter of Intent generation</li>
                   <li>• Download as professional PDF</li>
                 </ul>
-                <div className="flex items-center justify-center mt-4">
-                  <Badge variant="secondary" className="text-lg px-6 py-2">
-                    5 Credits
-                  </Badge>
-                </div>
               </CardContent>
             </Card>
           </section>
 
           {/* Grant Generator Form and Results */}
           <section className="mb-16">
+            {/* Credit Badge */}
+            <div className="flex justify-center mb-6">
+              <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                5 Credits
+              </Badge>
+            </div>
+            
             <div className="flex flex-col gap-8">
               {/* Form Section */}
               <div className="max-w-5xl mx-auto w-full">

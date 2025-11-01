@@ -6,6 +6,7 @@ import { ToolGuard } from "@/components/ToolGuard";
 import TeachingMaterialsGenerator from "@/components/TeachingMaterialsGenerator";
 import heroImage from "@/assets/hero-image.jpg";
 import { Badge } from "@/components/ui/badge";
+import { Zap } from "lucide-react";
 
 const TeachIt = () => {
   return (
@@ -45,11 +46,6 @@ const TeachIt = () => {
               >
                 Get Started Now
               </Button>
-            </div>
-            <div className="animate-fade-in mt-4" style={{ animationDelay: '0.5s' }}>
-              <Badge variant="secondary" className="text-lg px-6 py-2">
-                5 Credits
-              </Badge>
             </div>
           </div>
         </div>
@@ -154,6 +150,14 @@ const TeachIt = () => {
               Get comprehensive teaching materials optimized for learning outcomes AND revenue generation. 
               Download as professional PDF or printable handout.
             </p>
+          </div>
+          
+          {/* Credit Badge */}
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              5 Credits
+            </Badge>
           </div>
           
           <div className="animate-fade-in-scale">

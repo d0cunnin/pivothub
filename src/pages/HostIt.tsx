@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet-async";
 import { HostItWizard } from "@/components/HostItWizard";
 import { ToolGuard } from "@/components/ToolGuard";
 import { Badge } from "@/components/ui/badge";
+import { Zap } from "lucide-react";
 
 const HostIt = () => {
   return (
@@ -57,11 +58,6 @@ const HostIt = () => {
                 Get Started
               </Button>
             </div>
-            <div className="animate-fade-in mt-4" style={{ animationDelay: "0.5s" }}>
-              <Badge variant="secondary" className="text-lg px-6 py-2">
-                4 Credits
-              </Badge>
-            </div>
           </div>
         </div>
       </section>
@@ -70,6 +66,14 @@ const HostIt = () => {
       <section id="event-form" className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            {/* Credit Badge */}
+            <div className="flex justify-center mb-6">
+              <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                4 Credits
+              </Badge>
+            </div>
+            
             <ToolGuard toolName="host-it">
               <HostItWizard />
             </ToolGuard>

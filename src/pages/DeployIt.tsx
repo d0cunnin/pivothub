@@ -169,8 +169,13 @@ Visit: https://hireyourself.io
         
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-4 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
               <span className="text-3xl font-bold text-white tracking-wider">DEPLOY IT</span>
+            </div>
+            <div className="animate-fade-in mb-8" style={{ animationDelay: '0.1s' }}>
+              <Badge variant="outline" className="text-lg px-6 py-3 bg-blue-500/20 text-white border-blue-300/50">
+                Coming Soon - Beta Access
+              </Badge>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Build Your Own AI Agent
@@ -178,17 +183,28 @@ Visit: https://hireyourself.io
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               Design and plan your AI agent through OpenAI's Agent Builder
             </p>
-            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Badge variant="secondary" className="text-lg px-6 py-2">
-                20 Credits per use
-              </Badge>
-            </div>
           </div>
         </div>
       </section>
 
       <main id="deploy-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="deploy-it">
+          {/* Beta Notice */}
+          <Alert className="mb-8 border-blue-500/50 bg-blue-500/10">
+            <AlertDescription className="text-blue-600 dark:text-blue-400">
+              <p className="font-semibold text-lg mb-2">🚀 Feature In Development</p>
+              <p>Deploy It is currently in beta. While the blueprint generator is functional, full deployment automation is coming soon.</p>
+            </AlertDescription>
+          </Alert>
+          
+          {/* Credit Badge */}
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              10 Credits
+            </Badge>
+          </div>
+          
           {/* Technical Requirements Notice */}
           <Alert className="mb-8 border-yellow-500/50 bg-yellow-500/10">
             <AlertTriangle className="h-5 w-5 text-yellow-500" />

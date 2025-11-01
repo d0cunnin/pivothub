@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Loader2, Sparkles, AlertCircle } from "lucide-react";
+import { Loader2, Sparkles, AlertCircle, Zap } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,7 +48,20 @@ const PromptIt = () => {
         body: { prompt: userPrompt }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Edge function error:', error);
+        
+        // Provide specific error messages based on status
+        if (error.message?.includes('401') || error.message?.includes('auth')) {
+          toast.error("Authentication failed. Please sign in again.");
+        } else if (error.message?.includes('402') || error.message?.includes('credits')) {
+          toast.error("Insufficient credits. Please upgrade or purchase credits.");
+        } else {
+          toast.error(error.message || "Failed to analyze prompt. Please try again.");
+        }
+        setIsLoading(false);
+        return;
+      }
 
       setFeedback(data);
       toast.success("Prompt analyzed successfully!");
@@ -92,11 +105,6 @@ const PromptIt = () => {
             <p className="text-lg md:text-xl text-white/80 mb-10 animate-fade-in max-w-3xl mx-auto" style={{ animationDelay: '0.3s' }}>
               Master the language of prompting so every response is smart, relevant, and specific
             </p>
-            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Badge variant="secondary" className="text-lg px-6 py-2">
-                5 Credits for 5 Uses
-              </Badge>
-            </div>
           </div>
         </div>
       </section>
@@ -228,6 +236,14 @@ const PromptIt = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Credit Badge */}
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              1 Credit per Analysis
+            </Badge>
+          </div>
 
           {/* Two-Pane Practice Interface */}
           <div className="grid md:grid-cols-2 gap-8 mb-12">

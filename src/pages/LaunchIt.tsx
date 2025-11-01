@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+import { Loader2, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
@@ -185,12 +185,7 @@ const LaunchIt = () => {
                 onClick={() => document.getElementById('launch-form')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Get Started Now
-              </Button>
-            </div>
-            <div className="animate-fade-in mt-4" style={{ animationDelay: '0.5s' }}>
-              <Badge variant="secondary" className="text-lg px-6 py-2">
-                3 Credits
-              </Badge>
+            </Button>
             </div>
           </div>
         </div>
@@ -220,6 +215,13 @@ const LaunchIt = () => {
           </div>
           
           <div className="max-w-4xl mx-auto">
+            {/* Credit Badge */}
+            <div className="flex justify-center mb-6">
+              <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                3 Credits
+              </Badge>
+            </div>
 
             {/* Form */}
             <Card className="p-8 mb-8 bg-card/50 backdrop-blur-sm border-primary/20">

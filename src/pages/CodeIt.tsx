@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Loader2, Code2, Play, ExternalLink } from "lucide-react";
+import { Loader2, Code2, Play, ExternalLink, Zap } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -132,17 +132,20 @@ print(a + b)`,
             <p className="text-lg md:text-xl text-white/80 mb-10 animate-fade-in max-w-3xl mx-auto" style={{ animationDelay: '0.3s' }}>
               Start small, understand the logic, and see how your code comes to life
             </p>
-            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Badge variant="secondary" className="text-lg px-6 py-2">
-                1 Credit per use
-              </Badge>
-            </div>
           </div>
         </div>
       </section>
 
       <main id="code-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="code-it">
+          {/* Credit Badge */}
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              1 Credit per use
+            </Badge>
+          </div>
+          
           {/* Understanding Coding Section */}
           <Card className="mb-12 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
             <CardHeader>
