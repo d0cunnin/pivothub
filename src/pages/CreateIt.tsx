@@ -66,20 +66,6 @@ export default function CreateIt() {
         </section>
         
         <main className="flex-grow container mx-auto px-4 py-12">
-          {/* Integration Setup Section */}
-          <Card className="mb-8 max-w-4xl mx-auto border-primary/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-2xl">
-                🔌 Complete Integration Setup Included
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Create It provides step-by-step instructions for setting up all necessary integrations for your specific app type. We handle the technical decisions so you can focus on building.
-              </p>
-            </CardContent>
-          </Card>
-
           {/* Coming Soon Notice */}
           <Alert className="mb-8 bg-blue-50 border-blue-200 max-w-4xl mx-auto">
             <Info className="h-5 w-5 text-blue-600" />
