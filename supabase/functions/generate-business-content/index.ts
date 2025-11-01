@@ -1346,9 +1346,15 @@ Keep each section concise and actionable. Use plain text without markdown.`
         ],
         max_completion_tokens: type === 'business-plan' ? 8000 : type === 'business-foundation' ? 4000 : type === 'marketing-strategy' ? 6000 : 2000
       })
-    })
+    });
 
-    const result = await response.json()
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('OpenAI API error:', response.status, errorText);
+      throw new Error(`OpenAI API error: ${response.status} - ${errorText.slice(0, 200)}`);
+    }
+
+    const result = await response.json();
     
     if (result.error) {
       throw new Error(result.error.message)

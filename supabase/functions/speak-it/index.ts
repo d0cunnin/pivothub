@@ -375,7 +375,9 @@ FORMATTING REQUIREMENTS:
     });
 
     if (!openaiResponse.ok) {
-      throw new Error('OpenAI API error');
+      const errorText = await openaiResponse.text();
+      console.error('OpenAI API error:', openaiResponse.status, errorText);
+      throw new Error(`OpenAI API error: ${openaiResponse.status} - ${errorText.slice(0, 200)}`);
     }
 
     const openaiData = await openaiResponse.json();

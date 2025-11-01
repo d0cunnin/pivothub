@@ -279,6 +279,12 @@ QUALITY STANDARDS:
           }),
         });
 
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('OpenAI API error:', response.status, errorText);
+          throw new Error(`OpenAI API error: ${response.status} - ${errorText.slice(0, 200)}`);
+        }
+
         const aiData = await response.json();
         if (response.ok) {
           try {

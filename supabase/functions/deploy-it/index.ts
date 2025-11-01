@@ -85,7 +85,7 @@ Format your response as JSON with these keys:
     if (!response.ok) {
       const errorText = await response.text();
       console.error('OpenAI API error:', response.status, errorText);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      throw new Error(`OpenAI API error: ${response.status} - ${errorText.slice(0, 200)}`);
     }
 
     const data = await response.json();

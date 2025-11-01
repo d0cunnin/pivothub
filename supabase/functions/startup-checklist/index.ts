@@ -223,11 +223,13 @@ Return as a JSON object with this EXACT structure:
       }),
     });
 
-    const data = await response.json();
-    
     if (!response.ok) {
-      throw new Error(data.error?.message || 'Failed to generate checklist');
+      const errorText = await response.text();
+      console.error('OpenAI API error:', response.status, errorText);
+      throw new Error(`OpenAI API error: ${response.status} - ${errorText.slice(0, 200)}`);
     }
+
+    const data = await response.json();
 
     let checklist;
     try {
