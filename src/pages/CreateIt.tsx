@@ -121,13 +121,9 @@ export default function CreateIt() {
                 <p className="font-semibold mb-2">
                   🚫 This is NOT for beginners:
                 </p>
-                <p className="mb-2">
+                <p>
                   If you feel lost when dealing with technology or prefer guided, step-by-step support, 
                   this tool may be too advanced for you.
-                </p>
-                <p>
-                  <strong>Recommended alternative:</strong> Start with <strong>Prompt It</strong> and <strong>Code It</strong>{" "}
-                  to build foundational skills first before attempting Create It.
                 </p>
               </div>
               <p className="mt-4 text-sm">
