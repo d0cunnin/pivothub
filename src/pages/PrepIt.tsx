@@ -2,7 +2,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare, Brain, Briefcase } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare, Brain, Briefcase, Zap } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
 import { ToolGuard } from "@/components/ToolGuard";
@@ -158,10 +159,18 @@ const PrepIt = () => {
                 <h4 className="font-semibold text-foreground mb-1">24/7 Available</h4>
                 <p className="text-sm text-muted-foreground">Get immediate support whenever you need career guidance or advice</p>
               </div>
-            </div>
           </div>
-          
-          <ToolGuard toolName="career-advisor" showCreditInfo={true}>
+        </div>
+        
+        {/* Credit Badge */}
+        <div className="flex justify-center mb-6">
+          <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+            <Zap className="h-4 w-4" />
+            1 Credit per Message
+          </Badge>
+        </div>
+        
+        <ToolGuard toolName="career-advisor">
             <CareerAdvisorChatbot />
           </ToolGuard>
         </div>
@@ -210,10 +219,18 @@ const PrepIt = () => {
                 <h4 className="font-semibold text-foreground mb-1">Mock Interviews</h4>
                 <p className="text-sm text-muted-foreground">Practice timed interviews with comprehensive performance reports</p>
               </div>
-            </div>
           </div>
-          
-          <ToolGuard toolName="interview-questions" showCreditInfo={true}>
+        </div>
+        
+        {/* Credit Badge */}
+        <div className="flex justify-center mb-6">
+          <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+            <Zap className="h-4 w-4" />
+            2 Credits
+          </Badge>
+        </div>
+        
+        <ToolGuard toolName="interview-questions">
             <InterviewQuestionsCoach />
           </ToolGuard>
         </div>
@@ -262,10 +279,18 @@ const PrepIt = () => {
                 <h4 className="font-semibold text-foreground mb-1">PDF Export</h4>
                 <p className="text-sm text-muted-foreground">Download professional optimization guide and interview preparation materials as PDF</p>
               </div>
-            </div>
           </div>
-          
-          <ToolGuard toolName="resume-analyzer" showCreditInfo={true}>
+        </div>
+        
+        {/* Credit Badge */}
+        <div className="flex justify-center mb-6">
+          <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+            <Zap className="h-4 w-4" />
+            2 Credits
+          </Badge>
+        </div>
+        
+        <ToolGuard toolName="resume-analyzer">
             <ResumeCoachLetter />
           </ToolGuard>
         </div>
