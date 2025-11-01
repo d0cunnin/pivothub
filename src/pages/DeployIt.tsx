@@ -216,7 +216,7 @@ Visit: https://hireyourself.io
                   this tool may be too advanced for you.
                 </p>
                 <p>
-                  <strong>Recommended alternative:</strong> Start with <strong>Prompt It</strong> and <strong>Code It</strong> 
+                  <strong>Recommended alternative:</strong> Start with <strong>Prompt It</strong> and <strong>Code It</strong>{" "}
                   to build foundational skills first before attempting Deploy It.
                 </p>
               </div>
