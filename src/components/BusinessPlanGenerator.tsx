@@ -224,7 +224,7 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
           className="w-full"
           variant="hero"
         >
-          {isGenerating ? "Generating Business Plan..." : "Generate Business Plan"}
+          {isGenerating ? "Generating Business Plan..." : "Generate Business Plan (4 Credits)"}
         </Button>
 
         {generatedPlan && (

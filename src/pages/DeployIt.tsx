@@ -436,10 +436,10 @@ Visit: https://hireyourself.io
 
               <div className="flex items-center justify-between mb-4 p-4 bg-primary/5 rounded-lg border border-primary/10">
                 <div className="flex items-center gap-3">
-                  <Badge variant="default" className="text-base px-4 py-2">
-                    <Zap className="h-4 w-4 mr-2" />
-                    20 Credits Required
-                  </Badge>
+                <Badge variant="default" className="text-base px-4 py-2">
+                  <Zap className="h-4 w-4 mr-2" />
+                  40 Credits Required
+                </Badge>
                   <span className="text-sm text-muted-foreground">
                     Blueprint downloads as PDF
                   </span>

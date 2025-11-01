@@ -154,19 +154,19 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <ToolGuard toolName="business-idea" showCreditInfo={true}>
+              <ToolGuard toolName="business-idea">
                 <BusinessIdeaGenerator />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <ToolGuard toolName="name-checker" showCreditInfo={true}>
+              <ToolGuard toolName="name-checker">
                 <NameChecker />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <ToolGuard toolName="business-foundation" showCreditInfo={true}>
+              <ToolGuard toolName="business-foundation">
                 <BusinessFoundationBuilder />
               </ToolGuard>
             </div>
@@ -190,19 +190,19 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <ToolGuard toolName="business-plan" showCreditInfo={true}>
+              <ToolGuard toolName="business-plan">
                 <BusinessPlanGenerator />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <ToolGuard toolName="marketing-strategy" showCreditInfo={true}>
+              <ToolGuard toolName="marketing-strategy">
                 <MarketingStrategyGenerator />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <ToolGuard toolName="pitch-deck" showCreditInfo={true}>
+              <ToolGuard toolName="pitch-deck">
                 <PitchDeckGenerator />
               </ToolGuard>
             </div>
@@ -226,25 +226,25 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <ToolGuard toolName="logo-generator" showCreditInfo={true}>
+              <ToolGuard toolName="logo-generator">
                 <LogoGenerator />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <ToolGuard toolName="biography" showCreditInfo={true}>
+              <ToolGuard toolName="biography">
                 <BiographyGenerator />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <ToolGuard toolName="business-docs" showCreditInfo={true}>
+              <ToolGuard toolName="business-docs">
                 <BusinessDocsGenerator />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.3s' }}>
-              <ToolGuard toolName="startup-checklist" showCreditInfo={true}>
+              <ToolGuard toolName="startup-checklist">
                 <StartupChecklist />
               </ToolGuard>
             </div>
@@ -268,19 +268,19 @@ const BuildIt = () => {
           
           <div className="space-y-6">
             <div className="animate-fade-in-scale">
-              <ToolGuard toolName="social-media" showCreditInfo={true}>
+              <ToolGuard toolName="social-media">
                 <SocialMediaGenerator />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.1s' }}>
-              <ToolGuard toolName="business-mentor" showCreditInfo={true}>
+              <ToolGuard toolName="business-mentor">
                 <BusinessMentorChatbot />
               </ToolGuard>
             </div>
             
             <div className="animate-fade-in-scale" style={{ animationDelay: '0.2s' }}>
-              <ToolGuard toolName="business-resources" showCreditInfo={true}>
+              <ToolGuard toolName="business-resources">
                 <BusinessResourceFinder />
               </ToolGuard>
             </div>

@@ -227,7 +227,7 @@ export const StartupChecklist = () => {
           className="w-full"
           title={!businessStructure || !state ? "Please select both business structure and state to generate checklist" : ""}
         >
-          {isGenerating ? "Generating Checklist..." : "Generate Startup Checklist"}
+          {isGenerating ? "Generating Checklist..." : "Generate Startup Checklist (2 Credits)"}
         </Button>
       </form>
 

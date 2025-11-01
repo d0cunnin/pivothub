@@ -222,7 +222,7 @@ export const BusinessIdeaGenerator = () => {
         ) : (
           <>
             <Sparkles className="mr-2 h-5 w-5" />
-            Generate Business Ideas
+            Generate Business Ideas (2 Credits)
           </>
         )}
       </Button>

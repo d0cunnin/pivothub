@@ -557,7 +557,7 @@ export const PitchDeckGenerator = () => {
           className="w-full"
           variant="hero"
         >
-          {isGenerating ? "Generating Pitch Deck..." : "Generate Pitch Deck"}
+          {isGenerating ? "Generating Pitch Deck..." : "Generate Pitch Deck (3 Credits)"}
         </Button>
 
         {slides.length > 0 && (

@@ -332,7 +332,7 @@ export const BiographyGenerator = () => {
         </div>
 
         <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
-          {isGenerating ? "Generating Biography Package..." : "Generate Biography Package (8 Documents)"}
+          {isGenerating ? "Generating Biography Package..." : "Generate Biography Package (8 Documents) - 3 Credits"}
         </Button>
       </form>
 

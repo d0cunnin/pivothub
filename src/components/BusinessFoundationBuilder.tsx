@@ -599,7 +599,7 @@ export const BusinessFoundationBuilder = () => {
           variant="hero"
         >
           <Sparkles className="h-5 w-5 mr-2" />
-          {isGenerating ? "Building Your Foundation..." : "Build Business Foundation"}
+          {isGenerating ? "Building Your Foundation..." : "Build Business Foundation (2 Credits)"}
         </Button>
 
         {results && (

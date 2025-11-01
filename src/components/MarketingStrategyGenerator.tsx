@@ -510,7 +510,7 @@ export const MarketingStrategyGenerator = () => {
           className="w-full" 
           variant="hero"
         >
-          {isGenerating ? "Generating Strategy..." : "Generate Marketing Strategy"}
+          {isGenerating ? "Generating Strategy..." : "Generate Marketing Strategy (3 Credits)"}
         </Button>
       </form>
 

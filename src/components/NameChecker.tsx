@@ -175,7 +175,7 @@ export const NameChecker = () => {
           ) : (
             <>
               <Search className="mr-2 h-5 w-5" />
-              Check Name Availability
+              Check Name Availability (2 Credits)
             </>
           )}
         </Button>

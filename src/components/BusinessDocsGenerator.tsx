@@ -361,7 +361,7 @@ export const BusinessDocsGenerator = () => {
           className="w-full"
           title={!businessStructure || !state ? "Please select both business structure and state to generate documents" : ""}
         >
-          {isGenerating ? "Generating Document List..." : "Generate Required Documents"}
+          {isGenerating ? "Generating Document List..." : "Generate Required Documents (2 Credits)"}
         </Button>
       </form>
 
