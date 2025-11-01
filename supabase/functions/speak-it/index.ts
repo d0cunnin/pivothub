@@ -356,7 +356,7 @@ FORMATTING REQUIREMENTS:
     }
 
     // Call OpenAI GPT-5
-    const openaiKey = Deno.env.get('relaunch_openai_key');
+    const openaiKey = Deno.env.get('pivothub-openai-key');
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {

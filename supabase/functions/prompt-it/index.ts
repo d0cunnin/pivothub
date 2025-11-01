@@ -36,7 +36,7 @@ serve(async (req) => {
       throw new Error('Valid prompt is required');
     }
 
-    const OPENAI_API_KEY = Deno.env.get('relaunch_openai_key');
+    const OPENAI_API_KEY = Deno.env.get('pivothub-openai-key');
     if (!OPENAI_API_KEY) {
       throw new Error('OpenAI API key not configured');
     }

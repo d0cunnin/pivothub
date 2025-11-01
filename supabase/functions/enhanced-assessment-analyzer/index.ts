@@ -12,7 +12,7 @@ const assessmentAnalyzerSchema = z.object({
   userProfile: z.record(z.any()).optional()
 });
 
-const openAIApiKey = Deno.env.get('relaunch_openai_key');
+const openAIApiKey = Deno.env.get('pivothub-openai-key');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
 const supabaseServiceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 

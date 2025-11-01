@@ -67,7 +67,7 @@ serve(async (req) => {
       );
     }
     
-    const openAIApiKey = Deno.env.get('relaunch_openai_key');
+    const openAIApiKey = Deno.env.get('pivothub-openai-key');
     if (!openAIApiKey) {
       throw new Error('OpenAI API key not found');
     }

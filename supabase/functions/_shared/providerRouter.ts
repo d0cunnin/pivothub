@@ -42,7 +42,7 @@ export async function getModelForUser(
   return {
     provider: 'openai',
     model: 'gpt-5-2025-08-07',
-    apiKey: Deno.env.get('relaunch_openai_key')!,
+    apiKey: Deno.env.get('pivothub-openai-key')!,
     endpoint: 'https://api.openai.com/v1/chat/completions'
   };
 }

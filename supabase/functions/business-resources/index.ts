@@ -236,7 +236,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
 }`;
 
     // Initialize OpenAI model config (use GPT-4o for text generation)
-    const OPENAI_KEY = Deno.env.get('relaunch_openai_key');
+    const OPENAI_KEY = Deno.env.get('pivothub-openai-key');
     if (!OPENAI_KEY) {
       console.warn('OpenAI API key missing - returning unenhanced Google Places results');
       const resources = formatGooglePlacesResults(allPlaces, location);

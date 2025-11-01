@@ -75,9 +75,9 @@ serve(async (req) => {
       );
     }
     
-    const openaiApiKey = Deno.env.get('relaunch_openai_key')
+    const openaiApiKey = Deno.env.get('pivothub-openai-key')
     if (!openaiApiKey) {
-      throw new Error('relaunch_openai_key not found in environment variables')
+      throw new Error('pivothub-openai-key not found in environment variables')
     }
 
     let prompt = ''

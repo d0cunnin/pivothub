@@ -13,7 +13,7 @@ async function moderateContent(text: string, apiKey: string): Promise<{ flagged:
     const response = await fetch('https://api.openai.com/v1/moderations', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('relaunch_openai_key') || ''}`,
+        'Authorization': `Bearer ${Deno.env.get('pivothub-openai-key') || ''}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({

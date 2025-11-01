@@ -93,7 +93,7 @@ serve(async (req) => {
     }
 
     // Generate personalized report with GPT-5
-    const OPENAI_API_KEY = Deno.env.get('relaunch_openai_key');
+    const OPENAI_API_KEY = Deno.env.get('pivothub-openai-key');
     if (!OPENAI_API_KEY) {
       throw new Error('OpenAI API key is not configured');
     }

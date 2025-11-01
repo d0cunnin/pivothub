@@ -1,6 +1,6 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
-const OPENAI_API_KEY = Deno.env.get('relaunch_openai_key');
+const OPENAI_API_KEY = Deno.env.get('pivothub-openai-key');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
