@@ -1,3 +1,4 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
@@ -76,6 +77,8 @@ serve(async (req) => {
     }
     
     const openaiApiKey = Deno.env.get('pivothub-openai-key')
+    console.log('[BOOT] OpenAI key exists:', !!openaiApiKey);
+    console.log('[BOOT] Key prefix:', openaiApiKey?.substring(0, 10));
     if (!openaiApiKey) {
       throw new Error('pivothub-openai-key not found in environment variables')
     }

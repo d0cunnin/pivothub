@@ -150,7 +150,9 @@ serve(async (req) => {
     }
 
     // Business name similarity check using OpenAI
-    const openAIApiKey = Deno.env.get('relaunch_openai_key');
+    const openAIApiKey = Deno.env.get('pivothub-openai-key');
+    console.log('[BOOT] OpenAI key exists:', !!openAIApiKey);
+    console.log('[BOOT] Key prefix:', openAIApiKey?.substring(0, 10));
     let similarNames = [];
     
     if (openAIApiKey) {
