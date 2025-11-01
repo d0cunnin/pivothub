@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
@@ -359,10 +360,11 @@ QUALITY STANDARDS:
       };
     }
 
-    await logRequest({
-      endpoint: "generate-grant-content",
+    await logRequest(guardResult.supabase, {
       userId,
+      endpoint: "generate-grant-content",
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
       creditsCharged: 5,
       requestDurationMs: Date.now() - startTime
@@ -379,10 +381,17 @@ QUALITY STANDARDS:
   } catch (error: any) {
     console.error('Error in generate-grant-content:', error);
     
-    await logRequest({
-      endpoint: "generate-grant-content",
+    // Use service client for error logging since guardResult might not exist if guard failed
+    const serviceClient = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    );
+    
+    await logRequest(serviceClient, {
       userId,
+      endpoint: "generate-grant-content",
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: false,
       creditsCharged: 0,
       errorMessage: error.message || 'Unknown error',
