@@ -69,7 +69,7 @@ const PrepIt = () => {
                   onClick={() => document.getElementById('career-advisor')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Brain className="h-5 w-5" />
-                  <span>Career Advisor</span>
+                  <span>Career Advisor (1 Credit/msg)</span>
                 </Button>
                 <Button 
                   size="lg" 
@@ -78,7 +78,7 @@ const PrepIt = () => {
                   onClick={() => document.getElementById('interview-coach')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <MessageSquare className="h-5 w-5" />
-                  <span>Interview Coach</span>
+                  <span>Interview Coach (2 Credits)</span>
                 </Button>
                 <Button 
                   size="lg" 
@@ -87,7 +87,7 @@ const PrepIt = () => {
                   onClick={() => document.getElementById('resume-coach')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Briefcase className="h-5 w-5" />
-                  <span>Resume Coach</span>
+                  <span>Resume Coach (2 Credits)</span>
                 </Button>
               </div>
             </div>
