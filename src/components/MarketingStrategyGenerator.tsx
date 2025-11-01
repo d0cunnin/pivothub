@@ -421,10 +421,10 @@ export const MarketingStrategyGenerator = () => {
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <TrendingUp className="h-5 w-5 text-secondary" />
-        <h3 className="text-xl font-bold text-foreground">🎯 Professional Marketing Strategy Generator</h3>
+        <h3 className="text-xl font-bold text-foreground">Marketing Strategy Generator</h3>
       </div>
       
-      <p className="text-sm text-muted-foreground mb-6">Generate a comprehensive marketing strategy designed for beginners with step-by-step guidance. Includes psychology-based customer personas, messaging framework, 52-week rollout plan, and ad creative ideas. Download as PDF with full disclaimer.</p>
+      <p className="text-sm text-muted-foreground mb-6">Create a complete marketing strategy with customer personas, messaging, timeline, and tactics.</p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
         <div>

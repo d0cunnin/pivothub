@@ -350,9 +350,9 @@ export const PitchDeckGenerator = () => {
     <Card className="p-8">
       <div className="flex items-center gap-2 mb-6">
         <Presentation className="h-6 w-6 text-primary" />
-        <h3 className="text-2xl font-bold text-foreground">💼 Professional Pitch Deck Content Generator</h3>
+        <h3 className="text-2xl font-bold text-foreground">Pitch Deck Content Generator</h3>
       </div>
-      <p className="text-sm text-muted-foreground mb-6">Generate a compelling investor pitch deck with content focused on investor decision-making criteria. Export as PDF or text, ready for Canva, Google Slides, or PowerPoint.</p>
+      <p className="text-sm text-muted-foreground mb-6">Generate investor-ready pitch deck content with all essential slides for presentations.</p>
       
       <Alert className="mb-6">
         <Info className="h-4 w-4" />

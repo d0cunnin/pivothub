@@ -233,11 +233,11 @@ export const BiographyGenerator = () => {
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <User className="h-5 w-5 text-secondary" />
-        <h3 className="text-xl font-bold text-foreground">✍️ Biography and Statement Maker</h3>
+        <h3 className="text-xl font-bold text-foreground">Biography and Statement Maker</h3>
       </div>
       
       <p className="text-sm text-muted-foreground mb-6">
-        Create professional biographies for founders and businesses in multiple lengths (100, 250, 500 words), plus vision and mission statements.
+        Generate comprehensive biographies and statements for your business and founder profile.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
@@ -332,7 +332,7 @@ export const BiographyGenerator = () => {
         </div>
 
         <Button type="submit" disabled={isGenerating} size="lg" className="w-full" variant="hero">
-          {isGenerating ? "Generating Biography Package..." : "Generate Biography Package (8 Documents) - 3 Credits"}
+          {isGenerating ? "Generating Biography Package..." : "Generate Biography Package - 3 Credits"}
         </Button>
       </form>
 

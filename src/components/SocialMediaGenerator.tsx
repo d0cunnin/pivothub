@@ -184,11 +184,11 @@ export const SocialMediaGenerator = () => {
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
         <Share2 className="h-5 w-5 text-secondary" />
-        <h3 className="text-xl font-bold text-foreground">🔥 Viral Social Media Content Generator</h3>
+        <h3 className="text-xl font-bold text-foreground">Social Media Content Generator</h3>
       </div>
       
       <p className="text-sm text-muted-foreground mb-6">
-        Generate a complete 30-day social media content calendar with platform-specific posts, scroll-stopping hooks, strategic hashtags, visual suggestions, and optimal posting times optimized for engagement.
+        Create a 30-day content calendar with posts, hashtags, and posting schedules for your platforms.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
