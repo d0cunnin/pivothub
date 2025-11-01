@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 // Validation schema
 const interviewQuestionsSchema = z.object({
@@ -312,10 +313,11 @@ QUALITY STANDARDS:
       ];
     }
 
-    await logRequest({
+    await logRequest(guardResult.supabase, {
       endpoint: "interview-questions",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
       creditsCharged: 2,
       requestDurationMs: Date.now() - startTime
@@ -333,10 +335,14 @@ QUALITY STANDARDS:
     console.error('Error generating interview questions:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     
-    await logRequest({
+    await logRequest(createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    ), {
       endpoint: "interview-questions",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: false,
       creditsCharged: 0,
       errorMessage,

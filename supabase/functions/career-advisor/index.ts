@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts"
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -304,10 +305,11 @@ EXAMPLES OF PREMIUM VALUE:
       .replace(/\s{2,}/g, ' ') // Clean up extra spaces
       .trim()
 
-    await logRequest({
+    await logRequest(guardResult.supabase, {
       endpoint: "career-advisor",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
       creditsCharged: 1,
       requestDurationMs: Date.now() - startTime
@@ -325,10 +327,16 @@ EXAMPLES OF PREMIUM VALUE:
   } catch (error) {
     console.error('Error in career-advisor function:', error)
     
-    await logRequest({
+    // Use service client in catch to ensure logging even if guard failed
+    const serviceClient = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    );
+    await logRequest(serviceClient, {
       endpoint: "career-advisor",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: false,
       creditsCharged: 0,
       errorMessage: error instanceof Error ? error.message : 'Unknown error',

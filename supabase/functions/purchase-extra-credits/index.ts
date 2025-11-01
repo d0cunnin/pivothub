@@ -134,6 +134,16 @@ serve(async (req) => {
 
     const amount = pricing[credits];
 
+    // Resolve origin for redirect URLs
+    const originHeader = req.headers.get('origin');
+    let origin = originHeader || '';
+    if (!origin) {
+      const ref = req.headers.get('referer') || '';
+      try { origin = ref ? new URL(ref).origin : ''; } catch (_) {}
+    }
+    if (!origin) origin = 'https://www.pivothub.io';
+    logStep('Resolved origin', { origin });
+
     // Create checkout session for extra credits
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -151,8 +161,8 @@ serve(async (req) => {
           quantity: 1,
         },
       ],
-      success_url: `${req.headers.get('origin')}/settings?extra_credits=success`,
-      cancel_url: `${req.headers.get('origin')}/settings?extra_credits=cancelled`,
+      success_url: `${origin}/settings?extra_credits=success`,
+      cancel_url: `${origin}/settings?extra_credits=cancelled`,
       metadata: {
         user_id: user.id,
         credits: credits.toString(),

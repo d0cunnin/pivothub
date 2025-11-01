@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 // Validation schema
 const logoGeneratorSchema = z.object({
@@ -143,10 +144,11 @@ serve(async (req) => {
 
     console.log('Generated logos:', logos.filter(l => l.imageURL).length, 'successful');
 
-    await logRequest({
+    await logRequest(guardResult.supabase, {
       endpoint: "generate-logo",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
       creditsCharged: 2,
       requestDurationMs: Date.now() - startTime
@@ -161,10 +163,14 @@ serve(async (req) => {
     console.error('Error generating logo:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     
-    await logRequest({
+    await logRequest(createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    ), {
       endpoint: "generate-logo",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: false,
       creditsCharged: 0,
       errorMessage,

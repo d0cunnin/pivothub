@@ -22,6 +22,11 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_ANON_KEY") ?? ""
   );
 
+  const serviceClient = createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+  );
+
   try {
     logStep("Function started");
 
@@ -33,7 +38,7 @@ serve(async (req) => {
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     // CRITICAL: Ensure user record exists in public.users before checkout
-    const { data: userData, error: userCheckError } = await supabaseClient
+    const { data: userData, error: userCheckError } = await serviceClient
       .from('users')
       .select('id, email')
       .eq('id', user.id)
@@ -43,7 +48,7 @@ serve(async (req) => {
       logStep("User not found in public.users, creating record");
       
       // Create user record idempotently
-      const { error: insertError } = await supabaseClient
+      const { error: insertError } = await serviceClient
         .from('users')
         .insert({
           id: user.id,
@@ -65,6 +70,16 @@ serve(async (req) => {
 
     const { tier, assessmentId } = await req.json();
     logStep("Request received", { tier, assessmentId });
+
+    // Resolve origin for redirect URLs
+    const originHeader = req.headers.get("origin");
+    let origin = originHeader || "";
+    if (!origin) {
+      const ref = req.headers.get("referer") || "";
+      try { origin = ref ? new URL(ref).origin : ""; } catch (_) {}
+    }
+    if (!origin) origin = "https://www.pivothub.io";
+    logStep("Resolved origin", { origin });
 
     const stripe = new Stripe(Deno.env.get("stripe_restrictedkey_payments") || "", { apiVersion: "2023-10-16" });
     
@@ -103,8 +118,8 @@ serve(async (req) => {
         },
       ],
       mode: "subscription",
-      success_url: `${req.headers.get("origin")}/pricing?success=true`,
-      cancel_url: `${req.headers.get("origin")}/pricing?canceled=true`,
+      success_url: `${origin}/pricing?success=true`,
+      cancel_url: `${origin}/pricing?canceled=true`,
       metadata: { tier, subscription_package: selectedPlan.package || tier, userId: user.id },
     });
 

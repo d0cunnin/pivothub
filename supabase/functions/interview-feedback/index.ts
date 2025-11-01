@@ -437,10 +437,11 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
       };
     }
 
-    await logRequest({
+    await logRequest(guardResult.supabase, {
       endpoint: "interview-feedback",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
       creditsCharged: 2,
       requestDurationMs: Date.now() - startTime
@@ -458,10 +459,14 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
     console.error('Error analyzing interview answer:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     
-    await logRequest({
+    await logRequest(createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    ), {
       endpoint: "interview-feedback",
       userId,
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: false,
       creditsCharged: 0,
       errorMessage,

@@ -132,10 +132,11 @@ serve(async (req) => {
       }
     }
 
-    await logRequest({
+    await logRequest(guardResult.supabase, {
       endpoint: "enhanced-assessment-analyzer",
       userId: userId || 'unknown',
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
       creditsCharged: 3,
       requestDurationMs: Date.now() - startTime
@@ -149,10 +150,11 @@ serve(async (req) => {
     console.error('Error in enhanced-assessment-analyzer:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     
-    await logRequest({
+    await logRequest(supabase, {
       endpoint: "enhanced-assessment-analyzer",
       userId: userId || 'unknown',
       ip,
+      userAgent: req.headers.get('user-agent') || 'unknown',
       success: false,
       creditsCharged: 0,
       errorMessage,

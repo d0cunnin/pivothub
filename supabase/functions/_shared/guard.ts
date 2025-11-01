@@ -22,7 +22,9 @@ export interface GuardResult {
 const ALLOWED_ORIGINS = [
   'http://localhost:5173',
   'http://localhost:8080',
-  'https://fkvjsgqjgissolpdqbdh.supabase.co'
+  'https://fkvjsgqjgissolpdqbdh.supabase.co',
+  'https://www.pivothub.io',
+  'https://pivothub.io'
 ];
 
 const WINDOW_SECONDS = 60;
@@ -48,11 +50,10 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
   const isAllowedOrigin = ALLOWED_ORIGINS.some(allowed => 
     origin.startsWith(allowed) || origin.includes('lovable.app') || origin.includes('lovableproject.com')
   );
-
+  console.log('[GUARD] Origin check', { origin, isAllowedOrigin });
   if (origin && !isAllowedOrigin) {
     throw new Response('Origin not allowed', { status: 403 });
   }
-
   // Content-Type check
   if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
     const contentType = req.headers.get('content-type') || '';
