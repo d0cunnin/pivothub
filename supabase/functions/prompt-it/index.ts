@@ -36,9 +36,9 @@ serve(async (req) => {
       throw new Error('Valid prompt is required');
     }
 
-    const OPENAI_API_KEY = Deno.env.get('pivothub-openai-key');
-    if (!OPENAI_API_KEY) {
-      throw new Error('OpenAI API key not configured');
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('Lovable AI key not configured');
     }
 
     const systemPrompt = `You are a world-renowned prompt engineer from a leading tech company.
@@ -54,14 +54,14 @@ Format your response as JSON with these keys:
 - improvedPrompt: string
 - explanation: string`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Analyze this prompt: "${prompt}"` }
@@ -72,9 +72,15 @@ Format your response as JSON with these keys:
     });
 
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again later.');
+      }
+      if (response.status === 402) {
+        throw new Error('AI credits exhausted. Please add credits in Settings.');
+      }
       const errorText = await response.text();
-      console.error('OpenAI API error:', response.status, errorText);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      console.error('Lovable AI error:', response.status, errorText);
+      throw new Error(`Lovable AI error: ${response.status}`);
     }
 
     const data = await response.json();

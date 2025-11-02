@@ -75,9 +75,9 @@ serve(async (req) => {
       );
     }
     
-    const openaiApiKey = Deno.env.get('pivothub-openai-key')
-    if (!openaiApiKey) {
-      throw new Error('pivothub-openai-key not found in environment variables')
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY')
+    if (!lovableApiKey) {
+      throw new Error('LOVABLE_API_KEY not found in environment variables')
     }
 
     let prompt = ''
@@ -760,14 +760,14 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
         throw new Error('Invalid content type')
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemMessage },
           { role: 'user', content: prompt }

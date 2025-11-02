@@ -355,33 +355,38 @@ FORMATTING REQUIREMENTS:
 - Use markdown formatting with clear headings, bullet points, and tables`;
     }
 
-    // Call OpenAI GPT-5
-    const openaiKey = Deno.env.get('pivothub-openai-key');
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Call Lovable AI (OpenAI GPT-5)
+    const lovableKey = Deno.env.get('LOVABLE_API_KEY');
+    const lovableResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiKey}`,
+        'Authorization': `Bearer ${lovableKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Generate a comprehensive ${path === 'speaker' ? 'public speaking' : 'podcast'} launch plan.` }
         ],
-        temperature: 0.7,
-        max_tokens: 8000,
+        max_completion_tokens: 8000,
       }),
     });
 
-    if (!openaiResponse.ok) {
-      const errorText = await openaiResponse.text();
-      console.error('OpenAI API error:', openaiResponse.status, errorText);
-      throw new Error(`OpenAI API error: ${openaiResponse.status} - ${errorText.slice(0, 200)}`);
+    if (!lovableResponse.ok) {
+      if (lovableResponse.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again later.');
+      }
+      if (lovableResponse.status === 402) {
+        throw new Error('AI credits exhausted. Please add credits in Settings.');
+      }
+      const errorText = await lovableResponse.text();
+      console.error('Lovable AI error:', lovableResponse.status, errorText);
+      throw new Error(`Lovable AI error: ${lovableResponse.status} - ${errorText.slice(0, 200)}`);
     }
 
-    const openaiData = await openaiResponse.json();
-    const generatedPlan = openaiData.choices[0].message.content;
+    const lovableData = await lovableResponse.json();
+    const generatedPlan = lovableData.choices[0].message.content;
 
     return new Response(
       JSON.stringify({

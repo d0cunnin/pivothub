@@ -93,15 +93,15 @@ serve(async (req) => {
 
     const { message, conversationHistory } = validation.data;
 
-    const openAIApiKey = Deno.env.get('pivothub-openai-key');
-    if (!openAIApiKey) {
-      console.error('OpenAI API key not found');
-      throw new Error('OpenAI API key not configured');
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      console.error('Lovable AI key not found');
+      throw new Error('Lovable AI key not configured');
     }
 
     // Check content moderation
     console.log('Checking content moderation...');
-    const moderationResult = await moderateContent(message, openAIApiKey);
+    const moderationResult = await moderateContent(message, lovableApiKey);
     
     if (moderationResult.flagged) {
       console.warn('Content blocked by moderation:', moderationResult.categories);
@@ -308,23 +308,29 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
 
     console.log('Calling OpenAI API for business mentor chat...');
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: messages,
         max_completion_tokens: 2000,
       }),
     });
 
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again later.');
+      }
+      if (response.status === 402) {
+        throw new Error('AI credits exhausted. Please add credits in Settings.');
+      }
       const errorData = await response.text();
-      console.error('OpenAI API error:', errorData);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      console.error('Lovable AI error:', errorData);
+      throw new Error(`Lovable AI error: ${response.status}`);
     }
 
     const data = await response.json();

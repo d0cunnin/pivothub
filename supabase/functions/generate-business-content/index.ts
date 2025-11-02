@@ -76,11 +76,11 @@ serve(async (req) => {
       );
     }
     
-    const openaiApiKey = Deno.env.get('pivothub-openai-key')
-    console.log('[BOOT] OpenAI key exists:', !!openaiApiKey);
-    console.log('[BOOT] Key prefix:', openaiApiKey?.substring(0, 10));
-    if (!openaiApiKey) {
-      throw new Error('pivothub-openai-key not found in environment variables')
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY')
+    console.log('[BOOT] Lovable AI key exists:', !!lovableApiKey);
+    console.log('[BOOT] Key prefix:', lovableApiKey?.substring(0, 10));
+    if (!lovableApiKey) {
+      throw new Error('LOVABLE_API_KEY not found in environment variables')
     }
 
     let prompt = ''
@@ -1332,14 +1332,14 @@ Keep each section concise and actionable. Use plain text without markdown.`
         throw new Error('Invalid content type')
     }
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemMessage },
           { role: 'user', content: prompt }

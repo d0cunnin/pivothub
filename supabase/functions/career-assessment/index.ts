@@ -94,10 +94,10 @@ serve(async (req) => {
       );
     }
     
-    const openAIApiKey = Deno.env.get('pivothub-openai-key');
-    if (!openAIApiKey) {
-      console.error('OpenAI API key not found');
-      throw new Error('OpenAI API key not found');
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      console.error('Lovable AI key not found');
+      throw new Error('Lovable AI key not found');
     }
 
     console.log('Processing career assessment with OpenAI GPT-5...');
@@ -463,14 +463,14 @@ Return as a JSON object with this EXACT structure:
     }
   }
 }`;
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         max_completion_tokens: 16000,
         messages: [
           { role: 'system', content: systemPrompt },

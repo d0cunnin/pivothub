@@ -61,9 +61,9 @@ serve(async (req) => {
       additionalInfo 
     } = validation.data;
     
-    const apiKey = Deno.env.get('pivothub-openai-key');
+    const apiKey = Deno.env.get('LOVABLE_API_KEY');
     if (!apiKey) {
-      throw new Error('OpenAI API key not found');
+      throw new Error('Lovable AI key not found');
     }
 
     const systemPrompt = `You are a senior startup advisor and launch strategist who has personally launched 50+ successful products and businesses across tech, consumer goods, services, and digital products. You've raised $100M+ in funding, scaled companies from 0 to millions in revenue, and advised Fortune 500 companies on innovation strategy.
@@ -441,14 +441,14 @@ FORMATTING RULES:
 • Consider their skill level in complexity of tactics
 • Prioritize actions by ROI and feasibility`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.` }

@@ -149,22 +149,21 @@ serve(async (req) => {
       }
     }
 
-    // Business name similarity check using OpenAI
-    const openAIApiKey = Deno.env.get('pivothub-openai-key');
-    console.log('[BOOT] OpenAI key exists:', !!openAIApiKey);
-    console.log('[BOOT] Key prefix:', openAIApiKey?.substring(0, 10));
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    console.log('[BOOT] Lovable AI key exists:', !!lovableApiKey);
+    console.log('[BOOT] Key prefix:', lovableApiKey?.substring(0, 10));
     let similarNames = [];
     
-    if (openAIApiKey) {
+    if (lovableApiKey) {
       try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
+            'Authorization': `Bearer ${lovableApiKey}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'gpt-5-2025-08-07',
+            model: 'openai/gpt-5',
             messages: [
               { 
                 role: 'system', 
@@ -280,9 +279,15 @@ QUALITY STANDARDS:
         });
 
         if (!response.ok) {
+          if (response.status === 429) {
+            throw new Error('Rate limit exceeded. Please try again later.');
+          }
+          if (response.status === 402) {
+            throw new Error('AI credits exhausted. Please add credits in Settings.');
+          }
           const errorText = await response.text();
-          console.error('OpenAI API error:', response.status, errorText);
-          throw new Error(`OpenAI API error: ${response.status} - ${errorText.slice(0, 200)}`);
+          console.error('Lovable AI error:', response.status, errorText);
+          throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
         }
 
         const aiData = await response.json();

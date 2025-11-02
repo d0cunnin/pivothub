@@ -235,10 +235,10 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
   "strategicSummary": "..."
 }`;
 
-    // Initialize OpenAI model config (use GPT-4o for text generation)
-    const OPENAI_KEY = Deno.env.get('pivothub-openai-key');
-    if (!OPENAI_KEY) {
-      console.warn('OpenAI API key missing - returning unenhanced Google Places results');
+    // Initialize Lovable AI model config (use GPT-5 for text generation)
+    const LOVABLE_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_KEY) {
+      console.warn('Lovable AI key missing - returning unenhanced Google Places results');
       const resources = formatGooglePlacesResults(allPlaces, location);
       return new Response(
         JSON.stringify({ resources }),
@@ -247,13 +247,13 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
     }
 
     const modelConfig = {
-      model: 'gpt-5-2025-08-07',
-      apiKey: OPENAI_KEY,
-      endpoint: 'https://api.openai.com/v1/chat/completions'
+      model: 'openai/gpt-5',
+      apiKey: LOVABLE_KEY,
+      endpoint: 'https://ai.gateway.lovable.dev/v1/chat/completions'
     };
 
     try {
-      console.log('Invoking OpenAI for AI enhancement...');
+      console.log('Invoking Lovable AI for AI enhancement...');
       const aiResponse = await fetch(modelConfig.endpoint, {
         method: 'POST',
         headers: {
@@ -274,9 +274,25 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
       });
 
       if (!aiResponse.ok) {
+        if (aiResponse.status === 429) {
+          console.warn('Rate limit hit, using unenhanced results');
+          const resources = formatGooglePlacesResults(allPlaces, location);
+          return new Response(
+            JSON.stringify({ resources }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+          );
+        }
+        if (aiResponse.status === 402) {
+          console.warn('AI credits exhausted, using unenhanced results');
+          const resources = formatGooglePlacesResults(allPlaces, location);
+          return new Response(
+            JSON.stringify({ resources }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+          );
+        }
         const errorText = await aiResponse.text();
-        console.error(`AI API error (${aiResponse.status}):`, errorText);
-        throw new Error(`AI API returned ${aiResponse.status}`);
+        console.error(`Lovable AI error (${aiResponse.status}):`, errorText);
+        throw new Error(`Lovable AI returned ${aiResponse.status}`);
       }
 
       const aiData = await aiResponse.json();

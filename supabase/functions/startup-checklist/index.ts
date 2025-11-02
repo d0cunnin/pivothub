@@ -36,9 +36,9 @@ serve(async (req) => {
     
     const { businessType, industry, location, fundingGoal, timeline, hasCofounder } = validation.data;
     
-    const openAIApiKey = Deno.env.get('pivothub-openai-key');
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not found');
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      throw new Error('Lovable AI key not found');
     }
 
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - STARTUP CHECKLIST
@@ -207,14 +207,14 @@ Return as a JSON object with this EXACT structure:
   },
   "summary": "Comprehensive overview of this startup's unique path from idea to launch, considering ${businessType}, ${industry}, ${location}, and ${timeline} timeline (4-5 sentences)"
 }`;
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Create a comprehensive, actionable startup checklist for this ${businessType} business in ${location}. Focus on critical path tasks and realistic timelines.` }
@@ -224,9 +224,15 @@ Return as a JSON object with this EXACT structure:
     });
 
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again later.');
+      }
+      if (response.status === 402) {
+        throw new Error('AI credits exhausted. Please add credits in Settings.');
+      }
       const errorText = await response.text();
-      console.error('OpenAI API error:', response.status, errorText);
-      throw new Error(`OpenAI API error: ${response.status} - ${errorText.slice(0, 200)}`);
+      console.error('Lovable AI error:', response.status, errorText);
+      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
     }
 
     const data = await response.json();

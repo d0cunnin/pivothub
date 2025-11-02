@@ -77,9 +77,9 @@ serve(async (req) => {
       );
     }
     
-    const openAIApiKey = Deno.env.get('pivothub-openai-key');
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not found');
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      throw new Error('Lovable AI key not found');
     }
 
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - INTERVIEW FEEDBACK COACH
@@ -368,14 +368,14 @@ TONE: Expert, direct, encouraging but realistic, actionable.
 
 DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JSON values. Return clean text only.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Please analyze this interview answer and provide detailed, expert-level feedback following the comprehensive structure.` }

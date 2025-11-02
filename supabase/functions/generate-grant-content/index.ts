@@ -87,9 +87,9 @@ serve(async (req) => {
       );
     }
     
-    const openAIApiKey = Deno.env.get('pivothub-openai-key');
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not found');
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      throw new Error('Lovable AI key not found');
     }
 
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - GRANT PROPOSAL WRITER
@@ -323,14 +323,14 @@ QUALITY STANDARDS:
 • Align clearly with funder's mission and priorities
 • Write compellingly while maintaining professionalism
 • Proactively address potential reviewer concerns`;
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
