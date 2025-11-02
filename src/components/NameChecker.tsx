@@ -160,6 +160,7 @@ export const NameChecker = () => {
         </div>
 
         <Button
+          data-toolguard-trigger="true"
           onClick={checkNameAvailability}
           disabled={isChecking || !businessName.trim() || !state}
           variant="hero"
