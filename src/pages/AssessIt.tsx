@@ -87,7 +87,7 @@ const AssessIt = () => {
               Take Your Assessment Today
             </h2>
             <p className="text-lg text-foreground leading-relaxed mb-8">
-              Discover what's next with our three powerful assessment tools designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills—all to help you find the best career or business path that fits who you are and where you want to go.
+              Discover what's next with our four powerful assessment tools designed to help you move forward with purpose. Explore your personality, uncover your interests, and identify your skills—all to help you find the best career or business path that fits who you are and where you want to go.
             </p>
           </div>
 

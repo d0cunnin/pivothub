@@ -199,7 +199,7 @@ ${formData.businessName || "This business"} represents a compelling opportunity 
       <p className="text-muted-foreground mb-2">
         Create a comprehensive business plan tailored to your venture
       </p>
-      <p className="text-sm text-muted-foreground mb-6">Generate a comprehensive business plan tailored to your industry and goals. Get structured sections ready for investors and lenders.</p>
+      <p className="text-sm text-muted-foreground mb-6">Generate a comprehensive business plan tailored to your industry and goals.</p>
       <div className="space-y-6">
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
