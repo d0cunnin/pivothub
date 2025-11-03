@@ -24,25 +24,55 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
   const generateReport = async () => {
     setGenerating(true);
     try {
-      // Parse the assessment data from the string
       const assessmentData = JSON.parse(assessmentId);
+      console.log('📤 Sending assessment to edge function:', {
+        keys: Object.keys(assessmentData),
+        constraintsType: typeof assessmentData.constraints,
+        constraintsValue: assessmentData.constraints,
+        skillsCount: assessmentData.skills?.length
+      });
       
       const { data, error } = await supabase.functions.invoke('generate-side-income-report', {
         body: { assessmentData }
       });
 
-      if (error) throw error;
+      console.log('📬 Response received:', { 
+        hasData: !!data, 
+        hasError: !!error,
+        dataKeys: data ? Object.keys(data) : [],
+        error 
+      });
 
+      if (error) {
+        console.error('Function invocation error:', error);
+        throw new Error(`Function error: ${error.message || JSON.stringify(error)}`);
+      }
+      
+      if (!data) {
+        throw new Error('No response data received from function');
+      }
+      
+      if (data.error) {
+        console.error('Function returned error:', data.error, data.details);
+        throw new Error(`Report generation failed: ${data.error}${data.details ? '\n' + JSON.stringify(data.details, null, 2) : ''}`);
+      }
+
+      if (!data.report) {
+        console.error('Missing report in response:', data);
+        throw new Error('Report data is missing from response');
+      }
+
+      console.log('✅ Report generated successfully');
       setReport(data.report);
       toast({
         title: "Success!",
         description: "Your personalized blueprint is ready!",
       });
-    } catch (error) {
-      console.error('Error generating report:', error);
+    } catch (error: any) {
+      console.error('❌ Error generating report:', error);
       toast({
-        title: "Error",
-        description: "Failed to generate report. Please try again.",
+        title: "Report Generation Failed",
+        description: error.message || "An unexpected error occurred. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -92,11 +122,33 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
       <div className="container mx-auto px-4 py-16">
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
-            <CardTitle>Report Not Available</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              Unable to Generate Your Blueprint
+            </CardTitle>
             <CardDescription>
-              Unable to load your report. Please contact support.
+              We encountered an issue creating your personalized income plan.
             </CardDescription>
           </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-muted p-4 rounded-lg">
+              <p className="text-sm font-medium mb-2">This is usually a temporary issue that resolves on retry.</p>
+              <p className="text-sm text-muted-foreground">
+                Common causes: Network hiccup, API timeout, or system maintenance.
+              </p>
+            </div>
+            <div className="space-y-3">
+              <Button 
+                onClick={generateReport} 
+                className="w-full"
+                size="lg"
+              >
+                Try Generating Again
+              </Button>
+              <p className="text-xs text-center text-muted-foreground">
+                If this persists after 2-3 attempts, please contact support with error code: REPORT_GEN_FAIL
+              </p>
+            </div>
+          </CardContent>
         </Card>
       </div>
     );

@@ -51,25 +51,39 @@ serve(async (req) => {
         employmentStatus: z.string(),
         currentIncome: z.string(),
         timeAvailable: z.string(),
+        incomeGoal: z.string().optional(),
         timeframe: z.string(),
         workEnvironment: z.string(),
         clientInteraction: z.string(),
         skills: z.array(z.string()),
+        languages: z.array(z.string()).optional(),
+        customLanguage: z.string().optional(),
         goals: z.string(),
         startupBudget: z.string(),
+        experience: z.string().optional(),
         riskTolerance: z.string(),
-        constraints: z.string().optional(),
+        constraints: z.array(z.string()),
         dealBreakers: z.string().optional(),
       })
     });
 
-    const validation = requestSchema.safeParse(await req.json());
+    const requestBody = await req.json();
+    const { assessmentData } = requestBody;
+    
+    console.log('📥 Received request');
+    console.log('Assessment data keys:', Object.keys(assessmentData || {}));
+    console.log('Constraints type:', typeof assessmentData?.constraints, 'Value:', assessmentData?.constraints);
+    console.log('Skills count:', assessmentData?.skills?.length);
+
+    const validation = requestSchema.safeParse(requestBody);
     
     if (!validation.success) {
+      console.error('❌ Schema validation failed:', validation.error.issues);
       return new Response(
         JSON.stringify({ 
-          error: 'Invalid input', 
-          details: validation.error.issues 
+          error: 'Invalid input - schema validation failed', 
+          details: validation.error.issues,
+          received: Object.keys(assessmentData || {})
         }),
         { 
           status: 400, 
@@ -77,6 +91,8 @@ serve(async (req) => {
         }
       );
     }
+
+    console.log('✅ Schema validation passed');
 
     const { assessmentData } = validation.data;
 
@@ -170,7 +186,7 @@ ASSESSMENT DATA:
 - Goals: ${assessmentData.goals}
 - Startup Budget: ${assessmentData.startupBudget}
 - Risk Tolerance: ${assessmentData.riskTolerance}
-${assessmentData.constraints ? `- Constraints: ${assessmentData.constraints}` : ''}
+${assessmentData.constraints && assessmentData.constraints.length > 0 ? `- Constraints: ${assessmentData.constraints.join(', ')}` : ''}
 ${assessmentData.dealBreakers ? `- Deal Breakers: ${assessmentData.dealBreakers}` : ''}
 
 === BLUEPRINT MISSION ===
@@ -299,11 +315,12 @@ Current Situation:
 - Goals: ${assessmentData.goals}
 - Budget: ${assessmentData.startupBudget}
 - Risk Tolerance: ${assessmentData.riskTolerance}
-${assessmentData.constraints ? `- Constraints: ${assessmentData.constraints}` : ''}
+${assessmentData.constraints && assessmentData.constraints.length > 0 ? `- Constraints: ${assessmentData.constraints.join(', ')}` : ''}
 ${assessmentData.dealBreakers ? `- Deal Breakers: ${assessmentData.dealBreakers}` : ''}
 
 Create 3-5 specific, actionable side income paths ranked by feasibility based on their unique situation.`;
 
+    console.log('🤖 Calling AI API...');
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -323,9 +340,15 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
-      console.error('AI API error:', aiResponse.status, errorText);
-      throw new Error('Failed to generate report');
+      console.error('❌ AI API error:', {
+        status: aiResponse.status,
+        statusText: aiResponse.statusText,
+        body: errorText.substring(0, 500)
+      });
+      throw new Error(`AI API error ${aiResponse.status}: ${aiResponse.statusText}`);
     }
+
+    console.log('✅ AI response received, status:', aiResponse.status);
 
     const aiData = await aiResponse.json();
     const reportContent = JSON.parse(aiData.choices[0].message.content);
