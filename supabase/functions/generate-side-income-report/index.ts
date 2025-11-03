@@ -96,7 +96,14 @@ serve(async (req) => {
 
     const { assessmentData } = validation.data;
 
-    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY')!;
+    const openaiApiKey = Deno.env.get('PIVOTHUB_OPENAI_KEY');
+    if (!openaiApiKey) {
+      console.error('❌ PIVOTHUB_OPENAI_KEY not configured');
+      return new Response(
+        JSON.stringify({ error: 'OpenAI API key not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     // No authentication required - direct report generation
     // No database lookups needed - data provided directly
@@ -320,16 +327,16 @@ ${assessmentData.dealBreakers ? `- Deal Breakers: ${assessmentData.dealBreakers}
 
 Create 3-5 specific, actionable side income paths ranked by feasibility based on their unique situation.`;
 
-    console.log('🤖 Calling AI API...');
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    console.log('🤖 Calling OpenAI API...');
+    const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
+        'Authorization': `Bearer ${openaiApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        max_completion_tokens: 5000,
+        model: 'gpt-4o-mini',
+        max_tokens: 5000,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
@@ -340,15 +347,15 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
-      console.error('❌ AI API error:', {
+      console.error('❌ OpenAI API error:', {
         status: aiResponse.status,
         statusText: aiResponse.statusText,
         body: errorText.substring(0, 500)
       });
-      throw new Error(`AI API error ${aiResponse.status}: ${aiResponse.statusText}`);
+      throw new Error(`OpenAI API error ${aiResponse.status}: ${aiResponse.statusText}`);
     }
 
-    console.log('✅ AI response received, status:', aiResponse.status);
+    console.log('✅ OpenAI response received, status:', aiResponse.status);
 
     const aiData = await aiResponse.json();
     const reportContent = JSON.parse(aiData.choices[0].message.content);
