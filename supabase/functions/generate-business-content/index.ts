@@ -7,7 +7,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 // Validation schema
 const businessContentSchema = z.object({
-  type: z.enum(['business-ideas', 'business-plan', 'pitch-deck', 'legal-docs', 'biography']),
+  type: z.enum(['business-ideas', 'business-plan', 'pitch-deck', 'legal-docs', 'biography', 'business-foundation', 'marketing-strategy', 'social-media']),
   data: z.record(z.any()).refine((obj) => Object.keys(obj).length <= 50, "Data must contain at most 50 fields")
 });
 
