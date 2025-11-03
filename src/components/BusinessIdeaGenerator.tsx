@@ -31,6 +31,12 @@ export const BusinessIdeaGenerator = () => {
     const startTime = Date.now();
     
     try {
+      // Get user session for auth
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please sign in to use this tool");
+      }
+
       // Track analytics
       const inputData = { skills, interests, budget };
       const inputQuality = calculateInputQuality();
@@ -46,6 +52,9 @@ export const BusinessIdeaGenerator = () => {
             focus,
             systemModifiers: getSystemPromptModifiers(preferences, focus)
           }
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 

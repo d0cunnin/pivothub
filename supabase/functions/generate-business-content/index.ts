@@ -1392,7 +1392,30 @@ Keep each section concise and actionable. Use plain text without markdown.`
 
   } catch (error) {
     console.error('Error generating content:', error)
-    const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    // Extract meaningful error message from Response objects or Errors
+    let errorMessage = 'An unexpected error occurred';
+    let statusCode = 500;
+    
+    if (error instanceof Response) {
+      statusCode = error.status;
+      try {
+        const errorData = await error.json();
+        errorMessage = errorData.error || errorData.message || `Server error: ${error.status}`;
+      } catch {
+        errorMessage = `Server error: ${error.status} ${error.statusText || ''}`.trim();
+      }
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+      // Check for specific error types
+      if (error.message.includes('Auth session missing')) {
+        statusCode = 401;
+        errorMessage = 'Authentication required. Please sign in to use this tool.';
+      } else if (error.message.includes('RATE_LIMIT')) {
+        statusCode = 429;
+        errorMessage = 'Rate limit exceeded. Please try again in a few moments.';
+      }
+    }
     
     const serviceClient = createClient(
       Deno.env.get('SUPABASE_URL')!,
@@ -1413,7 +1436,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
       JSON.stringify({ error: errorMessage }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500 
+        status: statusCode 
       }
     )
   }

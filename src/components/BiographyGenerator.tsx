@@ -41,6 +41,12 @@ export const BiographyGenerator = () => {
     setIsGenerating(true);
     
     try {
+      // Get user session for auth
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please sign in to use this tool");
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-business-content', {
         body: {
           type: 'biography',
@@ -55,6 +61,9 @@ export const BiographyGenerator = () => {
             achievements,
             tone
           }
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 

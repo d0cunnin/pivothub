@@ -169,10 +169,21 @@ export const BusinessFoundationBuilder = () => {
     setIsGenerating(true);
     
     try {
+      // Get user session for auth
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to use this tool");
+        setIsGenerating(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-business-content', {
         body: {
           type: 'business-foundation',
           data: formData
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 
