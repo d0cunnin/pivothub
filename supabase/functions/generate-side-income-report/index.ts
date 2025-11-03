@@ -328,7 +328,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5',
+        model: 'google/gemini-2.5-flash',
         max_completion_tokens: 5000,
         messages: [
           { role: 'system', content: systemPrompt },
