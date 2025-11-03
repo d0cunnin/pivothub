@@ -28,6 +28,19 @@ serve(async (req) => {
   let userId: string | null = null;
 
   try {
+    // Apply security guard FIRST (before reading body)
+    const guardResult = await guard(req, {
+      endpoint: 'name-checker',
+      cost: 2, // 2 credits per name check
+      requireAuth: true,
+      requireCaptcha: false,
+      maxReqsPerMinute: 20
+    });
+
+    startTime = guardResult.startTime;
+    ip = guardResult.ip;
+    userId = guardResult.userId;
+
     const rawBody = await req.json();
     
     // Validate input
@@ -40,19 +53,6 @@ serve(async (req) => {
     }
     
     const { businessName } = validation.data;
-
-    // Apply security guard
-    const guardResult = await guard(req, {
-      endpoint: 'name-checker',
-      cost: 2, // 2 credits per name check
-      requireAuth: true,
-      requireCaptcha: false,
-      maxReqsPerMinute: 20
-    });
-
-    startTime = guardResult.startTime;
-    ip = guardResult.ip;
-    userId = guardResult.userId;
 
     // Clean up the business name for domain checking
     const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '');
