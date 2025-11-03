@@ -84,7 +84,24 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
   // Authentication check
   let userId: string | null = null;
   if (requireAuth) {
+    const authHeader = req.headers.get('authorization') || '';
+    
+    console.log('[GUARD] Authentication check:', {
+      endpoint,
+      hasAuthHeader: !!authHeader,
+      authHeaderPrefix: authHeader.substring(0, 20) + '...',
+      authHeaderLength: authHeader.length
+    });
+    
     const { data: { user }, error: userError } = await supabase.auth.getUser();
+    
+    console.log('[GUARD] Auth result:', {
+      endpoint,
+      hasUser: !!user,
+      userId: user?.id || 'none',
+      errorCode: userError?.code || 'none',
+      errorMessage: userError?.message || 'none'
+    });
     
     if (!user || userError) {
       await logRequest(supabase, {
@@ -94,10 +111,19 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
         userAgent: req.headers.get('user-agent') || 'unknown',
         creditsCharged: 0,
         success: false,
-        errorMessage: 'Unauthorized',
+        errorMessage: `Unauthorized: ${userError?.message || 'No user found'}`,
         requestDurationMs: Date.now() - startTime
       });
-      throw new Response('Unauthorized - Please sign in', { status: 401 });
+      throw new Response(
+        JSON.stringify({ 
+          error: 'Unauthorized', 
+          details: userError?.message || 'No valid authentication token'
+        }), 
+        { 
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
     }
     userId = user.id;
   }

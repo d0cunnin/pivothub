@@ -36,6 +36,19 @@ export const NameChecker = () => {
     setIsChecking(true);
     
     try {
+      // ✅ ADD: Debug session state before API call
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log('[NameChecker] Pre-API Session check:', {
+        hasSession: !!session,
+        expiresAt: session?.expires_at ? new Date(session.expires_at * 1000).toISOString() : 'none',
+        userId: session?.user?.id || 'none',
+        accessToken: session?.access_token ? 'present (length: ' + session.access_token.length + ')' : 'missing'
+      });
+
+      if (!session) {
+        throw new Error('No active session - please log in again');
+      }
+
       const { data, error } = await supabase.functions.invoke('name-checker', {
         body: {
           businessName: businessName.trim()

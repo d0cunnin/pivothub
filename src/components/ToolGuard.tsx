@@ -87,6 +87,49 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
       return;
     }
 
+    // ✅ CRITICAL FIX: Verify and refresh the session before allowing tool usage
+    console.log('[ToolGuard] Verifying session before tool use...');
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+    if (!session || sessionError) {
+      console.error('[ToolGuard] Session invalid, forcing re-login:', sessionError);
+      toast({
+        title: "Session Expired",
+        description: "Please sign in again to continue using tools.",
+        variant: "destructive",
+      });
+      setShowAuthModal(true);
+      return;
+    }
+
+    // Check if session is about to expire (< 5 minutes remaining)
+    const expiresAt = session.expires_at ? session.expires_at * 1000 : 0;
+    const timeUntilExpiry = expiresAt - Date.now();
+
+    console.log('[ToolGuard] Session check:', {
+      expiresAt: new Date(expiresAt).toISOString(),
+      timeUntilExpiry: Math.floor(timeUntilExpiry / 1000) + 's',
+      needsRefresh: timeUntilExpiry < 5 * 60 * 1000
+    });
+
+    if (timeUntilExpiry < 5 * 60 * 1000) {
+      console.log('[ToolGuard] Session expiring soon, refreshing...');
+      const { data: { session: newSession }, error: refreshError } = await supabase.auth.refreshSession();
+      
+      if (refreshError || !newSession) {
+        console.error('[ToolGuard] Session refresh failed:', refreshError);
+        toast({
+          title: "Session Refresh Failed",
+          description: "Please sign in again to continue.",
+          variant: "destructive",
+        });
+        setShowAuthModal(true);
+        return;
+      }
+      
+      console.log('[ToolGuard] Session refreshed successfully');
+    }
+
     // Get credit cost for this tool
     const creditCost = getToolCreditCost(toolName || 'generic');
     
