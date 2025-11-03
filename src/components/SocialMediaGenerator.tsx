@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Hash, Share2, Calendar, Copy, Download, FileText, Image, Video } from 'lucide-react';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SocialMediaPost {
   day: number;
@@ -56,13 +57,18 @@ export const SocialMediaGenerator = () => {
     }
 
     setIsGenerating(true);
+    
     try {
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/social-media-content', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error("Please sign in to generate content");
+        setIsGenerating(false);
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('social-media-content', {
+        body: {
           businessName,
           businessNiche,
           creatorType,
@@ -70,20 +76,27 @@ export const SocialMediaGenerator = () => {
           contentFocus,
           platforms: selectedPlatforms,
           tone
-        }),
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate content');
+      if (error) {
+        throw error;
+      }
+
+      if (!data?.contentCalendar) {
+        throw new Error('No content calendar received');
       }
 
       setContentCalendar(data.contentCalendar);
       toast.success('30-day content calendar generated!');
+      
     } catch (error) {
       console.error('Error generating content:', error);
-      toast.error('Failed to generate content calendar');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to generate content calendar';
+      toast.error(errorMessage);
     } finally {
       setIsGenerating(false);
     }
