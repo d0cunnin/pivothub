@@ -69,14 +69,21 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
     }
   }
 
-  // Initialize Supabase client with caller's JWT
+  // Extract JWT token from Authorization header
   const authHeader = req.headers.get('Authorization') || '';
+  const token = authHeader.replace('Bearer ', '').trim();
+  
+  // Initialize Supabase client with caller's JWT
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_ANON_KEY')!,
     {
       global: {
         headers: { Authorization: authHeader }
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
       }
     }
   );
@@ -87,11 +94,13 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
     console.log('[GUARD] Authentication check:', {
       endpoint,
       hasAuthHeader: !!authHeader,
-      authHeaderPrefix: authHeader.substring(0, 20) + '...',
-      authHeaderLength: authHeader.length
+      hasToken: !!token,
+      tokenPrefix: token.substring(0, 20) + '...',
+      tokenLength: token.length
     });
     
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    // Verify the JWT token
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
     
     console.log('[GUARD] Auth result:', {
       endpoint,
@@ -115,7 +124,7 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
       throw new Response(
         JSON.stringify({ 
           error: 'Unauthorized', 
-          details: userError?.message || 'No valid authentication token'
+          details: userError?.message || 'Auth session missing!'
         }), 
         { 
           status: 401,
