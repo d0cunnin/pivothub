@@ -12,6 +12,7 @@ import { Target, Download, Sparkles, HelpCircle } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from "sonner";
+import jsPDF from 'jspdf';
 
 interface FoundationData {
   businessName: string;
@@ -121,43 +122,88 @@ export const BusinessFoundationBuilder = () => {
   const exportFoundation = () => {
     if (!results) return;
     
-    let content = `BUSINESS FOUNDATION DOCUMENT\n`;
-    content += `Business: ${formData.businessName}\n`;
-    content += `Generated: ${new Date().toLocaleDateString()}\n\n`;
-    content += `${'='.repeat(80)}\n\n`;
+    try {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 20;
+      const maxLineWidth = pageWidth - (margin * 2);
+      let yPosition = margin;
 
-    const sections = [
-      { title: "VISION STATEMENT", content: results.vision },
-      { title: "MISSION STATEMENT", content: results.mission },
-      { title: "CORE VALUES", content: results.values },
-      { title: "STRATEGIC PILLARS", content: results.pillars },
-      { title: "BUSINESS GOALS", content: results.goals },
-      { title: "KEY OBJECTIVES", content: results.objectives },
-      { title: "PROBLEM STATEMENT", content: results.problemStatement },
-      { title: "SOLUTION", content: results.solution },
-      { title: "TARGET AUDIENCE", content: results.targetAudience },
-      { title: "IDEAL CUSTOMER PROFILE", content: results.idealCustomerProfile },
-      { title: "MARKET SIZE", content: results.marketSize },
-      { title: "BUSINESS MODEL", content: results.businessModel },
-      { title: "GO-TO-MARKET STRATEGY", content: results.goToMarketStrategy }
-    ];
+      const addText = (text: string, fontSize: number = 11, isBold: boolean = false) => {
+        doc.setFontSize(fontSize);
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+        
+        const lines = doc.splitTextToSize(text, maxLineWidth);
+        
+        lines.forEach((line: string) => {
+          if (yPosition > pageHeight - margin) {
+            doc.addPage();
+            yPosition = margin;
+          }
+          doc.text(line, margin, yPosition);
+          yPosition += fontSize * 0.5;
+        });
+        
+        yPosition += 5;
+      };
 
-    sections.forEach(section => {
-      content += `${section.title}\n`;
-      content += `${'-'.repeat(60)}\n\n`;
-      content += `${section.content}\n\n`;
-      content += `${'='.repeat(80)}\n\n`;
-    });
+      // Cover page
+      doc.setFontSize(24);
+      doc.setFont('helvetica', 'bold');
+      doc.text('BUSINESS FOUNDATION', pageWidth / 2, 100, { align: 'center' });
+      doc.setFontSize(18);
+      doc.text(formData.businessName || 'Your Business', pageWidth / 2, 120, { align: 'center' });
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2, 140, { align: 'center' });
+      
+      doc.addPage();
+      yPosition = margin;
 
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `business-foundation-${formData.businessName.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+      // Add all foundation sections
+      const sections = [
+        { title: "VISION STATEMENT", content: results.vision },
+        { title: "MISSION STATEMENT", content: results.mission },
+        { title: "CORE VALUES", content: results.values },
+        { title: "STRATEGIC PILLARS", content: results.pillars },
+        { title: "BUSINESS GOALS", content: results.goals },
+        { title: "KEY OBJECTIVES", content: results.objectives },
+        { title: "PROBLEM STATEMENT", content: results.problemStatement },
+        { title: "SOLUTION", content: results.solution },
+        { title: "TARGET AUDIENCE", content: results.targetAudience },
+        { title: "IDEAL CUSTOMER PROFILE", content: results.idealCustomerProfile },
+        { title: "MARKET SIZE", content: results.marketSize },
+        { title: "BUSINESS MODEL", content: results.businessModel },
+        { title: "GO-TO-MARKET STRATEGY", content: results.goToMarketStrategy }
+      ];
+
+      sections.forEach(section => {
+        addText(section.title, 14, true);
+        addText(section.content, 11);
+        yPosition += 5;
+      });
+
+      // Footer
+      const totalPages = doc.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(128, 128, 128);
+        doc.text(
+          `Generated by HireYourself Platform | Page ${i} of ${totalPages}`,
+          pageWidth / 2,
+          pageHeight - 10,
+          { align: 'center' }
+        );
+      }
+
+      doc.save(`business-foundation-${formData.businessName.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.pdf`);
+      toast.success('Business foundation exported to PDF!');
+    } catch (error) {
+      console.error('PDF export error:', error);
+      toast.error('Failed to export PDF');
+    }
   };
 
   const generateFoundation = async () => {
@@ -619,7 +665,7 @@ export const BusinessFoundationBuilder = () => {
               <h4 className="text-xl font-bold text-foreground">Your Business Foundation</h4>
               <Button variant="outline" size="sm" onClick={exportFoundation}>
                 <Download className="h-4 w-4 mr-2" />
-                Export
+                Download PDF
               </Button>
             </div>
 

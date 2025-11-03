@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   MessageSquare, 
   Clock, 
@@ -114,26 +115,32 @@ export const EnhancedInterviewCoach = () => {
 
     setLoading(true);
     try {
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/interview-questions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Get session for authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error('Please sign in to generate interview questions');
+        setLoading(false);
+        return;
+      }
+
+      // Use Supabase SDK with proper authentication
+      const { data, error } = await supabase.functions.invoke('interview-questions', {
+        body: {
           jobTitle,
           industry,
           level,
           questionTypes,
           jobDescription,
           difficulty: difficultyLevel[0]
-        }),
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate questions');
-      }
+      if (error) throw error;
+      if (!data?.questions) throw new Error('No questions received');
 
       const enhancedQuestions: Question[] = data.questions.map((q: any) => ({
         ...q,
@@ -167,25 +174,31 @@ export const EnhancedInterviewCoach = () => {
     setLoading(true);
     
     try {
-      const response = await fetch('https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/interview-feedback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Get session for authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error('Please sign in to get feedback');
+        setLoading(false);
+        return;
+      }
+
+      // Use Supabase SDK with proper authentication
+      const { data, error } = await supabase.functions.invoke('interview-feedback', {
+        body: {
           question: questions[currentQuestionIndex].text,
           answer: currentAnswer,
           questionType: questions[currentQuestionIndex].type,
           jobTitle: jobTitle,
           difficulty: level
-        }),
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to analyze answer');
-      }
+      if (error) throw error;
+      if (!data?.feedback) throw new Error('No feedback received');
 
       const duration = Math.round((Date.now() - startTime) / 1000);
       const enhancedResponse: Response = {

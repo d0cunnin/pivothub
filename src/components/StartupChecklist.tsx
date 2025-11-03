@@ -4,6 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckSquare, Clock, Building, Download } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface ChecklistItem {
   id: string;
@@ -27,26 +29,34 @@ export const StartupChecklist = () => {
     setIsGenerating(true);
     
     try {
-      const response = await fetch('/functions/v1/startup-checklist', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Get session for authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        console.error('No session found');
+        setIsGenerating(false);
+        toast.error('Please sign in to generate personalized checklist');
+        // Fall through to fallback checklist
+        throw new Error('Authentication required');
+      }
+
+      // Use Supabase SDK with proper authentication
+      const { data, error } = await supabase.functions.invoke('startup-checklist', {
+        body: {
           businessType: businessStructure.replace('-', ' '),
-          industry: 'General', // Could add industry field later
+          industry: 'General',
           location: state.replace('-', ' '),
-          fundingGoal: '$50,000', // Could add funding field later
+          fundingGoal: '$50,000',
           timeline: '3-6 months',
-          hasCofounder: false // Could add cofounder field later
-        }),
+          hasCofounder: false
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate checklist');
-      }
+      if (error) throw error;
+      if (!data?.checklist) throw new Error('No checklist received');
 
       // Transform AI response to match existing interface
       const transformedChecklist: ChecklistItem[] = [];
@@ -67,6 +77,7 @@ export const StartupChecklist = () => {
       });
 
       setChecklist(transformedChecklist.sort((a, b) => a.timeline.localeCompare(b.timeline)));
+      toast.success('Startup checklist generated successfully!');
     } catch (error) {
       console.error('Error generating checklist:', error);
       // Fallback to basic checklist

@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Palette, Type, Sparkles, AlertCircle } from 'lucide-react';
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface LogoConcept {
   style: string;
@@ -31,12 +33,18 @@ export const LogoGenerator = () => {
     setConcepts([]);
     
     try {
-      const response = await fetch(`https://fkvjsgqjgissolpdqbdh.supabase.co/functions/v1/generate-logo`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Get session for authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error('Please sign in to generate logos');
+        setIsGenerating(false);
+        return;
+      }
+
+      // Use Supabase SDK with proper authentication
+      const { data, error } = await supabase.functions.invoke('generate-logo', {
+        body: {
           businessName,
           industry,
           style,
@@ -44,14 +52,14 @@ export const LogoGenerator = () => {
           fonts,
           textDesired,
           additionalPrompt
-        })
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
-      const data = await response.json();
-      
-      if (data.error) {
-        throw new Error(data.error);
-      }
+      if (error) throw error;
+      if (!data?.logos) throw new Error('No logos received');
 
       // Convert API response to LogoConcept format, filtering out failed generations
       const logosConcepts: LogoConcept[] = data.logos
@@ -69,9 +77,10 @@ export const LogoGenerator = () => {
       }
 
       setConcepts(logosConcepts);
+      toast.success('Logos generated successfully!');
     } catch (error) {
       console.error('Error generating logos:', error);
-      alert(`Failed to generate logos: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error(`Failed to generate logos: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsGenerating(false);
     }
