@@ -52,6 +52,9 @@ export const NameChecker = () => {
       const { data, error } = await supabase.functions.invoke('name-checker', {
         body: {
           businessName: businessName.trim()
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 
