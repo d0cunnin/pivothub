@@ -68,12 +68,12 @@ serve(async (req) => {
     });
 
     const requestBody = await req.json();
-    const { assessmentData } = requestBody;
+    const rawAssessmentData = requestBody.assessmentData;
     
     console.log('📥 Received request');
-    console.log('Assessment data keys:', Object.keys(assessmentData || {}));
-    console.log('Constraints type:', typeof assessmentData?.constraints, 'Value:', assessmentData?.constraints);
-    console.log('Skills count:', assessmentData?.skills?.length);
+    console.log('Assessment data keys:', Object.keys(rawAssessmentData || {}));
+    console.log('Constraints type:', typeof rawAssessmentData?.constraints, 'Value:', rawAssessmentData?.constraints);
+    console.log('Skills count:', rawAssessmentData?.skills?.length);
 
     const validation = requestSchema.safeParse(requestBody);
     
@@ -83,7 +83,7 @@ serve(async (req) => {
         JSON.stringify({ 
           error: 'Invalid input - schema validation failed', 
           details: validation.error.issues,
-          received: Object.keys(assessmentData || {})
+          received: Object.keys(rawAssessmentData || {})
         }),
         { 
           status: 400, 
