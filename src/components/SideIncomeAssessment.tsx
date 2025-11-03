@@ -498,10 +498,10 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
+                Generating Your Blueprint...
               </>
             ) : (
-              'Continue to Payment'
+              'Generate My Free Blueprint'
             )}
           </Button>
         </form>
