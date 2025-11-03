@@ -43,31 +43,85 @@ export default function SideIncomeBlueprint() {
 
     setLoading(true);
     try {
+      // Verify we have a valid session with JWT token
+      console.log('Verifying auth session...');
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error('Session error:', sessionError);
+        throw new Error('Session verification failed');
+      }
+      
+      if (!session) {
+        console.error('No active session found');
+        toast({
+          title: "Session Expired",
+          description: "Your session has expired. Redirecting to sign in...",
+          variant: "destructive"
+        });
+        navigate("/auth?redirect=/earnit");
+        return;
+      }
+
+      console.log('Session verified. User ID:', session.user.id);
+      console.log('Inserting assessment...');
+
       const { data, error } = await supabase
         .from('side_income_assessments')
         .insert({
-          user_id: user.id,
+          user_id: session.user.id,
           assessment_data: assessmentData,
           credits_used: 2
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Insert error:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint
+        });
+        throw error;
+      }
 
+      console.log('Assessment saved successfully:', data.id);
       setAssessmentId(data.id);
       setStep('report');
-    } catch (error) {
-      console.error('Error saving assessment:', error);
+      
       toast({
-        title: "Error",
-        description: "Failed to save assessment. Please try again.",
+        title: "Success!",
+        description: "Your assessment has been saved. Generating your blueprint...",
+      });
+      
+    } catch (error: any) {
+      console.error('Error saving assessment:', error);
+      
+      // Provide specific error messages based on error type
+      let errorTitle = "Error Saving Assessment";
+      let errorDescription = "Failed to save assessment. Please try again.";
+      
+      if (error.message?.toLowerCase().includes('permission denied')) {
+        errorTitle = "Permission Error";
+        errorDescription = "Unable to save assessment. Please try signing out and back in.";
+      } else if (error.message?.toLowerCase().includes('session')) {
+        errorTitle = "Session Expired";
+        errorDescription = "Your login session has expired. Please sign in again.";
+      } else if (error.message?.toLowerCase().includes('jwt')) {
+        errorTitle = "Authentication Error";
+        errorDescription = "Authentication token expired. Please refresh the page and try again.";
+      }
+      
+      toast({
+        title: errorTitle,
+        description: errorDescription,
         variant: "destructive"
       });
     } finally {
       setLoading(false);
     }
-  }, [user, toast]);
+  }, [user, toast, navigate]);
 
   // Check if assessment already completed (from URL parameter)
   useEffect(() => {
