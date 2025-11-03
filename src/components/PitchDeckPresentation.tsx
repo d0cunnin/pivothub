@@ -79,7 +79,7 @@ export const PitchDeckPresentation = ({
                 style={{ 
                   fontSize: index === 0 ? '3rem' : index === 1 ? '1.5rem' : '1.25rem',
                   fontWeight: index === 0 ? 'bold' : 'normal',
-                  color: index === 0 ? primaryColor : 'inherit'
+                  color: index === 0 ? primaryColor : '#000000'
                 }}
               >
                 {trimmedLine}
@@ -98,7 +98,7 @@ export const PitchDeckPresentation = ({
           return (
             <li key={index} className="flex items-start">
               <span className="mr-3 text-2xl" style={{ color: accentColor }}>•</span>
-              <span className="text-xl leading-relaxed">{trimmedLine}</span>
+              <span className="text-xl leading-relaxed text-foreground">{trimmedLine}</span>
             </li>
           );
         })}
@@ -174,7 +174,7 @@ export const PitchDeckPresentation = ({
           )}
           
           {/* Slide Content */}
-          <div className={`text-muted-foreground space-y-2 flex-1 overflow-y-auto relative z-10 ${currentSlide === 0 ? 'h-full' : ''}`}>
+          <div className={`text-foreground space-y-2 flex-1 overflow-y-auto relative z-10 ${currentSlide === 0 ? 'h-full' : ''}`}>
             {formatContent(slide.content, currentSlide === 0)}
           </div>
 
