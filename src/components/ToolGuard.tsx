@@ -89,7 +89,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
 
     // ✅ CRITICAL FIX: Verify and refresh the session before allowing tool usage
     console.log('[ToolGuard] Verifying session before tool use...');
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+    const { data: { session }, error: sessionError } = await supabase.auth.refreshSession();
 
     if (!session || sessionError) {
       console.error('[ToolGuard] Session invalid, forcing re-login:', sessionError);

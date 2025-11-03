@@ -84,8 +84,6 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
   // Authentication check
   let userId: string | null = null;
   if (requireAuth) {
-    const authHeader = req.headers.get('authorization') || '';
-    
     console.log('[GUARD] Authentication check:', {
       endpoint,
       hasAuthHeader: !!authHeader,
