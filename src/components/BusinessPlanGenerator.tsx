@@ -45,10 +45,19 @@ export const BusinessPlanGenerator = () => {
     setIsGenerating(true);
     
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please sign in to use this tool");
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-business-content', {
         body: {
           type: 'business-plan',
           data: formData
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 

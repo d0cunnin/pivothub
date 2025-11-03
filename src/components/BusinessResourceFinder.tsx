@@ -40,6 +40,12 @@ export const BusinessResourceFinder = () => {
     setIsSearching(true);
     
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please sign in to use this tool");
+      }
+
       const { data: fnData, error: fnError } = await supabase.functions.invoke('business-resources', {
         body: {
           businessType: 'Small Business',
@@ -48,6 +54,9 @@ export const BusinessResourceFinder = () => {
           location: zipCode,
           specificNeeds: resourceType === 'all' ? 'General business support' : resourceType,
         },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (fnError) {

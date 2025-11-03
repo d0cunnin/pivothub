@@ -209,9 +209,21 @@ const FundIt = () => {
     setIsGenerating(true);
     
     try {
-      // Use secure Supabase client with automatic auth header injection
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Session Expired', {
+          description: 'Please log in again to continue.'
+        });
+        setIsGenerating(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-grant-content', {
-        body: formData
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) {

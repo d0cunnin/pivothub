@@ -33,10 +33,19 @@ export const CareerAdvisorChatbot = () => {
     try {
       console.log('🚀 Sending request to career advisor:', { message: userMessage });
       
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please sign in to use this tool");
+      }
+      
       const { data, error } = await supabase.functions.invoke('career-advisor', {
         body: {
           message: userMessage,
           conversationHistory: messages.slice(1) // Exclude the initial greeting
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 

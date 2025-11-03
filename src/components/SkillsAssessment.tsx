@@ -639,7 +639,9 @@ export const SkillsAssessment = () => {
     try {
       // Get auth token for the request
       const { data: { session } } = await supabase.auth.getSession();
-      const authToken = session?.access_token;
+      if (!session) {
+        throw new Error("Please sign in to use this tool");
+      }
 
       const response = await supabase.functions.invoke('enhanced-assessment-analyzer', {
         body: {
@@ -647,7 +649,9 @@ export const SkillsAssessment = () => {
           responses: answers,
           userProfile: {}
         },
-        headers: authToken ? { Authorization: `Bearer ${authToken}` } : {}
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (response.data && !response.error) {

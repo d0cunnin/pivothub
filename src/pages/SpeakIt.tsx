@@ -132,6 +132,9 @@ const SpeakIt = () => {
 
       const response = await supabase.functions.invoke('speak-it', {
         body: requestBody,
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (response.error) throw response.error;

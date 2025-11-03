@@ -29,10 +29,19 @@ export const BusinessMentorChatbot = () => {
 
   const getAIResponse = async (message: string, history: Message[]): Promise<string> => {
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please sign in to use this tool");
+      }
+
       const { data, error } = await supabase.functions.invoke('business-mentor', {
         body: {
           message,
           conversationHistory: history.slice(-10) // Include last 10 messages for context
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 

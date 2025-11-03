@@ -121,8 +121,19 @@ const LaunchIt = () => {
 
     setIsGenerating(true);
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to use this tool");
+        setIsGenerating(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-launch-strategy', {
-        body: formData
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) throw error;

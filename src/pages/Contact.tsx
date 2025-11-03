@@ -24,8 +24,16 @@ const Contact = () => {
     e.preventDefault();
     
     try {
+      // Get session (optional for contact form - it may work without auth)
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: formData
+        body: formData,
+        ...(session ? {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`
+          }
+        } : {})
       });
 
       if (error) throw error;

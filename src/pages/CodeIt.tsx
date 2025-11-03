@@ -84,8 +84,19 @@ print(a + b)`,
         return;
       }
 
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to use this tool");
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('code-it', {
-        body: { code: userCode }
+        body: { code: userCode },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) throw error;

@@ -26,8 +26,23 @@ export const AccountSettings = () => {
   const handleCancelSubscription = async () => {
     setIsLoading(true);
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to cancel subscription.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke("cancel-subscription", {
-        body: { reason: cancelReason }
+        body: { reason: cancelReason },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) throw error;
@@ -65,10 +80,25 @@ export const AccountSettings = () => {
 
     setIsLoading(true);
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to delete account.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke("delete-account", {
         body: { 
           confirmation: deleteConfirmation,
           reason: deleteReason 
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 
@@ -108,8 +138,24 @@ export const AccountSettings = () => {
 
     try {
       setIsLoading(true);
+      
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to purchase credits.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('purchase-extra-credits', {
-        body: { credits }
+        body: { credits },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) throw error;

@@ -44,8 +44,19 @@ const PromptIt = () => {
         return;
       }
 
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to use this tool");
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('prompt-it', {
-        body: { prompt: userPrompt }
+        body: { prompt: userPrompt },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) {

@@ -78,6 +78,18 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
 
     setIsSending(true);
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to send results.",
+          variant: "destructive",
+        });
+        setIsSending(false);
+        return;
+      }
+
       const { error } = await supabase.functions.invoke('send-assessment-results', {
         body: {
           email: emailAddress,
@@ -85,6 +97,9 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
           assessmentType,
           results: results,
           analysis: results
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 

@@ -75,8 +75,19 @@ const DeployIt = () => {
         return;
       }
 
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to use this tool");
+        setIsLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('deploy-it', {
-        body: formData
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) throw error;

@@ -84,6 +84,12 @@ const Admin = () => {
   // Grant access mutation
   const grantAccessMutation = useMutation({
     mutationFn: async (params: { userId: string; tier: string; duration: string; notes: string }) => {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Please sign in to manage subscriptions");
+      }
+
       const { data, error } = await supabase.functions.invoke("admin-manage-subscription", {
         body: {
           action: "grant",
@@ -92,6 +98,9 @@ const Admin = () => {
           duration: params.duration,
           notes: params.notes,
         },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
+        }
       });
 
       if (error) throw error;

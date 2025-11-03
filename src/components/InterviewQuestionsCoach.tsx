@@ -77,6 +77,14 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to use this tool");
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('interview-questions', {
         body: {
           jobTitle,
@@ -84,6 +92,9 @@ export const InterviewQuestionsCoach = () => {
           level,
           questionTypes,
           jobDescription
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 
@@ -113,12 +124,23 @@ export const InterviewQuestionsCoach = () => {
 
     setLoading(true);
     try {
+      // Get session for authorization
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to use this tool");
+        setLoading(false);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('interview-feedback', {
         body: {
           question: questions[currentQuestionIndex].text,
           answer: currentAnswer,
           questionType: questions[currentQuestionIndex].type,
           jobTitle: jobTitle
+        },
+        headers: {
+          Authorization: `Bearer ${session.access_token}`
         }
       });
 
