@@ -51,20 +51,34 @@ export const Header = () => {
             />
           </Link>
           
-          <nav className="flex items-center justify-center flex-1 mx-2 md:mx-8 overflow-x-auto">
+          <nav className="flex items-center justify-center flex-1 mx-2 md:mx-8">
             <div className="flex items-center space-x-2 md:space-x-4 text-xs md:text-sm">
-              <Link
-                to="/about" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/about' ? 'text-primary font-medium' : ''}`}
-              >
-                About
-              </Link>
-              <Link
-                to="/before-you-start" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/before-you-start' ? 'text-primary font-medium' : ''}`}
-              >
-                Before You Start
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="flex items-center space-x-1">
+                    <span 
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/about', '/before-you-start'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                    >
+                      About
+                    </span>
+                    <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
+                  <DropdownMenuItem asChild>
+                    <Link to="/about" className="flex w-full cursor-pointer">
+                      Our Story
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/before-you-start" className="flex w-full cursor-pointer">
+                      Before You Start
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Link 
                 to="/pricing" 
                 className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/pricing' ? 'text-primary font-medium' : ''}`}
