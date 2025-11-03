@@ -45,9 +45,22 @@ serve(async (req) => {
   }
 
   try {
-    // Validate input with zod
+    // Validate input with zod - now accepts raw assessment data
     const requestSchema = z.object({
-      assessmentId: z.string().uuid('Invalid assessment ID format')
+      assessmentData: z.object({
+        employmentStatus: z.string(),
+        currentIncome: z.string(),
+        timeAvailable: z.string(),
+        timeframe: z.string(),
+        workEnvironment: z.string(),
+        clientInteraction: z.string(),
+        skills: z.array(z.string()),
+        goals: z.string(),
+        startupBudget: z.string(),
+        riskTolerance: z.string(),
+        constraints: z.string().optional(),
+        dealBreakers: z.string().optional(),
+      })
     });
 
     const validation = requestSchema.safeParse(await req.json());
@@ -65,71 +78,12 @@ serve(async (req) => {
       );
     }
 
-    const { assessmentId } = validation.data;
+    const { assessmentData } = validation.data;
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY')!;
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Get authenticated user from JWT (automatically verified by Supabase)
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { 
-          status: 401, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { 
-          status: 401, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    // Use authenticated user ID instead of request body
-    const userId = user.id;
-
-    // Fetch the assessment - enforce user ownership for security
-    const { data: assessment, error: fetchError } = await supabase
-      .from('side_income_assessments')
-      .select('*')
-      .eq('id', assessmentId)
-      .eq('user_id', userId)
-      .single();
-
-    if (fetchError || !assessment) {
-      throw new Error('Assessment not found or access denied');
-    }
-
-    // Credits already deducted when assessment was created - no additional checks needed
-
-    // Check if report already exists
-    const { data: existingReport } = await supabase
-      .from('side_income_reports')
-      .select('*')
-      .eq('assessment_id', assessmentId)
-      .maybeSingle();
-
-    if (existingReport) {
-      return new Response(
-        JSON.stringify({ report: existingReport }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    const assessmentData = assessment.assessment_data as any;
+    // No authentication required - direct report generation
+    // No database lookups needed - data provided directly
 
     // Generate comprehensive report using AI
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - SIDE INCOME BLUEPRINT
@@ -379,24 +333,9 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
     // Sanitize the report content to remove excessive markdown
     const sanitizedReport = sanitizeObject(reportContent);
 
-    // Save the report
-    const { data: newReport, error: insertError } = await supabase
-      .from('side_income_reports')
-      .insert({
-        assessment_id: assessmentId,
-        user_id: assessment.user_id,
-        report_content: sanitizedReport
-      })
-      .select()
-      .single();
-
-    if (insertError) {
-      console.error('Error saving report:', insertError);
-      throw new Error('Failed to save report');
-    }
-
+    // Return report directly without saving to database
     return new Response(
-      JSON.stringify({ report: newReport }),
+      JSON.stringify({ report: sanitizedReport }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 

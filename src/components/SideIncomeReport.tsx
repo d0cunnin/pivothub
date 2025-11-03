@@ -9,65 +9,34 @@ import { Separator } from "@/components/ui/separator";
 import { generateSideIncomeReportPDF } from "@/lib/pdf-generator";
 
 interface SideIncomeReportProps {
-  assessmentId: string;
+  assessmentId: string; // Now contains stringified assessment data
 }
 
 export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps) {
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
+  const [generating, setGenerating] = useState(true);
   const [report, setReport] = useState<any>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    loadReport();
-  }, [assessmentId]);
-
-  const loadReport = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('side_income_reports')
-        .select('*')
-        .eq('assessment_id', assessmentId)
-        .maybeSingle();
-
-      if (error) throw error;
-
-      if (data) {
-        setReport(data.report_content);
-      } else {
-        // Report doesn't exist, generate it
-        await generateReport();
-      }
-    } catch (error) {
-      console.error('Error loading report:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load report",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+    generateReport();
+  }, []);
 
   const generateReport = async () => {
     setGenerating(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      // Parse the assessment data from the string
+      const assessmentData = JSON.parse(assessmentId);
       
       const { data, error } = await supabase.functions.invoke('generate-side-income-report', {
-        body: { assessmentId },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`
-        }
+        body: { assessmentData }
       });
 
       if (error) throw error;
 
-      setReport(data.report.report_content);
+      setReport(data.report);
       toast({
-        title: "Success",
-        description: "Your personalized blueprint is ready!"
+        title: "Success!",
+        description: "Your personalized blueprint is ready!",
       });
     } catch (error) {
       console.error('Error generating report:', error);
@@ -100,20 +69,17 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
     }
   };
 
-  if (loading || generating) {
+  if (generating) {
     return (
       <div className="container mx-auto px-4 py-16">
         <Card className="max-w-2xl mx-auto">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
             <h3 className="text-lg font-semibold mb-2">
-              {generating ? "Generating Your Blueprint..." : "Loading Report..."}
+              Generating Your Blueprint...
             </h3>
             <p className="text-muted-foreground text-center">
-              {generating 
-                ? "Our AI is analyzing your assessment and creating a personalized plan. This may take a minute."
-                : "Please wait while we load your report."
-              }
+              Our AI is analyzing your assessment and creating a personalized plan. This may take a minute.
             </p>
           </CardContent>
         </Card>
