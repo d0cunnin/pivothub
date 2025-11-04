@@ -335,7 +335,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-5',
         max_tokens: 5000,
         messages: [
           { role: 'system', content: systemPrompt },

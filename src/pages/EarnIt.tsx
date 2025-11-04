@@ -205,14 +205,14 @@ export default function SideIncomeBlueprint() {
                 <CardTitle className="text-xl mb-4 text-center text-foreground">Complete Assessment</CardTitle>
                 <CardContent className="p-0 space-y-3">
                   <p className="text-foreground text-sm leading-relaxed">
-                    <strong>15-20 minute free assessment</strong> that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
+                    <strong>8-minute assessment</strong> that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
                   </p>
                   <p className="text-foreground text-sm leading-relaxed">
                     <strong>Pro tip:</strong> The more detailed your answers, the more personalized your recommendations. Our AI analyzes 50+ data points to match you with the perfect opportunities. Take your time and be honest—there are no wrong answers.
                   </p>
                   <div className="mt-4 p-3 bg-success/10 rounded-lg">
                     <p className="text-xs text-foreground font-medium">
-                      ✓ 100% Free - No sign-in required
+                      ✓ Requires active account
                     </p>
                   </div>
                 </CardContent>
@@ -225,14 +225,14 @@ export default function SideIncomeBlueprint() {
                 <CardTitle className="text-xl mb-4 text-center text-foreground">Get Your Blueprint</CardTitle>
                 <CardContent className="p-0 space-y-3">
                   <p className="text-foreground text-sm leading-relaxed">
-                    <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. No waiting, no manual review—your custom plan is generated immediately and <strong>completely free</strong>.
+                    <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. No waiting, no manual review—your custom plan is generated immediately and <strong>included with your subscription</strong>.
                   </p>
                   <p className="text-foreground text-sm leading-relaxed">
                     Download it as PDF and access your blueprint anytime from any device. <strong>Get started right now with no barriers.</strong>
                   </p>
                   <div className="mt-4 p-3 bg-success/10 rounded-lg">
                     <p className="text-xs text-foreground font-medium">
-                      ✓ Free report generation - No payment required
+                      ✓ Uses credits from your plan
                     </p>
                   </div>
                 </CardContent>
@@ -251,7 +251,7 @@ export default function SideIncomeBlueprint() {
                 Ready to Build Your Side Income?
               </h2>
               <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Get your custom blueprint absolutely free. Three personalized income ideas with a complete 90-day plan.
+                Get your custom blueprint with your subscription. Three personalized income ideas with a complete 90-day plan.
               </p>
 
               <div className="flex flex-wrap justify-center gap-6 mb-8">
@@ -269,14 +269,14 @@ export default function SideIncomeBlueprint() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">100% Free</span>
+                  <span className="text-sm">Included</span>
                 </div>
               </div>
 
               <div className="mb-8">
                 <div className="inline-block p-6 bg-gradient-card rounded-2xl border-2 border-primary/20">
-                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">FREE</span>
-                  <p className="text-sm text-muted-foreground mt-2">No sign-in or payment required</p>
+                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">INCLUDED</span>
+                  <p className="text-sm text-muted-foreground mt-2">Account required</p>
                 </div>
               </div>
 
@@ -292,18 +292,18 @@ export default function SideIncomeBlueprint() {
                     Loading...
                   </>
                 ) : (
-                  'Get Your Free Blueprint'
+                  'Get Your Blueprint'
                 )}
               </Button>
 
               <div className="flex flex-col gap-2 text-sm text-muted-foreground">
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-primary">✓</span>
-                  <span>100% Free - No sign-in required</span>
+                  <span>Account required</span>
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-primary">⚡</span>
-                  <span>Instant delivery • 15-minute assessment</span>
+                  <span>Instant delivery • 8-minute assessment</span>
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   <span className="text-primary">💰</span>
