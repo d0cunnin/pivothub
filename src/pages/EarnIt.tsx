@@ -341,13 +341,6 @@ export default function SideIncomeBlueprint() {
                 </CardHeader>
                 <CardContent className="space-y-4 pl-14">
                   <div>
-                    <h4 className="font-semibold mb-2">How We Match You:</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-                      Our AI analyzes your assessment answers across 50+ data points, comparing your skills, available time, financial goals, and risk tolerance against a database of 200+ proven income models. You receive 3 personalized recommendations ranked by feasibility score (1-10).
-                    </p>
-                  </div>
-
-                  <div>
                     <h4 className="font-semibold mb-2">Each Idea Includes:</h4>
                     <ul className="text-sm text-muted-foreground space-y-2">
                       <li>• <strong>Income Potential:</strong> Realistic ranges based on part-time effort</li>
@@ -361,62 +354,6 @@ export default function SideIncomeBlueprint() {
                 </CardContent>
               </Card>
 
-              <Card className="premium-card">
-                <CardHeader>
-                  <div className="flex items-start gap-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary text-lg font-bold">✓</span>
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-2xl mb-2">Week-by-Week Launch Plans</CardTitle>
-                      <CardDescription>90-day roadmap with daily action steps for each income idea</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4 pl-14">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    No more wondering "what do I do next?" Every blueprint includes a detailed 90-day timeline broken into 12 weekly milestones. Each week has specific action items, time estimates, and success criteria so you know exactly what to focus on. The plans include flexible pacing with catch-up strategies if you fall behind, priority flags for critical tasks, and links to recommended tools and resources.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <div className="flex items-start gap-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary text-lg font-bold">✓</span>
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-2xl mb-2">All Templates & Scripts</CardTitle>
-                      <CardDescription>Copy-paste resources to save 40+ hours of work</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4 pl-14">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Don't waste time creating everything from scratch. Your blueprint includes 15-20 proven templates customized for your specific income ideas. From client communication and business operations to marketing materials and sales scripts, these ready-to-use resources include industry-specific variations and customization tips so you're not sending generic messages. Each template comes with guidance on how to adapt it for your unique voice and target audience.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <div className="flex items-start gap-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary text-lg font-bold">✓</span>
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-2xl mb-2">Bonus Tax & Legal Guide</CardTitle>
-                      <CardDescription>Essential information to stay compliant and maximize deductions</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4 pl-14">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Starting a side income comes with important tax and legal considerations. Your blueprint includes a comprehensive guide covering the essentials every side hustler needs to know—no legal jargon, just clear explanations and actionable steps. Learn about business structures, tax basics, deductions, recordkeeping, and when to hire professional help. The guide provides general educational information with state-specific considerations to help you understand the basics and know when it's time to consult with a qualified tax professional or attorney.
-                  </p>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </div>

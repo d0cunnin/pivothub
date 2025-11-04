@@ -604,11 +604,6 @@ ${generatedMaterials.marketingPlan}
     <div className="space-y-6">
       <Card className="p-6 bg-card/50 backdrop-blur-sm border-primary/20">
         <h3 className="text-2xl font-bold mb-6 text-foreground">💰 Create $1M+ Courses from Your Expertise</h3>
-        <p className="text-base text-muted-foreground mb-6">
-          Built by a course creator with 20+ years experience building $1M+ courses from workshops, webinars, and masterclasses. 
-          Helped 500+ creators monetize their expertise, with some earning $2M+ annually selling online courses. 
-          Get organized, strategic, and effective teaching materials designed to maximize revenue.
-        </p>
         
         <div className="space-y-6">
           {/* Full Name */}
