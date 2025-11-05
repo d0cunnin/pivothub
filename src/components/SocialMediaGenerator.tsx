@@ -82,12 +82,20 @@ export const SocialMediaGenerator = () => {
         }
       });
 
-      if (error) {
-        throw error;
+      if (error || data?.error) {
+        throw new Error(error?.message || data?.error || 'Failed to generate content calendar');
       }
 
-      if (!data?.contentCalendar) {
-        throw new Error('No content calendar received');
+      if (!data?.contentCalendar || !Array.isArray(data.contentCalendar) || data.contentCalendar.length === 0) {
+        throw new Error('Invalid or empty content calendar received');
+      }
+
+      const hasValidContent = data.contentCalendar.every((post: any) => 
+        post.caption && post.caption.length > 20
+      );
+      
+      if (!hasValidContent) {
+        throw new Error('Content too short. Please try again.');
       }
 
       setContentCalendar(data.contentCalendar);
@@ -117,7 +125,7 @@ export const SocialMediaGenerator = () => {
     const pdf = new jsPDF();
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 20;
+    const margin = 72;
     let yPos = margin;
 
     // Title

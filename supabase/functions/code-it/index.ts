@@ -49,43 +49,70 @@ Format your response as JSON with these keys:
 - expectedOutput: string (what would this output if run)
 - tips: string (helpful tips or improvements)`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Explain this code:\n\n${code}` }
-        ],
-        max_completion_tokens: 1200,
-        response_format: { type: "json_object" }
-      }),
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Lovable AI Gateway error:', response.status, errorText);
-      throw new Error(`Lovable AI Gateway error: ${response.status} - ${errorText.slice(0, 200)}`);
+    try {
+      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Explain this code:\n\n${code}` }
+          ],
+          max_completion_tokens: 1200,
+          response_format: { type: "json_object" }
+        }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        }
+        if (response.status === 402) {
+          throw new Error('AI credits exhausted. Please add credits in Settings.');
+        }
+        const errorText = await response.text();
+        console.error('Lovable AI Gateway error:', response.status, errorText);
+        throw new Error(`Lovable AI Gateway error: ${response.status} - ${errorText.slice(0, 200)}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices[0]?.message?.content;
+      
+      if (!content) {
+        throw new Error('Empty response from AI');
+      }
+
+      console.log('AI response length:', content.length);
+
+      const result = JSON.parse(content);
+
+      await deductCreditsOnSuccess(
+        supabase,
+        userId,
+        '/code-it',
+        1
+      );
+
+      return new Response(JSON.stringify(result), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        throw new Error('Request timeout. Please try again.');
+      }
+      throw error;
     }
-
-    const data = await response.json();
-    const content = data.choices[0].message.content;
-    const result = JSON.parse(content);
-
-    await deductCreditsOnSuccess(
-      supabase,
-      userId,
-      '/code-it',
-      1
-    );
-
-    return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
   } catch (error: any) {
     console.error('Error in code-it function:', error);
     return new Response(JSON.stringify({ error: error.message }), {

@@ -67,12 +67,12 @@ export const BiographyGenerator = () => {
         }
       });
 
-      if (error) {
-        throw new Error(error.message);
+      if (error || data?.error) {
+        throw new Error(error?.message || data?.error || 'Failed to generate biography');
       }
 
-      if (data.error) {
-        throw new Error(data.error);
+      if (!data?.content || data.content.length < 300) {
+        throw new Error('Biography content too short. Please try again.');
       }
 
       // Parse AI response into biography sections
@@ -89,8 +89,10 @@ export const BiographyGenerator = () => {
       };
       
       setContent(generatedContent);
-    } catch (error) {
+      toast({ title: "Success", description: "Biography package generated successfully!" });
+    } catch (error: any) {
       console.error('Error generating biography:', error);
+      toast({ title: "Error", description: error.message || "Failed to generate biography", variant: "destructive" });
       // Enhanced fallback based on user input
       const fallbackContent: BiographyContent = {
         founderBio100: `${founderName} is an experienced professional in ${background}, currently leading ${businessType}.`,
@@ -149,7 +151,7 @@ export const BiographyGenerator = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
-    const margin = 20;
+    const margin = 72;
     let yPos = margin;
 
     const addFooter = (pageNum: number) => {

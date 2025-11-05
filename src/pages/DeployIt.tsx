@@ -91,7 +91,13 @@ const DeployIt = () => {
         }
       });
 
-      if (error) throw error;
+      if (error || data?.error) {
+        throw new Error(error?.message || data?.error || 'Failed to generate blueprint');
+      }
+
+      if (!data?.blueprint || data.blueprint.length < 300) {
+        throw new Error('Blueprint too short. Please try again.');
+      }
 
       setBlueprint(data);
       toast.success("Agent blueprint generated successfully!");
@@ -110,7 +116,7 @@ const DeployIt = () => {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 20;
+      const margin = 72;
       const maxLineWidth = pageWidth - (margin * 2);
       let yPosition = margin;
 

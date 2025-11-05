@@ -126,7 +126,7 @@ export const BusinessFoundationBuilder = () => {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 20;
+      const margin = 72;
       const maxLineWidth = pageWidth - (margin * 2);
       let yPosition = margin;
 
@@ -233,12 +233,12 @@ export const BusinessFoundationBuilder = () => {
         }
       });
 
-      if (error) {
-        throw new Error(error.message);
+      if (error || data?.error) {
+        throw new Error(error?.message || data?.error || 'Failed to generate business foundation');
       }
 
-      if (data.error) {
-        throw new Error(data.error);
+      if (!data?.content || data.content.length < 300) {
+        throw new Error('Foundation content too short. Please try again.');
       }
 
       const sanitizedContent = sanitizeAIContent(data.content);

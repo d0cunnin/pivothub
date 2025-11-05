@@ -60,17 +60,30 @@ const PromptIt = () => {
         }
       });
 
-      if (error) {
+      if (error || data?.error) {
         console.error('Edge function error:', error);
         
-        // Provide specific error messages based on status
-        if (error.message?.includes('401') || error.message?.includes('auth')) {
-          toast.error("Authentication failed. Please sign in again.");
-        } else if (error.message?.includes('402') || error.message?.includes('credits')) {
-          toast.error("Insufficient credits. Please upgrade or purchase credits.");
+        const errorMsg = error?.message || data?.error || 'Failed to analyze prompt';
+        if (errorMsg.includes('429') || errorMsg.includes('rate limit')) {
+          toast.error('Rate limit exceeded. Please try again later.');
+        } else if (errorMsg.includes('402') || errorMsg.includes('credits')) {
+          toast.error('Insufficient credits. Please upgrade or purchase credits.');
         } else {
-          toast.error(error.message || "Failed to analyze prompt. Please try again.");
+          toast.error(errorMsg);
         }
+        setIsLoading(false);
+        return;
+      }
+
+      if (!data?.analysis || !data?.improvedPrompt || !data?.explanation) {
+        toast.error('Incomplete response. Please try again.');
+        setIsLoading(false);
+        return;
+      }
+
+      const totalContent = `${data.analysis} ${data.improvedPrompt} ${data.explanation}`;
+      if (totalContent.length < 200) {
+        toast.error('Response too short. Please try again.');
         setIsLoading(false);
         return;
       }
@@ -92,7 +105,7 @@ const PromptIt = () => {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 20;
+      const margin = 72;
       const maxLineWidth = pageWidth - (margin * 2);
       let yPosition = margin;
 

@@ -100,7 +100,18 @@ print(a + b)`,
         }
       });
 
-      if (error) throw error;
+      if (error || data?.error) {
+        throw new Error(error?.message || data?.error || 'Failed to explain code');
+      }
+
+      if (!data?.explanation || !data?.expectedOutput || !data?.tips) {
+        throw new Error('Incomplete response from AI. Please try again.');
+      }
+
+      const totalContent = `${data.explanation} ${data.expectedOutput} ${data.tips}`;
+      if (totalContent.length < 200) {
+        throw new Error('Response too short. Please try again.');
+      }
 
       setExplanation(data);
       toast.success("Code explained successfully!");
@@ -119,7 +130,7 @@ print(a + b)`,
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 20;
+      const margin = 72;
       const maxLineWidth = pageWidth - (margin * 2);
       let yPosition = margin;
 

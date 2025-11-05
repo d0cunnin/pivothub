@@ -273,7 +273,7 @@ export const ResumeCoachLetter = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
-    const margin = 20;
+    const margin = 72;
     let yPos = margin;
 
     const addFooter = (pageNum: number) => {

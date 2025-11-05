@@ -17,7 +17,6 @@ serve(async (req) => {
     });
   } catch (err) {
     console.error('Guard error:', err);
-    // Guard throws Response objects with proper status codes
     if (err instanceof Response) {
       return err;
     }
@@ -65,49 +64,70 @@ Format your response as JSON with these keys:
 - tips: string (helpful tips for success)
 - resources: array of strings (useful links or resources)`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        max_completion_tokens: 1500,
-        response_format: { type: "json_object" }
-      }),
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded. Please try again later.');
+    try {
+      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-5',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          max_completion_tokens: 1500,
+          response_format: { type: "json_object" }
+        }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        }
+        if (response.status === 402) {
+          throw new Error('AI credits exhausted. Please add credits in Settings.');
+        }
+        const errorText = await response.text();
+        console.error('Lovable AI error:', response.status, errorText);
+        throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
       }
-      if (response.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
+
+      const data = await response.json();
+      const content = data.choices[0]?.message?.content;
+      
+      if (!content) {
+        throw new Error('Empty response from AI');
       }
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
+
+      console.log('AI response length:', content.length);
+
+      const result = JSON.parse(content);
+
+      await deductCreditsOnSuccess(
+        supabase,
+        userId,
+        '/deploy-it',
+        10
+      );
+
+      return new Response(JSON.stringify(result), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } catch (error: any) {
+      clearTimeout(timeoutId);
+      if (error.name === 'AbortError') {
+        throw new Error('Request timeout. Please try again.');
+      }
+      throw error;
     }
-
-    const data = await response.json();
-    const content = data.choices[0].message.content;
-    const result = JSON.parse(content);
-
-    await deductCreditsOnSuccess(
-      supabase,
-      userId,
-      '/deploy-it',
-      10
-    );
-
-    return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
   } catch (error: any) {
     console.error('Error in deploy-it function:', error);
     return new Response(JSON.stringify({ error: error.message }), {
