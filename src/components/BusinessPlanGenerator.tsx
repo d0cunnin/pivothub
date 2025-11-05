@@ -64,16 +64,22 @@ export const BusinessPlanGenerator = () => {
       });
 
       if (error) {
-        throw new Error(error.message);
+        console.error('Edge function error:', error);
+        throw new Error(error.message || 'Failed to generate business plan');
       }
 
-      const result = data;
-      
-      if (result.error) {
-        throw new Error(result.error);
+      if (data?.error) {
+        console.error('Response error:', data.error);
+        throw new Error(data.error);
       }
 
-      setGeneratedPlan(result.content);
+      if (!data?.content || data.content.trim().length < 200) {
+        console.error('Empty or invalid content response:', data);
+        throw new Error('Received incomplete business plan. Please try again.');
+      }
+
+      setGeneratedPlan(data.content);
+      toast.success('Business plan generated!');
     } catch (error) {
       console.error('Error generating business plan:', error);
       // Fallback to mock data if API fails

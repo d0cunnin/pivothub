@@ -1,6 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
-import { throttle_user } from '../_shared/guard.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -69,8 +68,21 @@ Deno.serve(async (req) => {
 
     const userId = user.id;
 
-    // Throttle to 3 requests per hour
-    await throttle_user(supabase, userId, 'speak-it', 3600, 3);
+    // Throttle to 3 requests per hour using RPC
+    const { error: throttleError } = await supabase.rpc('throttle_user', {
+      p_user_id: userId,
+      p_endpoint: 'speak-it',
+      p_window_seconds: 3600,
+      p_max_reqs: 3
+    });
+
+    if (throttleError) {
+      console.error('Throttle error:', throttleError);
+      return new Response(JSON.stringify({ error: 'Rate limit check failed' }), {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     const body: SpeakItRequest = await req.json();
     const { path, sharedData, speakerData, podcasterData } = body;

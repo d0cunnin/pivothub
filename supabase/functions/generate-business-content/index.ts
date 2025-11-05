@@ -76,11 +76,10 @@ serve(async (req) => {
       );
     }
     
-    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY')
-    console.log('[BOOT] Lovable AI key exists:', !!lovableApiKey);
-    console.log('[BOOT] Key prefix:', lovableApiKey?.substring(0, 10));
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
     if (!lovableApiKey) {
-      throw new Error('LOVABLE_API_KEY not found in environment variables')
+      console.error('[ERROR] LOVABLE_API_KEY not found');
+      throw new Error('AI service not configured');
     }
 
     let prompt = ''

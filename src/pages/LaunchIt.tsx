@@ -137,7 +137,20 @@ const LaunchIt = () => {
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Edge function error:', error);
+        throw new Error(error.message || 'Failed to generate strategy');
+      }
+
+      if (data?.error) {
+        console.error('Response error:', data.error);
+        throw new Error(data.error);
+      }
+
+      if (!data?.strategy || data.strategy.trim().length < 100) {
+        console.error('Empty or invalid strategy response:', data);
+        throw new Error('Received incomplete strategy. Please try again.');
+      }
 
       setStrategy(data.strategy);
       toast.success("Launch strategy generated!");

@@ -441,6 +441,10 @@ FORMATTING RULES:
 • Consider their skill level in complexity of tactics
 • Prioritize actions by ROI and feasibility`;
 
+    // Add timeout handling
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000); // 45s timeout
+    
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -448,19 +452,32 @@ FORMATTING RULES:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.` }
         ],
-        max_completion_tokens: 8000,
+        max_completion_tokens: 7000,
       }),
+      signal: controller.signal
     });
+    
+    clearTimeout(timeout);
 
     const data = await response.json();
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again later.');
+      }
+      if (response.status === 402) {
+        throw new Error('AI credits exhausted. Please add credits in Settings.');
+      }
       throw new Error(data.error?.message || 'Failed to generate launch strategy');
+    }
+
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('AI response missing content');
     }
 
     let strategy = data.choices[0].message.content;

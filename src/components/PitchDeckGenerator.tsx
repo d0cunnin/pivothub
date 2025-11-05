@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Presentation, Download, Eye, Play, FileText, Info } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import { PitchDeckPresentation } from './PitchDeckPresentation';
 import jsPDF from 'jspdf';
 
@@ -217,18 +218,31 @@ export const PitchDeckGenerator = () => {
       });
 
       if (error) {
-        throw new Error(error.message);
+        console.error('Edge function error:', error);
+        throw new Error(error.message || 'Failed to generate pitch deck');
       }
 
-      if (data.error) {
+      if (data?.error) {
+        console.error('Response error:', data.error);
         throw new Error(data.error);
+      }
+
+      if (!data?.content || data.content.trim().length < 200) {
+        console.error('Empty or invalid content response:', data);
+        throw new Error('Received incomplete pitch deck content. Please try again.');
       }
 
       // Parse AI response into slide format
       const sanitizedContent = sanitizeAIContent(data.content);
       const generatedSlides = parsePitchDeckSlides(sanitizedContent);
       
+      if (generatedSlides.length < 5) {
+        console.error('Too few slides generated:', generatedSlides.length);
+        throw new Error('Failed to generate complete pitch deck. Please try again.');
+      }
+      
       setSlides(generatedSlides);
+      toast.success('Pitch deck generated!');
     } catch (error) {
       console.error('Error generating pitch deck:', error);
       // Enhanced fallback with bullet points

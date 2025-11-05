@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TrendingUp, Target, DollarSign, Users, Calendar, Download } from 'lucide-react';
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 
 interface MarketingStrategy {
@@ -48,11 +49,18 @@ export const MarketingStrategyGenerator = () => {
       });
 
       if (error) {
-        throw new Error(error.message);
+        console.error('Edge function error:', error);
+        throw new Error(error.message || 'Failed to generate marketing strategy');
       }
 
-      if (data.error) {
+      if (data?.error) {
+        console.error('Response error:', data.error);
         throw new Error(data.error);
+      }
+
+      if (!data?.content || data.content.trim().length < 300) {
+        console.error('Empty or invalid content response:', data);
+        throw new Error('Received incomplete marketing strategy. Please try again.');
       }
 
       // Parse AI response into structured strategy format
@@ -60,6 +68,7 @@ export const MarketingStrategyGenerator = () => {
       const phases = parseMarketingStrategy(sanitizedContent);
       
       setStrategy(phases);
+      toast.success('Marketing strategy generated!');
     } catch (error) {
       console.error('Error generating strategy:', error);
       // Fallback strategy based on user input
@@ -285,7 +294,7 @@ export const MarketingStrategyGenerator = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
-    const margin = 20;
+    const margin = 72; // 1 inch = 72 points
     let yPosition = 20;
     
     // Disclaimer text for footer
