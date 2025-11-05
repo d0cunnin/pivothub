@@ -114,7 +114,25 @@ export function ScheduleItWizard() {
         }
       });
 
-      if (error) throw error;
+      if (error || data?.error) {
+        console.error('Schedule error:', error || data.error);
+        toast.error(data?.error || error?.message || 'Failed to generate schedule');
+        return;
+      }
+
+      if (!data?.ok || !data?.weeklySchedule) {
+        toast.error('Received incomplete schedule data. Please try again.');
+        return;
+      }
+
+      // Validate schedule structure
+      const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+      const missingDays = days.filter(day => !data.weeklySchedule[day] || !Array.isArray(data.weeklySchedule[day]));
+
+      if (missingDays.length > 0) {
+        toast.error(`Schedule is missing data for: ${missingDays.join(', ')}`);
+        return;
+      }
 
       setGeneratedSchedule(data);
       toast.success('Schedule generated successfully!');
@@ -443,11 +461,11 @@ export function ScheduleItWizard() {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-muted-foreground">Total Committed Hours</p>
-                <p className="text-2xl font-bold">{generatedSchedule.summary.totalCommittedHours}</p>
+                <p className="text-2xl font-bold">{generatedSchedule?.summary?.totalCommittedHours || 0}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Side Business Hours</p>
-                <p className="text-2xl font-bold">{generatedSchedule.summary.sideBusinessHours}</p>
+                <p className="text-2xl font-bold">{generatedSchedule?.summary?.sideBusinessHours || 0}</p>
               </div>
             </div>
           </div>

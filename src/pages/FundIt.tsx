@@ -261,6 +261,33 @@ const FundIt = () => {
     }
   };
 
+  const downloadLOIPDF = () => {
+    if (!generatedLOI || !formData.organizationName || !formData.projectTitle) {
+      toast.error('Please generate a Letter of Intent first');
+      return;
+    }
+
+    try {
+      const pdf = generateGrantProposalPDF(
+        '', // No proposal
+        generatedLOI,
+        formData.organizationName,
+        formData.projectTitle,
+        {
+          name: formData.contactPersonName || 'Contact Person',
+          title: formData.contactTitle || 'Title',
+          email: formData.contactEmail || 'email@example.com',
+          phone: formData.contactPhone || '(555) 555-5555',
+        }
+      );
+      pdf.save(`${formData.organizationName.replace(/\s+/g, '-')}-LOI.pdf`);
+      toast.success('Letter of Intent PDF downloaded successfully!');
+    } catch (error) {
+      console.error('Error generating LOI PDF:', error);
+      toast.error('Failed to generate LOI PDF');
+    }
+  };
+
   const downloadProposalPDF = () => {
     if (!generatedProposal || !formData.organizationName || !formData.projectTitle) {
       toast.error('Please generate a proposal first');
@@ -893,39 +920,55 @@ const FundIt = () => {
                         </TabsList>
                         
                         <TabsContent value="proposal" className="space-y-4">
-                          <div className="flex justify-between items-center">
-                            <h3 className="font-semibold">Grant Proposal</h3>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={downloadProposalPDF}
-                              className="h-8"
-                            >
-                              <Download className="h-3 w-3 mr-1" />
-                              Download PDF
-                            </Button>
-                          </div>
-                          <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
-                            <pre className="whitespace-pre-wrap text-sm text-foreground">{generatedProposal}</pre>
-                          </div>
+                          {generatedProposal ? (
+                            <>
+                              <div className="flex justify-between items-center">
+                                <h3 className="font-semibold">Grant Proposal</h3>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={downloadProposalPDF}
+                                  className="h-8"
+                                >
+                                  <Download className="h-3 w-3 mr-1" />
+                                  Download PDF
+                                </Button>
+                              </div>
+                              <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
+                                <pre className="whitespace-pre-wrap text-sm text-foreground">{generatedProposal}</pre>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-center py-8 text-muted-foreground">
+                              Proposal not generated yet
+                            </div>
+                          )}
                         </TabsContent>
                         
                         <TabsContent value="loi" className="space-y-4">
-                          <div className="flex justify-between items-center">
-                            <h3 className="font-semibold">Letter of Intent</h3>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={downloadProposalPDF}
-                              className="h-8"
-                            >
-                              <Download className="h-3 w-3 mr-1" />
-                              Download PDF
-                            </Button>
-                          </div>
-                          <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
-                            <pre className="whitespace-pre-wrap text-sm text-foreground">{generatedLOI}</pre>
-                          </div>
+                          {generatedLOI ? (
+                            <>
+                              <div className="flex justify-between items-center">
+                                <h3 className="font-semibold">Letter of Intent</h3>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={downloadLOIPDF}
+                                  className="h-8"
+                                >
+                                  <Download className="h-3 w-3 mr-1" />
+                                  Download PDF
+                                </Button>
+                              </div>
+                              <div className="bg-muted/50 p-4 rounded-lg max-h-96 overflow-y-auto">
+                                <pre className="whitespace-pre-wrap text-sm text-foreground">{generatedLOI}</pre>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-center py-8 text-muted-foreground">
+                              Letter of Intent not generated yet
+                            </div>
+                          )}
                         </TabsContent>
                       </Tabs>
                     </CardContent>

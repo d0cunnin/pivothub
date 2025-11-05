@@ -532,6 +532,10 @@ Make the plan practical, budget-conscious, and focused on PROFITABILITY. Include
 Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`
 
       try {
+        // Add timeout
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 45000); // 45 second timeout
+        
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
           headers: {
@@ -545,17 +549,49 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
               { role: 'user', content: prompt }
             ],
             max_completion_tokens: 7000,
-          })
-        })
+          }),
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeout);
 
         if (!response.ok) {
-          const errorData = await response.text()
-          console.error('OpenAI API error:', response.status, errorData)
-          throw new Error(`OpenAI API error: ${response.status}`)
+          const errorData = await response.text();
+          console.error('OpenAI API error:', response.status, errorData);
+          
+          if (response.status === 429) {
+            return new Response(JSON.stringify({ 
+              error: "Rate limit exceeded. Please try again in a moment." 
+            }), {
+              status: 200,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+            });
+          }
+          
+          if (response.status === 402) {
+            return new Response(JSON.stringify({ 
+              error: "Insufficient credits. Please add credits to continue." 
+            }), {
+              status: 200,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+            });
+          }
+          
+          throw new Error(`OpenAI API error: ${response.status}`);
         }
 
-        const aiResponse = await response.json()
-        const fullContent = aiResponse.choices[0].message.content
+        const aiResponse = await response.json();
+        const fullContent = aiResponse.choices[0].message.content;
+        
+        if (!fullContent) {
+          console.error('[generate-teaching-content] AI response missing content');
+          return new Response(JSON.stringify({ 
+            error: "AI returned empty content. Please try again." 
+          }), {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
 
         // Function to clean markdown formatting
         const cleanMarkdown = (text: string): string => {

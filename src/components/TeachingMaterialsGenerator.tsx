@@ -362,7 +362,39 @@ const TeachingMaterialsGenerator = () => {
         }
       });
 
-      if (error) throw error;
+      if (error || data?.error) {
+        console.error('Teaching materials error:', error || data.error);
+        toast({
+          title: "Generation Failed",
+          description: data?.error || error?.message || "Failed to generate materials",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (!data?.webinarConcepts || !data?.courseOutline) {
+        toast({
+          title: "Incomplete Content",
+          description: "Generated content is incomplete. Please try again.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Validate minimum content length
+      const totalContent = 
+        (data.webinarConcepts?.length || 0) + 
+        (data.courseOutline?.length || 0) + 
+        (data.handouts?.length || 0);
+
+      if (totalContent < 500) {
+        toast({
+          title: "Content Too Short",
+          description: "Generated content seems incomplete. Please try again.",
+          variant: "destructive"
+        });
+        return;
+      }
 
       setGeneratedMaterials(data);
       toast({
