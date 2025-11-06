@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AdminGuard } from "@/components/AdminGuard";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -146,11 +146,58 @@ const Admin = () => {
     user.id.includes(searchQuery)
   );
 
-  const stats = {
+  const [liveStats, setLiveStats] = useState({
     totalUsers: users?.length || 0,
     activeSubscriptions: users?.filter(u => u.subscribed).length || 0,
-    trialUsers: 0, // No longer tracking trials
-  };
+    trialUsers: 0,
+  });
+
+  useEffect(() => {
+    if (users) {
+      setLiveStats({
+        totalUsers: users.length,
+        activeSubscriptions: users.filter(u => u.subscribed).length,
+        trialUsers: 0,
+      });
+    }
+  }, [users]);
+
+  useEffect(() => {
+    // Subscribe to new users
+    const userChannel = supabase
+      .channel('admin-users')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'profiles'
+      }, () => {
+        queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+        setLiveStats(prev => ({ ...prev, totalUsers: prev.totalUsers + 1 }));
+      })
+      .subscribe();
+
+    // Subscribe to subscription changes
+    const subChannel = supabase
+      .channel('admin-subscriptions')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'subscribers_public'
+      }, (payload) => {
+        queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+        if (payload.new.subscribed && !payload.old.subscribed) {
+          setLiveStats(prev => ({ ...prev, activeSubscriptions: prev.activeSubscriptions + 1 }));
+        } else if (!payload.new.subscribed && payload.old.subscribed) {
+          setLiveStats(prev => ({ ...prev, activeSubscriptions: Math.max(0, prev.activeSubscriptions - 1) }));
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(userChannel);
+      supabase.removeChannel(subChannel);
+    };
+  }, [queryClient]);
 
   const exportToCSV = () => {
     if (!filteredUsers) return;
@@ -206,7 +253,7 @@ const Admin = () => {
                     <Users className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats.totalUsers}</div>
+                    <div className="text-2xl font-bold transition-all duration-300">{liveStats.totalUsers}</div>
                   </CardContent>
                 </Card>
 
@@ -216,7 +263,7 @@ const Admin = () => {
                     <Activity className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats.activeSubscriptions}</div>
+                    <div className="text-2xl font-bold transition-all duration-300">{liveStats.activeSubscriptions}</div>
                   </CardContent>
                 </Card>
 
@@ -226,7 +273,7 @@ const Admin = () => {
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats.trialUsers}</div>
+                    <div className="text-2xl font-bold transition-all duration-300">{liveStats.trialUsers}</div>
                   </CardContent>
                 </Card>
               </div>

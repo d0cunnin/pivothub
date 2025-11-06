@@ -1,9 +1,12 @@
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, Users, TrendingUp, CreditCard } from "lucide-react";
 
 export const RevenueAnalytics = () => {
+  const [livePaidCount, setLivePaidCount] = useState(0);
+
   const { data: subscriptionStats } = useQuery({
     queryKey: ["revenue-subscriptions"],
     queryFn: async () => {
@@ -21,14 +24,37 @@ export const RevenueAnalytics = () => {
         return acc;
       }, {});
       
+      setLivePaidCount(paidSubs.length);
+      
       return {
         totalPaid: paidSubs.length,
-        totalTrials: 0, // No longer tracking trials
+        totalTrials: 0,
         tierBreakdown: tierCounts,
-        conversionRate: 0 // No longer calculating conversion
+        conversionRate: 0
       };
     }
   });
+
+  useEffect(() => {
+    const subChannel = supabase
+      .channel('revenue-subscriptions')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'subscribers_public'
+      }, (payload) => {
+        if (payload.new.subscribed && !payload.old.subscribed) {
+          setLivePaidCount(prev => prev + 1);
+        } else if (!payload.new.subscribed && payload.old.subscribed) {
+          setLivePaidCount(prev => Math.max(0, prev - 1));
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subChannel);
+    };
+  }, []);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mt-4">
@@ -38,7 +64,7 @@ export const RevenueAnalytics = () => {
           <DollarSign className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{subscriptionStats?.totalPaid || 0}</div>
+          <div className="text-2xl font-bold transition-all duration-300">{livePaidCount}</div>
           <p className="text-xs text-muted-foreground">Active paying users</p>
         </CardContent>
       </Card>
