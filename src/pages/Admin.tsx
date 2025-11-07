@@ -52,24 +52,31 @@ const Admin = () => {
   const { data: users, isLoading } = useQuery({
     queryKey: ["admin-users"],
     queryFn: async () => {
-      const { data: profiles } = await supabase
+      const { data: profiles, error: profilesError } = await supabase
         .from("profiles")
         .select("id, display_name");
 
-      const { data: authUsers } = await supabase.auth.admin.listUsers();
+      const { data: secureData, error: secureError } = await supabase
+        .from("subscribers_secure")
+        .select("user_id, email");
 
-      const { data: subscribers } = await supabase
+      const { data: subscribers, error: subscribersError } = await supabase
         .from("subscribers_public")
-        .select("user_id, subscribed, subscription_tier, subscription_package, subscription_end, created_at, updated_at");
+        .select("user_id, subscribed, subscription_tier, subscription_package, subscription_end");
 
-      const combinedData: UserWithSubscription[] = authUsers?.users.map(user => {
-        const profile = profiles?.find(p => p.id === user.id);
-        const subscription = subscribers?.find(s => s.user_id === user.id);
+      if (profilesError) console.error("Error fetching profiles:", profilesError);
+      if (secureError) console.error("Error fetching secure data:", secureError);
+      if (subscribersError) console.error("Error fetching subscribers:", subscribersError);
+
+      // Use profiles as the base (all registered users should have a profile)
+      const combinedData: UserWithSubscription[] = profiles?.map(profile => {
+        const secure = secureData?.find(s => s.user_id === profile.id);
+        const subscription = subscribers?.find(s => s.user_id === profile.id);
 
         return {
-          id: user.id,
-          email: user.email || "",
-          display_name: profile?.display_name,
+          id: profile.id,
+          email: secure?.email || "",
+          display_name: profile.display_name,
           subscribed: subscription?.subscribed || false,
           subscription_tier: subscription?.subscription_tier,
           subscription_package: subscription?.subscription_package,
