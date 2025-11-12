@@ -105,7 +105,7 @@ export default function About() {
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                 <h3 className="text-2xl font-bold text-white mb-3">Our Mission</h3>
                 <p className="section-description text-white/90">
-                  To empower people to pivot forward with clarity, confidence, and direction through AI-driven tools that simplify rebuilding, retraining, and reimagining the future of work.
+                  To empower people through life's transitions with clarity and confidence by providing AI-powered pathways and personalized guidance that create opportunity, inspire purpose, and bring structure to every next step.
                 </p>
               </div>
               
