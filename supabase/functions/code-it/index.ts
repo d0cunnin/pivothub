@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { guard, deductCreditsOnSuccess, corsHeaders } from '../_shared/guard.ts';
+import { chat } from '../_shared/openai.ts';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -32,11 +33,6 @@ serve(async (req) => {
       throw new Error('Valid code is required');
     }
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('Lovable AI key not configured');
-    }
-
     const systemPrompt = `You are a patient coding teacher for absolute beginners.
 Analyze the Python code provided and explain:
 1. What each line does in simple, child-level terms
@@ -53,48 +49,26 @@ Format your response as JSON with these keys:
     const timeoutId = setTimeout(() => controller.abort(), 45000);
 
     try {
-      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Explain this code:\n\n${code}` }
-          ],
-          max_completion_tokens: 1200,
-          response_format: { type: "json_object" }
-        }),
-        signal: controller.signal
+      const response = await chat({
+        model: 'gpt-5-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Explain this code:\n\n${code}` }
+        ],
+        maxOutputTokens: 1200,
+        responseFormat: { type: "json_object" }
       });
 
       clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        if (response.status === 429) {
-          throw new Error('Rate limit exceeded. Please try again later.');
-        }
-        if (response.status === 402) {
-          throw new Error('AI credits exhausted. Please add credits in Settings.');
-        }
-        const errorText = await response.text();
-        console.error('Lovable AI Gateway error:', response.status, errorText);
-        throw new Error(`Lovable AI Gateway error: ${response.status} - ${errorText.slice(0, 200)}`);
-      }
-
-      const data = await response.json();
-      const content = data.choices[0]?.message?.content;
-      
-      if (!content) {
+      if (!response.text) {
         throw new Error('Empty response from AI');
       }
 
-      console.log('AI response length:', content.length);
+      console.log('AI response length:', response.text.length);
+      console.log('OpenAI Request ID:', response.requestId);
 
-      const result = JSON.parse(content);
+      const result = JSON.parse(response.text);
 
       await deductCreditsOnSuccess(
         supabase,
