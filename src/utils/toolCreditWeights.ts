@@ -50,8 +50,8 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'personality-assessment': 2,
   'tech-readiness-assessment': 2,    // Timed 50-question test with adaptive sequencing, GPT-5 report (~3,000 tokens)
   
-  // EARN IT ASSESSMENT (5 credits total)
-  'side-income-assessment': 5,     // Comprehensive side income blueprint (~10,000 tokens output)
+  // EARN IT ASSESSMENT (7 credits total)
+  'side-income-assessment': 7,     // Comprehensive side income blueprint with 90-day plan (~10,000 tokens output)
   
   // LEARNING (0 credits) - No AI generation
   'learn-a-skill': 0,              // Video content only, no AI
