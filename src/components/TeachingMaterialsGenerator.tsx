@@ -635,7 +635,7 @@ ${generatedMaterials.marketingPlan}
   return (
     <div className="space-y-6">
       <Card className="p-6 bg-card/50 backdrop-blur-sm border-primary/20">
-        <h3 className="text-2xl font-bold mb-6 text-foreground">💰 Create $1M+ Courses from Your Expertise</h3>
+        
         
         <div className="space-y-6">
           {/* Full Name */}
