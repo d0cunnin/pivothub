@@ -951,7 +951,6 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       default:
         throw new Error('Invalid content type')
     }
-    }
     
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
