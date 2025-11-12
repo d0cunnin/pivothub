@@ -331,7 +331,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
     
     // Add timeout handling
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000); // 45s timeout
+    const timeout = setTimeout(() => controller.abort(), 120000); // 120s timeout
     
     const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
