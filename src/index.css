@@ -168,7 +168,7 @@ All colors MUST be HSL.
 
   /* Global typography utilities */
   .section-header {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4;
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent mb-4 leading-tight;
   }
 
   .section-body-text {
