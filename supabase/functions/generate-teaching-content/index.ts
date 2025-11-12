@@ -665,10 +665,9 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
               ],
               max_completion_tokens: 7000,
             }),
-            signal: ctrl
+            signal: controller.signal
           });
-          clearTimeout(t);
-          } catch(ae){if(ae.name==='AbortError'){const c2=new AbortController();const t2=setTimeout(()=>c2.abort(),60000);resp=await fetch('https://ai.gateway.lovable.dev/v1/chat/completions',{method:'POST',headers:{'Authorization':`Bearer ${lovableApiKey}`,'Content-Type':'application/json'},body:JSON.stringify({model:'openai/gpt-5-mini',messages:[{role:'system',content:systemMessage},{role:'user',content:prompt}],max_completion_tokens:2500}),signal:c2.signal});clearTimeout(t2);}else throw ae;}
+          clearTimeout(timeout);
         } catch (abortErr) {
           if (abortErr.name === 'AbortError') {
             console.log('⚠️ GPT-5 timeout, falling back to GPT-5 Mini');
