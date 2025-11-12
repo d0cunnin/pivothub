@@ -154,7 +154,7 @@ export default function About() {
               <h3 className="section-header text-white">Build Your Future</h3>
               <div className="space-y-4">
                 <p className="section-body-text text-white/90">
-                  From job preparation and interview coaching to launching a business or creating digital products, PivotHub provides end-to-end support. Our AI-powered tools include resume builders, business plan generators, pitch deck creators, funding assistance, and course development systems designed to help you succeed in any direction you choose.
+                  From job preparation and interview coaching to launching a business or creating digital products, PivotHub provides end-to-end support. Our AI-powered tools include resume builders, business plan generators, pitch deck creators, and course development systems designed to help you plan, build, and succeed in any direction you choose.
                 </p>
                 <p className="section-body-text text-white/90 font-medium italic">
                   Forward does not have to be fast. It just has to be yours.
