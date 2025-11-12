@@ -32,7 +32,7 @@ export default function About() {
               Our Story + Visionary
             </h1>
           <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
-            A Safe Place to Land and a Plan to Move Forward
+            Your Pathway to What's Next
           </p>
           </div>
         </div>
@@ -46,14 +46,13 @@ export default function About() {
               <h2 className="section-header">The Beginning of PivotHub</h2>
               <div className="space-y-4">
                 <p className="section-body-text">
-                  PivotHub was born out of necessity during a critical period in our economy. Between January and October 2025, 
-                  hundreds of thousands of people found themselves unemployed or underemployed, facing an unprecedented challenge 
-                  in securing meaningful work.
+                  PivotHub was created for a world in transition. Between January and October 2025, hundreds of thousands of people faced income loss and job uncertainty, revealing a hard truth: traditional career development tools were no longer enough.
                 </p>
                 <p className="section-body-text">
-                  As we witnessed this crisis unfold, it became clear that traditional approaches to career development were 
-                  no longer sufficient. The accelerated pace of technological advancement was reshaping entire industries, 
-                  creating both challenges and opportunities for the workforce.
+                  As industries evolved faster than ever before, people needed more than advice; they needed direction, strategy, and a way forward. PivotHub was born out of that necessity, an AI-powered platform designed to guide individuals and organizations through change with clarity, confidence, and purpose.
+                </p>
+                <p className="section-body-text italic text-primary font-medium">
+                  Clarity is power, and forward is a direction, not a deadline.
                 </p>
               </div>
             </div>
@@ -82,12 +81,13 @@ export default function About() {
               <h2 className="section-header">Growing Together</h2>
               <div className="space-y-4">
                 <p className="section-body-text">
-                  We realized that people needed more than just job search assistance. They needed comprehensive tools to either 
-                  upskill for the evolving job market or forge their own path through entrepreneurship.
+                  At PivotHub, we believe transitions are not roadblocks; they are turning points. We realized people did not just need job search assistance; they needed a pathway. PivotHub bridges the gap between where you are and where you want to go, offering AI-powered tools that simplify rebuilding, reskilling, and reimagining what comes next.
+                </p>
+                <p className="section-body-text italic text-primary font-medium">
+                  You are not lost. You are in transition.
                 </p>
                 <p className="section-body-text">
-                  PivotHub was created to provide exactly that: a platform where individuals can either develop new skills to become more 
-                  marketable for employment or launch their own businesses with the tools and guidance they need to succeed.
+                  Our platform helps users take action, one guided step at a time, with personalized AI insights that translate uncertainty into opportunity.
                 </p>
               </div>
             </div>
@@ -100,17 +100,38 @@ export default function About() {
         <div className="page-container">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="section-header mb-6 text-white">Our Mission & Values</h2>
-            <p className="section-description text-white/90">
-              Empowering individuals to navigate career transitions through comprehensive assessment tools, skill development, entrepreneurship support, and preparation resources—all powered by AI-driven tools and expert guidance.
-            </p>
+            
+            <div className="space-y-6 mb-8">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                <h3 className="text-2xl font-bold text-white mb-3">Our Mission</h3>
+                <p className="section-description text-white/90">
+                  To empower people to pivot forward with clarity, confidence, and direction through AI-driven tools that simplify rebuilding, retraining, and reimagining the future of work.
+                </p>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                <h3 className="text-2xl font-bold text-white mb-3">Our Vision</h3>
+                <p className="section-description text-white/90">
+                  A world where every person, regardless of background or circumstance, has access to the tools, knowledge, and technology needed to reinvent themselves, create new income, and thrive in an ever-changing economy.
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
               <h3 className="section-header text-white">Discover Your Path</h3>
-              <p className="section-body-text text-white/90">
-                Start with our comprehensive career assessment tools to identify your strengths, skills, and ideal career direction. Whether you're pivoting to a new industry, developing new skills for emerging opportunities, or preparing to launch your own venture, our AI-powered tools provide personalized insights to guide your journey.
-              </p>
+              <div className="space-y-4">
+                <p className="section-body-text text-white/90">
+                  Every journey starts with clarity. PivotHub's comprehensive assessments and interactive tools help you uncover your strengths, identify opportunities, and take the next right step toward your future.
+                </p>
+                <p className="section-body-text text-white/90 font-medium italic">
+                  Our Promise: Every experience with PivotHub delivers clarity, direction, and measurable progress.
+                </p>
+                <p className="section-body-text text-white/90">
+                  Whether you are pivoting into a new industry, developing new skills, or preparing to launch your own venture, PivotHub gives you the structure, insights, and tools to move from stuck to ready.
+                </p>
+              </div>
             </div>
             <div className="lg:ml-4">
               <img 
@@ -131,18 +152,28 @@ export default function About() {
             </div>
             <div className="space-y-6 order-1 lg:order-2">
               <h3 className="section-header text-white">Build Your Future</h3>
-              <p className="section-body-text text-white/90">
-                From job preparation and interview coaching to launching your own business, teaching a skill, or securing funding—we provide end-to-end support. Our platform includes AI-powered resume builders, business plan generators, pitch deck creators, funding assistance, and course development tools to help you succeed in any direction you choose.
-              </p>
+              <div className="space-y-4">
+                <p className="section-body-text text-white/90">
+                  From job preparation and interview coaching to launching a business or creating digital products, PivotHub provides end-to-end support. Our AI-powered tools include resume builders, business plan generators, pitch deck creators, funding assistance, and course development systems designed to help you succeed in any direction you choose.
+                </p>
+                <p className="section-body-text text-white/90 font-medium italic">
+                  Forward does not have to be fast. It just has to be yours.
+                </p>
+              </div>
             </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-16">
             <div className="space-y-6">
-              <h3 className="section-header text-white">Learn & Grow</h3>
-              <p className="section-body-text text-white/90">
-                Access curated learning pathways designed to help you master in-demand skills. Whether you're learning to code, developing business acumen, or gaining expertise to teach others, our interactive courses and AI mentorship provide the knowledge and confidence you need to thrive in today's digital economy.
-              </p>
+              <h3 className="section-header text-white">Learn and Grow</h3>
+              <div className="space-y-4">
+                <p className="section-body-text text-white/90">
+                  Explore curated learning pathways built to help you master in-demand skills. Whether you are learning to code, building a business, or sharing your expertise through teaching, PivotHub gives you the confidence, community, and clarity you need to grow at your own pace.
+                </p>
+                <p className="section-body-text text-white/90 font-medium italic">
+                  Because when you learn, you lead. And when you lead, you help others pivot forward too.
+                </p>
+              </div>
             </div>
             <div className="lg:ml-4">
               <img 
@@ -155,9 +186,20 @@ export default function About() {
 
           <div className="max-w-3xl mx-auto text-center">
             <h3 className="section-header text-white">Join the PivotHub Community</h3>
-            <p className="section-body-text text-white/90 mb-6">
-              Since July 2025, we've been helping professionals navigate career transitions with confidence. Whether you're seeking your next job opportunity, launching a business, teaching your expertise, or securing grant funding, PivotHub provides the comprehensive tools, AI-powered guidance, and supportive community you need to pivot successfully into your future.
-            </p>
+            <div className="space-y-4">
+              <p className="section-body-text text-white/90">
+                In 2025, PivotHub has been helping professionals, entrepreneurs, and creators turn transition into transformation.
+              </p>
+              <p className="section-body-text text-white/90">
+                Whether you are seeking your next opportunity, launching a business, or developing your next big idea, PivotHub is your pathway to what comes next.
+              </p>
+              <p className="section-body-text text-white/90 font-bold text-xl">
+                Rebuild. Reimagine. Relaunch.
+              </p>
+              <p className="section-body-text text-white/90 italic">
+                Together, we move forward, one pivot at a time.
+              </p>
+            </div>
           </div>
         </div>
       </section>
