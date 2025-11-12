@@ -1,7 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { guard, deductCreditsOnSuccess, corsHeaders } from '../_shared/guard.ts';
-import { chat } from '../_shared/openai.ts';
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -49,30 +48,49 @@ Format your response as JSON with these keys:
 - improvedPrompt: string
 - explanation: string`;
 
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('LOVABLE_API_KEY not configured');
+    }
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 45000);
 
     try {
-      const response = await chat({
-        model: 'gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analyze this prompt: "${prompt}"` }
-        ],
-        maxOutputTokens: 1500,
-        responseFormat: { type: "json_object" }
+      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-5',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Analyze this prompt: "${prompt}"` }
+          ],
+          max_completion_tokens: 1500,
+          response_format: { type: "json_object" }
+        }),
       });
 
       clearTimeout(timeoutId);
 
-      if (!response.text) {
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Lovable AI error:', response.status, errorText);
+        throw new Error(`AI request failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (!data.choices?.[0]?.message?.content) {
         throw new Error('Empty response from AI');
       }
 
-      console.log('AI response length:', response.text.length);
-      console.log('OpenAI Request ID:', response.requestId);
+      console.log('AI response length:', data.choices[0].message.content.length);
 
-      const result = JSON.parse(response.text);
+      const result = JSON.parse(data.choices[0].message.content);
 
       await deductCreditsOnSuccess(
         supabase,

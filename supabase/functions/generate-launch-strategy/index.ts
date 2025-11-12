@@ -469,7 +469,7 @@ FORMATTING RULES:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'openai/gpt-5',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.` }
