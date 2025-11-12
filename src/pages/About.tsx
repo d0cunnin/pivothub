@@ -129,7 +129,7 @@ export default function About() {
                   Our Promise: Every experience with PivotHub delivers clarity, direction, and measurable progress.
                 </p>
                 <p className="section-body-text text-white/90">
-                  Whether you are pivoting into a new industry, developing new skills, or preparing to launch your own venture, PivotHub gives you the structure, insights, and tools to move from stuck to ready.
+                  Whether you are pivoting into a new industry, developing new skills, or preparing to launch your own venture, PivotHub gives you the structure, insights, and tools to move forward with clarity and confidence.
                 </p>
               </div>
             </div>
