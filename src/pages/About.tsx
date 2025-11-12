@@ -168,7 +168,7 @@ export default function About() {
               <h3 className="section-header text-white">Learn and Grow</h3>
               <div className="space-y-4">
                 <p className="section-body-text text-white/90">
-                  Explore curated learning pathways built to help you master in-demand skills. Whether you are learning to code, building a business, or sharing your expertise through teaching, PivotHub gives you the confidence, community, and clarity you need to grow at your own pace.
+                  Explore curated learning pathways built to help you develop practical, in-demand skills for today's evolving world. Whether you are strengthening professional abilities, expanding entrepreneurial knowledge, or preparing to teach what you know, PivotHub gives you the confidence, community, and clarity you need to grow at your own pace.
                 </p>
                 <p className="section-body-text text-white/90 font-medium italic">
                   Because when you learn, you lead. And when you lead, you help others pivot forward too.
