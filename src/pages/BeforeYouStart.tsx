@@ -7,7 +7,7 @@ import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Compass, Target, BookOpen, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sparkles, Code, Wrench } from "lucide-react";
+import { Compass, Target, BookOpen, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic } from "lucide-react";
 import { PACKAGE_TOOLS } from "@/utils/packageAccess";
 
 const BeforeYouStart = () => {
@@ -94,43 +94,11 @@ const BeforeYouStart = () => {
     },
     {
       icon: BookOpen,
-      title: "Micro Courses",
-      description: "Access short, focused learning experiences designed to give you relevant information quickly. Perfect for busy learners who want practical skills without a large time commitment.",
-      cta: "Browse Courses",
+      title: "Learn It",
+      description: "Learn It provides short micro courses that teach practical skills you can apply immediately. These lessons support your development and help you grow into your next step with confidence.",
+      cta: "Start Learning",
       link: "/learnit",
       color: "text-rose-600"
-    },
-    {
-      icon: Sparkles,
-      title: "Prompt It",
-      description: "Master the art of AI prompting. Learn how to write effective prompts that get better results from AI tools and maximize your productivity with AI assistants.",
-      cta: "Learn Prompting",
-      link: "/promptit",
-      color: "text-violet-600"
-    },
-    {
-      icon: Code,
-      title: "Code It",
-      description: "Understand code through AI-powered explanations. Paste any code snippet and get clear, beginner-friendly breakdowns of how it works and what it does.",
-      cta: "Understand Code",
-      link: "/codeit",
-      color: "text-sky-600"
-    },
-    {
-      icon: Rocket,
-      title: "Deploy It",
-      description: "Get step-by-step guidance for deploying your applications and projects to the cloud. Learn deployment strategies and best practices for taking your projects live.",
-      cta: "Deploy Projects",
-      link: "/deployit",
-      color: "text-teal-600"
-    },
-    {
-      icon: Wrench,
-      title: "Create It",
-      description: "Design and plan digital products, apps, and platforms with AI assistance. Build comprehensive blueprints with technical requirements and implementation roadmaps.",
-      cta: "Design Products",
-      link: "/createit",
-      color: "text-fuchsia-600"
     }
   ];
 

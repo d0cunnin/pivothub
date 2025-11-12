@@ -278,7 +278,7 @@ EXAMPLES OF PREMIUM VALUE:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'openai/gpt-5',
         messages,
         max_completion_tokens: 2000,
       }),

@@ -315,7 +315,7 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: 'openai/gpt-5',
         messages: messages,
         max_completion_tokens: 2000,
       }),

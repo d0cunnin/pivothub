@@ -32,6 +32,11 @@ serve(async (req) => {
       throw new Error('Valid code is required');
     }
 
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('Lovable AI key not configured');
+    }
+
     const systemPrompt = `You are a patient coding teacher for absolute beginners.
 Analyze the Python code provided and explain:
 1. What each line does in simple, child-level terms
@@ -44,11 +49,6 @@ Format your response as JSON with these keys:
 - expectedOutput: string (what would this output if run)
 - tips: string (helpful tips or improvements)`;
 
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY not configured');
-    }
-
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 45000);
 
@@ -60,7 +60,7 @@ Format your response as JSON with these keys:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Explain this code:\n\n${code}` }
@@ -68,25 +68,33 @@ Format your response as JSON with these keys:
           max_completion_tokens: 1200,
           response_format: { type: "json_object" }
         }),
+        signal: controller.signal
       });
 
       clearTimeout(timeoutId);
 
       if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        }
+        if (response.status === 402) {
+          throw new Error('AI credits exhausted. Please add credits in Settings.');
+        }
         const errorText = await response.text();
-        console.error('Lovable AI error:', response.status, errorText);
-        throw new Error(`AI request failed: ${response.status}`);
+        console.error('Lovable AI Gateway error:', response.status, errorText);
+        throw new Error(`Lovable AI Gateway error: ${response.status} - ${errorText.slice(0, 200)}`);
       }
 
       const data = await response.json();
+      const content = data.choices[0]?.message?.content;
       
-      if (!data.choices?.[0]?.message?.content) {
+      if (!content) {
         throw new Error('Empty response from AI');
       }
 
-      console.log('AI response length:', data.choices[0].message.content.length);
+      console.log('AI response length:', content.length);
 
-      const result = JSON.parse(data.choices[0].message.content);
+      const result = JSON.parse(content);
 
       await deductCreditsOnSuccess(
         supabase,

@@ -323,139 +323,41 @@ QUALITY STANDARDS:
 • Align clearly with funder's mission and priorities
 • Write compellingly while maintaining professionalism
 • Proactively address potential reviewer concerns`;
-    // Add timeout handling with fallback
-    let aiResponse;
-    let modelUsed = 'openai/gpt-5';
-    const aiStartTime = Date.now();
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${lovableApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-5',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
+        ],
+        max_completion_tokens: 6000,
+      }),
+    });
 
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 120000); // 120s timeout
-      
-      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-5',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
-          ],
-          max_completion_tokens: 6000,
-        }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeout);
-    } catch (abortError) {
-      // If timeout, try once with faster model
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        modelUsed = 'openai/gpt-5-mini';
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000); // 60s for fallback
-        
-        try {
-          aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
-              ],
-              max_completion_tokens: 4000, // Reduced for faster response
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          if (fallbackError.name === 'AbortError') {
-            console.error('❌ Both GPT-5 and GPT-5 Mini timed out');
-            return new Response(JSON.stringify({ 
-              error: 'Generation is taking too long. Please try again with shorter descriptions or contact support.' 
-            }), {
-              status: 200, // Use 200 so client shows error in toast
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          throw fallbackError; // Re-throw other errors
-        }
-      } else {
-        throw abortError; // Re-throw non-timeout errors
-      }
-    }
-
-    const aiDuration = Date.now() - aiStartTime;
-    console.log(`✅ AI response received using ${modelUsed} in ${aiDuration}ms`);
-
-    const data = await aiResponse.json();
-
+    const data = await response.json();
     
-    if (!aiResponse.ok) {
-      // Handle rate limits and credit issues gracefully
-      if (aiResponse.status === 429) {
-        return new Response(JSON.stringify({ 
-          error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
-        }), {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-      if (aiResponse.status === 402) {
-        return new Response(JSON.stringify({ 
-          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
-        }), {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
+    if (!response.ok) {
       throw new Error(data.error?.message || 'Failed to generate grant content');
     }
 
     let grantContent;
     try {
-      const rawContent = data.choices[0].message.content;
-      grantContent = JSON.parse(rawContent);
+      grantContent = JSON.parse(data.choices[0].message.content);
     } catch (parseError) {
-      console.log('⚠️ JSON parse failed, attempting extraction...');
+      // Fallback if JSON parsing fails
+      const content = data.choices[0].message.content;
+      const proposalMatch = content.match(/```proposal\n(.*?)\n```/s) || content.match(/"proposal":\s*"(.*?)"/s);
+      const loiMatch = content.match(/```letterOfIntent\n(.*?)\n```/s) || content.match(/"letterOfIntent":\s*"(.*?)"/s);
       
-      try {
-        // Try to extract JSON from markdown code blocks or text
-        const rawContent = data.choices[0].message.content;
-        const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
-        
-        if (jsonMatch) {
-          grantContent = JSON.parse(jsonMatch[0]);
-          console.log('✅ Successfully extracted JSON from response');
-        } else {
-          throw new Error('No JSON object found in response');
-        }
-      } catch (extractError) {
-        console.error('❌ JSON extraction failed:', {
-          error: extractError.message,
-          rawContentPreview: data.choices[0].message.content.substring(0, 500)
-        });
-        
-        // Fallback to the existing fallback parsing
-        const content = data.choices[0].message.content;
-        const proposalMatch = content.match(/```proposal\n(.*?)\n```/s) || content.match(/"proposal":\s*"(.*?)"/s);
-        const loiMatch = content.match(/```letterOfIntent\n(.*?)\n```/s) || content.match(/"letterOfIntent":\s*"(.*?)"/s);
-        
-        grantContent = {
-          proposal: proposalMatch ? proposalMatch[1] : content.split('LETTER OF INTENT')[0] || content,
-          letterOfIntent: loiMatch ? loiMatch[1] : content.split('LETTER OF INTENT')[1] || generateFallbackLOI(grantData)
-        };
-      }
+      grantContent = {
+        proposal: proposalMatch ? proposalMatch[1] : content.split('LETTER OF INTENT')[0] || content,
+        letterOfIntent: loiMatch ? loiMatch[1] : content.split('LETTER OF INTENT')[1] || generateFallbackLOI(grantData)
+      };
     }
 
     await logRequest(guardResult.supabase, {
