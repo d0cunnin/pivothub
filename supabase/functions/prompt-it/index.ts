@@ -54,7 +54,7 @@ Format your response as JSON with these keys:
 - explanation: string`;
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 45000);
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
       const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -64,12 +64,12 @@ Format your response as JSON with these keys:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'openai/gpt-5-mini',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Analyze this prompt: "${prompt}"` }
           ],
-          max_completion_tokens: 1500,
+          max_completion_tokens: 1000,
           response_format: { type: "json_object" }
         }),
         signal: controller.signal
@@ -77,28 +77,84 @@ Format your response as JSON with these keys:
 
       clearTimeout(timeoutId);
 
+      // Text-first parsing to handle non-JSON responses
+      const responseText = await response.text();
+      console.log('AI Gateway status:', response.status, 'Response length:', responseText.length);
+
       if (!response.ok) {
         if (response.status === 429) {
-          throw new Error('Rate limit exceeded. Please try again later.');
+          return new Response(JSON.stringify({ 
+            error: 'Rate limit exceeded. Please try again in a few moments.' 
+          }), {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
         }
         if (response.status === 402) {
-          throw new Error('AI credits exhausted. Please add credits in Settings.');
+          return new Response(JSON.stringify({ 
+            error: 'AI credits exhausted. Please add credits in Settings.' 
+          }), {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
         }
-        const errorText = await response.text();
-        console.error('Lovable AI error:', response.status, errorText);
-        throw new Error(`Lovable AI error: ${response.status}`);
+        console.error('Lovable AI error:', response.status, responseText.substring(0, 300));
+        return new Response(JSON.stringify({ 
+          error: 'AI service temporarily unavailable. Please try again.' 
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Failed to parse AI response:', responseText.substring(0, 300));
+        return new Response(JSON.stringify({ 
+          error: 'Invalid response from AI. Please try again.' 
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+
       const content = data.choices[0]?.message?.content;
       
       if (!content) {
-        throw new Error('Empty response from AI');
+        return new Response(JSON.stringify({ 
+          error: 'Empty response from AI. Please try again.' 
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
       }
 
       console.log('AI response length:', content.length);
 
-      const result = JSON.parse(content);
+      let result;
+      try {
+        result = JSON.parse(content);
+      } catch (parseError) {
+        console.error('Failed to parse AI content:', content.substring(0, 300));
+        return new Response(JSON.stringify({ 
+          error: 'Invalid AI response format. Please try again.' 
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+
+      // Validate required fields
+      if (!result.analysis || !result.improvedPrompt || !result.explanation) {
+        return new Response(JSON.stringify({ 
+          error: 'Incomplete response from AI. Please try again.' 
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
 
       await deductCreditsOnSuccess(
         supabase,
@@ -113,14 +169,21 @@ Format your response as JSON with these keys:
     } catch (error: any) {
       clearTimeout(timeoutId);
       if (error.name === 'AbortError') {
-        throw new Error('Request timeout. Please try again.');
+        return new Response(JSON.stringify({ 
+          error: 'Request took too long. Please try a shorter prompt.' 
+        }), {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
       }
       throw error;
     }
   } catch (error: any) {
     console.error('Error in prompt-it function:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+    return new Response(JSON.stringify({ 
+      error: error.message || 'An error occurred. Please try again.' 
+    }), {
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
