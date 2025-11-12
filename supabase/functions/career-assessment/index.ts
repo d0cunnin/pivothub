@@ -185,7 +185,7 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
     === ANALYSIS FRAMEWORK ===
     Provide a comprehensive career assessment worth $200+ of professional career counseling services.
 
-    Return as a JSON object with this EXACT structure:`
+    Return as a JSON object with this EXACT structure:
 {
   "recommendations": [
     {
