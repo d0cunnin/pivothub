@@ -2,6 +2,8 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { guard, deductCreditsOnSuccess, corsHeaders } from '../_shared/guard.ts';
 
+const BUILD_VERSION = "2025-01-12-v2";
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -28,6 +30,8 @@ serve(async (req) => {
 
   const { supabase, userId, ip, startTime } = guardResult;
 
+  console.log(`[PROMPT-IT] Build version: ${BUILD_VERSION}`);
+
   try {
     const { prompt } = await req.json();
 
@@ -48,10 +52,11 @@ Analyze the user's prompt and provide:
 4. Professional explanation of the structure you used
 
 Keep feedback constructive, clear, and educational.
-Format your response as JSON with these keys:
-- analysis: string
-- improvedPrompt: string
-- explanation: string`;
+
+CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entire response must be parseable JSON with these exact keys:
+- analysis: string (your assessment)
+- improvedPrompt: string (the rewritten prompt)
+- explanation: string (explanation of improvements)`;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000);
@@ -64,13 +69,11 @@ Format your response as JSON with these keys:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5-mini',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Analyze this prompt: "${prompt}"` }
-          ],
-          max_completion_tokens: 1000,
-          response_format: { type: "json_object" }
+          ]
         }),
         signal: controller.signal
       });
@@ -120,9 +123,35 @@ Format your response as JSON with these keys:
         });
       }
 
-      const content = data.choices[0]?.message?.content;
+      // Robust content extraction
+      const extractContent = (data: any): string | null => {
+        const msg = data?.choices?.[0]?.message;
+        
+        // Try string content first
+        if (typeof msg?.content === 'string' && msg.content.trim()) {
+          return msg.content;
+        }
+        
+        // Try content array (for models that return structured content)
+        if (Array.isArray(msg?.content) && msg.content.length > 0) {
+          const textPart = msg.content.find((p: any) => typeof p.text === 'string' && p.text.trim());
+          if (textPart?.text) return textPart.text;
+        }
+        
+        // Try tool calls (some models may use function calling format)
+        const toolArgs = msg?.tool_calls?.[0]?.function?.arguments;
+        if (typeof toolArgs === 'string' && toolArgs.trim()) {
+          return toolArgs;
+        }
+        
+        return null;
+      };
+
+      const content = extractContent(data);
       
       if (!content) {
+        const debugPreview = responseText.substring(0, 200);
+        console.error('Empty response from AI. Debug preview:', debugPreview);
         return new Response(JSON.stringify({ 
           error: 'Empty response from AI. Please try again.' 
         }), {
@@ -131,7 +160,7 @@ Format your response as JSON with these keys:
         });
       }
 
-      console.log('AI response length:', content.length);
+      console.log('AI response content length:', content.length);
 
       let result;
       try {
