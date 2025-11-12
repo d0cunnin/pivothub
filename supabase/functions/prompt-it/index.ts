@@ -73,7 +73,27 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Analyze this prompt: "${prompt}"` }
-          ]
+          ],
+          tools: [
+            {
+              type: 'function',
+              function: {
+                name: 'prompt_analysis',
+                description: 'Return structured analysis and improved prompt.',
+                parameters: {
+                  type: 'object',
+                  properties: {
+                    analysis: { type: 'string' },
+                    improvedPrompt: { type: 'string' },
+                    explanation: { type: 'string' }
+                  },
+                  required: ['analysis', 'improvedPrompt', 'explanation'],
+                  additionalProperties: false
+                }
+              }
+            }
+          ],
+          tool_choice: { type: 'function', function: { name: 'prompt_analysis' } }
         }),
         signal: controller.signal
       });
@@ -123,31 +143,71 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
         });
       }
 
-      // Robust content extraction
-      const extractContent = (data: any): string | null => {
-        const msg = data?.choices?.[0]?.message;
-        
-        // Try string content first
-        if (typeof msg?.content === 'string' && msg.content.trim()) {
-          return msg.content;
+      // More flexible content extractor with structural logging and fallbacks
+      const extractContentFlexible = (data: any, rawText: string): string | null => {
+        try {
+          const msg = data?.choices?.[0]?.message;
+
+          const hasToolCalls = Array.isArray(msg?.tool_calls) && msg.tool_calls.length > 0;
+          const contentType = typeof msg?.content;
+          const isContentArray = Array.isArray(msg?.content);
+
+          console.log('[PROMPT-IT] Message shape:', {
+            contentType,
+            isContentArray,
+            hasToolCalls,
+            toolArgsType: typeof msg?.tool_calls?.[0]?.function?.arguments,
+          });
+
+          // 1) Direct string content
+          if (typeof msg?.content === 'string' && msg.content.trim()) {
+            return msg.content;
+          }
+
+          // 2) Array content variants
+          if (Array.isArray(msg?.content) && msg.content.length > 0) {
+            const parts = msg.content
+              .map((p: any) => {
+                if (!p) return null;
+                if (typeof p === 'string') return p;
+                if (typeof p.text === 'string') return p.text;
+                if (typeof p.content === 'string') return p.content;
+                if ((p.type === 'text' || p.type === 'output_text') && typeof p.text === 'string') return p.text;
+                return null;
+              })
+              .filter(Boolean);
+
+            if (parts.length) return parts.join('').trim();
+          }
+
+          // 3) Tool calls (function calling)
+          const toolArgs = msg?.tool_calls?.[0]?.function?.arguments;
+          if (typeof toolArgs === 'string' && toolArgs.trim()) {
+            return toolArgs;
+          }
+          if (toolArgs && typeof toolArgs === 'object') {
+            try {
+              return JSON.stringify(toolArgs);
+            } catch { /* ignore */ }
+          }
+
+          // 4) Fallback: scan raw response for a JSON object that looks like our schema
+          const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const candidate = jsonMatch[0];
+            if (candidate.includes('"analysis"') && candidate.includes('"improvedPrompt"') && candidate.includes('"explanation"')) {
+              return candidate;
+            }
+          }
+
+          return null;
+        } catch (e) {
+          console.error('[PROMPT-IT] extractContentFlexible error:', e);
+          return null;
         }
-        
-        // Try content array (for models that return structured content)
-        if (Array.isArray(msg?.content) && msg.content.length > 0) {
-          const textPart = msg.content.find((p: any) => typeof p.text === 'string' && p.text.trim());
-          if (textPart?.text) return textPart.text;
-        }
-        
-        // Try tool calls (some models may use function calling format)
-        const toolArgs = msg?.tool_calls?.[0]?.function?.arguments;
-        if (typeof toolArgs === 'string' && toolArgs.trim()) {
-          return toolArgs;
-        }
-        
-        return null;
       };
 
-      const content = extractContent(data);
+      const content = extractContentFlexible(data, responseText);
       
       if (!content) {
         const debugPreview = responseText.substring(0, 200);
@@ -162,11 +222,18 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
 
       console.log('AI response content length:', content.length);
 
+      // Clean potential code fences before parsing
+      const cleaned = content
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/```$/i, '')
+        .trim();
+
       let result;
       try {
-        result = JSON.parse(content);
+        result = JSON.parse(cleaned);
       } catch (parseError) {
-        console.error('Failed to parse AI content:', content.substring(0, 300));
+        console.error('Failed to parse AI content:', cleaned.substring(0, 300));
         return new Response(JSON.stringify({ 
           error: 'Invalid AI response format. Please try again.' 
         }), {
