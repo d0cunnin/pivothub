@@ -246,6 +246,35 @@ const FundIt = () => {
         return;
       }
 
+      // Check for error in response data
+      if (data.error) {
+        console.error('Function returned error:', data.error);
+        let errorMessage = data.error;
+        
+        // Provide helpful context for common errors
+        if (data.error.includes('taking too long')) {
+          errorMessage += '\n\nTip: Try providing less detailed information in your grant application.';
+        } else if (data.error.includes('Rate limit')) {
+          errorMessage += '\n\nPlease wait 1-2 minutes before trying again.';
+        } else if (data.error.includes('credits exhausted')) {
+          errorMessage += '\n\nGo to Settings → Cloud → Usage to add credits.';
+        }
+        
+        toast.error('Generation Failed', {
+          description: errorMessage
+        });
+        return;
+      }
+
+      // Validate response format
+      if (!data || !data.proposal || !data.letterOfIntent) {
+        console.error('Invalid response format:', data);
+        toast.error('Generation Failed', {
+          description: 'Invalid response format. Please try again.'
+        });
+        return;
+      }
+
       const { proposal, letterOfIntent } = data;
       
       setGeneratedProposal(proposal);
