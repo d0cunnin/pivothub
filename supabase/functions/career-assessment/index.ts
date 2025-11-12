@@ -179,13 +179,13 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
 • **Hidden opportunities**: Surface overlooked career paths that fit their profile
 • **Work-life balance scoring**: Match careers to lifestyle preferences
 
-USER ASSESSMENT RESPONSES:
-${JSON.stringify(responses)}
+    USER ASSESSMENT RESPONSES:
+    ${JSON.stringify(responses)}
 
-=== ANALYSIS FRAMEWORK ===
-Provide a comprehensive career assessment worth $200+ of professional career counseling services.
+    === ANALYSIS FRAMEWORK ===
+    Provide a comprehensive career assessment worth $200+ of professional career counseling services.
 
-Return as a JSON object with this EXACT structure:
+    Return as a JSON object with this EXACT structure:`
 {
   "recommendations": [
     {
@@ -470,23 +470,65 @@ Return as a JSON object with this EXACT structure:
     }
   }
 }`;
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        max_completion_tokens: 16000,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
-        ],
-      }),
-    });
+    // Add timeout with GPT-5 Mini fallback
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120000);
 
-    const data = await response.json();
+    let response;
+    try {
+      response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${lovableApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-5',
+          max_completion_tokens: 16000,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
+          ],
+        }),
+        signal: controller.signal
+      });
+      clearTimeout(timeout);
+    } catch (abortErr) {
+      if (abortErr.name === 'AbortError') {
+        console.log('⚠️ GPT-5 timeout, fallback to GPT-5 Mini');
+        const c2 = new AbortController();
+        const t2 = setTimeout(() => c2.abort(), 60000);
+        response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${lovableApiKey}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'openai/gpt-5-mini',
+            max_completion_tokens: 11000,
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
+            ],
+          }),
+          signal: c2.signal
+        });
+        clearTimeout(t2);
+      } else throw abortErr;
+    }
+
+    let text = await response.text();
+    let data;
+    try {
+      if (!response.ok) {
+        console.error('Lovable AI error:', response.status, text.slice(0, 300));
+        if (response.status === 429) return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        if (response.status === 402) return new Response(JSON.stringify({ error: 'AI credits exhausted. Add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ error: `Lovable AI error ${response.status}` }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      data = JSON.parse(text);
+    } catch (err) {
+      console.error('Non-JSON response:', text?.slice(0, 300));
+      return new Response(JSON.stringify({ error: 'Invalid AI response. Please try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
     
     if (!response.ok) {
       const errorDetails = {

@@ -645,32 +645,63 @@ Make the plan practical, budget-conscious, and focused on PROFITABILITY. Include
 Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`
 
       try {
-        // Add timeout
+        // Add timeout with fallback
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 45000); // 45 second timeout
+        const timeout = setTimeout(() => controller.abort(), 120000);
         
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openaiApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'gpt-5-2025-08-07',
-            messages: [
-              { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
-              { role: 'user', content: prompt }
-            ],
-            max_completion_tokens: 7000,
-          }),
-          signal: controller.signal
-        });
-        
-        clearTimeout(timeout);
+        let response;
+        try {
+          response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${openaiApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'gpt-5-2025-08-07',
+              messages: [
+                { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
+                { role: 'user', content: prompt }
+              ],
+              max_completion_tokens: 7000,
+            }),
+            signal: ctrl
+          });
+          clearTimeout(t);
+          } catch(ae){if(ae.name==='AbortError'){const c2=new AbortController();const t2=setTimeout(()=>c2.abort(),60000);resp=await fetch('https://ai.gateway.lovable.dev/v1/chat/completions',{method:'POST',headers:{'Authorization':`Bearer ${lovableApiKey}`,'Content-Type':'application/json'},body:JSON.stringify({model:'openai/gpt-5-mini',messages:[{role:'system',content:systemMessage},{role:'user',content:prompt}],max_completion_tokens:2500}),signal:c2.signal});clearTimeout(t2);}else throw ae;}
+        } catch (abortErr) {
+          if (abortErr.name === 'AbortError') {
+            console.log('⚠️ GPT-5 timeout, falling back to GPT-5 Mini');
+            const ctrl2 = new AbortController();
+            const t2 = setTimeout(() => ctrl2.abort(), 60000);
+            
+            response = await fetch('https://api.openai.com/v1/chat/completions', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${openaiApiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                model: 'gpt-5-mini-2025-08-07',
+                messages: [
+                  { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
+                  { role: 'user', content: prompt }
+                ],
+                max_completion_tokens: 5000,
+              }),
+              signal: ctrl2.signal
+            });
+            clearTimeout(t2);
+          } else {
+            throw abortErr;
+          }
+        }
 
+        // Text-first parsing
+        let text = await response.text();
+        
         if (!response.ok) {
-          const errorData = await response.text();
-          console.error('OpenAI API error:', response.status, errorData);
+          console.error('OpenAI API error:', response.status, text.slice(0, 300));
           
           if (response.status === 429) {
             return new Response(JSON.stringify({ 
@@ -690,10 +721,13 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
             });
           }
           
-          throw new Error(`OpenAI API error: ${response.status}`);
+          return new Response(JSON.stringify({
+            error: `OpenAI error ${response.status}`,
+            details: text.slice(0, 300)
+          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
 
-        const aiResponse = await response.json();
+        const aiResponse = JSON.parse(text);
         const fullContent = aiResponse.choices[0].message.content;
         
         if (!fullContent) {

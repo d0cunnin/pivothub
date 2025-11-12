@@ -329,60 +329,133 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
 
     console.log('🤖 Calling Lovable AI Gateway...');
     
-    // Add timeout handling
+    // Add timeout handling with GPT-5 Mini fallback
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000); // 45s timeout
+    const timeout = setTimeout(() => controller.abort(), 120000);
     
-    const aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        max_completion_tokens: 6000,
-      }),
-      signal: controller.signal
-    });
-    
-    clearTimeout(timeout);
+    let aiResponse;
 
-    if (!aiResponse.ok) {
-      if (aiResponse.status === 429) {
-        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }), {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-      if (aiResponse.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings.' }), {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-      const errorText = await aiResponse.text();
-      console.error('❌ Lovable AI error:', {
-        status: aiResponse.status,
-        statusText: aiResponse.statusText,
-        body: errorText.substring(0, 500)
+    try {
+      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${lovableApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'google/gemini-2.5-flash',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          max_completion_tokens: 6000,
+        }),
+        signal: controller.signal
       });
-      throw new Error(`AI Gateway error ${aiResponse.status}: ${aiResponse.statusText}`);
+      
+      clearTimeout(timeout);
+    } catch (abortError) {
+      if (abortError.name === 'AbortError') {
+        console.log('⚠️ Gemini Flash timed out, falling back to GPT-5 Mini...');
+        
+        const controller2 = new AbortController();
+        const timeout2 = setTimeout(() => controller2.abort(), 60000);
+        
+        try {
+          aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${lovableApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'openai/gpt-5-mini',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: userPrompt }
+              ],
+              max_completion_tokens: 4200,
+            }),
+            signal: controller2.signal
+          });
+          
+          clearTimeout(timeout2);
+        } catch (fallbackError) {
+          if (fallbackError.name === 'AbortError') {
+            return new Response(JSON.stringify({ 
+              error: 'Report generation is taking too long. Please try again with shorter responses or contact support.' 
+            }), {
+              status: 200,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+            });
+          }
+          throw fallbackError;
+        }
+      } else {
+        throw abortError;
+      }
+    }
+
+    // Text-first parsing to prevent crashes  
+    let text;
+    let aiData;
+    try {
+      text = await aiResponse.text();
+      
+      if (!aiResponse.ok) {
+        console.error('❌ Lovable AI error:', aiResponse.status, text.slice(0, 300));
+        
+        if (aiResponse.status === 429) {
+          return new Response(JSON.stringify({ 
+            error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
+          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (aiResponse.status === 402) {
+          return new Response(JSON.stringify({ 
+            error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
+          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        
+        return new Response(JSON.stringify({
+          error: `Lovable AI error ${aiResponse.status}`,
+          details: text.slice(0, 300),
+        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      
+      aiData = JSON.parse(text);
+    } catch (err) {
+      console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
+      return new Response(JSON.stringify({
+        error: "Lovable AI Gateway returned invalid data. Please try again.",
+      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     console.log('✅ Lovable AI response received, status:', aiResponse.status);
-
-    const aiData = await aiResponse.json();
     
-    if (!aiData.choices?.[0]?.message?.content) {
-      throw new Error('AI response missing content');
+    // Robust JSON extraction with text-first parsing
+    let reportContent;
+    try {
+      reportContent = JSON.parse(aiData.choices[0].message.content);
+    } catch (parseError) {
+      console.warn('⚠️ JSON parse failed, attempting extraction from raw text');
+      const rawContent = aiData.choices[0].message.content;
+      
+      // Try to extract JSON from markdown or mixed content
+      const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          reportContent = JSON.parse(jsonMatch[0]);
+        } catch {
+          return new Response(JSON.stringify({
+            error: "Failed to parse AI response. Please try again.",
+          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+      } else {
+        return new Response(JSON.stringify({
+          error: "Invalid AI response format. Please try again.",
+        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
     }
-    
-    const reportContent = JSON.parse(aiData.choices[0].message.content);
     
     // Sanitize the report content to remove excessive markdown
     const sanitizedReport = sanitizeObject(reportContent);

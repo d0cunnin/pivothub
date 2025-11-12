@@ -711,26 +711,105 @@ Analyze the user's responses comprehensively to create a professional-grade skil
     • Assess both technical and soft skills comprehensively
     • Be encouraging but realistic about the effort required`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Analyze these skill assessment responses and provide comprehensive career development recommendations following the detailed structure provided.` }
-        ],
-        max_completion_tokens: 8000,
-      }),
-    });
+    // Add timeout with GPT-5 Mini fallback
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120000);
 
-    const data = await response.json();
-    
-    if (!response.ok) {
-      throw new Error(data.error?.message || 'Failed to analyze skills');
+    let aiResponse;
+
+    try {
+      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${lovableApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-5',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: `Analyze these skill assessment responses and provide comprehensive career development recommendations following the detailed structure provided.` }
+          ],
+          max_completion_tokens: 8000,
+        }),
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeout);
+    } catch (abortError) {
+      if (abortError.name === 'AbortError') {
+        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
+        
+        const controller2 = new AbortController();
+        const timeout2 = setTimeout(() => controller2.abort(), 60000);
+        
+        try {
+          aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${lovableApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'openai/gpt-5-mini',
+              messages: [
+                { role: 'system', content: systemPrompt },
+                { role: 'user', content: `Analyze these skill assessment responses and provide comprehensive career development recommendations following the detailed structure provided.` }
+              ],
+              max_completion_tokens: 5600,
+            }),
+            signal: controller2.signal
+          });
+          
+          clearTimeout(timeout2);
+        } catch (fallbackError) {
+          if (fallbackError.name === 'AbortError') {
+            return new Response(JSON.stringify({ 
+              error: 'Skills assessment is taking too long. Please try again with shorter responses.' 
+            }), {
+              status: 200,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+            });
+          }
+          throw fallbackError;
+        }
+      } else {
+        throw abortError;
+      }
+    }
+
+    // Text-first parsing
+    let text;
+    let data;
+    try {
+      text = await aiResponse.text();
+      
+      if (!aiResponse.ok) {
+        console.error("Lovable AI Gateway error:", aiResponse.status, text.slice(0, 300));
+        
+        if (aiResponse.status === 429) {
+          return new Response(JSON.stringify({ 
+            error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
+          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        if (aiResponse.status === 402) {
+          return new Response(JSON.stringify({ 
+            error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
+          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        
+        return new Response(JSON.stringify({
+          error: `Lovable AI error ${aiResponse.status}`,
+          details: text.slice(0, 300),
+        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      
+      data = JSON.parse(text);
+    } catch (err) {
+      console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
+      return new Response(JSON.stringify({
+        error: "Lovable AI Gateway returned invalid data. Please try again.",
+      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     let assessment;
