@@ -38,9 +38,13 @@ const PromptIt = () => {
 
     try {
       // Check credits and usage
-      const canUse = await checkAndIncrementUsage('prompt-it');
+      const { canUse, reason } = await checkAndIncrementUsage('prompt-it');
       if (!canUse) {
-        toast.error("Insufficient credits. Please upgrade or purchase credits.");
+        const msg =
+          reason === 'not_logged_in' ? 'Please sign in to use Prompt It' :
+          reason === 'over_limit' || reason === 'insufficient_credits' ? 'Insufficient credits. Please upgrade or purchase credits.' :
+          'You cannot use this tool right now. Please try again later.';
+        toast.error(msg);
         setIsLoading(false);
         return;
       }
@@ -362,7 +366,7 @@ const PromptIt = () => {
                 />
                 <Button 
                   onClick={handleAnalyze} 
-                  disabled={isLoading || !userPrompt.trim()}
+                  disabled={isLoading || !userPrompt.trim() || remainingRequests <= 0}
                   className="w-full mt-4"
                   size="lg"
                 >

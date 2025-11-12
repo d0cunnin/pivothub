@@ -151,12 +151,14 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
           const hasToolCalls = Array.isArray(msg?.tool_calls) && msg.tool_calls.length > 0;
           const contentType = typeof msg?.content;
           const isContentArray = Array.isArray(msg?.content);
+          const hasCandidates = Array.isArray(data?.candidates) && data.candidates.length > 0;
 
           console.log('[PROMPT-IT] Message shape:', {
             contentType,
             isContentArray,
             hasToolCalls,
             toolArgsType: typeof msg?.tool_calls?.[0]?.function?.arguments,
+            hasCandidates,
           });
 
           // 1) Direct string content
@@ -189,6 +191,21 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
             try {
               return JSON.stringify(toolArgs);
             } catch { /* ignore */ }
+          }
+
+          // 3.5) Gemini candidates format (Lovable gateway sometimes returns this)
+          const candidate = data?.candidates?.[0];
+          if (candidate?.content?.parts && Array.isArray(candidate.content.parts)) {
+            const parts = candidate.content.parts
+              .map((p: any) => {
+                if (typeof p === 'string') return p;
+                if (typeof p?.text === 'string') return p.text;
+                if (typeof p?.content === 'string') return p.content;
+                return null;
+              })
+              .filter(Boolean);
+            console.log('[PROMPT-IT] Gemini candidates parts:', { count: parts.length });
+            if (parts.length) return parts.join('').trim();
           }
 
           // 4) Fallback: scan raw response for a JSON object that looks like our schema
