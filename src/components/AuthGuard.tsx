@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Lock, Mail, Eye, EyeOff, Check, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import Turnstile from 'react-turnstile';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -29,15 +30,10 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
-  const [honeypot, setHoneypot] = useState('');
-  const [formStartTime, setFormStartTime] = useState(Date.now());
+  const [turnstileToken, setTurnstileToken] = useState('');
   const { toast } = useToast();
 
   const emailsMatch = confirmEmail && email === confirmEmail;
-
-  useEffect(() => {
-    setFormStartTime(Date.now());
-  }, [showAuthModal]);
 
   if (loading) {
     return (
@@ -78,22 +74,11 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
     try {
       setAuthLoading(true);
 
-      // Bot protection checks
-      if (honeypot) {
+      // Turnstile verification
+      if (!turnstileToken) {
         toast({
-          title: "Error",
-          description: "Invalid form submission detected.",
-          variant: "destructive",
-        });
-        setAuthLoading(false);
-        return;
-      }
-
-      const formFillTime = Date.now() - formStartTime;
-      if (formFillTime < 2000) {
-        toast({
-          title: "Please slow down",
-          description: "Please take a moment to review your information.",
+          title: "Verification required",
+          description: "Please complete the security check.",
           variant: "destructive",
         });
         setAuthLoading(false);
@@ -140,6 +125,17 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
     e.preventDefault();
     try {
       setAuthLoading(true);
+      
+      // Turnstile verification
+      if (!turnstileToken) {
+        toast({
+          title: "Verification required",
+          description: "Please complete the security check.",
+          variant: "destructive",
+        });
+        setAuthLoading(false);
+        return;
+      }
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -230,17 +226,6 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
               
               <TabsContent value="signup">
                 <form onSubmit={handleEmailSignUp} className="space-y-4">
-                  {/* Honeypot field - hidden from users */}
-                  <input
-                    type="text"
-                    name="website"
-                    value={honeypot}
-                    onChange={(e) => setHoneypot(e.target.value)}
-                    style={{ position: 'absolute', left: '-9999px' }}
-                    tabIndex={-1}
-                    autoComplete="off"
-                  />
-                  
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
@@ -308,6 +293,17 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
                       </button>
                     </div>
                   </div>
+                  
+                  <div className="flex justify-center">
+                    <Turnstile
+                      sitekey="0x4AAAAAACAzO1fmGnonyqIG"
+                      onVerify={(token) => setTurnstileToken(token)}
+                      onError={() => setTurnstileToken('')}
+                      onExpire={() => setTurnstileToken('')}
+                      theme="light"
+                    />
+                  </div>
+                  
                   <Button type="submit" className="w-full" disabled={authLoading || !emailsMatch}>
                     {authLoading ? "Creating Account..." : "Create Account"}
                   </Button>
@@ -353,6 +349,17 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
                       </button>
                     </div>
                   </div>
+                  
+                  <div className="flex justify-center">
+                    <Turnstile
+                      sitekey="0x4AAAAAACAzO1fmGnonyqIG"
+                      onVerify={(token) => setTurnstileToken(token)}
+                      onError={() => setTurnstileToken('')}
+                      onExpire={() => setTurnstileToken('')}
+                      theme="light"
+                    />
+                  </div>
+                  
                   <Button type="submit" className="w-full" disabled={authLoading}>
                     {authLoading ? "Signing In..." : "Sign In"}
                   </Button>

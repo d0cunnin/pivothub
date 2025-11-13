@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, Eye, EyeOff, Check, X } from "lucide-react";
 import { z } from 'zod';
+import Turnstile from 'react-turnstile';
 
 // Password validation schema
 const passwordSchema = z.string()
@@ -26,8 +27,7 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [honeypot, setHoneypot] = useState('');
-  const [formStartTime, setFormStartTime] = useState(Date.now());
+  const [turnstileToken, setTurnstileToken] = useState('');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
@@ -46,9 +46,6 @@ const Auth = () => {
       }
     };
     checkUser();
-    
-    // Track form start time for bot detection
-    setFormStartTime(Date.now());
   }, [navigate, redirectPath]);
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -56,22 +53,11 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      // Bot protection checks
-      if (honeypot) {
+      // Turnstile verification
+      if (!turnstileToken) {
         toast({
-          title: "Error",
-          description: "Invalid form submission detected.",
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
-      const formFillTime = Date.now() - formStartTime;
-      if (formFillTime < 2000) {
-        toast({
-          title: "Please slow down",
-          description: "Please take a moment to review your information.",
+          title: "Verification required",
+          description: "Please complete the security check.",
           variant: "destructive",
         });
         setLoading(false);
@@ -174,6 +160,16 @@ const Auth = () => {
     setLoading(true);
 
     try {
+      // Turnstile verification
+      if (!turnstileToken) {
+        toast({
+          title: "Verification required",
+          description: "Please complete the security check.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
       // Check if account is locked BEFORE attempting login
       const { data: lockoutCheck } = await supabase
         .rpc('check_account_lockout', { p_email: email });
@@ -336,6 +332,17 @@ const Auth = () => {
                     </button>
                   </div>
                 </div>
+                
+                <div className="flex justify-center">
+                  <Turnstile
+                    sitekey="0x4AAAAAACAzO1fmGnonyqIG"
+                    onVerify={(token) => setTurnstileToken(token)}
+                    onError={() => setTurnstileToken('')}
+                    onExpire={() => setTurnstileToken('')}
+                    theme="light"
+                  />
+                </div>
+                
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Signing In..." : "Sign In"}
                 </Button>
@@ -371,17 +378,6 @@ const Auth = () => {
               </div>
               
               <form onSubmit={handleSignUp} className="space-y-4">
-                {/* Honeypot field - hidden from users */}
-                <input
-                  type="text"
-                  name="website"
-                  value={honeypot}
-                  onChange={(e) => setHoneypot(e.target.value)}
-                  style={{ position: 'absolute', left: '-9999px' }}
-                  tabIndex={-1}
-                  autoComplete="off"
-                />
-                
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
@@ -492,6 +488,17 @@ const Auth = () => {
                     </div>
                   )}
                 </div>
+                
+                <div className="flex justify-center">
+                  <Turnstile
+                    sitekey="0x4AAAAAACAzO1fmGnonyqIG"
+                    onVerify={(token) => setTurnstileToken(token)}
+                    onError={() => setTurnstileToken('')}
+                    onExpire={() => setTurnstileToken('')}
+                    theme="light"
+                  />
+                </div>
+                
                 <Button type="submit" className="w-full" disabled={loading || !emailsMatch}>
                   {loading ? "Creating Account..." : "Create Account"}
                 </Button>
