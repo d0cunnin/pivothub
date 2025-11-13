@@ -131,3 +131,6 @@ verify_jwt = true
 
 [functions.deploy-it]
 verify_jwt = true
+
+[functions.track-signup]
+verify_jwt = false
