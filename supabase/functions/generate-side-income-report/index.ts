@@ -203,7 +203,12 @@ Create a personalized side income blueprint with 3-5 specific, actionable paths 
 3. Fit with their skills, preferences, and risk tolerance
 4. Speed to first dollar (prioritize quick wins)
 
-IMPORTANT: Provide clean, professional text without markdown formatting. Use simple formatting only.
+CRITICAL JSON FORMATTING RULES:
+1. Return ONLY a valid JSON object - no markdown, no code blocks, no explanatory text
+2. Start your response with { and end with }
+3. Do not wrap JSON in backticks or ```json blocks
+4. Ensure all strings are properly escaped
+5. Use double quotes for all keys and string values
 
 Structure the response as a JSON object with these sections:
 {
@@ -343,7 +348,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
+          model: 'google/gemini-2.5-flash', // If JSON issues persist, try: 'openai/gpt-5-mini'
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt }
@@ -436,24 +441,77 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
     let reportContent;
     try {
       reportContent = JSON.parse(aiData.choices[0].message.content);
+      console.log('✅ Successfully parsed JSON directly');
     } catch (parseError) {
       console.warn('⚠️ JSON parse failed, attempting extraction from raw text');
       const rawContent = aiData.choices[0].message.content;
       
-      // Try to extract JSON from markdown or mixed content
-      const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
+      // Add detailed logging for debugging
+      console.log('Raw AI content length:', rawContent?.length);
+      console.log('First 200 chars:', rawContent?.slice(0, 200));
+      console.log('Last 100 chars:', rawContent?.slice(-100));
+      
+      // First try to extract from markdown code blocks
+      const markdownMatch = rawContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (markdownMatch) {
         try {
-          reportContent = JSON.parse(jsonMatch[0]);
-        } catch {
-          return new Response(JSON.stringify({
-            error: "Failed to parse AI response. Please try again.",
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          reportContent = JSON.parse(markdownMatch[1].trim());
+          console.log('✅ Extracted JSON from markdown code block');
+        } catch (mdErr) {
+          console.warn('Failed to parse markdown-wrapped JSON:', mdErr);
         }
-      } else {
+      }
+      
+      // If markdown extraction failed, try improved regex
+      if (!reportContent) {
+        const jsonMatch = rawContent.match(/\{[\s\S]*?\}(?=\s*$|\s*```|$)/);
+        if (jsonMatch) {
+          try {
+            reportContent = JSON.parse(jsonMatch[0]);
+            console.log('✅ Extracted JSON using improved regex');
+          } catch (regexErr) {
+            console.warn('Failed to parse regex-extracted JSON:', regexErr);
+          }
+        }
+      }
+      
+      // Last resort: return mock data with clear disclaimer
+      if (!reportContent) {
+        console.warn('⚠️ All parsing failed, returning mock data');
         return new Response(JSON.stringify({
-          error: "Invalid AI response format. Please try again.",
-        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          report: {
+            executive_summary: "⚠️ DEMO DATA: AI response parsing failed. This is sample data to demonstrate the report structure. Please try generating again or contact support@pivothub.io.",
+            skills_analysis: "Sample skills analysis. Your actual skills: communication, problem-solving, time management. Please regenerate for your personalized analysis.",
+            recommended_paths: [
+              {
+                rank: 1,
+                title: "Sample Income Path (Demo Data)",
+                description: "This is demo data. The AI successfully analyzed your assessment but the response format needs adjustment. Please try regenerating your report.",
+                startup_cost: "$0-50",
+                time_commitment: "5-10 hours/week",
+                income_potential: "$500-2000/month",
+                steps: [
+                  "This is sample data - please regenerate your report",
+                  "If the issue persists after 2-3 attempts, contact support@pivothub.io"
+                ]
+              }
+            ],
+            immediate_actions: [
+              "Click the 'Try Generating Again' button to regenerate your personalized report",
+              "If issue persists, contact support@pivothub.io with error code: JSON_PARSE_FAIL"
+            ],
+            resources: [],
+            ninety_day_plan: {
+              month_1: ["Regenerate report for personalized plan"],
+              month_2: ["Contact support if issues persist"],
+              month_3: ["Begin implementing your actual blueprint"]
+            }
+          },
+          _is_mock: true
+        }), { 
+          status: 200, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        });
       }
     }
     

@@ -64,10 +64,21 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
 
       console.log('✅ Report generated successfully');
       setReport(data.report);
-      toast({
-        title: "Success!",
-        description: "Your personalized blueprint is ready!",
-      });
+      
+      // Check if mock data was returned
+      if (data._is_mock) {
+        toast({
+          title: "Demo Data Displayed",
+          description: "AI parsing failed. Showing sample data. Please try regenerating.",
+          variant: "destructive",
+          duration: 10000
+        });
+      } else {
+        toast({
+          title: "Success!",
+          description: "Your personalized blueprint is ready!",
+        });
+      }
     } catch (error: any) {
       console.error('❌ Error generating report:', error);
       toast({
