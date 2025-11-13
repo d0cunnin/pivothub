@@ -25,6 +25,8 @@ import { ActivityFeed } from "@/components/admin/ActivityFeed";
 import { AssessmentAnalytics } from "@/components/admin/AssessmentAnalytics";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { CostAnalytics } from "@/components/admin/CostAnalytics";
+import { SignupAuditViewer } from "@/components/admin/SignupAuditViewer";
+import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
 
 interface UserWithSubscription {
   id: string;
@@ -249,6 +251,7 @@ const Admin = () => {
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="cost">Cost Analysis</TabsTrigger>
               <TabsTrigger value="activity">Activity</TabsTrigger>
+              <TabsTrigger value="security">Security</TabsTrigger>
               <TabsTrigger value="system">System</TabsTrigger>
             </TabsList>
 
@@ -377,6 +380,11 @@ const Admin = () => {
             <TabsContent value="activity" className="space-y-6">
               <ActivityFeed />
               <AuditLogViewer />
+            </TabsContent>
+
+            <TabsContent value="security" className="space-y-6">
+              <FraudDetectionPanel />
+              <SignupAuditViewer />
             </TabsContent>
 
             <TabsContent value="system" className="space-y-6">
