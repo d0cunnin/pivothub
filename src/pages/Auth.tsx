@@ -90,7 +90,7 @@ const Auth = () => {
         ? `${window.location.origin}/auth/callback`
         : `${window.location.origin}/auth/callback?redirect=${redirectPath}`;
         
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -105,6 +105,20 @@ const Auth = () => {
           variant: "destructive",
         });
       } else {
+        // Track signup with IP for fraud detection (non-blocking)
+        if (data.user) {
+          supabase.functions
+            .invoke('track-signup', {
+              body: { userId: data.user.id, email: data.user.email },
+            })
+            .then((result) => {
+              if (result.data?.flagged) {
+                console.warn(`Signup flagged as suspicious: ${result.data.accountsFromIp} accounts from this IP`);
+              }
+            })
+            .catch((err) => console.error('Failed to track signup:', err));
+        }
+
         toast({
           title: "Success",
           description: "Your account has been created! You can now sign in.",
