@@ -206,7 +206,7 @@ Create a personalized side income blueprint with 3-5 specific, actionable paths 
 CRITICAL JSON FORMATTING RULES:
 1. Return ONLY a valid JSON object - no markdown, no code blocks, no explanatory text
 2. Start your response with { and end with }
-3. Do not wrap JSON in backticks or ```json blocks
+3. Do not wrap JSON in backticks or \`\`\`json blocks
 4. Ensure all strings are properly escaped
 5. Use double quotes for all keys and string values
 
