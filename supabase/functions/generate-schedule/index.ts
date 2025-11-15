@@ -148,6 +148,8 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
     validateProvider('text', modelConfig.model);
 
     let response;
+    
+    // Try GPT-5 first with 120 second timeout
     try {
       response = await fetchWithTimeout(
         modelConfig.endpoint,
@@ -158,33 +160,77 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            model: modelConfig.model,
+            model: 'openai/gpt-5',
             messages: [
               { role: "system", content: systemPrompt },
               { role: "user", content: userPrompt },
             ],
-            max_completion_tokens: 10000, // Increased for full weekly schedule generation
+            max_completion_tokens: 8000,
           }),
         },
-        30000 // 30 second timeout
+        120000 // 2 minute timeout for GPT-5
       );
-    } catch (error) {
-      await logRequest(supabase, {
-        userId,
-        endpoint: "generate-schedule",
-        ip,
-        userAgent: req.headers.get('user-agent') || 'unknown',
-        creditsCharged: 0,
-        success: false,
-        errorMessage: error instanceof AIError ? error.message : 'AI request failed',
-        requestDurationMs: Date.now() - startTime
-      });
-      
-      return handleAIError(error, corsHeaders, {
-        endpoint: 'generate-schedule',
-        userId,
-        startTime
-      });
+    } catch (firstError) {
+      // If GPT-5 timed out, fall back to GPT-5 Mini
+      if (firstError instanceof AIError && firstError.code === 'TIMEOUT') {
+        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
+        
+        try {
+          response = await fetchWithTimeout(
+            modelConfig.endpoint,
+            {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${modelConfig.apiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                model: 'openai/gpt-5-mini',
+                messages: [
+                  { role: "system", content: systemPrompt },
+                  { role: "user", content: userPrompt },
+                ],
+                max_completion_tokens: 8000,
+              }),
+            },
+            60000 // 1 minute timeout for GPT-5 Mini
+          );
+        } catch (secondError) {
+          await logRequest(supabase, {
+            userId,
+            endpoint: "generate-schedule",
+            ip,
+            userAgent: req.headers.get('user-agent') || 'unknown',
+            creditsCharged: 0,
+            success: false,
+            errorMessage: secondError instanceof AIError ? secondError.message : 'AI request failed after fallback',
+            requestDurationMs: Date.now() - startTime
+          });
+          
+          return handleAIError(secondError, corsHeaders, {
+            endpoint: 'generate-schedule',
+            userId,
+            startTime
+          });
+        }
+      } else {
+        await logRequest(supabase, {
+          userId,
+          endpoint: "generate-schedule",
+          ip,
+          userAgent: req.headers.get('user-agent') || 'unknown',
+          creditsCharged: 0,
+          success: false,
+          errorMessage: firstError instanceof AIError ? firstError.message : 'AI request failed',
+          requestDurationMs: Date.now() - startTime
+        });
+        
+        return handleAIError(firstError, corsHeaders, {
+          endpoint: 'generate-schedule',
+          userId,
+          startTime
+        });
+      }
     }
 
     if (!response.ok) {
