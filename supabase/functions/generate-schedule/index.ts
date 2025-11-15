@@ -33,6 +33,7 @@ Deno.serve(async (req) => {
     // Truncate all text inputs to prevent token limit issues
     const truncatedData = {
       ...formData,
+      workScheduleDetails: truncateText(formData.workScheduleDetails, 150),
       familyCommitments: truncateText(formData.familyCommitments, 150),
       recurringAppointments: truncateText(formData.recurringAppointments, 150),
       schoolCommitment: truncateText(formData.schoolCommitment, 100),
@@ -87,12 +88,22 @@ Keep activity descriptions under 50 characters.`;
 
     const userPrompt = `Schedule requirements:
 
-COMMITMENTS:
-- Work: ${truncatedData.workHours}h/wk (${truncatedData.workSchedule})
-- School: ${truncatedData.schoolCommitment}
+WORK & COMMUTE:
+- Work hours: ${truncatedData.workHours}h/week
+- Work type: ${truncatedData.workSchedule}
+- Work schedule: ${truncatedData.workScheduleDetails || 'Not specified'}
+- CRITICAL: If work hours are 9 AM - 5 PM, commute TO work must END by 9 AM
+- CRITICAL: If work hours are 9 AM - 5 PM, commute FROM work must START at 5 PM
+- Commute duration: ${truncatedData.commuteTime || 0}h total per day
+- Do NOT overlap commute with work hours
+
+EDUCATION & TRAINING:
+- Currently enrolled: ${truncatedData.inSchool === 'yes' ? 'Yes' : 'No'}
+${truncatedData.inSchool === 'yes' ? `- Schedule: ${truncatedData.schoolCommitment || 'Self-paced, no fixed schedule'}` : ''}
+
+OTHER COMMITMENTS:
 - Family: ${truncatedData.familyCommitments}
 - Appointments: ${truncatedData.recurringAppointments}
-- Commute: ${truncatedData.commuteTime || 0}h/day
 
 ENERGY:
 - Type: ${truncatedData.energyType}

@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ChevronLeft, ChevronRight, Calendar, Download, ExternalLink, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
@@ -17,6 +18,8 @@ interface ScheduleFormData {
   // Step 1: Current Commitments
   workHours: string;
   workSchedule: string;
+  workScheduleDetails: string;
+  inSchool: string;
   schoolCommitment: string;
   familyCommitments: string;
   recurringAppointments: string;
@@ -45,6 +48,8 @@ export function ScheduleItWizard() {
   const [formData, setFormData] = useState<ScheduleFormData>({
     workHours: '',
     workSchedule: '',
+    workScheduleDetails: '',
+    inSchool: '',
     schoolCommitment: '',
     familyCommitments: '',
     recurringAppointments: '',
@@ -91,8 +96,20 @@ export function ScheduleItWizard() {
 
   const generateSchedule = async () => {
     // Validation
-    if (!formData.workHours || !formData.energyType || !formData.businessType) {
-      toast.error('Please fill in all required fields');
+    if (!formData.workHours || !formData.inSchool || !formData.energyType || !formData.businessType) {
+      toast.error('Please fill in all required fields (marked with *)');
+      return;
+    }
+
+    // If enrolled in school, require schedule details
+    if (formData.inSchool === 'yes' && !formData.schoolCommitment) {
+      toast.error('Please provide your school/training schedule');
+      return;
+    }
+
+    // If work schedule selected, require details
+    if (formData.workSchedule && formData.workSchedule !== 'none' && !formData.workScheduleDetails) {
+      toast.error('Please specify your work schedule details');
       return;
     }
 
@@ -242,15 +259,68 @@ export function ScheduleItWizard() {
               </Select>
             </div>
 
-            <div>
-              <Label htmlFor="schoolCommitment">School/Education Commitments</Label>
-              <Textarea
-                id="schoolCommitment"
-                value={formData.schoolCommitment}
-                onChange={(e) => handleInputChange('schoolCommitment', e.target.value)}
-                placeholder="Classes, study time, etc."
-                rows={3}
-              />
+            {formData.workSchedule && formData.workSchedule !== 'none' && (
+              <div>
+                <Label htmlFor="workScheduleDetails">Specific Work Schedule *</Label>
+                <Textarea
+                  id="workScheduleDetails"
+                  value={formData.workScheduleDetails}
+                  onChange={(e) => handleInputChange('workScheduleDetails', e.target.value)}
+                  placeholder="e.g., Monday-Friday 9 AM - 5 PM, or Tuesday/Thursday 2-10 PM"
+                  rows={2}
+                />
+                <p className="text-sm text-muted-foreground mt-1">
+                  Enter your exact work hours and days
+                </p>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <Label className="text-base">
+                Are you currently enrolled in school or a training program? *
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                (e.g., college, university, cosmetology school, skilled trades, certification programs)
+              </p>
+              
+              <RadioGroup 
+                value={formData.inSchool} 
+                onValueChange={(val) => {
+                  handleInputChange('inSchool', val);
+                  if (val === 'no') {
+                    handleInputChange('schoolCommitment', '');
+                  }
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="yes" id="school-yes" />
+                  <Label htmlFor="school-yes" className="font-normal cursor-pointer">
+                    Yes, I am currently enrolled
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="school-no" />
+                  <Label htmlFor="school-no" className="font-normal cursor-pointer">
+                    No, not currently enrolled
+                  </Label>
+                </div>
+              </RadioGroup>
+
+              {formData.inSchool === 'yes' && (
+                <div className="mt-3 pl-4 border-l-2 border-primary/30">
+                  <Label htmlFor="schoolCommitment">School/Training Schedule</Label>
+                  <Textarea
+                    id="schoolCommitment"
+                    value={formData.schoolCommitment}
+                    onChange={(e) => handleInputChange('schoolCommitment', e.target.value)}
+                    placeholder="e.g., Monday/Wednesday 6-9 PM, or self-paced online (10 hrs/week)"
+                    rows={3}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Include class times, study hours, or "self-paced" if no fixed schedule
+                  </p>
+                </div>
+              )}
             </div>
 
             <div>
