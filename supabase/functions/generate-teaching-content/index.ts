@@ -973,21 +973,97 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
         throw new Error('Invalid content type')
     }
     
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemMessage },
-          { role: 'user', content: prompt }
-        ],
-        max_completion_tokens: 14000
-      })
-    })
+    // Try GPT-5 first with 120 second timeout
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120000); // 2 minutes for GPT-5
+    
+    let response;
+    let modelUsed = 'openai/gpt-5';
+    
+    try {
+      response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${lovableApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-5',
+          messages: [
+            { role: 'system', content: systemMessage },
+            { role: 'user', content: prompt }
+          ],
+          max_completion_tokens: 14000
+        }),
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeout);
+    } catch (abortError) {
+      clearTimeout(timeout);
+      
+      // GPT-5 Mini fallback on timeout
+      if (abortError.name === 'AbortError') {
+        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
+        modelUsed = 'openai/gpt-5-mini';
+        
+        const controller2 = new AbortController();
+        const timeout2 = setTimeout(() => controller2.abort(), 60000); // 1 minute fallback
+        
+        try {
+          response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${lovableApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: 'openai/gpt-5-mini',
+              messages: [
+                { role: 'system', content: systemMessage },
+                { role: 'user', content: prompt }
+              ],
+              max_completion_tokens: 14000
+            }),
+            signal: controller2.signal
+          });
+          
+          clearTimeout(timeout2);
+        } catch (fallbackError) {
+          clearTimeout(timeout2);
+          
+          if (fallbackError.name === 'AbortError') {
+            return new Response(JSON.stringify({ 
+              error: 'Request timed out after two attempts. Please try again with shorter inputs.' 
+            }), {
+              status: 200,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+            });
+          }
+          throw fallbackError;
+        }
+      } else {
+        throw abortError;
+      }
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Lovable AI error:', response.status, errorText);
+      
+      if (response.status === 429) {
+        return new Response(JSON.stringify({ 
+          error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
+        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ 
+          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
+        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      
+      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
+    }
 
     const result = await response.json()
     
