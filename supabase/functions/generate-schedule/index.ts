@@ -33,14 +33,14 @@ Deno.serve(async (req) => {
     // Truncate all text inputs to prevent token limit issues
     const truncatedData = {
       ...formData,
-      familyCommitments: truncateText(formData.familyCommitments, 300),
-      recurringAppointments: truncateText(formData.recurringAppointments, 300),
-      schoolCommitment: truncateText(formData.schoolCommitment, 200),
-      workSchedule: truncateText(formData.workSchedule, 200),
-      businessType: truncateText(formData.businessType, 300),
-      sleepSchedule: truncateText(formData.sleepSchedule, 100),
-      nonNegotiables: truncateText(formData.nonNegotiables, 300),
-      otherCommitments: truncateText(formData.otherCommitments, 300),
+      familyCommitments: truncateText(formData.familyCommitments, 150),
+      recurringAppointments: truncateText(formData.recurringAppointments, 150),
+      schoolCommitment: truncateText(formData.schoolCommitment, 100),
+      workSchedule: truncateText(formData.workSchedule, 120),
+      businessType: truncateText(formData.businessType, 120),
+      sleepSchedule: truncateText(formData.sleepSchedule, 80),
+      nonNegotiables: truncateText(formData.nonNegotiables, 150),
+      otherCommitments: truncateText(formData.otherCommitments, 150),
     };
 
     // Optimized system prompt (concise version)
@@ -50,7 +50,7 @@ CRITICAL: You MUST respond with ONLY valid JSON. No markdown, no code blocks, no
 
 IMPORTANT CONSTRAINTS:
 - Keep ALL activity descriptions under 30 characters
-- Limit to 6-8 activities per day maximum
+- Limit to 4-5 activities per day maximum
 - Keep recommendations brief (under 50 characters each)
 - Focus on essential tasks only
 
@@ -77,13 +77,7 @@ RESPONSE FORMAT - Return ONLY valid JSON:
   "summary": {
     "totalCommittedHours": 40,
     "totalAvailableHours": 168,
-    "sideBusinessHours": 15,
-    "familyTime": 20,
-    "personalDevelopment": 5,
-    "fitnessHours": 4,
-    "faithTime": 3,
-    "restHours": 56,
-    "recommendations": ["Concise tip 1", "Concise tip 2", "Concise tip 3"]
+    "recommendations": ["Tip 1", "Tip 2", "Tip 3"]
   }
 }
 
