@@ -27,6 +27,8 @@ import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { CostAnalytics } from "@/components/admin/CostAnalytics";
 import { SignupAuditViewer } from "@/components/admin/SignupAuditViewer";
 import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
+import { AIUsageMonitor } from "@/components/admin/AIUsageMonitor";
+import { AIUsageAlerts } from "@/components/admin/AIUsageAlerts";
 
 interface UserWithSubscription {
   id: string;
@@ -244,9 +246,12 @@ const Admin = () => {
             <p className="text-muted-foreground">Manage user access and subscriptions</p>
           </div>
 
+          <AIUsageAlerts />
+
           <Tabs defaultValue="overview" className="space-y-6">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="ai-usage">AI Usage</TabsTrigger>
               <TabsTrigger value="users">Users</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="cost">Cost Analysis</TabsTrigger>
@@ -280,6 +285,10 @@ const Admin = () => {
               
               <PlatformAnalytics />
               <RevenueAnalytics />
+            </TabsContent>
+
+            <TabsContent value="ai-usage" className="space-y-6">
+              <AIUsageMonitor />
             </TabsContent>
 
             <TabsContent value="users" className="space-y-6">
