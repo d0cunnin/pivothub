@@ -129,7 +129,7 @@ Create a balanced weekly schedule in JSON format.`;
               { role: "system", content: systemPrompt },
               { role: "user", content: userPrompt },
             ],
-            max_completion_tokens: 8000,
+            max_completion_tokens: 16000,
           }),
         },
         120000 // 2 minute timeout for GPT-5
@@ -154,7 +154,7 @@ Create a balanced weekly schedule in JSON format.`;
                   { role: "system", content: systemPrompt },
                   { role: "user", content: userPrompt },
                 ],
-                max_completion_tokens: 8000,
+                max_completion_tokens: 16000,
               }),
             },
             60000 // 1 minute timeout for GPT-5 Mini

@@ -27,7 +27,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Launch Strategy Generator', credits: 3 },
   ],
   'Schedule It (Time Management)': [
-    { name: 'Schedule Builder', credits: 3 },
+    { name: 'Schedule Builder', credits: 5 },
   ],
   'Host It (Event Planning)': [
     { name: 'Event Planning Generator', credits: 4 },
