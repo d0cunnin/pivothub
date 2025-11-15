@@ -32,6 +32,9 @@ interface ScheduleFormData {
   peakProductivity: string[];
   energyDips: string[];
   sleepSchedule: string;
+  hasExerciseRoutine: string;
+  exerciseHours: string;
+  exercisePreferredTime: string;
 
   // Step 3: Business Goals
   businessType: string;
@@ -43,6 +46,7 @@ interface ScheduleFormData {
   nonNegotiableBlocks: string;
   preferredEnvironment: string;
   schedulingStyle: string;
+  downtimeHours: string;
 }
 
 export function ScheduleItWizard() {
@@ -62,6 +66,9 @@ export function ScheduleItWizard() {
     peakProductivity: [],
     energyDips: [],
     sleepSchedule: '',
+    hasExerciseRoutine: '',
+    exerciseHours: '',
+    exercisePreferredTime: '',
     businessType: '',
     weeklyHoursWanted: '',
     weeklyHoursRealistic: '',
@@ -69,6 +76,7 @@ export function ScheduleItWizard() {
     nonNegotiableBlocks: '',
     preferredEnvironment: '',
     schedulingStyle: '',
+    downtimeHours: '',
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -88,6 +96,52 @@ export function ScheduleItWizard() {
     } else {
       handleInputChange(field, [...currentArray, value]);
     }
+  };
+
+  const validateTimeFormats = (): { isValid: boolean; issues: string[] } => {
+    const issues: string[] = [];
+    
+    // Safe patterns that should NOT be flagged
+    const safePatterns = [
+      /\b\d{1,2}\s*(hours?|hrs?|minutes?|mins?)\b/gi,  // "10 hours", "5 hrs"
+      /\b24\/7\b/gi,                                    // "24/7"
+      /\ball\s+day\b/gi,                                // "all day"
+      /\b\d{2}:\d{2}-\d{2}:\d{2}\b/g,                  // Military time "14:00-22:00"
+      /\b\d+-\d+\s+(days?|times?|per|week)\b/gi        // "3-5 days per week"
+    ];
+    
+    const fieldsToCheck = {
+      'Work Schedule Details': formData.workScheduleDetails,
+      'School Schedule': formData.schoolCommitment,
+      'Family Commitments': formData.familyCommitments,
+      'Sleep Schedule': formData.sleepSchedule,
+    };
+    
+    Object.entries(fieldsToCheck).forEach(([fieldName, value]) => {
+      if (!value) return;
+      
+      // Check if value matches any safe pattern
+      const isSafe = safePatterns.some(pattern => pattern.test(value));
+      if (isSafe) return;
+      
+      // Pattern to detect times without AM/PM (e.g., "9-5", "2:30-6:30")
+      const ambiguousTimePattern = /\b(\d{1,2})(:\d{2})?\s*[-–to]\s*(\d{1,2})(:\d{2})?\b(?!\s*(AM|PM|am|pm))/gi;
+      
+      // Pattern to detect single times without AM/PM (e.g., "at 3", "8", "3:30")
+      const singleTimePattern = /\b(at\s+)?(\d{1,2})(:\d{2})?\b(?!\s*(AM|PM|am|pm|hours?|hrs?|minutes?|mins?))/gi;
+      
+      const hasAmbiguousRange = ambiguousTimePattern.test(value);
+      const hasSingleTime = singleTimePattern.test(value);
+      
+      if (hasAmbiguousRange || hasSingleTime) {
+        issues.push(`${fieldName}: Please specify AM/PM for all times`);
+      }
+    });
+    
+    return {
+      isValid: issues.length === 0,
+      issues
+    };
   };
 
   const nextStep = () => {
@@ -120,6 +174,16 @@ export function ScheduleItWizard() {
     // If has family commitments, require details
     if (formData.hasFamilyCommitments === 'yes' && !formData.familyCommitments) {
       toast.error('Please provide your family commitment details');
+      return;
+    }
+
+    // Validate time formats
+    const timeValidation = validateTimeFormats();
+    if (!timeValidation.isValid) {
+      toast.error('⚠️ Please add AM/PM to your times:', {
+        description: timeValidation.issues.join('\n'),
+        duration: 8000,
+      });
       return;
     }
 
@@ -498,6 +562,72 @@ export function ScheduleItWizard() {
                 onChange={(e) => handleInputChange('sleepSchedule', e.target.value)}
                 placeholder="e.g., 11 PM - 6 AM"
               />
+              <p className="text-xs text-amber-600 mt-1">⚠️ Always include AM or PM (e.g., "11 PM - 6 AM", not "11-6")</p>
+            </div>
+
+            {/* Exercise Routine */}
+            <div className="space-y-3">
+              <Label className="text-base">Do you exercise regularly?</Label>
+              <RadioGroup 
+                value={formData.hasExerciseRoutine} 
+                onValueChange={(val) => {
+                  handleInputChange('hasExerciseRoutine', val);
+                  if (val === 'no') {
+                    handleInputChange('exerciseHours', '');
+                    handleInputChange('exercisePreferredTime', '');
+                  }
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="yes" id="exercise-yes" />
+                  <Label htmlFor="exercise-yes" className="font-normal cursor-pointer">
+                    Yes
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="exercise-no" />
+                  <Label htmlFor="exercise-no" className="font-normal cursor-pointer">
+                    No
+                  </Label>
+                </div>
+              </RadioGroup>
+
+              {formData.hasExerciseRoutine === 'yes' && (
+                <div className="space-y-3 pl-4 border-l-2 border-primary/30">
+                  <div>
+                    <Label htmlFor="exerciseHours">Hours per week</Label>
+                    <Input
+                      id="exerciseHours"
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={formData.exerciseHours}
+                      onChange={(e) => handleInputChange('exerciseHours', e.target.value)}
+                      placeholder="e.g., 3"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="exercisePreferredTime">Preferred time</Label>
+                    <Select 
+                      value={formData.exercisePreferredTime} 
+                      onValueChange={(val) => handleInputChange('exercisePreferredTime', val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select preferred time..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="early-morning">Early Morning (5-7 AM)</SelectItem>
+                        <SelectItem value="morning">Morning (7-10 AM)</SelectItem>
+                        <SelectItem value="lunch">Lunch (11 AM - 1 PM)</SelectItem>
+                        <SelectItem value="afternoon">Afternoon (2-5 PM)</SelectItem>
+                        <SelectItem value="evening">Evening (5-8 PM)</SelectItem>
+                        <SelectItem value="night">Night (8-10 PM)</SelectItem>
+                        <SelectItem value="flexible">Flexible</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         );
@@ -591,6 +721,25 @@ export function ScheduleItWizard() {
                   <SelectItem value="hybrid">Hybrid (some fixed, some flexible)</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="downtimeHours">Desired Weekly Relaxation Time (hours)</Label>
+              <Input
+                id="downtimeHours"
+                type="number"
+                min="0"
+                max="40"
+                value={formData.downtimeHours}
+                onChange={(e) => handleInputChange('downtimeHours', e.target.value)}
+                placeholder="e.g., 10"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Time for entertainment, hobbies, TV, gaming, reading, etc.
+              </p>
+              <p className="text-xs text-primary/70 mt-1">
+                💡 Tip: Even busy schedules need 5-10 hours of guilt-free downtime weekly
+              </p>
             </div>
           </div>
         );

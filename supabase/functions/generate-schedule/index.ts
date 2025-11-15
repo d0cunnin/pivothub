@@ -40,8 +40,8 @@ Deno.serve(async (req) => {
       workSchedule: truncateText(formData.workSchedule, 120),
       businessType: truncateText(formData.businessType, 120),
       sleepSchedule: truncateText(formData.sleepSchedule, 80),
-      nonNegotiables: truncateText(formData.nonNegotiables, 150),
-      otherCommitments: truncateText(formData.otherCommitments, 150),
+      nonNegotiableBlocks: truncateText(formData.nonNegotiableBlocks, 150),
+      specificActivities: truncateText(formData.specificActivities, 150),
     };
 
     // Optimized system prompt (concise version)
@@ -126,15 +126,26 @@ ENERGY:
 - Peak times: ${truncatedData.peakProductivity?.join(', ') || 'Not specified'}
 - Low energy: ${truncatedData.energyDips?.join(', ') || 'Not specified'}
 - Sleep: ${truncatedData.sleepSchedule}
+${truncatedData.hasExerciseRoutine === 'yes' ? `- Exercise: ${truncatedData.exerciseHours || 0}h/week, preferred time: ${truncatedData.exercisePreferredTime || 'flexible'}` : ''}
 
 GOALS:
 - Building: ${truncatedData.businessType}
 - Target hours: ${truncatedData.weeklyHoursWanted || 'Not specified'}
 - Realistic: ${truncatedData.weeklyHoursRealistic || 'Not specified'}
-- Non-negotiables: ${truncatedData.nonNegotiables}
-- Other: ${truncatedData.otherCommitments}
+- Non-negotiables: ${truncatedData.nonNegotiableBlocks || 'None'}
+- Specific activities: ${truncatedData.specificActivities || 'Not specified'}
+${truncatedData.downtimeHours ? `- Desired relaxation time: ${truncatedData.downtimeHours}h/week for entertainment, hobbies, TV, gaming, reading` : ''}
 
-Create a balanced weekly schedule in JSON format.`;
+CONSTRAINTS:
+- Preferred environment: ${truncatedData.preferredEnvironment || 'Not specified'}
+- Scheduling style: ${truncatedData.schedulingStyle || 'Not specified'}
+
+Create a balanced weekly schedule in JSON format that:
+1. Respects all commitments and constraints
+2. Schedules ${truncatedData.weeklyHoursRealistic || truncatedData.weeklyHoursWanted || 0}h for business/side income
+${truncatedData.hasExerciseRoutine === 'yes' ? `3. Includes ${truncatedData.exerciseHours || 0}h of exercise during ${truncatedData.exercisePreferredTime || 'flexible'} times` : '3. Includes physical activity'}
+${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for relaxation and entertainment` : '4. Includes adequate rest'}
+5. Aligns with energy patterns and peak productivity times`;
 
     // Get AI model based on user subscription (OpenAI only for text)
     const modelConfig = await getModelForUser(supabase, userId, 'text');
