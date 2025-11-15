@@ -111,6 +111,24 @@ Create a balanced weekly schedule in JSON format.`;
     const modelConfig = await getModelForUser(supabase, userId, 'text');
     validateProvider('text', modelConfig.model);
 
+    // Check for empty or trivially short user input
+    if (!userPrompt || userPrompt.trim().length < 20) {
+      console.warn('⚠️ User prompt seems too short or empty. Length:', userPrompt?.length);
+    }
+
+    // Pre-call diagnostics
+    console.log('=== PRE-CALL DEBUG ===');
+    console.log('ModelConfig:', { 
+      provider: modelConfig.provider, 
+      model: modelConfig.model, 
+      endpoint: modelConfig.endpoint 
+    });
+    console.log('System prompt length:', systemPrompt.length);
+    console.log('User prompt length:', userPrompt.length);
+    console.log('Combined prompt length:', systemPrompt.length + userPrompt.length);
+    console.log('System prompt preview:', systemPrompt.slice(0, 300));
+    console.log('User prompt preview:', userPrompt.slice(0, 300));
+
     let response;
     
     // Try GPT-5 first with 120 second timeout
@@ -130,6 +148,7 @@ Create a balanced weekly schedule in JSON format.`;
               { role: "user", content: userPrompt },
             ],
             max_completion_tokens: 16000,
+            response_format: { type: "json_object" },
           }),
         },
         120000 // 2 minute timeout for GPT-5
@@ -138,6 +157,20 @@ Create a balanced weekly schedule in JSON format.`;
       // If GPT-5 timed out, fall back to GPT-5 Mini
       if (firstError instanceof AIError && firstError.code === 'TIMEOUT') {
         console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
+        
+        // Fallback pre-call diagnostics
+        console.log('=== FALLBACK PRE-CALL DEBUG ===');
+        const fallbackBodyPreview = {
+          model: 'openai/gpt-5-mini',
+          messages: [
+            { role: "system", content: systemPrompt.slice(0, 300) },
+            { role: "user", content: userPrompt.slice(0, 300) },
+          ],
+        };
+        const fallbackBodyStr = JSON.stringify(fallbackBodyPreview);
+        console.log('Fallback body preview char length:', fallbackBodyStr.length);
+        console.log('System prompt preview:', systemPrompt.slice(0, 300));
+        console.log('User prompt preview:', userPrompt.slice(0, 300));
         
         try {
           response = await fetchWithTimeout(
@@ -155,6 +188,7 @@ Create a balanced weekly schedule in JSON format.`;
                   { role: "user", content: userPrompt },
                 ],
                 max_completion_tokens: 16000,
+                response_format: { type: "json_object" },
               }),
             },
             60000 // 1 minute timeout for GPT-5 Mini
@@ -247,6 +281,31 @@ Create a balanced weekly schedule in JSON format.`;
 
     const aiData = await response.json();
 
+    // Comprehensive post-call diagnostics
+    console.log('=== FULL AI RESPONSE DEBUG ===');
+    console.log('Status:', response.status);
+    console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+    
+    try {
+      const aiDataStr = JSON.stringify(aiData);
+      console.log('aiData length:', aiDataStr.length);
+      console.log('aiData (first 4000 chars):', aiDataStr.slice(0, 4000));
+    } catch (_e) {
+      console.log('aiData: [unserializable]');
+    }
+    
+    console.log('Choices array present:', !!aiData.choices);
+    console.log('Choices length:', aiData.choices?.length);
+    
+    try {
+      const firstChoiceStr = JSON.stringify(aiData.choices?.[0] || {});
+      console.log('First choice object (trimmed):', firstChoiceStr.slice(0, 1000));
+    } catch (_e) {
+      console.log('First choice: [unserializable]');
+    }
+    
+    console.log('Model used:', aiData.model);
+    
     // Enhanced logging for debugging
     console.log('=== AI Response Structure ===');
     console.log('Has choices:', !!aiData.choices);
@@ -280,6 +339,22 @@ Create a balanced weekly schedule in JSON format.`;
 
     const content = aiData.choices[0]?.message?.content;
     const finishReason = aiData.choices[0]?.finish_reason;
+    
+    // Log content metadata
+    console.log('Content present:', typeof content === 'string' && content.length > 0);
+    console.log('Content length:', content?.length);
+    console.log('Finish reason:', finishReason);
+    
+    // Empty content guard with detailed diagnostics
+    if ((finishReason === 'stop' || !finishReason) && (!content || content.length === 0)) {
+      console.error('=== EMPTY CONTENT WITH STOP/NULL FINISH_REASON ===');
+      try {
+        const aiDataSnapshot = JSON.stringify(aiData);
+        console.error('aiData snapshot (first 4000):', aiDataSnapshot.slice(0, 4000));
+      } catch (_e) {
+        console.error('aiData snapshot: [unserializable]');
+      }
+    }
     
     // Log the raw AI response for debugging
     console.log('=== AI Response Debug ===');
