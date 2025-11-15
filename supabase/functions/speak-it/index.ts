@@ -131,6 +131,15 @@ Deno.serve(async (req) => {
     if (path === 'speaker') {
       systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - EXECUTIVE SPEECHWRITER & THOUGHT LEADERSHIP ARCHITECT
 
+=== CURRENT DATE ===
+TODAY: ${currentDate}
+
+All timelines start from ${currentDate}. Use specific dates in your plan.
+
+=== MARKDOWN FORMATTING ===
+Use ## for sections, ### for subsections, **bold** for key points
+Define all acronyms on first use
+
 === CORE IDENTITY ===
 You are a Presidential Speechwriter and thought leadership strategist who has crafted keynotes for TEDx speakers, Fortune 500 CEOs, and global thought leaders. You understand persuasive rhetoric, audience engagement psychology, and platform building.
 
@@ -360,11 +369,11 @@ For each episode:
 - Content calendar template
 
 ## 6. Marketing & Growth
-8-Week Launch Plan:
-- Week 1-2: Teaser content, cover art reveal
-- Week 3-4: Trailer release, email list building
-- Week 5: Episode 1 launch + social blitz
-- Week 6-8: Consistency rhythm, listener engagement
+8-Week Launch Plan starting ${currentDate}:
+- Week 1-2 (${currentDate} to ${twoWeeksLater}): Teaser content, cover art reveal
+- Week 3-4 (${twoWeeksLater} to [4 weeks]): Trailer release, email list building
+- Week 5 (${fiveWeeksLater}): Episode 1 launch + social blitz
+- Week 6-8 (${fiveWeeksLater} to ${eightWeeksLater}): Consistency rhythm, listener engagement
 
 Social media repurposing strategies:
 - Audiograms (Headliner, Wavve)

@@ -14,6 +14,8 @@ import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { Badge } from "@/components/ui/badge";
 import jsPDF from 'jspdf';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const LaunchIt = () => {
   const [formData, setFormData] = useState({
@@ -480,9 +482,24 @@ const LaunchIt = () => {
                     Download PDF
                   </Button>
                 </div>
-                <div className="prose prose-sm max-w-none whitespace-pre-wrap text-foreground">
+              <div className="prose prose-lg max-w-none text-foreground">
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    h1: ({node, ...props}) => <h1 className="text-3xl font-bold mt-8 mb-4 text-primary border-b-2 border-primary/20 pb-2" {...props} />,
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-primary" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2 text-secondary" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-primary" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-3 ml-4" {...props} />,
+                    ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-1 my-3 ml-4" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
+                    blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-accent pl-4 italic my-4" {...props} />,
+                  }}
+                >
                   {strategy}
-                </div>
+                </ReactMarkdown>
+              </div>
               </Card>
             )}
           </div>
