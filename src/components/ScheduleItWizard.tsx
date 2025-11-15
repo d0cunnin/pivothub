@@ -152,7 +152,7 @@ export function ScheduleItWizard() {
       }
 
       if (!data?.ok || !data?.weeklySchedule) {
-        toast.error('Received incomplete schedule data. Please try again.');
+        toast.error(data?.message || 'Received incomplete schedule data. Please try again.');
         return;
       }
 
