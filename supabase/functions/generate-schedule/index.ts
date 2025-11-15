@@ -78,6 +78,9 @@ Key principles:
 - Include recommendations for long-term sustainability
 - Consider the user's family commitments, marriage, faith, and personal wellbeing
 
+CRITICAL: Return ONLY valid JSON. Do not include any explanatory text, markdown formatting, or comments.
+The response must start with { and end with }
+
 Return ONLY valid JSON in this exact format:
 {
   "weeklySchedule": {
@@ -155,7 +158,7 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        max_completion_tokens: 5000,
+        max_completion_tokens: 10000, // Increased for full weekly schedule generation
       }),
     });
 
@@ -182,6 +185,13 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
 
     const aiData = await response.json();
     const content = aiData.choices[0]?.message?.content;
+    
+    // Log the raw AI response for debugging
+    console.log('=== AI Response Debug ===');
+    console.log('Status:', response.status);
+    console.log('Content Length:', content?.length);
+    console.log('Content Preview:', content?.slice(0, 300));
+    console.log('Content End:', content?.slice(-200));
 
     if (!content) {
       await logRequest(supabase, {
@@ -204,13 +214,39 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
       });
     }
 
-    // Parse JSON from response
+    // Parse JSON from response with robust extraction
     let scheduleData;
     try {
-      const jsonString = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      console.log('=== JSON Parsing Attempt ===');
+      console.log('Raw content length:', content.length);
+      console.log('First 500 chars:', content.slice(0, 500));
+      
+      let jsonString = content.trim();
+      
+      // Remove markdown code blocks
+      jsonString = jsonString.replace(/```json\s*/gi, '');
+      jsonString = jsonString.replace(/```\s*/g, '');
+      
+      // Remove any leading/trailing text before first { and after last }
+      const firstBrace = jsonString.indexOf('{');
+      const lastBrace = jsonString.lastIndexOf('}');
+      
+      if (firstBrace === -1 || lastBrace === -1) {
+        throw new Error('No JSON object found in response');
+      }
+      
+      jsonString = jsonString.substring(firstBrace, lastBrace + 1).trim();
+      
+      console.log('Extracted JSON length:', jsonString.length);
+      console.log('JSON starts with:', jsonString.slice(0, 100));
+      console.log('JSON ends with:', jsonString.slice(-100));
+      
       scheduleData = JSON.parse(jsonString);
     } catch (parseError) {
-      console.error("JSON parse error:", parseError, "Content:", content);
+      console.error("=== JSON PARSE ERROR ===");
+      console.error("Error:", parseError);
+      console.error("Full AI response:", content);
+      
       await logRequest(supabase, {
         userId,
         endpoint: "generate-schedule",
@@ -218,18 +254,65 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
         userAgent: req.headers.get('user-agent') || 'unknown',
         creditsCharged: 0,
         success: false,
-        errorMessage: "Failed to parse AI response",
+        errorMessage: `Failed to parse AI response: ${parseError.message}`,
         requestDurationMs: Date.now() - startTime
       });
       
       return new Response(JSON.stringify({ 
         ok: false, 
-        message: "This action did not use credits. Try again." 
+        message: "AI response was malformed. This action did not use credits. Try again." 
       }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    // Validate schedule structure
+    const requiredDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const missingDays = requiredDays.filter(day => 
+      !scheduleData.weeklySchedule?.[day] || 
+      !Array.isArray(scheduleData.weeklySchedule[day]) ||
+      scheduleData.weeklySchedule[day].length === 0
+    );
+    
+    if (missingDays.length > 0) {
+      console.error('=== INCOMPLETE SCHEDULE ===');
+      console.error('Missing days:', missingDays);
+      console.error('Schedule data:', JSON.stringify(scheduleData, null, 2));
+      
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: `Incomplete schedule - missing days: ${missingDays.join(', ')}`,
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(JSON.stringify({ 
+        ok: false, 
+        message: `Schedule is incomplete. Missing: ${missingDays.join(', ')}. This action did not use credits. Try again.`
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    
+    // Validate summary exists
+    if (!scheduleData.summary) {
+      console.error('=== MISSING SUMMARY ===');
+      scheduleData.summary = {
+        totalCommittedHours: 0,
+        totalAvailableHours: 168,
+        recommendations: ['Please review your schedule and adjust as needed.']
+      };
+    }
+    
+    console.log('=== SCHEDULE VALIDATION PASSED ===');
+    console.log('All days present:', requiredDays.join(', '));
+    console.log('Total time blocks:', Object.values(scheduleData.weeklySchedule).flat().length);
 
     // SUCCESS - Deduct credits after successful generation
     await deductCreditsOnSuccess(supabase, userId, "generate-schedule", 3, `schedule-${userId}-${Date.now()}`);
