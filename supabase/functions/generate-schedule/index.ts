@@ -46,6 +46,8 @@ Deno.serve(async (req) => {
     // Optimized system prompt (concise version)
     const systemPrompt = `You are an executive time management coach specializing in sustainable, balanced schedules.
 
+CRITICAL: You MUST respond with ONLY valid JSON. No markdown, no code blocks, no explanations, no preamble - just the raw JSON object exactly as specified below.
+
 REQUIREMENTS:
 - Create realistic weekly schedules optimized for energy patterns
 - Balance ALL 12 life domains: work, business, marriage, children, family, fitness, faith, health, study, personal development, creativity, rest
@@ -148,7 +150,6 @@ Create a balanced weekly schedule in JSON format.`;
               { role: "user", content: userPrompt },
             ],
             max_completion_tokens: 16000,
-            response_format: { type: "json_object" },
           }),
         },
         120000 // 2 minute timeout for GPT-5
@@ -188,7 +189,6 @@ Create a balanced weekly schedule in JSON format.`;
                   { role: "user", content: userPrompt },
                 ],
                 max_completion_tokens: 16000,
-                response_format: { type: "json_object" },
               }),
             },
             60000 // 1 minute timeout for GPT-5 Mini
