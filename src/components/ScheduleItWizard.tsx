@@ -13,12 +13,16 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { generateSchedulePDF } from '@/lib/pdf-templates/schedule-template';
 import { generateRecurringScheduleLinks } from '@/lib/calendar-utils';
+import { TimePickerField } from '@/components/ui/time-picker';
 
 interface ScheduleFormData {
   // Step 1: Current Commitments
   workHours: string;
   workSchedule: string;
   workScheduleDetails: string;
+  workStartTime: string;
+  workEndTime: string;
+  workDays: string[];
   inSchool: string;
   schoolCommitment: string;
   hasFamilyCommitments: string;
@@ -31,7 +35,8 @@ interface ScheduleFormData {
   energyType: string;
   peakProductivity: string[];
   energyDips: string[];
-  sleepSchedule: string;
+  bedtime: string;
+  wakeTime: string;
   hasExerciseRoutine: string;
   exerciseHours: string;
   exercisePreferredTime: string;
@@ -55,6 +60,9 @@ export function ScheduleItWizard() {
     workHours: '',
     workSchedule: '',
     workScheduleDetails: '',
+    workStartTime: '',
+    workEndTime: '',
+    workDays: [],
     inSchool: '',
     schoolCommitment: '',
     hasFamilyCommitments: '',
@@ -65,7 +73,8 @@ export function ScheduleItWizard() {
     energyType: '',
     peakProductivity: [],
     energyDips: [],
-    sleepSchedule: '',
+    bedtime: '',
+    wakeTime: '',
     hasExerciseRoutine: '',
     exerciseHours: '',
     exercisePreferredTime: '',
@@ -89,7 +98,7 @@ export function ScheduleItWizard() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleArrayToggle = (field: 'peakProductivity' | 'energyDips', value: string) => {
+  const handleArrayToggle = (field: 'peakProductivity' | 'energyDips' | 'workDays', value: string) => {
     const currentArray = formData[field];
     if (currentArray.includes(value)) {
       handleInputChange(field, currentArray.filter(item => item !== value));
@@ -114,7 +123,6 @@ export function ScheduleItWizard() {
       'Work Schedule Details': formData.workScheduleDetails,
       'School Schedule': formData.schoolCommitment,
       'Family Commitments': formData.familyCommitments,
-      'Sleep Schedule': formData.sleepSchedule,
     };
     
     Object.entries(fieldsToCheck).forEach(([fieldName, value]) => {
@@ -165,9 +173,21 @@ export function ScheduleItWizard() {
       return;
     }
 
-    // If work schedule selected, require details
-    if (formData.workSchedule && formData.workSchedule !== 'none' && !formData.workScheduleDetails) {
-      toast.error('Please specify your work schedule details');
+    // If work schedule selected, require details or structured fields
+    if (formData.workSchedule && formData.workSchedule !== 'none') {
+      if (formData.workSchedule === 'fixed' && (!formData.workStartTime || !formData.workEndTime || formData.workDays.length === 0)) {
+        toast.error('Please specify your fixed work hours and days');
+        return;
+      }
+      if ((formData.workSchedule === 'flexible' || formData.workSchedule === 'shift') && !formData.workScheduleDetails) {
+        toast.error('Please specify your work schedule details');
+        return;
+      }
+    }
+
+    // Validate sleep schedule
+    if (!formData.bedtime || !formData.wakeTime) {
+      toast.error('Please specify your sleep schedule');
       return;
     }
 
@@ -198,8 +218,20 @@ export function ScheduleItWizard() {
         return;
       }
 
+      // Prepare data - combine structured fields into strings
+      const preparedData: any = { ...formData };
+      
+      // Combine bedtime and wake time into sleepSchedule
+      preparedData.sleepSchedule = `${formData.bedtime} - ${formData.wakeTime}`;
+      
+      // If fixed work schedule, combine structured fields into workScheduleDetails
+      if (formData.workSchedule === 'fixed' && formData.workStartTime && formData.workEndTime && formData.workDays.length > 0) {
+        const daysStr = formData.workDays.join('/');
+        preparedData.workScheduleDetails = `${daysStr} ${formData.workStartTime} - ${formData.workEndTime}`;
+      }
+
       const { data, error } = await supabase.functions.invoke('generate-schedule', {
-        body: formData,
+        body: preparedData,
         headers: {
           Authorization: `Bearer ${session.access_token}`
         }
@@ -333,19 +365,57 @@ export function ScheduleItWizard() {
               </Select>
             </div>
 
-            {formData.workSchedule && formData.workSchedule !== 'none' && (
-              <div>
-                <Label htmlFor="workScheduleDetails">Specific Work Schedule *</Label>
+            {formData.workSchedule === 'fixed' && (
+              <div className="space-y-3 pl-4 border-l-2 border-primary/30">
+                <Label className="text-base">Fixed Work Hours *</Label>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <TimePickerField 
+                    label="Start Time" 
+                    value={formData.workStartTime}
+                    onChange={(val) => handleInputChange('workStartTime', val)}
+                    defaultHour={9}
+                    defaultMinute={0}
+                    defaultPeriod="AM"
+                  />
+                  <TimePickerField 
+                    label="End Time" 
+                    value={formData.workEndTime}
+                    onChange={(val) => handleInputChange('workEndTime', val)}
+                    defaultHour={5}
+                    defaultMinute={0}
+                    defaultPeriod="PM"
+                  />
+                </div>
+                
+                <div>
+                  <Label className="text-base">Work Days</Label>
+                  <div className="grid grid-cols-4 gap-2 mt-2">
+                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                      <div key={day} className="flex items-center space-x-2">
+                        <Checkbox
+                          checked={formData.workDays.includes(day)}
+                          onCheckedChange={() => handleArrayToggle('workDays', day)}
+                        />
+                        <label className="text-sm">{day}</label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {(formData.workSchedule === 'flexible' || formData.workSchedule === 'shift') && (
+              <div className="pl-4 border-l-2 border-primary/30">
+                <Label htmlFor="workScheduleDetails">Work Schedule Details *</Label>
                 <Textarea
                   id="workScheduleDetails"
                   value={formData.workScheduleDetails}
                   onChange={(e) => handleInputChange('workScheduleDetails', e.target.value)}
-                  placeholder="e.g., Monday-Friday 9 AM - 5 PM, or Tuesday/Thursday 2-10 PM"
-                  rows={2}
+                  placeholder="e.g., Rotating: Week 1 Mon-Fri 7 AM - 3 PM, Week 2 Mon-Fri 3 PM - 11 PM"
+                  rows={3}
                 />
-                <p className="text-sm text-muted-foreground mt-1">
-                  Enter your exact work hours and days
-                </p>
+                <p className="text-xs text-amber-600 mt-1">⚠️ Always include AM or PM for all times</p>
               </div>
             )}
 
@@ -554,15 +624,28 @@ export function ScheduleItWizard() {
               </div>
             </div>
 
-            <div>
-              <Label htmlFor="sleepSchedule">Sleep Schedule</Label>
-              <Input
-                id="sleepSchedule"
-                value={formData.sleepSchedule}
-                onChange={(e) => handleInputChange('sleepSchedule', e.target.value)}
-                placeholder="e.g., 11 PM - 6 AM"
-              />
-              <p className="text-xs text-amber-600 mt-1">⚠️ Always include AM or PM (e.g., "11 PM - 6 AM", not "11-6")</p>
+            <div className="space-y-3">
+              <Label className="text-base">Sleep Schedule *</Label>
+              <p className="text-sm text-muted-foreground">When do you typically sleep?</p>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <TimePickerField 
+                  label="Bedtime" 
+                  value={formData.bedtime}
+                  onChange={(val) => handleInputChange('bedtime', val)}
+                  defaultHour={11}
+                  defaultMinute={0}
+                  defaultPeriod="PM"
+                />
+                <TimePickerField 
+                  label="Wake Time" 
+                  value={formData.wakeTime}
+                  onChange={(val) => handleInputChange('wakeTime', val)}
+                  defaultHour={7}
+                  defaultMinute={0}
+                  defaultPeriod="AM"
+                />
+              </div>
             </div>
 
             {/* Exercise Routine */}
