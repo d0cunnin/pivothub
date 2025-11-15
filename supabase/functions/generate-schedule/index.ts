@@ -24,70 +24,40 @@ Deno.serve(async (req) => {
 
     const formData = await req.json();
 
-    // System prompt for executive time management
-    const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - EXECUTIVE TIME STRATEGIST
+    // Truncate helper function to prevent prompt explosion
+    const truncateText = (text: string | undefined | null, maxLength: number): string => {
+      if (!text) return 'None';
+      return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    };
 
-=== CORE IDENTITY ===
-You are a Chief Productivity Officer and executive coach who has optimized schedules for 200+ C-suite executives, founders, and high-performers. You understand energy management, decision fatigue, deep work principles, and work-life integration at the highest levels.
+    // Truncate all text inputs to prevent token limit issues
+    const truncatedData = {
+      ...formData,
+      familyCommitments: truncateText(formData.familyCommitments, 300),
+      recurringAppointments: truncateText(formData.recurringAppointments, 300),
+      schoolCommitment: truncateText(formData.schoolCommitment, 200),
+      workSchedule: truncateText(formData.workSchedule, 200),
+      businessType: truncateText(formData.businessType, 300),
+      sleepSchedule: truncateText(formData.sleepSchedule, 100),
+      nonNegotiables: truncateText(formData.nonNegotiables, 300),
+      otherCommitments: truncateText(formData.otherCommitments, 300),
+    };
 
-EXPERTISE:
-• Time blocking and energy management
-• Deep work vs. shallow work optimization
-• Meeting architecture and calendar defense
-• Work-life integration (not balance)
-• Delegation and leverage strategies
-• Recovery and sustainable performance
-• Executive presence and time sovereignty
+    // Optimized system prompt (concise version)
+    const systemPrompt = `You are an executive time management coach specializing in sustainable, balanced schedules.
 
-=== QUALITY STANDARDS ($3,000+ EXECUTIVE COACHING) ===
-• Every response must rival a $3,000+ executive coaching engagement
-• Provide schedules that respect circadian rhythms and energy patterns
-• Include strategic time allocation across all 12 life domains
-• All schedules must be sustainable for 90+ days (not sprint-only)
-• Include quarterly review checkpoints and adjustment protocols
+REQUIREMENTS:
+- Create realistic weekly schedules optimized for energy patterns
+- Balance ALL 12 life domains: work, business, marriage, children, family, fitness, faith, health, study, personal development, creativity, rest
+- Respect user's energy type and peak productivity times
+- Include 10-15 minute buffers between activities
+- Avoid overscheduling
 
-USER CONTEXT:
-- Work: ${formData.workHours} hours/week (${formData.workSchedule})
-- Energy Type: ${formData.energyType}
-- Peak Productivity: ${formData.peakProductivity?.join(', ')}
-- Business Goals: ${formData.businessType}
-- Available Time: ${formData.weeklyHoursRealistic || formData.weeklyHoursWanted} hours/week
-
-Generate a realistic, executive-level weekly schedule that optimizes for sustainable high performance.
-
-IMPORTANT: Your schedule MUST include time blocks for these key life domains:
-1. Work / Career - Primary employment and career development
-2. Business / Entrepreneurship - Side business, startups, ventures
-3. Marriage / Relationship - Quality time with spouse/partner
-4. Children / Parenting - Active parenting, homework help, activities
-5. Family Time - Extended family, family meals, traditions
-6. Fitness / Exercise - Physical activity, gym, sports
-7. Faith / Spiritual Life - Prayer, worship, meditation, spiritual practices
-8. Health & Wellness - Medical appointments, mental health, self-care
-9. Study / Learning - Formal education, skill development, courses
-10. Personal Development - Reading, journaling, coaching, therapy
-11. Creativity - Creative hobbies, artistic expression, projects
-12. Rest & Recovery - Sleep, downtime, relaxation, sabbath
-
-Key principles:
-- Respect energy patterns (don't schedule deep work during low-energy times)
-- Include buffer time between activities (10-15 minutes)
-- Balance ALL life domains - avoid neglecting any area
-- Be realistic - don't overschedule
-- Respect non-negotiable time blocks
-- Provide specific time blocks (e.g., "Monday 6:00 AM - 8:00 AM: Side Business - Content Creation")
-- Include recommendations for long-term sustainability
-- Consider the user's family commitments, marriage, faith, and personal wellbeing
-
-CRITICAL: Return ONLY valid JSON. Do not include any explanatory text, markdown formatting, or comments.
-The response must start with { and end with }
-
-Return ONLY valid JSON in this exact format:
+RESPONSE FORMAT - Return ONLY valid JSON:
 {
   "weeklySchedule": {
     "monday": [
-      { "time": "6:00 AM - 8:00 AM", "activity": "Side Business - Content Creation", "category": "business" },
-      { "time": "8:00 AM - 9:00 AM", "activity": "Morning Routine & Family Breakfast", "category": "family" }
+      {"time": "6:00 AM - 8:00 AM", "activity": "Brief description", "category": "business"}
     ],
     "tuesday": [...],
     "wednesday": [...],
@@ -105,43 +75,37 @@ Return ONLY valid JSON in this exact format:
     "fitnessHours": 4,
     "faithTime": 3,
     "restHours": 56,
-    "recommendations": [
-      "Start with 2 hours per day for your side business",
-      "Schedule 30 minutes daily for marriage quality time",
-      "Block Friday evenings for family time"
-    ]
+    "recommendations": ["Concise tip 1", "Concise tip 2", "Concise tip 3"]
   }
 }
 
-Categories must be one of: "work", "business", "marriage", "children", "family", "fitness", "faith", "health", "study", "personal-development", "creativity", "rest"`;
+Valid categories: work, business, marriage, children, family, fitness, faith, health, study, personal-development, creativity, rest
 
-    const userPrompt = `Create a weekly schedule based on these details:
+Keep activity descriptions under 50 characters.`;
 
-**Current Commitments:**
-- Work: ${formData.workHours} hours/week (${formData.workSchedule})
-- School: ${formData.schoolCommitment || 'None'}
-- Family: ${formData.familyCommitments || 'None'}
-- Recurring appointments: ${formData.recurringAppointments || 'None'}
-- Commute: ${formData.commuteTime || '0'} hours/day
+    const userPrompt = `Schedule requirements:
 
-**Energy Patterns:**
-- Energy type: ${formData.energyType}
-- Peak productivity: ${formData.peakProductivity?.join(', ') || 'Not specified'}
-- Energy dips: ${formData.energyDips?.join(', ') || 'Not specified'}
-- Sleep schedule: ${formData.sleepSchedule || 'Not specified'}
+COMMITMENTS:
+- Work: ${truncatedData.workHours}h/wk (${truncatedData.workSchedule})
+- School: ${truncatedData.schoolCommitment}
+- Family: ${truncatedData.familyCommitments}
+- Appointments: ${truncatedData.recurringAppointments}
+- Commute: ${truncatedData.commuteTime || 0}h/day
 
-**Business Goals:**
-- Building: ${formData.businessType}
-- Hours wanted: ${formData.weeklyHoursWanted || 'Not specified'}
-- Hours realistic: ${formData.weeklyHoursRealistic || 'Not specified'}
-- Activities: ${formData.specificActivities || 'Not specified'}
+ENERGY:
+- Type: ${truncatedData.energyType}
+- Peak times: ${truncatedData.peakProductivity?.join(', ') || 'Not specified'}
+- Low energy: ${truncatedData.energyDips?.join(', ') || 'Not specified'}
+- Sleep: ${truncatedData.sleepSchedule}
 
-**Constraints:**
-- Non-negotiable: ${formData.nonNegotiableBlocks || 'None'}
-- Preferred environment: ${formData.preferredEnvironment || 'Flexible'}
-- Scheduling style: ${formData.schedulingStyle || 'Flexible'}
+GOALS:
+- Building: ${truncatedData.businessType}
+- Target hours: ${truncatedData.weeklyHoursWanted || 'Not specified'}
+- Realistic: ${truncatedData.weeklyHoursRealistic || 'Not specified'}
+- Non-negotiables: ${truncatedData.nonNegotiables}
+- Other: ${truncatedData.otherCommitments}
 
-Generate a realistic weekly schedule that respects all constraints and energy patterns.`;
+Create a balanced weekly schedule in JSON format.`;
 
     // Get AI model based on user subscription (OpenAI only for text)
     const modelConfig = await getModelForUser(supabase, userId, 'text');
@@ -315,13 +279,40 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
     }
 
     const content = aiData.choices[0]?.message?.content;
+    const finishReason = aiData.choices[0]?.finish_reason;
     
     // Log the raw AI response for debugging
     console.log('=== AI Response Debug ===');
     console.log('Status:', response.status);
+    console.log('Finish reason:', finishReason);
     console.log('Content Length:', content?.length);
     console.log('Content Preview:', content?.slice(0, 300));
     console.log('Content End:', content?.slice(-200));
+
+    // Check if response was truncated due to token limits
+    if (finishReason === 'length') {
+      console.error('=== TOKEN LIMIT HIT ===');
+      console.error('Response was cut off due to length');
+      
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: "AI hit token limit (finish_reason: length)",
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(JSON.stringify({ 
+        ok: false, 
+        message: "Your input was too detailed and exceeded our processing capacity. Please try providing shorter, more concise information in the form fields. This action did not use credits." 
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     if (!content) {
       await logRequest(supabase, {
@@ -337,7 +328,7 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
       
       return new Response(JSON.stringify({ 
         ok: false, 
-        message: "This action did not use credits. Try again." 
+        message: "AI service returned an empty response. This may indicate rate limiting, service issues, or model capacity limits. This action did not use credits. Please wait a moment and try again." 
       }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
