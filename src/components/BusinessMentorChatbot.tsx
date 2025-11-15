@@ -49,6 +49,18 @@ export const BusinessMentorChatbot = () => {
         throw new Error(error.message);
       }
 
+      if (data?.error === 'credits_exhausted') {
+        throw new Error('AI service is currently unavailable. Please add credits in Settings.');
+      }
+      
+      if (data?.error === 'timeout') {
+        throw new Error('AI request timed out. Please try again.');
+      }
+      
+      if (data?.error === 'rate_limit_exceeded') {
+        throw new Error('Rate limit exceeded. Please wait a moment and try again.');
+      }
+
       if (data?.error === 'inappropriate_content') {
         throw new Error(data.message || 'Inappropriate content detected');
       }

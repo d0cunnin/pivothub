@@ -116,7 +116,38 @@ export function ScheduleItWizard() {
 
       if (error || data?.error) {
         console.error('Schedule error:', error || data.error);
-        toast.error(data?.error || error?.message || 'Failed to generate schedule');
+        
+        // Handle specific AI error types
+        if (data?.error === 'credits_exhausted') {
+          toast.error('AI Service Unavailable', {
+            description: 'The AI service has run out of credits. Please add credits in Settings → Cloud & AI balance.',
+            duration: 10000,
+          });
+          return;
+        }
+        
+        if (data?.error === 'timeout') {
+          toast.error('Request Timed Out', {
+            description: 'The AI service is experiencing issues. Please try again in a few moments.',
+            action: {
+              label: 'Retry',
+              onClick: () => generateSchedule()
+            },
+            duration: 8000,
+          });
+          return;
+        }
+        
+        if (data?.error === 'rate_limit_exceeded') {
+          toast.error('Rate Limit Exceeded', {
+            description: 'Too many requests. Please wait a moment and try again.',
+            duration: 6000,
+          });
+          return;
+        }
+        
+        // Generic error fallback
+        toast.error(data?.message || error?.message || 'Failed to generate schedule');
         return;
       }
 

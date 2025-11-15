@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts"
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
+import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts"
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -271,26 +272,24 @@ EXAMPLES OF PREMIUM VALUE:
       { role: "user", content: message }
     ]
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
+    const response = await fetchWithTimeout(
+      'https://ai.gateway.lovable.dev/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${lovableApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openai/gpt-5',
+          messages,
+          max_completion_tokens: 2000,
+        }),
       },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages,
-        max_completion_tokens: 2000,
-      }),
-    });
+      30000
+    );
 
     if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded. Please try again later.');
-      }
-      if (response.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
-      }
       const errorText = await response.text();
       console.error('Lovable AI error:', response.status, errorText);
       throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);

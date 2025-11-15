@@ -110,6 +110,36 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_service_status: {
+        Row: {
+          checked_at: string
+          created_at: string | null
+          error_message: string | null
+          id: string
+          response_time_ms: number | null
+          status: string
+          workspace_paused: boolean | null
+        }
+        Insert: {
+          checked_at?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          response_time_ms?: number | null
+          status: string
+          workspace_paused?: boolean | null
+        }
+        Update: {
+          checked_at?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          response_time_ms?: number | null
+          status?: string
+          workspace_paused?: boolean | null
+        }
+        Relationships: []
+      }
       api_ip_usage: {
         Row: {
           count: number
@@ -1336,6 +1366,7 @@ export type Database = {
           }
         | { Args: { p_user_id: string }; Returns: Json }
       cleanup_expired_contexts: { Args: never; Returns: undefined }
+      cleanup_old_health_checks: { Args: never; Returns: undefined }
       clear_account_lockout: { Args: { p_email: string }; Returns: undefined }
       floor_to_window: {
         Args: { seconds: number; ts: string }
