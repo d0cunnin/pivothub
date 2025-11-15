@@ -569,6 +569,42 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_alerts: {
+        Row: {
+          active_tools: Json | null
+          alert_level: string
+          id: string
+          notes: string | null
+          percentage_used: number
+          rate_limit: number
+          requests_per_minute: number
+          resolved_at: string | null
+          triggered_at: string
+        }
+        Insert: {
+          active_tools?: Json | null
+          alert_level: string
+          id?: string
+          notes?: string | null
+          percentage_used: number
+          rate_limit: number
+          requests_per_minute: number
+          resolved_at?: string | null
+          triggered_at?: string
+        }
+        Update: {
+          active_tools?: Json | null
+          alert_level?: string
+          id?: string
+          notes?: string | null
+          percentage_used?: number
+          rate_limit?: number
+          requests_per_minute?: number
+          resolved_at?: string | null
+          triggered_at?: string
+        }
+        Relationships: []
+      }
       result_feedback: {
         Row: {
           created_at: string
@@ -1097,6 +1133,25 @@ export type Database = {
           total_credits: number | null
           total_uses: number | null
           user_id: string | null
+        }
+        Relationships: []
+      }
+      v_ai_current_rate: {
+        Row: {
+          active_tools: string[] | null
+          active_users: number | null
+          credits_last_minute: number | null
+          requests_last_minute: number | null
+        }
+        Relationships: []
+      }
+      v_ai_usage_by_minute: {
+        Row: {
+          minute: string | null
+          request_count: number | null
+          tools_used: string[] | null
+          total_credits: number | null
+          unique_users: number | null
         }
         Relationships: []
       }
