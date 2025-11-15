@@ -254,7 +254,66 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
       });
     }
 
+    // Check for empty response body
+    const contentLength = response.headers.get('Content-Length');
+    if (contentLength && parseInt(contentLength) === 0) {
+      console.error('=== EMPTY RESPONSE BODY ===');
+      console.error('Status:', response.status);
+      console.error('Headers:', Object.fromEntries(response.headers.entries()));
+      
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: "AI returned 200 but with empty body",
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(JSON.stringify({ 
+        ok: false, 
+        message: "AI service returned an empty response. This may indicate rate limiting or service issues. This action did not use credits. Please wait a moment and try again." 
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const aiData = await response.json();
+
+    // Enhanced logging for debugging
+    console.log('=== AI Response Structure ===');
+    console.log('Has choices:', !!aiData.choices);
+    console.log('Choices length:', aiData.choices?.length);
+    console.log('First choice:', JSON.stringify(aiData.choices?.[0]?.message).substring(0, 200));
+
+    // Validate choices array exists and has content
+    if (!aiData.choices || !Array.isArray(aiData.choices) || aiData.choices.length === 0) {
+      console.error('=== EMPTY CHOICES ARRAY ===');
+      console.error('Full AI response:', JSON.stringify(aiData, null, 2));
+      
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: "AI returned empty choices array",
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(JSON.stringify({ 
+        ok: false, 
+        message: "AI service returned an empty response. This may indicate rate limiting or quota issues. This action did not use credits. Please try again in a few moments." 
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const content = aiData.choices[0]?.message?.content;
     
     // Log the raw AI response for debugging
