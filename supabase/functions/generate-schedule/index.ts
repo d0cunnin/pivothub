@@ -48,6 +48,12 @@ Deno.serve(async (req) => {
 
 CRITICAL: You MUST respond with ONLY valid JSON. No markdown, no code blocks, no explanations, no preamble - just the raw JSON object exactly as specified below.
 
+IMPORTANT CONSTRAINTS:
+- Keep ALL activity descriptions under 30 characters
+- Limit to 6-8 activities per day maximum
+- Keep recommendations brief (under 50 characters each)
+- Focus on essential tasks only
+
 REQUIREMENTS:
 - Create realistic weekly schedules optimized for energy patterns
 - Balance ALL 12 life domains: work, business, marriage, children, family, fitness, faith, health, study, personal development, creativity, rest
@@ -143,14 +149,14 @@ Create a balanced weekly schedule in JSON format.`;
             "Authorization": `Bearer ${modelConfig.apiKey}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            model: 'openai/gpt-5',
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: userPrompt },
-            ],
-            max_completion_tokens: 16000,
-          }),
+            body: JSON.stringify({
+              model: 'openai/gpt-5',
+              messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: userPrompt },
+              ],
+              max_completion_tokens: 8000,
+            }),
         },
         120000 // 2 minute timeout for GPT-5
       );
@@ -188,7 +194,7 @@ Create a balanced weekly schedule in JSON format.`;
                   { role: "system", content: systemPrompt },
                   { role: "user", content: userPrompt },
                 ],
-                max_completion_tokens: 16000,
+                max_completion_tokens: 8000,
               }),
             },
             60000 // 1 minute timeout for GPT-5 Mini
