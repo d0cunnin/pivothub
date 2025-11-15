@@ -343,7 +343,7 @@ QUALITY STANDARDS:
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
           ],
-          max_completion_tokens: 6000,
+          max_completion_tokens: 16000,
         }),
         signal: controller.signal
       });
@@ -371,7 +371,7 @@ QUALITY STANDARDS:
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
               ],
-              max_completion_tokens: 4200,
+              max_completion_tokens: 12000,
             }),
             signal: controller2.signal
           });
