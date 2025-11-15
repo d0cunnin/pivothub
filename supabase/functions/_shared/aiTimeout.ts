@@ -64,7 +64,7 @@ export async function fetchWithTimeout(
     // Handle abort/timeout
     if (error.name === 'AbortError') {
       throw new AIError(
-        'AI request timed out after 30 seconds',
+        'AI request timed out',
         'TIMEOUT',
         408
       );

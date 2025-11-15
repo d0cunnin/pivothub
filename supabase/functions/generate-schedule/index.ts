@@ -187,10 +187,11 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },
               ],
-              max_completion_tokens: 12000,
+              temperature: 0.2,              // More focused/deterministic output
+              max_completion_tokens: 6000,   // Reduced for faster generation
             }),
         },
-        60000 // 1 minute timeout for GPT-5 Mini
+        120000 // 2 minute timeout - more time for complex schedules
       );
     } catch (error) {
       await logRequest(supabase, {

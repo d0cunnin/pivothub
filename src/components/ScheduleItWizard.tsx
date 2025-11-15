@@ -237,11 +237,52 @@ export function ScheduleItWizard() {
         }
       });
 
-      if (error || data?.error) {
-        console.error('Schedule error:', error || data.error);
+      // Handle HTTP errors from edge function
+      if (error) {
+        console.error('Schedule error:', error);
+        const status = (error as any).status;
         
-        // Handle specific AI error types
-        if (data?.error === 'credits_exhausted') {
+        if (status === 408) {
+          toast.error('Request Timed Out', {
+            description: 'The AI service is taking longer than expected. Please try again in a few moments.',
+            action: {
+              label: 'Retry',
+              onClick: () => generateSchedule()
+            },
+            duration: 8000,
+          });
+          return;
+        }
+        
+        if (status === 429) {
+          toast.error('Rate Limit Exceeded', {
+            description: 'Too many requests. Please wait a moment and try again.',
+            duration: 6000,
+          });
+          return;
+        }
+        
+        if (status === 402) {
+          toast.error('AI Service Unavailable', {
+            description: 'Please add credits to continue using this feature.',
+            duration: 6000,
+          });
+          return;
+        }
+        
+        // Generic fallback
+        toast.error('Generation Failed', {
+          description: 'An unexpected error occurred. Please try again.',
+          duration: 5000,
+        });
+        return;
+      }
+      
+      // Handle payload errors (when function returns 200 but with error data)
+      if (data?.error) {
+        console.error('Schedule payload error:', data.error);
+        
+        if (data.error === 'credits_exhausted') {
           toast.error('AI Service Unavailable', {
             description: 'The AI service has run out of credits. Please add credits in Settings → Cloud & AI balance.',
             duration: 10000,
@@ -249,7 +290,7 @@ export function ScheduleItWizard() {
           return;
         }
         
-        if (data?.error === 'timeout') {
+        if (data.error === 'timeout') {
           toast.error('Request Timed Out', {
             description: 'The AI service is experiencing issues. Please try again in a few moments.',
             action: {
@@ -261,7 +302,7 @@ export function ScheduleItWizard() {
           return;
         }
         
-        if (data?.error === 'rate_limit_exceeded') {
+        if (data.error === 'rate_limit_exceeded') {
           toast.error('Rate Limit Exceeded', {
             description: 'Too many requests. Please wait a moment and try again.',
             duration: 6000,
@@ -270,7 +311,7 @@ export function ScheduleItWizard() {
         }
         
         // Generic error fallback
-        toast.error(data?.message || error?.message || 'Failed to generate schedule');
+        toast.error(data?.message || 'Failed to generate schedule');
         return;
       }
 
