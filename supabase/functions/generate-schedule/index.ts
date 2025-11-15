@@ -54,6 +54,10 @@ IMPORTANT CONSTRAINTS:
 - Limit to 4-5 activities per day maximum
 - Keep recommendations brief (under 50 characters each)
 - Focus on essential tasks only
+- CRITICAL: ONLY schedule based on user's ACTUAL input - DO NOT invent activities
+- DO NOT add example activities like "creative jam", "coffee with friend", or "hobby time" unless user specified them
+- If user provided specific commitments (work, school, family), schedule those FIRST
+- Use general labels like "Business Work", "Personal Time", "Rest" rather than inventing specific activities
 
 REQUIREMENTS:
 - Create realistic weekly schedules optimized for energy patterns
@@ -61,6 +65,12 @@ REQUIREMENTS:
 - Respect user's energy type and peak productivity times
 - Include 10-15 minute buffers between activities
 - Avoid overscheduling
+
+SUMMARY CALCULATIONS:
+- totalCommittedHours: Sum of ALL scheduled activities (work + school + business + family + etc)
+- sideBusinessHours: Count ONLY activities with category "business" (this is what user is building)
+- personalTime: Count activities with categories "rest", "personal-development", "creativity", "fitness"
+- Include 3-5 brief, actionable recommendations
 
 RESPONSE FORMAT - Return ONLY valid JSON:
 {
@@ -78,6 +88,8 @@ RESPONSE FORMAT - Return ONLY valid JSON:
   "summary": {
     "totalCommittedHours": 40,
     "totalAvailableHours": 168,
+    "sideBusinessHours": 10,
+    "personalTime": 15,
     "recommendations": ["Tip 1", "Tip 2", "Tip 3"]
   }
 }
@@ -517,8 +529,18 @@ Create a balanced weekly schedule in JSON format.`;
       scheduleData.summary = {
         totalCommittedHours: 0,
         totalAvailableHours: 168,
+        sideBusinessHours: 0,
+        personalTime: 0,
         recommendations: ['Please review your schedule and adjust as needed.']
       };
+    } else {
+      // Ensure sideBusinessHours and personalTime exist even if AI didn't provide them
+      if (typeof scheduleData.summary.sideBusinessHours !== 'number') {
+        scheduleData.summary.sideBusinessHours = 0;
+      }
+      if (typeof scheduleData.summary.personalTime !== 'number') {
+        scheduleData.summary.personalTime = 0;
+      }
     }
     
     console.log('=== SCHEDULE VALIDATION PASSED ===');

@@ -32,10 +32,20 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
 
   // Color mappings
   const categoryColors: Record<string, [number, number, number]> = {
-    'work': [59, 130, 246],        // Blue
-    'personal': [16, 185, 129],    // Green
-    'side-business': [139, 92, 246], // Purple
-    'rest': [156, 163, 175]        // Gray
+    'work': [59, 130, 246],           // Blue
+    'personal': [16, 185, 129],       // Green
+    'side-business': [139, 92, 246],  // Purple
+    'business': [139, 92, 246],       // Purple (add both variants)
+    'rest': [100, 100, 100],          // Medium gray
+    'family': [236, 72, 153],         // Pink
+    'fitness': [34, 197, 94],         // Bright green
+    'faith': [168, 85, 247],          // Light purple
+    'health': [239, 68, 68],          // Red
+    'study': [251, 146, 60],          // Orange
+    'personal-development': [14, 165, 233], // Sky blue
+    'creativity': [249, 115, 22],     // Dark orange
+    'marriage': [244, 63, 94],        // Rose
+    'children': [250, 204, 21]        // Yellow
   };
 
   // Header
@@ -85,7 +95,7 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
   days.forEach((day, index) => {
     const daySchedule = scheduleData.weeklySchedule[day] || [];
     
-    if (yPos > pageHeight - 50) {
+    if (yPos > pageHeight - 70) {
       doc.addPage();
       yPos = margin;
     }
@@ -103,12 +113,18 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
     // Time blocks for this day
     if (daySchedule.length > 0) {
       daySchedule.forEach((block: TimeBlock) => {
-        const color = categoryColors[block.category] || [0, 0, 0];
-        doc.setFillColor(color[0], color[1], color[2], 0.15);
+        const color = categoryColors[block.category] || [100, 100, 100]; // Default to medium gray
+        
+        // Use VERY light background (5% opacity) for all blocks - ensures readability
+        doc.setFillColor(color[0], color[1], color[2], 0.05);
         doc.rect(margin, yPos, pageWidth - 2 * margin, 10, 'F');
-        doc.setDrawColor(color[0], color[1], color[2]);
+        
+        // Use the actual color for border (but at 40% opacity for subtlety)
+        doc.setDrawColor(color[0], color[1], color[2], 0.4);
         doc.rect(margin, yPos, pageWidth - 2 * margin, 10, 'S');
         
+        // Use BLACK text for maximum readability on light backgrounds
+        doc.setTextColor(0, 0, 0);
         doc.setFontSize(9);
         doc.setFont('helvetica', 'bold');
         doc.text(block.time, margin + 3, yPos + 4);
@@ -131,7 +147,7 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
 
   // Recommendations
   if (scheduleData.summary.recommendations.length > 0) {
-    if (yPos > pageHeight - 60) {
+    if (yPos > pageHeight - 80) {
       doc.addPage();
       yPos = margin;
     }
@@ -146,7 +162,7 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
     scheduleData.summary.recommendations.forEach((rec: string) => {
       const lines = doc.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin - 5);
       lines.forEach((line: string) => {
-        if (yPos > pageHeight - 15) {
+        if (yPos > pageHeight - 25) {
           doc.addPage();
           yPos = margin;
         }
