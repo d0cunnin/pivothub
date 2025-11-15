@@ -2,11 +2,13 @@ import { useAIRateMonitor } from "@/hooks/useAIRateMonitor";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Activity, Users, Zap, TrendingUp } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Activity, Users, Zap, TrendingUp, AlertCircle, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { getAlertBadgeColor, getAlertColor } from "@/utils/aiRateLimits";
 
 export const AIUsageMonitor = () => {
-  const { metrics, isLoading } = useAIRateMonitor();
+  const { metrics, serviceHealth, isLoading } = useAIRateMonitor();
 
   if (isLoading) {
     return (
@@ -23,6 +25,46 @@ export const AIUsageMonitor = () => {
 
   return (
     <div className="space-y-6">
+      {/* Service Health Alert - Only show if paused */}
+      {serviceHealth?.status === 'paused' && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>🔴 AI SERVICE: PAUSED</AlertTitle>
+          <AlertDescription>
+            <p className="mb-3">Lovable AI workspace has no credits. All AI features are unavailable.</p>
+            <div className="flex gap-2">
+              <Button size="sm" variant="default" asChild>
+                <a href="/settings" target="_blank" rel="noopener noreferrer">
+                  Add Credits
+                </a>
+              </Button>
+              <Button size="sm" variant="outline" asChild>
+                <a href="https://docs.lovable.dev/features/ai" target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-3 w-3 mr-1" />
+                  View Docs
+                </a>
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Service Health Banner - Only show if degraded */}
+      {serviceHealth?.status === 'degraded' && (
+        <Alert variant="default" className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950/20">
+          <AlertCircle className="h-4 w-4 text-yellow-600" />
+          <AlertTitle className="text-yellow-800 dark:text-yellow-400">
+            🟡 AI SERVICE: DEGRADED
+          </AlertTitle>
+          <AlertDescription className="text-yellow-700 dark:text-yellow-500">
+            AI service is experiencing issues. Response times may be slower than normal.
+            {serviceHealth.error_message && (
+              <p className="mt-1 text-xs">Error: {serviceHealth.error_message}</p>
+            )}
+          </AlertDescription>
+        </Alert>
+      )}
+
       {/* Header Card */}
       <Card>
         <CardHeader>
@@ -32,7 +74,18 @@ export const AIUsageMonitor = () => {
                 <Zap className="h-5 w-5" />
                 AI Usage Monitor
               </CardTitle>
-              <CardDescription>Last updated: {lastUpdate}</CardDescription>
+              <CardDescription>
+                Last updated: {lastUpdate}
+                {serviceHealth && (
+                  <span className="ml-2">
+                    • Service: {
+                      serviceHealth.status === 'operational' ? '🟢 Operational' :
+                      serviceHealth.status === 'paused' ? '🔴 Paused' :
+                      '🟡 Degraded'
+                    }
+                  </span>
+                )}
+              </CardDescription>
             </div>
             <Badge className={getAlertBadgeColor(metrics.alertLevel)}>
               {metrics.alertLevel.toUpperCase()}

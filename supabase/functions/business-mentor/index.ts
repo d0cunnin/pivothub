@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts";
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -308,26 +309,49 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
 
     console.log('Calling OpenAI API for business mentor chat...');
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: messages,
-        max_completion_tokens: 2000,
-      }),
-    });
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    let response;
+    try {
+      response = await fetchWithTimeout(
+        'https://ai.gateway.lovable.dev/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${lovableApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'openai/gpt-5',
+            messages: messages,
+            max_completion_tokens: 2000,
+          }),
+        },
+        30000
+      );
+    } catch (error) {
+      await logRequest(supabaseClient, {
+        userId,
+        endpoint: 'business-mentor',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: error instanceof AIError ? error.message : 'AI request failed',
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return handleAIError(error, corsHeaders, {
+        endpoint: 'business-mentor',
+        userId,
+        startTime
+      });
+    }
 
     if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded. Please try again later.');
-      }
-      if (response.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
-      }
       const errorData = await response.text();
       console.error('Lovable AI error:', errorData);
       throw new Error(`Lovable AI error: ${response.status}`);

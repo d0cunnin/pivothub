@@ -6,9 +6,10 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 export const AIUsageAlerts = () => {
-  const { metrics } = useAIRateMonitor();
+  const { metrics, serviceHealth } = useAIRateMonitor();
   const { toast } = useToast();
   const lastAlertLevel = useRef<'safe' | 'warning' | 'critical'>('safe');
+  const lastServiceStatus = useRef<'operational' | 'paused' | 'degraded'>('operational');
   const hasShownNotification = useRef<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -56,6 +57,59 @@ export const AIUsageAlerts = () => {
       hasShownNotification.current = {};
     }
   }, [metrics.alertLevel, metrics.percentageUsed, metrics.requestsLastMinute, metrics.rateLimit, toast]);
+
+  // Monitor service health changes
+  useEffect(() => {
+    if (!serviceHealth) return;
+    
+    const currentStatus = serviceHealth.status;
+    const previousStatus = lastServiceStatus.current;
+
+    // Alert on service degradation
+    if (currentStatus !== previousStatus) {
+      if (currentStatus === 'paused' && !hasShownNotification.current['service_paused']) {
+        toast({
+          title: "🚨 AI Service Down",
+          description: "Lovable AI workspace is paused. Add credits immediately to restore service.",
+          variant: "destructive",
+          duration: Infinity, // Keep showing until dismissed
+        });
+
+        // Browser notification
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('AI Service Down', {
+            body: 'Lovable AI workspace is paused - credits exhausted',
+            icon: '/favicon.png'
+          });
+        }
+
+        hasShownNotification.current['service_paused'] = true;
+      }
+
+      if (currentStatus === 'degraded' && !hasShownNotification.current['service_degraded']) {
+        toast({
+          title: "⚠️ AI Service Degraded",
+          description: serviceHealth.error_message || "AI service is experiencing issues. Response times may be slower.",
+          variant: "default",
+        });
+        hasShownNotification.current['service_degraded'] = true;
+      }
+
+      // Reset flags when service returns to operational
+      if (currentStatus === 'operational' && previousStatus !== 'operational') {
+        hasShownNotification.current['service_paused'] = false;
+        hasShownNotification.current['service_degraded'] = false;
+        
+        toast({
+          title: "✅ AI Service Restored",
+          description: "AI service is operational again.",
+          variant: "default",
+        });
+      }
+
+      lastServiceStatus.current = currentStatus;
+    }
+  }, [serviceHealth, toast]);
 
   // Request notification permission on mount
   useEffect(() => {

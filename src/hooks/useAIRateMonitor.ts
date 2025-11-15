@@ -89,6 +89,31 @@ export const useAIRateMonitor = (refreshInterval: number = 5000) => {
     refetchInterval: refreshInterval,
   });
 
+  // Fetch AI service health status
+  const { data: serviceHealth, isLoading: serviceHealthLoading } = useQuery({
+    queryKey: ['ai-service-health', realtimeUpdate],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('ai_service_status')
+        .select('*')
+        .order('checked_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data as {
+        id: string;
+        checked_at: string;
+        status: 'operational' | 'paused' | 'degraded';
+        response_time_ms: number | null;
+        error_message: string | null;
+        workspace_paused: boolean;
+        created_at: string;
+      } | null;
+    },
+    refetchInterval: 10000, // Check every 10 seconds
+  });
+
   const metrics: AIRateMetrics = {
     requestsLastMinute: currentRate?.requests_last_minute ?? 0,
     activeUsers: currentRate?.active_users ?? 0,
@@ -108,7 +133,8 @@ export const useAIRateMonitor = (refreshInterval: number = 5000) => {
 
   return {
     metrics,
-    isLoading: currentRateLoading || minuteDataLoading,
+    serviceHealth: serviceHealth || null,
+    isLoading: currentRateLoading || minuteDataLoading || serviceHealthLoading,
     refresh: () => setRealtimeUpdate(prev => prev + 1)
   };
 };
