@@ -420,6 +420,13 @@ QUALITY STANDARDS:
       }
       
       data = JSON.parse(text);
+      
+      // Log AI response details
+      console.log('=== AI Response Debug ===');
+      console.log('Model Used:', modelUsed);
+      console.log('Response Status:', aiResponse.status);
+      console.log('Response Length:', text.length);
+      console.log('Raw Response Preview:', text.slice(0, 500));
     } catch (err) {
       console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
       return new Response(JSON.stringify({
@@ -431,15 +438,57 @@ QUALITY STANDARDS:
     try {
       grantContent = JSON.parse(data.choices[0].message.content);
     } catch (parseError) {
-      // Fallback if JSON parsing fails
+      console.log('JSON parsing failed, using regex fallback');
       const content = data.choices[0].message.content;
-      const proposalMatch = content.match(/```proposal\n(.*?)\n```/s) || content.match(/"proposal":\s*"(.*?)"/s);
-      const loiMatch = content.match(/```letterOfIntent\n(.*?)\n```/s) || content.match(/"letterOfIntent":\s*"(.*?)"/s);
+      
+      // Try multiple regex patterns for more robust parsing
+      const proposalMatch = 
+        content.match(/```proposal\n([\s\S]*?)\n```/s) ||
+        content.match(/"proposal":\s*"([\s\S]*?)"/s) ||
+        content.match(/GRANT PROPOSAL[\s\S]*?\n\n([\s\S]*?)(?=LETTER OF INTENT|$)/i) ||
+        content.match(/## Full Grant Proposal\n\n([\s\S]*?)(?=## Letter of Intent|$)/i);
+        
+      const loiMatch = 
+        content.match(/```letterOfIntent\n([\s\S]*?)\n```/s) ||
+        content.match(/"letterOfIntent":\s*"([\s\S]*?)"/s) ||
+        content.match(/LETTER OF INTENT[\s\S]*?\n\n([\s\S]*?)$/i) ||
+        content.match(/## Letter of Intent\n\n([\s\S]*?)$/i);
+      
+      console.log('Regex parsing results:', {
+        foundProposal: !!proposalMatch,
+        foundLOI: !!loiMatch,
+        proposalLength: proposalMatch?.[1]?.length || 0,
+        loiLength: loiMatch?.[1]?.length || 0
+      });
       
       grantContent = {
-        proposal: proposalMatch ? proposalMatch[1] : content.split('LETTER OF INTENT')[0] || content,
-        letterOfIntent: loiMatch ? loiMatch[1] : content.split('LETTER OF INTENT')[1] || generateFallbackLOI(grantData)
+        proposal: proposalMatch?.[1]?.trim() || content.trim(),
+        letterOfIntent: loiMatch?.[1]?.trim() || generateFallbackLOI(grantData)
       };
+    }
+
+    // Log parsed content details
+    console.log('=== Parsed Content Debug ===');
+    console.log('Proposal Length:', grantContent.proposal?.length || 0);
+    console.log('Proposal Preview:', grantContent.proposal?.slice(0, 200) || 'EMPTY');
+    console.log('LOI Length:', grantContent.letterOfIntent?.length || 0);
+    console.log('LOI Preview:', grantContent.letterOfIntent?.slice(0, 200) || 'EMPTY');
+
+    // Validate content exists and is substantial
+    const proposalLength = grantContent.proposal?.length || 0;
+    const loiLength = grantContent.letterOfIntent?.length || 0;
+    
+    if (proposalLength < 500 || loiLength < 300) {
+      console.error('Generated content too short:', { proposalLength, loiLength });
+      return new Response(
+        JSON.stringify({ 
+          error: 'Generated content is incomplete',
+          details: 'The AI generated content that is too short. Please add more details to your form and try again.',
+          proposalLength,
+          loiLength
+        }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     await logRequest(guardResult.supabase, {

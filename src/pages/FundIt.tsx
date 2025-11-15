@@ -142,6 +142,7 @@ const FundIt = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedProposal, setGeneratedProposal] = useState('');
   const [generatedLOI, setGeneratedLOI] = useState('');
+  const [generationProgress, setGenerationProgress] = useState<string>('');
 
   const handleInputChange = (field: keyof GrantFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -219,12 +220,21 @@ const FundIt = () => {
         return;
       }
 
+      // Add progress feedback
+      setGenerationProgress('Connecting to AI...');
+      setTimeout(() => setGenerationProgress('Analyzing grant requirements...'), 2000);
+      setTimeout(() => setGenerationProgress('Generating proposal sections...'), 8000);
+      setTimeout(() => setGenerationProgress('Creating letter of intent...'), 15000);
+      setTimeout(() => setGenerationProgress('Finalizing documents...'), 25000);
+
       const { data, error } = await supabase.functions.invoke('generate-grant-content', {
         body: formData,
         headers: {
           Authorization: `Bearer ${session.access_token}`
         }
       });
+
+      setGenerationProgress('');
 
       if (error) {
         // Handle specific error types
@@ -234,11 +244,19 @@ const FundIt = () => {
           });
         } else if (error.message?.includes('credits') || error.message?.includes('limit')) {
           toast.error('Insufficient Credits', {
-            description: "You don't have enough credits for this operation."
+            description: "You don't have enough credits. Visit Settings → Credits to add more."
           });
         } else if (error.message?.includes('rate limit')) {
           toast.error('Rate Limit Exceeded', {
-            description: 'Please wait a moment before trying again.'
+            description: 'Too many requests. Please wait 1-2 minutes and try again.'
+          });
+        } else if (error.message?.includes('timeout') || error.message?.includes('too long')) {
+          toast.error('Generation Timeout', {
+            description: 'The request took too long. Try reducing the length of your descriptions.'
+          });
+        } else if (error.message?.includes('incomplete') || error.message?.includes('too short')) {
+          toast.error('Incomplete Content', {
+            description: 'Generated content was too short. Please add more details to your form.'
           });
         } else {
           throw error;
@@ -247,10 +265,35 @@ const FundIt = () => {
       }
 
       const { proposal, letterOfIntent } = data;
-      
+
+      // Debug logging
+      console.log('=== Received Grant Content ===');
+      console.log('Proposal Length:', proposal?.length || 0);
+      console.log('LOI Length:', letterOfIntent?.length || 0);
+      console.log('Proposal Preview:', proposal?.slice(0, 150) || 'EMPTY');
+      console.log('LOI Preview:', letterOfIntent?.slice(0, 150) || 'EMPTY');
+
+      // Validate content before setting state and showing success
+      if (!proposal || proposal.length < 500) {
+        toast.error('Incomplete Proposal Generated', {
+          description: 'The proposal is too short or empty. Please add more details to your form fields and try again.'
+        });
+        return;
+      }
+
+      if (!letterOfIntent || letterOfIntent.length < 300) {
+        toast.error('Incomplete Letter of Intent Generated', {
+          description: 'The letter of intent is too short or empty. Please add more details to your form fields and try again.'
+        });
+        return;
+      }
+
+      // Only set state and show success if content is valid
       setGeneratedProposal(proposal);
       setGeneratedLOI(letterOfIntent);
-      toast.success('AI-powered grant documents generated successfully!');
+      toast.success('AI-powered grant documents generated successfully!', {
+        description: `Generated ${Math.round(proposal.length / 1000)}k proposal and ${Math.round(letterOfIntent.length / 1000)}k letter of intent`
+      });
     } catch (error: any) {
       console.error('Error generating grant content:', error);
       toast.error('Failed to generate grant content', {
@@ -888,7 +931,7 @@ const FundIt = () => {
                         {isGenerating ? (
                           <>
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Generating Documents...
+                            {generationProgress || 'Generating Documents...'}
                           </>
                         ) : (
                           <>

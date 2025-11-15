@@ -668,6 +668,42 @@ export type Database = {
           },
         ]
       }
+      signup_audit: {
+        Row: {
+          accounts_from_ip: number | null
+          created_at: string
+          email: string
+          flagged_as_suspicious: boolean
+          fraud_reason: string | null
+          id: string
+          ip_address: unknown
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          accounts_from_ip?: number | null
+          created_at?: string
+          email: string
+          flagged_as_suspicious?: boolean
+          fraud_reason?: string | null
+          id?: string
+          ip_address: unknown
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          accounts_from_ip?: number | null
+          created_at?: string
+          email?: string
+          flagged_as_suspicious?: boolean
+          fraud_reason?: string | null
+          id?: string
+          ip_address?: unknown
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       storage_access_audit: {
         Row: {
           access_granted: boolean
@@ -1199,6 +1235,18 @@ export type Database = {
           total_cost: number | null
           total_credits: number | null
           user_id: string | null
+        }
+        Relationships: []
+      }
+      v_suspicious_signups: {
+        Row: {
+          account_count: number | null
+          emails: string[] | null
+          first_signup: string | null
+          has_flags: boolean | null
+          ip_address: unknown
+          last_signup: string | null
+          signup_count: number | null
         }
         Relationships: []
       }
