@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { guard, corsHeaders, deductCreditsOnSuccess, logRequest } from "../_shared/guard.ts";
 import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
+import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts";
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -146,21 +147,45 @@ Generate a realistic weekly schedule that respects all constraints and energy pa
     const modelConfig = await getModelForUser(supabase, userId, 'text');
     validateProvider('text', modelConfig.model);
 
-    const response = await fetch(modelConfig.endpoint, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${modelConfig.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: modelConfig.model,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        max_completion_tokens: 10000, // Increased for full weekly schedule generation
-      }),
-    });
+    let response;
+    try {
+      response = await fetchWithTimeout(
+        modelConfig.endpoint,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${modelConfig.apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: modelConfig.model,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt },
+            ],
+            max_completion_tokens: 10000, // Increased for full weekly schedule generation
+          }),
+        },
+        30000 // 30 second timeout
+      );
+    } catch (error) {
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: error instanceof AIError ? error.message : 'AI request failed',
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return handleAIError(error, corsHeaders, {
+        endpoint: 'generate-schedule',
+        userId,
+        startTime
+      });
+    }
 
     if (!response.ok) {
       await logRequest(supabase, {
