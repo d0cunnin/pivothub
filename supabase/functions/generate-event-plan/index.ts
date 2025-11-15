@@ -214,21 +214,139 @@ Generate event titles, description, color palette${formData.includeItinerary ? '
     const modelConfig = await getModelForUser(supabase, userId, 'text');
     validateProvider('text', modelConfig.model);
 
-    const response = await fetch(modelConfig.endpoint, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${modelConfig.apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: modelConfig.model,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        max_completion_tokens: 7000,
-      }),
-    });
+    // Add timeout with GPT-5 fallback to GPT-5 Mini
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 120000);  // 2 minutes
+
+    let response;
+
+    try {
+      response = await fetch(modelConfig.endpoint, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${modelConfig.apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: modelConfig.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          max_completion_tokens: 7000,
+        }),
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeout);
+      
+    } catch (abortError) {
+      clearTimeout(timeout);
+      
+      // If GPT-5 timed out, fall back to GPT-5 Mini
+      if (abortError.name === 'AbortError') {
+        console.log('⚠️ Primary model timed out, falling back to faster model...');
+        
+        const controller2 = new AbortController();
+        const timeout2 = setTimeout(() => controller2.abort(), 60000);  // 1 minute
+        
+        try {
+          // Get GPT-5 Mini config
+          const fallbackConfig = await getModelForUser(supabase, userId, 'text', 'openai/gpt-5-mini');
+          
+          response = await fetch(fallbackConfig.endpoint, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${fallbackConfig.apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: 'openai/gpt-5-mini',
+              messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: userPrompt },
+              ],
+              max_completion_tokens: 7000,
+            }),
+            signal: controller2.signal
+          });
+          
+          clearTimeout(timeout2);
+          
+        } catch (secondAbortError) {
+          clearTimeout(timeout2);
+          
+          // Both attempts failed - return 408 timeout error
+          if (secondAbortError.name === 'AbortError') {
+            await logRequest(supabase, {
+              userId,
+              endpoint: "generate-event-plan",
+              ip,
+              userAgent: req.headers.get('user-agent') || 'unknown',
+              creditsCharged: 0,
+              success: false,
+              errorMessage: 'AI request timeout after fallback',
+              requestDurationMs: Date.now() - startTime
+            });
+            
+            return new Response(
+              JSON.stringify({
+                error: 'timeout',
+                message: 'AI request timed out after two attempts. The service may be experiencing issues. Please try again in a few moments.'
+              }),
+              { status: 408, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+            );
+          }
+          
+          throw secondAbortError;
+        }
+      } else {
+        throw abortError;
+      }
+    }
+
+    // Handle 402 (credits exhausted) and 429 (rate limit) errors
+    if (response.status === 402) {
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-event-plan",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: 'AI credits exhausted',
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(
+        JSON.stringify({
+          error: 'ai_credits_exhausted',
+          message: 'AI service unavailable. Please add credits in Settings → Cloud & AI balance.'
+        }),
+        { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (response.status === 429) {
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-event-plan",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: 'AI rate limit exceeded',
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return new Response(
+        JSON.stringify({
+          error: 'rate_limit',
+          message: 'AI service rate limit exceeded. Please try again in a few moments.'
+        }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     if (!response.ok) {
       await logRequest(supabase, {
