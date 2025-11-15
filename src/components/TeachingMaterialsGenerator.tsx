@@ -13,6 +13,8 @@ import { toast } from "@/hooks/use-toast";
 import { Loader2, Download, X } from "lucide-react";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface SkillEntry {
   category: string;
@@ -1038,7 +1040,18 @@ ${generatedMaterials.marketingPlan}
                 </Button>
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
-                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.webinarConcepts}</pre>
+                <div className="prose prose-lg max-w-none text-foreground">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-primary" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-primary" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-3 ml-4" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
+                  }}>
+                    {generatedMaterials.webinarConcepts}
+                  </ReactMarkdown>
+                </div>
               </div>
             </TabsContent>
 
@@ -1055,7 +1068,18 @@ ${generatedMaterials.marketingPlan}
                 </Button>
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
-                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.courseOutline}</pre>
+                <div className="prose prose-lg max-w-none text-foreground">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-primary" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-primary" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-3 ml-4" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
+                  }}>
+                    {generatedMaterials.courseOutline}
+                  </ReactMarkdown>
+                </div>
               </div>
             </TabsContent>
 
@@ -1072,7 +1096,18 @@ ${generatedMaterials.marketingPlan}
                 </Button>
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
-                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.handouts}</pre>
+                <div className="prose prose-lg max-w-none text-foreground">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-primary" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-primary" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-3 ml-4" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
+                  }}>
+                    {generatedMaterials.handouts}
+                  </ReactMarkdown>
+                </div>
               </div>
             </TabsContent>
 
@@ -1089,7 +1124,18 @@ ${generatedMaterials.marketingPlan}
                 </Button>
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
-                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.lessonScript}</pre>
+                <div className="prose prose-lg max-w-none text-foreground">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-primary" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-primary" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-3 ml-4" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
+                  }}>
+                    {generatedMaterials.lessonScript}
+                  </ReactMarkdown>
+                </div>
               </div>
             </TabsContent>
 
@@ -1106,7 +1152,18 @@ ${generatedMaterials.marketingPlan}
                 </Button>
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
-                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.toolsAndPlatforms}</pre>
+                <div className="prose prose-lg max-w-none text-foreground">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-primary" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-primary" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-3 ml-4" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
+                  }}>
+                    {generatedMaterials.toolsAndPlatforms}
+                  </ReactMarkdown>
+                </div>
               </div>
             </TabsContent>
 
@@ -1123,7 +1180,18 @@ ${generatedMaterials.marketingPlan}
                 </Button>
               </div>
               <div className="bg-muted/50 p-4 rounded-lg max-h-[500px] overflow-y-auto">
-                <pre className="whitespace-pre-wrap text-sm">{generatedMaterials.marketingPlan}</pre>
+                <div className="prose prose-lg max-w-none text-foreground">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                    h2: ({node, ...props}) => <h2 className="text-2xl font-bold mt-6 mb-3 text-primary" {...props} />,
+                    h3: ({node, ...props}) => <h3 className="text-xl font-semibold mt-4 mb-2" {...props} />,
+                    strong: ({node, ...props}) => <strong className="font-bold text-primary" {...props} />,
+                    ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-3 ml-4" {...props} />,
+                    li: ({node, ...props}) => <li className="my-1" {...props} />,
+                    p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
+                  }}>
+                    {generatedMaterials.marketingPlan}
+                  </ReactMarkdown>
+                </div>
               </div>
             </TabsContent>
           </Tabs>

@@ -89,8 +89,30 @@ serve(async (req) => {
       );
     }
 
+    // Get current date for accurate timeline calculations
+    const currentDate = new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    
+    const twoWeeksLater = new Date(Date.now() + 14*24*60*60*1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    const fourWeeksLater = new Date(Date.now() + 28*24*60*60*1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
     let prompt = ''
     const systemMessage = `PIVOTHUB MASTER PROMPT FRAMEWORK - CORPORATE LEARNING & DEVELOPMENT EXECUTIVE
+
+=== CURRENT DATE & TIMELINE CONTEXT ===
+TODAY'S DATE: ${currentDate}
+
+All launch timelines must start from today. Calculate specific dates:
+- Week 1-2: ${currentDate} to ${twoWeeksLater}
+- Pre-Launch (4 weeks): ${currentDate} to ${fourWeeksLater}
+
+=== MARKDOWN FORMATTING ===
+Use ## for main sections, ### for subsections, **bold** for emphasis
+Include blank lines for readability
+Define all acronyms on first use
 
 === CORE IDENTITY ===
 You are a Chief Learning Officer and Senior L&D Executive with 25+ years designing corporate training programs for Fortune 500 companies. You've led learning initiatives for organizations with 10,000+ employees, managed $50M+ training budgets, and achieved measurable business impact through strategic learning interventions.
@@ -963,7 +985,7 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
           { role: 'system', content: systemMessage },
           { role: 'user', content: prompt }
         ],
-        max_completion_tokens: 3500
+        max_completion_tokens: 14000
       })
     })
 
@@ -975,15 +997,23 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
 
     let content = result.choices[0].message.content
 
-    // Sanitize content to remove any remaining markdown artifacts
+    // Preserve markdown structure, clean only excessive formatting
     content = content
-      .replace(/^#{1,6}\s+/gm, '')
-      .replace(/\*\*\*(.+?)\*\*\*/g, '$1')
-      .replace(/\*\*(.+?)\*\*/g, '$1')
-      .replace(/\*(.+?)\*/g, '$1')
-      .replace(/#{2,}/g, '')
-      .replace(/\n{3,}/g, '\n\n')
+      .replace(/\*\*\*\*/g, '**')
+      .replace(/\n{4,}/g, '\n\n\n')
       .trim()
+    
+    console.log('=== AI Response Debug ===');
+    console.log('Content Length:', content?.length);
+    console.log('Preview:', content?.slice(0, 200));
+    
+    // Validate content length
+    if (!content || content.length < 500) {
+      return new Response(JSON.stringify({ 
+        error: 'Generated content too short',
+        details: 'Please provide more details in the form'
+      }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
     return new Response(
       JSON.stringify({ content, type }),

@@ -66,6 +66,16 @@ serve(async (req) => {
       throw new Error('Lovable AI key not found');
     }
 
+    // Get current date for accurate timeline calculations
+    const currentDate = new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    
+    const twoWeeksLater = new Date(Date.now() + 14*24*60*60*1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    const fourWeeksLater = new Date(Date.now() + 28*24*60*60*1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - EXECUTIVE LAUNCH STRATEGIST
 
 === CORE IDENTITY ===
@@ -86,6 +96,60 @@ EXPERTISE:
 • Include market analysis, competitive positioning, and risk mitigation
 • All milestones must have specific dates, owners, and success metrics
 • Include financial projections and resource requirements
+• Define ALL acronyms on first use (e.g., "MRR (Monthly Recurring Revenue)")
+• Avoid business jargon without explanation - write for entrepreneurs unfamiliar with industry terms
+• Use clear, accessible language while maintaining professional depth
+
+=== CURRENT DATE & TIMELINE CONTEXT ===
+TODAY'S DATE: ${currentDate}
+
+CRITICAL: All timelines MUST be calculated from today's date.
+- Week 1 starts: ${currentDate}
+- Week 2 ends: ${twoWeeksLater}
+- Week 4 ends: ${fourWeeksLater}
+
+Example timeline format: "FOUNDATION PHASE (${currentDate} - ${fourWeeksLater})"
+NOT: "FOUNDATION PHASE (Weeks 1-4)" with outdated months
+
+=== MARKDOWN FORMATTING REQUIREMENTS ===
+Use markdown for clear visual hierarchy:
+• Use ## for main sections (e.g., "## 1. EXECUTIVE SUMMARY")
+• Use ### for subsections (e.g., "### Bootstrap Strategy")
+• Use **bold** for key terms, metrics, and important callouts
+• Use bullet points with - for lists
+• Add blank lines between sections for breathing room
+• Use > for important notes or warnings
+
+Example formatting:
+## 2. COMPREHENSIVE ROADMAP
+
+### FOUNDATION PHASE (${currentDate} - ${fourWeeksLater})
+
+**Timeline:** ${currentDate} to ${fourWeeksLater}
+
+• **Action 1:** Set up legal entity
+  - Register LLC in Delaware ($300)
+  - File for EIN (free)
+  - Open business bank account
+  
+• **Action 2:** Build MVP
+  - Use no-code tools: Webflow + Airtable
+  - Budget: $50/month
+  
+**Key Milestone:** Legal entity registered, MVP live
+
+**Budget Required:** $500-$800
+
+> **Important:** Don't skip legal setup - it protects you personally
+
+=== KEY METRICS TO DEFINE ===
+Always define these acronyms on first use:
+• MRR = Monthly Recurring Revenue (predictable monthly income)
+• ARR = Annual Recurring Revenue (yearly subscription revenue)
+• CAC = Customer Acquisition Cost (cost to get one customer)
+• LTV = Lifetime Value (total revenue from one customer)
+• PMF = Product-Market Fit (when your product strongly resonates with market)
+• GMV = Gross Merchandise Value (total sales through platform)
 
 PROJECT CONTEXT:
 - Category: ${ideaCategory}
@@ -565,13 +629,16 @@ FORMATTING RULES:
 
     let strategy = data.choices[0].message.content;
     
-    // Clean up excessive markdown formatting
+    // Preserve markdown structure, clean only excessive formatting
     strategy = strategy
-      .replace(/\*\*\*/g, '')
-      .replace(/\*\*/g, '')
-      .replace(/\*/g, '')
-      .replace(/#{1,6}\s/g, '')
-      .replace(/\n{3,}/g, '\n\n');
+      .replace(/\*\*\*\*/g, '**')  // Reduce quadruple asterisks to double
+      .replace(/\n{4,}/g, '\n\n\n')  // Limit to max 3 line breaks
+      .replace(/#{7,}/g, '######')  // Limit headers to h6 max
+      .trim();
+    
+    console.log('=== Generated Strategy ===');
+    console.log('Content Length:', strategy.length);
+    console.log('Preview:', strategy.slice(0, 200));
 
     await logRequest(guardResult.supabase, {
       endpoint: "generate-launch-strategy",
