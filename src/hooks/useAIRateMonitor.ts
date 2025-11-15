@@ -114,6 +114,27 @@ export const useAIRateMonitor = (refreshInterval: number = 5000) => {
     refetchInterval: 10000, // Check every 10 seconds
   });
 
+  // Fetch 24-hour historical data
+  const { data: historicalData, isLoading: historicalLoading } = useQuery({
+    queryKey: ['ai-historical-usage', realtimeUpdate],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('tool_usage_analytics')
+        .select('tool_name, credits_used, created_at')
+        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+        .order('created_at', { ascending: false })
+        .limit(1000);
+
+      if (error) throw error;
+      return data as Array<{
+        tool_name: string;
+        credits_used: number;
+        created_at: string;
+      }>;
+    },
+    refetchInterval: refreshInterval,
+  });
+
   const metrics: AIRateMetrics = {
     requestsLastMinute: currentRate?.requests_last_minute ?? 0,
     activeUsers: currentRate?.active_users ?? 0,
@@ -134,7 +155,8 @@ export const useAIRateMonitor = (refreshInterval: number = 5000) => {
   return {
     metrics,
     serviceHealth: serviceHealth || null,
-    isLoading: currentRateLoading || minuteDataLoading || serviceHealthLoading,
+    historicalData: historicalData || [],
+    isLoading: currentRateLoading || minuteDataLoading || serviceHealthLoading || historicalLoading,
     refresh: () => setRealtimeUpdate(prev => prev + 1)
   };
 };
