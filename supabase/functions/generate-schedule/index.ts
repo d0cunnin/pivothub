@@ -88,22 +88,26 @@ Keep activity descriptions under 50 characters.`;
 
     const userPrompt = `Schedule requirements:
 
-WORK & COMMUTE:
+WORK:
 - Work hours: ${truncatedData.workHours}h/week
 - Work type: ${truncatedData.workSchedule}
 - Work schedule: ${truncatedData.workScheduleDetails || 'Not specified'}
-- CRITICAL: If work hours are 9 AM - 5 PM, commute TO work must END by 9 AM
-- CRITICAL: If work hours are 9 AM - 5 PM, commute FROM work must START at 5 PM
-- Commute duration: ${truncatedData.commuteTime || 0}h total per day
-- Do NOT overlap commute with work hours
 
 EDUCATION & TRAINING:
 - Currently enrolled: ${truncatedData.inSchool === 'yes' ? 'Yes' : 'No'}
 ${truncatedData.inSchool === 'yes' ? `- Schedule: ${truncatedData.schoolCommitment || 'Self-paced, no fixed schedule'}` : ''}
 
-OTHER COMMITMENTS:
-- Family: ${truncatedData.familyCommitments}
-- Appointments: ${truncatedData.recurringAppointments}
+FAMILY & PERSONAL:
+- Has family commitments: ${truncatedData.hasFamilyCommitments === 'yes' ? 'Yes' : 'No'}
+${truncatedData.hasFamilyCommitments === 'yes' ? `- Details: ${truncatedData.familyCommitments || 'General family time'}` : ''}
+- Recurring appointments: ${truncatedData.recurringAppointments || 'None'}
+
+COMMUTE:
+- Type: ${truncatedData.commuteType || 'Not specified'}
+${truncatedData.commuteType === 'one-way' ? `- One-way duration: ${truncatedData.commuteTime || 0}h (${(parseFloat(truncatedData.commuteTime || '0') * 2).toFixed(2)}h total daily)` : ''}
+${truncatedData.commuteType === 'round-trip' ? `- Total daily commute: ${truncatedData.commuteTime || 0}h` : ''}
+${truncatedData.commuteType === 'none' ? '- No commute (remote/online)' : ''}
+${truncatedData.commuteType && truncatedData.commuteType !== 'none' ? '- CRITICAL: Schedule commute to END before work starts and START when work ends' : ''}
 
 ENERGY:
 - Type: ${truncatedData.energyType}

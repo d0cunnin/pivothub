@@ -21,7 +21,9 @@ interface ScheduleFormData {
   workScheduleDetails: string;
   inSchool: string;
   schoolCommitment: string;
+  hasFamilyCommitments: string;
   familyCommitments: string;
+  commuteType: string;
   recurringAppointments: string;
   commuteTime: string;
 
@@ -51,7 +53,9 @@ export function ScheduleItWizard() {
     workScheduleDetails: '',
     inSchool: '',
     schoolCommitment: '',
+    hasFamilyCommitments: '',
     familyCommitments: '',
+    commuteType: '',
     recurringAppointments: '',
     commuteTime: '',
     energyType: '',
@@ -96,7 +100,7 @@ export function ScheduleItWizard() {
 
   const generateSchedule = async () => {
     // Validation
-    if (!formData.workHours || !formData.inSchool || !formData.energyType || !formData.businessType) {
+    if (!formData.workHours || !formData.inSchool || !formData.hasFamilyCommitments) {
       toast.error('Please fill in all required fields (marked with *)');
       return;
     }
@@ -110,6 +114,12 @@ export function ScheduleItWizard() {
     // If work schedule selected, require details
     if (formData.workSchedule && formData.workSchedule !== 'none' && !formData.workScheduleDetails) {
       toast.error('Please specify your work schedule details');
+      return;
+    }
+
+    // If has family commitments, require details
+    if (formData.hasFamilyCommitments === 'yes' && !formData.familyCommitments) {
+      toast.error('Please provide your family commitment details');
       return;
     }
 
@@ -323,15 +333,52 @@ export function ScheduleItWizard() {
               )}
             </div>
 
-            <div>
-              <Label htmlFor="familyCommitments">Family Commitments</Label>
-              <Textarea
-                id="familyCommitments"
-                value={formData.familyCommitments}
-                onChange={(e) => handleInputChange('familyCommitments', e.target.value)}
-                placeholder="Childcare, eldercare, family time, etc."
-                rows={3}
-              />
+            <div className="space-y-3">
+              <Label className="text-base">
+                Do you have regular family commitments? *
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                (e.g., childcare, eldercare, spouse/partner time, family activities)
+              </p>
+              
+              <RadioGroup 
+                value={formData.hasFamilyCommitments} 
+                onValueChange={(val) => {
+                  handleInputChange('hasFamilyCommitments', val);
+                  if (val === 'no') {
+                    handleInputChange('familyCommitments', '');
+                  }
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="yes" id="family-yes" />
+                  <Label htmlFor="family-yes" className="font-normal cursor-pointer">
+                    Yes, I have regular family commitments
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="family-no" />
+                  <Label htmlFor="family-no" className="font-normal cursor-pointer">
+                    No family commitments to schedule around
+                  </Label>
+                </div>
+              </RadioGroup>
+
+              {formData.hasFamilyCommitments === 'yes' && (
+                <div className="mt-3 pl-4 border-l-2 border-primary/30">
+                  <Label htmlFor="familyCommitments">Family Commitment Details</Label>
+                  <Textarea
+                    id="familyCommitments"
+                    value={formData.familyCommitments}
+                    onChange={(e) => handleInputChange('familyCommitments', e.target.value)}
+                    placeholder="e.g., Drop off kids at 8 AM, pick up at 3 PM. Evening family time 6-8 PM. Sunday family activities."
+                    rows={3}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Include specific times, days, and types of commitments
+                  </p>
+                </div>
+              )}
             </div>
 
             <div>
@@ -344,16 +391,51 @@ export function ScheduleItWizard() {
               />
             </div>
 
-            <div>
-              <Label htmlFor="commuteTime">Daily Commute Time (hours)</Label>
-              <Input
-                id="commuteTime"
-                type="number"
-                step="0.5"
-                value={formData.commuteTime}
-                onChange={(e) => handleInputChange('commuteTime', e.target.value)}
-                placeholder="e.g., 1.5"
-              />
+            <div className="space-y-3">
+              <Label className="text-base">Daily Commute Time</Label>
+              <p className="text-sm text-muted-foreground">
+                How long does it take you to commute to work/school each day?
+              </p>
+              
+              <div>
+                <Label htmlFor="commuteType">Commute Type</Label>
+                <Select
+                  value={formData.commuteType}
+                  onValueChange={(value) => handleInputChange('commuteType', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select commute type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="one-way">One-way (just to work/school)</SelectItem>
+                    <SelectItem value="round-trip">Round-trip (to and from work/school)</SelectItem>
+                    <SelectItem value="none">No commute (remote work/online school)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {formData.commuteType && formData.commuteType !== 'none' && (
+                <div>
+                  <Label htmlFor="commuteTime">
+                    Commute Duration (hours) - {formData.commuteType === 'one-way' ? 'One direction' : 'Total daily'}
+                  </Label>
+                  <Input
+                    id="commuteTime"
+                    type="number"
+                    step="0.25"
+                    min="0"
+                    max="5"
+                    value={formData.commuteTime}
+                    onChange={(e) => handleInputChange('commuteTime', e.target.value)}
+                    placeholder={formData.commuteType === 'one-way' ? "e.g., 0.75 (45 min)" : "e.g., 1.5 (total)"}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {formData.commuteType === 'one-way' 
+                      ? 'Enter time for one direction. We\'ll double this for your schedule.' 
+                      : 'Enter total time for both to and from work/school.'}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         );
