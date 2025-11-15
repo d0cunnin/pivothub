@@ -171,7 +171,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
 
     let response;
     
-    // Try GPT-5 first with 120 second timeout
+    // Call GPT-5 Mini (faster, optimized for structured JSON generation)
     try {
       response = await fetchWithTimeout(
         modelConfig.endpoint,
@@ -182,7 +182,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
             "Content-Type": "application/json",
           },
             body: JSON.stringify({
-              model: 'openai/gpt-5',
+              model: 'openai/gpt-5-mini',
               messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },
@@ -190,83 +190,25 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
               max_completion_tokens: 12000,
             }),
         },
-        120000 // 2 minute timeout for GPT-5
+        60000 // 1 minute timeout for GPT-5 Mini
       );
-    } catch (firstError) {
-      // If GPT-5 timed out, fall back to GPT-5 Mini
-      if (firstError instanceof AIError && firstError.code === 'TIMEOUT') {
-        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        
-        // Fallback pre-call diagnostics
-        console.log('=== FALLBACK PRE-CALL DEBUG ===');
-        const fallbackBodyPreview = {
-          model: 'openai/gpt-5-mini',
-          messages: [
-            { role: "system", content: systemPrompt.slice(0, 300) },
-            { role: "user", content: userPrompt.slice(0, 300) },
-          ],
-        };
-        const fallbackBodyStr = JSON.stringify(fallbackBodyPreview);
-        console.log('Fallback body preview char length:', fallbackBodyStr.length);
-        console.log('System prompt preview:', systemPrompt.slice(0, 300));
-        console.log('User prompt preview:', userPrompt.slice(0, 300));
-        
-        try {
-          response = await fetchWithTimeout(
-            modelConfig.endpoint,
-            {
-              method: "POST",
-              headers: {
-                "Authorization": `Bearer ${modelConfig.apiKey}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                model: 'openai/gpt-5-mini',
-                messages: [
-                  { role: "system", content: systemPrompt },
-                  { role: "user", content: userPrompt },
-                ],
-                max_completion_tokens: 12000,
-              }),
-            },
-            60000 // 1 minute timeout for GPT-5 Mini
-          );
-        } catch (secondError) {
-          await logRequest(supabase, {
-            userId,
-            endpoint: "generate-schedule",
-            ip,
-            userAgent: req.headers.get('user-agent') || 'unknown',
-            creditsCharged: 0,
-            success: false,
-            errorMessage: secondError instanceof AIError ? secondError.message : 'AI request failed after fallback',
-            requestDurationMs: Date.now() - startTime
-          });
-          
-          return handleAIError(secondError, corsHeaders, {
-            endpoint: 'generate-schedule',
-            userId,
-            startTime
-          });
-        }
-      } else {
-        await logRequest(supabase, {
-          userId,
-          endpoint: "generate-schedule",
-          ip,
-          userAgent: req.headers.get('user-agent') || 'unknown',
-          creditsCharged: 0,
-          success: false,
-          errorMessage: firstError instanceof AIError ? firstError.message : 'AI request failed',
-          requestDurationMs: Date.now() - startTime
-        });
-        
-        return handleAIError(firstError, corsHeaders, {
-          endpoint: 'generate-schedule',
-          userId,
-          startTime
-        });
-      }
+    } catch (error) {
+      await logRequest(supabase, {
+        userId,
+        endpoint: "generate-schedule",
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: error instanceof AIError ? error.message : 'AI request failed',
+        requestDurationMs: Date.now() - startTime
+      });
+      
+      return handleAIError(error, corsHeaders, {
+        endpoint: 'generate-schedule',
+        userId,
+        startTime
+      });
     }
 
     if (!response.ok) {
