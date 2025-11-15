@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { getAlertBadgeColor, getAlertColor } from "@/utils/aiRateLimits";
 
 export const AIUsageMonitor = () => {
-  const { metrics, serviceHealth, isLoading } = useAIRateMonitor();
+  const { metrics, serviceHealth, historicalData, isLoading } = useAIRateMonitor();
 
   if (isLoading) {
     return (
@@ -180,6 +180,29 @@ export const AIUsageMonitor = () => {
               ) : (
                 <p className="text-sm text-muted-foreground">No activity in the last 10 minutes</p>
               )}
+            </div>
+          </div>
+
+          {/* Historical Summary - Last 24 Hours */}
+          <div className="border-t pt-4">
+            <h3 className="text-sm font-medium mb-3">Last 24 Hours</h3>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="p-4 rounded-lg bg-muted/30">
+                <div className="text-2xl font-bold">{historicalData?.length || 0}</div>
+                <div className="text-sm text-muted-foreground">Total Requests</div>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/30">
+                <div className="text-2xl font-bold">
+                  {historicalData?.reduce((sum, r) => sum + r.credits_used, 0) || 0}
+                </div>
+                <div className="text-sm text-muted-foreground">Credits Used</div>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/30">
+                <div className="text-2xl font-bold">
+                  {new Set(historicalData?.map(r => r.tool_name)).size || 0}
+                </div>
+                <div className="text-sm text-muted-foreground">Tools Used</div>
+              </div>
             </div>
           </div>
         </CardContent>
