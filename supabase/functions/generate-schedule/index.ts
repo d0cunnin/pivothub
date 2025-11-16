@@ -187,7 +187,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },
               ],
-              max_completion_tokens: 8000,
+              max_completion_tokens: 16000,
               response_format: { type: "json_object" }
             }),
         },
