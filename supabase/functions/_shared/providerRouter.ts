@@ -38,10 +38,10 @@ export async function getModelForUser(
   const isPaid = userData?.subscribed === true && 
                  userData?.subscription_tier !== 'explore';
 
-  // Use GPT-5 for all users via Lovable AI
+  // Use GPT-5 Mini for all users via Lovable AI
   return {
     provider: 'openai',
-    model: 'openai/gpt-5',
+    model: 'openai/gpt-5-mini',
     apiKey: Deno.env.get('LOVABLE_API_KEY')!,
     endpoint: 'https://ai.gateway.lovable.dev/v1/chat/completions'
   };
