@@ -182,16 +182,16 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
             "Content-Type": "application/json",
           },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'openai/gpt-4o',
               messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },
               ],
-              max_completion_tokens: 16000,
+              max_completion_tokens: 8000,
               response_format: { type: "json_object" }
             }),
         },
-        180000 // 3 minute timeout - allows for 16k token generation
+        120000 // 2 minute timeout - plenty for GPT-4o
       );
     } catch (error) {
       await logRequest(supabase, {
