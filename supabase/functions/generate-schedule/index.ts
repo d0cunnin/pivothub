@@ -50,11 +50,11 @@ Deno.serve(async (req) => {
 CRITICAL: You MUST respond with ONLY valid JSON. No markdown, no code blocks, no explanations, no preamble - just the raw JSON object exactly as specified below.
 
 IMPORTANT CONSTRAINTS:
-- **MAXIMUM 3 activities per day** (not 4-5)
-- **ALL activity descriptions under 20 characters** (not 30)
-- **Use short time formats: "9a-12p"** (not "9:00 AM - 12:00 PM")
-- **Limit to 3 recommendations, each under 30 characters**
-- Focus on essential tasks only
+- **MAXIMUM 5-6 activities per day** (provide more detail)
+- **Keep activity descriptions under 35 characters** (readable but informative)
+- **Use clean time formats: "9:00a-12:00p"** (clear without verbosity)
+- **Provide 4-5 recommendations, each under 50 characters** (actionable advice)
+- Focus on meaningful, actionable tasks
 - CRITICAL: ONLY schedule based on user's ACTUAL input - DO NOT invent activities
 - DO NOT add example activities like "creative jam", "coffee with friend", or "hobby time" unless user specified them
 - If user provided specific commitments (work, school, family), schedule those FIRST
@@ -71,7 +71,11 @@ SUMMARY CALCULATIONS:
 - totalCommittedHours: Sum of ALL scheduled activities (work + school + business + family + etc)
 - sideBusinessHours: Count ONLY activities with category "business" (this is what user is building)
 - personalTime: Count activities with categories "rest", "personal-development", "creativity", "fitness"
-- Include 3-5 brief, actionable recommendations
+- Include 4-5 actionable recommendations (under 50 characters each)
+
+${truncatedData.hasExerciseRoutine === 'no' || !truncatedData.hasExerciseRoutine 
+  ? '⚠️ CRITICAL PRIORITY: User does NOT exercise regularly. You MUST include "Start 30-min exercise routine 3x/week" as the TOP recommendation. Schedule exercise blocks during their peak energy times (fitness category).'
+  : 'User has exercise routine - support it in the schedule with fitness category blocks.'}
 
 RESPONSE FORMAT - Return ONLY valid JSON:
 {
@@ -188,7 +192,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },
               ],
-              max_completion_tokens: 3500,  // Gateway-safe threshold: aggressive reduction
+              max_completion_tokens: 5500,  // Increased for richer 5-6 activities/day
               response_format: { type: "json_object" }
             }),
         },
