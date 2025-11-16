@@ -95,7 +95,8 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
   days.forEach((day, index) => {
     const daySchedule = scheduleData.weeklySchedule[day] || [];
     
-    if (yPos > pageHeight - 70) {
+    // Increased safety margin: 80 units ensures footer + day header + at least 3 blocks fit
+    if (yPos > pageHeight - 80) {
       doc.addPage();
       yPos = margin;
     }
@@ -113,6 +114,23 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
     // Time blocks for this day
     if (daySchedule.length > 0) {
       daySchedule.forEach((block: TimeBlock) => {
+        // CHECK: Will this block fit on current page?
+        // Each block needs 12 units, footer needs 15 units safety
+        if (yPos > pageHeight - 30) {
+          doc.addPage();
+          yPos = margin;
+          
+          // Re-add day header on new page
+          doc.setFillColor(59, 130, 246);
+          doc.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(11);
+          doc.setFont('helvetica', 'bold');
+          doc.text(dayNames[index] + ' (continued)', margin + 3, yPos + 5.5);
+          doc.setTextColor(0, 0, 0);
+          yPos += 10;
+        }
+        
         const color = categoryColors[block.category] || [220, 220, 220]; // Default to light gray
         
         // Create light pastel background colors (add 100 to each RGB channel)
@@ -155,7 +173,8 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
 
   // Recommendations
   if (scheduleData.summary.recommendations.length > 0) {
-    if (yPos > pageHeight - 80) {
+    // Ensure at least 90 units for recommendations header + multiple lines + footer
+    if (yPos > pageHeight - 90) {
       doc.addPage();
       yPos = margin;
     }
@@ -170,7 +189,8 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
     scheduleData.summary.recommendations.forEach((rec: string) => {
       const lines = doc.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin - 5);
       lines.forEach((line: string) => {
-        if (yPos > pageHeight - 25) {
+        // Ensure at least 30 units for line + footer safety
+        if (yPos > pageHeight - 30) {
           doc.addPage();
           yPos = margin;
         }
