@@ -158,7 +158,35 @@ ENERGY:
 - Peak times: ${truncatedData.peakProductivity?.join(', ') || 'Not specified'}
 - Low energy: ${truncatedData.energyDips?.join(', ') || 'Not specified'}
 - Sleep: ${truncatedData.sleepSchedule}
-${truncatedData.hasExerciseRoutine === 'yes' ? `- Exercise: ${truncatedData.exerciseHours || 0}h/week, preferred time: ${truncatedData.exercisePreferredTime || 'flexible'}` : ''}
+
+EXERCISE:
+${truncatedData.hasExerciseRoutine === 'yes' ? `
+- Weekly hours: ${truncatedData.exerciseHours || 0}h
+- Preferred time: ${truncatedData.exercisePreferredTime || 'Flexible'}
+  ${truncatedData.exercisePreferredTime === 'very-early-morning' ? '(3-5 AM - very early riser schedule)' : ''}
+  ${truncatedData.exercisePreferredTime === 'late-night' ? '(10 PM-Midnight - late evening workout)' : ''}
+  ${truncatedData.exercisePreferredTime === 'overnight' ? '(Midnight-3 AM - night shift workout schedule)' : ''}
+` : '⚠️ User does NOT exercise - prioritize adding this'}
+
+MEAL PREPARATION:
+${truncatedData.hasMealPrepRoutine === 'yes' ? `
+- Frequency: ${truncatedData.mealPrepFrequency || 'Not specified'}
+- Weekly hours: ${truncatedData.mealPrepHours || 0}h
+- MUST schedule realistic meal prep/cooking blocks:
+  * Daily cooking: 30-45 min per meal (breakfast, lunch, dinner)
+  * Batch cooking: 1.5-2h sessions 2-3x per week
+  * Weekly meal prep: 2-4h block on one day (usually Sunday)
+- Schedule during low-energy periods or natural breaks
+` : '- User does not cook regularly (uses takeout/prepared meals)'}
+
+SPIRITUAL PRACTICES:
+${truncatedData.hasSpiritualPractice === 'yes' ? `
+- Type: ${truncatedData.spiritualPracticeType || 'Not specified'}
+- Preferred time: ${truncatedData.spiritualPracticeTime || 'Flexible'}
+- Daily duration: ${truncatedData.spiritualPracticeDuration || 0} minutes
+- CRITICAL: This is a non-negotiable daily practice - schedule it consistently at preferred time
+- Consider as part of morning/evening routine structure
+` : '- No spiritual practice to schedule'}
 
 GOALS:
 - Building: ${truncatedData.businessType}
