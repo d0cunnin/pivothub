@@ -68,13 +68,21 @@ REQUIREMENTS:
 - Avoid overscheduling
 
 CRITICAL SCHEDULING LOGIC (must follow):
-1. **DO NOT place fitness/exercise immediately before or after long commutes** - this is physically unrealistic
+1. **NEVER place fitness/exercise immediately before or after commute blocks** - this is physically exhausting and unrealistic
+   - ❌ WRONG: "Commute to work" → "Fitness Routine" → "Work"
+   - ❌ WRONG: "Work" → "Commute from work" → "Fitness Routine"
+   - ✅ CORRECT: "Commute to work" → "Work" → "Commute from work" → "Rest/transition 30-45min" → "Evening meal" → "Fitness Routine"
+   - ✅ CORRECT: "Wake up routine" → "Fitness Routine" → "Breakfast/shower" → "Commute to work"
 2. **Fill ALL gaps** between major activities - no 2+ hour unscheduled blocks during waking hours
 3. **Logical sequence**: Commute → Work → Commute → Rest/Transition → Evening activities
 4. **Exercise placement**: Schedule during natural breaks (lunch hour, after work before dinner, weekends)
 5. **Transition time**: Add 15-30 min "wind down" or "transition" activities between major blocks
 6. **Evening structure**: After work commute, include dinner/rest (30-60 min) before evening activities
 7. **Realistic timing**: Don't schedule intense activities (fitness, business work) immediately after exhausting ones (long work days, commutes)
+8. **Morning routine sequence** (if user has morning commute):
+   - Wake up → Morning routine (personal care, breakfast, 30-60 min) → Commute to work → Work
+   - OR: Wake up → Exercise (if energy high) → Shower/breakfast → Commute to work → Work
+   - DO NOT: Wake up → Commute immediately (unrealistic - no one does this)
 
 SUMMARY CALCULATIONS:
 - totalCommittedHours: Sum of ALL scheduled activities (work + school + business + family + etc)
@@ -129,11 +137,21 @@ ${truncatedData.hasFamilyCommitments === 'yes' ? `- Details: ${truncatedData.fam
 - Recurring appointments: ${truncatedData.recurringAppointments || 'None'}
 
 COMMUTE:
-- Type: ${truncatedData.commuteType || 'Not specified'}
-${truncatedData.commuteType === 'one-way' ? `- One-way duration: ${truncatedData.commuteTime || 0}h (${(parseFloat(truncatedData.commuteTime || '0') * 2).toFixed(2)}h total daily)` : ''}
-${truncatedData.commuteType === 'round-trip' ? `- Total daily commute: ${truncatedData.commuteTime || 0}h` : ''}
-${truncatedData.commuteType === 'none' ? '- No commute (remote/online)' : ''}
-${truncatedData.commuteType && truncatedData.commuteType !== 'none' ? '- CRITICAL: Schedule commute to END before work starts and START when work ends' : ''}
+${truncatedData.commuteType === 'one-way' ? `
+- Commute type: One-way only
+- Duration: ${truncatedData.commuteTime || 0}h one direction
+- SCHEDULE IN YOUR OUTPUT: ${truncatedData.commuteTime || 0}h commute block BEFORE work starts (e.g., "7:00a-8:00a Commute to work")
+- User handles return commute on their own (don't schedule return trip)
+` : ''}
+${truncatedData.commuteType === 'round-trip' ? `
+- Commute type: Round-trip (to and from work)
+- Total daily time: ${truncatedData.commuteTime || 0}h
+- **SPLIT THIS EVENLY**: ${(parseFloat(truncatedData.commuteTime || '0') / 2).toFixed(2)}h morning commute + ${(parseFloat(truncatedData.commuteTime || '0') / 2).toFixed(2)}h evening commute
+- SCHEDULE IN YOUR OUTPUT:
+  1. Morning: ${(parseFloat(truncatedData.commuteTime || '0') / 2).toFixed(2)}h block BEFORE work (e.g., "7:00a-8:00a Commute to work")
+  2. Evening: ${(parseFloat(truncatedData.commuteTime || '0') / 2).toFixed(2)}h block AFTER work (e.g., "5:00p-6:00p Commute from work")
+` : ''}
+${truncatedData.commuteType === 'none' ? '- No commute (remote work or online school)' : ''}
 
 ENERGY:
 - Type: ${truncatedData.energyType}
