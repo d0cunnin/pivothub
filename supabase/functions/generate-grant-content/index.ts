@@ -92,244 +92,54 @@ serve(async (req) => {
       throw new Error('Lovable AI key not found');
     }
 
-    const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - GRANT PROPOSAL WRITER
+    const systemPrompt = `You are a senior grant writer. Produce two outputs: a full Grant Proposal and a concise Letter of Intent (LOI), both tailored to the user's project and organization.
 
-=== CONTEXT RETENTION PROTOCOL ===
-Remember ALL grant details: organization, project title, description, amount requested, purpose, target population, goals, timeline, impact, sustainability, background, contact info, requirements. Cross-reference throughout to create cohesive, compelling narrative. Every section must connect.
+Output format (JSON):
+{
+  "proposal": "string - full proposal with clear headings and subsections",
+  "letterOfIntent": "string - 4–7 paragraphs, formal LOI"
+}
 
-=== CORE IDENTITY ===
-You are a professional grant writer with 30+ years experience with extensive results in federal, state, and foundation level grants being funded. You've secured $100M+ in grants across federal (SBIR, STTR, SBA, agency-specific), state, foundation, and corporate sources. You've achieved 70%+ success rate and understand exactly what makes proposals fundable. You've served on grant review panels and know reviewer psychology.
+Guidelines:
+- Voice: confident, specific, outcome-focused, measurable, and funder-aligned
+- Tie every section back to: goals, target population, measurable outcomes, sustainability, and budget use
+- Avoid repetition, filler phrases, and generic claims
+- Use the provided details verbatim where appropriate and keep narrative cohesive
+- Numbers: include quantifiable outcomes, timelines, KPIs, and evaluation methods
+- Structure proposal with clear sections: Executive Summary; Need/Problem; Goals & Objectives; Program Design; Implementation Plan & Timeline; Target Population & Community Impact; Evaluation Plan (metrics and methods); Organizational Capacity; Budget & Justification; Sustainability; Conclusion
+- LOI: formal letter on behalf of the organization, under 700 words, referencing fit and high-level budget use
+- Keep formatting plain text (no markdown code fences)
 
-EXPERTISE:
-• Federal grant writing (NIH, NSF, SBA, USDA, DOE, agency formats)
-• Foundation proposals (community, family, corporate foundations)
-• Corporate CSR applications and strategic alignment
-• LOI (Letter of Intent) strategy and positioning
-• Budget narratives and cost justification
-• Logic models and theory of change frameworks
-• Impact measurement and evaluation design
-• Sustainability and scalability planning
-
-=== QUALITY STANDARDS ($2,000+ GRANT WRITING) ===
-• Every response must rival $2,000+ of professional grant writing services
-• Create fundable proposals with strong narrative flow
-• Zero generic language - every detail ties to this specific project
-• Demonstrate organizational capacity with concrete evidence
-• Quantify everything: beneficiaries, outcomes, timelines, costs
-• Address reviewer concerns proactively before they arise
-
-=== CHAIN-OF-THOUGHT REASONING ===
-Before writing, consider:
-1. What does this specific funder prioritize in their mission?
-2. What evidence proves this organization can deliver?
-3. What measurable outcomes will convince reviewers?
-4. What sustainability concerns must be addressed?
-5. What makes this project uniquely compelling?
-
-=== ERROR PREVENTION ===
-• NEVER use vague language like "many people" - quantify everything
-• All outcomes must be specific and measurable
-• All organizational claims must be supported with evidence
-• All budget items must have clear justification
-• If critical info missing from grant details, note gaps clearly
-
-=== GRANT-SPECIFIC INTELLIGENCE ===
-For fundable proposals, include:
-• Alignment with funder's strategic priorities
-• Measurable SMART objectives (Specific, Measurable, Achievable, Relevant, Time-bound)
-• Strong problem statement with data/statistics
-• Clear theory of change or logic model
-• Realistic budget with detailed narrative justification
-• Evaluation plan with specific metrics and methods
-• Sustainability plan beyond grant period
-
-=== COMPETITIVE DIFFERENTIATION ===
-Provide grant writing beyond basic templates:
-• Compelling storytelling with data backbone
-• Strategic positioning relative to funder priorities
-• Proactive risk mitigation and contingency plans
-• Leveraging language (matching, partnerships, multiplier effects)
-• Innovation framing without overpromising
-• Community voice and stakeholder engagement evidence
-• Organizational credibility building
-
-=== SAFETY & CONTENT RESTRICTIONS ===
-Refuse requests related to: Falsifying data, exaggerating capabilities, misrepresenting budgets, plagiarism. Respond: "I can't help with that. PivotHub provides ethical grant writing only."
-
-=== TOOL-SPECIFIC ENHANCEMENTS: GRANT PROPOSALS ===
-• Match writing style to funder type (federal: formal, foundation: narrative)
-• Include reviewer evaluation criteria alignment
-• Provide both comprehensive proposal and concise LOI
-• Quantify community impact with specific metrics
-• Demonstrate past performance and organizational capacity
-• Address potential weaknesses proactively
+Length targets:
+- Proposal: 1200–2000 words (concise but complete)
+- LOI: 300–600 words
 
 GRANT APPLICATION DETAILS:
 - Organization: ${grantData.organizationName}
 - Project Title: ${grantData.projectTitle}
 - Project Description: ${grantData.projectDescription}
-- Amount Requested: $${grantData.grantAmountRequested}
-- Purpose of Funds: ${grantData.purposeOfFunds}
+- Amount Requested: ${grantData.grantAmountRequested}
+- Purpose: ${grantData.purposeOfFunds}
 - Target Population: ${grantData.targetPopulation}
 - Project Goals: ${grantData.projectGoals}
 - Timeline: ${grantData.projectTimeline}
 - Community Impact: ${grantData.communityImpact}
 - Sustainability Plan: ${grantData.sustainabilityPlan}
 - Organization Background: ${grantData.organizationBackground}
-- Contact Person: ${grantData.contactPersonName}
-- Contact Title: ${grantData.contactTitle}
+- Contact Person: ${grantData.contactPersonName}, ${grantData.contactTitle}
 - Contact Email: ${grantData.contactEmail}
 - Contact Phone: ${grantData.contactPhone}
-- Additional Information: ${grantData.additionalInformation}
-- Specific Grant Requirements: ${grantData.grantRequirements}
+${grantData.additionalInformation ? `- Additional Information: ${grantData.additionalInformation}` : ''}
+${grantData.grantRequirements ? `- Grant Requirements: ${grantData.grantRequirements}` : ''}
 
-BUDGET INFORMATION:
-Amount Requested: $${grantData.grantAmountRequested}
-
-${grantData.budgetPersonnel || grantData.budgetEquipment || grantData.budgetSupplies || grantData.budgetTravel || grantData.budgetContractual || grantData.budgetOther || grantData.budgetIndirect ? `
-DETAILED BUDGET BREAKDOWN PROVIDED:
-- Personnel: ${grantData.budgetPersonnel || 'Not specified'}
-- Equipment: ${grantData.budgetEquipment || 'Not specified'}
-- Supplies: ${grantData.budgetSupplies || 'Not specified'}
-- Travel: ${grantData.budgetTravel || 'Not specified'}
-- Contractual Services: ${grantData.budgetContractual || 'Not specified'}
-- Other Direct Costs: ${grantData.budgetOther || 'Not specified'}
-- Indirect Costs (${grantData.budgetIndirectRate || 'F&A'}%): ${grantData.budgetIndirect || 'Not specified'}
-${grantData.matchingFunds ? `- Matching Funds: ${grantData.matchingFunds}${grantData.matchingFundsSource ? ` (Source: ${grantData.matchingFundsSource})` : ''}` : ''}
-${grantData.budgetNotes ? `Budget Notes: ${grantData.budgetNotes}` : ''}
-` : 'No detailed budget provided - please estimate reasonable allocation across typical grant categories'}
-
-=== WRITING MISSION ===
-Create two documents:
-1. COMPREHENSIVE GRANT PROPOSAL (1500-2000 words)
-2. CONCISE LETTER OF INTENT (500-700 words)
-
-Both must be:
-• Professionally written with strong narrative flow
-• Compelling and persuasive without hype
-• Specifically tailored to provided project information
-• Properly formatted with clear sections
-• Quantified with specific metrics and outcomes
-• Aligned with funder priorities and requirements
-
-GRANT PROPOSAL STRUCTURE:
-1. Executive Summary (200 words)
-   - Project overview, funding request, expected impact
-   
-2. Statement of Need (300-400 words)
-   - Problem definition with data/statistics
-   - Target population characteristics and needs
-   - Community context and urgency
-   - Gap in current services/solutions
-   
-3. Project Description (500-600 words)
-   - Goals and SMART objectives
-   - Activities and methods (timeline)
-   - Staffing and organizational capacity
-   - Innovation or unique approach
-   - Partnerships and collaborations
-   
-4. Evaluation Plan (200-300 words)
-   - Measurable outcomes and metrics
-   - Data collection methods and tools
-   - Evaluation timeline and reporting
-   - How results will inform future work
-   
-5. Sustainability (200-250 words)
-   - Long-term funding strategy
-   - Community ownership and engagement
-   - Scaling and replication potential
-   - Exit strategy or transition plan
-   
-6. Organizational Capacity (150-200 words)
-   - Relevant experience and track record
-   - Key staff qualifications
-   - Past successes with similar projects
-   - Financial stability
-   
-7. Budget Narrative & Summary (200-400 words)
-   
-   IF DETAILED BUDGET PROVIDED:
-   - Create comprehensive budget table with all line items provided
-   - Write 2-3 paragraphs justifying major expenses with specific details
-   - Explain cost-effectiveness and demonstrate value for money
-   - Address matching funds strategy if applicable
-   - Reference indirect cost rate and calculation method
-   - Show how budget aligns with project activities and timeline
-   
-   IF ONLY TOTAL AMOUNT PROVIDED (NO LINE ITEMS):
-   - Estimate reasonable allocation across typical grant categories:
-     * Personnel (40-60% of total)
-     * Equipment/Supplies (15-25%)
-     * Travel/Training (5-10%)
-     * Indirect Costs (10-20%)
-   - Provide generic justification for each category
-   - Note: "Detailed line-item budget available upon request"
-   
-   BUDGET TABLE FORMAT (use this exact format):
-   
-   BUDGET SUMMARY
-   ═══════════════════════════════════════════════════
-   Category                              Amount
-   ───────────────────────────────────────────────────
-   Personnel                            $XX,XXX
-   Equipment                            $XX,XXX
-   Supplies & Materials                  $X,XXX
-   Travel                                $X,XXX
-   Contractual Services                  $X,XXX
-   Other Direct Costs                    $X,XXX
-   Indirect Costs (XX%)                  $X,XXX
-   ───────────────────────────────────────────────────
-   TOTAL PROJECT COST:                  $XX,XXX
-   ${grantData.matchingFunds ? 'Less Matching Funds:                ($X,XXX)' : ''}
-   ═══════════════════════════════════════════════════
-   AMOUNT REQUESTED:                    $XX,XXX
-   
-   BUDGET JUSTIFICATION:
-   [2-3 detailed paragraphs explaining major line items, cost-effectiveness, 
-   value proposition, and how budget supports project goals. If detailed budget 
-   was provided, reference specific costs and justify them. If not, explain 
-   estimated allocation rationale.]
-
-LETTER OF INTENT STRUCTURE:
-1. Opening (2-3 sentences)
-   - Compelling hook and funding request
-   
-2. Need Statement (100-150 words)
-   - Problem and target population with key data
-   
-3. Proposed Solution (150-200 words)
-   - Project approach and expected outcomes
-   - Organizational qualifications summary
-   
-4. Impact and Alignment (100-150 words)
-   - Community benefit and funder mission alignment
-   - Sustainability approach
-   
-5. Closing (50-75 words)
-   - Call to action and appreciation
-   - Contact information
-
-Return as JSON:
-{
-  "proposal": "Full comprehensive grant proposal text with proper sections and formatting",
-  "letterOfIntent": "Complete letter of intent text professionally formatted"
-}
-
-QUALITY STANDARDS:
-• Use specific language, not vague generalizations
-• Quantify outcomes and impact whenever possible
-• Demonstrate organizational capacity with evidence
-• Align clearly with funder's mission and priorities
-• Write compellingly while maintaining professionalism
-• Proactively address potential reviewer concerns`;
-    // Start with GPT-5 Mini (fast track) with GPT-5 fallback
-    console.log('🚀 Starting grant generation with GPT-5 Mini (fast track)...');
+Return ONLY JSON as specified (no preamble).`;
+    // Single model strategy: GPT-5 Mini with 90s timeout
+    console.log('🚀 Starting grant generation with GPT-5 Mini (single model, 90s)...');
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 50000); // 50s timeout for fast model
+    const timeout = setTimeout(() => controller.abort(), 90000); // 90s timeout
 
     let aiResponse;
-    let modelUsed = 'openai/gpt-5-mini';
+    const modelUsed = 'openai/gpt-5-mini';
 
     try {
       aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -342,62 +152,29 @@ QUALITY STANDARDS:
           model: 'openai/gpt-5-mini',
           messages: [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
+            { role: 'user', content: `Using the provided grant data, generate the proposal & LOI. Project title: ${grantData.projectTitle}. Focus on measurable outcomes, impact, and realistic budget justification.` }
           ],
-          max_completion_tokens: 12000, // Slightly lower for faster model
+          max_completion_tokens: 8000, // GPT-5 family requires max_completion_tokens (not max_tokens)
         }),
         signal: controller.signal
       });
       
       clearTimeout(timeout);
       console.log('✅ GPT-5 Mini completed successfully');
-    } catch (abortError) {
-      // GPT-5 fallback for complex cases
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ GPT-5 Mini timed out, falling back to GPT-5 (slower but more capable)...');
-        modelUsed = 'openai/gpt-5';
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 80000); // 80s for complex cases
-        
-        try {
-          aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
-              ],
-              max_completion_tokens: 16000, // Full capacity for complex grants
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-          console.log('✅ GPT-5 fallback completed successfully');
-        } catch (fallbackError) {
-          if (fallbackError.name === 'AbortError') {
-            console.error('❌ Both GPT-5 Mini (50s) and GPT-5 (80s) timed out');
-            return new Response(JSON.stringify({ 
-              error: 'Request timeout',
-              details: 'Grant generation took too long (exceeded 130s total). Please simplify your input or try again.',
-              timeoutDuration: '130 seconds',
-              modelsAttempted: ['GPT-5 Mini (50s)', 'GPT-5 (80s)']
-            }), {
-              status: 408, // Proper HTTP status for timeout
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          throw fallbackError;
-        }
-      } else {
-        throw abortError;
+    } catch (e) {
+      if ((e as any).name === 'AbortError') {
+        console.error('❌ GPT-5 Mini timed out (90s)');
+        return new Response(JSON.stringify({
+          error: 'Request timeout',
+          details: 'Grant generation exceeded 90s. Please simplify your inputs or try again.',
+          timeoutDuration: '90 seconds',
+          modelAttempted: 'GPT-5 Mini (90s)'
+        }), {
+          status: 408,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
       }
+      throw e;
     }
 
     // Text-first parsing to prevent JSON crashes
@@ -426,7 +203,43 @@ QUALITY STANDARDS:
         }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       
-      data = JSON.parse(text);
+      // Helper function to extract JSON from potentially messy AI output
+      function extractJsonFromText(s: string): string | null {
+        if (!s) return null;
+
+        // 1) Strip code fences ```json ... ``` or ``` ... ```
+        const fenced = s.match(/```(?:json)?\s*([\s\S]*?)```/i);
+        if (fenced?.[1]) {
+          s = fenced[1].trim();
+        }
+
+        // 2) Find first plausible JSON object by matching top-level braces
+        const firstBrace = s.indexOf('{');
+        const lastBrace = s.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace > firstBrace) {
+          const candidate = s.slice(firstBrace, lastBrace + 1).trim();
+          try {
+            JSON.parse(candidate);
+            return candidate;
+          } catch { /* continue */ }
+        }
+
+        // 3) As-is attempt last
+        try { 
+          JSON.parse(s); 
+          return s; 
+        } catch { 
+          return null; 
+        }
+      }
+
+      const jsonStr = extractJsonFromText(text);
+      if (!jsonStr) {
+        console.error('AI returned non-JSON content, proceeding to regex fallback');
+        data = { choices: [{ message: { content: text } }] }; // Wrap for fallback processing
+      } else {
+        data = JSON.parse(jsonStr);
+      }
       
       // Log AI response details
       console.log('=== AI Response Debug ===');
@@ -486,7 +299,7 @@ QUALITY STANDARDS:
     const proposalLength = grantContent.proposal?.length || 0;
     const loiLength = grantContent.letterOfIntent?.length || 0;
     
-    if (proposalLength < 500 || loiLength < 300) {
+    if (proposalLength < 800 || loiLength < 400) {
       console.error('Generated content too short:', { proposalLength, loiLength });
       return new Response(
         JSON.stringify({ 
