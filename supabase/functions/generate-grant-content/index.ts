@@ -323,12 +323,13 @@ QUALITY STANDARDS:
 • Align clearly with funder's mission and priorities
 • Write compellingly while maintaining professionalism
 • Proactively address potential reviewer concerns`;
-    // Add timeout with GPT-5 Mini fallback
+    // Start with GPT-5 Mini (fast track) with GPT-5 fallback
+    console.log('🚀 Starting grant generation with GPT-5 Mini (fast track)...');
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000); // 120s for GPT-5
+    const timeout = setTimeout(() => controller.abort(), 50000); // 50s timeout for fast model
 
     let aiResponse;
-    let modelUsed = 'openai/gpt-5';
+    let modelUsed = 'openai/gpt-5-mini';
 
     try {
       aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -338,25 +339,26 @@ QUALITY STANDARDS:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'openai/gpt-5-mini',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
           ],
-          max_completion_tokens: 16000,
+          max_completion_tokens: 12000, // Slightly lower for faster model
         }),
         signal: controller.signal
       });
       
       clearTimeout(timeout);
+      console.log('✅ GPT-5 Mini completed successfully');
     } catch (abortError) {
-      // GPT-5 Mini fallback on timeout
+      // GPT-5 fallback for complex cases
       if (abortError.name === 'AbortError') {
-        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        modelUsed = 'openai/gpt-5-mini';
+        console.log('⚠️ GPT-5 Mini timed out, falling back to GPT-5 (slower but more capable)...');
+        modelUsed = 'openai/gpt-5';
         
         const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000); // 60s fallback
+        const timeout2 = setTimeout(() => controller2.abort(), 80000); // 80s for complex cases
         
         try {
           aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -366,23 +368,28 @@ QUALITY STANDARDS:
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'openai/gpt-5',
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Generate a comprehensive, fundable grant proposal and compelling letter of intent for this ${grantData.projectTitle} project. Focus on measurable outcomes, community impact, and organizational capacity.` }
               ],
-              max_completion_tokens: 12000,
+              max_completion_tokens: 16000, // Full capacity for complex grants
             }),
             signal: controller2.signal
           });
           
           clearTimeout(timeout2);
+          console.log('✅ GPT-5 fallback completed successfully');
         } catch (fallbackError) {
           if (fallbackError.name === 'AbortError') {
+            console.error('❌ Both GPT-5 Mini (50s) and GPT-5 (80s) timed out');
             return new Response(JSON.stringify({ 
-              error: 'Grant generation is taking too long. Please try again with shorter input or contact support.' 
+              error: 'Request timeout',
+              details: 'Grant generation took too long (exceeded 130s total). Please simplify your input or try again.',
+              timeoutDuration: '130 seconds',
+              modelsAttempted: ['GPT-5 Mini (50s)', 'GPT-5 (80s)']
             }), {
-              status: 200,
+              status: 408, // Proper HTTP status for timeout
               headers: { ...corsHeaders, 'Content-Type': 'application/json' }
             });
           }
@@ -423,10 +430,11 @@ QUALITY STANDARDS:
       
       // Log AI response details
       console.log('=== AI Response Debug ===');
-      console.log('Model Used:', modelUsed);
-      console.log('Response Status:', aiResponse.status);
-      console.log('Response Length:', text.length);
-      console.log('Raw Response Preview:', text.slice(0, 500));
+      console.log('🤖 Model Used:', modelUsed);
+      console.log('⏱️ Response Time:', Date.now() - startTime, 'ms');
+      console.log('📊 Response Status:', aiResponse.status);
+      console.log('📏 Response Length:', text.length);
+      console.log('🔍 Raw Response Preview:', text.slice(0, 500));
     } catch (err) {
       console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
       return new Response(JSON.stringify({
