@@ -67,6 +67,15 @@ REQUIREMENTS:
 - Include 10-15 minute buffers between activities
 - Avoid overscheduling
 
+CRITICAL SCHEDULING LOGIC (must follow):
+1. **DO NOT place fitness/exercise immediately before or after long commutes** - this is physically unrealistic
+2. **Fill ALL gaps** between major activities - no 2+ hour unscheduled blocks during waking hours
+3. **Logical sequence**: Commute → Work → Commute → Rest/Transition → Evening activities
+4. **Exercise placement**: Schedule during natural breaks (lunch hour, after work before dinner, weekends)
+5. **Transition time**: Add 15-30 min "wind down" or "transition" activities between major blocks
+6. **Evening structure**: After work commute, include dinner/rest (30-60 min) before evening activities
+7. **Realistic timing**: Don't schedule intense activities (fitness, business work) immediately after exhausting ones (long work days, commutes)
+
 SUMMARY CALCULATIONS:
 - totalCommittedHours: Sum of ALL scheduled activities (work + school + business + family + etc)
 - sideBusinessHours: Count ONLY activities with category "business" (this is what user is building)
