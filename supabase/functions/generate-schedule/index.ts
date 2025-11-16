@@ -191,7 +191,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
               response_format: { type: "json_object" }
             }),
         },
-        120000 // 2 minute timeout - more time for complex schedules
+        180000 // 3 minute timeout - allows for 16k token generation
       );
     } catch (error) {
       await logRequest(supabase, {
