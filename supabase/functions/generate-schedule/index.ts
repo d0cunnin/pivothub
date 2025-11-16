@@ -187,8 +187,8 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },
               ],
-              temperature: 0.2,              // More focused/deterministic output
-              max_completion_tokens: 6000,   // Reduced for faster generation
+              max_completion_tokens: 6000,
+              response_format: { type: "json_object" }
             }),
         },
         120000 // 2 minute timeout - more time for complex schedules
