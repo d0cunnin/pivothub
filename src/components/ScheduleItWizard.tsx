@@ -40,6 +40,13 @@ interface ScheduleFormData {
   hasExerciseRoutine: string;
   exerciseHours: string;
   exercisePreferredTime: string;
+  hasMealPrepRoutine: string;
+  mealPrepFrequency: string;
+  mealPrepHours: string;
+  hasSpiritualPractice: string;
+  spiritualPracticeType: string;
+  spiritualPracticeTime: string;
+  spiritualPracticeDuration: string;
 
   // Step 3: Business Goals
   businessType: string;
@@ -78,6 +85,13 @@ export function ScheduleItWizard() {
     hasExerciseRoutine: '',
     exerciseHours: '',
     exercisePreferredTime: '',
+    hasMealPrepRoutine: '',
+    mealPrepFrequency: '',
+    mealPrepHours: '',
+    hasSpiritualPractice: '',
+    spiritualPracticeType: '',
+    spiritualPracticeTime: '',
+    spiritualPracticeDuration: '',
     businessType: '',
     weeklyHoursWanted: '',
     weeklyHoursRealistic: '',
@@ -740,15 +754,166 @@ export function ScheduleItWizard() {
                         <SelectValue placeholder="Select preferred time..." />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="very-early-morning">Very Early Morning (3-5 AM)</SelectItem>
                         <SelectItem value="early-morning">Early Morning (5-7 AM)</SelectItem>
                         <SelectItem value="morning">Morning (7-10 AM)</SelectItem>
                         <SelectItem value="lunch">Lunch (11 AM - 1 PM)</SelectItem>
                         <SelectItem value="afternoon">Afternoon (2-5 PM)</SelectItem>
                         <SelectItem value="evening">Evening (5-8 PM)</SelectItem>
                         <SelectItem value="night">Night (8-10 PM)</SelectItem>
+                        <SelectItem value="late-night">Late Night (10 PM - Midnight)</SelectItem>
+                        <SelectItem value="overnight">Overnight (Midnight - 3 AM)</SelectItem>
                         <SelectItem value="flexible">Flexible</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Meal Preparation Habits */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Do you cook or meal prep regularly?</Label>
+              <RadioGroup 
+                value={formData.hasMealPrepRoutine} 
+                onValueChange={(val) => {
+                  handleInputChange('hasMealPrepRoutine', val);
+                  if (val === 'no') {
+                    handleInputChange('mealPrepFrequency', '');
+                    handleInputChange('mealPrepHours', '');
+                  }
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="yes" id="meal-yes" />
+                  <Label htmlFor="meal-yes" className="font-normal cursor-pointer">
+                    Yes, I cook/meal prep regularly
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="meal-no" />
+                  <Label htmlFor="meal-no" className="font-normal cursor-pointer">
+                    No, I don't cook much (takeout/eating out)
+                  </Label>
+                </div>
+              </RadioGroup>
+
+              {formData.hasMealPrepRoutine === 'yes' && (
+                <div className="space-y-3 pl-4 border-l-2 border-primary/30">
+                  <div>
+                    <Label htmlFor="mealPrepFrequency">How often?</Label>
+                    <Select 
+                      value={formData.mealPrepFrequency} 
+                      onValueChange={(val) => handleInputChange('mealPrepFrequency', val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select frequency..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="daily-cooking">Daily cooking (prepare each meal fresh)</SelectItem>
+                        <SelectItem value="batch-cooking">Batch cooking (cook 2-3 days at once)</SelectItem>
+                        <SelectItem value="weekly-meal-prep">Weekly meal prep (Sundays for the week)</SelectItem>
+                        <SelectItem value="mixed">Mixed approach</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="mealPrepHours">Approximate hours per week</Label>
+                    <Input
+                      id="mealPrepHours"
+                      type="number"
+                      min="1"
+                      max="20"
+                      value={formData.mealPrepHours}
+                      onChange={(e) => handleInputChange('mealPrepHours', e.target.value)}
+                      placeholder="e.g., 7 (1 hour/day) or 4 (big Sunday prep)"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Spiritual Practices */}
+            <div className="space-y-3">
+              <Label className="text-base font-semibold">Do you have spiritual practices (prayer, meditation, scripture study)?</Label>
+              <RadioGroup 
+                value={formData.hasSpiritualPractice} 
+                onValueChange={(val) => {
+                  handleInputChange('hasSpiritualPractice', val);
+                  if (val === 'no') {
+                    handleInputChange('spiritualPracticeType', '');
+                    handleInputChange('spiritualPracticeTime', '');
+                    handleInputChange('spiritualPracticeDuration', '');
+                  }
+                }}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="yes" id="spiritual-yes" />
+                  <Label htmlFor="spiritual-yes" className="font-normal cursor-pointer">
+                    Yes, I have a spiritual practice
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="no" id="spiritual-no" />
+                  <Label htmlFor="spiritual-no" className="font-normal cursor-pointer">
+                    No spiritual practice
+                  </Label>
+                </div>
+              </RadioGroup>
+
+              {formData.hasSpiritualPractice === 'yes' && (
+                <div className="space-y-3 pl-4 border-l-2 border-primary/30">
+                  <div>
+                    <Label htmlFor="spiritualPracticeType">Type of practice</Label>
+                    <Select 
+                      value={formData.spiritualPracticeType} 
+                      onValueChange={(val) => handleInputChange('spiritualPracticeType', val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select practice type..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="prayer">Prayer</SelectItem>
+                        <SelectItem value="meditation">Meditation</SelectItem>
+                        <SelectItem value="scripture-study">Scripture study</SelectItem>
+                        <SelectItem value="combined">Multiple practices</SelectItem>
+                        <SelectItem value="other">Other spiritual practice</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="spiritualPracticeTime">Preferred time</Label>
+                    <Select 
+                      value={formData.spiritualPracticeTime} 
+                      onValueChange={(val) => handleInputChange('spiritualPracticeTime', val)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select preferred time..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="very-early-morning">Very Early Morning (3-5 AM)</SelectItem>
+                        <SelectItem value="early-morning">Early Morning (5-7 AM)</SelectItem>
+                        <SelectItem value="morning">Morning (7-10 AM)</SelectItem>
+                        <SelectItem value="midday">Midday (11 AM - 2 PM)</SelectItem>
+                        <SelectItem value="afternoon">Afternoon (2-5 PM)</SelectItem>
+                        <SelectItem value="evening">Evening (5-8 PM)</SelectItem>
+                        <SelectItem value="night">Night (8-10 PM)</SelectItem>
+                        <SelectItem value="before-bed">Before bed</SelectItem>
+                        <SelectItem value="flexible">Flexible</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="spiritualPracticeDuration">Daily duration (minutes)</Label>
+                    <Input
+                      id="spiritualPracticeDuration"
+                      type="number"
+                      min="5"
+                      max="240"
+                      value={formData.spiritualPracticeDuration}
+                      onChange={(e) => handleInputChange('spiritualPracticeDuration', e.target.value)}
+                      placeholder="e.g., 30"
+                    />
                   </div>
                 </div>
               )}
