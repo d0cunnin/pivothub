@@ -113,17 +113,25 @@ export function generateSchedulePDF(scheduleData: ScheduleData, userName: string
     // Time blocks for this day
     if (daySchedule.length > 0) {
       daySchedule.forEach((block: TimeBlock) => {
-        const color = categoryColors[block.category] || [100, 100, 100]; // Default to medium gray
+        const color = categoryColors[block.category] || [220, 220, 220]; // Default to light gray
         
-        // Use VERY light background (5% opacity) for all blocks - ensures readability
-        doc.setFillColor(color[0], color[1], color[2], 0.05);
+        // Create light pastel background colors (add 100 to each RGB channel)
+        const lightColor: [number, number, number] = [
+          Math.min(255, color[0] + 100),
+          Math.min(255, color[1] + 100),
+          Math.min(255, color[2] + 100)
+        ];
+        
+        // Use light pastel background
+        doc.setFillColor(lightColor[0], lightColor[1], lightColor[2]);
         doc.rect(margin, yPos, pageWidth - 2 * margin, 10, 'F');
         
-        // Use the actual color for border (but at 40% opacity for subtlety)
-        doc.setDrawColor(color[0], color[1], color[2], 0.4);
+        // Use subtle border with original color at low opacity
+        doc.setDrawColor(color[0], color[1], color[2]);
+        doc.setLineWidth(0.3);
         doc.rect(margin, yPos, pageWidth - 2 * margin, 10, 'S');
         
-        // Use BLACK text for maximum readability on light backgrounds
+        // Use BLACK text for maximum readability
         doc.setTextColor(0, 0, 0);
         doc.setFontSize(9);
         doc.setFont('helvetica', 'bold');
