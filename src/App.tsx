@@ -26,6 +26,7 @@ import Auth from "./pages/Auth";
 import Pricing from "./pages/Pricing";
 import FAQ from "./pages/FAQ";
 import FundIt from "./pages/FundIt";
+import ContractIt from "./pages/ContractIt";
 import FreelancerMarketplace from "./pages/FreelancerMarketplace";
 import FreelancerOnboarding from "./pages/FreelancerOnboarding";
 import ClientOnboarding from "./pages/ClientOnboarding";
@@ -76,6 +77,7 @@ const App = () => (
             <Route path="/prepit" element={<PrepIt />} />
             <Route path="/buildit" element={<BuildIt />} />
             <Route path="/fundit" element={<FundIt />} />
+            <Route path="/contractit" element={<ContractIt />} />
             <Route path="/freelancer-marketplace" element={<FreelancerMarketplace />} />
             <Route path="/freelancer-onboarding" element={<FreelancerOnboarding />} />
             <Route path="/client-onboarding" element={<ClientOnboarding />} />
