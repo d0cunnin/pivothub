@@ -188,8 +188,11 @@ function calculateFederalScore(formData: any, businessFoundation: number): numbe
   
   if (formData.ueiNumber) score += 10;
   if (formData.cageCode) score += 10;
-  if (formData.naicsCodes?.length > 0) {
-    score += Math.min(15, formData.naicsCodes.length * 2);
+  const naicsCodes = formData.naicsCodesInput 
+    ? formData.naicsCodesInput.split(',').map((c: string) => c.trim()).filter((c: string) => c.length > 0)
+    : [];
+  if (naicsCodes.length > 0) {
+    score += Math.min(15, naicsCodes.length * 2);
   }
   if (formData.pscCodes) score += 5;
   if (formData.federalCertifications?.length > 0) {
