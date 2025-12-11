@@ -143,3 +143,18 @@ verify_jwt = true
 
 [functions.generate-contract-readiness]
 verify_jwt = true
+
+[functions.generate-program-design]
+verify_jwt = true
+
+[functions.generate-grant-readiness]
+verify_jwt = true
+
+[functions.generate-community-assessment]
+verify_jwt = true
+
+[functions.generate-stakeholder-plan]
+verify_jwt = true
+
+[functions.community-dev-coach]
+verify_jwt = true

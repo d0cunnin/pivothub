@@ -27,6 +27,7 @@ import Pricing from "./pages/Pricing";
 import FAQ from "./pages/FAQ";
 import FundIt from "./pages/FundIt";
 import ContractIt from "./pages/ContractIt";
+import DevelopIt from "./pages/DevelopIt";
 import FreelancerMarketplace from "./pages/FreelancerMarketplace";
 import FreelancerOnboarding from "./pages/FreelancerOnboarding";
 import ClientOnboarding from "./pages/ClientOnboarding";
@@ -78,6 +79,7 @@ const App = () => (
             <Route path="/buildit" element={<BuildIt />} />
             <Route path="/fundit" element={<FundIt />} />
             <Route path="/contractit" element={<ContractIt />} />
+            <Route path="/developit" element={<DevelopIt />} />
             <Route path="/freelancer-marketplace" element={<FreelancerMarketplace />} />
             <Route path="/freelancer-onboarding" element={<FreelancerOnboarding />} />
             <Route path="/client-onboarding" element={<ClientOnboarding />} />
