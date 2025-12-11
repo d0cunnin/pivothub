@@ -66,6 +66,13 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   // CONTRACT IT TOOLS
   'capability-statement': 4,       // ~4,000 tokens output (government capability statement)
   'contract-readiness': 3,         // ~3,000 tokens output (readiness assessment with recommendations)
+  
+  // DEVELOP IT TOOLS
+  'program-design': 4,             // ~6,000 tokens output (Program Builder)
+  'grant-readiness': 3,            // ~5,000 tokens output (Grant Readiness & Funding Prep)
+  'community-assessment': 3,       // ~4,000 tokens output (Community Assessment Tool)
+  'stakeholder-plan': 3,           // ~5,000 tokens output (Stakeholder Engagement Planner)
+  'community-dev-coach': 1,        // Chatbot, ~2,000 tokens per message
 };
 
 export function getToolCreditCost(toolName: string): number {
