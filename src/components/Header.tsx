@@ -207,12 +207,32 @@ export const Header = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Link 
-                to="/fundit" 
-                className={`text-foreground hover:text-primary transition-colors whitespace-nowrap ${location.pathname === '/fundit' ? 'text-primary font-medium' : ''}`}
-              >
-                Fund It
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="flex items-center space-x-1">
+                    <span 
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/fundit', '/contractit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                    >
+                      Grow It
+                    </span>
+                    <button className="text-foreground hover:text-primary transition-colors cursor-pointer">
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48 bg-card border border-border shadow-lg z-50">
+                  <DropdownMenuItem asChild>
+                    <Link to="/fundit" className="flex w-full cursor-pointer">
+                      Fund It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/contractit" className="flex w-full cursor-pointer">
+                      Contract It
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </nav>
 

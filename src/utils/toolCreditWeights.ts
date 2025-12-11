@@ -62,6 +62,10 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'code-it': 1,                    // ~1,200 tokens output (explain code)
   'deploy-it': 40,                 // ~1,500 tokens output (AI agent blueprint) - complex agent planning
   'create-it-blueprint': 70,       // ~15,000 tokens output (comprehensive platform blueprint with tech stack, integrations, implementation guide)
+  
+  // CONTRACT IT TOOLS
+  'capability-statement': 4,       // ~4,000 tokens output (government capability statement)
+  'contract-readiness': 3,         // ~3,000 tokens output (readiness assessment with recommendations)
 };
 
 export function getToolCreditCost(toolName: string): number {

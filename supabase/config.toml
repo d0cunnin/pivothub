@@ -137,3 +137,9 @@ verify_jwt = false
 
 [functions.ai-health-check]
 verify_jwt = false
+
+[functions.generate-capability-statement]
+verify_jwt = true
+
+[functions.generate-contract-readiness]
+verify_jwt = true

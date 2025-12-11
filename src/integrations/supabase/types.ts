@@ -1356,6 +1356,7 @@ export type Database = {
         Returns: boolean
       }
       check_and_increment_ai_usage:
+        | { Args: { p_user_id: string }; Returns: Json }
         | {
             Args: {
               p_credits_to_use?: number
@@ -1364,7 +1365,6 @@ export type Database = {
             }
             Returns: Json
           }
-        | { Args: { p_user_id: string }; Returns: Json }
       cleanup_expired_contexts: { Args: never; Returns: undefined }
       cleanup_old_health_checks: { Args: never; Returns: undefined }
       clear_account_lockout: { Args: { p_email: string }; Returns: undefined }
