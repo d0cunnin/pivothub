@@ -34,7 +34,7 @@ interface CapabilityFormData {
   logoFile: File | null;
   uei: string;
   cageCode: string;
-  naicsCodes: string[];
+  naicsCodesInput: string;
   primaryNaics: string;
   pscCodes: string;
   nigpCodes: string;
@@ -108,7 +108,7 @@ interface ReadinessFormData {
   samRegistration: string;
   ueiNumber: string;
   cageCode: string;
-  naicsCodes: string[];
+  naicsCodesInput: string;
   pscCodes: string;
   federalCertifications: string[];
   hasFederalExperience: boolean;
@@ -130,29 +130,14 @@ const US_STATES = [
   "Wisconsin", "Wyoming", "Washington D.C."
 ];
 
-const NAICS_CODES = [
-  "236220 - Commercial Building Construction",
-  "238210 - Electrical Contractors",
-  "238220 - Plumbing & HVAC",
-  "511210 - Software Publishers",
-  "518210 - Data Processing",
-  "541330 - Engineering Services",
-  "541511 - Custom Computer Programming",
-  "541512 - Computer Systems Design",
-  "541519 - Other Computer Services",
-  "541611 - Administrative Management Consulting",
-  "541612 - HR Consulting",
-  "541613 - Marketing Consulting",
-  "541614 - Process & Logistics Consulting",
-  "541618 - Other Management Consulting",
-  "541690 - Other Scientific Consulting",
-  "541990 - All Other Professional Services",
-  "561110 - Office Administrative Services",
-  "561210 - Facilities Support Services",
-  "561320 - Temporary Help Services",
-  "561720 - Janitorial Services",
-  "611430 - Professional & Management Training"
-];
+// Helper function to parse comma-separated NAICS codes
+const parseNaicsCodes = (input: string): string[] => {
+  return input
+    .split(',')
+    .map(code => code.trim())
+    .filter(code => code.length > 0)
+    .slice(0, 10); // Limit to 10 codes
+};
 
 const CERTIFICATIONS = [
   { id: "small-business", label: "Small Business" },
@@ -188,7 +173,7 @@ const ContractIt = () => {
     logoFile: null,
     uei: "",
     cageCode: "",
-    naicsCodes: [],
+    naicsCodesInput: "",
     primaryNaics: "",
     pscCodes: "",
     nigpCodes: "",
@@ -251,7 +236,7 @@ const ContractIt = () => {
     samRegistration: "",
     ueiNumber: "",
     cageCode: "",
-    naicsCodes: [],
+    naicsCodesInput: "",
     pscCodes: "",
     federalCertifications: [],
     hasFederalExperience: false,
@@ -492,33 +477,33 @@ const ContractIt = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>NAICS Codes (Select up to 10)</Label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-48 overflow-y-auto border rounded-md p-3">
-                  {NAICS_CODES.map((code) => (
-                    <div key={code} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`naics-${code}`}
-                        checked={capabilityForm.naicsCodes.includes(code)}
-                        onCheckedChange={() => {
-                          if (capabilityForm.naicsCodes.length < 10 || capabilityForm.naicsCodes.includes(code)) {
-                            toggleArrayValue("capability", "naicsCodes", code);
-                          }
-                        }}
-                        disabled={capabilityForm.naicsCodes.length >= 10 && !capabilityForm.naicsCodes.includes(code)}
-                      />
-                      <label htmlFor={`naics-${code}`} className="text-sm cursor-pointer">{code}</label>
-                    </div>
-                  ))}
-                </div>
-                {capabilityForm.naicsCodes.length > 0 && (
-                  <div className="space-y-2">
+                <Label htmlFor="naicsCodesInput">NAICS Codes (Enter up to 10, comma-separated)</Label>
+                <Input
+                  id="naicsCodesInput"
+                  value={capabilityForm.naicsCodesInput}
+                  onChange={(e) => updateCapabilityForm("naicsCodesInput", e.target.value)}
+                  placeholder="e.g., 541511, 541512, 238210"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enter 6-digit NAICS codes separated by commas.{" "}
+                  <a 
+                    href="https://www.census.gov/naics/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Look up your NAICS codes →
+                  </a>
+                </p>
+                {parseNaicsCodes(capabilityForm.naicsCodesInput).length > 0 && (
+                  <div className="space-y-2 mt-3">
                     <Label htmlFor="primaryNaics">Primary NAICS Code</Label>
                     <Select value={capabilityForm.primaryNaics} onValueChange={(v) => updateCapabilityForm("primaryNaics", v)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select primary NAICS" />
                       </SelectTrigger>
                       <SelectContent>
-                        {capabilityForm.naicsCodes.map((code) => (
+                        {parseNaicsCodes(capabilityForm.naicsCodesInput).map((code) => (
                           <SelectItem key={code} value={code}>{code}</SelectItem>
                         ))}
                       </SelectContent>
@@ -1390,24 +1375,24 @@ const ContractIt = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>NAICS Codes (Select up to 10)</Label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-40 overflow-y-auto border rounded-md p-3">
-                  {NAICS_CODES.map((code) => (
-                    <div key={code} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`r-naics-${code}`}
-                        checked={readinessForm.naicsCodes.includes(code)}
-                        onCheckedChange={() => {
-                          if (readinessForm.naicsCodes.length < 10 || readinessForm.naicsCodes.includes(code)) {
-                            toggleArrayValue("readiness", "naicsCodes", code);
-                          }
-                        }}
-                        disabled={readinessForm.naicsCodes.length >= 10 && !readinessForm.naicsCodes.includes(code)}
-                      />
-                      <label htmlFor={`r-naics-${code}`} className="text-sm cursor-pointer">{code}</label>
-                    </div>
-                  ))}
-                </div>
+                <Label htmlFor="r-naicsCodesInput">NAICS Codes (Enter up to 10, comma-separated)</Label>
+                <Input
+                  id="r-naicsCodesInput"
+                  value={readinessForm.naicsCodesInput}
+                  onChange={(e) => updateReadinessForm("naicsCodesInput", e.target.value)}
+                  placeholder="e.g., 541511, 541512, 238210"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Enter 6-digit NAICS codes separated by commas.{" "}
+                  <a 
+                    href="https://www.census.gov/naics/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Look up your NAICS codes →
+                  </a>
+                </p>
               </div>
 
               <div className="space-y-2">

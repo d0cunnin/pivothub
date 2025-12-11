@@ -180,8 +180,11 @@ function buildCapabilityPrompt(formData: any): string {
   parts.push("\nCODES:");
   if (formData.uei) parts.push(`UEI: ${formData.uei}`);
   if (formData.cageCode) parts.push(`CAGE: ${formData.cageCode}`);
-  if (formData.naicsCodes?.length > 0) {
-    parts.push(`NAICS: ${formData.naicsCodes.join(", ")}`);
+  const naicsCodes = formData.naicsCodesInput 
+    ? formData.naicsCodesInput.split(',').map((c: string) => c.trim()).filter((c: string) => c.length > 0)
+    : [];
+  if (naicsCodes.length > 0) {
+    parts.push(`NAICS: ${naicsCodes.join(", ")}`);
     if (formData.primaryNaics) parts.push(`Primary NAICS: ${formData.primaryNaics}`);
   }
   if (formData.pscCodes) parts.push(`PSC/FSC: ${formData.pscCodes}`);
