@@ -80,6 +80,18 @@ const Index = () => {
     },
     {
       icon: reskillIcon,
+      title: "Develop It",
+      description: "Design community programs and prepare for grant funding.",
+      link: "/developit",
+    },
+    {
+      icon: hireyourselfIcon,
+      title: "Contract It",
+      description: "Build capability statements and assess contract readiness.",
+      link: "/contractit",
+    },
+    {
+      icon: reskillIcon,
       title: "Speak It",
       description: "Launch your voice as a speaker or podcaster with professional guidance.",
       link: "/speakit",
@@ -225,7 +237,7 @@ const Index = () => {
       {/* Features Section - Dark background, light text */}
       <section
         id="explore-hub"
-        className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-16 md:py-24 overflow-hidden"
+        className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-16 md:py-24 pb-28 md:pb-36 overflow-hidden"
       >
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
         <div className="absolute top-20 right-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>

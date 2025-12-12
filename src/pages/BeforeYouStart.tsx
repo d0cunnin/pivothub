@@ -342,7 +342,7 @@ const BeforeYouStart = () => {
               <div className="text-center mb-12">
                 <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
                   <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                    Understanding Tool Costs
+                    Understanding Tool Credits
                   </h2>
                 </div>
                 <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto">
