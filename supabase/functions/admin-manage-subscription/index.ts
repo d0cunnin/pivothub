@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { requireAdminMfa } from "../_shared/adminMfaGuard.ts";
 
 const logStep = (step: string, data?: any) => {
   console.log(`[ADMIN-MANAGE] ${step}`, data || '');
@@ -86,6 +87,35 @@ serve(async (req) => {
 
     logStep('Admin verified:', adminId);
 
+    // Create service role client for MFA check
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+    );
+
+    // Require MFA for admin subscription management
+    const mfaCheck = await requireAdminMfa(supabaseAdmin, adminId);
+    if (mfaCheck.error) {
+      logStep('MFA check failed:', mfaCheck.error);
+      await logRequest(guardResult.supabase, {
+        userId: adminId,
+        endpoint: 'admin-manage-subscription',
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        creditsCharged: 0,
+        success: false,
+        errorMessage: mfaCheck.error,
+        requestDurationMs: Date.now() - startTime
+      });
+
+      return new Response(
+        JSON.stringify({ error: mfaCheck.error, code: 'MFA_REQUIRED' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    logStep('MFA verified for admin');
+
     // Use validated data
     const requestBody = validation.data as GrantAccessRequest;
     const { action, userId, tier, duration, notes } = requestBody;
@@ -115,12 +145,6 @@ serve(async (req) => {
         { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    // Use service role for database operations
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-    );
 
     // Get current subscription state for audit log
     const { data: currentSub } = await supabaseAdmin

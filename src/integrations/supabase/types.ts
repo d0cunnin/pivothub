@@ -1395,6 +1395,17 @@ export type Database = {
         Args: { assessment_id: string }
         Returns: string
       }
+      get_subscriber_secure_data: {
+        Args: { target_user_id?: string }
+        Returns: {
+          created_at: string
+          email_masked: string
+          has_stripe_customer: boolean
+          has_stripe_subscription: boolean
+          updated_at: string
+          user_id: string
+        }[]
+      }
       has_role:
         | { Args: { _role: string }; Returns: boolean }
         | {
