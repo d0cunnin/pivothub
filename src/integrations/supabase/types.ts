@@ -881,6 +881,7 @@ export type Database = {
           email: string | null
           id: string
           stripe_customer_id: string | null
+          stripe_subscription_id: string | null
           updated_at: string
           user_id: string
         }
@@ -889,6 +890,7 @@ export type Database = {
           email?: string | null
           id?: string
           stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -897,6 +899,7 @@ export type Database = {
           email?: string | null
           id?: string
           stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -1062,8 +1065,6 @@ export type Database = {
           last_login: string | null
           next_billing_date: string | null
           onboarding_completed: boolean | null
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
           subscribed: boolean | null
           subscription_end: string | null
           subscription_package: string | null
@@ -1087,8 +1088,6 @@ export type Database = {
           last_login?: string | null
           next_billing_date?: string | null
           onboarding_completed?: boolean | null
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
           subscribed?: boolean | null
           subscription_end?: string | null
           subscription_package?: string | null
@@ -1112,8 +1111,6 @@ export type Database = {
           last_login?: string | null
           next_billing_date?: string | null
           onboarding_completed?: boolean | null
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
           subscribed?: boolean | null
           subscription_end?: string | null
           subscription_package?: string | null
