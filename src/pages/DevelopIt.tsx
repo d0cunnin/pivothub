@@ -1490,6 +1490,41 @@ const DevelopIt = () => {
             </p>
           </div>
 
+          <div className="text-left mb-8 space-y-3 max-w-3xl mx-auto">
+            <p className="text-muted-foreground">
+              <strong className="text-foreground">Program Builder</strong> — Turn your program idea into a structured, 
+              funder-ready design. Answer questions about your goals, target population, activities, and timeline, 
+              and receive a complete Program Design Summary with SMART outcomes, a delivery model, and a pitch paragraph 
+              you can paste into proposals.
+            </p>
+            
+            <p className="text-muted-foreground">
+              <strong className="text-foreground">Grant Readiness</strong> — Find out if your organization is ready 
+              to pursue grants. Share your mission, project details, and capacity, and get a readiness snapshot highlighting 
+              your strengths and gaps, plus draft narrative sections (needs statement, project description, evaluation plan) 
+              you can adapt for applications.
+            </p>
+            
+            <p className="text-muted-foreground">
+              <strong className="text-foreground">Community Assessment</strong> — Describe your community's needs, 
+              assets, and opportunities. Provide information about who lives there, the key challenges, existing resources, 
+              and what residents are saying. You'll receive a Community Assessment Summary ready for grant applications, 
+              presentations, or planning documents.
+            </p>
+            
+            <p className="text-muted-foreground">
+              <strong className="text-foreground">Stakeholder Planner</strong> — Plan who you need to engage and how. 
+              Select your stakeholder groups (residents, officials, funders, partners), define their roles and influence, 
+              and receive a strategy with talking points, communication methods, and an outreach timeline.
+            </p>
+            
+            <p className="text-muted-foreground">
+              <strong className="text-foreground">Dev Coach</strong> — Ask any community development question and get 
+              real-time AI coaching. Whether you're starting a youth program, handling pushback from leadership, or figuring 
+              out how to measure impact, the coach provides step-by-step guidance and practical options you can act on.
+            </p>
+          </div>
+
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5 mb-6">
               <TabsTrigger value="program-builder" className="flex flex-col md:flex-row items-center gap-1 text-xs md:text-sm">
