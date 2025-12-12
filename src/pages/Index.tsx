@@ -81,7 +81,7 @@ const Index = () => {
     {
       icon: reskillIcon,
       title: "Develop It",
-      description: "Design community programs and prepare for grant funding.",
+      description: "Design community programs and prepare for government contracts.",
       link: "/developit",
     },
     {
