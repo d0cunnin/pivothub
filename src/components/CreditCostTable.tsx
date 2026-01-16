@@ -36,6 +36,9 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Speaker Launch Plan', credits: 3, note: 'Complete launch plan + PDF' },
     { name: 'Podcast Launch Plan', credits: 3, note: 'Complete launch plan + PDF' },
   ],
+  'Garden It (Gardening)': [
+    { name: 'Garden Plan Generator', credits: 3, note: 'Complete garden plan + shopping list' },
+  ],
   'Prep It (Career Tools)': [
     { name: 'Career Advisor Chatbot', credits: 1, note: 'per message' },
     { name: 'Interview Questions Coach', credits: 2 },

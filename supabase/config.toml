@@ -158,3 +158,6 @@ verify_jwt = true
 
 [functions.community-dev-coach]
 verify_jwt = true
+
+[functions.generate-garden-plan]
+verify_jwt = true

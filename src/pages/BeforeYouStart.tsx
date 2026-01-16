@@ -7,7 +7,7 @@ import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Compass, Target, BookOpen, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic } from "lucide-react";
+import { Compass, Target, BookOpen, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sprout } from "lucide-react";
 import { PACKAGE_TOOLS } from "@/utils/packageAccess";
 
 const BeforeYouStart = () => {
@@ -99,6 +99,14 @@ const BeforeYouStart = () => {
       cta: "Start Learning",
       link: "/learnit",
       color: "text-rose-600"
+    },
+    {
+      icon: Sprout,
+      title: "Garden It",
+      description: "Garden It helps you plan what to plant, when to plant, and how to prepare your garden based on your location in the United States. It provides personalized planting recommendations, 4-week garden plans, and shopping lists.",
+      cta: "Start Garden It",
+      link: "/gardenit",
+      color: "text-green-600"
     }
   ];
 
