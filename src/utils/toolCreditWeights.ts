@@ -73,6 +73,9 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'community-assessment': 3,       // ~4,000 tokens output (Community Assessment Tool)
   'stakeholder-plan': 3,           // ~5,000 tokens output (Stakeholder Engagement Planner)
   'community-dev-coach': 1,        // Chatbot, ~2,000 tokens per message
+  
+  // GARDEN IT TOOLS (Plan It)
+  'garden-it': 3,                  // ~5,000 tokens output (garden plan + plant cards + shopping list)
 };
 
 export function getToolCreditCost(toolName: string): number {

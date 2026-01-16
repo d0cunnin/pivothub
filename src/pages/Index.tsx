@@ -96,6 +96,12 @@ const Index = () => {
       description: "Launch your voice as a speaker or podcaster with professional guidance.",
       link: "/speakit",
     },
+    {
+      icon: reskillIcon,
+      title: "Garden It",
+      description: "Plan your garden by location and season.",
+      link: "/gardenit",
+    },
   ];
 
   const steps = [
