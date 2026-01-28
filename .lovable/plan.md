@@ -1,41 +1,34 @@
 
+## Update FAQ: Replace Pathway Content with Credit System
 
-## Add 300 Credits to User
+### Overview
+The FAQ page has an outdated question "Which path is right for me?" that refers to the old pathway system (Prep It, Build It paths). This needs to be updated to reflect the new credit-based subscription system.
 
-**User Details:**
-- Email: michaelport3@gmail.com
-- User ID: `e9069307-d2e0-47da-ac9c-833185384111`
-- Current credits: 5 remaining, 0 extra credits
+### Current State
+The existing FAQ answer says:
+> "If you're job hunting, choose Prep It. Building a business? Pick Build It. Not sure? Get the All Access Pass for everything. Start with Explore Mode (free forever) to try our tools first!"
 
-**What will be done:**
+### What Will Change
 
-Add 300 credits to this user by updating both the `users` table and `subscribers_public` table to ensure credit tracking stays synchronized.
+**File: `src/pages/FAQ.tsx`**
 
-**Database Changes:**
+Update the question and answer at lines 60-67 to explain the credit system instead of pathways:
 
-1. **Update `users` table:**
-   - Increase `ai_credits_remaining` by 300 (5 → 305)
-   - Increase `ai_credits_total` by 300 (5 → 305)
+**New Question:** "Which plan is right for me?"
 
-2. **Update `subscribers_public` table:**
-   - Add 300 to `extra_credits` (0 → 300)
+**New Answer:** 
+Explain the credit-based tiers and help users understand how to choose:
+- **Explore Mode (Free)**: 5 credits/month - perfect for trying tools before committing
+- **Starter ($19/month)**: 40 credits/month - great for occasional use
+- **Pro ($39/month)**: 100 credits/month - ideal for regular users
+- **All-Access ($79/month)**: 250 credits/month - best value for power users
 
-**SQL to execute:**
-```sql
--- Update users table
-UPDATE users 
-SET ai_credits_remaining = ai_credits_remaining + 300,
-    ai_credits_total = ai_credits_total + 300,
-    updated_at = now()
-WHERE id = 'e9069307-d2e0-47da-ac9c-833185384111';
+Include guidance on credit costs (chatbots = 1 credit, assessments = 2 credits, complex tools = 3-5 credits) to help users estimate which plan fits their usage.
 
--- Update subscribers_public table  
-UPDATE subscribers_public
-SET extra_credits = extra_credits + 300,
-    updated_at = now()
-WHERE user_id = 'e9069307-d2e0-47da-ac9c-833185384111';
-```
+### Technical Details
 
-**Result:**
-The user will have 305 total credits available (5 base + 300 added).
-
+**Single file change:**
+- `src/pages/FAQ.tsx` - Lines 60-67 (AccordionItem value="item-2")
+  - Change question from "Which path is right for me?" to "Which plan is right for me?"
+  - Replace pathway guidance with credit-based plan comparison
+  - Add helpful context about tool credit costs to guide decision-making
