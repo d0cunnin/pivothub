@@ -45,6 +45,59 @@ serve(async (req) => {
   }
 
   try {
+    // Initialize Supabase client for authentication
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: { Authorization: req.headers.get('Authorization')! }
+      }
+    });
+    
+    // Verify the user is authenticated
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      console.error('❌ Authentication failed:', authError?.message);
+      return new Response(
+        JSON.stringify({ error: 'Authentication required. Please log in to generate a report.' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    console.log('✅ User authenticated:', user.id);
+    
+    // Check user's credit balance before generating report
+    const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
+    const { data: usageCheck, error: usageError } = await serviceClient.rpc(
+      'check_and_increment_ai_usage',
+      { p_user_id: user.id, p_tool_name: 'side-income-report', p_credits_to_use: 2 }
+    );
+    
+    if (usageError) {
+      console.error('❌ Usage check failed:', usageError);
+      return new Response(
+        JSON.stringify({ error: 'Failed to verify credit balance' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    if (!usageCheck?.can_use) {
+      console.log('⚠️ Insufficient credits:', usageCheck?.reason);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Insufficient credits',
+          reason: usageCheck?.reason,
+          remaining: usageCheck?.remaining || 0
+        }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    console.log('✅ Credits deducted:', usageCheck?.credits_charged, 'Remaining:', usageCheck?.remaining);
+
     // Validate input with zod - now accepts raw assessment data
     const requestSchema = z.object({
       assessmentData: z.object({
@@ -70,7 +123,7 @@ serve(async (req) => {
     const requestBody = await req.json();
     const rawAssessmentData = requestBody.assessmentData;
     
-    console.log('📥 Received request');
+    console.log('📥 Received request for user:', user.id);
     console.log('Assessment data keys:', Object.keys(rawAssessmentData || {}));
     console.log('Constraints type:', typeof rawAssessmentData?.constraints, 'Value:', rawAssessmentData?.constraints);
     console.log('Skills count:', rawAssessmentData?.skills?.length);
@@ -95,18 +148,6 @@ serve(async (req) => {
     console.log('✅ Schema validation passed');
 
     const { assessmentData } = validation.data;
-
-    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!lovableApiKey) {
-      console.error('❌ LOVABLE_API_KEY not configured');
-      return new Response(
-        JSON.stringify({ error: 'AI service not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // No authentication required - direct report generation
-    // No database lookups needed - data provided directly
 
     // Generate comprehensive report using AI
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - SIDE INCOME BLUEPRINT
