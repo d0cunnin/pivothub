@@ -31,7 +31,7 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.generate-side-income-report]
-verify_jwt = false
+verify_jwt = true
 
 [functions.get-course-video]
 verify_jwt = true
