@@ -59,10 +59,17 @@ const FAQ = () => {
 
                 <AccordionItem value="item-2">
                   <AccordionTrigger className="text-left">
-                    Which path is right for me?
+                    Which plan is right for me?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    If you're job hunting, choose Prep It. Building a business? Pick Build It. Not sure? Get the All Access Pass for everything. Start with Explore Mode (free forever) to try our tools first!
+                    <p className="mb-3">Choose based on how often you'll use our AI-powered tools:</p>
+                    <ul className="list-disc pl-6 space-y-2 mb-3">
+                      <li><strong>Explore Mode (Free):</strong> 5 credits/month — perfect for trying tools before committing</li>
+                      <li><strong>Starter ($19/month):</strong> 40 credits/month — great for occasional use</li>
+                      <li><strong>Pro ($39/month):</strong> 100 credits/month — ideal for regular users</li>
+                      <li><strong>All-Access ($79/month):</strong> 250 credits/month — best value for power users</li>
+                    </ul>
+                    <p className="text-sm"><strong>Credit costs:</strong> Chatbots use 1 credit per message, assessments use 2 credits, and complex tools (business plans, teaching materials) use 3-5 credits. Start with Explore Mode to test tools risk-free!</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
