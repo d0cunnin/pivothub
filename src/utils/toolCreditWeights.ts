@@ -79,6 +79,9 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   
   // ACT IT TOOLS (Plan It)
   'act-it': 3,                     // ~6,000 tokens output (story concept + characters + plot outline)
+  
+  // STUDY IT TOOLS (Learn It)
+  'study-it': 2,                   // ~4,000 tokens output (biblical reference with etymology + scriptures)
 };
 
 export function getToolCreditCost(toolName: string): number {

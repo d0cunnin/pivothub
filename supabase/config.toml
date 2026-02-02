@@ -164,3 +164,6 @@ verify_jwt = true
 
 [functions.act-it]
 verify_jwt = true
+
+[functions.study-it]
+verify_jwt = true
