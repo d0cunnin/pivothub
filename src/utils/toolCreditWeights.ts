@@ -76,6 +76,9 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   
   // GARDEN IT TOOLS (Plan It)
   'garden-it': 3,                  // ~5,000 tokens output (garden plan + plant cards + shopping list)
+  
+  // ACT IT TOOLS (Plan It)
+  'act-it': 3,                     // ~6,000 tokens output (story concept + characters + plot outline)
 };
 
 export function getToolCreditCost(toolName: string): number {
