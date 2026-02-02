@@ -42,6 +42,7 @@ import HostIt from "./pages/HostIt";
 import GardenIt from "./pages/GardenIt";
 import SpeakIt from "./pages/SpeakIt";
 import ActIt from "./pages/ActIt";
+import StudyIt from "./pages/StudyIt";
 import BeforeYouStart from "./pages/BeforeYouStart";
 import AuthCallback from "./pages/AuthCallback";
 
@@ -70,8 +71,9 @@ const App = () => (
           <Route path="/hostit" element={<HostIt />} />
           <Route path="/gardenit" element={<GardenIt />} />
           <Route path="/speakit" element={<SpeakIt />} />
-          <Route path="/actit" element={<ActIt />} />
-          <Route path="/before-you-start" element={<BeforeYouStart />} />
+            <Route path="/actit" element={<ActIt />} />
+            <Route path="/studyit" element={<StudyIt />} />
+            <Route path="/before-you-start" element={<BeforeYouStart />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/promptit" element={<PromptIt />} />
             <Route path="/codeit" element={<CodeIt />} />
