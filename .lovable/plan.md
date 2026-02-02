@@ -1,41 +1,60 @@
 
 
-## Add Description Notice to Act It Page
+## Add Faith/Cultural Elements Specification Input
 
 ### Overview
-Add a clear description on the Act It page to set user expectations that this tool generates a story **outline and concept** - not a full script.
+When users enable the "Faith or Cultural Elements" toggle on the Act It page, they need a way to specify what specific faith tradition, cultural background, or elements they want incorporated into their story.
 
 ### What Will Change
 
-**File: `src/pages/ActIt.tsx`**
+#### 1. Frontend: `src/pages/ActIt.tsx`
 
-Add an informational notice between the Credit Badge (line 321) and the ToolGuard/form section (line 323). This will be a styled card or alert that explains:
+**Add new state variable (around line 62-63):**
+- Add `faithElementsDetails` state to capture the specific details
+- This will be a text input that appears conditionally when the toggle is enabled
 
-**Content:**
-> **What You'll Get:** ACT IT generates a professional story development package including concept briefs, character profiles, plot outlines, and production notes. This tool creates a **structured outline and concept** — not a full script. Use your results as a foundation for scriptwriting, pitches, or production planning.
+**Update the form UI (around lines 491-501):**
+- When `hasFaithElements` is `true`, show an additional text input field
+- Label: "Specify Faith or Cultural Elements"
+- Placeholder: "e.g., Christian themes, African diaspora culture, Buddhist philosophy, Latino heritage..."
+- The input will appear directly below the toggle in an expanded section
 
-### Visual Design
-- Use a Card or styled div with a subtle background
-- Include an info icon (like `FileText` or `Info`) for visual clarity
-- Match the existing page styling (rounded corners, proper spacing)
-- Keep it concise but clear
+**Update request body (around line 112):**
+- Include `faithElementsDetails` in the API request when present
 
-### Placement
+**Update reset function (around line 261):**
+- Reset `faithElementsDetails` to empty string
+
+#### 2. Edge Function: `supabase/functions/act-it/index.ts`
+
+**Update interface (line 18):**
+- Change from `hasFaithElements?: boolean` to also accept `faithElementsDetails?: string`
+
+**Update destructuring (line 88):**
+- Extract `faithElementsDetails` from request body
+
+**Update system prompt (line 154):**
+- Change from generic "Include faith-based or cultural themes" to include the specific details:
+  - `Faith/Cultural Elements: Include the following - ${faithElementsDetails}`
+
+### Visual Layout
+
 ```
-Hero Section
-    ↓
-Credit Badge (3 Credits)
-    ↓
-[NEW] Description Notice  ← Add here
-    ↓
-ToolGuard + Form
+┌─────────────────────────────────────────────┐
+│  Faith or Cultural Elements          [ON]   │
+│  Include faith-based or cultural themes     │
+├─────────────────────────────────────────────┤
+│  Specify Faith or Cultural Elements         │  ← NEW (only shows when ON)
+│  ┌─────────────────────────────────────────┐│
+│  │ e.g., Christian themes, African...     ││
+│  └─────────────────────────────────────────┘│
+└─────────────────────────────────────────────┘
 ```
 
-### Technical Details
+### Files to Modify
 
-**Single edit to `src/pages/ActIt.tsx`:**
-- Add a new informational Card/div after line 321 (closing `</div>` of credit badge)
-- Before line 323 (the `<ToolGuard>` component)
-- Use existing UI components (Card or styled div with border)
-- Include FileText or Info icon from lucide-react (already imported)
+| File | Changes |
+|------|---------|
+| `src/pages/ActIt.tsx` | Add `faithElementsDetails` state, conditional text input, update request body and reset |
+| `supabase/functions/act-it/index.ts` | Add `faithElementsDetails` to interface and include in system prompt |
 
