@@ -320,6 +320,19 @@ const ActIt = () => {
             </Badge>
           </div>
 
+          {/* Description Notice */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <div className="flex items-start gap-4 p-6 rounded-xl bg-muted/50 border border-border">
+              <FileText className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-foreground mb-2">What You'll Get</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  ACT IT generates a professional story development package including concept briefs, character profiles, plot outlines, and production notes. This tool creates a <strong className="text-foreground">structured outline and concept</strong> — not a full script. Use your results as a foundation for scriptwriting, pitches, or production planning.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <ToolGuard toolName="act-it">
             {!showResults ? (
               <>
