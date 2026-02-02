@@ -16,6 +16,7 @@ interface ActItRequest {
   settingPreference?: string;
   centralTheme?: string;
   hasFaithElements?: boolean;
+  faithElementsDetails?: string;
   lengthPreference?: string;
 }
 
@@ -84,10 +85,11 @@ Deno.serve(async (req) => {
       tone, 
       timePeriod, 
       settingPreference, 
-      centralTheme, 
-      hasFaithElements, 
-      lengthPreference 
-    } = body;
+    centralTheme, 
+    hasFaithElements,
+    faithElementsDetails,
+    lengthPreference 
+  } = body;
 
     // Validate required fields
     if (!projectTitle || !genres?.length || !format) {
@@ -151,7 +153,7 @@ ${tone ? `Tone: ${tone}` : ''}
 ${timePeriod ? `Time Period: ${timePeriod}` : ''}
 ${settingPreference ? `Setting Preference: ${settingPreference}` : ''}
 ${centralTheme ? `Central Theme/Message: ${centralTheme}` : ''}
-${hasFaithElements ? 'Faith/Cultural Elements: Include faith-based or cultural themes' : ''}
+${hasFaithElements ? `Faith/Cultural Elements: Include the following faith-based or cultural themes - ${faithElementsDetails || 'general faith/cultural elements'}` : ''}
 ${lengthPreference ? `Length Preference: ${lengthPreference}` : ''}
 
 === OUTPUT FORMAT ===
