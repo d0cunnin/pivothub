@@ -161,3 +161,6 @@ verify_jwt = true
 
 [functions.generate-garden-plan]
 verify_jwt = true
+
+[functions.act-it]
+verify_jwt = true
