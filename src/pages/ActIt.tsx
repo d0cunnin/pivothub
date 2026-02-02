@@ -60,6 +60,7 @@ const ActIt = () => {
   const [settingPreference, setSettingPreference] = useState('');
   const [centralTheme, setCentralTheme] = useState('');
   const [hasFaithElements, setHasFaithElements] = useState(false);
+  const [faithElementsDetails, setFaithElementsDetails] = useState('');
   const [lengthPreference, setLengthPreference] = useState('');
 
   const toggleGenre = (genre: string) => {
@@ -110,6 +111,7 @@ const ActIt = () => {
         settingPreference: settingPreference || undefined,
         centralTheme: centralTheme || undefined,
         hasFaithElements,
+        faithElementsDetails: hasFaithElements ? faithElementsDetails : undefined,
         lengthPreference: lengthPreference || undefined,
       };
 
@@ -259,6 +261,7 @@ const ActIt = () => {
     setSettingPreference('');
     setCentralTheme('');
     setHasFaithElements(false);
+    setFaithElementsDetails('');
     setLengthPreference('');
   };
 
@@ -489,15 +492,29 @@ const ActIt = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
-                      <div className="flex items-center justify-between p-4 rounded-lg border">
-                        <div>
-                          <Label>Faith or Cultural Elements</Label>
-                          <p className="text-sm text-muted-foreground">Include faith-based or cultural themes</p>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between p-4 rounded-lg border">
+                          <div>
+                            <Label>Faith or Cultural Elements</Label>
+                            <p className="text-sm text-muted-foreground">Include faith-based or cultural themes</p>
+                          </div>
+                          <Switch
+                            checked={hasFaithElements}
+                            onCheckedChange={setHasFaithElements}
+                          />
                         </div>
-                        <Switch
-                          checked={hasFaithElements}
-                          onCheckedChange={setHasFaithElements}
-                        />
+                        {hasFaithElements && (
+                          <div className="pl-2">
+                            <Label htmlFor="faithElementsDetails">Specify Faith or Cultural Elements</Label>
+                            <Input
+                              id="faithElementsDetails"
+                              value={faithElementsDetails}
+                              onChange={(e) => setFaithElementsDetails(e.target.value)}
+                              placeholder="e.g., Christian themes, African diaspora culture, Buddhist philosophy, Latino heritage..."
+                              className="mt-1"
+                            />
+                          </div>
+                        )}
                       </div>
 
                       <div>
