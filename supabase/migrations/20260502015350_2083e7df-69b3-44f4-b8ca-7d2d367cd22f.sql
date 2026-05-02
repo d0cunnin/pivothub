@@ -1,0 +1,18 @@
+DELETE FROM public.user_roles WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.subscribers_secure WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.subscribers_public WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.profiles WHERE id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.users WHERE id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.assessment_results WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.tool_usage_analytics WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.user_preferences WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.user_progress WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.lesson_progress WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.quiz_results WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.activity_submissions WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.course_enrollments WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.conversation_context WHERE user_id IS NOT NULL AND user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.side_income_assessments WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.side_income_reports WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.result_feedback WHERE user_id NOT IN (SELECT id FROM auth.users);
+DELETE FROM public.checkout_sessions WHERE user_id NOT IN (SELECT id FROM auth.users);

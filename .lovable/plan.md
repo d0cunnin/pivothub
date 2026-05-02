@@ -1,31 +1,41 @@
-## Problem
+## Heads up
 
-After a successful email/password sign-up, the user is left staring at the same sign-in/sign-up form with only a small toast. This happens because Supabase requires email verification before a session is created — `signUp()` does not log the user in, so there's nothing to navigate to. The current toast ("You can now sign in") is also misleading since they must click the confirmation link first.
+There is currently **no `support@pivothub.io` account** in the database. The 3 existing users are:
 
-## Fix
+- `dandrea.bolden@gmail.com`
+- `johnbcodes@gmail.com`
+- `stepstovictory1@gmail.com`
 
-Update `src/pages/Auth.tsx` to:
+So "delete everyone except support@pivothub.io" effectively means: **delete all 3 existing users**, then you sign up fresh with `support@pivothub.io`. Because of the `auto_grant_first_user_admin` trigger, the first account created after the wipe automatically becomes admin — so signing up with `support@pivothub.io` next will make it the admin.
 
-1. **Add a `signupSuccess` state** that flips to `true` when `supabase.auth.signUp()` returns without error.
+## Plan
 
-2. **Replace the form with a confirmation panel** when `signupSuccess` is true. The panel shows:
-   - A check/email icon
-   - Heading: "Check your email"
-   - Body: "We've sent a confirmation link to **{email}**. Click it to activate your account, then come back to sign in."
-   - A "Back to sign in" button that resets `signupSuccess` and switches the tab to Sign In
-   - A small "Didn't get it? Resend" link that calls `supabase.auth.resend({ type: 'signup', email })`
+1. **Create a one-time admin edge function** `admin-purge-users` that:
+   - Verifies the caller (or accepts a one-time secret) — since no admin exists right now, gate it via a hard-coded `PURGE_TOKEN` secret you'll provide (or simply allow it once and remove the function after).
+   - Uses the service role to call `supabase.auth.admin.listUsers()` and `supabase.auth.admin.deleteUser(id)` for every user whose email is **not** `support@pivothub.io`.
+   - Deleting the auth user cascades to `profiles`, `users`, `subscribers_public`, `subscribers_secure` (via `on delete cascade` on the FK to `auth.users`).
+   - Also cleans any orphaned rows in tables keyed by `user_id` without a FK (e.g. `assessment_results`, `tool_usage_analytics`, `user_roles`, etc.) for safety.
 
-3. **Update the success toast** to match: "Confirmation email sent — check your inbox."
+2. **Invoke the function once** from the chat (I'll curl it after deploy) to wipe the 3 accounts.
 
-4. **Handle the "already-registered" edge case**: When `signUp()` returns `data.user` with an empty `identities` array, Supabase silently means the email is already in use. Detect this and show a toast telling them to sign in or reset their password instead of showing the success panel.
+3. **You then sign up** at `/auth` using `support@pivothub.io`. The `auto_grant_first_user_admin` trigger fires because `user_roles` will be empty, so that account gets the `admin` role automatically.
 
-5. **Edge case — email confirmation disabled**: If a session is returned immediately from `signUp()` (meaning the project has auto-confirm on), navigate straight to `redirectPath` instead of showing the confirmation panel.
+4. **Delete the purge function** after use so it can't be re-triggered.
 
-## Files touched
+### Technical details
 
-- `src/pages/Auth.tsx` — the only change. No backend, schema, or routing changes needed. `/auth/callback` already handles the post-verification redirect correctly.
+- Edge function path: `supabase/functions/admin-purge-users/index.ts`
+- Uses `SUPABASE_SERVICE_ROLE_KEY` (already in secrets)
+- Config: `verify_jwt = false` (one-time admin script, gated by a token header)
+- Cleanup SQL the function will run via service role:
+  ```sql
+  DELETE FROM public.user_roles WHERE user_id NOT IN (SELECT id FROM auth.users);
+  DELETE FROM public.assessment_results WHERE user_id NOT IN (SELECT id FROM auth.users);
+  -- etc. for any user-scoped tables without FK cascade
+  ```
 
-## Out of scope
+### Why a function instead of just SQL
 
-- Not changing Cloud auth settings (email confirmation stays ON, which is the secure default).
-- Not touching Google sign-in flow — it already navigates correctly via `/auth/callback`.
+`auth.users` is a Supabase-reserved schema — direct `DELETE FROM auth.users` via migrations is blocked / unsafe. The official path is `supabase.auth.admin.deleteUser()`, which only works from a service-role context (an edge function).
+
+Approve and I'll build + run it, then remove it.
