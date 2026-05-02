@@ -286,27 +286,44 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
     doc.text('Resources & Tools', margin, yPosition);
     yPosition += 10;
 
+    const writeResourceCategory = (label: string, items: any) => {
+      const list = Array.isArray(items)
+        ? items
+        : items && typeof items === 'object'
+          ? Object.values(items)
+          : items
+            ? [items]
+            : [];
+      if (list.length === 0) return;
+      checkPageBreak(20);
+      doc.setFontSize(12);
+      doc.setTextColor(59, 130, 246);
+      doc.text(label, margin, yPosition);
+      yPosition += 6;
+      doc.setFontSize(9);
+      doc.setTextColor(75, 85, 99);
+      list.forEach((item: any) => {
+        const text = typeof item === 'string' ? item : JSON.stringify(item);
+        const lines = doc.splitTextToSize(`• ${text}`, pageWidth - 2 * margin - 5);
+        checkPageBreak(lines.length * 5 + 2);
+        doc.text(lines, margin + 5, yPosition);
+        yPosition += lines.length * 5 + 2;
+      });
+      yPosition += 5;
+    };
+
     if (Array.isArray(report.resources)) {
       report.resources.forEach((category: any) => {
-        checkPageBreak(20);
-        
-        doc.setFontSize(12);
-        doc.setTextColor(59, 130, 246);
-        doc.text(category.category, margin, yPosition);
-        yPosition += 6;
-
-        doc.setFontSize(9);
-        doc.setTextColor(75, 85, 99);
-        if (Array.isArray(category.items)) {
-          category.items.forEach((item: string) => {
-            checkPageBreak(7);
-            doc.text(`• ${item}`, margin + 5, yPosition);
-            yPosition += 5;
-          });
-        }
-        yPosition += 5;
+        writeResourceCategory(String(category?.category ?? 'Resources'), category?.items);
       });
+    } else if (typeof report.resources === 'object') {
+      const r: any = report.resources;
+      writeResourceCategory('Platforms', r.platforms);
+      writeResourceCategory('Learning Resources', r.learningResources);
+      writeResourceCategory('Tools', r.tools);
+      writeResourceCategory('Communities', r.communities);
     }
+  }
   }
 
   // FOOTER on all pages
