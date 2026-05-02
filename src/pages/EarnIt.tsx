@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import SideIncomeAssessment from "@/components/SideIncomeAssessment";
 import SideIncomeReport from "@/components/SideIncomeReport";
+import { ReportErrorBoundary } from "@/components/ReportErrorBoundary";
 import heroImage from "@/assets/hero-image.jpg";
 
 export default function SideIncomeBlueprint() {
@@ -89,15 +90,17 @@ export default function SideIncomeBlueprint() {
 
   if (step === 'report') {
     return (
-      <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Your Side Income Blueprint | PivotHub</title>
-          <meta name="description" content="Your personalized side income strategy and action plan." />
-        </Helmet>
-        <Header />
-        <SideIncomeReport assessmentId={assessmentId} />
-        <Footer />
-      </div>
+      <ReportErrorBoundary onRetry={() => setStep('intro')} resetKey={assessmentId}>
+        <div className="min-h-screen bg-background">
+          <Helmet>
+            <title>Your Side Income Blueprint | PivotHub</title>
+            <meta name="description" content="Your personalized side income strategy and action plan." />
+          </Helmet>
+          <Header />
+          <SideIncomeReport assessmentId={assessmentId} />
+          <Footer />
+        </div>
+      </ReportErrorBoundary>
     );
   }
 
