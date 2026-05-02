@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { generateSideIncomeReportPDF } from "@/lib/pdf-generator";
+import { ReportErrorBoundary } from "@/components/ReportErrorBoundary";
 
 interface SideIncomeReportProps {
   assessmentId: string; // Now contains stringified assessment data
@@ -387,8 +388,9 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
-      <div className="flex justify-between items-center mb-8">
+    <ReportErrorBoundary onRetry={generateReport} resetKey={report ? "loaded" : "empty"}>
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Your Earn It Blueprint</h1>
           <p className="text-muted-foreground">Personalized plan for building sustainable income</p>
@@ -429,7 +431,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       {renderText(path.title)}
-                      <Badge variant="secondary">Path {path.rank ?? index + 1}</Badge>
+                      <Badge variant="secondary">Path {renderText(path.rank ?? index + 1)}</Badge>
                     </CardTitle>
                     <CardDescription className="mt-2">
                       {renderText(path.description)}
@@ -604,6 +606,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
           )}
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </ReportErrorBoundary>
   );
 }
