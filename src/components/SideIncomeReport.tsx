@@ -228,7 +228,13 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
   const generateReport = async () => {
     setGenerating(true);
     try {
-      const assessmentData = JSON.parse(assessmentId);
+      let assessmentData: any;
+      try {
+        assessmentData = assessmentId ? JSON.parse(assessmentId) : null;
+      } catch (e) {
+        throw new Error('Invalid assessment payload — please retake the assessment.');
+      }
+      if (!assessmentData) throw new Error('No assessment data found.');
       console.log('📤 Sending assessment to edge function:', {
         keys: Object.keys(assessmentData),
         constraintsType: typeof assessmentData.constraints,
