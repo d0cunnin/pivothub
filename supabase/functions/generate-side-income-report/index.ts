@@ -21,6 +21,79 @@ function sanitizeText(text: string): string {
     .trim();
 }
 
+// Strip ```json fences if present
+function stripCodeFences(s: string): string {
+  if (!s) return s;
+  let trimmed = s.trim();
+  const fence = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
+  if (fence) return fence[1].trim();
+  // Also strip a leading fence with no closing
+  trimmed = trimmed.replace(/^```(?:json)?\s*/, '').replace(/\s*```\s*$/, '');
+  return trimmed.trim();
+}
+
+// Escape unescaped control characters that appear inside JSON string literals.
+// Walks the string tracking whether we're inside a "..." string and escapes
+// raw \n \r \t \b \f and any other 0x00-0x1F that appear there.
+function escapeControlCharsInJsonStrings(input: string): string {
+  let out = '';
+  let inStr = false;
+  let escape = false;
+  for (let i = 0; i < input.length; i++) {
+    const ch = input[i];
+    const code = input.charCodeAt(i);
+    if (escape) {
+      out += ch;
+      escape = false;
+      continue;
+    }
+    if (ch === '\\' && inStr) {
+      out += ch;
+      escape = true;
+      continue;
+    }
+    if (ch === '"') {
+      inStr = !inStr;
+      out += ch;
+      continue;
+    }
+    if (inStr && code < 0x20) {
+      switch (ch) {
+        case '\n': out += '\\n'; break;
+        case '\r': out += '\\r'; break;
+        case '\t': out += '\\t'; break;
+        case '\b': out += '\\b'; break;
+        case '\f': out += '\\f'; break;
+        default: out += '\\u' + code.toString(16).padStart(4, '0');
+      }
+      continue;
+    }
+    out += ch;
+  }
+  return out;
+}
+
+// Try multiple strategies to parse a possibly-messy JSON string from an LLM.
+function robustJsonParse(raw: string): any | null {
+  if (!raw) return null;
+  const attempts: string[] = [];
+  attempts.push(raw);
+  attempts.push(stripCodeFences(raw));
+  // Substring from first { to last }
+  const first = raw.indexOf('{');
+  const last = raw.lastIndexOf('}');
+  if (first !== -1 && last > first) {
+    attempts.push(raw.slice(first, last + 1));
+    attempts.push(stripCodeFences(raw.slice(first, last + 1)));
+  }
+  for (const a of attempts) {
+    if (!a) continue;
+    try { return JSON.parse(a); } catch { /* try next */ }
+    try { return JSON.parse(escapeControlCharsInJsonStrings(a)); } catch { /* try next */ }
+  }
+  return null;
+}
+
 // Recursively sanitize all string values in an object
 function sanitizeObject(obj: any): any {
   if (typeof obj === 'string') {
