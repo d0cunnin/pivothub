@@ -520,11 +520,11 @@ const Auth = () => {
           
           <p className="text-xs text-muted-foreground text-center mt-4">
             By signing up, you agree to our{" "}
-            <a href="/terms" className="text-primary hover:underline">
+            <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
               Terms of Use
             </a>{" "}
             and{" "}
-            <a href="/privacy" className="text-primary hover:underline">
+            <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
               Privacy Policy
             </a>
             .
