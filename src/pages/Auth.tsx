@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { Mail, Lock, Eye, EyeOff, Check, X } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Check, X, MailCheck } from "lucide-react";
 import { z } from 'zod';
 import Turnstile from 'react-turnstile';
 
@@ -29,6 +29,10 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState('');
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [signupEmail, setSignupEmail] = useState('');
+  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signin');
+  const [resending, setResending] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
@@ -106,6 +110,27 @@ const Auth = () => {
           variant: "destructive",
         });
       } else {
+        // If a session was returned, email confirmation is disabled — user is signed in
+        if (data.session) {
+          toast({
+            title: "Welcome!",
+            description: "Your account has been created.",
+          });
+          navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
+          return;
+        }
+
+        // Detect "already registered" — Supabase returns a user with empty identities
+        if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          toast({
+            title: "Email already registered",
+            description: "This email is already in use. Please sign in instead.",
+            variant: "destructive",
+          });
+          setActiveTab('signin');
+          return;
+        }
+
         // Track signup with IP for fraud detection (non-blocking)
         if (data.user) {
           supabase.functions
@@ -120,9 +145,12 @@ const Auth = () => {
             .catch((err) => console.error('Failed to track signup:', err));
         }
 
+        // Show "check your email" panel
+        setSignupEmail(email);
+        setSignupSuccess(true);
         toast({
-          title: "Success",
-          description: "Your account has been created! You can now sign in.",
+          title: "Confirmation email sent",
+          description: "Check your inbox to activate your account.",
         });
       }
     } catch (error) {
@@ -272,7 +300,55 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
+          {signupSuccess ? (
+            <div className="text-center space-y-4 py-4">
+              <div className="mx-auto w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                <MailCheck className="h-7 w-7 text-primary" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">Check your email</h3>
+                <p className="text-sm text-muted-foreground">
+                  We sent a confirmation link to{' '}
+                  <span className="font-medium text-foreground">{signupEmail}</span>.
+                  Click it to activate your account, then come back to sign in.
+                </p>
+              </div>
+              <div className="space-y-2 pt-2">
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    setSignupSuccess(false);
+                    setActiveTab('signin');
+                    setPassword('');
+                    setConfirmEmail('');
+                  }}
+                >
+                  Back to sign in
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full"
+                  disabled={resending}
+                  onClick={async () => {
+                    setResending(true);
+                    const { error } = await supabase.auth.resend({
+                      type: 'signup',
+                      email: signupEmail,
+                    });
+                    setResending(false);
+                    toast({
+                      title: error ? 'Could not resend' : 'Email resent',
+                      description: error ? error.message : 'Check your inbox again.',
+                      variant: error ? 'destructive' : 'default',
+                    });
+                  }}
+                >
+                  {resending ? 'Resending…' : "Didn't get it? Resend"}
+                </Button>
+              </div>
+            </div>
+          ) : (
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'signin' | 'signup')} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -517,6 +593,7 @@ const Auth = () => {
               </form>
             </TabsContent>
           </Tabs>
+          )}
           
           <p className="text-xs text-muted-foreground text-center mt-4">
             By signing up, you agree to our{" "}
