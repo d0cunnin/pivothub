@@ -249,7 +249,28 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
     if (Array.isArray(monthData)) {
       monthData.forEach((action: string) => {
         checkPageBreak(10);
-        const actionLines = doc.splitTextToSize(`▸ ${action}`, pageWidth - 2 * margin - 5);
+        const actionLines = doc.splitTextToSize(`▸ ${typeof action === 'string' ? action : JSON.stringify(action)}`, pageWidth - 2 * margin - 5);
+        doc.text(actionLines, margin + 5, yPosition);
+        yPosition += actionLines.length * 5 + 3;
+      });
+    } else if (monthData && typeof monthData === 'object') {
+      if (monthData.goal) {
+        const goalLines = doc.splitTextToSize(`Goal: ${monthData.goal}`, pageWidth - 2 * margin - 5);
+        checkPageBreak(goalLines.length * 5 + 2);
+        doc.setTextColor(45, 55, 72);
+        doc.text(goalLines, margin + 5, yPosition);
+        yPosition += goalLines.length * 5 + 3;
+        doc.setTextColor(75, 85, 99);
+      }
+      const actions = Array.isArray(monthData.weeklyActions)
+        ? monthData.weeklyActions
+        : Array.isArray(monthData.actions)
+          ? monthData.actions
+          : [];
+      actions.forEach((action: any) => {
+        const text = typeof action === 'string' ? action : JSON.stringify(action);
+        const actionLines = doc.splitTextToSize(`▸ ${text}`, pageWidth - 2 * margin - 5);
+        checkPageBreak(actionLines.length * 5 + 2);
         doc.text(actionLines, margin + 5, yPosition);
         yPosition += actionLines.length * 5 + 3;
       });
