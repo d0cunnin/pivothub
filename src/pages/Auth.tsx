@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, Eye, EyeOff, Check, X } from "lucide-react";
@@ -138,26 +139,23 @@ const Auth = () => {
   const handleGoogleSignIn = async (isSignUp: boolean = false) => {
     setLoading(true);
     try {
-      const redirectUrl = `${window.location.origin}/auth/callback`;
-        
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: redirectUrl,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          }
-        }
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: `${window.location.origin}/auth/callback`,
       });
 
-      if (error) {
+      if (result.error) {
         toast({
           title: "Error",
-          description: error.message,
+          description: result.error.message || "Failed to sign in with Google",
           variant: "destructive",
         });
+        setLoading(false);
+        return;
       }
+
+      if (result.redirected) return;
+
+      navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
     } catch (error) {
       toast({
         title: "Error",
