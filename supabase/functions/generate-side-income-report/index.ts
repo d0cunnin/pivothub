@@ -573,7 +573,8 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
       
       if (!aiResponse.ok) {
         console.error('❌ Lovable AI error:', aiResponse.status, text.slice(0, 300));
-        
+        await refundCredits(`ai-gateway-${aiResponse.status}`);
+
         if (aiResponse.status === 429) {
           return new Response(JSON.stringify({ 
             error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
@@ -594,6 +595,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
       aiData = JSON.parse(text);
     } catch (err) {
       console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
+      await refundCredits('gateway-non-json');
       return new Response(JSON.stringify({
         error: "Lovable AI Gateway returned invalid data. Please try again.",
       }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
