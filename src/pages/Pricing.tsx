@@ -57,18 +57,11 @@ const Pricing = () => {
 
     setPurchasingCredits(true);
     try {
-      const { data, error } = await supabase.functions.invoke('purchase-extra-credits', {
-        body: { credits },
-        headers: {
-          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        },
+      toast({
+        title: "Payments Coming Soon",
+        description: "Extra credit purchases will be available once payments are reconnected.",
       });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      return;
     } catch (error: any) {
       let errorMessage = "Failed to create checkout session. Please try again.";
       
@@ -98,18 +91,11 @@ const Pricing = () => {
     }
 
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: { tier },
-        headers: {
-          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        },
+      toast({
+        title: "Payments Coming Soon",
+        description: "Subscription checkout will be available once payments are reconnected.",
       });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      return;
     } catch (error) {
       toast({
         title: "Error",
