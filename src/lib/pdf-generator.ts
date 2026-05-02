@@ -324,7 +324,6 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
       writeResourceCategory('Communities', r.communities);
     }
   }
-  }
 
   // FOOTER on all pages
   const totalPages = doc.internal.pages.length - 1;
