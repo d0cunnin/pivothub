@@ -110,6 +110,27 @@ const Auth = () => {
           variant: "destructive",
         });
       } else {
+        // If a session was returned, email confirmation is disabled — user is signed in
+        if (data.session) {
+          toast({
+            title: "Welcome!",
+            description: "Your account has been created.",
+          });
+          navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
+          return;
+        }
+
+        // Detect "already registered" — Supabase returns a user with empty identities
+        if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+          toast({
+            title: "Email already registered",
+            description: "This email is already in use. Please sign in instead.",
+            variant: "destructive",
+          });
+          setActiveTab('signin');
+          return;
+        }
+
         // Track signup with IP for fraud detection (non-blocking)
         if (data.user) {
           supabase.functions
@@ -124,9 +145,12 @@ const Auth = () => {
             .catch((err) => console.error('Failed to track signup:', err));
         }
 
+        // Show "check your email" panel
+        setSignupEmail(email);
+        setSignupSuccess(true);
         toast({
-          title: "Success",
-          description: "Your account has been created! You can now sign in.",
+          title: "Confirmation email sent",
+          description: "Check your inbox to activate your account.",
         });
       }
     } catch (error) {
