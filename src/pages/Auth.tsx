@@ -349,7 +349,7 @@ const Auth = () => {
                 
                 <div className="flex justify-center">
                   <Turnstile
-                    sitekey="0x4AAAAAACAzO1fmGnonyqIG"
+                    sitekey="1x00000000000000000000AA"
                     onVerify={(token) => setTurnstileToken(token)}
                     onError={() => setTurnstileToken('')}
                     onExpire={() => setTurnstileToken('')}
@@ -505,7 +505,7 @@ const Auth = () => {
                 
                 <div className="flex justify-center">
                   <Turnstile
-                    sitekey="0x4AAAAAACAzO1fmGnonyqIG"
+                    sitekey="1x00000000000000000000AA"
                     onVerify={(token) => setTurnstileToken(token)}
                     onError={() => setTurnstileToken('')}
                     onExpire={() => setTurnstileToken('')}
