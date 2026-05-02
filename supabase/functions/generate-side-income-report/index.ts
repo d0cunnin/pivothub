@@ -49,16 +49,26 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      global: {
-        headers: { Authorization: req.headers.get('Authorization')! }
-      }
-    });
-    
-    // Verify the user is authenticated
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
+
+    // Extract the JWT from the Authorization header explicitly
+    const authHeader = req.headers.get('Authorization') || req.headers.get('authorization') || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+
+    console.log('🔐 Auth header present:', !!authHeader, 'Token length:', token.length);
+
+    if (!token) {
+      console.error('❌ No bearer token in Authorization header');
+      return new Response(
+        JSON.stringify({ error: 'Authentication required. Please log in to generate a report.' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    // Verify the user by passing the JWT explicitly to getUser
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
     if (authError || !user) {
       console.error('❌ Authentication failed:', authError?.message);
       return new Response(
@@ -66,8 +76,9 @@ serve(async (req) => {
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-    
+
     console.log('✅ User authenticated:', user.id);
+
     
     // Check user's credit balance before generating report
     const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
