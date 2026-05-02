@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useToast } from "@/hooks/use-toast";
 import { Lock, Mail, Eye, EyeOff, Check, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -50,14 +51,19 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
   const handleGoogleSignIn = async () => {
     try {
       setAuthLoading(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin
-        }
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: `${window.location.origin}/auth/callback`,
       });
-      
-      if (error) throw error;
+
+      if (result.error) {
+        throw result.error instanceof Error
+          ? result.error
+          : new Error((result.error as any)?.message || "Failed to sign in with Google");
+      }
+
+      if (result.redirected) return;
+
+      setShowAuthModal(false);
     } catch (error: any) {
       toast({
         title: "Error",
