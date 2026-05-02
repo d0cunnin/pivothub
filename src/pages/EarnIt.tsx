@@ -91,17 +91,15 @@ function SideIncomeBlueprintInner() {
 
   if (step === 'report') {
     return (
-      <ReportErrorBoundary onRetry={() => setStep('intro')} resetKey={assessmentId}>
-        <div className="min-h-screen bg-background">
-          <Helmet>
-            <title>Your Side Income Blueprint | PivotHub</title>
-            <meta name="description" content="Your personalized side income strategy and action plan." />
-          </Helmet>
-          <Header />
-          <SideIncomeReport assessmentId={assessmentId} />
-          <Footer />
-        </div>
-      </ReportErrorBoundary>
+      <div className="min-h-screen bg-background">
+        <Helmet>
+          <title>Your Side Income Blueprint | PivotHub</title>
+          <meta name="description" content="Your personalized side income strategy and action plan." />
+        </Helmet>
+        <Header />
+        <SideIncomeReport assessmentId={assessmentId} />
+        <Footer />
+      </div>
     );
   }
 
