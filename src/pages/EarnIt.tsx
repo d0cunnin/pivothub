@@ -16,7 +16,8 @@ import SideIncomeReport from "@/components/SideIncomeReport";
 import { ReportErrorBoundary } from "@/components/ReportErrorBoundary";
 import heroImage from "@/assets/hero-image.jpg";
 
-export default function SideIncomeBlueprint() {
+function SideIncomeBlueprintInner() {
+  console.log("EarnIt render start");
   const { user } = useAuth();
   const { remainingRequests } = useUsage();
   const navigate = useNavigate();
