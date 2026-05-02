@@ -1,59 +1,28 @@
-# Fix Earn It Auth Failure In Edge Function
+# Give support@pivothub.io 1000 Tool Credits
 
-## What the screenshots and logs show
-
-You signed in as the admin and completed the assessment, but the report screen shows **"Unable to Generate Your Blueprint"** with code `REPORT_GEN_FAIL`.
-
-The edge function logs (`generate-side-income-report`) show the real cause:
+## Current state
 
 ```
-2026-05-02T02:09:14Z ERROR ❌ Authentication failed: Auth session missing!
+email                   ai_request_limit  extra_credits  rollover  used
+support@pivothub.io     5                 0              0         4
 ```
 
-Even though you are logged in, the function cannot recover your user from the request.
+Credit gating in `check_and_increment_ai_usage` uses `subscribers_public.ai_request_limit + extra_credits + rollover_credits`, so the admin only has 5 total — that's why Earn It (2 credits) is on the edge.
 
-## Root cause
+## The change
 
-In `supabase/functions/generate-side-income-report/index.ts` the function does:
+Run a one-off SQL update (no schema change) for user_id `6e213a88-5363-4b05-a58f-561f2a771170`:
 
-```ts
-const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  global: { headers: { Authorization: req.headers.get('Authorization')! } }
-});
-const { data: { user } } = await supabase.auth.getUser();   // ← no token argument
-```
+- `subscribers_public.ai_request_limit = 1000`
+- `subscribers_public.monthly_ai_requests = 0` (reset usage so the full 1000 is available now)
+- `subscribers_public.extra_credits = 0`, `rollover_credits = 0` (clean slate)
+- `subscribers_public.subscription_tier = 'admin'`, `subscription_package = 'admin'`, `subscribed = true`, `account_status = 'active'`
+- Mirror on `users`: `ai_credits_total = 1000`, `ai_credits_remaining = 1000`, `ai_credits_used = 0`, `subscription_tier = 'admin'`, `subscribed = true`
 
-With the current Supabase JS SDK, `auth.getUser()` with no argument tries to read a stored session — which doesn't exist in an edge function. It must be called as `auth.getUser(jwt)` with the token pulled from the `Authorization: Bearer ...` header. That's why every request fails with "Auth session missing!" even for authenticated users.
+This will be delivered as a migration file so it runs against the live database with your approval.
 
-## The fix
+## Notes
 
-### 1. `supabase/functions/generate-side-income-report/index.ts`
-- Read the bearer token from `req.headers.get('Authorization')` and strip the `Bearer ` prefix.
-- If no token, return 401 (same as today).
-- Call `await supabase.auth.getUser(token)` explicitly so the SDK validates the JWT instead of looking for a non-existent session.
-- Add a small log `🔐 Auth header present / token length` so future failures are easier to diagnose.
-
-No other logic changes — the rest of the function (credit check via `check_and_increment_ai_usage`, AI call, JSON parsing, response shaping) stays the same.
-
-### 2. Deploy the function and verify
-- Deploy `generate-side-income-report`.
-- Tail its logs and re-run the Earn It assessment as `support@pivothub.io`.
-- Expected new logs: `🔐 Auth header present: true ...` then `✅ User authenticated: <uuid>` then `✅ Credits deducted: 2`.
-- Expected UI: the report renders instead of the REPORT_GEN_FAIL screen.
-
-### 3. Audit other edge functions for the same bug (follow-up, same change)
-Several other functions appear to use the same `getUser()`-without-token pattern and likely fail the same way for any logged-in user. After confirming the Earn It fix, apply the identical token-extraction change to:
-
-- `generate-grant-content`, `generate-grant-readiness`
-- `generate-event-plan`, `generate-schedule`, `generate-garden-plan`, `generate-program-design`, `generate-stakeholder-plan`
-- `generate-launch-strategy`, `generate-legal-docs`, `generate-business-content`, `generate-teaching-content`, `generate-capability-statement`, `generate-contract-readiness`
-- `act-it`, `code-it`, `deploy-it`, `prompt-it`, `speak-it`, `study-it`, `community-dev-coach`
-- `interview-feedback`, `interview-questions`, `resume-analyzer`, `enhanced-assessment-analyzer`, `tech-readiness-assessment`, `personality-assessment`, `skills-assessment`, `career-assessment`, `generate-community-assessment`, `generate-side-income-report` (already covered), `generate-logo`, `name-checker`, `business-mentor`, `business-resources`, `career-advisor`, `grant-finder`, `grant-resources`, `social-media-content`, `startup-checklist`
-
-I'll grep each one and only change the ones that exhibit the bad pattern; functions that don't require auth or already pass the token correctly will be skipped.
-
-## Notes / scope
-
-- No database, RLS, or migration changes.
-- No frontend changes — `supabase.functions.invoke()` already attaches the Authorization header correctly.
-- No changes to Google OAuth, sign-in flow, or admin role assignment.
+- Only this one admin account is affected.
+- No code, RLS, or schema changes — just data updates.
+- After the migration runs, refresh the app and the credit counter should show 1000 remaining.
