@@ -16,7 +16,8 @@ import SideIncomeReport from "@/components/SideIncomeReport";
 import { ReportErrorBoundary } from "@/components/ReportErrorBoundary";
 import heroImage from "@/assets/hero-image.jpg";
 
-export default function SideIncomeBlueprint() {
+function SideIncomeBlueprintInner() {
+  console.log("EarnIt render start");
   const { user } = useAuth();
   const { remainingRequests } = useUsage();
   const navigate = useNavigate();
@@ -90,17 +91,15 @@ export default function SideIncomeBlueprint() {
 
   if (step === 'report') {
     return (
-      <ReportErrorBoundary onRetry={() => setStep('intro')} resetKey={assessmentId}>
-        <div className="min-h-screen bg-background">
-          <Helmet>
-            <title>Your Side Income Blueprint | PivotHub</title>
-            <meta name="description" content="Your personalized side income strategy and action plan." />
-          </Helmet>
-          <Header />
-          <SideIncomeReport assessmentId={assessmentId} />
-          <Footer />
-        </div>
-      </ReportErrorBoundary>
+      <div className="min-h-screen bg-background">
+        <Helmet>
+          <title>Your Side Income Blueprint | PivotHub</title>
+          <meta name="description" content="Your personalized side income strategy and action plan." />
+        </Helmet>
+        <Header />
+        <SideIncomeReport assessmentId={assessmentId} />
+        <Footer />
+      </div>
     );
   }
 
@@ -495,5 +494,13 @@ export default function SideIncomeBlueprint() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function SideIncomeBlueprint() {
+  return (
+    <ReportErrorBoundary>
+      <SideIncomeBlueprintInner />
+    </ReportErrorBoundary>
   );
 }

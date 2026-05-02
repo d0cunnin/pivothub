@@ -1,50 +1,44 @@
 ## Goal
-Convert the white screen on `/earnit` into a readable error card so we can see the actual crash. Three surgical changes only — no other hardening.
 
-## Changes
+Stop guessing. Force any crash on `/earnit` to surface as a readable error (not a white screen), reproduce it live in the browser, then apply one surgical fix.
 
-### 1. `src/pages/EarnIt.tsx` — wrap report branch in ReportErrorBoundary
-Add the import and wrap the existing `step === 'report'` return so any crash above `SideIncomeReport` is caught.
+## Why we keep missing it
 
-Add import:
-```tsx
-import { ReportErrorBoundary } from "@/components/ReportErrorBoundary";
-```
+Current state of the code (verified):
+- `EarnIt.tsx` only wraps the `step === 'report'` branch in `ReportErrorBoundary`. If the crash happens in `Header`, a context, a hook, or during the intro/assessment branches, the boundary never mounts → white screen.
+- `SideIncomeReport.tsx` already has the `JSON.parse` try/catch, defensive `renderText`/`toStringArray` helpers, and Array.isArray guards on `recommended_paths`.
+- `src/lib/pdf-generator.ts` line 126 has an unguarded `report.recommended_paths.forEach(...)` — but that only runs on PDF download, not on render.
 
-Replace the `if (step === 'report')` block (lines 90–102) with:
-```tsx
-if (step === 'report') {
-  return (
-    <ReportErrorBoundary onRetry={() => setStep('intro')} resetKey={assessmentId}>
-      <div className="min-h-screen bg-background">
-        <Helmet>
-          <title>Your Side Income Blueprint | PivotHub</title>
-          <meta name="description" content="Your personalized side income strategy and action plan." />
-        </Helmet>
-        <Header />
-        <SideIncomeReport assessmentId={assessmentId} />
-        <Footer />
-      </div>
-    </ReportErrorBoundary>
-  );
-}
-```
+So the boundary needs to be higher to actually catch what's killing the page.
 
-### 2. `src/components/SideIncomeReport.tsx` — guard JSON.parse
-At the top of `generateReport` (currently line 231 `const assessmentData = JSON.parse(assessmentId);`), replace with:
+## Plan (4 small steps)
 
-```ts
-let assessmentData: any;
-try {
-  assessmentData = assessmentId ? JSON.parse(assessmentId) : null;
-} catch (e) {
-  throw new Error('Invalid assessment payload — please retake the assessment.');
-}
-if (!assessmentData) throw new Error('No assessment data found.');
-```
+### Step 1 — Force the error to surface
+In `src/pages/EarnIt.tsx`:
+- Add `console.log("EarnIt render start")` at the top of the component
+- Wrap **all three** return branches (intro, assessment, report) in `<ReportErrorBoundary>`, not just `report`
+- Remove the redundant inner `<ReportErrorBoundary>` from `SideIncomeReport.tsx` (lines 397 and 616) — the outer one will cover it
 
-### 3. Nothing else changes
-No other files touched. No additional `renderText` calls. No PDF generator changes.
+### Step 2 — Reproduce live
+Use browser tools to:
+1. `navigate_to_sandbox` → `/earnit`
+2. Check console for `"EarnIt render start"` (tells us if the module even loads)
+3. Click "Get Your Blueprint", walk through the assessment
+4. Capture the error: either the `ReportErrorBoundary` "Details:" text on screen, or the console stack
 
-## After deploy
-Open `/earnit`, run through the flow. If a crash occurs, the error boundary now renders a card showing the exact error message instead of going white. Share that error text and I'll provide the one-line fix.
+### Step 3 — Apply one surgical fix based on what we see
+
+| Outcome | Fix |
+|---|---|
+| Boundary card shows specific message | Patch the exact line named (1–3 lines) |
+| Still white + no `"EarnIt render start"` log | Module-load / import error — fix the import |
+| Still white + log present | Crash is in `Header`/context above `EarnIt` — move boundary into `App.tsx` route |
+| Page renders, PDF download crashes | Add `Array.isArray` guards in `pdf-generator.ts` line 126 + `ninety_day_plan` access |
+
+### Step 4 — Confirm
+Re-run the flow, screenshot the working report (or the now-readable error), report back.
+
+## What I will NOT do
+- Replace `SideIncomeReport.tsx` with a stub (the working helpers stay)
+- Add more speculative defensive wrappers without evidence from Step 2
+- Touch the PDF generator unless Step 3 outcome D occurs
