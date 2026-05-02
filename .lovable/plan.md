@@ -1,28 +1,34 @@
-# Give support@pivothub.io 1000 Tool Credits
+# Fix REPORT_GEN_FAIL — missing API key variable
 
-## Current state
+## Root cause (confirmed in logs)
 
 ```
-email                   ai_request_limit  extra_credits  rollover  used
-support@pivothub.io     5                 0              0         4
+ReferenceError: lovableApiKey is not defined
+  at index.ts:388:38
 ```
 
-Credit gating in `check_and_increment_ai_usage` uses `subscribers_public.ai_request_limit + extra_credits + rollover_credits`, so the admin only has 5 total — that's why Earn It (2 credits) is on the edge.
+Auth ✅, credits deducted ✅ (998 remaining), schema validated ✅ — then it crashes calling the AI Gateway because the variable `lovableApiKey` is referenced on lines 399 and 425 but never declared. The `LOVABLE_API_KEY` secret exists in the project; the code just never reads it.
 
-## The change
+## Fix
 
-Run a one-off SQL update (no schema change) for user_id `6e213a88-5363-4b05-a58f-561f2a771170`:
+In `supabase/functions/generate-side-income-report/index.ts`, before the first AI Gateway fetch (around line 388), add:
 
-- `subscribers_public.ai_request_limit = 1000`
-- `subscribers_public.monthly_ai_requests = 0` (reset usage so the full 1000 is available now)
-- `subscribers_public.extra_credits = 0`, `rollover_credits = 0` (clean slate)
-- `subscribers_public.subscription_tier = 'admin'`, `subscription_package = 'admin'`, `subscribed = true`, `account_status = 'active'`
-- Mirror on `users`: `ai_credits_total = 1000`, `ai_credits_remaining = 1000`, `ai_credits_used = 0`, `subscription_tier = 'admin'`, `subscribed = true`
+```ts
+const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+if (!lovableApiKey) {
+  return new Response(
+    JSON.stringify({ error: 'AI service is not configured.' }),
+    { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+}
+```
 
-This will be delivered as a migration file so it runs against the live database with your approval.
+Then redeploy the function.
 
-## Notes
+## Credit refund consideration
 
-- Only this one admin account is affected.
-- No code, RLS, or schema changes — just data updates.
-- After the migration runs, refresh the app and the credit counter should show 1000 remaining.
+The last failed attempt charged 2 credits. Admin currently has 998 — I'll restore those 2 so the balance returns to 1000 after the fix is in.
+
+## Verification
+
+After deploy, click "Try Generating Again" on /earnit. Expect a successful blueprint with no REPORT_GEN_FAIL.

@@ -385,7 +385,16 @@ ${assessmentData.dealBreakers ? `- Deal Breakers: ${assessmentData.dealBreakers}
 Create 3-5 specific, actionable side income paths ranked by feasibility based on their unique situation.`;
 
     console.log('🤖 Calling Lovable AI Gateway...');
-    
+
+    const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!lovableApiKey) {
+      console.error('❌ LOVABLE_API_KEY is not configured');
+      return new Response(
+        JSON.stringify({ error: 'AI service is not configured. Please contact support.' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Add timeout handling with GPT-5 Mini fallback
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 120000);
