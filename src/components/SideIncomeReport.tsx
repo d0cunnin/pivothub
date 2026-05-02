@@ -388,8 +388,9 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
-      <div className="flex justify-between items-center mb-8">
+    <ReportErrorBoundary onRetry={generateReport} resetKey={report ? "loaded" : "empty"}>
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold mb-2">Your Earn It Blueprint</h1>
           <p className="text-muted-foreground">Personalized plan for building sustainable income</p>
