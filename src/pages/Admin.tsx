@@ -101,21 +101,8 @@ const Admin = () => {
         throw new Error("Please sign in to manage subscriptions");
       }
 
-      const { data, error } = await supabase.functions.invoke("admin-manage-subscription", {
-        body: {
-          action: "grant",
-          userId: params.userId,
-          tier: params.tier,
-          duration: params.duration,
-          notes: params.notes,
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      });
-
-      if (error) throw error;
-      return data;
+      // Payments not yet enabled in this rebuild — stub admin grant
+      throw new Error("Subscription management is disabled until payments are reconnected.");
     },
     onSuccess: () => {
       toast({

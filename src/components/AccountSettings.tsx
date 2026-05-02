@@ -38,18 +38,10 @@ export const AccountSettings = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("cancel-subscription", {
-        body: { reason: cancelReason },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      });
-
-      if (error) throw error;
-
+      // Payments not yet enabled in this rebuild
       toast({
-        title: "Subscription Cancelled",
-        description: data.message || "Your subscription has been cancelled successfully.",
+        title: "Payments Coming Soon",
+        description: "Subscription management will be available once payments are reconnected.",
       });
 
       setCancelReason("");
@@ -151,18 +143,12 @@ export const AccountSettings = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('purchase-extra-credits', {
-        body: { credits },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
+      // Payments not yet enabled in this rebuild
+      toast({
+        title: "Payments Coming Soon",
+        description: "Extra credit purchases will be available once payments are reconnected.",
       });
-
-      if (error) throw error;
-
-      if (data?.url) {
-        window.location.href = data.url;
-      }
+      return;
     } catch (error: any) {
       console.error('Error purchasing credits:', error);
       
