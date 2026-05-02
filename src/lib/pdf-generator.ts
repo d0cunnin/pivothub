@@ -23,6 +23,13 @@ export interface SideIncomeReportPDF {
   ninety_day_plan: any;
 }
 
+const asText = (v: any): string => {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'string') return v;
+  if (typeof v === 'number' || typeof v === 'boolean') return String(v);
+  try { return JSON.stringify(v); } catch { return String(v); }
+};
+
 export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -67,7 +74,7 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
 
   doc.setFontSize(10);
   doc.setTextColor(75, 85, 99);
-  const summaryLines = doc.splitTextToSize(report.executive_summary, pageWidth - 2 * margin);
+  const summaryLines = doc.splitTextToSize(asText(report.executive_summary), pageWidth - 2 * margin);
   doc.text(summaryLines, margin, yPosition);
   yPosition += summaryLines.length * 5 + 10;
 
@@ -128,13 +135,13 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
 
     doc.setFontSize(14);
     doc.setTextColor(45, 55, 72);
-    doc.text(path.title, margin + 25, yPosition);
+    doc.text(asText(path.title), margin + 25, yPosition);
     yPosition += 10;
 
     // Description
     doc.setFontSize(10);
     doc.setTextColor(75, 85, 99);
-    const descLines = doc.splitTextToSize(path.description, pageWidth - 2 * margin);
+    const descLines = doc.splitTextToSize(asText(path.description), pageWidth - 2 * margin);
     doc.text(descLines, margin, yPosition);
     yPosition += descLines.length * 5 + 8;
 
