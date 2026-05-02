@@ -80,12 +80,40 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
 
   doc.setFontSize(10);
   doc.setTextColor(75, 85, 99);
-  const skillsText = typeof report.skills_analysis === 'string' 
-    ? report.skills_analysis 
-    : JSON.stringify(report.skills_analysis, null, 2);
-  const skillsLines = doc.splitTextToSize(skillsText, pageWidth - 2 * margin);
-  doc.text(skillsLines, margin, yPosition);
-  yPosition += skillsLines.length * 5 + 15;
+  const sa = report.skills_analysis;
+  const writeSkillsBlock = (label: string, value: any) => {
+    if (!value) return;
+    const items = Array.isArray(value) ? value : [String(value)];
+    if (items.length === 0) return;
+    checkPageBreak(15);
+    doc.setFontSize(11);
+    doc.setTextColor(45, 55, 72);
+    doc.text(label, margin, yPosition);
+    yPosition += 6;
+    doc.setFontSize(10);
+    doc.setTextColor(75, 85, 99);
+    items.forEach((it: any) => {
+      const text = typeof it === 'string' ? it : JSON.stringify(it);
+      const lines = doc.splitTextToSize(`• ${text}`, pageWidth - 2 * margin - 5);
+      checkPageBreak(lines.length * 5 + 2);
+      doc.text(lines, margin + 5, yPosition);
+      yPosition += lines.length * 5 + 2;
+    });
+    yPosition += 4;
+  };
+
+  if (typeof sa === 'string') {
+    const skillsLines = doc.splitTextToSize(sa, pageWidth - 2 * margin);
+    doc.text(skillsLines, margin, yPosition);
+    yPosition += skillsLines.length * 5 + 15;
+  } else if (sa && typeof sa === 'object') {
+    writeSkillsBlock('Marketable Skills', sa.marketableSkills);
+    writeSkillsBlock('Undervalued Skills', sa.undervaluedSkills);
+    writeSkillsBlock('Quick Monetization', sa.quickMonetization);
+    writeSkillsBlock('Skill Gaps to Develop', sa.skillGaps);
+    writeSkillsBlock('Learning Priority', sa.learningPriority);
+    yPosition += 5;
+  }
 
   // RECOMMENDED PATHS
   report.recommended_paths.forEach((path, index) => {
