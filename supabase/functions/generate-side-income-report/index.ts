@@ -182,6 +182,33 @@ serve(async (req) => {
     
     console.log('✅ Credits deducted:', usageCheck?.credits_charged, 'Remaining:', usageCheck?.remaining);
 
+    const creditsCharged: number = usageCheck?.credits_charged ?? 0;
+    let creditsRefunded = false;
+    const refundCredits = async (reason: string) => {
+      if (creditsRefunded || creditsCharged <= 0) return;
+      try {
+        // Re-read current usage to safely subtract
+        const { data: cur } = await serviceClient
+          .from('subscribers_public')
+          .select('monthly_ai_requests')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        const newCount = Math.max(0, (cur?.monthly_ai_requests ?? creditsCharged) - creditsCharged);
+        const { error: refundErr } = await serviceClient
+          .from('subscribers_public')
+          .update({ monthly_ai_requests: newCount })
+          .eq('user_id', user.id);
+        if (refundErr) {
+          console.error('⚠️ Credit refund failed:', refundErr, 'reason:', reason);
+        } else {
+          creditsRefunded = true;
+          console.log(`💰 Refunded ${creditsCharged} credits to user ${user.id} (reason: ${reason})`);
+        }
+      } catch (e) {
+        console.error('⚠️ Refund threw:', e);
+      }
+    };
+
     // Validate input with zod - now accepts raw assessment data
     const requestSchema = z.object({
       assessmentData: z.object({
