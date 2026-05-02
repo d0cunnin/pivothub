@@ -1,50 +1,64 @@
-## What I found
-This looks like a **Google OAuth redirect mismatch**, not a publish issue.
+# Rebrand the Google Sign-In Screen to "Pivot Hub"
 
-I checked your app and found **two likely causes**:
+## The Issue
 
-1. **Your Google OAuth setup is probably using the wrong redirect URI**
-   - For this Lovable Cloud setup, the correct redirect URIs are the ones shown in **Cloud → Users → Auth → Google**.
-   - The older backend callback URL I mentioned earlier (`.../auth/v1/callback`) is for a different flow and is likely **not** the URI Google expects for your current setup.
-   - If you’re using **your own Google credentials**, Google must whitelist **every exact redirect URI** selected in Lovable.
+When users click "Sign in with Google", the consent screen shows:
+> "You're signing back in to **fkvjsgqjgissolpdqbdh.supabase.co**"
 
-2. **Your app currently uses two different Google sign-in implementations**
-   - `src/pages/Auth.tsx` uses `lovable.auth.signInWithOAuth(...)`
-   - `src/components/AuthGuard.tsx` and `src/components/ToolGuard.tsx` still use `supabase.auth.signInWithOAuth(...)`
-   - That inconsistency can produce different redirect behavior depending on where the user clicks “Continue with Google”.
+instead of:
+> "You're signing back in to **Pivot Hub**"
 
-## What to do right now in the Google/Lovable settings
-1. Open **Cloud → Users → Auth → Google**.
-2. Check whether you selected **Your own credentials**.
-3. Copy the **exact redirect URI or URIs shown there**.
-4. In **Google Cloud Console → OAuth Client → Authorized redirect URIs**:
-   - remove the old backend callback if that’s what you added
-   - add **every exact URI shown in Lovable**
-   - make sure there are no typos, no missing path, and no trailing-slash mismatch
-5. If your Google consent screen is still in testing mode, add your Google account as a **Test user**.
-6. Wait a couple of minutes, then test again on the **same domain you whitelisted**.
+This is purely a **Google Cloud Console configuration** issue — not a code issue. The text Google displays comes from your OAuth Consent Screen settings in Google Cloud Console, which currently has the raw Supabase backend URL instead of your branding.
 
-## Code cleanup I can do after approval
-1. Update all Google sign-in buttons to use the **same Lovable Cloud OAuth method**.
-2. Replace the old Google auth calls in:
-   - `src/components/AuthGuard.tsx`
-   - `src/components/ToolGuard.tsx`
-3. Align `src/pages/Auth.tsx` with the documented pattern so the redirect target is consistent.
-4. Re-check the callback flow in `src/pages/AuthCallback.tsx` and route handling so sign-in lands users in the right place.
-5. Verify Google sign-in from all entry points:
-   - `/auth`
-   - gated dashboard flow
-   - gated tool modal flow
+There are **two paths** to fix this. Pick whichever you prefer:
 
-## Technical notes
-- Current mixed implementations:
-  ```text
-  Auth page: lovable.auth.signInWithOAuth("google", { redirect_uri: ... })
-  Guard modals: supabase.auth.signInWithOAuth({ provider: 'google', ... })
-  ```
-- Lovable docs for **your own credentials** say the selected redirect URIs in Lovable must match the ones added in Google exactly.
-- This error is usually caused by config mismatch first, but the code inconsistency should still be cleaned up so the app behaves the same everywhere.
+---
 
-## Fastest path
-- First fix the **Authorized redirect URIs** in Google based on what Lovable shows.
-- Then I can clean up the code paths so this doesn’t break from one sign-in button but not another.
+## Option A (Easiest — Recommended): Switch to Lovable's Managed Google OAuth
+
+Lovable Cloud provides a managed Google OAuth out of the box. When you use it, the consent screen shows clean Lovable-managed branding (no scary Supabase URL) and you don't have to maintain your own Google Cloud project.
+
+**Steps:**
+1. Open **Cloud → Users → Auth Settings → Sign In Methods → Google** in Lovable.
+2. Remove your custom Client ID and Client Secret (leave the fields empty).
+3. Save. Lovable will fall back to its managed Google OAuth credentials.
+4. Test sign-in — the screen will no longer show the supabase.co URL.
+
+**Trade-off:** The consent screen will show Lovable-managed branding rather than "Pivot Hub" specifically. Cleaner than the supabase URL, but not custom-branded.
+
+---
+
+## Option B (Full Branding): Update Your OAuth Consent Screen in Google Cloud Console
+
+Keep your own Google OAuth credentials and properly brand them as "Pivot Hub".
+
+**Steps (all done in Google Cloud Console — no code changes):**
+
+1. Go to **Google Cloud Console → APIs & Services → OAuth consent screen**.
+2. Click **Edit App**.
+3. Update these fields:
+   - **App name**: `Pivot Hub`
+   - **User support email**: your support email
+   - **App logo**: upload the Pivot Hub logo (optional but recommended)
+   - **Application home page**: `https://pivothub.io`
+   - **Application privacy policy link**: `https://pivothub.io/privacy` (must exist)
+   - **Application terms of service link**: `https://pivothub.io/terms` (must exist)
+   - **Authorized domains**: add `pivothub.io` and `lovable.app`
+   - **Developer contact email**: your email
+4. Save.
+5. (If your app is still in "Testing" mode and you want public users) Click **Publish App** to move it to Production. Note: with sensitive scopes this triggers Google verification, but for basic `email`/`profile`/`openid` scopes publishing is instant and no verification is needed.
+6. Wait ~5 minutes for Google's cache to refresh, then test.
+
+**Result:** The consent screen will say "You're signing back in to **Pivot Hub**" with your logo.
+
+---
+
+## Recommendation
+
+Go with **Option B** if you want full "Pivot Hub" branding on the Google screen (most professional). Go with **Option A** if you just want to get rid of the ugly supabase.co URL with zero hassle.
+
+---
+
+## What I Cannot Do
+
+This fix lives entirely inside **your Google Cloud Console account** — there's no code in your project that controls what Google displays. So no file edits are needed for either option. Once you tell me which option you've done (or want help walking through), I can verify the sign-in flow works end-to-end.
