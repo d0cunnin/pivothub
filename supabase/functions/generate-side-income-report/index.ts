@@ -542,6 +542,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
                 { role: 'user', content: userPrompt }
               ],
               max_completion_tokens: 4200,
+              response_format: { type: 'json_object' },
             }),
             signal: controller2.signal
           });
