@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -477,6 +477,7 @@ export type Database = {
           display_name: string
           effective_from: string
           features: Json
+          id: string
           is_active: boolean
           plan_code: string
           price_cents: number
@@ -490,6 +491,7 @@ export type Database = {
           display_name: string
           effective_from?: string
           features?: Json
+          id?: string
           is_active?: boolean
           plan_code: string
           price_cents: number
@@ -503,6 +505,7 @@ export type Database = {
           display_name?: string
           effective_from?: string
           features?: Json
+          id?: string
           is_active?: boolean
           plan_code?: string
           price_cents?: number
@@ -717,22 +720,7 @@ export type Database = {
           report_content?: Json
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "side_income_reports_assessment_id_fkey"
-            columns: ["assessment_id"]
-            isOneToOne: true
-            referencedRelation: "side_income_assessments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "side_income_reports_assessment_id_fkey"
-            columns: ["assessment_id"]
-            isOneToOne: true
-            referencedRelation: "v_side_income_assessments"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       signup_audit: {
         Row: {
@@ -1153,193 +1141,7 @@ export type Database = {
       }
     }
     Views: {
-      monthly_usage_summary: {
-        Row: {
-          month_year: string | null
-          total_cost_usd: number | null
-          total_credits: number | null
-          total_uses: number | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
-      v_ai_current_rate: {
-        Row: {
-          active_tools: string[] | null
-          active_users: number | null
-          credits_last_minute: number | null
-          requests_last_minute: number | null
-        }
-        Relationships: []
-      }
-      v_ai_usage_by_minute: {
-        Row: {
-          minute: string | null
-          request_count: number | null
-          tools_used: string[] | null
-          total_credits: number | null
-          unique_users: number | null
-        }
-        Relationships: []
-      }
-      v_assessment_summary: {
-        Row: {
-          assessment_type: string | null
-          created_at: string | null
-          id: string | null
-          score: number | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          assessment_type?: string | null
-          created_at?: string | null
-          id?: string | null
-          score?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          assessment_type?: string | null
-          created_at?: string | null
-          id?: string | null
-          score?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      v_failed_login_monitoring: {
-        Row: {
-          attempt_count: number | null
-          email: string | null
-          ip_addresses: string[] | null
-          last_attempt: string | null
-        }
-        Relationships: []
-      }
-      v_public_pricing: {
-        Row: {
-          credit_limit: number | null
-          currency: string | null
-          display_name: string | null
-          features: Json | null
-          plan_code: string | null
-          price_cents: number | null
-          rollover_cap_multiplier: number | null
-        }
-        Insert: {
-          credit_limit?: number | null
-          currency?: string | null
-          display_name?: string | null
-          features?: Json | null
-          plan_code?: string | null
-          price_cents?: number | null
-          rollover_cap_multiplier?: number | null
-        }
-        Update: {
-          credit_limit?: number | null
-          currency?: string | null
-          display_name?: string | null
-          features?: Json | null
-          plan_code?: string | null
-          price_cents?: number | null
-          rollover_cap_multiplier?: number | null
-        }
-        Relationships: []
-      }
-      v_side_income_assessments: {
-        Row: {
-          assessment_data: Json | null
-          created_at: string | null
-          credits_used: number | null
-          id: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          assessment_data?: Json | null
-          created_at?: string | null
-          credits_used?: number | null
-          id?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          assessment_data?: Json | null
-          created_at?: string | null
-          credits_used?: number | null
-          id?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      v_storage_access_monitoring: {
-        Row: {
-          access_attempts: number | null
-          bucket_id: string | null
-          denied_count: number | null
-          granted_count: number | null
-          last_attempt: string | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
-      v_subscribers_masked: {
-        Row: {
-          created_at: string | null
-          email_masked: string | null
-          has_stripe_account: boolean | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email_masked?: never
-          has_stripe_account?: never
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email_masked?: never
-          has_stripe_account?: never
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      v_suspicious_credit_usage: {
-        Row: {
-          request_count: number | null
-          tool_name: string | null
-          total_cost: number | null
-          total_credits: number | null
-          user_id: string | null
-        }
-        Relationships: []
-      }
-      v_suspicious_signups: {
-        Row: {
-          account_count: number | null
-          emails: string[] | null
-          first_signup: string | null
-          has_flags: boolean | null
-          ip_address: unknown
-          last_signup: string | null
-          signup_count: number | null
-        }
-        Relationships: []
-      }
-      v_webhook_failures: {
-        Row: {
-          event_type: string | null
-          failure_count: number | null
-          last_failure: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       check_account_lockout: { Args: { p_email: string }; Returns: Json }
@@ -1390,10 +1192,6 @@ export type Database = {
           updated_at: string
           user_id: string
         }[]
-      }
-      get_my_payment_status: {
-        Args: { assessment_id: string }
-        Returns: string
       }
       get_subscriber_secure_data: {
         Args: { target_user_id?: string }
