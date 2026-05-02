@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { generateSideIncomeReportPDF } from "@/lib/pdf-generator";
+import { ReportErrorBoundary } from "@/components/ReportErrorBoundary";
 
 interface SideIncomeReportProps {
   assessmentId: string; // Now contains stringified assessment data
@@ -429,7 +430,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       {renderText(path.title)}
-                      <Badge variant="secondary">Path {path.rank ?? index + 1}</Badge>
+                      <Badge variant="secondary">Path {renderText(path.rank ?? index + 1)}</Badge>
                     </CardTitle>
                     <CardDescription className="mt-2">
                       {renderText(path.description)}

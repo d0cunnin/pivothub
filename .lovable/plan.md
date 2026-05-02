@@ -1,76 +1,62 @@
-# Fix Earn It blank-screen render crash
+## What I checked
 
-## Root cause
+- `SideIncomeReport.tsx` (current code, all 609 lines) — the object-safe helpers (`renderText`, `toStringArray`, `SkillsAnalysisBlock`, `IncomePotentialBlock`, `ResourcesBlock`, `MonthBlock`) are in place, and the report state is set via `setReport(data.report)` only after a success path that handles `error`, missing `data`, and missing `data.report`.
+- `src/lib/pdf-generator.ts` — the side-income PDF section already coerces objects (`JSON.stringify` fallbacks, dual array/object month handling).
+- `src/pages/EarnIt.tsx` — the only caller; renders `<SideIncomeReport assessmentId={assessmentId} />` after the assessment completes. The PDF generator runs only inside `downloadReport`, triggered by a button click — never on mount — so a PDF crash cannot blank the page.
+- Live console (browser tool, logged-out session): no React errors, no uncaught exceptions. Just harmless `postMessage` warnings from the Lovable iframe.
+- Edge function logs: most recent run completed cleanly (200, 19.5 KB, schema validation passed).
+- `/earnit` rendered correctly in the browser. Forcing the report path with junk data produced the proper "Unable to Generate Your Blueprint" fallback card — not a white screen.
 
-The edge function now succeeds (logs show `✅ Successfully parsed AI JSON response`, 200 OK, ~22k chars). The white screen is a **React render crash** in `src/components/SideIncomeReport.tsx`.
+## Diagnosis
 
-The AI prompt in `generate-side-income-report/index.ts` instructs the model to return:
+The report code path is now defensive everywhere I can audit it. If you're still seeing a white screen, it's almost certainly a render crash on a field shape we haven't met yet (the AI occasionally returns nested objects in `recommended_paths[].pros/cons/steps/platforms/skillsNeeded` instead of strings, or wraps `executive_summary` in an object). One unguarded `{someObject}` in JSX will unmount the whole tree → blank page.
 
-- `skills_analysis` as an **object** `{ marketableSkills, undervaluedSkills, quickMonetization, skillGaps, learningPriority }`
-- `ninety_day_plan.month_1` / `month_2` / `month_3` as **objects** `{ goal, weeklyActions: [...] }`
-- `resources` as an **object** `{ platforms, learningResources, tools, communities }`
+To pin this down without more guessing, I need either (a) the actual console error text from when it goes blank, or (b) a guarantee that no future shape mismatch can ever produce a blank page. Plan (b) is the right structural fix and also surfaces the exact field that broke for next time.
 
-But the React component still renders the old shape:
+## Plan
 
-```tsx
-<p>{report.skills_analysis}</p>                       // ← object as React child → THROWS
-report.ninety_day_plan.month_1?.map(...)              // ← .map on object → silently nothing
-report.resources?.map((category) => category.items)   // ← old [{category, items}] shape
-```
+### 1. Add `ReportErrorBoundary` (new file)
 
-`{report.skills_analysis}` rendering an object throws "Objects are not valid as a React child", which unwinds the whole tree → blank white page. The other two just render nothing silently and would only result in missing sections, not a crash.
+`src/components/ReportErrorBoundary.tsx` — small class component:
 
-## Fix
+- Catches render errors in its children via `componentDidCatch`.
+- Logs `error.message`, `error.stack`, and `errorInfo.componentStack` to `console.error` so the failing field is identifiable.
+- Renders the same "Unable to Generate Your Blueprint" card style already in `SideIncomeReport.tsx`, with:
+  - Message: "Something in this blueprint couldn't be displayed."
+  - Error code shown to the user: `RENDER_FAIL`.
+  - Buttons: "Try Generating Again" (calls `onRetry` prop) and "Go Back" (router back).
+- Resets `hasError` when the `resetKey` prop changes, so a successful re-generation re-renders cleanly.
 
-Update `src/components/SideIncomeReport.tsx` to render the new structured shape, with backwards-compatible fallbacks in case an older string shape ever comes back.
+### 2. Wrap the report render in `SideIncomeReport.tsx`
 
-### 1. Skills Analysis card
+Wrap only the final success-path JSX (the `<div className="container mx-auto px-4 py-8 max-w-5xl">…</div>` block, lines ~390–607) with `<ReportErrorBoundary onRetry={generateReport} resetKey={report ? 'loaded' : 'empty'}>`. The loading and empty-report fallbacks already render safely and stay outside the boundary.
 
-Replace the single `<p>` with a structured renderer that handles both string and object:
+### 3. Harden the last few raw renders inside `SideIncomeReport.tsx`
 
-- If `skills_analysis` is a string → render as `<p>` (legacy fallback).
-- If it's an object → render labeled subsections:
-  - Marketable Skills (bulleted list of `marketableSkills`)
-  - Undervalued Skills (bulleted list of `undervaluedSkills`)
-  - Quick Monetization (`quickMonetization` paragraph)
-  - Skill Gaps (bulleted list of `skillGaps`)
-  - Learning Priority (`learningPriority` paragraph)
+Convert any direct `{path.foo}` or `{report.bar}` JSX that isn't already wrapped through `renderText` / `toStringArray`:
 
-### 2. Recommended Paths card
+- `{path.rank ?? index + 1}` (line ~432) → `{renderText(path.rank ?? index + 1)}`.
+- Spot-check `{action}` and `{step}` mappings — already strings via `toStringArray`, leave alone.
+- Any other field accessed directly on `report.*` or `path.*` that isn't a string — wrap in `renderText`.
 
-Add the new fields the AI now returns (still optional):
+### 4. Tiny PDF-generator hardening
 
-- Show `whyRecommended` paragraph under description.
-- Render `income_potential` correctly: it can be a string or an object `{ month1, month3, month6, year1 }`. If object, show a small grid of the four ranges; if string, show as-is.
-- Render `pros` / `cons` lists (if present).
-- Show `timeToFirstDollar` next to startup cost / time / income chips.
+`src/lib/pdf-generator.ts`:
 
-### 3. Resources card
+- `path.title` and `path.description` (lines 131, 137) currently assume strings — wrap with a local `asText(v)` helper that does `typeof v === 'string' ? v : JSON.stringify(v ?? '')` so a stray object can't crash `doc.splitTextToSize`.
+- `report.executive_summary` (line 70) — same `asText` wrap.
+- This is purely defensive; it only runs when the user clicks Download PDF, so it doesn't affect the white-screen issue, but it prevents the same class of bug in the PDF path.
 
-Handle the new `resources` shape:
+## Files touched
 
-- If array of `{ category, items }` → keep current rendering (legacy).
-- If object → render four labeled sections: Platforms, Learning Resources, Tools, Communities, each as a bulleted list.
+- `src/components/ReportErrorBoundary.tsx` (new, ~70 lines)
+- `src/components/SideIncomeReport.tsx` (wrap return JSX, harden `path.rank`, audit raw renders)
+- `src/lib/pdf-generator.ts` (add `asText` helper for `title`, `description`, `executive_summary`)
 
-### 4. 90-Day Implementation Plan card
+## Outcome
 
-Each month is now `{ goal, weeklyActions: string[] }` instead of a string array. Render:
+- A white screen becomes impossible: any future shape mismatch shows the "Unable to display" card with a Retry button.
+- The console will print the exact field that broke (component stack), so if it happens again you can paste that and we fix the specific field in one edit.
+- No backend or schema changes — the edge function already returns valid JSON.
 
-- The month's `goal` as a one-line subtitle under the Month badge.
-- `weeklyActions` as the bulleted list (current map target).
-- Fall back to mapping the month directly if it's still an array (legacy).
-
-### 5. Quick Wins (new, optional)
-
-If `report.quickWinOpportunities` exists, render it as a small card between Immediate Actions and Resources.
-
-### 6. PDF generator
-
-`src/lib/pdf-generator.ts` already types these fields as `any`, but the actual rendering inside the PDF likely assumes the old shapes too. Update it to handle the same dual shapes (object or string/array) so PDF download doesn't throw after the UI is fixed. Verify the relevant blocks (skills_analysis, resources, ninety_day_plan, income_potential) and add the same conditional handling.
-
-## Technical notes
-
-- Pure UI change in two files: `src/components/SideIncomeReport.tsx` and `src/lib/pdf-generator.ts`. No edge function or schema changes.
-- Edge function output is correct and matches the prompt — do not change the prompt.
-- All new fields are optional in the renderer so older cached responses still display.
-- After the change, regenerate the report once to verify; no credits are charged for a re-render of an already-fetched report.
+After approval I'll make the changes and ask you to re-run the assessment once. If it still blanks, the new console error will tell us the exact culprit instantly.
