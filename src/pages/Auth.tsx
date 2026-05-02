@@ -593,6 +593,7 @@ const Auth = () => {
               </form>
             </TabsContent>
           </Tabs>
+          )}
           
           <p className="text-xs text-muted-foreground text-center mt-4">
             By signing up, you agree to our{" "}
