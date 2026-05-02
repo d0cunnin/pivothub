@@ -606,6 +606,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
           )}
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </ReportErrorBoundary>
   );
 }
