@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { Mail, Lock, Eye, EyeOff, Check, X } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Check, X, MailCheck } from "lucide-react";
 import { z } from 'zod';
 import Turnstile from 'react-turnstile';
 
