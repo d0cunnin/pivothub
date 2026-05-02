@@ -21,6 +21,79 @@ function sanitizeText(text: string): string {
     .trim();
 }
 
+// Strip ```json fences if present
+function stripCodeFences(s: string): string {
+  if (!s) return s;
+  let trimmed = s.trim();
+  const fence = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
+  if (fence) return fence[1].trim();
+  // Also strip a leading fence with no closing
+  trimmed = trimmed.replace(/^```(?:json)?\s*/, '').replace(/\s*```\s*$/, '');
+  return trimmed.trim();
+}
+
+// Escape unescaped control characters that appear inside JSON string literals.
+// Walks the string tracking whether we're inside a "..." string and escapes
+// raw \n \r \t \b \f and any other 0x00-0x1F that appear there.
+function escapeControlCharsInJsonStrings(input: string): string {
+  let out = '';
+  let inStr = false;
+  let escape = false;
+  for (let i = 0; i < input.length; i++) {
+    const ch = input[i];
+    const code = input.charCodeAt(i);
+    if (escape) {
+      out += ch;
+      escape = false;
+      continue;
+    }
+    if (ch === '\\' && inStr) {
+      out += ch;
+      escape = true;
+      continue;
+    }
+    if (ch === '"') {
+      inStr = !inStr;
+      out += ch;
+      continue;
+    }
+    if (inStr && code < 0x20) {
+      switch (ch) {
+        case '\n': out += '\\n'; break;
+        case '\r': out += '\\r'; break;
+        case '\t': out += '\\t'; break;
+        case '\b': out += '\\b'; break;
+        case '\f': out += '\\f'; break;
+        default: out += '\\u' + code.toString(16).padStart(4, '0');
+      }
+      continue;
+    }
+    out += ch;
+  }
+  return out;
+}
+
+// Try multiple strategies to parse a possibly-messy JSON string from an LLM.
+function robustJsonParse(raw: string): any | null {
+  if (!raw) return null;
+  const attempts: string[] = [];
+  attempts.push(raw);
+  attempts.push(stripCodeFences(raw));
+  // Substring from first { to last }
+  const first = raw.indexOf('{');
+  const last = raw.lastIndexOf('}');
+  if (first !== -1 && last > first) {
+    attempts.push(raw.slice(first, last + 1));
+    attempts.push(stripCodeFences(raw.slice(first, last + 1)));
+  }
+  for (const a of attempts) {
+    if (!a) continue;
+    try { return JSON.parse(a); } catch { /* try next */ }
+    try { return JSON.parse(escapeControlCharsInJsonStrings(a)); } catch { /* try next */ }
+  }
+  return null;
+}
+
 // Recursively sanitize all string values in an object
 function sanitizeObject(obj: any): any {
   if (typeof obj === 'string') {
@@ -108,6 +181,33 @@ serve(async (req) => {
     }
     
     console.log('✅ Credits deducted:', usageCheck?.credits_charged, 'Remaining:', usageCheck?.remaining);
+
+    const creditsCharged: number = usageCheck?.credits_charged ?? 0;
+    let creditsRefunded = false;
+    const refundCredits = async (reason: string) => {
+      if (creditsRefunded || creditsCharged <= 0) return;
+      try {
+        // Re-read current usage to safely subtract
+        const { data: cur } = await serviceClient
+          .from('subscribers_public')
+          .select('monthly_ai_requests')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        const newCount = Math.max(0, (cur?.monthly_ai_requests ?? creditsCharged) - creditsCharged);
+        const { error: refundErr } = await serviceClient
+          .from('subscribers_public')
+          .update({ monthly_ai_requests: newCount })
+          .eq('user_id', user.id);
+        if (refundErr) {
+          console.error('⚠️ Credit refund failed:', refundErr, 'reason:', reason);
+        } else {
+          creditsRefunded = true;
+          console.log(`💰 Refunded ${creditsCharged} credits to user ${user.id} (reason: ${reason})`);
+        }
+      } catch (e) {
+        console.error('⚠️ Refund threw:', e);
+      }
+    };
 
     // Validate input with zod - now accepts raw assessment data
     const requestSchema = z.object({
@@ -415,6 +515,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
             { role: 'user', content: userPrompt }
           ],
           max_completion_tokens: 6000,
+          response_format: { type: 'json_object' },
         }),
         signal: controller.signal
       });
@@ -441,6 +542,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
                 { role: 'user', content: userPrompt }
               ],
               max_completion_tokens: 4200,
+              response_format: { type: 'json_object' },
             }),
             signal: controller2.signal
           });
@@ -448,6 +550,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
           clearTimeout(timeout2);
         } catch (fallbackError) {
           if (fallbackError.name === 'AbortError') {
+            await refundCredits('timeout-fallback');
             return new Response(JSON.stringify({ 
               error: 'Report generation is taking too long. Please try again with shorter responses or contact support.' 
             }), {
@@ -470,7 +573,8 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
       
       if (!aiResponse.ok) {
         console.error('❌ Lovable AI error:', aiResponse.status, text.slice(0, 300));
-        
+        await refundCredits(`ai-gateway-${aiResponse.status}`);
+
         if (aiResponse.status === 429) {
           return new Response(JSON.stringify({ 
             error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
@@ -491,6 +595,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
       aiData = JSON.parse(text);
     } catch (err) {
       console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
+      await refundCredits('gateway-non-json');
       return new Response(JSON.stringify({
         error: "Lovable AI Gateway returned invalid data. Please try again.",
       }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -498,84 +603,35 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
 
     console.log('✅ Lovable AI response received, status:', aiResponse.status);
     
-    // Robust JSON extraction with text-first parsing
-    let reportContent;
-    try {
-      reportContent = JSON.parse(aiData.choices[0].message.content);
-      console.log('✅ Successfully parsed JSON directly');
-    } catch (parseError) {
-      console.warn('⚠️ JSON parse failed, attempting extraction from raw text');
-      const rawContent = aiData.choices[0].message.content;
-      
-      // Add detailed logging for debugging
-      console.log('Raw AI content length:', rawContent?.length);
+    // Robust JSON extraction with multiple fallback strategies (incl. control-char escaping)
+    const rawContent: string = aiData?.choices?.[0]?.message?.content ?? '';
+    const finishReason = aiData?.choices?.[0]?.finish_reason;
+    console.log('AI finish_reason:', finishReason, 'content length:', rawContent?.length);
+
+    let reportContent: any = robustJsonParse(rawContent);
+
+    if (reportContent) {
+      console.log('✅ Successfully parsed AI JSON response');
+    } else {
+      console.warn('⚠️ All parsing strategies failed');
       console.log('First 200 chars:', rawContent?.slice(0, 200));
-      console.log('Last 100 chars:', rawContent?.slice(-100));
-      
-      // First try to extract from markdown code blocks
-      const markdownMatch = rawContent.match(/```(?:json)?\s*([\s\S]*?)```/);
-      if (markdownMatch) {
-        try {
-          reportContent = JSON.parse(markdownMatch[1].trim());
-          console.log('✅ Extracted JSON from markdown code block');
-        } catch (mdErr) {
-          console.warn('Failed to parse markdown-wrapped JSON:', mdErr);
-        }
-      }
-      
-      // If markdown extraction failed, try improved regex
-      if (!reportContent) {
-        const jsonMatch = rawContent.match(/\{[\s\S]*?\}(?=\s*$|\s*```|$)/);
-        if (jsonMatch) {
-          try {
-            reportContent = JSON.parse(jsonMatch[0]);
-            console.log('✅ Extracted JSON using improved regex');
-          } catch (regexErr) {
-            console.warn('Failed to parse regex-extracted JSON:', regexErr);
-          }
-        }
-      }
-      
-      // Last resort: return mock data with clear disclaimer
-      if (!reportContent) {
-        console.warn('⚠️ All parsing failed, returning mock data');
-        return new Response(JSON.stringify({
-          report: {
-            executive_summary: "⚠️ DEMO DATA: AI response parsing failed. This is sample data to demonstrate the report structure. Please try generating again or contact support@pivothub.io.",
-            skills_analysis: "Sample skills analysis. Your actual skills: communication, problem-solving, time management. Please regenerate for your personalized analysis.",
-            recommended_paths: [
-              {
-                rank: 1,
-                title: "Sample Income Path (Demo Data)",
-                description: "This is demo data. The AI successfully analyzed your assessment but the response format needs adjustment. Please try regenerating your report.",
-                startup_cost: "$0-50",
-                time_commitment: "5-10 hours/week",
-                income_potential: "$500-2000/month",
-                steps: [
-                  "This is sample data - please regenerate your report",
-                  "If the issue persists after 2-3 attempts, contact support@pivothub.io"
-                ]
-              }
-            ],
-            immediate_actions: [
-              "Click the 'Try Generating Again' button to regenerate your personalized report",
-              "If issue persists, contact support@pivothub.io with error code: JSON_PARSE_FAIL"
-            ],
-            resources: [],
-            ninety_day_plan: {
-              month_1: ["Regenerate report for personalized plan"],
-              month_2: ["Contact support if issues persist"],
-              month_3: ["Begin implementing your actual blueprint"]
-            }
-          },
-          _is_mock: true
-        }), { 
-          status: 200, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        });
-      }
+      console.log('Last 200 chars:', rawContent?.slice(-200));
+
+      // Refund credits since the user got nothing usable
+      await refundCredits('json-parse-failed');
+
+      const truncated = finishReason === 'length' || finishReason === 'max_tokens';
+      return new Response(JSON.stringify({
+        error: truncated
+          ? 'The AI response was cut off before completing. Your credits have been refunded — please try again.'
+          : 'We could not read the AI response. Your credits have been refunded — please try again.',
+        retryable: true,
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
-    
+
     // Sanitize the report content to remove excessive markdown
     const sanitizedReport = sanitizeObject(reportContent);
 
