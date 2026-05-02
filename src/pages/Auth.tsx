@@ -300,7 +300,55 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
+          {signupSuccess ? (
+            <div className="text-center space-y-4 py-4">
+              <div className="mx-auto w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
+                <MailCheck className="h-7 w-7 text-primary" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">Check your email</h3>
+                <p className="text-sm text-muted-foreground">
+                  We sent a confirmation link to{' '}
+                  <span className="font-medium text-foreground">{signupEmail}</span>.
+                  Click it to activate your account, then come back to sign in.
+                </p>
+              </div>
+              <div className="space-y-2 pt-2">
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    setSignupSuccess(false);
+                    setActiveTab('signin');
+                    setPassword('');
+                    setConfirmEmail('');
+                  }}
+                >
+                  Back to sign in
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="w-full"
+                  disabled={resending}
+                  onClick={async () => {
+                    setResending(true);
+                    const { error } = await supabase.auth.resend({
+                      type: 'signup',
+                      email: signupEmail,
+                    });
+                    setResending(false);
+                    toast({
+                      title: error ? 'Could not resend' : 'Email resent',
+                      description: error ? error.message : 'Check your inbox again.',
+                      variant: error ? 'destructive' : 'default',
+                    });
+                  }}
+                >
+                  {resending ? 'Resending…' : "Didn't get it? Resend"}
+                </Button>
+              </div>
+            </div>
+          ) : (
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'signin' | 'signup')} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
