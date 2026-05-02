@@ -80,12 +80,40 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
 
   doc.setFontSize(10);
   doc.setTextColor(75, 85, 99);
-  const skillsText = typeof report.skills_analysis === 'string' 
-    ? report.skills_analysis 
-    : JSON.stringify(report.skills_analysis, null, 2);
-  const skillsLines = doc.splitTextToSize(skillsText, pageWidth - 2 * margin);
-  doc.text(skillsLines, margin, yPosition);
-  yPosition += skillsLines.length * 5 + 15;
+  const sa = report.skills_analysis;
+  const writeSkillsBlock = (label: string, value: any) => {
+    if (!value) return;
+    const items = Array.isArray(value) ? value : [String(value)];
+    if (items.length === 0) return;
+    checkPageBreak(15);
+    doc.setFontSize(11);
+    doc.setTextColor(45, 55, 72);
+    doc.text(label, margin, yPosition);
+    yPosition += 6;
+    doc.setFontSize(10);
+    doc.setTextColor(75, 85, 99);
+    items.forEach((it: any) => {
+      const text = typeof it === 'string' ? it : JSON.stringify(it);
+      const lines = doc.splitTextToSize(`• ${text}`, pageWidth - 2 * margin - 5);
+      checkPageBreak(lines.length * 5 + 2);
+      doc.text(lines, margin + 5, yPosition);
+      yPosition += lines.length * 5 + 2;
+    });
+    yPosition += 4;
+  };
+
+  if (typeof sa === 'string') {
+    const skillsLines = doc.splitTextToSize(sa, pageWidth - 2 * margin);
+    doc.text(skillsLines, margin, yPosition);
+    yPosition += skillsLines.length * 5 + 15;
+  } else if (sa && typeof sa === 'object') {
+    writeSkillsBlock('Marketable Skills', sa.marketableSkills);
+    writeSkillsBlock('Undervalued Skills', sa.undervaluedSkills);
+    writeSkillsBlock('Quick Monetization', sa.quickMonetization);
+    writeSkillsBlock('Skill Gaps to Develop', sa.skillGaps);
+    writeSkillsBlock('Learning Priority', sa.learningPriority);
+    yPosition += 5;
+  }
 
   // RECOMMENDED PATHS
   report.recommended_paths.forEach((path, index) => {
@@ -221,7 +249,28 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
     if (Array.isArray(monthData)) {
       monthData.forEach((action: string) => {
         checkPageBreak(10);
-        const actionLines = doc.splitTextToSize(`▸ ${action}`, pageWidth - 2 * margin - 5);
+        const actionLines = doc.splitTextToSize(`▸ ${typeof action === 'string' ? action : JSON.stringify(action)}`, pageWidth - 2 * margin - 5);
+        doc.text(actionLines, margin + 5, yPosition);
+        yPosition += actionLines.length * 5 + 3;
+      });
+    } else if (monthData && typeof monthData === 'object') {
+      if (monthData.goal) {
+        const goalLines = doc.splitTextToSize(`Goal: ${monthData.goal}`, pageWidth - 2 * margin - 5);
+        checkPageBreak(goalLines.length * 5 + 2);
+        doc.setTextColor(45, 55, 72);
+        doc.text(goalLines, margin + 5, yPosition);
+        yPosition += goalLines.length * 5 + 3;
+        doc.setTextColor(75, 85, 99);
+      }
+      const actions = Array.isArray(monthData.weeklyActions)
+        ? monthData.weeklyActions
+        : Array.isArray(monthData.actions)
+          ? monthData.actions
+          : [];
+      actions.forEach((action: any) => {
+        const text = typeof action === 'string' ? action : JSON.stringify(action);
+        const actionLines = doc.splitTextToSize(`▸ ${text}`, pageWidth - 2 * margin - 5);
+        checkPageBreak(actionLines.length * 5 + 2);
         doc.text(actionLines, margin + 5, yPosition);
         yPosition += actionLines.length * 5 + 3;
       });
@@ -237,26 +286,42 @@ export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF 
     doc.text('Resources & Tools', margin, yPosition);
     yPosition += 10;
 
+    const writeResourceCategory = (label: string, items: any) => {
+      const list = Array.isArray(items)
+        ? items
+        : items && typeof items === 'object'
+          ? Object.values(items)
+          : items
+            ? [items]
+            : [];
+      if (list.length === 0) return;
+      checkPageBreak(20);
+      doc.setFontSize(12);
+      doc.setTextColor(59, 130, 246);
+      doc.text(label, margin, yPosition);
+      yPosition += 6;
+      doc.setFontSize(9);
+      doc.setTextColor(75, 85, 99);
+      list.forEach((item: any) => {
+        const text = typeof item === 'string' ? item : JSON.stringify(item);
+        const lines = doc.splitTextToSize(`• ${text}`, pageWidth - 2 * margin - 5);
+        checkPageBreak(lines.length * 5 + 2);
+        doc.text(lines, margin + 5, yPosition);
+        yPosition += lines.length * 5 + 2;
+      });
+      yPosition += 5;
+    };
+
     if (Array.isArray(report.resources)) {
       report.resources.forEach((category: any) => {
-        checkPageBreak(20);
-        
-        doc.setFontSize(12);
-        doc.setTextColor(59, 130, 246);
-        doc.text(category.category, margin, yPosition);
-        yPosition += 6;
-
-        doc.setFontSize(9);
-        doc.setTextColor(75, 85, 99);
-        if (Array.isArray(category.items)) {
-          category.items.forEach((item: string) => {
-            checkPageBreak(7);
-            doc.text(`• ${item}`, margin + 5, yPosition);
-            yPosition += 5;
-          });
-        }
-        yPosition += 5;
+        writeResourceCategory(String(category?.category ?? 'Resources'), category?.items);
       });
+    } else if (typeof report.resources === 'object') {
+      const r: any = report.resources;
+      writeResourceCategory('Platforms', r.platforms);
+      writeResourceCategory('Learning Resources', r.learningResources);
+      writeResourceCategory('Tools', r.tools);
+      writeResourceCategory('Communities', r.communities);
     }
   }
 
