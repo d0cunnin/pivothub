@@ -67,7 +67,23 @@ export default function SideIncomeBlueprint() {
   }, [searchParams]);
 
   const handleStartAssessment = async () => {
-    // No auth or credit checks - free to use
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to generate your Earn It Blueprint.",
+      });
+      navigate('/auth?redirect=/earnit');
+      return;
+    }
+    if (typeof remainingRequests === 'number' && remainingRequests < 2) {
+      toast({
+        title: "Not enough credits",
+        description: `This blueprint uses 2 Tool Credits. You have ${remainingRequests} remaining.`,
+        variant: "destructive",
+      });
+      navigate('/pricing');
+      return;
+    }
     setStep('assessment');
   };
 
@@ -225,10 +241,10 @@ export default function SideIncomeBlueprint() {
                 <CardTitle className="text-xl mb-4 text-center text-foreground">Get Your Blueprint</CardTitle>
                 <CardContent className="p-0 space-y-3">
                   <p className="text-foreground text-sm leading-relaxed">
-                    <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. No waiting, no manual review—your custom plan is generated immediately and <strong>included with your subscription</strong>.
+                    <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. Your custom plan is generated immediately using <strong>2 Tool Credits</strong> from your plan.
                   </p>
                   <p className="text-foreground text-sm leading-relaxed">
-                    Download it as PDF and access your blueprint anytime from any device. <strong>Get started right now with no barriers.</strong>
+                    Download it as PDF and access your blueprint anytime from any device.
                   </p>
                   <div className="mt-4 p-3 bg-success/10 rounded-lg">
                     <p className="text-xs text-foreground font-medium">
@@ -275,8 +291,8 @@ export default function SideIncomeBlueprint() {
 
               <div className="mb-8">
                 <div className="inline-block p-6 bg-gradient-card rounded-2xl border-2 border-primary/20">
-                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">INCLUDED</span>
-                  <p className="text-sm text-muted-foreground mt-2">Account required</p>
+                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">2 CREDITS</span>
+                  <p className="text-sm text-muted-foreground mt-2">Sign in required • Uses 2 Tool Credits</p>
                 </div>
               </div>
 

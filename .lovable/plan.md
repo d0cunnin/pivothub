@@ -1,41 +1,35 @@
-## Heads up
+# Fix Earn It "Get Your Blueprint" Button
 
-There is currently **no `support@pivothub.io` account** in the database. The 3 existing users are:
+## The problem
 
-- `dandrea.bolden@gmail.com`
-- `johnbcodes@gmail.com`
-- `stepstovictory1@gmail.com`
+The "Get Your Blueprint" button on `/earnit` opens the assessment for anyone, but the underlying edge function (`generate-side-income-report`) requires:
+1. An authenticated user (returns 401 "Auth session missing" otherwise)
+2. 2 available Tool Credits
 
-So "delete everyone except support@pivothub.io" effectively means: **delete all 3 existing users**, then you sign up fresh with `support@pivothub.io`. Because of the `auto_grant_first_user_admin` trigger, the first account created after the wipe automatically becomes admin — so signing up with `support@pivothub.io` next will make it the admin.
+Currently `handleStartAssessment` has a comment `// No auth or credit checks - free to use` and skips both checks. So a logged‑out visitor (or one with 0 credits) can complete the 8‑minute assessment, then sees a generic "Report Generation Failed" toast at the very end.
 
-## Plan
+The edge function logs confirm this: `❌ Authentication failed: Auth session missing!`
 
-1. **Create a one-time admin edge function** `admin-purge-users` that:
-   - Verifies the caller (or accepts a one-time secret) — since no admin exists right now, gate it via a hard-coded `PURGE_TOKEN` secret you'll provide (or simply allow it once and remove the function after).
-   - Uses the service role to call `supabase.auth.admin.listUsers()` and `supabase.auth.admin.deleteUser(id)` for every user whose email is **not** `support@pivothub.io`.
-   - Deleting the auth user cascades to `profiles`, `users`, `subscribers_public`, `subscribers_secure` (via `on delete cascade` on the FK to `auth.users`).
-   - Also cleans any orphaned rows in tables keyed by `user_id` without a FK (e.g. `assessment_results`, `tool_usage_analytics`, `user_roles`, etc.) for safety.
+## The fix
 
-2. **Invoke the function once** from the chat (I'll curl it after deploy) to wipe the 3 accounts.
+### 1. `src/pages/EarnIt.tsx` — gate the start button
+Update `handleStartAssessment` to:
+- If `!user`, show a toast ("Please sign in to generate your blueprint") and `navigate('/auth?redirect=/earnit')` instead of starting the assessment.
+- If logged in but `remainingRequests < 2`, show a toast ("This blueprint uses 2 credits — you have X remaining") and route to `/pricing`.
+- Only set `step = 'assessment'` when both checks pass.
+- Remove the misleading "No auth or credit checks - free to use" comment and the "INCLUDED / no barriers" copy near the CTA so the UI matches reality (account + 2 credits required).
 
-3. **You then sign up** at `/auth` using `support@pivothub.io`. The `auto_grant_first_user_admin` trigger fires because `user_roles` will be empty, so that account gets the `admin` role automatically.
+### 2. `src/components/SideIncomeReport.tsx` — better error surfacing
+When the edge function returns an error response, the current code throws a generic message. Improve the catch block to:
+- Detect `error.message` containing "401" / "Authentication required" → toast "Please sign in again" and redirect to `/auth`.
+- Detect "Insufficient credits" → toast with remaining count and link to `/pricing`.
+- Otherwise keep the existing retry UI.
 
-4. **Delete the purge function** after use so it can't be re-triggered.
+### 3. Verify behavior in the preview
+After the edits, sign in as `support@pivothub.io`, click "Get Your Blueprint", confirm the assessment opens and the report generates. Then sign out, click the button, and confirm we are redirected to `/auth` instead of getting a silent failure at the end.
 
-### Technical details
+## Notes / scope
 
-- Edge function path: `supabase/functions/admin-purge-users/index.ts`
-- Uses `SUPABASE_SERVICE_ROLE_KEY` (already in secrets)
-- Config: `verify_jwt = false` (one-time admin script, gated by a token header)
-- Cleanup SQL the function will run via service role:
-  ```sql
-  DELETE FROM public.user_roles WHERE user_id NOT IN (SELECT id FROM auth.users);
-  DELETE FROM public.assessment_results WHERE user_id NOT IN (SELECT id FROM auth.users);
-  -- etc. for any user-scoped tables without FK cascade
-  ```
-
-### Why a function instead of just SQL
-
-`auth.users` is a Supabase-reserved schema — direct `DELETE FROM auth.users` via migrations is blocked / unsafe. The official path is `supabase.auth.admin.deleteUser()`, which only works from a service-role context (an edge function).
-
-Approve and I'll build + run it, then remove it.
+- No database, RLS, or edge‑function changes needed — the edge function is already correctly enforcing auth and credits.
+- No changes to the Auth flow, Google OAuth, or admin role assignment.
+- This is the same root cause pattern likely affecting any other tool page that says "free to use" while its edge function requires credits; out of scope for this change but worth a follow‑up audit.
