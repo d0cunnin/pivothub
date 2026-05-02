@@ -67,7 +67,23 @@ export default function SideIncomeBlueprint() {
   }, [searchParams]);
 
   const handleStartAssessment = async () => {
-    // No auth or credit checks - free to use
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to generate your Earn It Blueprint.",
+      });
+      navigate('/auth?redirect=/earnit');
+      return;
+    }
+    if (typeof remainingRequests === 'number' && remainingRequests < 2) {
+      toast({
+        title: "Not enough credits",
+        description: `This blueprint uses 2 Tool Credits. You have ${remainingRequests} remaining.`,
+        variant: "destructive",
+      });
+      navigate('/pricing');
+      return;
+    }
     setStep('assessment');
   };
 

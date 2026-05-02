@@ -81,9 +81,28 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
       }
     } catch (error: any) {
       console.error('❌ Error generating report:', error);
+      const msg = (error?.message || '').toString();
+      if (msg.includes('401') || /authentication required/i.test(msg) || /auth session/i.test(msg)) {
+        toast({
+          title: "Sign in required",
+          description: "Your session expired. Please sign in again to generate your blueprint.",
+          variant: "destructive",
+        });
+        window.location.href = '/auth?redirect=/earnit';
+        return;
+      }
+      if (/insufficient credits/i.test(msg) || /limit_exceeded/i.test(msg)) {
+        toast({
+          title: "Not enough credits",
+          description: "This blueprint uses 2 Tool Credits. Upgrade your plan to continue.",
+          variant: "destructive",
+        });
+        window.location.href = '/pricing';
+        return;
+      }
       toast({
         title: "Report Generation Failed",
-        description: error.message || "An unexpected error occurred. Please try again.",
+        description: msg || "An unexpected error occurred. Please try again.",
         variant: "destructive"
       });
     } finally {
