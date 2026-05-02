@@ -1,35 +1,59 @@
-# Fix Earn It "Get Your Blueprint" Button
+# Fix Earn It Auth Failure In Edge Function
 
-## The problem
+## What the screenshots and logs show
 
-The "Get Your Blueprint" button on `/earnit` opens the assessment for anyone, but the underlying edge function (`generate-side-income-report`) requires:
-1. An authenticated user (returns 401 "Auth session missing" otherwise)
-2. 2 available Tool Credits
+You signed in as the admin and completed the assessment, but the report screen shows **"Unable to Generate Your Blueprint"** with code `REPORT_GEN_FAIL`.
 
-Currently `handleStartAssessment` has a comment `// No auth or credit checks - free to use` and skips both checks. So a logged‑out visitor (or one with 0 credits) can complete the 8‑minute assessment, then sees a generic "Report Generation Failed" toast at the very end.
+The edge function logs (`generate-side-income-report`) show the real cause:
 
-The edge function logs confirm this: `❌ Authentication failed: Auth session missing!`
+```
+2026-05-02T02:09:14Z ERROR ❌ Authentication failed: Auth session missing!
+```
+
+Even though you are logged in, the function cannot recover your user from the request.
+
+## Root cause
+
+In `supabase/functions/generate-side-income-report/index.ts` the function does:
+
+```ts
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  global: { headers: { Authorization: req.headers.get('Authorization')! } }
+});
+const { data: { user } } = await supabase.auth.getUser();   // ← no token argument
+```
+
+With the current Supabase JS SDK, `auth.getUser()` with no argument tries to read a stored session — which doesn't exist in an edge function. It must be called as `auth.getUser(jwt)` with the token pulled from the `Authorization: Bearer ...` header. That's why every request fails with "Auth session missing!" even for authenticated users.
 
 ## The fix
 
-### 1. `src/pages/EarnIt.tsx` — gate the start button
-Update `handleStartAssessment` to:
-- If `!user`, show a toast ("Please sign in to generate your blueprint") and `navigate('/auth?redirect=/earnit')` instead of starting the assessment.
-- If logged in but `remainingRequests < 2`, show a toast ("This blueprint uses 2 credits — you have X remaining") and route to `/pricing`.
-- Only set `step = 'assessment'` when both checks pass.
-- Remove the misleading "No auth or credit checks - free to use" comment and the "INCLUDED / no barriers" copy near the CTA so the UI matches reality (account + 2 credits required).
+### 1. `supabase/functions/generate-side-income-report/index.ts`
+- Read the bearer token from `req.headers.get('Authorization')` and strip the `Bearer ` prefix.
+- If no token, return 401 (same as today).
+- Call `await supabase.auth.getUser(token)` explicitly so the SDK validates the JWT instead of looking for a non-existent session.
+- Add a small log `🔐 Auth header present / token length` so future failures are easier to diagnose.
 
-### 2. `src/components/SideIncomeReport.tsx` — better error surfacing
-When the edge function returns an error response, the current code throws a generic message. Improve the catch block to:
-- Detect `error.message` containing "401" / "Authentication required" → toast "Please sign in again" and redirect to `/auth`.
-- Detect "Insufficient credits" → toast with remaining count and link to `/pricing`.
-- Otherwise keep the existing retry UI.
+No other logic changes — the rest of the function (credit check via `check_and_increment_ai_usage`, AI call, JSON parsing, response shaping) stays the same.
 
-### 3. Verify behavior in the preview
-After the edits, sign in as `support@pivothub.io`, click "Get Your Blueprint", confirm the assessment opens and the report generates. Then sign out, click the button, and confirm we are redirected to `/auth` instead of getting a silent failure at the end.
+### 2. Deploy the function and verify
+- Deploy `generate-side-income-report`.
+- Tail its logs and re-run the Earn It assessment as `support@pivothub.io`.
+- Expected new logs: `🔐 Auth header present: true ...` then `✅ User authenticated: <uuid>` then `✅ Credits deducted: 2`.
+- Expected UI: the report renders instead of the REPORT_GEN_FAIL screen.
+
+### 3. Audit other edge functions for the same bug (follow-up, same change)
+Several other functions appear to use the same `getUser()`-without-token pattern and likely fail the same way for any logged-in user. After confirming the Earn It fix, apply the identical token-extraction change to:
+
+- `generate-grant-content`, `generate-grant-readiness`
+- `generate-event-plan`, `generate-schedule`, `generate-garden-plan`, `generate-program-design`, `generate-stakeholder-plan`
+- `generate-launch-strategy`, `generate-legal-docs`, `generate-business-content`, `generate-teaching-content`, `generate-capability-statement`, `generate-contract-readiness`
+- `act-it`, `code-it`, `deploy-it`, `prompt-it`, `speak-it`, `study-it`, `community-dev-coach`
+- `interview-feedback`, `interview-questions`, `resume-analyzer`, `enhanced-assessment-analyzer`, `tech-readiness-assessment`, `personality-assessment`, `skills-assessment`, `career-assessment`, `generate-community-assessment`, `generate-side-income-report` (already covered), `generate-logo`, `name-checker`, `business-mentor`, `business-resources`, `career-advisor`, `grant-finder`, `grant-resources`, `social-media-content`, `startup-checklist`
+
+I'll grep each one and only change the ones that exhibit the bad pattern; functions that don't require auth or already pass the token correctly will be skipped.
 
 ## Notes / scope
 
-- No database, RLS, or edge‑function changes needed — the edge function is already correctly enforcing auth and credits.
-- No changes to the Auth flow, Google OAuth, or admin role assignment.
-- This is the same root cause pattern likely affecting any other tool page that says "free to use" while its edge function requires credits; out of scope for this change but worth a follow‑up audit.
+- No database, RLS, or migration changes.
+- No frontend changes — `supabase.functions.invoke()` already attaches the Authorization header correctly.
+- No changes to Google OAuth, sign-in flow, or admin role assignment.
