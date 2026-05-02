@@ -498,3 +498,11 @@ function SideIncomeBlueprintInner() {
     </div>
   );
 }
+
+export default function SideIncomeBlueprint() {
+  return (
+    <ReportErrorBoundary>
+      <SideIncomeBlueprintInner />
+    </ReportErrorBoundary>
+  );
+}
