@@ -550,6 +550,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
           clearTimeout(timeout2);
         } catch (fallbackError) {
           if (fallbackError.name === 'AbortError') {
+            await refundCredits('timeout-fallback');
             return new Response(JSON.stringify({ 
               error: 'Report generation is taking too long. Please try again with shorter responses or contact support.' 
             }), {
