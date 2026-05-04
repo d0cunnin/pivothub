@@ -6,19 +6,26 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Content moderation function using Lovable AI (via OpenAI compatible endpoint)
-async function moderateContent(text: string, apiKey: string): Promise<{ flagged: boolean; categories?: string[] }> {
+// Content moderation via Lovable AI Gateway
+async function moderateContent(text: string, _apiKey: string): Promise<{ flagged: boolean; categories?: string[] }> {
   try {
-    // Use OpenAI moderation API directly for content filtering
-    const response = await fetch('https://api.openai.com/v1/moderations', {
+    const lovableKey = Deno.env.get('LOVABLE_API_KEY') || '';
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('pivothub-openai-key') || ''}`,
+        'Authorization': `Bearer ${lovableKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        input: text,
-        model: 'omni-moderation-latest'
+        model: 'google/gemini-2.5-flash-lite',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a content moderation classifier. Respond ONLY with valid JSON {"flagged": boolean, "categories": string[]}. Flag sexual content involving minors, explicit violence, hate speech, harassment/threats, self-harm encouragement, or instructions for illegal weapons/drugs.'
+          },
+          { role: 'user', content: text }
+        ],
+        response_format: { type: 'json_object' },
       }),
     });
 
@@ -28,13 +35,13 @@ async function moderateContent(text: string, apiKey: string): Promise<{ flagged:
     }
 
     const data = await response.json();
-    const result = data.results?.[0];
-    
-    if (result?.flagged) {
-      const flaggedCategories = Object.keys(result.categories || {})
-        .filter(key => result.categories[key]);
-      console.log('Content flagged:', flaggedCategories);
-      return { flagged: true, categories: flaggedCategories };
+    const raw = data.choices?.[0]?.message?.content;
+    let parsed: { flagged?: boolean; categories?: string[] } | null = null;
+    try { parsed = raw ? JSON.parse(raw) : null; } catch { parsed = null; }
+
+    if (parsed?.flagged) {
+      console.log('Content flagged:', parsed.categories || []);
+      return { flagged: true, categories: parsed.categories || [] };
     }
 
     return { flagged: false };
