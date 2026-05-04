@@ -696,7 +696,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                model: 'gpt-5-mini-2025-08-07',
+                model: 'openai/gpt-5-mini',
                 messages: [
                   { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
                   { role: 'user', content: prompt }
