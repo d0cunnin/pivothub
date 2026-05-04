@@ -689,7 +689,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
             const ctrl2 = new AbortController();
             const t2 = setTimeout(() => ctrl2.abort(), 60000);
             
-            response = await fetch('https://api.openai.com/v1/chat/completions', {
+            response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${openaiApiKey}`,
