@@ -80,14 +80,7 @@ serve(async (req) => {
       throw new Error('LOVABLE_API_KEY not found in environment variables')
     }
 
-    const openaiApiKey = Deno.env.get('PIVOTHUB_OPENAI_KEY');
-    if (!openaiApiKey) {
-      console.error('❌ PIVOTHUB_OPENAI_KEY not configured');
-      return new Response(
-        JSON.stringify({ error: 'OpenAI API key not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    const openaiApiKey = lovableApiKey;
 
     // Get current date for accurate timeline calculations
     const currentDate = new Date().toLocaleDateString('en-US', { 
@@ -673,14 +666,14 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
         
         let response;
         try {
-          response = await fetch('https://api.openai.com/v1/chat/completions', {
+          response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${openaiApiKey}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'gpt-5-2025-08-07',
+              model: 'openai/gpt-5',
               messages: [
                 { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
                 { role: 'user', content: prompt }
@@ -696,14 +689,14 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
             const ctrl2 = new AbortController();
             const t2 = setTimeout(() => ctrl2.abort(), 60000);
             
-            response = await fetch('https://api.openai.com/v1/chat/completions', {
+            response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
               method: 'POST',
               headers: {
                 'Authorization': `Bearer ${openaiApiKey}`,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                model: 'gpt-5-mini-2025-08-07',
+                model: 'openai/gpt-5-mini',
                 messages: [
                   { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
                   { role: 'user', content: prompt }
