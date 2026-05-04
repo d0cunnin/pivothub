@@ -666,7 +666,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
         
         let response;
         try {
-          response = await fetch('https://api.openai.com/v1/chat/completions', {
+          response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${openaiApiKey}`,
