@@ -29,41 +29,45 @@ export async function moderateContent(
   const truncatedText = text.slice(0, 32000);
 
   try {
-    const response = await fetch('https://api.openai.com/v1/moderations', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'omni-moderation-latest',
-        input: truncatedText,
+        model: 'google/gemini-2.5-flash-lite',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a content moderation classifier. Given user text, decide if it contains disallowed content (sexual content involving minors, explicit violence/gore, hate speech, harassment/threats, self-harm encouragement, illegal weapons/drugs instructions). Respond ONLY with valid JSON of the form {"flagged": boolean, "categories": string[]}. Categories must be from: sexual, sexual/minors, hate, hate/threatening, harassment, harassment/threatening, self-harm, violence, violence/graphic, illicit. Empty array if not flagged.'
+          },
+          { role: 'user', content: truncatedText }
+        ],
+        response_format: { type: 'json_object' },
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`OpenAI Moderation API error (${response.status}):`, errorText);
-      
-      // Risk-based failure mode
+      console.error(`Lovable AI moderation error (${response.status}):`, errorText);
+
       if (riskLevel === 'high') {
-        // Fail-closed: Block request for high-risk functions
         await logModeration(truncatedText, functionName, userId, true, ['moderation_service_unavailable']);
         return { flagged: true, categories: ['moderation_service_unavailable'] };
       } else {
-        // Fail-open: Allow request to proceed for medium-risk functions
         await logModeration(truncatedText, functionName, userId, false, ['api_error']);
         return { flagged: false, categories: ['api_error'] };
       }
     }
 
     const data = await response.json();
-    const result = data.results?.[0];
-    
-    if (!result) {
-      console.error('No moderation result returned from OpenAI');
-      
-      // Risk-based failure mode
+    const raw = data.choices?.[0]?.message?.content;
+    let parsed: { flagged?: boolean; categories?: string[] } | null = null;
+    try { parsed = raw ? JSON.parse(raw) : null; } catch { parsed = null; }
+
+    if (!parsed) {
+      console.error('No moderation result returned from Lovable AI');
       if (riskLevel === 'high') {
         await logModeration(truncatedText, functionName, userId, true, ['moderation_error']);
         return { flagged: true, categories: ['moderation_error'] };
@@ -73,12 +77,9 @@ export async function moderateContent(
       }
     }
 
-    const flagged = result.flagged || false;
-    const categories = flagged 
-      ? Object.entries(result.categories || {})
-          .filter(([_, flagged]) => flagged)
-          .map(([category]) => category)
-      : [];
+    const flagged = parsed.flagged === true;
+    const categories = flagged ? (parsed.categories || []) : [];
+
 
     // Log the moderation result
     await logModeration(truncatedText, functionName, userId, flagged, categories);
