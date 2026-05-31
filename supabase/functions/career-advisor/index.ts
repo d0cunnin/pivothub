@@ -254,7 +254,7 @@ EXAMPLES OF PREMIUM VALUE:
           max_completion_tokens: 2000,
         }),
       },
-      30000
+      90000
     );
 
     if (!response.ok) {
