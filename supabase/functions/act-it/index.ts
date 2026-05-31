@@ -279,7 +279,7 @@ Optional creative next steps:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'google/gemini-3-flash-preview',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Generate a comprehensive story development package for "${projectTitle}" - a ${formatLabel} in the ${genres.join('/')} genre.` }
