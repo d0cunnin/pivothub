@@ -149,6 +149,8 @@ export const InterviewQuestionsCoach = () => {
       if (error) {
         throw new Error(error.message || 'Failed to analyze answer');
       }
+      if ((data as any)?.error) throw new Error((data as any).error);
+      if (!data?.feedback) throw new Error('No feedback was returned. Please try again.');
 
       const response_data: Response = {
         questionId: questions[currentQuestionIndex].id,
