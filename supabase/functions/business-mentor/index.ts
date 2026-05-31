@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts";
+import { moderateContent } from "../_shared/moderation.ts";
 
 // Input validation schema
 const chatMessageSchema = z.object({
