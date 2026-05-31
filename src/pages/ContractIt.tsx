@@ -261,7 +261,9 @@ const ContractIt = () => {
       });
 
       if (error) throw error;
-      
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
+
       setCapabilityResult(data);
       toast.success("Capability Statement generated successfully!");
     } catch (error: any) {
