@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
 import { moderateContent } from "../_shared/moderation.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Input validation schema
 const skillsAssessmentSchema = z.object({
@@ -814,7 +815,7 @@ Analyze the user's responses comprehensively to create a professional-grade skil
 
     let assessment;
     try {
-      assessment = JSON.parse(data.choices[0].message.content);
+      assessment = JSON.parse(extractContent(data));
       
       // Log success
       await logRequest(supabase, {

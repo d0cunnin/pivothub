@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const teachingContentSchema = z.object({
@@ -742,7 +743,7 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
         }
 
         const aiResponse = JSON.parse(text);
-        const fullContent = aiResponse.choices[0].message.content;
+        const fullContent = extractContent(aiResponse);
         
         if (!fullContent) {
           console.error('[generate-teaching-content] AI response missing content');
@@ -1064,7 +1065,7 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       throw new Error(result.error.message)
     }
 
-    let content = result.choices[0].message.content
+    let content = extractContent(result)
 
     // Preserve markdown structure, clean only excessive formatting
     content = content

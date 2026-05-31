@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const interviewQuestionsSchema = z.object({
@@ -353,7 +354,7 @@ QUALITY STANDARDS:
 
     let questions;
     try {
-      const aiResponse = data.choices[0].message.content;
+      const aiResponse = extractContent(data);
       // Sanitize and parse JSON
       const sanitizedContent = aiResponse
         .replace(/^#{1,6}\s+/gm, '') // Remove markdown headers
@@ -366,7 +367,7 @@ QUALITY STANDARDS:
       questions = JSON.parse(sanitizedContent);
     } catch (parseError) {
       // Fallback if JSON parsing fails
-      const content = data.choices[0].message.content;
+      const content = extractContent(data);
       questions = [
         {
           id: '1',

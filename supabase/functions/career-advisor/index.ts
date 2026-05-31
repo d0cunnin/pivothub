@@ -5,6 +5,7 @@ import { guard, logRequest, corsHeaders } from "../_shared/guard.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts"
 import { moderateContent } from "../_shared/moderation.ts"
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -264,7 +265,7 @@ EXAMPLES OF PREMIUM VALUE:
 
     const data = await response.json();
 
-    const aiResponse = data.choices[0].message.content
+    const aiResponse = extractContent(data)
     
     // Sanitize AI response to remove markdown formatting
     const sanitizedResponse = aiResponse

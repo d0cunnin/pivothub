@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
+import { extractContent } from "../_shared/aiResponse.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -525,7 +526,7 @@ FORMATTING REQUIREMENTS:
     }
 
     const lovableData = await lovableResponse.json();
-    const generatedPlan = lovableData.choices[0].message.content;
+    const generatedPlan = extractContent(lovableData);
 
     return new Response(
       JSON.stringify({

@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 serve(async (req) => {
   const startTime = Date.now();
@@ -366,7 +367,7 @@ Format as formal operating agreement.`;
       }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    let document = data.choices[0].message.content;
+    let document = extractContent(data);
 
     // Sanitize to remove markdown
     document = document

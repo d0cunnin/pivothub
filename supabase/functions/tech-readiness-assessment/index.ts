@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0';
+import { extractContent } from "../_shared/aiResponse.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -263,7 +264,7 @@ OUTPUT FORMAT (JSON only, no additional text):
     }
 
     const aiData = await response.json();
-    const analysisText = aiData.choices[0].message.content;
+    const analysisText = extractContent(aiData);
     
     let analysis;
     try {

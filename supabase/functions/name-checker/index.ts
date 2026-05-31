@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema with strict limits
 const nameCheckerSchema = z.object({
@@ -293,7 +294,7 @@ QUALITY STANDARDS:
         const aiData = await response.json();
         if (response.ok) {
           try {
-            similarNames = JSON.parse(aiData.choices[0].message.content);
+            similarNames = JSON.parse(extractContent(aiData));
           } catch (parseError) {
             similarNames = [];
           }
