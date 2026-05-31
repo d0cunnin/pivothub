@@ -56,13 +56,17 @@ export const StartupChecklist = () => {
       });
 
       if (error) throw error;
-      if (!data?.checklist) throw new Error('No checklist received');
+      if ((data as any)?.error) throw new Error((data as any).error);
+      if (!data?.checklist || !Array.isArray(data.checklist.phases)) {
+        throw new Error('No checklist received');
+      }
 
       // Transform AI response to match existing interface
       const transformedChecklist: ChecklistItem[] = [];
       let idCounter = 1;
 
       data.checklist.phases.forEach((phase: any) => {
+        if (!Array.isArray(phase?.tasks)) return;
         phase.tasks.forEach((task: any) => {
           transformedChecklist.push({
             id: idCounter.toString(),
