@@ -1,65 +1,35 @@
-# Phase B: Safe AI Response Parsing
+# Smoke Test: All 21 AI Edge Functions
 
-Goal: eliminate `data.choices[0].message.content` crashes in edge functions by funneling every Lovable AI Gateway response through one helper that fails loudly with a clear error.
+Goal: invoke every AI edge function once with a minimal valid payload (as the logged-in preview user) and confirm each returns a non-empty, well-shaped response rather than an `extractContent` throw, an upstream gateway error, or a blank body.
 
-## 1. Create the shared helper
+## Approach
 
-New file: `supabase/functions/_shared/aiResponse.ts`
+For each function, call it via the authenticated edge-function HTTP path using a tiny but schema-valid input. Capture:
+- HTTP status
+- whether the response body has the expected content field (text/array/object)
+- any `error` field
+- approximate latency
 
-```ts
-export function extractContent(data: unknown): string {
-  const content =
-    (data as any)?.choices?.[0]?.message?.content;
+Then report a pass/fail table. Failures will include the error message so we know whether it's a 402/429 (credits/rate), a missing input field, a gateway timeout, or a real bug.
 
-  if (typeof content !== "string" || content.trim().length === 0) {
-    throw new Error("AI gateway returned an empty response");
-  }
+## Functions to test (21)
 
-  return content;
-}
+`act-it`, `study-it`, `speak-it`, `career-advisor`, `business-mentor`, `career-assessment`, `personality-assessment`, `skills-assessment`, `tech-readiness-assessment`, `enhanced-assessment-analyzer`, `startup-checklist`, `social-media-content`, `business-resources`, `name-checker`, `grant-finder`, `generate-grant-content`, `generate-launch-strategy`, `generate-legal-docs`, `generate-business-content`, `generate-teaching-content`, `interview-questions`, `interview-feedback`, `resume-analyzer`.
 
-// For endpoints that expect JSON in the model output
-export function extractJson<T = unknown>(data: unknown): T {
-  const raw = extractContent(data);
-  // Strip ```json fences if the model wrapped output
-  const cleaned = raw
-    .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```\s*$/i, "")
-    .trim();
-  try {
-    return JSON.parse(cleaned) as T;
-  } catch {
-    throw new Error("AI gateway returned malformed JSON");
-  }
-}
-```
+(That's the full set with `extractContent` rolled out; minor pruning if any function isn't user-callable on its own.)
 
-## 2. Roll out across edge functions
+## Inputs
 
-Scope: every function under `supabase/functions/*` that reads `choices[0].message.content` from a Lovable AI Gateway chat completion response. Expected ~19 call sites based on prior audit.
+Use the smallest realistic payload each function accepts. I'll read each function's input validator (zod schema or manual checks) first, then build the minimum body. Examples:
+- `act-it`: short scene prompt
+- `name-checker`: one candidate business name
+- `grant-finder`: brief org description + region
+- `interview-questions`: role + level
 
-For each function:
-- `import { extractContent } from "../_shared/aiResponse.ts";` (or `extractJson` when the call site immediately `JSON.parse`s the content).
-- Replace `const content = data.choices[0].message.content;` (and variants) with `const content = extractContent(data);`.
-- Replace manual `JSON.parse(data.choices[0].message.content)` with `extractJson<ShapeType>(data)` and remove the now-redundant fence-stripping / try-catch where it duplicates the helper.
-- Leave upstream HTTP-status handling (429/402/5xx) untouched — the helper only addresses malformed/empty 200 bodies.
+## Cost note
 
-Out of scope:
-- Functions that don't call the chat-completions endpoint (image generation, embeddings, non-AI utilities).
-- Streaming responses (none of the current functions stream).
-- Response envelope redesign (deferred per user instruction).
+Each call consumes 1+ Tool Credits on your account. Total: ~25-30 credits across the run. Calls run sequentially with a 1s gap to avoid IP throttle.
 
-## 3. Verification
+## Deliverable
 
-- Build passes (`npm run build`).
-- Spot-check 3 representative functions by calling them through `supabase--curl_edge_functions`:
-  1. `act-it` — happy path returns content.
-  2. `fund-it` — JSON parsing path returns structured grant data.
-  3. `career-advisor` — moderation + chat path still works.
-- For each, confirm a thrown `extractContent` error surfaces as a clean JSON error envelope (already guaranteed by Phase A frontend guards → toast, no blank screen).
-
-## Technical notes
-
-- Helper lives in `_shared/` so every function can import it via relative path; matches the existing `_shared/moderation.ts` pattern.
-- `extractJson` is additive — only adopted where the function was already doing `JSON.parse` on the content. Functions returning prose stay on `extractContent`.
-- No DB migrations, no schema changes, no frontend changes.
+A single pass/fail table in chat, plus the raw error string for any failure. No code changes in this phase — if a function fails, we'll triage in a follow-up.
