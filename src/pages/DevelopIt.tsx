@@ -439,6 +439,8 @@ const DevelopIt = () => {
         }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.response) throw new Error('No response returned. Please try again.');
       setCoachMessages(prev => [...prev, { role: "assistant", content: data.response }]);
     } catch (error: any) {
       console.error("Error with coach:", error);
