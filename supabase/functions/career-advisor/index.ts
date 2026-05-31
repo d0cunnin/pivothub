@@ -240,32 +240,40 @@ EXAMPLES OF PREMIUM VALUE:
       { role: "user", content: message }
     ]
 
-    const response = await fetchWithTimeout(
-      'https://ai.gateway.lovable.dev/v1/chat/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
+    const callModel = async (model: string, maxTokens: number) => {
+      const r = await fetchWithTimeout(
+        'https://ai.gateway.lovable.dev/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${lovableApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model,
+            messages,
+            max_completion_tokens: maxTokens,
+          }),
         },
-        body: JSON.stringify({
-          model: 'openai/gpt-5',
-          messages,
-          max_completion_tokens: 2000,
-        }),
-      },
-      90000
-    );
+        90000
+      );
+      if (!r.ok) {
+        const errorText = await r.text();
+        console.error(`Lovable AI error (${model}):`, r.status, errorText);
+        throw new Error(`Lovable AI error: ${r.status} - ${errorText.slice(0, 200)}`);
+      }
+      return await r.json();
+    };
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
+    let aiResponse: string;
+    try {
+      const data = await callModel('openai/gpt-5', 4000);
+      aiResponse = extractContent(data);
+    } catch (primaryErr) {
+      console.warn('GPT-5 failed, falling back to Gemini:', primaryErr instanceof Error ? primaryErr.message : primaryErr);
+      const data = await callModel('google/gemini-2.5-flash', 2000);
+      aiResponse = extractContent(data);
     }
-
-    const data = await response.json();
-
-    const aiResponse = extractContent(data)
     
     // Sanitize AI response to remove markdown formatting
     const sanitizedResponse = aiResponse

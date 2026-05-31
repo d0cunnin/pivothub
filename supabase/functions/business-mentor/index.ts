@@ -283,9 +283,8 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    let response;
-    try {
-      response = await fetchWithTimeout(
+    const callModel = async (model: string, maxTokens: number) => {
+      const r = await fetchWithTimeout(
         'https://ai.gateway.lovable.dev/v1/chat/completions',
         {
           method: 'POST',
@@ -294,13 +293,31 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'openai/gpt-5',
-            messages: messages,
-            max_completion_tokens: 2000,
+            model,
+            messages,
+            max_completion_tokens: maxTokens,
           }),
         },
         90000
       );
+      if (!r.ok) {
+        const errorText = await r.text();
+        console.error(`Lovable AI error (${model}):`, r.status, errorText);
+        throw new Error(`Lovable AI error: ${r.status}`);
+      }
+      return await r.json();
+    };
+
+    let aiResponse: string;
+    try {
+      try {
+        const data = await callModel('openai/gpt-5', 4000);
+        aiResponse = extractContent(data);
+      } catch (primaryErr) {
+        console.warn('GPT-5 failed, falling back to Gemini:', primaryErr instanceof Error ? primaryErr.message : primaryErr);
+        const data = await callModel('google/gemini-2.5-flash', 2000);
+        aiResponse = extractContent(data);
+      }
     } catch (error) {
       await logRequest(supabaseClient, {
         userId,
@@ -309,10 +326,9 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
         userAgent: req.headers.get('user-agent') || 'unknown',
         creditsCharged: 0,
         success: false,
-        errorMessage: error instanceof AIError ? error.message : 'AI request failed',
+        errorMessage: error instanceof AIError ? error.message : (error instanceof Error ? error.message : 'AI request failed'),
         requestDurationMs: Date.now() - startTime
       });
-      
       return handleAIError(error, corsHeaders, {
         endpoint: 'business-mentor',
         userId,
@@ -320,19 +336,6 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
       });
     }
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Lovable AI error:', errorData);
-      throw new Error(`Lovable AI error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      throw new Error('Invalid response from OpenAI API');
-    }
-
-    const aiResponse = extractContent(data);
 
     // Clean up the response
     const sanitizedResponse = aiResponse
