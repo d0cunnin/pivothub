@@ -69,7 +69,7 @@ Deno.serve(async (req) => {
     }
 
     // Moderate content
-    const moderation = await moderateContent(topic, supabase, userId, 'study-it');
+    const moderation = await moderateContent(topic, 'study-it', userId, 'medium');
     if (moderation.flagged) {
       return new Response(JSON.stringify({ 
         error: 'Content flagged by moderation',

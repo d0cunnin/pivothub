@@ -1,36 +1,59 @@
-## Goal
+# Fix remaining AI tool bugs + harden gateway calls
 
-Apply the same fixes Claude diagnosed locally, directly in Lovable, so you don't need the patch or GitHub push. Two categories: (1) broken backend AI calls returning 500/401, (2) frontend tools that white-screen instead of showing the error.
+## Phase 1 — Real bugs (high priority)
 
-## Backend fixes (edge functions)
+### 1. `supabase/functions/contact-chatbot/index.ts`
+- Remove the local duplicated `moderateContent()` function (lines ~10–48).
+- Import the canonical helper: `import { moderateContent } from "../_shared/moderation.ts"`.
+- Update the call site (~line 213) to the correct signature: `moderateContent(lastUserMessage.content, 'contact-chatbot', userId, 'low')`.
+- This restores moderation logging + reputation updates.
 
-1. **`act-it/index.ts`, `study-it/index.ts`** — replace `google/gemini-3-flash-preview` (not valid on the gateway) with `google/gemini-2.5-flash`. Also make the fallback trigger on HTTP errors, not just timeouts.
-2. **`generate-event-plan/index.ts`** — stop using `openai/gpt-4o` (invalid here). Use `openai/gpt-5-mini`.
-3. **`_shared/providerRouter.ts`** — change default text model from `openai/gpt-4o` to `openai/gpt-5-mini` so other callers also stop returning invalid models.
-4. **`career-advisor/index.ts`, `business-mentor/index.ts`** — moderation calls hit `api.openai.com` with the Lovable key (401, silently dead). Route through the Lovable AI Gateway (`google/gemini-2.5-flash-lite`, JSON `{flagged, categories}`), keep fail-open behavior.
-5. **`_shared/moderation.ts`, `contact-chatbot/index.ts`, `generate-teaching-content/index.ts`** — already in `.lovable/plan.md`: remove `pivothub-openai-key` / `PIVOTHUB_OPENAI_KEY` references, route through the gateway with `LOVABLE_API_KEY`. Map `gpt-5-2025-08-07` → `openai/gpt-5`, `gpt-5-mini-2025-08-07` → `openai/gpt-5-mini`.
+### 2. `supabase/functions/study-it/index.ts`
+- Fix wrong argument order at line 72.
+- Change `moderateContent(topic, supabase, userId, 'study-it')` → `moderateContent(topic, 'study-it', userId, 'medium')`.
+- Eliminates `[object Object]` log entries and a potential runtime throw.
 
-## Frontend fixes (error surfacing)
+## Phase 2 — Resilience migration (medium priority)
 
-These tools dereference `data` without checking `data.error`, so a backend error renders as a blank page (and PDFs are blank because there's no content):
+Migrate ~30 edge functions from bare `fetch()` against the Lovable AI Gateway to the shared `fetchWithTimeout()` + `handleAIError()` helpers in `_shared/aiTimeout.ts`. This converts opaque 500s on 402 (credits)/429 (rate limit)/timeout into structured errors the frontend already knows how to surface.
 
-- `src/pages/ActIt.tsx`
-- `src/pages/SpeakIt.tsx`
-- `src/pages/StudyIt.tsx`
-- `src/pages/DevelopIt.tsx`
-- `src/pages/ContractIt.tsx`
-- `src/components/LogoGenerator.tsx`
-- `src/components/EnhancedInterviewCoach.tsx`
-- `src/components/TechReadinessAssessment.tsx`
+Pattern, applied identically per function:
 
-For each: after `supabase.functions.invoke(...)`, check `data?.error` and missing-result, surface via the existing toast pattern, and bail before rendering. No layout changes.
+```ts
+import { fetchWithTimeout, handleAIError } from "../_shared/aiTimeout.ts";
+
+try {
+  const resp = await fetchWithTimeout(
+    "https://ai.gateway.lovable.dev/v1/chat/completions",
+    { method: "POST", headers: {...}, body: JSON.stringify({...}) },
+    60000
+  );
+  // existing parsing
+} catch (err) {
+  return handleAIError(err, corsHeaders, "<function-name>");
+}
+```
+
+Target functions (group by tool area):
+- Build It: `generate-business-content`, `generate-logo`, `name-checker`, `startup-checklist`
+- Fund It: `generate-grant-content`, `grant-finder`, `generate-grant-readiness`
+- Contract It / Develop It: `generate-capability-statement`, `generate-program-design`, `generate-community-assessment`, `generate-stakeholder-plan`, `community-dev-coach`
+- Host It / Garden It: `generate-garden-plan`
+- Earn It / Teaching: `generate-side-income-report`, `generate-teaching-content`, `generate-legal-docs`, `generate-launch-strategy`, `social-media-content`, `business-resources`
+- Story/Speak/Study: `act-it`, `speak-it`, `study-it`, `prompt-it`, `code-it`, `deploy-it`
+- Prep It / Assess It: `resume-analyzer`, `interview-questions`, `interview-feedback`, `career-assessment`, `skills-assessment`, `personality-assessment`, `enhanced-assessment-analyzer`
+
+## Phase 3 — Cleanup (low priority)
+- Delete unused `src/lib/runware.ts` (no call sites, no key configured).
 
 ## Out of scope
-
-- No schema, RLS, or config changes.
-- Not touching the ~10 other tools defensively in this pass — we'll do that only if errors persist after this fix surfaces real messages.
-- Rate-limit (5/min guard) behavior unchanged; with the new error surfacing, 429s will now show as a toast instead of a white screen.
+- No DB schema, RLS, or `verify_jwt` changes.
+- No model swaps beyond what's already fixed.
+- No frontend changes (Phase 1's frontend error-surfacing landed in the previous pass).
 
 ## Validation
+- After Phase 1: trigger Contact chatbot + Study It; confirm `moderation_log` rows have correct `function_name` and no `[object Object]`.
+- After Phase 2: hit one migrated tool while gateway returns 429 (or simulate); confirm frontend toast shows "Rate limit" / "Credits exhausted" instead of generic error.
 
-After implementation: open Act It, Study It, Speak It, Logo, Develop It, Contract It, Interview Coach, Tech Readiness in the preview, trigger one generation each, confirm either a result or a visible error toast (no white screens). Spot-check edge function logs for the four moderation-touching functions to confirm no more `api.openai.com` 401s.
+## Recommended scope for this build
+Run **Phase 1 only** now (fast, fixes the 2 actual broken tools). Phase 2 is a larger sweep — confirm before I touch ~30 files.
