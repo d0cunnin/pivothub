@@ -340,6 +340,8 @@ const DevelopIt = () => {
         body: { formData: programForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setProgramResult(data);
       toast.success("Program Design generated successfully!");
     } catch (error: any) {
@@ -361,6 +363,8 @@ const DevelopIt = () => {
         body: { formData: grantForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setGrantResult(data);
       toast.success("Grant Readiness assessment complete!");
     } catch (error: any) {
@@ -382,6 +386,8 @@ const DevelopIt = () => {
         body: { formData: assessmentForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setAssessmentResult(data);
       toast.success("Community Assessment generated!");
     } catch (error: any) {
@@ -403,6 +409,8 @@ const DevelopIt = () => {
         body: { formData: stakeholderForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setStakeholderResult(data);
       toast.success("Stakeholder Engagement Plan generated!");
     } catch (error: any) {
@@ -431,6 +439,8 @@ const DevelopIt = () => {
         }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.response) throw new Error('No response returned. Please try again.');
       setCoachMessages(prev => [...prev, { role: "assistant", content: data.response }]);
     } catch (error: any) {
       console.error("Error with coach:", error);

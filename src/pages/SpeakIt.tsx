@@ -140,6 +140,8 @@ const SpeakIt = () => {
       });
 
       if (response.error) throw response.error;
+      if (response.data?.error) throw new Error(response.data.error);
+      if (!response.data?.plan) throw new Error('No plan was returned. Please try again.');
 
       setGeneratedPlan(response.data.plan);
       setShowResults(true);

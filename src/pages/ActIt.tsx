@@ -123,6 +123,8 @@ const ActIt = () => {
       });
 
       if (response.error) throw response.error;
+      if (response.data?.error) throw new Error(response.data.error);
+      if (!response.data?.concept) throw new Error('No story concept was returned. Please try again.');
 
       setGeneratedConcept(response.data.concept);
       setShowResults(true);

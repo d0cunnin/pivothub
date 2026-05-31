@@ -57,6 +57,8 @@ const StudyIt = () => {
       });
 
       if (response.error) throw response.error;
+      if (response.data?.error) throw new Error(response.data.error);
+      if (!response.data?.content) throw new Error('No content was returned. Please try again.');
 
       setGeneratedContent(response.data.content);
       setShowResults(true);

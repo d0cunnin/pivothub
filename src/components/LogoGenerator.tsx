@@ -59,6 +59,7 @@ export const LogoGenerator = () => {
       });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
       if (!data?.logos) throw new Error('No logos received');
 
       // Convert API response to LogoConcept format, filtering out failed generations

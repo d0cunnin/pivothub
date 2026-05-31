@@ -194,7 +194,7 @@ A list of key New Testament references connected to the topic.
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'google/gemini-3-flash-preview',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Generate a structured biblical reference for the topic: "${topic.trim()}"` }
