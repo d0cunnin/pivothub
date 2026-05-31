@@ -4,6 +4,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const assessmentAnalyzerSchema = z.object({
@@ -101,7 +102,7 @@ serve(async (req) => {
 
     const data = await response.json();
 
-    const content = data.choices[0].message.content;
+    const content = extractContent(data);
     console.log('AI Response received:', content.substring(0, 200) + '...');
     
     let analysis;

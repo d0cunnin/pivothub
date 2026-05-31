@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -296,7 +297,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
       }
 
       const aiData = await aiResponse.json();
-      let aiContent = aiData.choices[0].message.content;
+      let aiContent = extractContent(aiData);
       
       // Strip markdown code fences if present
       aiContent = aiContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();

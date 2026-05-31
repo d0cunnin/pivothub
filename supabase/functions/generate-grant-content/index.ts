@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const grantDataSchema = z.object({
@@ -257,10 +258,10 @@ Return ONLY JSON as specified (no preamble).`;
 
     let grantContent;
     try {
-      grantContent = JSON.parse(data.choices[0].message.content);
+      grantContent = JSON.parse(extractContent(data));
     } catch (parseError) {
       console.log('JSON parsing failed, using regex fallback');
-      const content = data.choices[0].message.content;
+      const content = extractContent(data);
       
       // Try multiple regex patterns for more robust parsing
       const proposalMatch = 

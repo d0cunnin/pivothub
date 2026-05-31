@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const launchStrategySchema = z.object({
@@ -627,7 +628,7 @@ FORMATTING RULES:
       throw new Error('AI response missing content');
     }
 
-    let strategy = data.choices[0].message.content;
+    let strategy = extractContent(data);
     
     // Preserve markdown structure, clean only excessive formatting
     strategy = strategy

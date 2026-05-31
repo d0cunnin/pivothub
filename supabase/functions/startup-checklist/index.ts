@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const startupChecklistSchema = z.object({
@@ -251,7 +252,7 @@ Return as a JSON object with this EXACT structure:
 
     let checklist;
     try {
-      checklist = JSON.parse(data.choices[0].message.content);
+      checklist = JSON.parse(extractContent(data));
     } catch (parseError) {
       // Fallback checklist if JSON parsing fails
       checklist = {

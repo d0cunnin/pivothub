@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const socialMediaSchema = z.object({
@@ -254,7 +255,7 @@ QUALITY CHECKLIST:
 
     let contentCalendar;
     try {
-      contentCalendar = JSON.parse(data.choices[0].message.content);
+      contentCalendar = JSON.parse(extractContent(data));
     } catch (parseError) {
       console.error('JSON parse error:', parseError);
       // Fallback calendar if JSON parsing fails

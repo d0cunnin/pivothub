@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
 import { moderateContent } from "../_shared/moderation.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema for personality assessment
 const personalityAssessmentSchema = z.object({
@@ -580,7 +581,7 @@ serve(async (req) => {
 
     let personality;
     try {
-      personality = JSON.parse(data.choices[0].message.content);
+      personality = JSON.parse(extractContent(data));
       
       // Log success
       await logRequest(supabase, {

@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const businessContentSchema = z.object({
@@ -1429,7 +1430,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
       throw new Error(result.error.message)
     }
 
-    let content = result.choices[0].message.content
+    let content = extractContent(result)
 
     // Sanitize content to remove any remaining markdown artifacts
     content = content

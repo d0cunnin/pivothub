@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Validation schema
 const interviewFeedbackSchema = z.object({
@@ -471,7 +472,7 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
 
     let feedback;
     try {
-      const aiResponse = data.choices[0].message.content;
+      const aiResponse = extractContent(data);
       // Sanitize and parse JSON
       const sanitizedContent = aiResponse
         .replace(/^#{1,6}\s+/gm, '') // Remove markdown headers

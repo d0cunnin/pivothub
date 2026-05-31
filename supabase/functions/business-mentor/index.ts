@@ -5,6 +5,7 @@ import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { extractContent } from "../_shared/aiResponse.ts";
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -331,7 +332,7 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
       throw new Error('Invalid response from OpenAI API');
     }
 
-    const aiResponse = data.choices[0].message.content;
+    const aiResponse = extractContent(data);
 
     // Clean up the response
     const sanitizedResponse = aiResponse
