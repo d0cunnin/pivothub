@@ -340,6 +340,8 @@ const DevelopIt = () => {
         body: { formData: programForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setProgramResult(data);
       toast.success("Program Design generated successfully!");
     } catch (error: any) {
