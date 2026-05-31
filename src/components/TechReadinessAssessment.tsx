@@ -351,6 +351,8 @@ export const TechReadinessAssessment = () => {
       if (error) {
         throw error;
       }
+      if (data?.error) throw new Error(data.error);
+      if (!data?.analysis) throw new Error('No analysis was returned. Please try again.');
 
       setResults(data.analysis);
       setIsGeneratingReport(false);
