@@ -299,7 +299,7 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
             max_completion_tokens: 2000,
           }),
         },
-        30000
+        90000
       );
     } catch (error) {
       await logRequest(supabaseClient, {
