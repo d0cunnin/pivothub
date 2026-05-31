@@ -1,42 +1,65 @@
-# Remediation plan review + targeted fixes
+# Phase B: Safe AI Response Parsing
 
-I checked Claude Code's plan against the current codebase. **Most of Phase 0 is already done** (work from our previous passes). Below is what's actually still outstanding, organized by risk so we can stop at any point.
+Goal: eliminate `data.choices[0].message.content` crashes in edge functions by funneling every Lovable AI Gateway response through one helper that fails loudly with a clear error.
 
-## Already done — skip
-- **0.1** `act-it` / `study-it` already use `google/gemini-2.5-flash` (no `gemini-3-flash-preview` anywhere).
-- **0.2** `providerRouter.ts` already returns `openai/gpt-5-mini` (no `gpt-4o`).
-- **0.4** `data?.error` guard already added in ActIt, SpeakIt, StudyIt, LogoGenerator, EnhancedInterviewCoach, TechReadinessAssessment, DevelopIt (all 5), ContractIt (both).
+## 1. Create the shared helper
 
-## Phase A — Remaining real bugs (do now, low risk)
+New file: `supabase/functions/_shared/aiResponse.ts`
 
-1. **`career-advisor/index.ts` + `business-mentor/index.ts` moderation (0.3)**
-   Both still have a local `moderateContent(text, apiKey)` that POSTs to `api.openai.com/v1/moderations` with the Lovable key (401, silently dead). Replace each local function with an import from `_shared/moderation.ts` (canonical pattern, fails open). Update call sites to the shared signature `moderateContent(text, '<function-name>', userId, 'low')`. No other behavior change.
+```ts
+export function extractContent(data: unknown): string {
+  const content =
+    (data as any)?.choices?.[0]?.message?.content;
 
-2. **Frontend `data?.error` guards still missing (0.4 tail)**
-   Add the same one-liner already used elsewhere:
-   ```ts
-   if ((data as any)?.error) throw new Error((data as any).error);
-   ```
-   plus a guard on the specific field, in:
-   - `src/pages/FundIt.tsx` (line ~230, generate-grant-content)
-   - `src/components/InterviewQuestionsCoach.tsx` (both invokes ~88, ~135)
-   - `src/components/CareerAssessment.tsx` (~317) + guard `data.analysis.recommendations` before `.forEach`
-   - `src/components/StartupChecklist.tsx` (~44) + guard `data.checklist.phases` / `phase.tasks` before `.forEach`
-   - `src/components/BusinessResourceFinder.tsx` (~49) + guard `category.resources` before `.forEach`
+  if (typeof content !== "string" || content.trim().length === 0) {
+    throw new Error("AI gateway returned an empty response");
+  }
 
-**Acceptance:** with backend forced to error, every tool shows a toast, never a blank screen; moderation log shows entries for career-advisor and business-mentor.
+  return content;
+}
 
-## Phase B — Backend robustness (mechanical, medium effort)
+// For endpoints that expect JSON in the model output
+export function extractJson<T = unknown>(data: unknown): T {
+  const raw = extractContent(data);
+  // Strip ```json fences if the model wrapped output
+  const cleaned = raw
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```\s*$/i, "")
+    .trim();
+  try {
+    return JSON.parse(cleaned) as T;
+  } catch {
+    throw new Error("AI gateway returned malformed JSON");
+  }
+}
+```
 
-3. **Shared `extractContent()` helper (1.1)** — create `_shared/aiResponse.ts` and replace unguarded `data.choices[0].message.content` reads in the 19 functions Claude listed. Pure refactor; converts gateway weirdness from 500 into a clean error.
+## 2. Roll out across edge functions
 
-4. **Shared `_shared/http.ts` (1.2)** — `jsonResponse` / `errorResponse` with CORS + JSON headers. Migrate error returns only (keep success shapes to avoid frontend coupling).
+Scope: every function under `supabase/functions/*` that reads `choices[0].message.content` from a Lovable AI Gateway chat completion response. Expected ~19 call sites based on prior audit.
 
-5. **Migrate inline auth to `guard.ts` (1.3)** — 14 functions, one per commit, tested individually. Higher risk because it touches auth/rate limiting.
+For each function:
+- `import { extractContent } from "../_shared/aiResponse.ts";` (or `extractJson` when the call site immediately `JSON.parse`s the content).
+- Replace `const content = data.choices[0].message.content;` (and variants) with `const content = extractContent(data);`.
+- Replace manual `JSON.parse(data.choices[0].message.content)` with `extractJson<ShapeType>(data)` and remove the now-redundant fence-stripping / try-catch where it duplicates the helper.
+- Leave upstream HTTP-status handling (429/402/5xx) untouched — the helper only addresses malformed/empty 200 bodies.
 
-## Phase C — Deferred (require test scaffolding first)
+Out of scope:
+- Functions that don't call the chat-completions endpoint (image generation, embeddings, non-AI utilities).
+- Streaming responses (none of the current functions stream).
+- Response envelope redesign (deferred per user instruction).
 
-Phases 2–5 from Claude's doc (Vitest setup, strict TS, logger, response envelope, folder-by-feature, perf splitting, a11y/docs, `.env` hygiene) — all reasonable, but multi-day work and risky without tests. Recommend not starting these until Phase A + B are in.
+## 3. Verification
 
-## Recommendation
-Run **Phase A only** in the next build (small, finishes Phase 0 cleanly). Decide on Phase B after that; skip Phase C unless you want to commit to a longer hardening sprint.
+- Build passes (`npm run build`).
+- Spot-check 3 representative functions by calling them through `supabase--curl_edge_functions`:
+  1. `act-it` — happy path returns content.
+  2. `fund-it` — JSON parsing path returns structured grant data.
+  3. `career-advisor` — moderation + chat path still works.
+- For each, confirm a thrown `extractContent` error surfaces as a clean JSON error envelope (already guaranteed by Phase A frontend guards → toast, no blank screen).
+
+## Technical notes
+
+- Helper lives in `_shared/` so every function can import it via relative path; matches the existing `_shared/moderation.ts` pattern.
+- `extractJson` is additive — only adopted where the function was already doing `JSON.parse` on the content. Functions returning prose stay on `extractContent`.
+- No DB migrations, no schema changes, no frontend changes.
