@@ -363,6 +363,8 @@ const DevelopIt = () => {
         body: { formData: grantForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setGrantResult(data);
       toast.success("Grant Readiness assessment complete!");
     } catch (error: any) {
