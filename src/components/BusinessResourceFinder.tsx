@@ -63,10 +63,11 @@ export const BusinessResourceFinder = () => {
         console.error('Edge function error:', fnError);
         throw new Error(fnError.message || 'Failed to find resources');
       }
+      if ((fnData as any)?.error) throw new Error((fnData as any).error);
 
       console.log('Edge function response:', fnData);
 
-      if (!fnData || !fnData.resources || !fnData.resources.categories) {
+      if (!fnData || !fnData.resources || !Array.isArray(fnData.resources.categories)) {
         console.error('Invalid response structure:', fnData);
         throw new Error('Invalid response from server');
       }
@@ -78,6 +79,7 @@ export const BusinessResourceFinder = () => {
       let idCounter = 1;
 
       data.resources.categories.forEach((category: any) => {
+        if (!Array.isArray(category?.resources)) return;
         category.resources.forEach((resource: any) => {
           transformedResources.push({
             id: resource.id || idCounter.toString(),
