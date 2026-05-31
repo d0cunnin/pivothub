@@ -16,7 +16,8 @@ interface ModelConfig {
 export async function getModelForUser(
   supabase: SupabaseClient,
   userId: string,
-  toolType: 'text' | 'image'
+  toolType: 'text' | 'image',
+  overrideModel?: string
 ): Promise<ModelConfig> {
   // CRITICAL: Images must use Gemini
   if (toolType === 'image') {
@@ -35,17 +36,17 @@ export async function getModelForUser(
     .eq('id', userId)
     .maybeSingle();
 
-  const isPaid = userData?.subscribed === true && 
+  const isPaid = userData?.subscribed === true &&
                  userData?.subscription_tier !== 'explore';
 
-  // Use GPT-4o for all users via Lovable AI
   return {
     provider: 'openai',
-    model: 'openai/gpt-4o',
+    model: overrideModel || 'openai/gpt-5-mini',
     apiKey: Deno.env.get('LOVABLE_API_KEY')!,
     endpoint: 'https://ai.gateway.lovable.dev/v1/chat/completions'
   };
 }
+
 
 /**
  * Validates that text tools are not using Gemini
