@@ -199,6 +199,7 @@ export const EnhancedInterviewCoach = () => {
       });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
       if (!data?.feedback) throw new Error('No feedback received');
 
       const duration = Math.round((Date.now() - startTime) / 1000);
