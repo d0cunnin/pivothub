@@ -386,6 +386,8 @@ const DevelopIt = () => {
         body: { formData: assessmentForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setAssessmentResult(data);
       toast.success("Community Assessment generated!");
     } catch (error: any) {
