@@ -16,42 +16,49 @@ const careerAdvisorSchema = z.object({
   conversationHistory: z.array(chatMessageSchema).max(20, "Conversation history too long").default([])
 })
 
-// Content moderation function using OpenAI Moderation API
+// Content moderation function using Lovable AI Gateway (fail-open)
 async function moderateContent(text: string, apiKey: string): Promise<{ flagged: boolean; categories?: string[] }> {
   try {
-    const response = await fetch('https://api.openai.com/v1/moderations', {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        input: text,
-        model: 'omni-moderation-latest'
+        model: 'google/gemini-2.5-flash-lite',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a content moderation classifier. Decide if user text contains disallowed content (sexual/minors, explicit violence, hate, harassment, self-harm encouragement, illegal weapons/drugs instructions). Respond ONLY with JSON {"flagged": boolean, "categories": string[]}.'
+          },
+          { role: 'user', content: text.slice(0, 32000) }
+        ],
+        response_format: { type: 'json_object' },
       }),
     });
 
     if (!response.ok) {
       console.error('Moderation API error:', response.status);
-      return { flagged: false }; // Fail open on API error
+      return { flagged: false }; // Fail open
     }
 
     const data = await response.json();
-    const result = data.results?.[0];
-    
-    if (result?.flagged) {
-      const flaggedCategories = Object.keys(result.categories || {})
-        .filter(key => result.categories[key]);
-      console.log('Content flagged:', flaggedCategories);
-      return { flagged: true, categories: flaggedCategories };
+    const raw = data.choices?.[0]?.message?.content;
+    let parsed: { flagged?: boolean; categories?: string[] } | null = null;
+    try { parsed = raw ? JSON.parse(raw) : null; } catch { parsed = null; }
+    if (!parsed) return { flagged: false };
+    if (parsed.flagged) {
+      console.log('Content flagged:', parsed.categories);
+      return { flagged: true, categories: parsed.categories || [] };
     }
-
     return { flagged: false };
   } catch (error) {
     console.error('Moderation check failed:', error);
-    return { flagged: false }; // Fail open on error
+    return { flagged: false };
   }
 }
+
 
 serve(async (req) => {
   const startTime = Date.now();
