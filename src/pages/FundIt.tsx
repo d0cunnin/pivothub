@@ -236,6 +236,7 @@ const FundIt = () => {
 
       setGenerationProgress('');
 
+      if ((data as any)?.error) throw new Error((data as any).error);
       if (error) {
         // Handle specific error types
         if (error.message?.includes('JWT') || error.message?.includes('auth')) {

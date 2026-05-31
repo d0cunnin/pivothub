@@ -101,6 +101,8 @@ export const InterviewQuestionsCoach = () => {
       if (error) {
         throw new Error(error.message || 'Failed to generate questions');
       }
+      if ((data as any)?.error) throw new Error((data as any).error);
+      if (!Array.isArray(data?.questions)) throw new Error('No questions were returned. Please try again.');
 
       const filteredQuestions = (data?.questions || []).filter((q: Question) => questionTypes.includes(q.type));
       setQuestions(filteredQuestions);
@@ -147,6 +149,8 @@ export const InterviewQuestionsCoach = () => {
       if (error) {
         throw new Error(error.message || 'Failed to analyze answer');
       }
+      if ((data as any)?.error) throw new Error((data as any).error);
+      if (!data?.feedback) throw new Error('No feedback was returned. Please try again.');
 
       const response_data: Response = {
         questionId: questions[currentQuestionIndex].id,

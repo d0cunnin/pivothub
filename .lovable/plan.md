@@ -1,59 +1,42 @@
-# Fix remaining AI tool bugs + harden gateway calls
+# Remediation plan review + targeted fixes
 
-## Phase 1 — Real bugs (high priority)
+I checked Claude Code's plan against the current codebase. **Most of Phase 0 is already done** (work from our previous passes). Below is what's actually still outstanding, organized by risk so we can stop at any point.
 
-### 1. `supabase/functions/contact-chatbot/index.ts`
-- Remove the local duplicated `moderateContent()` function (lines ~10–48).
-- Import the canonical helper: `import { moderateContent } from "../_shared/moderation.ts"`.
-- Update the call site (~line 213) to the correct signature: `moderateContent(lastUserMessage.content, 'contact-chatbot', userId, 'low')`.
-- This restores moderation logging + reputation updates.
+## Already done — skip
+- **0.1** `act-it` / `study-it` already use `google/gemini-2.5-flash` (no `gemini-3-flash-preview` anywhere).
+- **0.2** `providerRouter.ts` already returns `openai/gpt-5-mini` (no `gpt-4o`).
+- **0.4** `data?.error` guard already added in ActIt, SpeakIt, StudyIt, LogoGenerator, EnhancedInterviewCoach, TechReadinessAssessment, DevelopIt (all 5), ContractIt (both).
 
-### 2. `supabase/functions/study-it/index.ts`
-- Fix wrong argument order at line 72.
-- Change `moderateContent(topic, supabase, userId, 'study-it')` → `moderateContent(topic, 'study-it', userId, 'medium')`.
-- Eliminates `[object Object]` log entries and a potential runtime throw.
+## Phase A — Remaining real bugs (do now, low risk)
 
-## Phase 2 — Resilience migration (medium priority)
+1. **`career-advisor/index.ts` + `business-mentor/index.ts` moderation (0.3)**
+   Both still have a local `moderateContent(text, apiKey)` that POSTs to `api.openai.com/v1/moderations` with the Lovable key (401, silently dead). Replace each local function with an import from `_shared/moderation.ts` (canonical pattern, fails open). Update call sites to the shared signature `moderateContent(text, '<function-name>', userId, 'low')`. No other behavior change.
 
-Migrate ~30 edge functions from bare `fetch()` against the Lovable AI Gateway to the shared `fetchWithTimeout()` + `handleAIError()` helpers in `_shared/aiTimeout.ts`. This converts opaque 500s on 402 (credits)/429 (rate limit)/timeout into structured errors the frontend already knows how to surface.
+2. **Frontend `data?.error` guards still missing (0.4 tail)**
+   Add the same one-liner already used elsewhere:
+   ```ts
+   if ((data as any)?.error) throw new Error((data as any).error);
+   ```
+   plus a guard on the specific field, in:
+   - `src/pages/FundIt.tsx` (line ~230, generate-grant-content)
+   - `src/components/InterviewQuestionsCoach.tsx` (both invokes ~88, ~135)
+   - `src/components/CareerAssessment.tsx` (~317) + guard `data.analysis.recommendations` before `.forEach`
+   - `src/components/StartupChecklist.tsx` (~44) + guard `data.checklist.phases` / `phase.tasks` before `.forEach`
+   - `src/components/BusinessResourceFinder.tsx` (~49) + guard `category.resources` before `.forEach`
 
-Pattern, applied identically per function:
+**Acceptance:** with backend forced to error, every tool shows a toast, never a blank screen; moderation log shows entries for career-advisor and business-mentor.
 
-```ts
-import { fetchWithTimeout, handleAIError } from "../_shared/aiTimeout.ts";
+## Phase B — Backend robustness (mechanical, medium effort)
 
-try {
-  const resp = await fetchWithTimeout(
-    "https://ai.gateway.lovable.dev/v1/chat/completions",
-    { method: "POST", headers: {...}, body: JSON.stringify({...}) },
-    60000
-  );
-  // existing parsing
-} catch (err) {
-  return handleAIError(err, corsHeaders, "<function-name>");
-}
-```
+3. **Shared `extractContent()` helper (1.1)** — create `_shared/aiResponse.ts` and replace unguarded `data.choices[0].message.content` reads in the 19 functions Claude listed. Pure refactor; converts gateway weirdness from 500 into a clean error.
 
-Target functions (group by tool area):
-- Build It: `generate-business-content`, `generate-logo`, `name-checker`, `startup-checklist`
-- Fund It: `generate-grant-content`, `grant-finder`, `generate-grant-readiness`
-- Contract It / Develop It: `generate-capability-statement`, `generate-program-design`, `generate-community-assessment`, `generate-stakeholder-plan`, `community-dev-coach`
-- Host It / Garden It: `generate-garden-plan`
-- Earn It / Teaching: `generate-side-income-report`, `generate-teaching-content`, `generate-legal-docs`, `generate-launch-strategy`, `social-media-content`, `business-resources`
-- Story/Speak/Study: `act-it`, `speak-it`, `study-it`, `prompt-it`, `code-it`, `deploy-it`
-- Prep It / Assess It: `resume-analyzer`, `interview-questions`, `interview-feedback`, `career-assessment`, `skills-assessment`, `personality-assessment`, `enhanced-assessment-analyzer`
+4. **Shared `_shared/http.ts` (1.2)** — `jsonResponse` / `errorResponse` with CORS + JSON headers. Migrate error returns only (keep success shapes to avoid frontend coupling).
 
-## Phase 3 — Cleanup (low priority)
-- Delete unused `src/lib/runware.ts` (no call sites, no key configured).
+5. **Migrate inline auth to `guard.ts` (1.3)** — 14 functions, one per commit, tested individually. Higher risk because it touches auth/rate limiting.
 
-## Out of scope
-- No DB schema, RLS, or `verify_jwt` changes.
-- No model swaps beyond what's already fixed.
-- No frontend changes (Phase 1's frontend error-surfacing landed in the previous pass).
+## Phase C — Deferred (require test scaffolding first)
 
-## Validation
-- After Phase 1: trigger Contact chatbot + Study It; confirm `moderation_log` rows have correct `function_name` and no `[object Object]`.
-- After Phase 2: hit one migrated tool while gateway returns 429 (or simulate); confirm frontend toast shows "Rate limit" / "Credits exhausted" instead of generic error.
+Phases 2–5 from Claude's doc (Vitest setup, strict TS, logger, response envelope, folder-by-feature, perf splitting, a11y/docs, `.env` hygiene) — all reasonable, but multi-day work and risky without tests. Recommend not starting these until Phase A + B are in.
 
-## Recommended scope for this build
-Run **Phase 1 only** now (fast, fixes the 2 actual broken tools). Phase 2 is a larger sweep — confirm before I touch ~30 files.
+## Recommendation
+Run **Phase A only** in the next build (small, finishes Phase 0 cleanly). Decide on Phase B after that; skip Phase C unless you want to commit to a longer hardening sprint.

@@ -335,8 +335,9 @@ export const CareerAssessment = () => {
         });
         throw error;
       }
-      
-      if (data && data.analysis) {
+      if ((data as any)?.error) throw new Error((data as any).error);
+
+      if (data && data.analysis && Array.isArray(data.analysis.recommendations)) {
         // Transform AI response to match existing interface
         const results: AssessmentResults = {};
         
