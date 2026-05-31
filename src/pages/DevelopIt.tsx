@@ -409,6 +409,8 @@ const DevelopIt = () => {
         body: { formData: stakeholderForm }
       });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
       setStakeholderResult(data);
       toast.success("Stakeholder Engagement Plan generated!");
     } catch (error: any) {
