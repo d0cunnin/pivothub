@@ -301,7 +301,9 @@ const ContractIt = () => {
       });
 
       if (error) throw error;
-      
+      if (data?.error) throw new Error(data.error);
+      if (!data) throw new Error('No result returned. Please try again.');
+
       setReadinessResult(data);
       toast.success("Readiness assessment complete!");
     } catch (error: any) {
