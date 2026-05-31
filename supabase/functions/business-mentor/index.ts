@@ -70,7 +70,7 @@ serve(async (req) => {
 
     // Check content moderation
     console.log('Checking content moderation...');
-    const moderationResult = await moderateContent(message, lovableApiKey);
+    const moderationResult = await moderateContent(message, 'business-mentor', userId, 'medium');
     
     if (moderationResult.flagged) {
       console.warn('Content blocked by moderation:', moderationResult.categories);
