@@ -7,11 +7,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Activity, BarChart3, Calendar, CreditCard, TrendingUp, Zap, Award, BookOpen } from "lucide-react";
+import { Activity, BarChart3, Calendar, CreditCard, TrendingUp, Zap, Award, BookOpen, Rocket, Download, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { getPackageDisplayName } from "@/utils/packageAccess";
+import { CreateItBlueprint, EMPTY_FORM } from "@/types/createit";
+import { downloadCreateItBlueprintPDF } from "@/lib/CreateItBlueprintPDF";
+import { toast } from "sonner";
 
 interface ToolUsage {
   tool_name: string;
@@ -25,12 +28,23 @@ interface UserProgress {
   milestone?: string;
 }
 
+interface CreateItProject {
+  id: string;
+  platform_name: string;
+  platform_description: string | null;
+  industry: string | null;
+  platform_type: string | null;
+  blueprint_json: CreateItBlueprint;
+  created_at: string;
+}
+
 const Dashboard = () => {
   const { user, subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd } = useAuth();
   const { monthlyRequests, remainingRequests, totalAvailable, rolloverCredits } = useUsage();
   const [toolUsage, setToolUsage] = useState<ToolUsage[]>([]);
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
   const [courseEnrollments, setCourseEnrollments] = useState<number>(0);
+  const [createItProjects, setCreateItProjects] = useState<CreateItProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
@@ -114,6 +128,18 @@ const Dashboard = () => {
         .eq('user_id', user?.id);
 
       setCourseEnrollments(count || 0);
+
+      // Load Create It platform blueprints (My Projects / Saved Blueprints)
+      const { data: blueprintData } = await supabase
+        .from('create_it_blueprints')
+        .select('id, platform_name, platform_description, industry, platform_type, blueprint_json, created_at')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (blueprintData) {
+        setCreateItProjects(blueprintData as unknown as CreateItProject[]);
+      }
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
@@ -122,6 +148,26 @@ const Dashboard = () => {
   };
 
   const usagePercentage = totalAvailable > 0 ? ((monthlyRequests / totalAvailable) * 100) : 0;
+
+  const downloadBlueprint = (project: CreateItProject) => {
+    try {
+      downloadCreateItBlueprintPDF({
+        form: {
+          ...EMPTY_FORM,
+          appName: project.platform_name,
+          platformDescription: project.platform_description || "",
+          primaryPurpose: project.industry || "",
+          platformType: project.platform_type || "",
+        },
+        blueprint: project.blueprint_json,
+        userName: user?.email || undefined,
+      });
+      toast.success("Blueprint downloaded as PDF!");
+    } catch (error) {
+      console.error("PDF download failed:", error);
+      toast.error("Could not download the blueprint.");
+    }
+  };
 
   return (
     <AuthGuard>
@@ -292,6 +338,64 @@ const Dashboard = () => {
               </Card>
             </div>
 
+            {/* Create It — AI Platform Blueprints */}
+            <Card className="mb-8">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Rocket className="h-5 w-5" />
+                      My AI Platform Blueprints
+                    </CardTitle>
+                    <CardDescription>Your saved Create It blueprints and downloads</CardDescription>
+                  </div>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/createit">
+                      New Blueprint <ArrowRight className="ml-1 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {loading ? (
+                  <div className="space-y-3">
+                    {[1, 2].map((i) => <div key={i} className="h-14 bg-muted animate-pulse rounded" />)}
+                  </div>
+                ) : createItProjects.length > 0 ? (
+                  <div className="space-y-3">
+                    {createItProjects.map((project) => (
+                      <div key={project.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                        <div className="min-w-0">
+                          <div className="font-medium truncate">{project.platform_name}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {project.industry ? `${project.industry} · ` : ""}
+                            {new Date(project.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <Button size="sm" variant="ghost" onClick={() => downloadBlueprint(project)}>
+                            <Download className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="outline" asChild>
+                            <Link to="/createit">View</Link>
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Rocket className="h-12 w-12 mx-auto mb-3 opacity-30" />
+                    <p>No platform blueprints yet</p>
+                    <p className="text-sm">Use Create It to design your first AI-powered platform</p>
+                    <Button className="mt-4" asChild>
+                      <Link to="/createit">Open Create It</Link>
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
             {/* Quick Actions */}
             <Card>
               <CardHeader>
@@ -300,6 +404,12 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <Button variant="outline" asChild className="h-auto py-4 flex-col gap-2">
+                    <Link to="/createit">
+                      <Rocket className="h-6 w-6" />
+                      <span>Create a Platform</span>
+                    </Link>
+                  </Button>
                   <Button variant="outline" asChild className="h-auto py-4 flex-col gap-2">
                     <Link to="/assessit">
                       <BarChart3 className="h-6 w-6" />
