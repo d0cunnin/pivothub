@@ -270,8 +270,8 @@ const ActIt = () => {
   return (
     <>
       <Helmet>
-        <title>Act It - Story Development Tool | PivotHub</title>
-        <meta name="description" content="Transform your idea into a structured movie, short film, or stage play concept with professional story development guidance." />
+        <title>Act It - Story Studio for Film, Stage & Web | PivotHub</title>
+        <meta name="description" content="Story Studio for screenwriters and playwrights. Turn a logline into a structured story concept with character profiles, plot outline, and production notes for film, stage, or web series." />
       </Helmet>
       <div className="min-h-screen flex flex-col bg-background">
         <Header />
@@ -294,13 +294,13 @@ const ActIt = () => {
             <div className="text-center max-w-5xl mx-auto">
               <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
                 <Clapperboard className="h-8 w-8 text-white mr-3" />
-                <span className="text-3xl font-bold text-white tracking-wider">ACT IT</span>
+                <span className="text-3xl font-bold text-white tracking-wider">ACT IT — STORY STUDIO</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-                Turn Ideas Into Stories
+                Story Studio for Screen & Stage
               </h1>
               <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
-                Transform your concept into a movie or stage-ready story outline
+                Turn a logline into a complete story package — concept, characters, plot outline, and production notes for film, stage, or web series. (Outline, not a full script.)
               </p>
               <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <Button 
