@@ -242,25 +242,26 @@ serve(async (req) => {
       throw new Error('AI key not configured');
     }
 
-    const systemPrompt = buildSystemPrompt(body.skillLevel || 'Intermediate');
     const userPrompt = buildUserPrompt(body);
+    const skillLevel = body.skillLevel || 'Intermediate';
 
-    // Generate blueprint — try the primary model, fall back on failure.
-    let raw: Blueprint;
-    let modelUsed = PRIMARY_MODEL;
+    // Generate blueprint as 3 parallel chunks to avoid token-cap truncation.
+    let partials: Partial<Blueprint>[];
     try {
-      raw = await callModel(LOVABLE_API_KEY, PRIMARY_MODEL, systemPrompt, userPrompt, 75_000);
-    } catch (primaryErr: any) {
-      // Surface hard billing/rate errors directly rather than burning a fallback.
-      if (primaryErr?.status === 402) {
+      partials = await Promise.all(
+        CHUNKS.map((keys) => generateChunk(LOVABLE_API_KEY, keys, skillLevel, userPrompt)),
+      );
+    } catch (err: any) {
+      if (err?.status === 402) {
         throw new Error('AI credits exhausted. Please add credits in Settings.');
       }
-      console.warn(`[${ENDPOINT}] Primary model failed, falling back to ${FALLBACK_MODEL}:`, primaryErr?.message);
-      modelUsed = FALLBACK_MODEL;
-      raw = await callModel(LOVABLE_API_KEY, FALLBACK_MODEL, systemPrompt, userPrompt, 60_000);
+      throw err;
     }
 
-    const blueprint = validateBlueprint(raw);
+    const merged: Partial<Blueprint> = Object.assign({}, ...partials);
+    const blueprint = validateBlueprint(merged);
+    const modelUsed = PRIMARY_MODEL;
+
 
     // Store history (RLS: user_id must equal auth.uid()).
     let blueprintId: string | null = null;
