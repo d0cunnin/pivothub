@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ToolGuard } from "@/components/ToolGuard";
 import TeachingMaterialsGenerator from "@/components/TeachingMaterialsGenerator";
+import LessonPlanGenerator from "@/components/LessonPlanGenerator";
+import QuizGenerator from "@/components/QuizGenerator";
+import RubricBuilder from "@/components/RubricBuilder";
 import heroImage from "@/assets/hero-image.jpg";
 import { Badge } from "@/components/ui/badge";
 import { Zap } from "lucide-react";
@@ -163,6 +166,54 @@ const TeachIt = () => {
               <TeachingMaterialsGenerator />
             </ToolGuard>
           </div>
+        </div>
+      </section>
+
+      {/* Lesson Plan Generator */}
+      <section id="lesson-plan" className="section-spacing-sm bg-accent/40 relative">
+        <div className="page-container">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent inline-block px-6 py-3 rounded-2xl bg-gradient-card shadow-elegant">
+              Lesson Plan Generator
+            </h2>
+            <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">Standards-aligned lesson plans with warm-up, instruction, practice, and assessment.</p>
+          </div>
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />5 Credits</Badge>
+          </div>
+          <ToolGuard toolName="lesson-plan"><LessonPlanGenerator /></ToolGuard>
+        </div>
+      </section>
+
+      {/* Quiz Generator */}
+      <section id="quiz-generator" className="section-spacing-sm bg-white relative">
+        <div className="page-container">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent inline-block px-6 py-3 rounded-2xl bg-gradient-card shadow-elegant">
+              Quiz Generator
+            </h2>
+            <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">Quizzes with answer keys — multiple choice, true/false, or short answer.</p>
+          </div>
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />4 Credits</Badge>
+          </div>
+          <ToolGuard toolName="quiz-generator"><QuizGenerator /></ToolGuard>
+        </div>
+      </section>
+
+      {/* Rubric Builder */}
+      <section id="rubric-builder" className="section-spacing-sm bg-accent/40 relative">
+        <div className="page-container">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-hero bg-clip-text text-transparent inline-block px-6 py-3 rounded-2xl bg-gradient-card shadow-elegant">
+              Rubric Builder
+            </h2>
+            <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">Multi-level scoring rubrics with observable, level-by-level descriptors.</p>
+          </div>
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />3 Credits</Badge>
+          </div>
+          <ToolGuard toolName="rubric-builder"><RubricBuilder /></ToolGuard>
         </div>
       </section>
 
