@@ -10,7 +10,7 @@ interface ModelConfig {
 /**
  * Get the appropriate AI model configuration based on user subscription and tool type
  * 
- * TEXT TOOLS: Always use OpenAI (GPT-5 for paid, GPT-4o for free)
+ * TEXT TOOLS: Always use OpenAI (GPT-5-mini)
  * IMAGE TOOLS: Always use Gemini Nano
  */
 export async function getModelForUser(
