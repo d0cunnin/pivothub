@@ -217,7 +217,7 @@ serve(async (req) => {
     let raw: Blueprint;
     let modelUsed = PRIMARY_MODEL;
     try {
-      raw = await callModel(LOVABLE_API_KEY, PRIMARY_MODEL, systemPrompt, userPrompt, 110_000);
+      raw = await callModel(LOVABLE_API_KEY, PRIMARY_MODEL, systemPrompt, userPrompt, 75_000);
     } catch (primaryErr: any) {
       // Surface hard billing/rate errors directly rather than burning a fallback.
       if (primaryErr?.status === 402) {
@@ -225,7 +225,7 @@ serve(async (req) => {
       }
       console.warn(`[${ENDPOINT}] Primary model failed, falling back to ${FALLBACK_MODEL}:`, primaryErr?.message);
       modelUsed = FALLBACK_MODEL;
-      raw = await callModel(LOVABLE_API_KEY, FALLBACK_MODEL, systemPrompt, userPrompt, 110_000);
+      raw = await callModel(LOVABLE_API_KEY, FALLBACK_MODEL, systemPrompt, userPrompt, 60_000);
     }
 
     const blueprint = validateBlueprint(raw);
