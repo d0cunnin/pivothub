@@ -5,7 +5,7 @@ import { extractJson } from '../_shared/aiResponse.ts';
 
 const ENDPOINT = '/generate-create-it-blueprint';
 const PRIMARY_MODEL = 'google/gemini-2.5-flash';
-const FALLBACK_MODEL = 'openai/gpt-5-mini';
+const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
 
 interface CreateItRequest {
   // Step 1 — Platform Overview
@@ -135,7 +135,7 @@ async function callModel(
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
-        max_completion_tokens: 8000,
+        max_completion_tokens: 5000,
         response_format: { type: 'json_object' },
       }),
       signal: controller.signal,
@@ -217,7 +217,7 @@ serve(async (req) => {
     let raw: Blueprint;
     let modelUsed = PRIMARY_MODEL;
     try {
-      raw = await callModel(LOVABLE_API_KEY, PRIMARY_MODEL, systemPrompt, userPrompt, 110_000);
+      raw = await callModel(LOVABLE_API_KEY, PRIMARY_MODEL, systemPrompt, userPrompt, 75_000);
     } catch (primaryErr: any) {
       // Surface hard billing/rate errors directly rather than burning a fallback.
       if (primaryErr?.status === 402) {
@@ -225,7 +225,7 @@ serve(async (req) => {
       }
       console.warn(`[${ENDPOINT}] Primary model failed, falling back to ${FALLBACK_MODEL}:`, primaryErr?.message);
       modelUsed = FALLBACK_MODEL;
-      raw = await callModel(LOVABLE_API_KEY, FALLBACK_MODEL, systemPrompt, userPrompt, 110_000);
+      raw = await callModel(LOVABLE_API_KEY, FALLBACK_MODEL, systemPrompt, userPrompt, 60_000);
     }
 
     const blueprint = validateBlueprint(raw);
