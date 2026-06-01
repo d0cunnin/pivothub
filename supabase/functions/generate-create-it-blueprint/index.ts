@@ -4,8 +4,8 @@ import { guard, corsHeaders } from '../_shared/guard.ts';
 import { extractJson } from '../_shared/aiResponse.ts';
 
 const ENDPOINT = '/generate-create-it-blueprint';
-const PRIMARY_MODEL = 'openai/gpt-5';
-const FALLBACK_MODEL = 'google/gemini-2.5-flash';
+const PRIMARY_MODEL = 'google/gemini-2.5-flash';
+const FALLBACK_MODEL = 'openai/gpt-5-mini';
 
 interface CreateItRequest {
   // Step 1 — Platform Overview
