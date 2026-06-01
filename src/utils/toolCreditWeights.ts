@@ -22,6 +22,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'business-idea': 2,              // ~4,000 tokens output
   'social-media': 2,               // ~3,000 tokens output
   'resume-analyzer': 2,            // ~3,000 tokens with feedback
+  'resume-builder': 5,             // ~6,000 tokens (full structured resume)
   'interview-feedback': 2,         // ~3,000 tokens with analysis
   'business-foundation': 2,        // ~3,000 tokens output
   'schedule-it': 5,                // ~12,000 tokens output (Schedule It)
@@ -61,7 +62,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'prompt-it': 1,                  // ~1,500 tokens (2 free uses, then 1 credit per use)
   'code-it': 1,                    // ~1,200 tokens output (explain code)
   'deploy-it': 40,                 // ~1,500 tokens output (AI agent blueprint) - complex agent planning
-  'create-it-blueprint': 70,       // ~15,000 tokens output (comprehensive platform blueprint with tech stack, integrations, implementation guide)
+  'create-it-blueprint': 0,        // Disabled — Create It is now a waitlist page
   
   // CONTRACT IT TOOLS
   'capability-statement': 4,       // ~4,000 tokens output (government capability statement)
@@ -82,6 +83,11 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   
   // STUDY IT TOOLS (Learn It)
   'study-it': 2,                   // ~4,000 tokens output (biblical reference with etymology + scriptures)
+
+  // TEACH IT TOOLS (educator suite)
+  'lesson-plan': 5,                // ~5,000 tokens output (standards-aligned lesson plan)
+  'quiz-generator': 4,             // ~5,000 tokens output (quiz + answer key)
+  'rubric-builder': 3,             // ~4,000 tokens output (multi-level scoring rubric)
 };
 
 export function getToolCreditCost(toolName: string): number {
