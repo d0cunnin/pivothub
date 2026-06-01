@@ -3,13 +3,14 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare, Brain, Briefcase, Zap } from "lucide-react";
+import { Target, BookOpen, Users, TrendingUp, FileText, Edit3, MessageSquare, Brain, Briefcase, Zap, Sparkles } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
 import { ToolGuard } from "@/components/ToolGuard";
 import { CareerAdvisorChatbot } from "@/components/CareerAdvisorChatbot";
 import { InterviewQuestionsCoach } from "@/components/InterviewQuestionsCoach";
 import { ResumeCoachLetter } from "@/components/ResumeCoachLetter";
+import ResumeBuilder from "@/components/ResumeBuilder";
 import heroImage from "@/assets/hero-image.jpg";
 
 const PrepIt = () => {
@@ -292,6 +293,31 @@ const PrepIt = () => {
         
         <ToolGuard toolName="resume-analyzer">
             <ResumeCoachLetter />
+          </ToolGuard>
+        </div>
+      </section>
+
+      {/* Resume Builder (Generator) */}
+      <section id="resume-builder" className="section-spacing-sm bg-white relative overflow-hidden">
+        <div className="page-container">
+          <div className="text-center max-w-4xl mx-auto mb-10 animate-fade-in">
+            <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">
+                Resume Builder
+              </h2>
+            </div>
+            <p className="text-lg text-foreground leading-relaxed mb-4">
+              Generate a complete, ATS-friendly resume from scratch with quantified, results-oriented bullets tailored to your target role.
+            </p>
+          </div>
+          <div className="flex justify-center mb-6">
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
+              <Sparkles className="h-4 w-4" />
+              5 Credits
+            </Badge>
+          </div>
+          <ToolGuard toolName="resume-builder">
+            <ResumeBuilder />
           </ToolGuard>
         </div>
       </section>

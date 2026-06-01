@@ -204,8 +204,8 @@ const StudyIt = () => {
   return (
     <>
       <Helmet>
-        <title>Study It - Biblical Reference Tool | PivotHub</title>
-        <meta name="description" content="A structured, reference-only biblical breakdown for study, teaching preparation, and academic review. Definitions, etymology, Strong's Concordance, and scripture references." />
+        <title>Study It - Scripture Reference Tool | PivotHub</title>
+        <meta name="description" content="Look up any biblical word or concept. Get definitions, original-language etymology, Strong's Concordance entries, and Old/New Testament scripture references. Reference only — no commentary." />
       </Helmet>
       <div className="min-h-screen flex flex-col bg-background">
         <Header />
@@ -228,13 +228,13 @@ const StudyIt = () => {
             <div className="text-center max-w-5xl mx-auto">
               <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
                 <BookOpen className="h-8 w-8 text-white mr-3" />
-                <span className="text-3xl font-bold text-white tracking-wider">STUDY IT</span>
+                <span className="text-3xl font-bold text-white tracking-wider">STUDY IT — SCRIPTURE REFERENCE</span>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-                Biblical Reference Tool
+                Bible Reference & Etymology Tool
               </h1>
               <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
-                Biblical reference. Original language. Scripture only.
+                Look up any biblical word — get definitions, Hebrew/Greek etymology, Strong's entries, and scripture references. No commentary.
               </p>
               <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <Button 

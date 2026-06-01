@@ -1,35 +1,96 @@
-# Smoke Test: All 21 AI Edge Functions
+# Implementation Plan — 5 Gap Fixes (in order)
 
-Goal: invoke every AI edge function once with a minimal valid payload (as the logged-in preview user) and confirm each returns a non-empty, well-shaped response rather than an `extractContent` throw, an upstream gateway error, or a blank body.
+Executing all 5 items from the gap analysis sequentially.
 
-## Approach
+---
 
-For each function, call it via the authenticated edge-function HTTP path using a tiny but schema-valid input. Capture:
-- HTTP status
-- whether the response body has the expected content field (text/array/object)
-- any `error` field
-- approximate latency
+## 1. Fix `packageAccess.ts` (highest ROI — unblocks paying users)
 
-Then report a pass/fail table. Failures will include the error message so we know whether it's a 402/429 (credits/rate), a missing input field, a gateway timeout, or a real bug.
+Rebuild `PACKAGE_TOOLS` so every tool that exists in the codebase is mapped to the correct paid tier. Currently many tools (Contract It, Develop It, Schedule It, Host It, Garden It, Act It, Study It, Speak It, Earn It, Prompt It, Code It, Deploy It, chatbots) are unmapped — tiered subscribers silently lose access.
 
-## Functions to test (21)
+**New mapping:**
+- `assess-prep-learn` → add `tech-readiness-assessment`, `community-assessment`, `career-advisor`
+- `build-teach-launch` → add `biography-generator`, `business-docs`, `business-mentor`
+- `fund-it` → add `grant-finder`, `grant-readiness`, `grant-resources`
+- **New package buckets** (or fold into existing): map Contract It, Develop It, Schedule It, Host It, Garden It, Speak It, Act It, Study It, Prompt It, Code It, Deploy It, Earn It tools to the appropriate Build/Launch/All-Access tier.
+- Verify `hasToolAccess()` consumers (ToolGuard.tsx) still resolve correctly.
 
-`act-it`, `study-it`, `speak-it`, `career-advisor`, `business-mentor`, `career-assessment`, `personality-assessment`, `skills-assessment`, `tech-readiness-assessment`, `enhanced-assessment-analyzer`, `startup-checklist`, `social-media-content`, `business-resources`, `name-checker`, `grant-finder`, `generate-grant-content`, `generate-launch-strategy`, `generate-legal-docs`, `generate-business-content`, `generate-teaching-content`, `interview-questions`, `interview-feedback`, `resume-analyzer`.
+No DB changes. Pure TS edit + a quick sanity check by reading ToolGuard.
 
-(That's the full set with `extractContent` rolled out; minor pruning if any function isn't user-callable on its own.)
+---
 
-## Inputs
+## 2. Rename / redescribe Study It and Act It
 
-Use the smallest realistic payload each function accepts. I'll read each function's input validator (zod schema or manual checks) first, then build the minimum body. Examples:
-- `act-it`: short scene prompt
-- `name-checker`: one candidate business name
-- `grant-finder`: brief org description + region
-- `interview-questions`: role + level
+Fix the two worst UX mismatches without changing backend behavior.
 
-## Cost note
+- **Study It** → reposition as **"Scripture Study"** (or similar) in nav + page hero + home tool card. Update description to "Bible references, etymology, and scripture lookup for any term."
+- **Act It** → reposition as **"Story Studio"** (or keep "Act It" but rewrite copy). Update description to "Generate story concepts, characters, and plot outlines."
+- Update: `src/pages/StudyIt.tsx`, `src/pages/ActIt.tsx`, the home tool card list, and any nav/menu entries.
+- Update `mem://features/act-it-tool` description if needed.
 
-Each call consumes 1+ Tool Credits on your account. Total: ~25-30 credits across the run. Calls run sequentially with a 1s gap to avoid IP throttle.
+No route or edge-function changes.
 
-## Deliverable
+---
 
-A single pass/fail table in chat, plus the raw error string for any failure. No code changes in this phase — if a function fails, we'll triage in a follow-up.
+## 3. Build Resume Builder
+
+New tool that **generates** a resume (complements existing `resume-analyzer`).
+
+**Backend:**
+- New edge function `supabase/functions/resume-builder/index.ts`
+- Pattern: copy `biography-generator` structure (verify_jwt=true, credit check via `check_and_increment_ai_usage`, OpenAI via `providerRouter`, moderation guard).
+- Inputs: name, target role, years of experience, key skills, work history (array), education, optional tone.
+- Output: structured JSON (summary, experience bullets, skills section, education) + plain-text rendered version.
+- Credit cost: **5** (matches Biography Generator).
+
+**Frontend:**
+- New `src/components/ResumeBuilder.tsx` (form + result panel + copy/download buttons).
+- Add to `PrepIt.tsx` next to Resume Analyzer.
+- Register `resume-builder` in `toolCreditWeights.ts` (5 credits) and `packageAccess.ts` (`assess-prep-learn`).
+
+---
+
+## 4. Flesh out Teach It (add 3 educator tools)
+
+Teach It currently has only Teaching Materials Generator. Add three sibling tools, each following the same edge-function pattern:
+
+1. **Lesson Plan Generator** (`lesson-plan`, 5 credits) — inputs: subject, grade, duration, learning objectives → returns standards-aligned lesson plan with warm-up, activities, assessment, materials.
+2. **Quiz Generator** (`quiz-generator`, 4 credits) — inputs: topic, grade, # questions, type (MC/short-answer/mixed) → returns questions + answer key.
+3. **Rubric Builder** (`rubric-builder`, 3 credits) — inputs: assignment description, grade, criteria count → returns multi-level scoring rubric (table).
+
+**Files per tool:**
+- `supabase/functions/<name>/index.ts`
+- `src/components/<Name>.tsx`
+- Wire into `src/pages/TeachIt.tsx` (tabs or cards)
+- Add to `toolCreditWeights.ts` and `packageAccess.ts` (`build-teach-launch`)
+
+---
+
+## 5. Convert Create It to a waitlist
+
+Stop charging 70 credits for nothing.
+
+- Remove credit cost from `toolCreditWeights.ts` for `create-it` (or set to 0).
+- Replace `CreateIt.tsx` body with a "Coming Soon — Join the Waitlist" page: brief description, email capture form, primary CTA.
+- New table `public.create_it_waitlist` (id, email, user_id nullable, created_at) with RLS: anyone can INSERT, only admins can SELECT. Includes GRANTs.
+- New edge function `join-create-it-waitlist` (verify_jwt=false, accepts email, rate-limited by IP via `throttle_ip`, inserts row).
+- Keep route in App.tsx; remove from any "billable tools" lists.
+
+---
+
+## Technical notes
+
+- All new edge functions follow the project's standard pattern: `corsHeaders` import, JWT verify in code, moderation check, `check_and_increment_ai_usage` RPC for credits, `providerRouter` for model selection, structured JSON output.
+- After each batch, deploy via `supabase--deploy_edge_functions` and smoke-test with `supabase--curl_edge_functions`.
+- One migration only (for the Create It waitlist table) — runs once, gets approval, then code edits proceed.
+- Memory updates: refresh `mem://features/home-page-tool-cards`, add new memory `mem://features/resume-builder`, update `mem://features/act-it-tool` if renamed.
+
+## Execution order
+
+1. `packageAccess.ts` edit + ToolGuard sanity check
+2. Rename Study It + Act It (copy-only changes)
+3. Resume Builder (edge function + component + wiring)
+4. Teach It expansion (3 edge functions + 3 components + page wiring)
+5. Create It waitlist (migration → component → edge function)
+
+Estimated scope: ~5 edge functions, ~5 components, 1 migration, ~10 file edits.
