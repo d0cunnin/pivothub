@@ -10,7 +10,7 @@ export interface ModerationResult {
 }
 
 /**
- * Moderates text content using OpenAI's omni-moderation-latest model
+ * Moderates text content using the Lovable AI Gateway (google/gemini-2.5-flash-lite)
  * Logs all moderation attempts to the moderation_log table
  * 
  * @param text - The text content to moderate
