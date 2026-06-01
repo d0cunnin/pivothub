@@ -251,14 +251,14 @@ export default function CreateIt() {
   const handleSave = async () => {
     if (!blueprint || !user) return;
     try {
-      const { error } = await supabase.from("create_it_blueprints").insert({
+      const { error } = await supabase.from("create_it_blueprints").insert([{
         user_id: user.id,
         platform_name: form.appName,
         platform_description: form.platformDescription,
-        industry: form.primaryPurpose || null,
-        platform_type: form.platformType || null,
-        blueprint_json: blueprint as unknown as Record<string, unknown>,
-      });
+        industry: form.primaryPurpose || undefined,
+        platform_type: form.platformType || undefined,
+        blueprint_json: blueprint as unknown as never,
+      }]);
       if (error) throw error;
       await loadHistory();
       toast.success("Saved to your blueprint history!");
