@@ -135,7 +135,7 @@ async function callModel(
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
-        max_completion_tokens: 8000,
+        max_completion_tokens: 5000,
         response_format: { type: 'json_object' },
       }),
       signal: controller.signal,
