@@ -47,33 +47,48 @@ const BLUEPRINT_KEYS = [
   'aiBuildPrompt',
 ] as const;
 
-type Blueprint = Record<(typeof BLUEPRINT_KEYS)[number], string>;
+type BlueprintKey = (typeof BLUEPRINT_KEYS)[number];
+type Blueprint = Record<BlueprintKey, string>;
 
-function buildSystemPrompt(skillLevel: string): string {
+const KEY_DESCRIPTIONS: Record<BlueprintKey, string> = {
+  executiveSummary: "Overview of the platform, the problem it solves, the target users, and the market opportunity.",
+  technologyStack: "Recommended stack with sections for Frontend, Backend, Database, Authentication, Payments, Storage, Notifications, Hosting, Analytics, and AI Services — with a one-line justification for each choice.",
+  databaseArchitecture: "Tables (with key columns and types), relationships, user roles, permissions, and data flow.",
+  applicationArchitecture: "Frontend architecture, Backend architecture, API architecture, Security architecture, and Deployment architecture.",
+  userFlow: "Step-by-step user journey, the screens required, the features on each screen, and the navigation structure.",
+  integrations: "For each selected integration, explain why it should be used and how it fits into the stack.",
+  monetizationStrategy: "Pricing recommendations, realistic revenue projections, and growth opportunities.",
+  developmentRoadmap: "Phase 1 MVP, Phase 2 Beta, Phase 3 Launch, Phase 4 Scale — each with deliverables and a rough timeline.",
+  buildInstructions: "Concrete build instructions with a subsection for Lovable, Claude Code, OpenAI Codex, Cursor, Bolt, Replit, and Webflow.",
+  githubSetup: "A numbered guide: 1) Create GitHub Repository, 2) Connect GitHub to Lovable, 3) Connect GitHub to Claude Code, 4) Configure Branch Strategy, 5) Configure Deployment Workflow, 6) Configure Environment Variables, 7) Configure Secrets, 8) Configure CI/CD.",
+  aiBuildPrompt: "A single, highly detailed, ready-to-paste implementation prompt the user can paste directly into Lovable, Claude Code, OpenAI, Cursor, or Bolt to generate the first version of the application. Include the stack, data model, core features, and acceptance criteria.",
+};
+
+// Split into 3 chunks so each AI call stays well under the token cap and
+// avoids truncation. Chunks run in parallel for low wall-clock latency.
+const CHUNKS: BlueprintKey[][] = [
+  ['executiveSummary', 'technologyStack', 'databaseArchitecture', 'applicationArchitecture'],
+  ['userFlow', 'integrations', 'monetizationStrategy', 'developmentRoadmap'],
+  ['buildInstructions', 'githubSetup', 'aiBuildPrompt'],
+];
+
+function buildSystemPrompt(skillLevel: string, keys: BlueprintKey[]): string {
+  const schemaLines = keys.map((k) => `  "${k}": "${KEY_DESCRIPTIONS[k]}"`).join(',\n');
   return `You are "AI Startup Architect" — a principal software architect and startup CTO who has shipped dozens of production SaaS, marketplace, and mobile platforms. You write blueprints detailed enough that a developer, an agency, or an AI builder (Lovable, Claude Code, OpenAI Codex, Cursor, Bolt, Replit, Webflow) can begin building immediately.
 
 QUALITY BAR: Treat this as a $10,000+ technical architecture engagement. Be specific, opinionated, and production-ready. Recommend concrete technologies, name actual tables and columns, describe real API routes, and give phased timelines. Never be vague.
 
 TECHNICAL DEPTH: Tailor the depth and terminology to a "${skillLevel}" builder. For Beginner, explain concepts plainly and prefer no-code/low-code paths. For Agency/Enterprise, include scalability, security, compliance, observability, and team workflow.
 
-OUTPUT FORMAT: Respond with a single valid JSON object and nothing else. Use these exact keys, each containing a detailed, well-structured markdown string (use ## / ### headings, bullet lists, and tables where helpful):
+OUTPUT FORMAT: Respond with a single valid JSON object containing EXACTLY these ${keys.length} keys and nothing else. Each value is a detailed, well-structured markdown string (use ## / ### headings, bullet lists, and tables where helpful). Keep the total response under ~3500 tokens so the JSON is never truncated.
 
 {
-  "executiveSummary": "Overview of the platform, the problem it solves, the target users, and the market opportunity.",
-  "technologyStack": "Recommended stack with sections for Frontend, Backend, Database, Authentication, Payments, Storage, Notifications, Hosting, Analytics, and AI Services — with a one-line justification for each choice.",
-  "databaseArchitecture": "Tables (with key columns and types), relationships, user roles, permissions, and data flow.",
-  "applicationArchitecture": "Frontend architecture, Backend architecture, API architecture, Security architecture, and Deployment architecture.",
-  "userFlow": "Step-by-step user journey, the screens required, the features on each screen, and the navigation structure.",
-  "integrations": "For each selected integration, explain why it should be used and how it fits into the stack.",
-  "monetizationStrategy": "Pricing recommendations, realistic revenue projections, and growth opportunities.",
-  "developmentRoadmap": "Phase 1 MVP, Phase 2 Beta, Phase 3 Launch, Phase 4 Scale — each with deliverables and a rough timeline.",
-  "buildInstructions": "Concrete build instructions with a subsection for Lovable, Claude Code, OpenAI Codex, Cursor, Bolt, Replit, and Webflow.",
-  "githubSetup": "A numbered guide: 1) Create GitHub Repository, 2) Connect GitHub to Lovable, 3) Connect GitHub to Claude Code, 4) Configure Branch Strategy, 5) Configure Deployment Workflow, 6) Configure Environment Variables, 7) Configure Secrets, 8) Configure CI/CD.",
-  "aiBuildPrompt": "A single, highly detailed, ready-to-paste implementation prompt the user can paste directly into Lovable, Claude Code, OpenAI, Cursor, or Bolt to generate the first version of the application. Include the stack, data model, core features, and acceptance criteria."
+${schemaLines}
 }
 
-IMPORTANT: Return ONLY the JSON object. No prose, no markdown fences, no commentary before or after.`;
+IMPORTANT: Return ONLY the JSON object with exactly the ${keys.length} keys listed above. No prose, no markdown fences, no commentary before or after.`;
 }
+
 
 function buildUserPrompt(body: CreateItRequest): string {
   const features = [...(body.features || [])];
