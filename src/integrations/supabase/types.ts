@@ -389,6 +389,42 @@ export type Database = {
         }
         Relationships: []
       }
+      create_it_blueprints: {
+        Row: {
+          blueprint_json: Json
+          created_at: string
+          id: string
+          industry: string | null
+          platform_description: string | null
+          platform_name: string
+          platform_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blueprint_json: Json
+          created_at?: string
+          id?: string
+          industry?: string | null
+          platform_description?: string | null
+          platform_name: string
+          platform_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blueprint_json?: Json
+          created_at?: string
+          id?: string
+          industry?: string | null
+          platform_description?: string | null
+          platform_name?: string
+          platform_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       credit_deduction_log: {
         Row: {
           credits_deducted: number
