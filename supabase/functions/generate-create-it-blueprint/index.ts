@@ -134,7 +134,7 @@ async function callModel(
   systemPrompt: string,
   userPrompt: string,
   timeoutMs: number,
-): Promise<Blueprint> {
+): Promise<Partial<Blueprint>> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -150,7 +150,7 @@ async function callModel(
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
-        max_completion_tokens: 5000,
+        max_completion_tokens: 4000,
         response_format: { type: 'json_object' },
       }),
       signal: controller.signal,
@@ -167,11 +167,28 @@ async function callModel(
     }
 
     const data = await response.json();
-    return extractJson<Blueprint>(data);
+    return extractJson<Partial<Blueprint>>(data);
   } finally {
     clearTimeout(timeoutId);
   }
 }
+
+async function generateChunk(
+  apiKey: string,
+  keys: BlueprintKey[],
+  skillLevel: string,
+  userPrompt: string,
+): Promise<Partial<Blueprint>> {
+  const systemPrompt = buildSystemPrompt(skillLevel, keys);
+  try {
+    return await callModel(apiKey, PRIMARY_MODEL, systemPrompt, userPrompt, 60_000);
+  } catch (err: any) {
+    if (err?.status === 402) throw err;
+    console.warn(`[${ENDPOINT}] Chunk [${keys.join(',')}] primary failed, falling back: ${err?.message}`);
+    return await callModel(apiKey, FALLBACK_MODEL, systemPrompt, userPrompt, 55_000);
+  }
+}
+
 
 function validateBlueprint(bp: Partial<Blueprint>): Blueprint {
   const result = {} as Blueprint;
