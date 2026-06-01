@@ -70,7 +70,9 @@ OUTPUT FORMAT: Respond with a single valid JSON object and nothing else. Use the
   "buildInstructions": "Concrete build instructions with a subsection for Lovable, Claude Code, OpenAI Codex, Cursor, Bolt, Replit, and Webflow.",
   "githubSetup": "A numbered guide: 1) Create GitHub Repository, 2) Connect GitHub to Lovable, 3) Connect GitHub to Claude Code, 4) Configure Branch Strategy, 5) Configure Deployment Workflow, 6) Configure Environment Variables, 7) Configure Secrets, 8) Configure CI/CD.",
   "aiBuildPrompt": "A single, highly detailed, ready-to-paste implementation prompt the user can paste directly into Lovable, Claude Code, OpenAI, Cursor, or Bolt to generate the first version of the application. Include the stack, data model, core features, and acceptance criteria."
-}`;
+}
+
+IMPORTANT: Return ONLY the JSON object. No prose, no markdown fences, no commentary before or after.`;
 }
 
 function buildUserPrompt(body: CreateItRequest): string {
@@ -260,8 +262,14 @@ serve(async (req) => {
     );
   } catch (error: any) {
     console.error(`[${ENDPOINT}] Error:`, error);
-    return new Response(JSON.stringify({ error: error.message || 'Failed to generate blueprint' }), {
-      status: 500,
+    const msg = error?.message || 'Failed to generate blueprint';
+    const isAIFailure = /malformed JSON|empty response|AI error/i.test(msg);
+    const status = isAIFailure ? 502 : 500;
+    const userMsg = isAIFailure
+      ? 'AI service is temporarily unavailable. Please try again in a moment.'
+      : msg;
+    return new Response(JSON.stringify({ error: userMsg }), {
+      status,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
