@@ -50,6 +50,45 @@ export type Database = {
         }
         Relationships: []
       }
+      create_it_blueprints: {
+        Row: {
+          id: string
+          user_id: string
+          platform_name: string
+          platform_description: string | null
+          industry: string | null
+          platform_type: string | null
+          blueprint_json: Json
+          pdf_url: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          platform_name: string
+          platform_description?: string | null
+          industry?: string | null
+          platform_type?: string | null
+          blueprint_json: Json
+          pdf_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          platform_name?: string
+          platform_description?: string | null
+          industry?: string | null
+          platform_type?: string | null
+          blueprint_json?: Json
+          pdf_url?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       admin_audit_log: {
         Row: {
           action: string
