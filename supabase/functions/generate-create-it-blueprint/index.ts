@@ -6,6 +6,11 @@ import { extractJson } from '../_shared/aiResponse.ts';
 const ENDPOINT = '/generate-create-it-blueprint';
 const PRIMARY_MODEL = 'google/gemini-2.5-flash';
 const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
+const MAX_TOKENS = 5000;
+// Gateway statuses worth a quick retry (transient: rate limit / upstream blips).
+const TRANSIENT_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 interface CreateItRequest {
   // Step 1 — Platform Overview
@@ -64,12 +69,17 @@ const KEY_DESCRIPTIONS: Record<BlueprintKey, string> = {
   aiBuildPrompt: "A single, highly detailed, ready-to-paste implementation prompt the user can paste directly into Lovable, Claude Code, OpenAI, Cursor, or Bolt to generate the first version of the application. Include the stack, data model, core features, and acceptance criteria.",
 };
 
-// Split into 3 chunks so each AI call stays well under the token cap and
-// avoids truncation. Chunks run in parallel for low wall-clock latency.
+// Split into small chunks so each AI call stays well under the token cap and
+// avoids truncation. The heaviest sections (buildInstructions, githubSetup,
+// aiBuildPrompt) are isolated so no single call has to emit too much at once.
+// Chunks run in parallel for low wall-clock latency, and a single failed chunk
+// no longer fails the whole blueprint (see Promise.allSettled below).
 const CHUNKS: BlueprintKey[][] = [
-  ['executiveSummary', 'technologyStack', 'databaseArchitecture', 'applicationArchitecture'],
+  ['executiveSummary', 'technologyStack'],
+  ['databaseArchitecture', 'applicationArchitecture'],
   ['userFlow', 'integrations', 'monetizationStrategy', 'developmentRoadmap'],
-  ['buildInstructions', 'githubSetup', 'aiBuildPrompt'],
+  ['buildInstructions', 'githubSetup'],
+  ['aiBuildPrompt'],
 ];
 
 function buildSystemPrompt(skillLevel: string, keys: BlueprintKey[]): string {
@@ -150,7 +160,7 @@ async function callModel(
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
-        max_completion_tokens: 4000,
+        max_completion_tokens: MAX_TOKENS,
         response_format: { type: 'json_object' },
       }),
       signal: controller.signal,
@@ -173,6 +183,31 @@ async function callModel(
   }
 }
 
+// Call a model with up to `retries` extra attempts on transient gateway errors,
+// using exponential backoff. Payment errors (402) are never retried.
+async function callModelWithRetry(
+  apiKey: string,
+  model: string,
+  systemPrompt: string,
+  userPrompt: string,
+  timeoutMs: number,
+  retries = 2,
+): Promise<Partial<Blueprint>> {
+  let lastErr: any;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await callModel(apiKey, model, systemPrompt, userPrompt, timeoutMs);
+    } catch (err: any) {
+      lastErr = err;
+      if (err?.status === 402) throw err;
+      const retryable = err?.status === undefined || TRANSIENT_STATUSES.has(err.status);
+      if (!retryable || attempt === retries) break;
+      await sleep(400 * 2 ** attempt);
+    }
+  }
+  throw lastErr;
+}
+
 async function generateChunk(
   apiKey: string,
   keys: BlueprintKey[],
@@ -181,11 +216,11 @@ async function generateChunk(
 ): Promise<Partial<Blueprint>> {
   const systemPrompt = buildSystemPrompt(skillLevel, keys);
   try {
-    return await callModel(apiKey, PRIMARY_MODEL, systemPrompt, userPrompt, 60_000);
+    return await callModelWithRetry(apiKey, PRIMARY_MODEL, systemPrompt, userPrompt, 60_000);
   } catch (err: any) {
     if (err?.status === 402) throw err;
     console.warn(`[${ENDPOINT}] Chunk [${keys.join(',')}] primary failed, falling back: ${err?.message}`);
-    return await callModel(apiKey, FALLBACK_MODEL, systemPrompt, userPrompt, 55_000);
+    return await callModelWithRetry(apiKey, FALLBACK_MODEL, systemPrompt, userPrompt, 55_000);
   }
 }
 
@@ -245,20 +280,33 @@ serve(async (req) => {
     const userPrompt = buildUserPrompt(body);
     const skillLevel = body.skillLevel || 'Intermediate';
 
-    // Generate blueprint as 3 parallel chunks to avoid token-cap truncation.
-    let partials: Partial<Blueprint>[];
-    try {
-      partials = await Promise.all(
-        CHUNKS.map((keys) => generateChunk(LOVABLE_API_KEY, keys, skillLevel, userPrompt)),
-      );
-    } catch (err: any) {
-      if (err?.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
+    // Generate blueprint as parallel chunks to avoid token-cap truncation.
+    // allSettled (not all): a single failed chunk leaves a few sections blank
+    // rather than failing the entire blueprint. Slight stagger desyncs the
+    // calls so a burst of requests is less likely to trip gateway rate limits.
+    const results = await Promise.allSettled(
+      CHUNKS.map(async (keys, i) => {
+        if (i > 0) await sleep(i * 150);
+        return generateChunk(LOVABLE_API_KEY, keys, skillLevel, userPrompt);
+      }),
+    );
+
+    const merged: Partial<Blueprint> = {};
+    let creditsExhausted = false;
+    for (const r of results) {
+      if (r.status === 'fulfilled') {
+        Object.assign(merged, r.value);
+      } else if ((r.reason as any)?.status === 402) {
+        creditsExhausted = true;
+      } else {
+        console.error(`[${ENDPOINT}] Chunk failed:`, (r.reason as any)?.message);
       }
-      throw err;
     }
 
-    const merged: Partial<Blueprint> = Object.assign({}, ...partials);
+    if (creditsExhausted && Object.keys(merged).length === 0) {
+      throw new Error('AI credits exhausted. Please add credits in Settings.');
+    }
+
     const blueprint = validateBlueprint(merged);
     const modelUsed = PRIMARY_MODEL;
 
