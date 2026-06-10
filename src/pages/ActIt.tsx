@@ -14,6 +14,7 @@ import { Clapperboard, Download, Loader2, Zap, Film, Theater, Tv, Play, FileText
 import { Helmet } from 'react-helmet-async';
 import heroImage from "@/assets/hero-image.jpg";
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import { ToolGuard } from '@/components/ToolGuard';
 import jsPDF from 'jspdf';
@@ -115,18 +116,18 @@ const ActIt = () => {
         lengthPreference: lengthPreference || undefined,
       };
 
-      const response = await supabase.functions.invoke('act-it', {
+      const { data, error } = await invokeFunction('act-it', {
         body: requestBody,
         headers: {
           Authorization: `Bearer ${session.access_token}`
         }
       });
 
-      if (response.error) throw response.error;
-      if (response.data?.error) throw new Error(response.data.error);
-      if (!response.data?.concept) throw new Error('No story concept was returned. Please try again.');
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.concept) throw new Error('No story concept was returned. Please try again.');
 
-      setGeneratedConcept(response.data.concept);
+      setGeneratedConcept(data.concept);
       setShowResults(true);
       // Initialize all sections as expanded
       setExpandedSections({

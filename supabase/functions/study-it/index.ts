@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
+import { generateText, systemUser } from '../_shared/aiGenerate.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -181,109 +182,37 @@ A list of key New Testament references connected to the topic.
       });
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 90000); // 90 seconds
-
-    let lovableResponse;
-
+    const maxTokens = 4000;
+    let content: string;
     try {
-      lovableResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Generate a structured biblical reference for the topic: "${topic.trim()}"` }
-          ],
-          max_completion_tokens: 4000,
-        }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeout);
-    } catch (abortError: any) {
-      clearTimeout(timeout);
-      
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ Primary model timed out, falling back to faster model...');
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000);
-        
-        try {
-          lovableResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'google/gemini-2.5-flash',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Generate a structured biblical reference for the topic: "${topic.trim()}"` }
-              ],
-              max_completion_tokens: 3500,
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          clearTimeout(timeout2);
-          console.error('Fallback model also failed:', fallbackError);
-          return new Response(JSON.stringify({ error: 'AI service temporarily unavailable. Please try again.' }), {
-            status: 503,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-        }
-      } else {
-        throw abortError;
-      }
-    }
-
-    if (!lovableResponse.ok) {
-      const errorText = await lovableResponse.text();
-      console.error('AI gateway error:', lovableResponse.status, errorText);
-      
-      if (lovableResponse.status === 429) {
+      content = await generateText(
+        lovableKey,
+        systemUser(systemPrompt, `Generate a structured biblical reference for the topic: "${topic.trim()}"`),
+        { maxTokens }
+      );
+    } catch (err: any) {
+      if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'AI rate limit exceeded. Please try again in a few minutes.' }), {
-          status: 429,
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      
-      if (lovableResponse.status === 402) {
+      if (err?.status === 402) {
         return new Response(JSON.stringify({ error: 'AI service credits exhausted. Please contact support.' }), {
-          status: 402,
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      
-      return new Response(JSON.stringify({ error: 'AI generation failed. Please try again.' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const aiResponse = await lovableResponse.json();
-    const content = aiResponse.choices?.[0]?.message?.content;
-
-    if (!content) {
-      console.error('No content in AI response:', aiResponse);
-      return new Response(JSON.stringify({ error: 'AI returned empty response. Please try again.' }), {
-        status: 500,
+      console.error('[study-it] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     console.log(`✅ Study It reference generated for user ${userId}: "${topic}"`);
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       content,
       creditsUsed: 2,
       remaining: usageData.remaining

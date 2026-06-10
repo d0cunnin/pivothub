@@ -9,6 +9,7 @@ import { Monitor, Clock, AlertTriangle, Download } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -315,7 +316,7 @@ export const TechReadinessAssessment = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const { data, error } = await supabase.functions.invoke('tech-readiness-assessment', {
+      const { data, error } = await invokeFunction('tech-readiness-assessment', {
         body: {
           localScores: scores,
           answersBreakdown: {

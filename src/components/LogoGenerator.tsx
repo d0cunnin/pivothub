@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Palette, Type, Sparkles, AlertCircle } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 
 interface LogoConcept {
@@ -43,7 +44,7 @@ export const LogoGenerator = () => {
       }
 
       // Use Supabase SDK with proper authentication
-      const { data, error } = await supabase.functions.invoke('generate-logo', {
+      const { data, error } = await invokeFunction('generate-logo', {
         body: {
           businessName,
           industry,

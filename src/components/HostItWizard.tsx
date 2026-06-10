@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ChevronLeft, ChevronRight, Download, ExternalLink, AlertCircle, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { generateEventPlanPDF } from '@/lib/pdf-templates/event-template';
 import { generateGoogleCalendarUrl, generateOutlookUrl, downloadICSFile } from '@/lib/calendar-utils';
 
@@ -151,7 +152,7 @@ export function HostItWizard() {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-event-plan', {
+      const { data, error } = await invokeFunction('generate-event-plan', {
         body: formData,
         headers: {
           Authorization: `Bearer ${session.access_token}`

@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Target, Download, Sparkles, HelpCircle } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
 
@@ -223,7 +224,7 @@ export const BusinessFoundationBuilder = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+      const { data, error } = await invokeFunction('generate-business-content', {
         body: {
           type: 'business-foundation',
           data: formData

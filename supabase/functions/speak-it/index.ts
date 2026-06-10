@@ -1,6 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from '../_shared/aiGenerate.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -125,6 +125,11 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+
+    // Date context for timeline-based prompts (referenced as ${currentDate} etc.)
+    const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const twoWeeksLater = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    const fourWeeksLater = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
     // Build system prompt based on path
     let systemPrompt = '';
@@ -415,118 +420,49 @@ FORMATTING REQUIREMENTS:
 - Use markdown formatting with clear headings, bullet points, and tables`;
     }
 
-    // Call Lovable AI with timeout and fallback
     const lovableKey = Deno.env.get('LOVABLE_API_KEY');
-    
-    // Add timeout with GPT-5 fallback to GPT-5 Mini
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000);  // 2 minutes
-
-    let lovableResponse;
-
-    try {
-      lovableResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-5',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Generate a comprehensive ${path === 'speaker' ? 'public speaking' : 'podcast'} launch plan.` }
-          ],
-          max_completion_tokens: 8000,
-        }),
-        signal: controller.signal
+    if (!lovableKey) {
+      return new Response(JSON.stringify({ error: 'AI service not configured' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
-      
-      clearTimeout(timeout);
-      
-    } catch (abortError) {
-      clearTimeout(timeout);
-      
-      // If GPT-5 timed out, fall back to GPT-5 Mini
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000);  // 1 minute
-        
-        try {
-          lovableResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5-mini',  // Faster fallback model
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Generate a comprehensive ${path === 'speaker' ? 'public speaking' : 'podcast'} launch plan.` }
-              ],
-              max_completion_tokens: 8000,
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-          
-        } catch (secondAbortError) {
-          clearTimeout(timeout2);
-          
-          // Both attempts failed - return error
-          if (secondAbortError.name === 'AbortError') {
-            return new Response(
-              JSON.stringify({
-                error: 'timeout',
-                message: 'AI request timed out after two attempts. The service may be experiencing issues. Please try again in a few moments.',
-                success: false
-              }),
-              { status: 408, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-            );
-          }
-          
-          throw secondAbortError;
-        }
-      } else {
-        throw abortError;
+    }
+
+    const maxTokens = 8000;
+    let generatedPlan: string;
+    try {
+      generatedPlan = await generateText(
+        lovableKey,
+        systemUser(systemPrompt, `Generate a comprehensive ${path === 'speaker' ? 'public speaking' : 'podcast'} launch plan.`),
+        { maxTokens }
+      );
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(
+          JSON.stringify({
+            error: 'rate_limit',
+            message: 'AI service rate limit exceeded. Please try again in a few moments.',
+            success: false
+          }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
-    }
-
-    // Handle 402 and 429 errors
-    if (lovableResponse.status === 402) {
+      if (err?.status === 402) {
+        return new Response(
+          JSON.stringify({
+            error: 'ai_credits_exhausted',
+            message: 'AI service unavailable. Please add credits in Settings → Cloud & AI balance.',
+            success: false
+          }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      console.error('[speak-it] Generation failed:', err?.message);
       return new Response(
-        JSON.stringify({
-          error: 'ai_credits_exhausted',
-          message: 'AI service unavailable. Please add credits in Settings → Cloud & AI balance.',
-          success: false
-        }),
-        { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    if (lovableResponse.status === 429) {
-      return new Response(
-        JSON.stringify({
-          error: 'rate_limit',
-          message: 'AI service rate limit exceeded. Please try again in a few moments.',
-          success: false
-        }),
-        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    if (!lovableResponse.ok) {
-      const errorText = await lovableResponse.text();
-      console.error('Lovable AI error:', lovableResponse.status, errorText);
-      throw new Error(`Lovable AI error: ${lovableResponse.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const lovableData = await lovableResponse.json();
-    const generatedPlan = extractContent(lovableData);
 
     return new Response(
       JSON.stringify({

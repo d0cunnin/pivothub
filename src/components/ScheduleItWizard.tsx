@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ChevronLeft, ChevronRight, Calendar, Download, ExternalLink, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { generateSchedulePDF } from '@/lib/pdf-templates/schedule-template';
 import { generateRecurringScheduleLinks } from '@/lib/calendar-utils';
 import { TimePickerField } from '@/components/ui/time-picker';
@@ -244,7 +245,7 @@ export function ScheduleItWizard() {
         preparedData.workScheduleDetails = `${daysStr} ${formData.workStartTime} - ${formData.workEndTime}`;
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-schedule', {
+      const { data, error } = await invokeFunction('generate-schedule', {
         body: preparedData,
         headers: {
           Authorization: `Bearer ${session.access_token}`

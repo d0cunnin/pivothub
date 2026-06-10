@@ -5,6 +5,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { extractContent } from "../_shared/aiResponse.ts";
+import { generateRaw, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const grantDataSchema = z.object({
@@ -134,126 +135,22 @@ ${grantData.additionalInformation ? `- Additional Information: ${grantData.addit
 ${grantData.grantRequirements ? `- Grant Requirements: ${grantData.grantRequirements}` : ''}
 
 Return ONLY JSON as specified (no preamble).`;
-    // Single model strategy: GPT-5 Mini with 90s timeout
-    console.log('🚀 Starting grant generation with GPT-5 Mini (single model, 90s)...');
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 90000); // 90s timeout
-
-    let aiResponse;
-    const modelUsed = 'openai/gpt-5-mini';
-
+    console.log('🚀 Starting grant generation...');
+    const maxTokens = 8000;
+    let data: unknown;
     try {
-      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-5-mini',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Using the provided grant data, generate the proposal & LOI. Project title: ${grantData.projectTitle}. Focus on measurable outcomes, impact, and realistic budget justification.` }
-          ],
-          max_completion_tokens: 8000, // GPT-5 family requires max_completion_tokens (not max_tokens)
-        }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeout);
-      console.log('✅ GPT-5 Mini completed successfully');
-    } catch (e) {
-      if ((e as any).name === 'AbortError') {
-        console.error('❌ GPT-5 Mini timed out (90s)');
-        return new Response(JSON.stringify({
-          error: 'Request timeout',
-          details: 'Grant generation exceeded 90s. Please simplify your inputs or try again.',
-          timeoutDuration: '90 seconds',
-          modelAttempted: 'GPT-5 Mini (90s)'
-        }), {
-          status: 408,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-      throw e;
-    }
-
-    // Text-first parsing to prevent JSON crashes
-    let text;
-    let data;
-    try {
-      text = await aiResponse.text();
-      
-      if (!aiResponse.ok) {
-        console.error("Lovable AI Gateway error:", aiResponse.status, text.slice(0, 300));
-        
-        if (aiResponse.status === 429) {
-          return new Response(JSON.stringify({ 
-            error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        if (aiResponse.status === 402) {
-          return new Response(JSON.stringify({ 
-            error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        
-        return new Response(JSON.stringify({
-          error: `Lovable AI error ${aiResponse.status}`,
-          details: text.slice(0, 300),
-        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      }
-      
-      // Helper function to extract JSON from potentially messy AI output
-      function extractJsonFromText(s: string): string | null {
-        if (!s) return null;
-
-        // 1) Strip code fences ```json ... ``` or ``` ... ```
-        const fenced = s.match(/```(?:json)?\s*([\s\S]*?)```/i);
-        if (fenced?.[1]) {
-          s = fenced[1].trim();
-        }
-
-        // 2) Find first plausible JSON object by matching top-level braces
-        const firstBrace = s.indexOf('{');
-        const lastBrace = s.lastIndexOf('}');
-        if (firstBrace !== -1 && lastBrace > firstBrace) {
-          const candidate = s.slice(firstBrace, lastBrace + 1).trim();
-          try {
-            JSON.parse(candidate);
-            return candidate;
-          } catch { /* continue */ }
-        }
-
-        // 3) As-is attempt last
-        try { 
-          JSON.parse(s); 
-          return s; 
-        } catch { 
-          return null; 
-        }
-      }
-
-      const jsonStr = extractJsonFromText(text);
-      if (!jsonStr) {
-        console.error('AI returned non-JSON content, proceeding to regex fallback');
-        data = { choices: [{ message: { content: text } }] }; // Wrap for fallback processing
-      } else {
-        data = JSON.parse(jsonStr);
-      }
-      
-      // Log AI response details
-      console.log('=== AI Response Debug ===');
-      console.log('🤖 Model Used:', modelUsed);
+      data = await generateRaw(lovableApiKey, systemUser(systemPrompt, `Using the provided grant data, generate the proposal & LOI. Project title: ${grantData.projectTitle}. Focus on measurable outcomes, impact, and realistic budget justification.`), { maxTokens });
+      console.log('✅ Generation completed successfully');
       console.log('⏱️ Response Time:', Date.now() - startTime, 'ms');
-      console.log('📊 Response Status:', aiResponse.status);
-      console.log('📏 Response Length:', text.length);
-      console.log('🔍 Raw Response Preview:', text.slice(0, 500));
-    } catch (err) {
-      console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
-      return new Response(JSON.stringify({
-        error: "Lovable AI Gateway returned invalid data. Please try again.",
-      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      console.error('[generate-grant-content] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     let grantContent;

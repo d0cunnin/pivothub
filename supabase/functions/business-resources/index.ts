@@ -3,8 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -236,7 +235,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
   "strategicSummary": "..."
 }`;
 
-    // Initialize Lovable AI model config (use GPT-5 for text generation)
+    // Initialize Lovable AI model config
     const LOVABLE_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_KEY) {
       console.warn('Lovable AI key missing - returning unenhanced Google Places results');
@@ -247,57 +246,13 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
       );
     }
 
-    const modelConfig = {
-      model: 'openai/gpt-5',
-      apiKey: LOVABLE_KEY,
-      endpoint: 'https://ai.gateway.lovable.dev/v1/chat/completions'
-    };
-
     try {
       console.log('Invoking Lovable AI for AI enhancement...');
-      const aiResponse = await fetch(modelConfig.endpoint, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${modelConfig.apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: modelConfig.model,
-          messages: [
-            { 
-              role: 'system', 
-              content: 'You are an expert business resource strategist. Always return valid JSON without markdown formatting.' 
-            },
-            { role: 'user', content: aiPrompt }
-          ],
-          max_completion_tokens: 4000
-        })
-      });
-
-      if (!aiResponse.ok) {
-        if (aiResponse.status === 429) {
-          console.warn('Rate limit hit, using unenhanced results');
-          const resources = formatGooglePlacesResults(allPlaces, location);
-          return new Response(
-            JSON.stringify({ resources }),
-            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-          );
-        }
-        if (aiResponse.status === 402) {
-          console.warn('AI credits exhausted, using unenhanced results');
-          const resources = formatGooglePlacesResults(allPlaces, location);
-          return new Response(
-            JSON.stringify({ resources }),
-            { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-          );
-        }
-        const errorText = await aiResponse.text();
-        console.error(`Lovable AI error (${aiResponse.status}):`, errorText);
-        throw new Error(`Lovable AI returned ${aiResponse.status}`);
-      }
-
-      const aiData = await aiResponse.json();
-      let aiContent = extractContent(aiData);
+      let aiContent = await generateText(
+        LOVABLE_KEY,
+        systemUser('You are an expert business resource strategist. Always return valid JSON without markdown formatting.', aiPrompt),
+        { maxTokens: 4000 }
+      );
       
       // Strip markdown code fences if present
       aiContent = aiContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();

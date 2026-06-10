@@ -3,7 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
 import { moderateContent } from "../_shared/moderation.ts";
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Input validation schema
 const careerAssessmentSchema = z.object({
@@ -100,8 +100,6 @@ serve(async (req) => {
       console.error('Lovable AI key not found');
       throw new Error('Lovable AI key not found');
     }
-
-    console.log('Processing career assessment with OpenAI GPT-5...');
 
     const systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - CAREER ASSESSMENT
 
@@ -471,92 +469,24 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
     }
   }
 }`;
-    // Add timeout with GPT-5 Mini fallback
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000);
-
-    let response;
+    const maxTokens = 16000;
+    let aiResponseText: string;
     try {
-      response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-5',
-          max_completion_tokens: 16000,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
-          ],
-        }),
-        signal: controller.signal
-      });
-      clearTimeout(timeout);
-    } catch (abortErr) {
-      if (abortErr.name === 'AbortError') {
-        console.log('⚠️ GPT-5 timeout, fallback to GPT-5 Mini');
-        const c2 = new AbortController();
-        const t2 = setTimeout(() => c2.abort(), 60000);
-        response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${lovableApiKey}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'openai/gpt-5-mini',
-            max_completion_tokens: 11000,
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: `Analyze these career assessment responses and provide personalized career recommendations.` }
-            ],
-          }),
-          signal: c2.signal
-        });
-        clearTimeout(t2);
-      } else throw abortErr;
-    }
-
-    let text = await response.text();
-    let data;
-    try {
-      if (!response.ok) {
-        console.error('Lovable AI error:', response.status, text.slice(0, 300));
-        if (response.status === 429) return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        if (response.status === 402) return new Response(JSON.stringify({ error: 'AI credits exhausted. Add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        return new Response(JSON.stringify({ error: `Lovable AI error ${response.status}` }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      aiResponseText = await generateText(lovableApiKey, systemUser(systemPrompt, `Analyze these career assessment responses and provide personalized career recommendations.`), { maxTokens });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      data = JSON.parse(text);
-    } catch (err) {
-      console.error('Non-JSON response:', text?.slice(0, 300));
-      return new Response(JSON.stringify({ error: 'Invalid AI response. Please try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-    
-    if (!response.ok) {
-      const errorDetails = {
-        status: response.status,
-        statusText: response.statusText,
-        error: data.error
-      };
-      console.error('OpenAI API error:', errorDetails);
-      
-      // Return specific error message based on status code
-      let userMessage = 'Failed to analyze career assessment with OpenAI';
-      if (response.status === 401) {
-        userMessage = 'OpenAI API authentication failed. Please contact support.';
-      } else if (response.status === 429) {
-        userMessage = 'Rate limit exceeded. Please try again in a few minutes.';
-      } else if (response.status === 402) {
-        userMessage = 'Payment required. Please contact support.';
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      
-      throw new Error(userMessage);
+      console.error('[career-assessment] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-
-    console.log('Successfully received OpenAI response');
 
     let analysis;
     try {
-      analysis = JSON.parse(extractContent(data));
+      analysis = JSON.parse(aiResponseText);
       
       // Log success
       await logRequest(supabase, {

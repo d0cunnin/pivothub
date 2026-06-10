@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -129,33 +130,18 @@ COMMUNITY VOICE:
 - How Heard From Residents: ${formData.howHeard?.join(", ") || "Not specified"}
 - Key Themes: ${formData.keyThemes || "Not specified"}`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt }
-        ],
-        max_completion_tokens: 4000,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("AI Gateway error:", response.status, errorText);
-      throw new Error(`AI generation failed: ${response.status}`);
-    }
-
-    const data = await response.json();
-    const content = data.choices?.[0]?.message?.content;
-
-    if (!content) {
-      throw new Error("No content generated");
+    let content: string;
+    try {
+      content = await generateText(LOVABLE_API_KEY, systemUser(systemPrompt, userPrompt), { maxTokens: 4000 });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      console.error('[generate-community-assessment] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     console.log(`[generate-community-assessment] Completed in ${Date.now() - startTime}ms for user ${user.id}`);

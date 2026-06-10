@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, ChevronRight, Sprout, Sun, Droplets, Calendar, ShoppingCart, Leaf, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 
 interface GardenFormData {
   // Step 1: Location
@@ -173,7 +174,7 @@ export function GardenItWizard() {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-garden-plan', {
+      const { data, error } = await invokeFunction('generate-garden-plan', {
         body: formData,
         headers: {
           Authorization: `Bearer ${session.access_token}`

@@ -4,7 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateJson, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const socialMediaSchema = z.object({
@@ -223,52 +223,22 @@ QUALITY CHECKLIST:
 ✓ Engagement strategies included
 ✓ Trend-aware and timely content`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Create a comprehensive 30-day social media content calendar for ${businessName}. Start from today's date and create exactly 30 days of content.` }
-        ],
-        max_completion_tokens: 8000,
-      }),
-    });
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded. Please try again later.');
-      }
-      if (response.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
-      }
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const data = await response.json();
-
-    let contentCalendar;
+    let contentCalendar: any;
     try {
-      contentCalendar = JSON.parse(extractContent(data));
-    } catch (parseError) {
-      console.error('JSON parse error:', parseError);
-      // Fallback calendar if JSON parsing fails
-      contentCalendar = Array.from({ length: 30 }, (_, i) => ({
-        day: i + 1,
-        date: new Date(Date.now() + i * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }),
-        platform: platforms[i % platforms.length],
-        contentType: "Post",
-        caption: `Day ${i + 1} content for ${businessName}. Share your story and connect with your audience!`,
-        hashtags: ["#business", "#socialmedia", "#content", `#${businessName.replace(/\s+/g, '')}`],
-        visualSuggestion: "Brand-aligned visual showcasing your products/services",
-        bestTime: "Peak engagement hours"
-      }));
+      contentCalendar = await generateJson(
+        lovableApiKey,
+        systemUser(systemPrompt, `Create a comprehensive 30-day social media content calendar for ${businessName}. Start from today's date and create exactly 30 days of content.`),
+        { maxTokens: 8000 },
+      );
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      console.error('[social-media-content] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     await logRequest(guardResult.supabase, {

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { MapPin, ExternalLink, Phone, Clock, Star, ChevronDown, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 
 interface BusinessResource {
   id: string;
@@ -46,7 +47,7 @@ export const BusinessResourceFinder = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const { data: fnData, error: fnError } = await supabase.functions.invoke('business-resources', {
+      const { data: fnData, error: fnError } = await invokeFunction('business-resources', {
         body: {
           businessType: 'Small Business',
           industry: 'General',

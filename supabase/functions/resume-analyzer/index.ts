@@ -4,7 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const resumeAnalyzerSchema = z.object({
@@ -506,112 +506,24 @@ QUALITY STANDARDS:
 • Be constructively critical - this is professional feedback they're paying for
 • Quantify recommendations where possible (percentages, timelines, impact)`;
 
-    // Add timeout with GPT-5 Mini fallback
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000);
-
-    let aiResponse;
-
+    let aiResponseText: string;
     try {
-      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-5',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Please analyze this resume comprehensively following the detailed structure. Provide professional-grade feedback.` }
-          ],
-          max_completion_tokens: 5000,
-        }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeout);
-    } catch (abortError) {
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000);
-        
-        try {
-          aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Please analyze this resume comprehensively following the detailed structure. Provide professional-grade feedback.` }
-              ],
-              max_completion_tokens: 3500,
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          if (fallbackError.name === 'AbortError') {
-            return new Response(JSON.stringify({ 
-              error: 'Resume analysis is taking too long. Please try again with shorter text.' 
-            }), {
-              status: 200,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          throw fallbackError;
-        }
-      } else {
-        throw abortError;
+      aiResponseText = await generateText(lovableApiKey, systemUser(systemPrompt, `Please analyze this resume comprehensively following the detailed structure. Provide professional-grade feedback.`), { maxTokens: 5000 });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-    }
-
-    // Text-first parsing
-    let text;
-    let data;
-    try {
-      text = await aiResponse.text();
-      
-      if (!aiResponse.ok) {
-        console.error("Lovable AI Gateway error:", aiResponse.status, text.slice(0, 300));
-        
-        if (aiResponse.status === 429) {
-          return new Response(JSON.stringify({ 
-            error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        if (aiResponse.status === 402) {
-          return new Response(JSON.stringify({ 
-            error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        
-        return new Response(JSON.stringify({
-          error: `Lovable AI error ${aiResponse.status}`,
-          details: text.slice(0, 300),
-        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      
-      data = JSON.parse(text);
-    } catch (err) {
-      console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
-      return new Response(JSON.stringify({
-        error: "Lovable AI Gateway returned invalid data. Please try again.",
-      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      console.error('[resume-analyzer] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     let analysis;
     try {
-      const aiResponse = extractContent(data);
       // Sanitize and parse JSON
-      const sanitizedContent = aiResponse
+      const sanitizedContent = aiResponseText
         .replace(/^#{1,6}\s+/gm, '')
         .replace(/\*\*\*(.+?)\*\*\*/g, '$1')
         .replace(/\*\*(.+?)\*\*/g, '$1')

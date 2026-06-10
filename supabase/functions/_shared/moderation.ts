@@ -28,6 +28,12 @@ export async function moderateContent(
   // Truncate text to 32k characters for OpenAI moderation API limit
   const truncatedText = text.slice(0, 32000);
 
+  // Moderation runs before the main AI call, so cap it tightly (12s) to protect
+  // the edge function's ~150s budget. A hung moderation call must never be able
+  // to starve the actual generation.
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 12000);
+
   try {
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -46,7 +52,10 @@ export async function moderateContent(
         ],
         response_format: { type: 'json_object' },
       }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -91,8 +100,9 @@ export async function moderateContent(
 
     return { flagged, categories };
   } catch (error) {
+    clearTimeout(timeoutId);
     console.error('Error in moderateContent:', error);
-    
+
     // Risk-based failure mode
     if (riskLevel === 'high') {
       // Fail-closed: Block request for high-risk functions

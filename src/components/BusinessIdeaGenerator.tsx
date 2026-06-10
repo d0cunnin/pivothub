@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Lightbulb, RefreshCw, Sparkles } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { PreferencesPanel } from './PreferencesPanel';
 import { ResultActions } from './ResultActions';
 import { useUserPreferences } from '@/hooks/useUserPreferences';
@@ -41,7 +42,7 @@ export const BusinessIdeaGenerator = () => {
       const inputData = { skills, interests, budget };
       const inputQuality = calculateInputQuality();
       
-      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+      const { data, error } = await invokeFunction('generate-business-content', {
         body: {
           type: 'business-ideas',
           data: { 

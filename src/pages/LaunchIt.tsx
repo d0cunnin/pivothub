@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, Zap, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { Badge } from "@/components/ui/badge";
@@ -132,7 +133,7 @@ const LaunchIt = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-launch-strategy', {
+      const { data, error } = await invokeFunction('generate-launch-strategy', {
         body: formData,
         headers: {
           Authorization: `Bearer ${session.access_token}`

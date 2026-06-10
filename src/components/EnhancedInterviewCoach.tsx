@@ -10,6 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { 
   MessageSquare, 
   Clock, 
@@ -125,7 +126,7 @@ export const EnhancedInterviewCoach = () => {
       }
 
       // Use Supabase SDK with proper authentication
-      const { data, error } = await supabase.functions.invoke('interview-questions', {
+      const { data, error } = await invokeFunction('interview-questions', {
         body: {
           jobTitle,
           industry,
@@ -185,7 +186,7 @@ export const EnhancedInterviewCoach = () => {
       }
 
       // Use Supabase SDK with proper authentication
-      const { data, error } = await supabase.functions.invoke('interview-feedback', {
+      const { data, error } = await invokeFunction('interview-feedback', {
         body: {
           question: questions[currentQuestionIndex].text,
           answer: currentAnswer,

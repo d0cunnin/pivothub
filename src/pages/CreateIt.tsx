@@ -23,6 +23,7 @@ import remarkGfm from "remark-gfm";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
@@ -208,7 +209,7 @@ export default function CreateIt() {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("generate-create-it-blueprint", {
+      const { data, error } = await invokeFunction("generate-create-it-blueprint", {
         body: form,
         headers: { Authorization: `Bearer ${session.access_token}` },
       });

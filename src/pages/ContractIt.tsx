@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, ClipboardCheck, Building2, Shield, MapPin, Flag, Loader2, Download, CheckCircle2, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { generateCapabilityStatementPDF } from "@/lib/pdf-templates/capability-statement-template";
 import { Helmet } from "react-helmet-async";
@@ -256,7 +257,7 @@ const ContractIt = () => {
 
     setCapabilityLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-capability-statement", {
+      const { data, error } = await invokeFunction("generate-capability-statement", {
         body: { formData: capabilityForm }
       });
 
@@ -296,7 +297,7 @@ const ContractIt = () => {
 
     setReadinessLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-contract-readiness", {
+      const { data, error } = await invokeFunction("generate-contract-readiness", {
         body: { formData: readinessForm }
       });
 

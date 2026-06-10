@@ -4,7 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const businessContentSchema = z.object({
@@ -1332,105 +1332,29 @@ Keep each section concise and actionable. Use plain text without markdown.`
         throw new Error('Invalid content type')
     }
 
-    // Try GPT-5 first with 120 second timeout
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000); // 2 minutes for GPT-5
-    
-    let response;
-    let modelUsed = 'openai/gpt-5';
-    
+    // Fast Gemini Flash primary with gpt-5-mini fallback, budgeted under the
+    // ~150s edge limit. The previous GPT-5 call with stacked 120s + 60s
+    // timeouts regularly exceeded that limit and the request died with a 504.
+    const maxTokens = type === 'business-plan' ? 8000 : type === 'business-foundation' ? 4000 : type === 'marketing-strategy' ? 6000 : 2000;
+    let content: string;
     try {
-      response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-5',
-          messages: [
-            { role: 'system', content: systemMessage },
-            { role: 'user', content: prompt }
-          ],
-          max_completion_tokens: type === 'business-plan' ? 8000 : type === 'business-foundation' ? 4000 : type === 'marketing-strategy' ? 6000 : 2000
-        }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeout);
-    } catch (abortError) {
-      clearTimeout(timeout);
-      
-      // GPT-5 Mini fallback on timeout
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        modelUsed = 'openai/gpt-5-mini';
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000); // 1 minute fallback
-        
-        try {
-          response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
-              messages: [
-                { role: 'system', content: systemMessage },
-                { role: 'user', content: prompt }
-              ],
-              max_completion_tokens: type === 'business-plan' ? 8000 : type === 'business-foundation' ? 4000 : type === 'marketing-strategy' ? 6000 : 2000
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          clearTimeout(timeout2);
-          
-          if (fallbackError.name === 'AbortError') {
-            return new Response(JSON.stringify({ 
-              error: 'Request timed out after two attempts. Please try again with shorter inputs.' 
-            }), {
-              status: 200,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          throw fallbackError;
-        }
-      } else {
-        throw abortError;
-      }
-    }
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ 
-          error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
+      content = await generateText(lovableApiKey, systemUser(systemMessage, prompt), { maxTokens });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({
+          error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.'
         }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ 
-          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({
+          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.'
         }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      
-      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
+      console.error('[generate-business-content] Generation failed:', err?.message);
+      return new Response(JSON.stringify({
+        error: 'AI service is temporarily unavailable. Please try again in a moment.'
+      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-
-    const result = await response.json();
-    
-    if (result.error) {
-      throw new Error(result.error.message)
-    }
-
-    let content = extractContent(result)
 
     // Sanitize content to remove any remaining markdown artifacts
     content = content

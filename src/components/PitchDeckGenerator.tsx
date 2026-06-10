@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Presentation, Download, Eye, Play, FileText, Info } from "lucide-react";
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import { PitchDeckPresentation } from './PitchDeckPresentation';
 import jsPDF from 'jspdf';
@@ -194,7 +195,7 @@ export const PitchDeckGenerator = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+      const { data, error } = await invokeFunction('generate-business-content', {
         body: {
           type: 'pitch-deck',
           data: {

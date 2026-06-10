@@ -9,6 +9,7 @@ import { CheckCircle, Calculator, BookOpen, Monitor, ClipboardList, Search, User
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { sanitizeAIContent } from "@/lib/utils";
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
@@ -645,7 +646,7 @@ export const SkillsAssessment = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const response = await supabase.functions.invoke('enhanced-assessment-analyzer', {
+      const response = await invokeFunction('enhanced-assessment-analyzer', {
         body: {
           assessmentType: 'skills',
           responses: answers,

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -175,53 +176,24 @@ Generate a comprehensive garden plan with plant recommendations appropriate for 
       });
     }
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.7,
-        max_tokens: 4000,
-      }),
-    });
-
-    if (!response.ok) {
-      const status = response.status;
-      console.error('AI gateway error:', status);
-      
-      if (status === 429) {
+    let content: string;
+    try {
+      content = await generateText(LOVABLE_API_KEY, systemUser(systemPrompt, userPrompt), { maxTokens: 4000 });
+    } catch (err: any) {
+      if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'rate_limit_exceeded' }), {
           status: 429,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      
-      if (status === 402) {
+      if (err?.status === 402) {
         return new Response(JSON.stringify({ error: 'credits_exhausted' }), {
           status: 402,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      
-      return new Response(JSON.stringify({ error: 'AI service error' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const aiResponse = await response.json();
-    const content = aiResponse.choices?.[0]?.message?.content;
-
-    if (!content) {
-      console.error('No content in AI response');
-      return new Response(JSON.stringify({ error: 'Empty AI response' }), {
+      console.error('[generate-garden-plan] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -237,7 +209,7 @@ Generate a comprehensive garden plan with plant recommendations appropriate for 
     } catch (parseError) {
       console.error('Failed to parse AI response:', parseError);
       console.error('Raw content:', content);
-      return new Response(JSON.stringify({ 
+      return new Response(JSON.stringify({
         error: 'parse_error',
         message: 'Failed to parse garden plan. Please try again.'
       }), {

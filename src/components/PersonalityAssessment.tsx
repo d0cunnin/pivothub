@@ -9,6 +9,7 @@ import { Brain, ArrowLeft, ArrowRight, CheckCircle, TrendingUp, Download } from 
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { sanitizeAIContent } from "@/lib/utils";
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
@@ -188,7 +189,7 @@ export const PersonalityAssessment = () => {
       const { data: { session } } = await supabase.auth.getSession();
       const authToken = session?.access_token;
 
-      const response = await supabase.functions.invoke('enhanced-assessment-analyzer', {
+      const response = await invokeFunction('enhanced-assessment-analyzer', {
         body: {
           assessmentType: 'personality',
           responses: answers,

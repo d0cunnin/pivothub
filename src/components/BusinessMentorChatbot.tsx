@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, Bot, User, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { useToast } from "@/hooks/use-toast";
 
 interface Message {
@@ -35,7 +36,7 @@ export const BusinessMentorChatbot = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const { data, error } = await supabase.functions.invoke('business-mentor', {
+      const { data, error } = await invokeFunction('business-mentor', {
         body: {
           message,
           conversationHistory: history.slice(-10) // Include last 10 messages for context

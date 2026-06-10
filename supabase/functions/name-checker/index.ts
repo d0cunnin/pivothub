@@ -2,7 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema with strict limits
 const nameCheckerSchema = z.object({
@@ -157,18 +157,10 @@ serve(async (req) => {
     
     if (lovableApiKey) {
       try {
-        const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${lovableApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'openai/gpt-5',
-            messages: [
-              { 
-                role: 'system', 
-                content: `PIVOTHUB MASTER PROMPT FRAMEWORK - BUSINESS NAME CHECKER
+        const aiText = await generateText(
+          lovableApiKey,
+          systemUser(
+            `PIVOTHUB MASTER PROMPT FRAMEWORK - BUSINESS NAME CHECKER
 
 === CONTEXT RETENTION PROTOCOL ===
 Remember the exact business name provided. Analyze thoroughly for all types of conflicts: exact matches, phonetic similarities, semantic overlaps, and translation equivalents. Consider industry context and trademark law.
@@ -233,11 +225,8 @@ Provide analysis beyond basic name search:
 • Translation checks for major languages
 • Famous marks doctrine application
 • Genericness and descriptiveness assessment
-• Rebranding cost estimate if conflicts found` 
-              },
-              { 
-                role: 'user', 
-                content: `Conduct a comprehensive business name trademark conflict analysis for "${businessName}".
+• Rebranding cost estimate if conflicts found`,
+            `Conduct a comprehensive business name trademark conflict analysis for "${businessName}".
 
 SEARCH CATEGORIES:
 1. EXACT MATCHES: Identical names in any industry or trademark class
@@ -272,35 +261,25 @@ QUALITY STANDARDS:
 • Explain legal reasoning clearly
 • Consider industry context and market overlap
 • Provide actionable recommendations
-• Note if conflicts are registered trademarks vs. common law` 
-              }
-            ],
-            max_completion_tokens: 1500,
-          }),
-        });
-
-        if (!response.ok) {
-          if (response.status === 429) {
-            throw new Error('Rate limit exceeded. Please try again later.');
-          }
-          if (response.status === 402) {
-            throw new Error('AI credits exhausted. Please add credits in Settings.');
-          }
-          const errorText = await response.text();
-          console.error('Lovable AI error:', response.status, errorText);
-          throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
+• Note if conflicts are registered trademarks vs. common law`
+          ),
+          { maxTokens: 1500 },
+        );
+        try {
+          similarNames = JSON.parse(aiText);
+        } catch (parseError) {
+          similarNames = [];
         }
-
-        const aiData = await response.json();
-        if (response.ok) {
-          try {
-            similarNames = JSON.parse(extractContent(aiData));
-          } catch (parseError) {
-            similarNames = [];
-          }
+      } catch (err: any) {
+        if (err?.status === 429) {
+          return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
-      } catch (error) {
-        console.error('Error checking similar names:', error);
+        if (err?.status === 402) {
+          return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        }
+        console.error('[name-checker] Generation failed:', err?.message);
+        // Non-fatal: similar-names analysis failed but the rest of the response is still valid
+        similarNames = [];
       }
     }
 

@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Loader2, FileDown, Sparkles, Copy } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from '@/lib/invokeFunction';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 
@@ -72,7 +73,7 @@ export default function ResumeBuilder() {
         toast.error('Please sign in to continue.');
         return;
       }
-      const { data, error } = await supabase.functions.invoke('resume-builder', {
+      const { data, error } = await invokeFunction('resume-builder', {
         body: form,
         headers: { Authorization: `Bearer ${session.access_token}` },
       });

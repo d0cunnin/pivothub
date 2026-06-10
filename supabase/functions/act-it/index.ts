@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
+import { generateText, systemUser } from '../_shared/aiGenerate.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -266,109 +267,37 @@ Optional creative next steps:
       });
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000); // 2 minutes
-
-    let lovableResponse;
-
+    const maxTokens = 6000;
+    let concept: string;
     try {
-      lovableResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Generate a comprehensive story development package for "${projectTitle}" - a ${formatLabel} in the ${genres.join('/')} genre.` }
-          ],
-          max_completion_tokens: 6000,
-        }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeout);
-    } catch (abortError: any) {
-      clearTimeout(timeout);
-      
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ Primary model timed out, falling back to faster model...');
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000);
-        
-        try {
-          lovableResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'google/gemini-2.5-flash',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Generate a comprehensive story development package for "${projectTitle}" - a ${formatLabel} in the ${genres.join('/')} genre.` }
-              ],
-              max_completion_tokens: 5000,
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          clearTimeout(timeout2);
-          console.error('Fallback model also failed:', fallbackError);
-          return new Response(JSON.stringify({ error: 'AI service temporarily unavailable. Please try again.' }), {
-            status: 503,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-        }
-      } else {
-        throw abortError;
-      }
-    }
-
-    if (!lovableResponse.ok) {
-      const errorText = await lovableResponse.text();
-      console.error('AI gateway error:', lovableResponse.status, errorText);
-      
-      if (lovableResponse.status === 429) {
+      concept = await generateText(
+        lovableKey,
+        systemUser(systemPrompt, `Generate a comprehensive story development package for "${projectTitle}" - a ${formatLabel} in the ${genres.join('/')} genre.`),
+        { maxTokens }
+      );
+    } catch (err: any) {
+      if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'AI rate limit exceeded. Please try again in a few minutes.' }), {
-          status: 429,
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      
-      if (lovableResponse.status === 402) {
+      if (err?.status === 402) {
         return new Response(JSON.stringify({ error: 'AI service credits exhausted. Please contact support.' }), {
-          status: 402,
+          status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      
-      return new Response(JSON.stringify({ error: 'AI generation failed. Please try again.' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const aiResponse = await lovableResponse.json();
-    const concept = aiResponse.choices?.[0]?.message?.content;
-
-    if (!concept) {
-      console.error('No content in AI response:', aiResponse);
-      return new Response(JSON.stringify({ error: 'AI returned empty response. Please try again.' }), {
-        status: 500,
+      console.error('[act-it] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), {
+        status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
     console.log(`✅ Act It concept generated for user ${userId}: "${projectTitle}"`);
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       concept,
       creditsUsed: 3,
       remaining: usageData.remaining

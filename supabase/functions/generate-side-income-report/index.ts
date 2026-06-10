@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
+import { generateRaw, systemUser } from "../_shared/aiGenerate.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -495,113 +496,25 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
       );
     }
 
-    // Add timeout handling with GPT-5 Mini fallback
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000);
-    
-    let aiResponse;
-
+    const maxTokens = 6000;
+    let aiData: any;
     try {
-      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash', // If JSON issues persist, try: 'openai/gpt-5-mini'
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt }
-          ],
-          max_completion_tokens: 6000,
-          response_format: { type: 'json_object' },
-        }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeout);
-    } catch (abortError) {
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ Gemini Flash timed out, falling back to GPT-5 Mini...');
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000);
-        
-        try {
-          aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: userPrompt }
-              ],
-              max_completion_tokens: 4200,
-              response_format: { type: 'json_object' },
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          if (fallbackError.name === 'AbortError') {
-            await refundCredits('timeout-fallback');
-            return new Response(JSON.stringify({ 
-              error: 'Report generation is taking too long. Please try again with shorter responses or contact support.' 
-            }), {
-              status: 200,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          throw fallbackError;
-        }
-      } else {
-        throw abortError;
+      aiData = await generateRaw(lovableApiKey, systemUser(systemPrompt, userPrompt), { maxTokens, responseFormat: { type: 'json_object' } });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        await refundCredits('rate-limit');
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
+      if (err?.status === 402) {
+        await refundCredits('out-of-credits');
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      console.error('[generate-side-income-report] Generation failed:', err?.message);
+      await refundCredits('generation-failed');
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    // Text-first parsing to prevent crashes  
-    let text;
-    let aiData;
-    try {
-      text = await aiResponse.text();
-      
-      if (!aiResponse.ok) {
-        console.error('❌ Lovable AI error:', aiResponse.status, text.slice(0, 300));
-        await refundCredits(`ai-gateway-${aiResponse.status}`);
-
-        if (aiResponse.status === 429) {
-          return new Response(JSON.stringify({ 
-            error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        if (aiResponse.status === 402) {
-          return new Response(JSON.stringify({ 
-            error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        
-        return new Response(JSON.stringify({
-          error: `Lovable AI error ${aiResponse.status}`,
-          details: text.slice(0, 300),
-        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      }
-      
-      aiData = JSON.parse(text);
-    } catch (err) {
-      console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
-      await refundCredits('gateway-non-json');
-      return new Response(JSON.stringify({
-        error: "Lovable AI Gateway returned invalid data. Please try again.",
-      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-
-    console.log('✅ Lovable AI response received, status:', aiResponse.status);
+    console.log('✅ Lovable AI response received');
     
     // Robust JSON extraction with multiple fallback strategies (incl. control-char escaping)
     const rawContent: string = aiData?.choices?.[0]?.message?.content ?? '';

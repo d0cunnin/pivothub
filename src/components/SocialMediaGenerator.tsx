@@ -10,6 +10,7 @@ import { Hash, Share2, Calendar, Copy, Download, FileText, Image, Video } from '
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 
 interface SocialMediaPost {
   day: number;
@@ -67,7 +68,7 @@ export const SocialMediaGenerator = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('social-media-content', {
+      const { data, error } = await invokeFunction('social-media-content', {
         body: {
           businessName,
           businessNiche,

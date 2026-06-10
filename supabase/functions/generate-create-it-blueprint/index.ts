@@ -1,14 +1,10 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { guard, corsHeaders } from '../_shared/guard.ts';
-import { extractJson } from '../_shared/aiResponse.ts';
+import { generateJson } from '../_shared/aiGenerate.ts';
 
 const ENDPOINT = '/generate-create-it-blueprint';
-const PRIMARY_MODEL = 'google/gemini-2.5-flash';
-const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
 const MAX_TOKENS = 5000;
-// Gateway statuses worth a quick retry (transient: rate limit / upstream blips).
-const TRANSIENT_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -138,76 +134,6 @@ ${integrations.length ? integrations.map((i) => `- ${i}`).join('\n') : '- (none 
 Generate the full blueprint now as the specified JSON object.`;
 }
 
-async function callModel(
-  apiKey: string,
-  model: string,
-  systemPrompt: string,
-  userPrompt: string,
-  timeoutMs: number,
-): Promise<Partial<Blueprint>> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-        max_completion_tokens: MAX_TOKENS,
-        response_format: { type: 'json_object' },
-      }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[${ENDPOINT}] ${model} error:`, response.status, errorText.slice(0, 300));
-      const err: any = new Error(`AI error: ${response.status}`);
-      err.status = response.status;
-      throw err;
-    }
-
-    const data = await response.json();
-    return extractJson<Partial<Blueprint>>(data);
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
-
-// Call a model with up to `retries` extra attempts on transient gateway errors,
-// using exponential backoff. Payment errors (402) are never retried.
-async function callModelWithRetry(
-  apiKey: string,
-  model: string,
-  systemPrompt: string,
-  userPrompt: string,
-  timeoutMs: number,
-  retries = 2,
-): Promise<Partial<Blueprint>> {
-  let lastErr: any;
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      return await callModel(apiKey, model, systemPrompt, userPrompt, timeoutMs);
-    } catch (err: any) {
-      lastErr = err;
-      if (err?.status === 402) throw err;
-      const retryable = err?.status === undefined || TRANSIENT_STATUSES.has(err.status);
-      if (!retryable || attempt === retries) break;
-      await sleep(400 * 2 ** attempt);
-    }
-  }
-  throw lastErr;
-}
-
 async function generateChunk(
   apiKey: string,
   keys: BlueprintKey[],
@@ -215,13 +141,18 @@ async function generateChunk(
   userPrompt: string,
 ): Promise<Partial<Blueprint>> {
   const systemPrompt = buildSystemPrompt(skillLevel, keys);
-  try {
-    return await callModelWithRetry(apiKey, PRIMARY_MODEL, systemPrompt, userPrompt, 60_000);
-  } catch (err: any) {
-    if (err?.status === 402) throw err;
-    console.warn(`[${ENDPOINT}] Chunk [${keys.join(',')}] primary failed, falling back: ${err?.message}`);
-    return await callModelWithRetry(apiKey, FALLBACK_MODEL, systemPrompt, userPrompt, 55_000);
-  }
+  return generateJson<Partial<Blueprint>>(
+    apiKey,
+    [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+    {
+      maxTokens: MAX_TOKENS,
+      fallbackModel: 'google/gemini-2.5-flash-lite',
+      fallbackTimeoutMs: 55_000,
+    },
+  );
 }
 
 
@@ -308,7 +239,7 @@ serve(async (req) => {
     }
 
     const blueprint = validateBlueprint(merged);
-    const modelUsed = PRIMARY_MODEL;
+    const modelUsed = 'google/gemini-2.5-flash';
 
 
     // Store history (RLS: user_id must equal auth.uid()).

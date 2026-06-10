@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TrendingUp, Target, DollarSign, Users, Calendar, Download } from 'lucide-react';
 import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 
@@ -38,7 +39,7 @@ export const MarketingStrategyGenerator = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+      const { data, error } = await invokeFunction('generate-business-content', {
         body: {
           type: 'marketing-strategy',
           data: { businessType, targetMarket, budget, goals, currentStage }

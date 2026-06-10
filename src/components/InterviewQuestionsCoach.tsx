@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { sanitizeAIContent } from "@/lib/utils";
 import { 
   MessageSquare, 
@@ -85,7 +86,7 @@ export const InterviewQuestionsCoach = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('interview-questions', {
+      const { data, error } = await invokeFunction('interview-questions', {
         body: {
           jobTitle,
           industry,
@@ -134,7 +135,7 @@ export const InterviewQuestionsCoach = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('interview-feedback', {
+      const { data, error } = await invokeFunction('interview-feedback', {
         body: {
           question: questions[currentQuestionIndex].text,
           answer: currentAnswer,

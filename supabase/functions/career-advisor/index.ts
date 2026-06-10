@@ -3,9 +3,8 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts"
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
-import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts"
 import { moderateContent } from "../_shared/moderation.ts"
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText } from "../_shared/aiGenerate.ts";
 
 // Input validation schema
 const chatMessageSchema = z.object({
@@ -240,39 +239,18 @@ EXAMPLES OF PREMIUM VALUE:
       { role: "user", content: message }
     ]
 
-    const callModel = async (model: string, maxTokens: number) => {
-      const r = await fetchWithTimeout(
-        'https://ai.gateway.lovable.dev/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${lovableApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model,
-            messages,
-            max_completion_tokens: maxTokens,
-          }),
-        },
-        90000
-      );
-      if (!r.ok) {
-        const errorText = await r.text();
-        console.error(`Lovable AI error (${model}):`, r.status, errorText);
-        throw new Error(`Lovable AI error: ${r.status} - ${errorText.slice(0, 200)}`);
-      }
-      return await r.json();
-    };
-
     let aiResponse: string;
     try {
-      const data = await callModel('openai/gpt-5', 4000);
-      aiResponse = extractContent(data);
-    } catch (primaryErr) {
-      console.warn('GPT-5 failed, falling back to Gemini:', primaryErr instanceof Error ? primaryErr.message : primaryErr);
-      const data = await callModel('google/gemini-2.5-flash', 2000);
-      aiResponse = extractContent(data);
+      aiResponse = await generateText(lovableApiKey, messages, { maxTokens: 4000 });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      console.error('[career-advisor] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     
     // Sanitize AI response to remove markdown formatting

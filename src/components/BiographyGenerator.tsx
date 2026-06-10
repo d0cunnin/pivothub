@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { User, Target, Eye, Heart, Download } from 'lucide-react';
 import { sanitizeAIContent, parseAISections } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { useToast } from '@/hooks/use-toast';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -47,7 +48,7 @@ export const BiographyGenerator = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+      const { data, error } = await invokeFunction('generate-business-content', {
         body: {
           type: 'biography',
           data: { 

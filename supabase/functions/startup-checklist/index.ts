@@ -3,7 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateJson, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const startupChecklistSchema = z.object({
@@ -220,41 +220,19 @@ Return as a JSON object with this EXACT structure:
   },
   "summary": "Comprehensive overview of this startup's unique path from idea to launch, considering ${businessType}, ${industry}, ${location}, and ${timeline} timeline (4-5 sentences)"
 }`;
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Create a comprehensive, actionable startup checklist for this ${businessType} business in ${location}. Focus on critical path tasks and realistic timelines.` }
-        ],
-        max_completion_tokens: 4000,
-      }),
-    });
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded. Please try again later.');
-      }
-      if (response.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
-      }
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
-    }
-
-    const data = await response.json();
-
-    let checklist;
+    const userContent = `Create a comprehensive, actionable startup checklist for this ${businessType} business in ${location}. Focus on critical path tasks and realistic timelines.`;
+    let checklist: any;
     try {
-      checklist = JSON.parse(extractContent(data));
-    } catch (parseError) {
-      // Fallback checklist if JSON parsing fails
+      checklist = await generateJson(lovableApiKey, systemUser(systemPrompt, userContent), { maxTokens: 4000 });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      console.error('[startup-checklist] Generation failed:', err?.message);
+      // Fallback checklist if generation fails
       checklist = {
         phases: [
           {

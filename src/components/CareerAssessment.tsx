@@ -9,6 +9,7 @@ import { CheckCircle, Target, TrendingUp, Users, Heart, Wrench, Calculator, Shie
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { sanitizeAIContent } from "@/lib/utils";
 import { toast } from "sonner";
 import jsPDF from 'jspdf';
@@ -314,7 +315,7 @@ export const CareerAssessment = () => {
       }
 
       // Call the AI assessment API
-      const { data, error } = await supabase.functions.invoke('career-assessment', {
+      const { data, error } = await invokeFunction('career-assessment', {
         body: {
           responses: responses
         },

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Loader2, FileDown, Sparkles, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from '@/lib/invokeFunction';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 
@@ -37,7 +38,7 @@ export default function QuizGenerator() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { toast.error('Please sign in.'); return; }
-      const { data, error } = await supabase.functions.invoke('quiz-generator', {
+      const { data, error } = await invokeFunction('quiz-generator', {
         body: form,
         headers: { Authorization: `Bearer ${session.access_token}` },
       });

@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0';
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -235,37 +235,21 @@ OUTPUT FORMAT (JSON only, no additional text):
   ]
 }`;
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: 'Generate a comprehensive tech readiness analysis based on the assessment results.' }
-        ],
-        max_completion_tokens: 3000,
-      }),
-    });
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded. Please try again later.');
+    const maxTokens = 3000;
+    let analysisText: string;
+    try {
+      analysisText = await generateText(LOVABLE_API_KEY, systemUser(systemPrompt, 'Generate a comprehensive tech readiness analysis based on the assessment results.'), { maxTokens });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      throw new Error('Failed to generate tech readiness report');
+      console.error('[tech-readiness-assessment] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    const aiData = await response.json();
-    const analysisText = extractContent(aiData);
-    
     let analysis;
     try {
       analysis = JSON.parse(analysisText);
@@ -274,7 +258,7 @@ OUTPUT FORMAT (JSON only, no additional text):
       throw new Error('Invalid AI response format');
     }
 
-    console.log('GPT-5 analysis generated successfully');
+    console.log('Analysis generated successfully');
 
     // Save to database (RLS protected)
     const { error: saveError } = await supabaseClient

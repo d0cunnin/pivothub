@@ -14,6 +14,7 @@ import { Mic, Podcast, Download, Loader2, Plus, X, Zap } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import heroImage from "@/assets/hero-image.jpg";
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import { ToolGuard } from '@/components/ToolGuard';
 import { EmailResultsPrompt } from '@/components/EmailResultsPrompt';
@@ -132,18 +133,18 @@ const SpeakIt = () => {
         }),
       };
 
-      const response = await supabase.functions.invoke('speak-it', {
+      const { data, error } = await invokeFunction('speak-it', {
         body: requestBody,
         headers: {
           Authorization: `Bearer ${session.access_token}`
         }
       });
 
-      if (response.error) throw response.error;
-      if (response.data?.error) throw new Error(response.data.error);
-      if (!response.data?.plan) throw new Error('No plan was returned. Please try again.');
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.plan) throw new Error('No plan was returned. Please try again.');
 
-      setGeneratedPlan(response.data.plan);
+      setGeneratedPlan(data.plan);
       setShowResults(true);
       toast.success(`${selectedPath === 'speaker' ? 'Speaking' : 'Podcast'} launch plan generated! (3 credits used)`);
     } catch (error: any) {

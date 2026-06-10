@@ -16,6 +16,7 @@ import heroImage from "@/assets/hero-image.jpg";
 import { generateGrantProposalPDF } from '@/lib/pdf-templates/grant-template';
 import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { useAuth } from '@/contexts/AuthContext';
 import { useUsage } from '@/contexts/UsageContext';
 import { ToolGuard } from '@/components/ToolGuard';
@@ -227,7 +228,7 @@ const FundIt = () => {
       setTimeout(() => setGenerationProgress('Creating letter of intent...'), 15000);
       setTimeout(() => setGenerationProgress('Finalizing documents...'), 25000);
 
-      const { data, error } = await supabase.functions.invoke('generate-grant-content', {
+      const { data, error } = await invokeFunction('generate-grant-content', {
         body: formData,
         headers: {
           Authorization: `Bearer ${session.access_token}`
@@ -251,7 +252,7 @@ const FundIt = () => {
           toast.error('Rate Limit Exceeded', {
             description: 'Too many requests. Please wait 1-2 minutes and try again.'
           });
-        } else if (error.message?.includes('timeout') || error.message?.includes('too long')) {
+        } else if (error?.timedOut || error.message?.includes('timeout') || error.message?.includes('too long')) {
           toast.error('Generation Timeout', {
             description: 'The request took too long. Try reducing the length of your descriptions.'
           });

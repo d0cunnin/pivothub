@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "@/hooks/use-toast";
 import { Loader2, Download, X } from "lucide-react";
 import jsPDF from 'jspdf';
@@ -354,7 +355,7 @@ const TeachingMaterialsGenerator = () => {
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke("generate-teaching-content", {
+      const { data, error } = await invokeFunction("generate-teaching-content", {
         body: {
           type: "all-materials",
           data: formData

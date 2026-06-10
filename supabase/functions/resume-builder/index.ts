@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
+import { generateJson, systemUser } from '../_shared/aiGenerate.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -138,66 +139,19 @@ Return ONLY the JSON object — no preamble, no markdown fences.`;
       });
     }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 90000);
-
-    let aiRes;
+    const maxTokens = 6000;
+    let resume: any;
     try {
-      aiRes = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${lovableKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt },
-          ],
-          response_format: { type: 'json_object' },
-          max_completion_tokens: 6000,
-        }),
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
-    } catch (e: any) {
-      clearTimeout(timeout);
-      console.error('AI call failed:', e);
-      return new Response(JSON.stringify({ error: 'AI service temporarily unavailable' }), {
-        status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (!aiRes.ok) {
-      const errText = await aiRes.text();
-      console.error('AI gateway error:', aiRes.status, errText);
-      if (aiRes.status === 429) {
-        return new Response(JSON.stringify({ error: 'AI rate limit exceeded. Try again shortly.' }), {
-          status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+      resume = await generateJson(lovableKey, systemUser(systemPrompt, userPrompt), { maxTokens });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      return new Response(JSON.stringify({ error: 'AI generation failed' }), {
-        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const aiJson = await aiRes.json();
-    const content = aiJson.choices?.[0]?.message?.content;
-    if (!content) {
-      return new Response(JSON.stringify({ error: 'AI returned empty response' }), {
-        status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    let resume;
-    try {
-      resume = JSON.parse(content);
-    } catch {
-      const match = content.match(/\{[\s\S]*\}/);
-      if (!match) {
-        return new Response(JSON.stringify({ error: 'Invalid AI response format' }), {
-          status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      resume = JSON.parse(match[0]);
+      console.error('[resume-builder] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     return new Response(JSON.stringify({

@@ -3,7 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const launchStrategySchema = z.object({
@@ -523,112 +523,20 @@ FORMATTING RULES:
 • Consider their skill level in complexity of tactics
 • Prioritize actions by ROI and feasibility`;
 
-    // Add timeout handling with GPT-5 Mini fallback
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000);
-
-    let aiResponse;
-
+    const maxTokens = 7000;
+    let strategy: string;
     try {
-      aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'google/gemini-2.5-flash',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.` }
-          ],
-          max_completion_tokens: 7000,
-        }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeout);
-    } catch (abortError) {
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ Gemini Flash timed out, falling back to GPT-5 Mini...');
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000);
-        
-        try {
-          aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${apiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
-              messages: [
-                { role: 'system', content: systemPrompt },
-                { role: 'user', content: `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.` }
-              ],
-              max_completion_tokens: 5000,
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          if (fallbackError.name === 'AbortError') {
-            return new Response(JSON.stringify({ 
-              error: 'Strategy generation is taking too long. Please try again with shorter input.' 
-            }), {
-              status: 200,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          throw fallbackError;
-        }
-      } else {
-        throw abortError;
+      strategy = await generateText(apiKey, systemUser(systemPrompt, `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.`), { maxTokens });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-    }
-
-    // Text-first parsing
-    let text;
-    let data;
-    try {
-      text = await aiResponse.text();
-      
-      if (!aiResponse.ok) {
-        console.error("Lovable AI Gateway error:", aiResponse.status, text.slice(0, 300));
-        
-        if (aiResponse.status === 429) {
-          return new Response(JSON.stringify({ 
-            error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        if (aiResponse.status === 402) {
-          return new Response(JSON.stringify({ 
-            error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-        
-        return new Response(JSON.stringify({
-          error: `Lovable AI error ${aiResponse.status}`,
-          details: text.slice(0, 300),
-        }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      
-      data = JSON.parse(text);
-    } catch (err) {
-      console.error("Lovable AI Gateway returned non-JSON response:", text?.slice(0, 300) || err);
-      return new Response(JSON.stringify({
-        error: "Lovable AI Gateway returned invalid data. Please try again.",
-      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      console.error('[generate-launch-strategy] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-
-    if (!data.choices?.[0]?.message?.content) {
-      throw new Error('AI response missing content');
-    }
-
-    let strategy = extractContent(data);
     
     // Preserve markdown structure, clean only excessive formatting
     strategy = strategy

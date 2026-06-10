@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { generateJson, systemUser } from "../_shared/aiGenerate.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -64,75 +65,34 @@ serve(async (req) => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 90000);
-
+    let result: any;
     try {
-      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: prompt }
-          ],
-          max_completion_tokens: 4000,
-        }),
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("AI gateway error:", response.status, errorText);
-        
-        if (response.status === 429) {
-          return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }), {
-            status: 429,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
-        }
-        if (response.status === 402) {
-          return new Response(JSON.stringify({ error: "AI service quota exceeded." }), {
-            status: 402,
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
-        }
-        throw new Error(`AI gateway error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      const content = data.choices?.[0]?.message?.content;
-
-      if (!content) {
-        throw new Error("No content in AI response");
-      }
-
-      // Parse the JSON response
-      const result = extractJsonFromText(content);
-
-      console.log(`[generate-capability-statement] Completed in ${Date.now() - startTime}ms for user ${user.id}`);
-
-      return new Response(JSON.stringify(result), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-
-    } catch (fetchError: any) {
-      clearTimeout(timeoutId);
-      if (fetchError.name === "AbortError") {
-        console.error("Request timed out after 90 seconds");
-        return new Response(JSON.stringify({ error: "Request timed out. Please try again." }), {
-          status: 504,
+      result = await generateJson(LOVABLE_API_KEY, systemUser(SYSTEM_PROMPT, prompt), { maxTokens: 4000 });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }), {
+          status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      throw fetchError;
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: "AI service quota exceeded." }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      console.error("[generate-capability-statement] Generation failed:", err?.message);
+      return new Response(JSON.stringify({ error: "AI service is temporarily unavailable. Please try again in a moment." }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
+
+    console.log(`[generate-capability-statement] Completed in ${Date.now() - startTime}ms for user ${user.id}`);
+
+    return new Response(JSON.stringify(result), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
 
   } catch (error: any) {
     console.error("Error in generate-capability-statement:", error);
@@ -238,28 +198,3 @@ function buildCapabilityPrompt(formData: any): string {
   return parts.join("\n");
 }
 
-function extractJsonFromText(text: string): any {
-  // Remove markdown code fences if present
-  let cleaned = text.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
-  
-  // Try to find the first { and last } for JSON extraction
-  const firstBrace = cleaned.indexOf("{");
-  const lastBrace = cleaned.lastIndexOf("}");
-  
-  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-    cleaned = cleaned.substring(firstBrace, lastBrace + 1);
-  }
-  
-  try {
-    return JSON.parse(cleaned);
-  } catch (e) {
-    console.error("JSON parse error:", e);
-    // Return a fallback structure
-    return {
-      companyData: "Unable to parse company data. Please try again.",
-      coreCompetencies: "Unable to parse competencies. Please try again.",
-      differentiators: "Unable to parse differentiators. Please try again.",
-      pastPerformance: "Unable to parse past performance. Please try again."
-    };
-  }
-}

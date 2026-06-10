@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { Helmet } from "react-helmet-async";
 import ReactMarkdown from "react-markdown";
@@ -336,7 +337,7 @@ const DevelopIt = () => {
     }
     setProgramLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-program-design", {
+      const { data, error } = await invokeFunction("generate-program-design", {
         body: { formData: programForm }
       });
       if (error) throw error;
@@ -359,7 +360,7 @@ const DevelopIt = () => {
     }
     setGrantLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-grant-readiness", {
+      const { data, error } = await invokeFunction("generate-grant-readiness", {
         body: { formData: grantForm }
       });
       if (error) throw error;
@@ -382,7 +383,7 @@ const DevelopIt = () => {
     }
     setAssessmentLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-community-assessment", {
+      const { data, error } = await invokeFunction("generate-community-assessment", {
         body: { formData: assessmentForm }
       });
       if (error) throw error;
@@ -405,7 +406,7 @@ const DevelopIt = () => {
     }
     setStakeholderLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("generate-stakeholder-plan", {
+      const { data, error } = await invokeFunction("generate-stakeholder-plan", {
         body: { formData: stakeholderForm }
       });
       if (error) throw error;
@@ -432,8 +433,8 @@ const DevelopIt = () => {
     setCoachLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("community-dev-coach", {
-        body: { 
+      const { data, error } = await invokeFunction("community-dev-coach", {
+        body: {
           message: userMessage,
           history: coachMessages
         }

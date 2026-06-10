@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Loader2, FileDown, Sparkles, Copy } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from '@/lib/invokeFunction';
 import { toast } from 'sonner';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -26,7 +27,7 @@ export default function LessonPlanGenerator() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { toast.error('Please sign in.'); return; }
-      const { data, error } = await supabase.functions.invoke('lesson-plan', {
+      const { data, error } = await invokeFunction('lesson-plan', {
         body: form,
         headers: { Authorization: `Bearer ${session.access_token}` },
       });

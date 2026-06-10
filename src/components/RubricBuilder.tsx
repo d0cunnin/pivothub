@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Loader2, FileDown, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from '@/lib/invokeFunction';
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 
@@ -35,7 +36,7 @@ export default function RubricBuilder() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { toast.error('Please sign in.'); return; }
-      const { data, error } = await supabase.functions.invoke('rubric-builder', {
+      const { data, error } = await invokeFunction('rubric-builder', {
         body: form,
         headers: { Authorization: `Bearer ${session.access_token}` },
       });

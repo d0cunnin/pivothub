@@ -4,7 +4,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
-import { extractContent } from "../_shared/aiResponse.ts";
+import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const assessmentAnalyzerSchema = z.object({
@@ -72,37 +72,20 @@ serve(async (req) => {
 
     const systemPrompt = getSystemPromptForAssessment(assessmentType);
     
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${lovableApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'openai/gpt-5',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Assessment Type: ${assessmentType}\nUser Responses: ${JSON.stringify(responses)}\nUser Profile: ${JSON.stringify(userProfile || {})}` }
-        ],
-        max_completion_tokens: 4000,
-      }),
-    });
-
-    if (!response.ok) {
-      if (response.status === 429) {
-        throw new Error('Rate limit exceeded. Please try again later.');
+    const maxTokens = 4000;
+    let content: string;
+    try {
+      content = await generateText(lovableApiKey!, systemUser(systemPrompt, `Assessment Type: ${assessmentType}\nUser Responses: ${JSON.stringify(responses)}\nUser Profile: ${JSON.stringify(userProfile || {})}`), { maxTokens });
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 402) {
-        throw new Error('AI credits exhausted. Please add credits in Settings.');
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
+      console.error('[enhanced-assessment-analyzer] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-
-    const data = await response.json();
-
-    const content = extractContent(data);
     console.log('AI Response received:', content.substring(0, 200) + '...');
     
     let analysis;

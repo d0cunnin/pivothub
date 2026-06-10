@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, Download, ArrowRight, DollarSign, Clock, TrendingUp, Sparkles } from "lucide-react";
@@ -242,7 +243,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
         skillsCount: assessmentData.skills?.length
       });
 
-      const { data, error } = await supabase.functions.invoke('generate-side-income-report', {
+      const { data, error } = await invokeFunction('generate-side-income-report', {
         body: { assessmentData }
       });
 

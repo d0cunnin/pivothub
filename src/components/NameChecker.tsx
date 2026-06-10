@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 
 interface NameCheckResult {
@@ -49,7 +50,7 @@ export const NameChecker = () => {
         throw new Error('No active session - please log in again');
       }
 
-      const { data, error } = await supabase.functions.invoke('name-checker', {
+      const { data, error } = await invokeFunction('name-checker', {
         body: {
           businessName: businessName.trim()
         },

@@ -74,8 +74,12 @@ serve(async (req) => {
       `Minimalist ${style} icon for "${businessName}" in ${industry} sector.${additionalContext} Simple geometric shapes, elegant, scalable design.`
     ];
 
-    const logos = await Promise.all(
+    const settled = await Promise.allSettled(
       logoPrompts.map(async (prompt, index) => {
+        // Per-call timeout so one slow/hung image generation can't hang the
+        // whole request past the ~150s edge limit (was an unbounded fetch).
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
         try {
           const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
@@ -92,7 +96,8 @@ serve(async (req) => {
                 }
               ],
               modalities: ['image', 'text']
-            })
+            }),
+            signal: controller.signal
           });
 
           if (!response.ok) {
@@ -131,15 +136,34 @@ serve(async (req) => {
             imageURL: imageUrl
           };
         } catch (error) {
+          const isTimeout = error instanceof Error && error.name === 'AbortError';
           console.error(`Error generating logo ${index + 1}:`, error);
           return {
             style: `${style} Design ${index + 1}`,
             concept: `${style} design for ${businessName} in the ${industry} industry`,
             imageURL: null,
-            error: error instanceof Error ? error.message : 'Failed to generate'
+            error: isTimeout
+              ? 'Logo generation timed out. Please try again.'
+              : (error instanceof Error ? error.message : 'Failed to generate')
           };
+        } finally {
+          clearTimeout(timeoutId);
         }
       })
+    );
+
+    // allSettled guarantees a result per concept; the inner try/catch already
+    // returns a graceful { imageURL: null, error } object, so a rejected
+    // promise here would be unexpected — map it to the same degraded shape.
+    const logos = settled.map((r, index) =>
+      r.status === 'fulfilled'
+        ? r.value
+        : {
+            style: `${style} Design ${index + 1}`,
+            concept: `${style} design for ${businessName} in the ${industry} industry`,
+            imageURL: null,
+            error: 'Failed to generate'
+          }
     );
 
     console.log('Generated logos:', logos.filter(l => l.imageURL).length, 'successful');

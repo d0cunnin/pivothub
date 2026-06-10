@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, GraduationCap, User, AlertCircle, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { sanitizeAIContent } from "@/lib/utils";
 
 interface Message {
@@ -39,7 +40,7 @@ export const CareerAdvisorChatbot = () => {
         throw new Error("Please sign in to use this tool");
       }
       
-      const { data, error } = await supabase.functions.invoke('career-advisor', {
+      const { data, error } = await invokeFunction('career-advisor', {
         body: {
           message: userMessage,
           conversationHistory: messages.slice(1) // Exclude the initial greeting

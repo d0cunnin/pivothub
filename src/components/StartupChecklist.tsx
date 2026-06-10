@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckSquare, Clock, Building, Download } from 'lucide-react';
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 
 interface ChecklistItem {
@@ -41,7 +42,7 @@ export const StartupChecklist = () => {
       }
 
       // Use Supabase SDK with proper authentication
-      const { data, error } = await supabase.functions.invoke('startup-checklist', {
+      const { data, error } = await invokeFunction('startup-checklist', {
         body: {
           businessType: businessStructure.replace('-', ' '),
           industry: 'General',

@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
+import { generateJson, systemUser } from '../_shared/aiGenerate.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -66,34 +67,14 @@ Rules:
     const userPrompt = `Assignment: ${assignment}\nGrade Level: ${gradeLevel}\nReturn ONLY the JSON object.`;
 
     const key = Deno.env.get('LOVABLE_API_KEY')!;
-    const controller = new AbortController();
-    const t = setTimeout(() => controller.abort(), 90000);
-    const res = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
-        messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
-        response_format: { type: 'json_object' },
-        max_completion_tokens: 4000,
-      }),
-      signal: controller.signal,
-    });
-    clearTimeout(t);
-
-    if (!res.ok) {
-      if (res.status === 429) return new Response(JSON.stringify({ error: 'AI rate limit exceeded' }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      return new Response(JSON.stringify({ error: 'AI generation failed' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-    const j = await res.json();
-    const content = j.choices?.[0]?.message?.content;
-    if (!content) return new Response(JSON.stringify({ error: 'Empty AI response' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-
-    let rubric;
-    try { rubric = JSON.parse(content); } catch {
-      const m = content.match(/\{[\s\S]*\}/);
-      if (!m) return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      rubric = JSON.parse(m[0]);
+    let rubric: any;
+    try {
+      rubric = await generateJson(key, systemUser(systemPrompt, userPrompt), { maxTokens: 4000 });
+    } catch (err: any) {
+      if (err?.status === 429) return new Response(JSON.stringify({ error: 'AI rate limit exceeded' }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      if (err?.status === 402) return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      console.error('[rubric-builder] Generation failed:', err?.message);
+      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     return new Response(JSON.stringify({ rubric, creditsUsed: 3, remaining: usage.remaining }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

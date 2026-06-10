@@ -10,6 +10,7 @@ import { BookOpen, Download, Loader2, Zap, AlertTriangle, ScrollText } from 'luc
 import { Helmet } from 'react-helmet-async';
 import heroImage from "@/assets/hero-image.jpg";
 import { supabase } from '@/integrations/supabase/client';
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import { ToolGuard } from '@/components/ToolGuard';
 import jsPDF from 'jspdf';
@@ -49,18 +50,18 @@ const StudyIt = () => {
         return;
       }
 
-      const response = await supabase.functions.invoke('study-it', {
+      const { data, error } = await invokeFunction('study-it', {
         body: { topic: topic.trim() },
         headers: {
           Authorization: `Bearer ${session.access_token}`
         }
       });
 
-      if (response.error) throw response.error;
-      if (response.data?.error) throw new Error(response.data.error);
-      if (!response.data?.content) throw new Error('No content was returned. Please try again.');
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!data?.content) throw new Error('No content was returned. Please try again.');
 
-      setGeneratedContent(response.data.content);
+      setGeneratedContent(data.content);
       setShowResults(true);
       // Initialize all sections as expanded
       setExpandedSections({

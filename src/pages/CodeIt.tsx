@@ -11,6 +11,7 @@ import jsPDF from 'jspdf';
 import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { ToolGuard } from "@/components/ToolGuard";
@@ -93,7 +94,7 @@ print(a + b)`,
         return;
       }
 
-      const { data, error } = await supabase.functions.invoke('code-it', {
+      const { data, error } = await invokeFunction('code-it', {
         body: { code: userCode },
         headers: {
           Authorization: `Bearer ${session.access_token}`
