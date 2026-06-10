@@ -10,6 +10,92 @@ const teachingContentSchema = z.object({
   data: z.record(z.any()).refine((obj) => Object.keys(obj).length <= 50, "Data must contain at most 50 fields")
 });
 
+const PRIMARY_MODEL = 'google/gemini-2.5-flash';
+const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
+const MAX_TOKENS = 5000;
+// Gateway statuses worth a quick retry (transient: rate limit / upstream blips).
+const TRANSIENT_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function callChat(
+  apiKey: string,
+  model: string,
+  systemMsg: string,
+  userPrompt: string,
+  timeoutMs: number,
+): Promise<string> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: systemMsg },
+          { role: 'user', content: userPrompt },
+        ],
+        max_completion_tokens: MAX_TOKENS,
+      }),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[generate-teaching-content] ${model} error:`, response.status, errorText.slice(0, 300));
+      const err: any = new Error(`AI error: ${response.status}`);
+      err.status = response.status;
+      throw err;
+    }
+
+    const data = await response.json();
+    return extractContent(data);
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+// Retry once on transient gateway statuses. Timeouts (AbortError) are NOT
+// retried on the same model — they fall through to the fallback model so the
+// total request stays under the 150s edge runtime limit.
+async function callChatWithRetry(
+  apiKey: string,
+  model: string,
+  systemMsg: string,
+  userPrompt: string,
+  timeoutMs: number,
+  retries = 1,
+): Promise<string> {
+  let lastErr: any;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await callChat(apiKey, model, systemMsg, userPrompt, timeoutMs);
+    } catch (err: any) {
+      lastErr = err;
+      if (err?.status === 402) throw err;
+      const retryable = err?.status !== undefined && TRANSIENT_STATUSES.has(err.status);
+      if (!retryable || attempt === retries) break;
+      await sleep(400 * 2 ** attempt);
+    }
+  }
+  throw lastErr;
+}
+
+async function generateText(apiKey: string, systemMsg: string, userPrompt: string): Promise<string> {
+  try {
+    return await callChatWithRetry(apiKey, PRIMARY_MODEL, systemMsg, userPrompt, 60_000);
+  } catch (err: any) {
+    if (err?.status === 402) throw err;
+    console.warn(`[generate-teaching-content] Primary model failed, falling back: ${err?.message}`);
+    return await callChatWithRetry(apiKey, FALLBACK_MODEL, systemMsg, userPrompt, 55_000);
+  }
+}
+
 serve(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
@@ -80,8 +166,6 @@ serve(async (req) => {
     if (!lovableApiKey) {
       throw new Error('LOVABLE_API_KEY not found in environment variables')
     }
-
-    const openaiApiKey = lovableApiKey;
 
     // Get current date for accurate timeline calculations
     const currentDate = new Date().toLocaleDateString('en-US', { 
@@ -174,10 +258,10 @@ Provide responses in clean, plain text format without markdown formatting. Use s
 
     // Handle all-materials type first
     if (type === 'all-materials') {
-      const audience = data.targetAudience.join(', ') + (data.otherAudience ? `, ${data.otherAudience}` : '')
-      
+      const audience = (data.targetAudience || []).join(', ') + (data.otherAudience ? `, ${data.otherAudience}` : '')
+
       // Build skills string from array of skill objects
-      const skillsText = data.skills.map((s: any) => 
+      const skillsText = (data.skills || []).map((s: any) =>
         `${s.category}: ${s.specificSkill} (${s.proficiency})`
       ).join(', ')
       
@@ -199,7 +283,7 @@ Provide responses in clean, plain text format without markdown formatting. Use s
         militaryInfo = `- Military Service: ${data.militaryBranch || 'N/A'}, Rank: ${data.militaryRank || 'N/A'}, Role: ${data.militaryRole || 'N/A'}`
       }
       
-      prompt = `You are a Chief Learning Officer designing a comprehensive corporate training program. Generate executive-level training materials for ${data.fullName}.
+      const profileBlock = `You are a Chief Learning Officer designing a comprehensive corporate training program. Generate executive-level training materials for ${data.fullName}.
 
 INSTRUCTOR PROFILE:
 - Name: ${data.fullName}
@@ -211,11 +295,13 @@ ${militaryInfo}
 - Delivery Format: ${data.teachingFormat}
 - Target Learner Audience: ${audience}
 - Program Duration: ${data.duration}
-${data.additionalNotes ? `- Business Objectives: ${data.additionalNotes}` : ''}
+${data.additionalNotes ? `- Business Objectives: ${data.additionalNotes}` : ''}`
 
-Generate ALL FOUR of the following materials in a single response. Format your response EXACTLY as shown below with clear section markers:
-
----WEBINAR_CONCEPTS_START---
+      // Each section is its own block so generation can be split into small
+      // parallel AI calls — one call emitting all six sections always
+      // truncated at the token cap and lost the later sections.
+      const sectionBlocks = [
+        `---WEBINAR_CONCEPTS_START---
 Generate 3-5 strategic training program concepts aligned with organizational learning objectives. Each concept must include:
 - Program Title (business-outcome focused, not feature-driven)
 - Business Problem Addressed (specific operational challenge or skills gap)
@@ -225,9 +311,9 @@ Generate 3-5 strategic training program concepts aligned with organizational lea
 - Duration & Format (hours, modality: virtual/in-person/hybrid)
 - Success Metrics (Kirkpatrick Level 3-4 outcomes)
 - Scalability Potential (pilot group → department → organization-wide)
----WEBINAR_CONCEPTS_END---
+---WEBINAR_CONCEPTS_END---`,
 
----COURSE_OUTLINE_START---
+        `---COURSE_OUTLINE_START---
 Create a comprehensive training program design using ADDIE or SAM methodology. Include:
 
 EXECUTIVE SUMMARY (3-4 sentences):
@@ -282,9 +368,9 @@ CHANGE MANAGEMENT PLAN:
 - Communication Strategy (pre-launch, during, post-program)
 - Manager Enablement (coaching guides, reinforcement tools)
 - Learner Adoption Incentives (gamification, recognition)
----COURSE_OUTLINE_END---
+---COURSE_OUTLINE_END---`,
 
----HANDOUTS_START---
+        `---HANDOUTS_START---
 Design professional learning materials for organizational deployment. Include:
 
 LEARNER MATERIALS:
@@ -321,9 +407,9 @@ BRANDING & STANDARDS:
 - Legal disclaimers and confidentiality notices
 
 Format these as enterprise-ready materials suitable for LMS upload or print distribution.
----HANDOUTS_END---
+---HANDOUTS_END---`,
 
----LESSON_SCRIPT_START---
+        `---LESSON_SCRIPT_START---
 Create a detailed facilitator guide for SESSION 1 using adult learning principles. Include:
 
 PRE-SESSION PREPARATION (Facilitator Checklist):
@@ -387,9 +473,9 @@ TIMING NOTES:
 Total session duration: ${data.duration}
 Include 10-minute break every 60 minutes for virtual sessions
 Build in buffer time (10%) for questions and discussion
----LESSON_SCRIPT_END---
+---LESSON_SCRIPT_END---`,
 
----TOOLS_PLATFORMS_START---
+        `---TOOLS_PLATFORMS_START---
 Create a comprehensive technology and tools guide for delivering ${data.teachingFormat} training. Include:
 
 A. LEARNING MANAGEMENT SYSTEMS (LMS)
@@ -487,9 +573,9 @@ Enterprise Package (Large Organization: 1000+ learners):
    • Total: $150k-500k/year depending on scale
 
 Tailor recommendations to the teaching format (${data.teachingFormat}) and target audience (${audience}).
----TOOLS_PLATFORMS_END---
+---TOOLS_PLATFORMS_END---`,
 
----MARKETING_PLAN_START---
+        `---MARKETING_PLAN_START---
 Create a comprehensive marketing plan to SELL and SCALE the ${data.teachingFormat} profitably. Include:
 
 A. TARGET AUDIENCE ANALYSIS
@@ -656,99 +742,48 @@ Scenario 2 (Medium - Cold Audience): 6-12 weeks
 Scenario 3 (Slow Build - Evergreen): 3-6 months
 
 Make the plan practical, budget-conscious, and focused on PROFITABILITY. Include specific action items, realistic timelines, and revenue projections.
----MARKETING_PLAN_END---
+---MARKETING_PLAN_END---`,
+      ];
+
+      const buildChunkPrompt = (blocks: string[]) => `${profileBlock}
+
+Generate ALL ${blocks.length} of the following materials in a single response. Format your response EXACTLY as shown below with clear section markers:
+
+${blocks.join('\n\n')}
 
 Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`
 
       try {
-        // Add timeout with fallback
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 120000);
-        
-        let response;
-        try {
-          response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${openaiApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5',
-              messages: [
-                { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
-                { role: 'user', content: prompt }
-              ],
-              max_completion_tokens: 7000,
-            }),
-            signal: controller.signal
-          });
-          clearTimeout(timeout);
-        } catch (abortErr) {
-          if (abortErr.name === 'AbortError') {
-            console.log('⚠️ GPT-5 timeout, falling back to GPT-5 Mini');
-            const ctrl2 = new AbortController();
-            const t2 = setTimeout(() => ctrl2.abort(), 60000);
-            
-            response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${openaiApiKey}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                model: 'openai/gpt-5-mini',
-                messages: [
-                  { role: 'system', content: 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.' },
-                  { role: 'user', content: prompt }
-                ],
-                max_completion_tokens: 5000,
-              }),
-              signal: ctrl2.signal
-            });
-            clearTimeout(t2);
+        const SYSTEM_MSG = 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.';
+
+        // Three parallel chunks of two sections each — allSettled so one
+        // failed chunk degrades that pair of sections instead of failing the
+        // whole request. Slight stagger reduces rate-limit collisions.
+        const chunkDefs: number[][] = [[0, 1], [2, 3], [4, 5]];
+        const results = await Promise.allSettled(
+          chunkDefs.map(async (idxs, i) => {
+            if (i > 0) await sleep(i * 150);
+            return generateText(lovableApiKey, SYSTEM_MSG, buildChunkPrompt(idxs.map((n) => sectionBlocks[n])));
+          }),
+        );
+
+        let fullContent = '';
+        let creditsExhausted = false;
+        for (const r of results) {
+          if (r.status === 'fulfilled') {
+            fullContent += r.value + '\n\n';
+          } else if ((r.reason as any)?.status === 402) {
+            creditsExhausted = true;
           } else {
-            throw abortErr;
+            console.error('[generate-teaching-content] Chunk failed:', (r.reason as any)?.message);
           }
         }
 
-        // Text-first parsing
-        let text = await response.text();
-        
-        if (!response.ok) {
-          console.error('OpenAI API error:', response.status, text.slice(0, 300));
-          
-          if (response.status === 429) {
-            return new Response(JSON.stringify({ 
-              error: "Rate limit exceeded. Please try again in a moment." 
-            }), {
-              status: 200,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          
-          if (response.status === 402) {
-            return new Response(JSON.stringify({ 
-              error: "Insufficient credits. Please add credits to continue." 
-            }), {
-              status: 200,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          
+        if (!fullContent.trim()) {
           return new Response(JSON.stringify({
-            error: `OpenAI error ${response.status}`,
-            details: text.slice(0, 300)
-          }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-        }
-
-        const aiResponse = JSON.parse(text);
-        const fullContent = extractContent(aiResponse);
-        
-        if (!fullContent) {
-          console.error('[generate-teaching-content] AI response missing content');
-          return new Response(JSON.stringify({ 
-            error: "AI returned empty content. Please try again." 
+            error: creditsExhausted
+              ? 'Insufficient credits. Please add credits to continue.'
+              : 'AI service is temporarily unavailable. Please try again in a moment.'
           }), {
             status: 200,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -967,105 +1002,28 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
         throw new Error('Invalid content type')
     }
     
-    // Try GPT-5 first with 120 second timeout
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 120000); // 2 minutes for GPT-5
-    
-    let response;
-    let modelUsed = 'openai/gpt-5';
-    
+    // Generate with the fast Gemini Flash model (Flash Lite fallback). The
+    // previous GPT-5 call with stacked 120s + 60s timeouts regularly exceeded
+    // the 150s edge runtime limit and the request died with a 504.
+    let content: string;
     try {
-      response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${lovableApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-5',
-          messages: [
-            { role: 'system', content: systemMessage },
-            { role: 'user', content: prompt }
-          ],
-          max_completion_tokens: 14000
-        }),
-        signal: controller.signal
-      });
-      
-      clearTimeout(timeout);
-    } catch (abortError) {
-      clearTimeout(timeout);
-      
-      // GPT-5 Mini fallback on timeout
-      if (abortError.name === 'AbortError') {
-        console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        modelUsed = 'openai/gpt-5-mini';
-        
-        const controller2 = new AbortController();
-        const timeout2 = setTimeout(() => controller2.abort(), 60000); // 1 minute fallback
-        
-        try {
-          response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${lovableApiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
-              messages: [
-                { role: 'system', content: systemMessage },
-                { role: 'user', content: prompt }
-              ],
-              max_completion_tokens: 14000
-            }),
-            signal: controller2.signal
-          });
-          
-          clearTimeout(timeout2);
-        } catch (fallbackError) {
-          clearTimeout(timeout2);
-          
-          if (fallbackError.name === 'AbortError') {
-            return new Response(JSON.stringify({ 
-              error: 'Request timed out after two attempts. Please try again with shorter inputs.' 
-            }), {
-              status: 200,
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-            });
-          }
-          throw fallbackError;
-        }
-      } else {
-        throw abortError;
-      }
-    }
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Lovable AI error:', response.status, errorText);
-      
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ 
-          error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' 
+      content = await generateText(lovableApiKey, systemMessage, prompt);
+    } catch (err: any) {
+      if (err?.status === 429) {
+        return new Response(JSON.stringify({
+          error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.'
         }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ 
-          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' 
+      if (err?.status === 402) {
+        return new Response(JSON.stringify({
+          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.'
         }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      
-      throw new Error(`Lovable AI error: ${response.status} - ${errorText.slice(0, 200)}`);
+      console.error('[generate-teaching-content] Generation failed:', err?.message);
+      return new Response(JSON.stringify({
+        error: 'AI service is temporarily unavailable. Please try again in a moment.'
+      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-
-    const result = await response.json()
-    
-    if (result.error) {
-      throw new Error(result.error.message)
-    }
-
-    let content = extractContent(result)
 
     // Preserve markdown structure, clean only excessive formatting
     content = content
