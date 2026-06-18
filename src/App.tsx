@@ -47,10 +47,12 @@ import BeforeYouStart from "./pages/BeforeYouStart";
 import AuthCallback from "./pages/AuthCallback";
 
 import { HelmetProvider } from 'react-helmet-async';
+import AppErrorBoundary from "@/components/AppErrorBoundary";
 
 const queryClient = new QueryClient();
 
 const App = () => (
+  <AppErrorBoundary>
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <TooltipProvider>
@@ -109,6 +111,7 @@ const App = () => (
     </TooltipProvider>
     </HelmetProvider>
   </QueryClientProvider>
+  </AppErrorBoundary>
 );
 
 export default App;

@@ -53,19 +53,28 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
   );
   console.log('[GUARD] Origin check', { origin, isAllowedOrigin });
   if (origin && !isAllowedOrigin) {
-    throw new Response('Origin not allowed', { status: 403 });
+    throw new Response(
+      JSON.stringify({ error: 'Origin not allowed', details: origin }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
   // Content-Type check
   if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
     const contentType = req.headers.get('content-type') || '';
     if (!contentType.includes('application/json')) {
-      throw new Response('Content-Type must be application/json', { status: 415 });
+      throw new Response(
+        JSON.stringify({ error: 'Content-Type must be application/json' }),
+        { status: 415, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     // Body size limit (prevent DoS)
     const contentLength = req.headers.get('content-length');
     if (contentLength && parseInt(contentLength) > maxBodySize) {
-      throw new Response('Request body too large', { status: 413 });
+      throw new Response(
+        JSON.stringify({ error: 'Request body too large' }),
+        { status: 413, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
   }
 
@@ -151,7 +160,10 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
         errorMessage: 'CAPTCHA required',
         requestDurationMs: Date.now() - startTime
       });
-      throw new Response('CAPTCHA verification required', { status: 400 });
+      throw new Response(
+        JSON.stringify({ error: 'CAPTCHA verification required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     // Verify with Cloudflare Turnstile
@@ -182,7 +194,10 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
           errorMessage: 'CAPTCHA verification failed',
           requestDurationMs: Date.now() - startTime
         });
-        throw new Response('CAPTCHA verification failed', { status: 403 });
+        throw new Response(
+          JSON.stringify({ error: 'CAPTCHA verification failed' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
     }
   }
@@ -207,7 +222,10 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
         errorMessage: 'Rate limit exceeded',
         requestDurationMs: Date.now() - startTime
       });
-      throw new Response('Rate limit exceeded - Please try again later', { status: 429 });
+      throw new Response(
+        JSON.stringify({ error: 'Rate limit exceeded - Please try again later', retryAfter: 60 }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': '60' } }
+      );
     }
   } catch (e) {
     if (e instanceof Response) throw e;
