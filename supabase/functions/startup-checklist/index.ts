@@ -227,7 +227,7 @@ Return as a JSON object with this EXACT structure:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Create a comprehensive, actionable startup checklist for this ${businessType} business in ${location}. Focus on critical path tasks and realistic timelines.` }

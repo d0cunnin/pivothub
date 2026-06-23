@@ -248,7 +248,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
     }
 
     const modelConfig = {
-      model: 'openai/gpt-5',
+      model: 'google/gemini-2.5-flash',
       apiKey: LOVABLE_KEY,
       endpoint: 'https://ai.gateway.lovable.dev/v1/chat/completions'
     };

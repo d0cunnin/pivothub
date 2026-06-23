@@ -214,7 +214,7 @@ QUALITY STANDARDS:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Find grants for this ${businessType} business in ${location} seeking ${fundingAmount}.` }
@@ -240,7 +240,7 @@ QUALITY STANDARDS:
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'google/gemini-2.5-flash-lite',
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Find grants for this ${businessType} business in ${location} seeking ${fundingAmount}.` }

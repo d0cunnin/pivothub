@@ -432,7 +432,7 @@ FORMATTING REQUIREMENTS:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Generate a comprehensive ${path === 'speaker' ? 'public speaking' : 'podcast'} launch plan.` }
@@ -462,7 +462,7 @@ FORMATTING REQUIREMENTS:
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',  // Faster fallback model
+              model: 'google/gemini-2.5-flash-lite',  // Faster fallback model
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Generate a comprehensive ${path === 'speaker' ? 'public speaking' : 'podcast'} launch plan.` }

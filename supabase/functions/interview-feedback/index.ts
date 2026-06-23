@@ -383,7 +383,7 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Please analyze this interview answer and provide detailed, expert-level feedback following the comprehensive structure.` }
@@ -409,7 +409,7 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'google/gemini-2.5-flash-lite',
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Please analyze this interview answer and provide detailed, expert-level feedback following the comprehensive structure.` }

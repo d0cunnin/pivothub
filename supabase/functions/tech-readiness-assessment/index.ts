@@ -242,7 +242,7 @@ OUTPUT FORMAT (JSON only, no additional text):
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: 'Generate a comprehensive tech readiness analysis based on the assessment results.' }
