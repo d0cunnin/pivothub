@@ -509,7 +509,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.5-flash', // If JSON issues persist, try: 'openai/gpt-5-mini'
+          model: 'google/gemini-2.5-flash', // If JSON issues persist, try: 'google/gemini-2.5-flash-lite'
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt }
@@ -536,7 +536,7 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'google/gemini-2.5-flash-lite',
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: userPrompt }

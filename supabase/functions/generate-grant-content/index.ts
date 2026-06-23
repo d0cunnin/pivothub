@@ -140,7 +140,7 @@ Return ONLY JSON as specified (no preamble).`;
     const timeout = setTimeout(() => controller.abort(), 90000); // 90s timeout
 
     let aiResponse;
-    const modelUsed = 'openai/gpt-5-mini';
+    const modelUsed = 'google/gemini-2.5-flash';
 
     try {
       aiResponse = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -150,7 +150,7 @@ Return ONLY JSON as specified (no preamble).`;
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5-mini',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Using the provided grant data, generate the proposal & LOI. Project title: ${grantData.projectTitle}. Focus on measurable outcomes, impact, and realistic budget justification.` }

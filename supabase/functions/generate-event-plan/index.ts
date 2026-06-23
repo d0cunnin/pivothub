@@ -252,7 +252,7 @@ Generate event titles, description, color palette${formData.includeItinerary ? '
         
         try {
           // Get GPT-5 Mini config
-          const fallbackConfig = await getModelForUser(supabase, userId, 'text', 'openai/gpt-5-mini');
+          const fallbackConfig = await getModelForUser(supabase, userId, 'text', 'google/gemini-2.5-flash-lite');
           
           response = await fetch(fallbackConfig.endpoint, {
             method: "POST",
@@ -261,7 +261,7 @@ Generate event titles, description, color palette${formData.includeItinerary ? '
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'google/gemini-2.5-flash-lite',
               messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },

@@ -9,9 +9,12 @@ interface ModelConfig {
 
 /**
  * Get the appropriate AI model configuration based on user subscription and tool type
- * 
- * TEXT TOOLS: Always use OpenAI (GPT-5-mini)
- * IMAGE TOOLS: Always use Gemini Nano
+ *
+ * All models are routed through the Lovable AI Gateway (LOVABLE_API_KEY); no
+ * direct OpenAI key is ever used.
+ *
+ * TEXT TOOLS:  Gemini 2.5 Flash (fast JSON, stays under the edge timeout)
+ * IMAGE TOOLS: Gemini 2.5 Flash Image
  */
 export async function getModelForUser(
   supabase: SupabaseClient,
@@ -40,8 +43,8 @@ export async function getModelForUser(
                  userData?.subscription_tier !== 'explore';
 
   return {
-    provider: 'openai',
-    model: overrideModel || 'openai/gpt-5-mini',
+    provider: 'gemini',
+    model: overrideModel || 'google/gemini-2.5-flash',
     apiKey: Deno.env.get('LOVABLE_API_KEY')!,
     endpoint: 'https://ai.gateway.lovable.dev/v1/chat/completions'
   };
@@ -49,14 +52,14 @@ export async function getModelForUser(
 
 
 /**
- * Validates that text tools are not using Gemini
- * Throws error if a text tool attempts to use Gemini
+ * Validates that a model was resolved before a request is sent.
+ *
+ * Historically this blocked Gemini for text tools (when text ran on OpenAI).
+ * Text generation now runs on Gemini 2.5 Flash via the Lovable gateway, so the
+ * only failure worth guarding against is an empty/missing model string.
  */
 export function validateProvider(toolType: 'text' | 'image', model: string): void {
-  if (toolType === 'text' && model.toLowerCase().includes('gemini')) {
-    throw new Error(
-      'PROVIDER_DOWNGRADE_BLOCKED: Text generation tools must use OpenAI. ' +
-      'Gemini is only allowed for image generation.'
-    );
+  if (!model || !model.trim()) {
+    throw new Error('PROVIDER_CONFIG_ERROR: No model resolved for ' + toolType + ' generation.');
   }
 }
