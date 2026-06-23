@@ -484,7 +484,7 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           max_completion_tokens: 16000,
           messages: [
             { role: 'system', content: systemPrompt },
@@ -503,7 +503,7 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
           method: 'POST',
           headers: { 'Authorization': `Bearer ${lovableApiKey}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: 'openai/gpt-5-mini',
+            model: 'google/gemini-2.5-flash-lite',
             max_completion_tokens: 11000,
             messages: [
               { role: 'system', content: systemPrompt },

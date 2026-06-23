@@ -79,7 +79,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Assessment Type: ${assessmentType}\nUser Responses: ${JSON.stringify(responses)}\nUser Profile: ${JSON.stringify(userProfile || {})}` }

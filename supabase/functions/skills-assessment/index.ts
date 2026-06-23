@@ -726,7 +726,7 @@ Analyze the user's responses comprehensively to create a professional-grade skil
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Analyze these skill assessment responses and provide comprehensive career development recommendations following the detailed structure provided.` }
@@ -752,7 +752,7 @@ Analyze the user's responses comprehensively to create a professional-grade skil
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'google/gemini-2.5-flash-lite',
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Analyze these skill assessment responses and provide comprehensive career development recommendations following the detailed structure provided.` }

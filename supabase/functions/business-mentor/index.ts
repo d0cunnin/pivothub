@@ -311,7 +311,7 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
     let aiResponse: string;
     try {
       try {
-        const data = await callModel('openai/gpt-5', 4000);
+        const data = await callModel('google/gemini-2.5-flash', 4000);
         aiResponse = extractContent(data);
       } catch (primaryErr) {
         console.warn('GPT-5 failed, falling back to Gemini:', primaryErr instanceof Error ? primaryErr.message : primaryErr);

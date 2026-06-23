@@ -230,7 +230,7 @@ QUALITY CHECKLIST:
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'openai/gpt-5',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Create a comprehensive 30-day social media content calendar for ${businessName}. Start from today's date and create exactly 30 days of content.` }

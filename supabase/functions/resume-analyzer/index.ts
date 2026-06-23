@@ -520,7 +520,7 @@ QUALITY STANDARDS:
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: `Please analyze this resume comprehensively following the detailed structure. Provide professional-grade feedback.` }
@@ -546,7 +546,7 @@ QUALITY STANDARDS:
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'google/gemini-2.5-flash-lite',
               messages: [
                 { role: 'system', content: systemPrompt },
                 { role: 'user', content: `Please analyze this resume comprehensively following the detailed structure. Provide professional-grade feedback.` }

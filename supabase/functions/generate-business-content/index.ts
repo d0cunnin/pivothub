@@ -1337,7 +1337,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
     const timeout = setTimeout(() => controller.abort(), 120000); // 2 minutes for GPT-5
     
     let response;
-    let modelUsed = 'openai/gpt-5';
+    let modelUsed = 'google/gemini-2.5-flash';
     
     try {
       response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
@@ -1347,7 +1347,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-5',
+          model: 'google/gemini-2.5-flash',
           messages: [
             { role: 'system', content: systemMessage },
             { role: 'user', content: prompt }
@@ -1364,7 +1364,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
       // GPT-5 Mini fallback on timeout
       if (abortError.name === 'AbortError') {
         console.log('⚠️ GPT-5 timed out, falling back to GPT-5 Mini...');
-        modelUsed = 'openai/gpt-5-mini';
+        modelUsed = 'google/gemini-2.5-flash-lite';
         
         const controller2 = new AbortController();
         const timeout2 = setTimeout(() => controller2.abort(), 60000); // 1 minute fallback
@@ -1377,7 +1377,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'openai/gpt-5-mini',
+              model: 'google/gemini-2.5-flash-lite',
               messages: [
                 { role: 'system', content: systemMessage },
                 { role: 'user', content: prompt }
