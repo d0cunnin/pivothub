@@ -496,11 +496,54 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
       );
     }
 
-    const maxTokens = 6000;
-    let aiData: any;
-    try {
-      aiData = await generateRaw(lovableApiKey, systemUser(systemPrompt, userPrompt), { maxTokens, responseFormat: { type: 'json_object' } });
-    } catch (err: any) {
+    // One call emitting the whole blueprint ran out of tokens and was cut off
+    // mid-JSON, so the report is generated as parallel section groups and
+    // merged. Only the recommended paths are required; a failed optional group
+    // just leaves those sections out (the UI skips missing sections).
+    const sectionGroups: { keys: string[]; maxTokens: number; required: boolean }[] = [
+      { keys: ['executive_summary', 'skills_analysis', 'immediate_actions', 'quickWinOpportunities'], maxTokens: 6000, required: false },
+      { keys: ['recommended_paths'], maxTokens: 12000, required: true },
+      { keys: ['resources', 'ninety_day_plan'], maxTokens: 6000, required: false },
+      { keys: ['financialProjections', 'riskMitigation', 'taxAndLegalBasics'], maxTokens: 6000, required: false },
+    ];
+
+    const generateGroup = async (keys: string[], maxTokens: number): Promise<Record<string, unknown>> => {
+      const groupPrompt = `${userPrompt}
+
+For this request, return ONLY a JSON object containing exactly these top-level keys from the structure above: ${keys.join(', ')}. Omit every other section.`;
+      const aiData: any = await generateRaw(lovableApiKey, systemUser(systemPrompt, groupPrompt), { maxTokens, responseFormat: { type: 'json_object' } });
+      const rawContent: string = aiData?.choices?.[0]?.message?.content ?? '';
+      const finishReason = aiData?.choices?.[0]?.finish_reason;
+      console.log(`[${keys.join(',')}] finish_reason:`, finishReason, 'content length:', rawContent.length);
+      const parsed = robustJsonParse(rawContent);
+      if (!parsed || typeof parsed !== 'object') {
+        const err: any = new Error(finishReason === 'length' || finishReason === 'max_tokens' ? 'truncated' : 'unparseable');
+        err.truncated = err.message === 'truncated';
+        throw err;
+      }
+      return parsed;
+    };
+
+    const results = await Promise.allSettled(
+      sectionGroups.map(async (g, i) => {
+        if (i > 0) await new Promise((r) => setTimeout(r, i * 150));
+        return generateGroup(g.keys, g.maxTokens);
+      }),
+    );
+
+    const reportContent: Record<string, unknown> = {};
+    let requiredFailure: any = null;
+    results.forEach((r, i) => {
+      if (r.status === 'fulfilled') {
+        Object.assign(reportContent, r.value);
+      } else {
+        console.error(`[generate-side-income-report] Section group [${sectionGroups[i].keys.join(',')}] failed:`, r.reason?.message);
+        if (sectionGroups[i].required) requiredFailure = r.reason;
+      }
+    });
+
+    if (requiredFailure || !Array.isArray(reportContent.recommended_paths)) {
+      const err = requiredFailure;
       if (err?.status === 429) {
         await refundCredits('rate-limit');
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -509,40 +552,13 @@ Create 3-5 specific, actionable side income paths ranked by feasibility based on
         await refundCredits('out-of-credits');
         return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      console.error('[generate-side-income-report] Generation failed:', err?.message);
-      await refundCredits('generation-failed');
-      return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-
-    console.log('✅ Lovable AI response received');
-    
-    // Robust JSON extraction with multiple fallback strategies (incl. control-char escaping)
-    const rawContent: string = aiData?.choices?.[0]?.message?.content ?? '';
-    const finishReason = aiData?.choices?.[0]?.finish_reason;
-    console.log('AI finish_reason:', finishReason, 'content length:', rawContent?.length);
-
-    let reportContent: any = robustJsonParse(rawContent);
-
-    if (reportContent) {
-      console.log('✅ Successfully parsed AI JSON response');
-    } else {
-      console.warn('⚠️ All parsing strategies failed');
-      console.log('First 200 chars:', rawContent?.slice(0, 200));
-      console.log('Last 200 chars:', rawContent?.slice(-200));
-
-      // Refund credits since the user got nothing usable
-      await refundCredits('json-parse-failed');
-
-      const truncated = finishReason === 'length' || finishReason === 'max_tokens';
+      await refundCredits(err?.truncated ? 'json-truncated' : 'generation-failed');
       return new Response(JSON.stringify({
-        error: truncated
+        error: err?.truncated
           ? 'The AI response was cut off before completing. Your credits have been refunded — please try again.'
-          : 'We could not read the AI response. Your credits have been refunded — please try again.',
+          : 'AI service is temporarily unavailable. Your credits have been refunded — please try again.',
         retryable: true,
-      }), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
+      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     // Sanitize the report content to remove excessive markdown
