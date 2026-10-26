@@ -4,7 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
-import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import { generateJson, generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const businessContentSchema = z.object({
@@ -88,27 +88,31 @@ serve(async (req) => {
 
     switch (type) {
       case 'business-ideas':
-        prompt = `Generate 5 personalized business ideas based on:
+        prompt = `Generate exactly 3 personalized business ideas for this person.
+
 Skills: ${data.skills}
 Interests: ${data.interests}
-Budget: ${data.budget}
+Starting budget: ${data.budget || 'Not specified (assume minimal)'}
+${data.focus ? `Focus these ideas on: ${data.focus}` : ''}
 
-For EACH business idea, provide:
-1. Business concept and why it fits their profile (2-3 sentences)
-2. VALIDATION TOOLS to test the idea:
-   • Market Research: Google Trends (free), Answer The Public (free), SimilarWeb
-   • Competitor Analysis: SEMrush, Ahrefs, SimilarWeb
-   • Survey Tools: Typeform, SurveyMonkey, Google Forms (free)
-3. MVP BUILDING TOOLS:
-   • No-Code Platforms: Bubble, Webflow, Softr, Airtable
-   • Landing Pages: Carrd ($19/year), Unbounce, Instapage
-   • E-commerce: Shopify (14-day trial), Gumroad (digital), Etsy
-4. EARLY CUSTOMER CHANNELS:
-   • Launch Platforms: Product Hunt, BetaList, Hacker News
-   • Communities: Reddit, indie hacker forums
-5. ESTIMATED STARTUP COSTS with specific tool costs
+Each idea must be a specific, concrete business someone could start, not a generic category. Combine their skills and interests where possible, and keep startup costs within their budget.
 
-Format as simple numbered list without markdown. Each idea should include concept, validation approach, tools needed, and costs.`
+Respond with ONLY a JSON object in exactly this shape:
+{
+  "ideas": [
+    {
+      "title": "Short, specific business name or concept (max 10 words)",
+      "concept": "2-3 sentences: what the business does, who it serves, and how it makes money",
+      "whyItFits": "1-2 sentences tying it to their specific skills, interests, and budget",
+      "firstSteps": ["3-4 concrete first actions, in order"],
+      "tools": ["3-5 specific tools or platforms suited to THIS idea, each with its cost, e.g. 'Carrd landing page ($19/year)'"],
+      "firstCustomers": "1-2 sentences on exactly where and how to find the first paying customers",
+      "startupCost": "Estimated startup cost range with a brief breakdown"
+    }
+  ]
+}
+
+Use plain text inside the strings (no markdown).`
         break
 
       case 'business-plan':
@@ -1330,6 +1334,42 @@ Keep each section concise and actionable. Use plain text without markdown.`
 
       default:
         throw new Error('Invalid content type')
+    }
+
+    // Business ideas are returned as structured JSON so the page can show
+    // each idea as a card instead of guessing where one idea ends.
+    if (type === 'business-ideas') {
+      let ideas: unknown[] = [];
+      try {
+        const result = await generateJson<{ ideas?: unknown[] }>(lovableApiKey, systemUser(systemMessage, prompt), { maxTokens: 6000 });
+        ideas = Array.isArray(result?.ideas) ? result.ideas.filter((i) => i && typeof i === 'object').slice(0, 3) : [];
+      } catch (err: any) {
+        console.error('[generate-business-content] Business ideas generation failed:', err?.message);
+        const error = err?.status === 429
+          ? 'Rate limit exceeded. Please wait 1-2 minutes and try again.'
+          : err?.status === 402
+            ? 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.'
+            : 'AI service is temporarily unavailable. Please try again in a moment.';
+        return new Response(JSON.stringify({ error }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      if (ideas.length === 0) {
+        return new Response(JSON.stringify({ error: 'No business ideas were generated. Please try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+
+      await logRequest(guardResult.supabase, {
+        endpoint: "generate-business-content",
+        userId,
+        ip,
+        userAgent: req.headers.get('user-agent') || 'unknown',
+        success: true,
+        creditsCharged: 3,
+        requestDurationMs: Date.now() - startTime
+      });
+
+      return new Response(
+        JSON.stringify({ ideas, type }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
     }
 
     // Fast Gemini Flash primary with gpt-5-mini fallback, budgeted under the

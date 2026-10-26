@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lightbulb, RefreshCw, Sparkles } from "lucide-react";
-import { sanitizeAIContent } from '@/lib/utils';
+import { toast } from "sonner";
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 import { PreferencesPanel } from './PreferencesPanel';
@@ -14,12 +14,47 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 import { useModelSelection } from '@/hooks/useModelSelection';
 import { v4 as uuidv4 } from 'uuid';
 
+interface BusinessIdea {
+  title: string;
+  concept?: string;
+  whyItFits?: string;
+  firstSteps?: string[];
+  tools?: string[];
+  firstCustomers?: string;
+  startupCost?: string;
+}
+
+const asString = (v: unknown): string => (typeof v === 'string' ? v.trim() : v == null ? '' : String(v));
+const asList = (v: unknown): string[] =>
+  Array.isArray(v) ? v.map(asString).filter(Boolean) : asString(v) ? [asString(v)] : [];
+
+const normalizeIdea = (raw: any, index: number): BusinessIdea => ({
+  title: asString(raw?.title) || `Business Idea ${index + 1}`,
+  concept: asString(raw?.concept),
+  whyItFits: asString(raw?.whyItFits),
+  firstSteps: asList(raw?.firstSteps),
+  tools: asList(raw?.tools),
+  firstCustomers: asString(raw?.firstCustomers),
+  startupCost: asString(raw?.startupCost),
+});
+
+const ideaToText = (idea: BusinessIdea, index: number): string => {
+  const parts = [`${index + 1}. ${idea.title}`];
+  if (idea.concept) parts.push(idea.concept);
+  if (idea.whyItFits) parts.push(`Why it fits you: ${idea.whyItFits}`);
+  if (idea.firstSteps?.length) parts.push(`First steps:\n${idea.firstSteps.map((s) => `- ${s}`).join('\n')}`);
+  if (idea.tools?.length) parts.push(`Tools:\n${idea.tools.map((t) => `- ${t}`).join('\n')}`);
+  if (idea.firstCustomers) parts.push(`First customers: ${idea.firstCustomers}`);
+  if (idea.startupCost) parts.push(`Startup cost: ${idea.startupCost}`);
+  return parts.join('\n');
+};
+
 export const BusinessIdeaGenerator = () => {
   const [skills, setSkills] = useState("");
   const [interests, setInterests] = useState("");
   const [budget, setBudget] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [ideas, setIdeas] = useState<string[]>([]);
+  const [ideas, setIdeas] = useState<BusinessIdea[]>([]);
   const [resultId] = useState(() => uuidv4());
   const [showPreferences, setShowPreferences] = useState(false);
 
@@ -67,25 +102,25 @@ export const BusinessIdeaGenerator = () => {
         throw new Error(data.error);
       }
 
-      // Parse and sanitize the AI response
-      const sanitizedContent = sanitizeAIContent(data.content);
-      const ideaLines = sanitizedContent
-        .split('\n')
-        .filter((line: string) => {
-          const trimmed = line.trim();
-          return trimmed && 
-                 trimmed.length > 20 && // Ensure substantial content
-                 (trimmed.match(/^\d+\./) || trimmed.includes(':') || trimmed.length > 30);
-        })
-        .map((line: string) => {
-          // Clean up numbered lists and formatting
-          return line.replace(/^\d+\.\s*/, '').trim();
-        })
-        .filter((idea: string) => idea.length > 15);
-      
-      const finalIdeas = ideaLines.slice(0, 5);
+      let finalIdeas: BusinessIdea[] = [];
+      if (Array.isArray(data?.ideas)) {
+        finalIdeas = data.ideas.map(normalizeIdea);
+      } else if (typeof data?.content === 'string' && data.content.trim()) {
+        // Older backend versions return plain text; split it on numbered items.
+        finalIdeas = data.content
+          .split(/\n(?=\s*\d+[.)]\s)/)
+          .map((chunk: string) => chunk.trim())
+          .filter(Boolean)
+          .map((chunk: string, i: number) => {
+            const [first, ...rest] = chunk.replace(/^\s*\d+[.)]\s*/, '').split('\n');
+            return { title: first.trim() || `Business Idea ${i + 1}`, concept: rest.join('\n').trim() };
+          });
+      }
+      if (finalIdeas.length === 0) {
+        throw new Error('No business ideas were generated. Please try again.');
+      }
       setIdeas(finalIdeas);
-      
+
       // Track successful usage
       await trackUsage({
         toolName: 'business-idea-generator',
@@ -106,15 +141,7 @@ export const BusinessIdeaGenerator = () => {
         responseTimeMs: Date.now() - startTime,
         sessionId: resultId
       });
-      // Enhanced fallback based on user input
-      const fallbackIdeas = [
-        `${skills ? `Consulting service specializing in ${skills}` : 'Professional consulting service'} - Leverage your expertise to help businesses solve problems in your area of specialization.`,
-        `${interests ? `${interests}-focused` : 'Niche'} e-commerce store - Create an online store selling products that align with your interests and target a passionate community.`,
-        `Digital course platform teaching ${skills || 'professional skills'} - Create and sell online courses sharing your knowledge and experience.`,
-        `${budget && budget.includes('low') || budget.includes('500') ? 'Service-based' : 'Product'} business in ${interests || 'your field'} - Start with minimal upfront investment and scale based on demand.`,
-        `Content creation and monetization around ${interests || 'your expertise'} - Build an audience through blogging, YouTube, or social media and monetize through various channels.`
-      ];
-      setIdeas(fallbackIdeas);
+      toast.error(error instanceof Error ? error.message : 'Failed to generate business ideas. Please try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -130,7 +157,7 @@ export const BusinessIdeaGenerator = () => {
   };
 
   const handleDownload = () => {
-    const content = ideas.map((idea, index) => `${index + 1}. ${idea}`).join('\n\n');
+    const content = ideas.map(ideaToText).join('\n\n');
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -244,12 +271,55 @@ export const BusinessIdeaGenerator = () => {
             </h3>
             <div className="grid gap-4">
               {ideas.map((idea, index) => (
-                <Card key={index} className="p-4 border-l-4 border-l-accent bg-accent/5">
+                <Card key={index} className="p-5 border-l-4 border-l-accent bg-accent/5">
                   <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
                       <span className="text-accent font-semibold">{index + 1}</span>
                     </div>
-                    <p className="text-foreground flex-1">{idea}</p>
+                    <div className="flex-1 space-y-3">
+                      <h4 className="text-lg font-semibold text-foreground">{idea.title}</h4>
+                      {idea.concept && (
+                        <p className="text-foreground whitespace-pre-line">{idea.concept}</p>
+                      )}
+                      {idea.whyItFits && (
+                        <div>
+                          <p className="text-sm font-semibold text-accent">Why it fits you</p>
+                          <p className="text-sm text-muted-foreground">{idea.whyItFits}</p>
+                        </div>
+                      )}
+                      {idea.firstSteps && idea.firstSteps.length > 0 && (
+                        <div>
+                          <p className="text-sm font-semibold text-foreground">First steps</p>
+                          <ol className="list-decimal pl-5 text-sm text-muted-foreground space-y-1">
+                            {idea.firstSteps.map((step, i) => <li key={i}>{step}</li>)}
+                          </ol>
+                        </div>
+                      )}
+                      {idea.tools && idea.tools.length > 0 && (
+                        <div>
+                          <p className="text-sm font-semibold text-foreground">Tools to use</p>
+                          <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
+                            {idea.tools.map((tool, i) => <li key={i}>{tool}</li>)}
+                          </ul>
+                        </div>
+                      )}
+                      {(idea.firstCustomers || idea.startupCost) && (
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          {idea.firstCustomers && (
+                            <div className="rounded-md border bg-background/60 p-3">
+                              <p className="text-xs font-semibold text-foreground">Finding first customers</p>
+                              <p className="text-sm text-muted-foreground">{idea.firstCustomers}</p>
+                            </div>
+                          )}
+                          {idea.startupCost && (
+                            <div className="rounded-md border bg-background/60 p-3">
+                              <p className="text-xs font-semibold text-foreground">Estimated startup cost</p>
+                              <p className="text-sm text-muted-foreground">{idea.startupCost}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Card>
               ))}
@@ -257,7 +327,7 @@ export const BusinessIdeaGenerator = () => {
             
             <ResultActions
               toolName="business-idea-generator"
-              resultContent={ideas.join('\n\n')}
+              resultContent={ideas.map(ideaToText).join('\n\n')}
               onRegenerate={(focus?: string) => generateIdeas(focus)}
               onDownload={handleDownload}
               isGenerating={isGenerating}
