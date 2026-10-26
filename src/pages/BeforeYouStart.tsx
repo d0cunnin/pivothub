@@ -7,7 +7,7 @@ import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Compass, Target, BookOpen, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sprout } from "lucide-react";
+import { Compass, Target, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sprout } from "lucide-react";
 import { PACKAGE_TOOLS } from "@/utils/packageAccess";
 
 const BeforeYouStart = () => {
@@ -91,14 +91,6 @@ const BeforeYouStart = () => {
       cta: "Prepare for Work",
       link: "/prepit",
       color: "text-cyan-600"
-    },
-    {
-      icon: BookOpen,
-      title: "Learn It",
-      description: "Learn It provides short micro courses that teach practical skills you can apply immediately. These lessons support your development and help you grow into your next step with confidence.",
-      cta: "Start Learning",
-      link: "/learnit",
-      color: "text-rose-600"
     },
     {
       icon: Sprout,

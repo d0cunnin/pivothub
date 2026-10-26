@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import upskillIcon from "@/assets/reskill-person.jpg";
 import hireyourselfIcon from "@/assets/hireyourself-person.jpg";
 import jobprepIcon from "@/assets/jobprep-person.jpg";
 
@@ -118,57 +117,6 @@ export const PathSelection = () => {
                   className="w-full group-hover:shadow-glow transition-all duration-300"
                 >
                   Prepare to Relaunch
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-          </Card>
-
-          {/* Learn It */}
-          <Card className="group relative overflow-hidden shadow-soft hover:shadow-strong transition-all duration-500 border-l-4 border-teal-500 h-full">
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-emerald-600/5 group-hover:from-teal-500/10 group-hover:to-emerald-600/20 transition-all duration-500"></div>
-            
-            <div className="relative p-8 h-full flex flex-col">
-              <div className="mb-6">
-                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-teal-500/10 mb-4 border border-teal-500/20 w-fit">
-                  <span className="text-sm font-bold text-teal-600 dark:text-teal-400 tracking-wide">LEARN IT</span>
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">Learn It</h3>
-                <p className="text-muted-foreground">Build Digital Skills</p>
-              </div>
-
-              <img 
-                src={upskillIcon} 
-                alt="Skill Learning" 
-                className="w-64 h-40 object-cover rounded-lg mb-6 mx-auto group-hover:scale-105 transition-transform duration-500"
-              />
-
-              <p className="text-foreground mb-6 leading-relaxed">
-                Complete mini-courses that build practical tech and digital skills. 
-                Stay competitive with hands-on learning modules.
-              </p>
-
-              <div className="space-y-3 mb-8 flex-grow">
-                {[
-                  "Interactive learning modules",
-                  "Tech & digital skills focus",
-                  "Practical applications",
-                  "Industry-relevant content"
-                ].map((feature, index) => (
-                  <div key={index} className="flex items-start space-x-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0 mt-2" />
-                    <span className="text-foreground">{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              <Link to="/learnit" className="mt-auto">
-                <Button 
-                  variant="default" 
-                  size="lg" 
-                  className="w-full group-hover:shadow-glow transition-all duration-300"
-                >
-                  Start Learning
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>

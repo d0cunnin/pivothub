@@ -35,12 +35,6 @@ const phases: OnboardingPhase[] = [
         icon: '🎯'
       },
       {
-        name: 'Learn It',
-        path: '/learnit',
-        description: 'Access courses and interactive learning modules to develop your skills',
-        icon: '📚'
-      },
-      {
         name: 'Schedule It',
         path: '/scheduleit',
         description: 'Plan and organize your events, workshops, and learning schedule',

@@ -25,12 +25,6 @@ const Index = () => {
       link: "/assessit",
     },
     {
-      icon: reskillIcon,
-      title: "Learn It",
-      description: "Upskill with courses designed to advance your career.",
-      link: "/learnit",
-    },
-    {
       icon: jobprepIcon,
       title: "Prep It",
       description: "Prepare for career success with expert guidance.",

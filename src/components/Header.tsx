@@ -116,7 +116,7 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
                     <span 
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/courses', '/createit', '/promptit', '/codeit', '/deployit', '/studyit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/createit', '/promptit', '/codeit', '/deployit', '/studyit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
                       Learn It
                     </span>
@@ -144,11 +144,6 @@ export const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/createit" className="flex w-full cursor-pointer">
                       Create It
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link to="/courses" className="flex w-full cursor-pointer">
-                      Courses
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>

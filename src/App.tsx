@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UsageProvider } from "@/contexts/UsageContext";
 import Index from "./pages/Index";
@@ -15,7 +15,6 @@ import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 import AssessIt from "./pages/AssessIt";
 import PrepIt from "./pages/PrepIt";
-import Courses from "./pages/Courses";
 import PromptIt from "./pages/PromptIt";
 import CodeIt from "./pages/CodeIt";
 import DeployIt from "./pages/DeployIt";
@@ -76,12 +75,12 @@ const App = () => (
             <Route path="/actit" element={<ActIt />} />
             <Route path="/studyit" element={<StudyIt />} />
             <Route path="/before-you-start" element={<BeforeYouStart />} />
-            <Route path="/courses" element={<Courses />} />
+            <Route path="/courses" element={<Navigate to="/" replace />} />
             <Route path="/promptit" element={<PromptIt />} />
             <Route path="/codeit" element={<CodeIt />} />
             <Route path="/deployit" element={<DeployIt />} />
             <Route path="/createit" element={<CreateIt />} />
-            <Route path="/learnit" element={<Courses />} /> {/* Redirect old route */}
+            <Route path="/learnit" element={<Navigate to="/" replace />} />
             <Route path="/assessit" element={<AssessIt />} />
             <Route path="/prepit" element={<PrepIt />} />
             <Route path="/buildit" element={<BuildIt />} />

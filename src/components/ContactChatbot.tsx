@@ -43,7 +43,7 @@ const FAQ_RESPONSES: Record<string, string> = {
     "Credits are used for AI-powered tools:\n\n• Each tool costs 1-5 credits\n• Paid plans include monthly credits\n• Unused credits roll over (up to 2× limit)\n• Extra credits: $5 for 20, $10 for 40, $15 for 60\n\nExplore Mode: 5 free credits/month, no rollover",
 
   "what tools are available": 
-    "PivotHub offers 9 tool categories:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n📚 Learn It - Skills courses (free!)\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant finding\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Event tools\n\nVisit /pricing for full details!",
+    "PivotHub offers 8 tool categories:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant finding\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Event tools\n\nVisit /pricing for full details!",
 
   "cancel subscription":
     "To cancel your subscription:\n1. Go to Settings → Subscription\n2. Click 'Cancel Subscription'\n3. Confirm cancellation\n\nYou'll retain access until your billing period ends. Credits don't refund but stay active until expiration.",
