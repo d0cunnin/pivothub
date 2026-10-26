@@ -19,7 +19,6 @@ export const PACKAGE_TOOLS = {
     'resume-builder',
     'career-advisor',
     // Learn It
-    'learn-a-skill',
     'prompt-it',
     'code-it',
     'study-it',

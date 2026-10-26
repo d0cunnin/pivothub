@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronRight, CheckCircle, Rocket, Compass } from "lucide-react";
+import { ChevronRight, CheckCircle, Rocket, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
@@ -23,6 +23,7 @@ const Index = () => {
       title: "Assess It",
       description: "Assess, improve, and grow with confidence.",
       link: "/assessit",
+      badge: "Start here",
     },
     {
       icon: jobprepIcon,
@@ -198,23 +199,36 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
+                className="bg-white text-primary hover:bg-white/90 border-2 border-white text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
                 asChild
               >
                 <Link to="/before-you-start">
                   <Rocket className="mr-2 h-5 w-5" />
-                  Before You Start
+                  Start Here
                 </Link>
               </Button>
               <Button
                 size="lg"
-                className="bg-white text-primary hover:bg-white/90 text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
-                onClick={() => document.getElementById("explore-hub")?.scrollIntoView({ behavior: "smooth" })}
+                variant="outline"
+                className="bg-transparent text-white border-2 border-white hover:bg-white/15 hover:text-white text-lg px-10 py-6 transition-elegant"
+                asChild
               >
-                <Compass className="mr-2 h-5 w-5" />
-                Explore the Hub
+                <Link to="/assessit">
+                  <Target className="mr-2 h-5 w-5" />
+                  Take the Free Assessment
+                </Link>
               </Button>
             </div>
+            <p className="mt-6 text-white/85 text-sm">
+              Free to start · No credit card required ·{" "}
+              <button
+                type="button"
+                className="underline underline-offset-4 hover:text-white"
+                onClick={() => document.getElementById("explore-hub")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                or explore all tools
+              </button>
+            </p>
           </div>
         </div>
 
@@ -260,7 +274,14 @@ const Index = () => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <CardHeader>
-                    <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
+                    <div className="flex items-center justify-between gap-2">
+                      <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
+                      {feature.badge && (
+                        <span className="rounded-full bg-white text-primary text-xs font-bold px-3 py-1 whitespace-nowrap">
+                          {feature.badge}
+                        </span>
+                      )}
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <CardDescription className="text-white/90 text-base">{feature.description}</CardDescription>
@@ -433,12 +454,12 @@ const Index = () => {
             <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
               Your next chapter begins here. Get access to AI-powered tools that help you grow smarter and faster.
             </p>
-            <Link to="/pricing">
+            <Link to="/auth?tab=signup">
               <Button
                 size="lg"
                 className="bg-white text-primary hover:bg-white/90 text-lg px-12 py-6 shadow-2xl hover:scale-105 transition-elegant group"
               >
-                Join PivotHub
+                Join PivotHub Free
                 <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>

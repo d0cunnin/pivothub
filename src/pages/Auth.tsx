@@ -31,10 +31,12 @@ const Auth = () => {
   const [turnstileToken, setTurnstileToken] = useState('');
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [signupEmail, setSignupEmail] = useState('');
-  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signin');
   const [resending, setResending] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState<'signin' | 'signup'>(
+    searchParams.get('tab') === 'signup' ? 'signup' : 'signin'
+  );
   const { toast } = useToast();
   const { user, isAdmin, checkAdminStatus } = useAuth();
 

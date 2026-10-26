@@ -125,6 +125,28 @@ const BeforeYouStart = () => {
     'teaching-materials': 'Teaching Materials',
     'startup-checklist': 'Startup Checklist',
     'grant-content': 'LOI & Grant Proposal Generator',
+    'tech-readiness-assessment': 'Tech Readiness Assessment',
+    'community-assessment': 'Community Assessment',
+    'career-advisor': 'Career Advisor Chatbot',
+    'resume-builder': 'Resume Builder',
+    'prompt-it': 'Prompt It',
+    'code-it': 'Code It',
+    'study-it': 'Study It',
+    'biography': 'Biography',
+    'business-docs': 'Business Documents',
+    'lesson-plan': 'Lesson Plans',
+    'quiz-generator': 'Quiz Generator',
+    'rubric-builder': 'Rubric Builder',
+    'launch-strategy': 'Launch Strategy',
+    'speak-it': 'Speak It',
+    'schedule-it': 'Schedule It',
+    'host-it': 'Host It',
+    'garden-it': 'Garden It',
+    'act-it': 'Act It',
+    'grant-finder': 'Grant Finder',
+    'grant-readiness': 'Grant Readiness',
+    'grant-resources': 'Grant Resources',
+    'side-income-report': 'Side Income Blueprint',
   };
 
   const getToolsList = (packageKey: string) => {
@@ -174,6 +196,45 @@ const BeforeYouStart = () => {
               <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
                 Learn how PivotHub works and discover which tools are right for your journey. Get guidance on starting your path to income, clarity, career, or business growth.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
+                  <Link to="/assessit">
+                    <Target className="w-5 h-5 mr-2" />
+                    Take the Free Assessment
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-white/10 text-white border-white/40 hover:bg-white/20 hover:text-white"
+                  onClick={() => document.getElementById('the-tools')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  See All Tools
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* If You Are Unsure Where to Start */}
+        <section className="py-20 bg-primary relative overflow-hidden">
+          <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+          
+          <div className="container mx-auto px-6 lg:px-8 relative z-10">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+                Not Sure Where to Start?
+              </h2>
+              <p className="text-xl md:text-2xl text-white/90 mb-8">
+                If you're unsure which tool is right for you, we recommend starting with <strong>Assess It</strong>. This tool helps you understand your skills, goals, and the best path forward.
+              </p>
+              <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
+                <Link to="/assessit">
+                  <Target className="w-5 h-5 mr-2" />
+                  Start with Assess It
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -199,15 +260,28 @@ const BeforeYouStart = () => {
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
                 How PivotHub Works
               </h2>
-              <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-12">
                 Our platform offers different tools to support specific goals. Each tool is designed to give you actionable guidance and results quickly.
               </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {[
+                { step: '1', title: 'Take an assessment', text: 'Answer a few questions to learn your strengths, skills, and the best path for you.' },
+                { step: '2', title: 'Get your recommended tools', text: 'Your results point you to the tools that fit your goals, so you do not waste time guessing.' },
+                { step: '3', title: 'Build your plan', text: 'Use your credits to create resumes, business plans, income plans, and more.' },
+              ].map((item) => (
+                <div key={item.step} className="rounded-2xl bg-white/10 border border-white/20 p-6 text-left text-white backdrop-blur-sm">
+                  <div className="w-10 h-10 rounded-full bg-white text-accent font-bold flex items-center justify-center mb-4">{item.step}</div>
+                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                  <p className="text-white/90">{item.text}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Section 3: The Tools */}
-        <section className="py-20 bg-white">
+        <section id="the-tools" className="py-20 bg-white scroll-mt-20">
           <div className="container mx-auto px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center text-foreground">
@@ -233,29 +307,6 @@ const BeforeYouStart = () => {
                   </Card>
                 ))}
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 4: If You Are Unsure Where to Start */}
-        <section className="py-20 bg-primary relative overflow-hidden">
-          <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-          <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-          
-          <div className="container mx-auto px-6 lg:px-8 relative z-10">
-            <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
-                Not Sure Where to Start?
-              </h2>
-              <p className="text-xl md:text-2xl text-white/90 mb-8">
-                If you're unsure which tool is right for you, we recommend starting with <strong>Assess It</strong>. This tool helps you understand your skills, goals, and the best path forward.
-              </p>
-              <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
-                <Link to="/assessit">
-                  <Target className="w-5 h-5 mr-2" />
-                  Start with Assess It
-                </Link>
-              </Button>
             </div>
           </div>
         </section>

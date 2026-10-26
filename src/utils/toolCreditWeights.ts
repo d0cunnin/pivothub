@@ -55,7 +55,6 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'side-income-assessment': 7,     // Comprehensive side income blueprint with 90-day plan (~10,000 tokens output)
   
   // LEARNING (0 credits) - No AI generation
-  'learn-a-skill': 0,              // Video content only, no AI
   'side-income-report': 0,         // Free - generated after assessment
   
   // LEARN IT TOOLS

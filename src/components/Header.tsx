@@ -252,6 +252,11 @@ export const Header = () => {
           </nav>
 
           <div className="flex space-x-1 md:space-x-2 flex-shrink-0 ml-2 md:ml-4">
+            <Link to="/before-you-start" className="hidden sm:block">
+              <Button variant="outline" className="border-accent text-accent hover:bg-accent/10">
+                Start Here
+              </Button>
+            </Link>
             {user ? (
               <>
                 {isAdmin && (
@@ -330,7 +335,7 @@ export const Header = () => {
                 <Link to="/auth">
                   <Button variant="ghost">Sign In</Button>
                 </Link>
-                <Link to="/auth">
+                <Link to="/auth?tab=signup">
                   <Button variant="hero">Sign Up</Button>
                 </Link>
               </>
