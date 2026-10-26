@@ -307,10 +307,44 @@ async function isAdminUser(serviceClient: SupabaseClient, userId: string): Promi
   return !!data;
 }
 
+// PostgREST reports a function missing from the schema cache as PGRST202
+// (Postgres: 42883). Used to fall back to the pre-hold behaviour until the
+// credit-holds migration is applied.
+function isMissingFunction(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  return error.code === 'PGRST202' || error.code === '42883' || /could not find the function/i.test(error.message ?? '');
+}
+
+function creditRefusal(reason: string | undefined, cost: number, remaining: number): Response {
+  if (reason === 'account_suspended') {
+    return new Response(
+      JSON.stringify({ error: 'Your account has been suspended. Please contact support.' }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+  if (reason === 'no_subscription') {
+    return new Response(
+      JSON.stringify({ error: 'No credit account was found for your profile. Please sign out and back in, or contact support.' }),
+      { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+  return new Response(
+    JSON.stringify({
+      error: `Not enough credits. This tool needs ${cost} credit${cost === 1 ? '' : 's'} and you have ${remaining} left.`,
+      code: 'INSUFFICIENT_CREDITS',
+    }),
+    { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+}
+
 /**
- * Verify the user can afford `cost` credits WITHOUT deducting anything.
- * Throws a Response (402/403) when they can't, so the AI is never called.
- * Mirrors the balance rules in the check_and_increment_ai_usage RPC.
+ * Verify the user can afford `cost` credits and place a short hold on them,
+ * WITHOUT deducting anything. Throws a Response (402/403/503) when they can't,
+ * so the AI is never called.
+ *
+ * The hold stops many simultaneous requests from all passing the check before
+ * any of them is charged. deductCreditsOnSuccess() turns the hold into a real
+ * charge; if the request fails the hold expires on its own (~5 minutes).
  */
 export async function assertCredits(userId: string, cost: number): Promise<void> {
   if (cost <= 0) return;
@@ -318,7 +352,26 @@ export async function assertCredits(userId: string, cost: number): Promise<void>
   const serviceClient = serviceRoleClient();
   if (await isAdminUser(serviceClient, userId)) return;
 
-  // Apply any due monthly reset first, as check_and_increment_ai_usage does.
+  const { data: hold, error: holdError } = await serviceClient.rpc('reserve_ai_credits', {
+    p_user_id: userId,
+    p_amount: cost,
+  });
+
+  if (!holdError) {
+    if (hold?.ok) return;
+    throw creditRefusal(hold?.reason, cost, hold?.remaining ?? 0);
+  }
+
+  if (!isMissingFunction(holdError)) {
+    console.error('[CREDITS] Credit hold failed:', holdError.message);
+    throw new Response(
+      JSON.stringify({ error: 'Could not verify your credit balance. Please try again.' }),
+      { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  // Fallback while the credit-holds migration is not yet applied: plain
+  // balance check, mirroring check_and_increment_ai_usage.
   const { error: resetError } = await serviceClient.rpc('reset_monthly_ai_requests');
   if (resetError) console.warn('[CREDITS] Monthly reset check failed:', resetError.message);
 
@@ -335,32 +388,12 @@ export async function assertCredits(userId: string, cost: number): Promise<void>
       { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
-
-  if (!sub) {
-    throw new Response(
-      JSON.stringify({ error: 'No credit account was found for your profile. Please sign out and back in, or contact support.' }),
-      { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  }
-
-  if (sub.account_status === 'suspended') {
-    throw new Response(
-      JSON.stringify({ error: 'Your account has been suspended. Please contact support.' }),
-      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  }
+  if (!sub) throw creditRefusal('no_subscription', cost, 0);
+  if (sub.account_status === 'suspended') throw creditRefusal('account_suspended', cost, 0);
 
   const total = (sub.ai_request_limit ?? 5) + (sub.extra_credits ?? 0) + (sub.rollover_credits ?? 0);
   const remaining = Math.max(0, total - (sub.monthly_ai_requests ?? 0));
-  if (cost > remaining) {
-    throw new Response(
-      JSON.stringify({
-        error: `Not enough credits. This tool needs ${cost} credit${cost === 1 ? '' : 's'} and you have ${remaining} left.`,
-        code: 'INSUFFICIENT_CREDITS',
-      }),
-      { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  }
+  if (cost > remaining) throw creditRefusal('limit_exceeded', cost, remaining);
 }
 
 /**
@@ -401,15 +434,20 @@ export async function deductCreditsOnSuccess(
     }
   }
 
-  // Deduct credits
-  const { data, error } = await serviceClient.rpc(
-    'check_and_increment_ai_usage',
-    {
+  // Deduct credits, converting the hold placed by assertCredits().
+  let { data, error } = await serviceClient.rpc('consume_ai_credit_hold', {
+    p_user_id: userId,
+    p_amount: cost,
+    p_tool_name: endpoint,
+  });
+
+  if (isMissingFunction(error)) {
+    ({ data, error } = await serviceClient.rpc('check_and_increment_ai_usage', {
       p_user_id: userId,
       p_tool_name: endpoint,
-      p_credits_to_use: cost
-    }
-  );
+      p_credits_to_use: cost,
+    }));
+  }
 
   if (error || !data?.can_use) {
     console.error('[CREDITS] Post-generation deduction failed:', error ?? data?.reason);

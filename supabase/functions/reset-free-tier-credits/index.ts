@@ -6,6 +6,17 @@ const logStep = (step: string, data?: any) => {
 };
 
 serve(async (req) => {
+  // Resets usage for every free account, so it may only be called by a
+  // scheduler or admin tool holding the service-role key. (The monthly reset
+  // also happens automatically inside the credit check.)
+  const token = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+  if (!token || token !== Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   try {
     logStep('Starting free tier credit reset check');
 

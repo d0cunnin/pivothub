@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { guard } from "../_shared/guard.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,6 +19,18 @@ const grantResourcesSchema = z.object({
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  // Calls paid Google APIs: signed-in users only, rate limited.
+  try {
+    await guard(req, { endpoint: 'grant-resources', cost: 0, requireAuth: true, maxReqsPerMinute: 10 });
+  } catch (err) {
+    if (err instanceof Response) return err;
+    console.error('[grant-resources] Guard error:', err);
+    return new Response(JSON.stringify({ error: 'Request could not be verified. Please sign in and try again.' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   try {

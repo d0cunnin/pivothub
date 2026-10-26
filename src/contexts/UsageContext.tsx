@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { getToolCreditCost } from '@/utils/toolCreditWeights';
 import { CREDITS_CHANGED_EVENT } from "@/lib/invokeFunction";
 
 interface UsageContextType {
@@ -11,7 +10,6 @@ interface UsageContextType {
   rolloverCredits: number;
   canUseTools: boolean;
   accountStatus: 'active' | 'suspended' | 'warning';
-  checkAndIncrementUsage: (toolName?: string) => Promise<{ canUse: boolean; reason?: string; creditsCharged?: number }>;
   refreshUsage: () => Promise<void>;
 }
 
@@ -85,49 +83,6 @@ export const UsageProvider: React.FC<UsageProviderProps> = ({ children }) => {
     return () => window.removeEventListener(CREDITS_CHANGED_EVENT, onCreditsChanged);
   }, [user]);
 
-  const checkAndIncrementUsage = async (toolName: string = 'generic'): Promise<{ canUse: boolean; reason?: string; creditsCharged?: number }> => {
-    if (!user) {
-      return { canUse: false, reason: 'not_logged_in' };
-    }
-
-    // Get credit cost for this tool
-    const creditCost = getToolCreditCost(toolName);
-
-    try {
-      const { data, error } = await supabase.rpc('check_and_increment_ai_usage', {
-        p_user_id: user.id,
-        p_tool_name: toolName,
-        p_credits_to_use: creditCost
-      });
-
-      if (error) throw error;
-
-      const result = data as { 
-        can_use: boolean; 
-        reason: string; 
-        remaining: number; 
-        total_used: number;
-        total_available: number;
-        rollover_credits: number;
-        credits_charged: number;
-      };
-      
-      setMonthlyRequests(result.total_used);
-      setRemainingRequests(result.remaining);
-      setTotalAvailable(result.total_available);
-      setRolloverCredits(result.rollover_credits);
-
-      return {
-        canUse: result.can_use,
-        reason: result.reason || undefined,
-        creditsCharged: result.credits_charged
-      };
-    } catch (error) {
-      console.error('Error checking usage:', error);
-      return { canUse: false, reason: 'error' };
-    }
-  };
-
   const canUseTools = accountStatus === 'active' && remainingRequests > 0;
 
   const value = {
@@ -137,7 +92,6 @@ export const UsageProvider: React.FC<UsageProviderProps> = ({ children }) => {
     rolloverCredits,
     canUseTools,
     accountStatus,
-    checkAndIncrementUsage,
     refreshUsage
   };
 

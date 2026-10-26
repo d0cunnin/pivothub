@@ -3,6 +3,7 @@ import { Resend } from "https://esm.sh/resend@2.0.0";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { guard } from "../_shared/guard.ts";
 
 const resend = new Resend(Deno.env.get("resendemail-key"));
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
@@ -36,6 +37,19 @@ const assessmentEmailSchema = z.object({
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Sending email costs money and can be abused for spam: signed-in users only,
+  // rate limited.
+  try {
+    await guard(req, { endpoint: 'send-assessment-results', cost: 0, requireAuth: true, maxReqsPerMinute: 5 });
+  } catch (err) {
+    if (err instanceof Response) return err;
+    console.error('[send-assessment-results] Guard error:', err);
+    return new Response(JSON.stringify({ error: 'Please sign in to email your results.' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   try {
@@ -75,7 +89,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const emailContent = generateEmailContent(assessmentType, analysis, name);
+    const emailContent = generateEmailContent(assessmentType, escapeDeep(analysis), escapeHtml(name));
     
     const emailResponse = await resend.emails.send({
       from: "RelaunchU Career Services <onboarding@resend.dev>",
@@ -107,6 +121,26 @@ const handler = async (req: Request): Promise<Response> => {
 
 function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// User- and AI-provided text is inserted into the email HTML; escape it so it
+// can't inject links, markup or scripts.
+function escapeHtml(value: string): string {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeDeep(value: any): any {
+  if (typeof value === 'string') return escapeHtml(value);
+  if (Array.isArray(value)) return value.map(escapeDeep);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, escapeDeep(v)]));
+  }
+  return value;
 }
 
 function generateEmailContent(assessmentType: string, analysis: any, name: string): string {
