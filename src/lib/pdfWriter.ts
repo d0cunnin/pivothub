@@ -47,6 +47,18 @@ export const toList = (v: any): string[] => {
   return [asText(v)];
 };
 
+/** Removes markdown emphasis/code markers and makes text safe for the PDF font. */
+export const cleanInline = (s: string): string =>
+  pdfSafe(
+    s
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/__(.+?)__/g, '$1')
+      .replace(/`([^`]*)`/g, '$1')
+      .replace(/\*/g, '')
+      .replace(/(^|\s)_(\S(?:.*?\S)?)_(?=\s|[.,;:!?]|$)/g, '$1$2')
+      .trim(),
+  );
+
 export type RGB = [number, number, number];
 export const HEADING: RGB = [45, 55, 72];
 export const BODY: RGB = [75, 85, 99];
@@ -125,8 +137,9 @@ export class PdfWriter {
   section(title: string, subtitle?: string) {
     this.ensureSpace(subtitle ? 30 : 24);
     this.setStyle(16, HEADING);
-    this.doc.text(pdfSafe(title), this.margin, this.y);
-    this.y += 8;
+    const lines: string[] = this.doc.splitTextToSize(pdfSafe(title), this.contentWidth);
+    lines.forEach((line, i) => this.doc.text(line, this.margin, this.y + i * 7));
+    this.y += (lines.length - 1) * 7 + 8;
     if (subtitle) {
       this.setStyle(10, MUTED);
       this.doc.text(pdfSafe(subtitle), this.margin, this.y);
@@ -137,8 +150,110 @@ export class PdfWriter {
   subHeading(title: string, color: RGB = HEADING, size = 11) {
     this.ensureSpace(14);
     this.setStyle(size, color, 'bold');
-    this.doc.text(pdfSafe(title), this.margin, this.y);
-    this.y += 6;
+    const lines: string[] = this.doc.splitTextToSize(pdfSafe(title), this.contentWidth);
+    lines.forEach((line, i) => this.doc.text(line, this.margin, this.y + i * size * 0.5));
+    this.y += (lines.length - 1) * size * 0.5 + 6;
+  }
+
+  /**
+   * A paragraph or list item with an optional leading bold label
+   * ("**Role:** The Burnout.") and an optional list marker.
+   */
+  richParagraph(text: string, opts: { indent?: number; marker?: string; size?: number; after?: number } = {}) {
+    const size = opts.size ?? 10;
+    const lineHeight = size * 0.5;
+    const x = this.margin + (opts.indent ?? 0);
+    const markerWidth = opts.marker ? 5 : 0;
+    const textX = x + markerWidth;
+    const width = this.contentWidth - (textX - this.margin);
+
+    const labelMatch = text.match(/^\s*\*\*(.+?)\*\*\s*(.*)$/s);
+    const label = labelMatch ? cleanInline(labelMatch[1]) : '';
+    const body = cleanInline(labelMatch ? labelMatch[2] : text);
+    if (!label && !body) return;
+
+    this.setStyle(size, HEADING, 'bold');
+    // Fixed gap after the label; measuring a trailing space is unreliable.
+    const labelWidth = label ? this.doc.getTextWidth(label) + size * 0.15 : 0;
+    this.setStyle(size, BODY);
+
+    // First line shares space with the label; the rest use the full width.
+    let lines: string[] = [];
+    if (body) {
+      if (labelWidth > 0 && labelWidth < width * 0.6) {
+        const first: string = this.doc.splitTextToSize(body, width - labelWidth)[0] ?? '';
+        const remainder = body.slice(first.length).trim();
+        lines = [first, ...(remainder ? (this.doc.splitTextToSize(remainder, width) as string[]) : [])];
+      } else {
+        lines = this.doc.splitTextToSize(body, width);
+      }
+    }
+    const labelOnOwnLine = label && labelWidth >= width * 0.6;
+
+    this.ensureSpace(lineHeight * Math.min(2, Math.max(1, lines.length)));
+    if (opts.marker) {
+      this.setStyle(size, BODY);
+      this.doc.text(opts.marker, x, this.y);
+    }
+    if (label) {
+      this.setStyle(size, HEADING, 'bold');
+      this.doc.text(label, textX, this.y);
+      if (labelOnOwnLine) this.y += lineHeight;
+    }
+    this.setStyle(size, BODY);
+    lines.forEach((line, i) => {
+      if (i > 0 || labelOnOwnLine || !label) this.ensureSpace(lineHeight);
+      const lx = i === 0 && label && !labelOnOwnLine ? textX + labelWidth : textX;
+      this.doc.text(line, lx, this.y);
+      this.y += lineHeight;
+    });
+    if (label && !lines.length && !labelOnOwnLine) this.y += lineHeight;
+    this.y += opts.after ?? 2;
+  }
+
+  /**
+   * Renders AI-generated markdown: headings, bullet and numbered lists
+   * (nested by indentation), bold labels, dividers and paragraphs. Inline
+   * emphasis markers are removed rather than printed.
+   */
+  markdown(md: string) {
+    let blankBefore = false;
+    for (const raw of md.replace(/\r/g, '').split('\n')) {
+      const line = raw.replace(/\s+$/, '');
+      if (!line.trim()) { blankBefore = true; continue; }
+      const gap = blankBefore ? 1.5 : 0;
+      blankBefore = false;
+
+      if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) {
+        // Skip dividers that would land at the top of a page.
+        if (this.y > this.margin + 1 && this.y + 26 < this.pageHeight - this.margin - 5) { this.y += 2; this.divider(); }
+        continue;
+      }
+
+      const heading = line.match(/^\s*(#{1,6})\s+(.*)$/);
+      if (heading) {
+        const title = cleanInline(heading[2]);
+        if (heading[1].length <= 2) { this.y += 2; this.section(title); }
+        else { this.y += gap + 1; this.subHeading(title, HEADING, heading[1].length === 3 ? 12 : 11); }
+        continue;
+      }
+
+      // A line that is only bold text acts as a small heading.
+      const boldOnly = line.match(/^\s*\*\*([^*]+)\*\*\s*:?\s*$/);
+      if (boldOnly) { this.y += gap + 1; this.subHeading(cleanInline(boldOnly[1]), HEADING, 11); continue; }
+
+      const item = line.match(/^(\s*)([*+-]|\d+[.)])\s+(.*)$/);
+      if (item) {
+        const depth = Math.min(3, Math.floor(item[1].replace(/\t/g, '    ').length / 2));
+        const marker = /\d/.test(item[2]) ? item[2].replace(')', '.') : depth > 0 ? '-' : '•';
+        this.y += gap;
+        this.richParagraph(item[3], { indent: 4 + depth * 6, marker, after: 1.5 });
+        continue;
+      }
+
+      this.y += gap;
+      this.richParagraph(line.trim(), { after: 2.5 });
+    }
   }
 
   bullets(items: string[], opts: { indent?: number; size?: number; numbered?: boolean } = {}) {
