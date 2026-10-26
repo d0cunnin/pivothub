@@ -7,12 +7,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, Target, TrendingUp, Users, Heart, Wrench, Calculator, Shield, MessageCircle, GraduationCap, Lightbulb, HandHeart, Home, Download } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
-import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { sanitizeAIContent } from "@/lib/utils";
 import { toast } from "sonner";
-import jsPDF from 'jspdf';
+import { generateCareerReportPDF } from "@/lib/careerReportPdf";
 
 interface CareerArea {
   id: string;
@@ -263,6 +262,7 @@ export const CareerAssessment = () => {
   const [showResults, setShowResults] = useState(false);
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState<any>(null);
 
   const totalQuestions = careerAreas.length * 10;
   const currentQuestionNumber = currentArea * 10 + currentStatement + 1;
@@ -290,7 +290,7 @@ export const CareerAssessment = () => {
       setCurrentStatement(0);
     } else {
       // Calculate results when assessment is complete
-      const calculatedResults = await calculateResults();
+      const calculatedResults = await calculateResults(updatedResponses);
       setResults(calculatedResults);
       setShowEmailPrompt(true);
     }
@@ -306,7 +306,7 @@ export const CareerAssessment = () => {
     setCurrentResponse(0);
   };
 
-  const calculateResults = async (): Promise<AssessmentResults> => {
+  const calculateResults = async (responses: Record<string, number[]>): Promise<AssessmentResults> => {
     try {
       // Get session for authorization
       const { data: { session } } = await supabase.auth.getSession();
@@ -338,26 +338,16 @@ export const CareerAssessment = () => {
       }
       if ((data as any)?.error) throw new Error((data as any).error);
 
-      if (data && data.analysis && Array.isArray(data.analysis.recommendations)) {
-        // Transform AI response to match existing interface
-        const results: AssessmentResults = {};
-        
-        data.analysis.recommendations.forEach((rec: any, index: number) => {
-          const areaId = `area_${index}`;
-          results[areaId] = {
-            score: rec.fitScore || 50,
-            percentage: rec.fitScore || 50,
-            level: rec.fitScore >= 80 ? "Strong interest" : rec.fitScore >= 60 ? "Moderate interest" : "Low interest"
-          };
-        });
-
-        return results;
+      if (data?.analysis && Array.isArray(data.analysis.recommendations)) {
+        setAiAnalysis(data.analysis);
       }
     } catch (error) {
       console.error('Error getting AI career assessment:', error);
     }
 
-    // Fallback to original calculation
+    // Interest-area scores come from the user's own answers so they line up
+    // with careerAreas; the AI analysis (careers, salaries, next steps) goes
+    // into the PDF report.
     const results: AssessmentResults = {};
     
     careerAreas.forEach(area => {
@@ -386,87 +376,23 @@ export const CareerAssessment = () => {
     setCurrentResponse(0);
     setShowResults(false);
     setShowEmailPrompt(false);
+    setAiAnalysis(null);
     setIsOpen(false);
   };
 
   const downloadCareerAssessmentPDF = () => {
-    if (!results) return;
-
     try {
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      const margin = 72;
-      const maxLineWidth = pageWidth - (margin * 2);
-      let yPosition = margin;
-
-      const addText = (text: string, fontSize: number = 11, isBold: boolean = false) => {
-        doc.setFontSize(fontSize);
-        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-        
-        const lines = doc.splitTextToSize(text, maxLineWidth);
-        
-        lines.forEach((line: string) => {
-          if (yPosition > pageHeight - margin) {
-            doc.addPage();
-            yPosition = margin;
-          }
-          doc.text(line, margin, yPosition);
-          yPosition += fontSize * 0.5;
-        });
-        
-        yPosition += 5;
-      };
-
-      // Title
-      addText('CAREER INTEREST ASSESSMENT RESULTS', 18, true);
-      addText(`Generated: ${new Date().toLocaleDateString()}`, 10);
-      yPosition += 10;
-
-      // Top Career Areas
-      addText('YOUR TOP CAREER AREAS', 14, true);
-      topThree.forEach(([areaId, result], index) => {
-        const area = careerAreas.find(a => a.id === areaId);
-        addText(`#${index + 1} ${area?.title} - ${Math.round(result.percentage)}%`, 12, true);
-        addText(`Interest Level: ${result.level}`, 11);
-        yPosition += 3;
-      });
-      yPosition += 10;
-
-      // All Results
-      addText('COMPLETE CAREER INTEREST PROFILE', 14, true);
-      Object.entries(results).forEach(([areaId, result]) => {
-        const area = careerAreas.find(a => a.id === areaId);
-        addText(`${area?.title}: ${Math.round(result.percentage)}% (${result.level})`, 11);
-      });
-      yPosition += 10;
-
-      // Next Steps
-      addText('RECOMMENDED NEXT STEPS', 14, true);
-      addText('1. Explore learning paths and career opportunities in your top-rated areas', 11);
-      addText('2. Take the Skills Assessment to identify your current skill levels', 11);
-      addText('3. Complete the Personality Assessment for a comprehensive career profile', 11);
-      addText('4. Research specific job roles within your high-interest career areas', 11);
-
-      // Footer
-      const totalPages = doc.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.setTextColor(128, 128, 128);
-        doc.text(
-          `Generated by HireYourself Platform | Page ${i} of ${totalPages}`,
-          pageWidth / 2,
-          pageHeight - 10,
-          { align: 'center' }
-        );
-      }
-
-      doc.save(`career-assessment-results-${Date.now()}.pdf`);
-      toast.success('Career assessment results exported to PDF!');
+      const topAreas = topThree.map(([areaId, result]) => ({
+        title: careerAreas.find(a => a.id === areaId)?.title ?? areaId,
+        percentage: result.percentage,
+        level: result.level,
+      }));
+      const pdf = generateCareerReportPDF(aiAnalysis, topAreas);
+      pdf.save(`pivothub-career-assessment-${new Date().toISOString().split('T')[0]}.pdf`);
+      toast.success('Your career assessment PDF has been downloaded!');
     } catch (error) {
       console.error('PDF export error:', error);
-      toast.error('Failed to export PDF');
+      toast.error('Failed to create the PDF. Please try again.');
     }
   };
 
@@ -501,22 +427,14 @@ export const CareerAssessment = () => {
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>
               <p className="text-muted-foreground mb-6">
-                Would you like to receive your detailed results by email?
+                Your results are ready. Download your full report as a PDF to keep, or view your results now.
               </p>
             </div>
-            <EmailResultsPrompt
-              assessmentType="career"
-              results={results}
-              onEmailSent={() => {
-                setShowResults(true);
-                setShowEmailPrompt(false);
-              }}
-              onSkip={() => {
-                setShowResults(true);
-                setShowEmailPrompt(false);
-              }}
-            />
-            <div className="text-center">
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              <Button onClick={downloadCareerAssessmentPDF}>
+                <Download className="h-4 w-4 mr-2" />
+                Download PDF
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => {
@@ -639,8 +557,8 @@ export const CareerAssessment = () => {
             <Card className="p-4 bg-blue-50 border border-blue-200">
               <h5 className="font-semibold text-blue-900 mb-2">Next Steps</h5>
               <p className="text-blue-800 text-sm">
-                Consider exploring learning paths and career opportunities in your top-rated areas. 
-                These results suggest where your interests align most strongly with different career paths.
+                These areas show where your interests are strongest. Download the PDF for your full report,
+                including recommended careers, salary ranges, the skills you already have, and steps to get started.
               </p>
             </Card>
 
@@ -649,7 +567,7 @@ export const CareerAssessment = () => {
                 Retake Assessment
               </Button>
               <Button onClick={() => setIsOpen(false)} className="px-8">
-                Explore Learning Paths
+                Done
               </Button>
             </div>
           </div>

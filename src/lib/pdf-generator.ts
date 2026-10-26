@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { asText, toList, type RGB, HEADING, BODY, MUTED, ACCENT, DIVIDER, PRO, CON } from './pdfWriter';
 
 export interface SideIncomeReportPDF {
   executive_summary?: string;
@@ -23,59 +24,6 @@ export interface SideIncomeReportPDF {
   ninety_day_plan?: any;
 }
 
-// jsPDF's built-in Helvetica only covers Windows-1252. Any other character
-// (arrows, check marks, emoji, non-breaking hyphens) prints as garbage such
-// as "%¸", so map the common ones to plain equivalents and drop the rest.
-const CP1252_EXTRAS = new Set('€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ');
-const REPLACEMENTS: Record<string, string> = {
-  '→': '->', '←': '<-', '⇒': '=>', '↑': '^', '↓': 'v',
-  '▸': '•', '▶': '•', '►': '•', '◆': '•', '●': '•', '▪': '•',
-  '✓': '-', '✔': '-', '✅': '-', '☐': '-', '★': '*', '☆': '*',
-  '≈': '~', '≥': '>=', '≤': '<=', '≠': '!=', '−': '-',
-  '‐': '-', '‑': '-', '‒': '-',
-  ' ': ' ', ' ': ' ', '​': '',
-};
-
-const pdfSafe = (s: string): string =>
-  Array.from(s.normalize('NFC'))
-    .map((ch) => {
-      if (ch in REPLACEMENTS) return REPLACEMENTS[ch];
-      const c = ch.codePointAt(0)!;
-      if (ch === '\n' || (c >= 0x20 && c <= 0x7e) || (c >= 0xa0 && c <= 0xff) || CP1252_EXTRAS.has(ch)) return ch;
-      return '';
-    })
-    .join('')
-    .replace(/[ \t]{2,}/g, ' ');
-
-const asText = (v: any): string => {
-  if (v === null || v === undefined) return '';
-  if (typeof v === 'string') return pdfSafe(v);
-  if (typeof v === 'number' || typeof v === 'boolean') return String(v);
-  if (Array.isArray(v)) return v.map(asText).filter(Boolean).join(', ');
-  if (typeof v === 'object') {
-    return Object.entries(v)
-      .map(([k, val]) => `${k}: ${asText(val)}`)
-      .join('; ');
-  }
-  return pdfSafe(String(v));
-};
-
-const toList = (v: any): string[] => {
-  if (!v) return [];
-  if (Array.isArray(v)) return v.map(asText).filter(Boolean);
-  if (typeof v === 'string') return [asText(v)];
-  if (typeof v === 'object') return Object.values(v).map(asText).filter(Boolean);
-  return [asText(v)];
-};
-
-type RGB = [number, number, number];
-const HEADING: RGB = [45, 55, 72];
-const BODY: RGB = [75, 85, 99];
-const MUTED: RGB = [107, 114, 128];
-const ACCENT: RGB = [59, 130, 246];
-const DIVIDER: RGB = [226, 232, 240];
-const PRO: RGB = [5, 150, 105];
-const CON: RGB = [225, 29, 72];
 
 export function generateSideIncomeReportPDF(report: SideIncomeReportPDF): jsPDF {
   const doc = new jsPDF();
