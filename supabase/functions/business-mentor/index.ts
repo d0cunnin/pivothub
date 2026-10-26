@@ -266,7 +266,7 @@ If conversation mentions:
 Context: You're chatting with an entrepreneur who needs guidance on their business journey. Provide actionable, experienced advice worth $300/hr consulting value.`;
 
     // Format messages for OpenAI API
-    const messages = [
+    const messages: { role: 'system' | 'user' | 'assistant'; content: any }[] = [
       { role: 'system', content: systemPrompt },
       ...conversationHistory.map((msg: any) => ({
         role: msg.isBot ? 'assistant' : 'user',
