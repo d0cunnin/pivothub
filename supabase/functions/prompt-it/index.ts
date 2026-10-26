@@ -23,7 +23,7 @@ serve(async (req) => {
     if (err instanceof Response) {
       return err;
     }
-    return new Response(JSON.stringify({ error: err.message || 'Guard check failed' }), {
+    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : 'Guard check failed' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });

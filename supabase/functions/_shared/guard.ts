@@ -500,14 +500,14 @@ export async function logRequest(
     );
 
     await serviceClient.from('api_request_log').insert({
-      user_id: log.userId,
+      user_id: log.userId ?? null,
       endpoint: log.endpoint,
-      ip_address: log.ip,
-      user_agent: log.userAgent,
-      credits_charged: log.creditsCharged,
-      success: log.success,
+      ip_address: log.ip ?? 'unknown',
+      user_agent: log.userAgent ?? 'unknown',
+      credits_charged: log.creditsCharged ?? 0,
+      success: log.success ?? false,
       error_message: log.errorMessage || null,
-      request_duration_ms: log.requestDurationMs
+      request_duration_ms: log.requestDurationMs ?? log.durationMs ?? 0
     });
   } catch (e) {
     console.error('Failed to log request:', e);
