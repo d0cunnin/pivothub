@@ -1,4 +1,3 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { guard, corsHeaders, deductCreditsOnSuccess, logRequest } from "../_shared/guard.ts";
 import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
 import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts";
