@@ -1,7 +1,7 @@
 // Shared security guard for all Edge Functions
 // Provides: authentication, rate limiting, credit deduction, CORS, audit logging
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 export interface GuardConfig {
   endpoint: string;
