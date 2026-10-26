@@ -149,7 +149,7 @@ async function generateChunk(
     ],
     {
       maxTokens: MAX_TOKENS,
-      fallbackModel: 'google/gemini-2.5-flash-lite',
+      fallbackModel: 'google/gemini-3.1-flash-lite',
       fallbackTimeoutMs: 55_000,
     },
   );
@@ -239,7 +239,7 @@ serve(async (req) => {
     }
 
     const blueprint = validateBlueprint(merged);
-    const modelUsed = 'google/gemini-2.5-flash';
+    const modelUsed = 'google/gemini-3.8-flash';
 
 
     // Store history (RLS: user_id must equal auth.uid()).

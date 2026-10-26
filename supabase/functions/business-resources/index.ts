@@ -180,7 +180,7 @@ serve(async (req) => {
       return fallbackResponse();
     }
 
-    // Phase 2: Add AI-powered strategic guidance with Gemini 2.5 Flash
+    // Phase 2: Add AI-powered strategic guidance with Gemini 3.8 Flash
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
 
     if (!LOVABLE_API_KEY) {

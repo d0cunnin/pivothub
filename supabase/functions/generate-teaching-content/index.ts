@@ -10,8 +10,8 @@ const teachingContentSchema = z.object({
   data: z.record(z.any()).refine((obj) => Object.keys(obj).length <= 50, "Data must contain at most 50 fields")
 });
 
-const PRIMARY_MODEL = 'google/gemini-2.5-flash';
-const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
+const PRIMARY_MODEL = 'google/gemini-3.8-flash';
+const FALLBACK_MODEL = 'google/gemini-3.1-flash-lite';
 const MAX_TOKENS = 5000;
 // Gateway statuses worth a quick retry (transient: rate limit / upstream blips).
 const TRANSIENT_STATUSES = new Set([408, 429, 500, 502, 503, 504]);

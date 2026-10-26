@@ -242,7 +242,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
             "Content-Type": "application/json",
           },
             body: JSON.stringify({
-              model: 'google/gemini-2.5-flash',  // Bypass OpenAI routing, faster JSON generation
+              model: 'google/gemini-3.8-flash',  // Bypass OpenAI routing, faster JSON generation
               messages: [
                 { role: "system", content: systemPrompt },
                 { role: "user", content: userPrompt },

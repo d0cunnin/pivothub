@@ -5,7 +5,7 @@
  * generate-teaching-content into a single reusable module so every tool stays
  * under the ~150s edge runtime limit instead of dying with a silent 504.
  *
- * Strategy: a fast primary model (Gemini 2.5 Flash) with a budgeted timeout,
+ * Strategy: a fast primary model (Gemini 3.8 Flash) with a budgeted timeout,
  * falling back to a secondary model (gpt-5-mini) only if the primary fails.
  * Transient gateway errors are retried once; timeouts are NOT retried on the
  * same model (they fall through to the fallback) so the total request time
@@ -16,7 +16,7 @@ import { extractContent, extractJson } from "./aiResponse.ts";
 
 const AI_GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
-export const DEFAULT_PRIMARY_MODEL = "google/gemini-2.5-flash";
+export const DEFAULT_PRIMARY_MODEL = "google/gemini-3.8-flash";
 export const DEFAULT_FALLBACK_MODEL = "openai/gpt-5-mini";
 
 const DEFAULT_PRIMARY_TIMEOUT_MS = 50_000;

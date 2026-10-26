@@ -10,7 +10,7 @@ export interface ModerationResult {
 }
 
 /**
- * Moderates text content using the Lovable AI Gateway (google/gemini-2.5-flash-lite)
+ * Moderates text content using the Lovable AI Gateway (google/gemini-3.1-flash-lite)
  * Logs all moderation attempts to the moderation_log table
  * 
  * @param text - The text content to moderate
@@ -42,7 +42,7 @@ export async function moderateContent(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash-lite',
+        model: 'google/gemini-3.1-flash-lite',
         messages: [
           {
             role: 'system',
