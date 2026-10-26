@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from '../_shared/guard.ts';
 import { moderateContent } from "../_shared/moderation.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import { PLAIN_LANGUAGE_RULES } from "../_shared/plainLanguage.ts";
 
 // Input validation schema
 const careerAssessmentSchema = z.object({
@@ -472,7 +473,7 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
     const maxTokens = 16000;
     let aiResponseText: string;
     try {
-      aiResponseText = await generateText(lovableApiKey, systemUser(systemPrompt, `Analyze these career assessment responses and provide personalized career recommendations.`), { maxTokens });
+      aiResponseText = await generateText(lovableApiKey, systemUser(systemPrompt + PLAIN_LANGUAGE_RULES, `Analyze these career assessment responses and provide personalized career recommendations.`), { maxTokens });
     } catch (err: any) {
       if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

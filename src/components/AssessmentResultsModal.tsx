@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { useToast } from "@/hooks/use-toast";
 import { 
   CheckCircle, 
@@ -90,7 +91,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
         return;
       }
 
-      const { error } = await supabase.functions.invoke('send-assessment-results', {
+      const { error } = await invokeFunction('send-assessment-results', {
         body: {
           email: emailAddress,
           name: userName,
@@ -103,7 +104,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
         }
       });
 
-      if (error) throw error;
+      if (error) throw new Error(error.message);
 
       setEmailSent(true);
       toast({
@@ -114,7 +115,7 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
       console.error('Error sending results email:', error);
       toast({
         title: "Email Failed",
-        description: "Unable to send email. Please try again or contact support.",
+        description: error instanceof Error && error.message ? error.message : "Unable to send email. Please try again or contact support.",
         variant: "destructive",
       });
     } finally {

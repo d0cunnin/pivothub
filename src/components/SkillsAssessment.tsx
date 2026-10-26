@@ -810,7 +810,7 @@ export const SkillsAssessment = () => {
             </div>
             <EmailResultsPrompt
               assessmentType="skills"
-              results={results}
+              results={aiAssessment || results}
               onEmailSent={() => {
                 setShowResults(true);
                 setShowEmailPrompt(false);

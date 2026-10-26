@@ -91,12 +91,23 @@ const handler = async (req: Request): Promise<Response> => {
 
     const emailContent = generateEmailContent(assessmentType, escapeDeep(analysis), escapeHtml(name));
     
+    // Must send from the verified pivothub.io domain: Resend's test sender
+    // (onboarding@resend.dev) only delivers to the Resend account owner.
     const emailResponse = await resend.emails.send({
-      from: "RelaunchU Career Services <onboarding@resend.dev>",
+      from: "PivotHub <noreply@pivothub.io>",
       to: [email],
-      subject: `Your ${capitalizeFirst(assessmentType)} Assessment Results - RelaunchU`,
+      subject: `Your ${capitalizeFirst(assessmentType)} Assessment Results - PivotHub`,
       html: emailContent,
     });
+
+    // Resend reports failures in the result instead of throwing.
+    if ((emailResponse as any)?.error) {
+      console.error("Resend rejected assessment results email:", (emailResponse as any).error);
+      return new Response(
+        JSON.stringify({ error: "We couldn't send the email right now. Please try again in a few minutes." }),
+        { status: 502, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
 
     console.log("Assessment results email sent successfully:", emailResponse);
 
@@ -262,7 +273,7 @@ function generateCareerEmailContent(analysis: any, name: string, styles: string)
       </div>
 
       <div class="footer">
-        <p>Keep building your future with RelaunchU! 🌟</p>
+        <p>Keep building your future with PivotHub! 🌟</p>
         <p>Visit our platform for more career development tools and resources.</p>
       </div>
     </div>
@@ -355,7 +366,7 @@ function generateSkillsEmailContent(analysis: any, name: string, styles: string)
       </div>
 
       <div class="footer">
-        <p>Keep growing your skills with RelaunchU! 🚀</p>
+        <p>Keep growing your skills with PivotHub! 🚀</p>
         <p>Practice makes perfect - stay consistent with your learning journey.</p>
       </div>
     </div>
@@ -442,7 +453,7 @@ function generatePersonalityEmailContent(analysis: any, name: string, styles: st
       </div>
 
       <div class="footer">
-        <p>Embrace your unique personality with RelaunchU! 🌟</p>
+        <p>Embrace your unique personality with PivotHub! 🌟</p>
         <p>Your personality is your superpower - use it to build an amazing career.</p>
       </div>
     </div>
@@ -480,7 +491,7 @@ function generateGenericEmailContent(analysis: any, name: string, styles: string
       </div>
 
       <div class="footer">
-        <p>Continue your growth journey with RelaunchU! 🚀</p>
+        <p>Continue your growth journey with PivotHub! 🚀</p>
         <p>Every step forward is progress - keep building your future.</p>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import { PLAIN_LANGUAGE_RULES } from "../_shared/plainLanguage.ts";
 
 // Validation schema
 const assessmentAnalyzerSchema = z.object({
@@ -70,7 +71,7 @@ serve(async (req) => {
       );
     }
 
-    const systemPrompt = getSystemPromptForAssessment(assessmentType);
+    const systemPrompt = getSystemPromptForAssessment(assessmentType) + PLAIN_LANGUAGE_RULES;
     
     const maxTokens = 4000;
     let content: string;

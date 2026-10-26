@@ -174,7 +174,7 @@ const AssessIt = () => {
             <div className="animate-fade-in space-y-6">
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm">
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  Find Your Perfect Learning Path
+                  Find Your Best Path Forward
                 </h2>
               </div>
               <p className="text-lg text-foreground leading-relaxed mb-6">
@@ -215,7 +215,7 @@ const AssessIt = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Personalized Recommendations</h4>
-                    <p className="text-muted-foreground text-sm">Get course suggestions tailored to your learning style and schedule</p>
+                    <p className="text-muted-foreground text-sm">Get clear next steps tailored to your strengths, goals, and schedule</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">

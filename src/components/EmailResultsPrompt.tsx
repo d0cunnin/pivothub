@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Send, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { useToast } from "@/hooks/use-toast";
 
 interface EmailResultsPromptProps {
@@ -50,7 +51,7 @@ export const EmailResultsPrompt = ({
         return;
       }
 
-      const { error } = await supabase.functions.invoke('send-assessment-results', {
+      const { error } = await invokeFunction('send-assessment-results', {
         body: {
           email: emailAddress,
           name: userName,
@@ -63,7 +64,7 @@ export const EmailResultsPrompt = ({
         }
       });
 
-      if (error) throw error;
+      if (error) throw new Error(error.message);
 
       setEmailSent(true);
       toast({
@@ -75,7 +76,7 @@ export const EmailResultsPrompt = ({
       console.error('Error sending results email:', error);
       toast({
         title: "Email Failed",
-        description: "Unable to send email. Please try again or contact support.",
+        description: error instanceof Error && error.message ? error.message : "Unable to send email. Please try again or contact support.",
         variant: "destructive",
       });
     } finally {

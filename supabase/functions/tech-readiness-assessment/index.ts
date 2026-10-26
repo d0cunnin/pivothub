@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 import { assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
+import { PLAIN_LANGUAGE_RULES } from "../_shared/plainLanguage.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -242,7 +243,7 @@ OUTPUT FORMAT (JSON only, no additional text):
     const maxTokens = 3000;
     let analysisText: string;
     try {
-      analysisText = await generateText(LOVABLE_API_KEY, systemUser(systemPrompt, 'Generate a comprehensive tech readiness analysis based on the assessment results.'), { maxTokens });
+      analysisText = await generateText(LOVABLE_API_KEY, systemUser(systemPrompt + PLAIN_LANGUAGE_RULES, 'Generate a comprehensive tech readiness analysis based on the assessment results.'), { maxTokens });
     } catch (err: any) {
       if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
