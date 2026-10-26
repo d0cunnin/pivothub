@@ -497,7 +497,7 @@ const SpeakIt = () => {
                       <Label>Speaking Goals *</Label>
                       <div className="space-y-2 mt-2">
                         {['Keynotes', 'Workshops', 'Trainings', 'Emcee'].map((goal) => (
-                          <div key={goal} className="flex items-center space-x-2">
+                          <label key={goal} className="flex items-center space-x-2 cursor-pointer">
                             <Checkbox
                               checked={speakingGoals.includes(goal)}
                               onCheckedChange={(checked) => {
@@ -508,8 +508,8 @@ const SpeakIt = () => {
                                 }
                               }}
                             />
-                            <Label>{goal}</Label>
-                          </div>
+                            <span className="text-sm font-medium leading-none">{goal}</span>
+                          </label>
                         ))}
                       </div>
                     </div>
@@ -561,7 +561,7 @@ const SpeakIt = () => {
                       <Label>Target Venues *</Label>
                       <div className="space-y-2 mt-2">
                         {['Schools', 'Prisons', 'Juvenile Programs', 'Ministries', 'Corporations', 'Universities', 'Associations', 'Conferences'].map((venue) => (
-                          <div key={venue} className="flex items-center space-x-2">
+                          <label key={venue} className="flex items-center space-x-2 cursor-pointer">
                             <Checkbox
                               checked={targetVenues.includes(venue)}
                               onCheckedChange={(checked) => {
@@ -572,8 +572,8 @@ const SpeakIt = () => {
                                 }
                               }}
                             />
-                            <Label>{venue}</Label>
-                          </div>
+                            <span className="text-sm font-medium leading-none">{venue}</span>
+                          </label>
                         ))}
                       </div>
                     </div>
@@ -629,7 +629,7 @@ const SpeakIt = () => {
                       <Label>Format *</Label>
                       <div className="space-y-2 mt-2">
                         {['Audio', 'Video', 'Live Stream'].map((fmt) => (
-                          <div key={fmt} className="flex items-center space-x-2">
+                          <label key={fmt} className="flex items-center space-x-2 cursor-pointer">
                             <Checkbox
                               checked={format.includes(fmt)}
                               onCheckedChange={(checked) => {
@@ -640,8 +640,8 @@ const SpeakIt = () => {
                                 }
                               }}
                             />
-                            <Label>{fmt}</Label>
-                          </div>
+                            <span className="text-sm font-medium leading-none">{fmt}</span>
+                          </label>
                         ))}
                       </div>
                     </div>
@@ -731,7 +731,7 @@ const SpeakIt = () => {
                           'YouTube Podcasts',
                           'Kajabi Podcasts',
                         ].map((platform) => (
-                          <div key={platform} className="flex items-center space-x-2">
+                          <label key={platform} className="flex items-center space-x-2 cursor-pointer">
                             <Checkbox
                               checked={platforms.includes(platform)}
                               onCheckedChange={(checked) => {
@@ -742,8 +742,8 @@ const SpeakIt = () => {
                                 }
                               }}
                             />
-                            <Label>{platform}</Label>
-                          </div>
+                            <span className="text-sm font-medium leading-none">{platform}</span>
+                          </label>
                         ))}
                       </div>
                       <p className="text-sm text-muted-foreground mt-2">

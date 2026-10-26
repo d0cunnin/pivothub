@@ -448,13 +448,13 @@ export function ScheduleItWizard() {
                   <Label className="text-base">Work Days</Label>
                   <div className="grid grid-cols-4 gap-2 mt-2">
                     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                      <div key={day} className="flex items-center space-x-2">
+                      <label key={day} className="flex items-center space-x-2 cursor-pointer">
                         <Checkbox
                           checked={formData.workDays.includes(day)}
                           onCheckedChange={() => handleArrayToggle('workDays', day)}
                         />
-                        <label className="text-sm">{day}</label>
-                      </div>
+                        <span className="text-sm">{day}</span>
+                      </label>
                     ))}
                   </div>
                 </div>
@@ -654,13 +654,13 @@ export function ScheduleItWizard() {
               <Label>Peak Productivity Times (select all that apply)</Label>
               <div className="space-y-2 mt-2">
                 {['Early Morning (5-8 AM)', 'Morning (8-12 PM)', 'Afternoon (12-5 PM)', 'Evening (5-9 PM)', 'Night (9 PM-12 AM)'].map(time => (
-                  <div key={time} className="flex items-center space-x-2">
+                  <label key={time} className="flex items-center space-x-2 cursor-pointer">
                     <Checkbox
                       checked={formData.peakProductivity.includes(time)}
                       onCheckedChange={() => handleArrayToggle('peakProductivity', time)}
                     />
-                    <label className="text-sm">{time}</label>
-                  </div>
+                    <span className="text-sm">{time}</span>
+                  </label>
                 ))}
               </div>
             </div>
@@ -669,13 +669,13 @@ export function ScheduleItWizard() {
               <Label>Energy Dips (when do you struggle most?)</Label>
               <div className="space-y-2 mt-2">
                 {['Early Morning (5-8 AM)', 'Morning (8-12 PM)', 'Afternoon (12-5 PM)', 'Evening (5-9 PM)', 'Night (9 PM-12 AM)'].map(time => (
-                  <div key={time} className="flex items-center space-x-2">
+                  <label key={time} className="flex items-center space-x-2 cursor-pointer">
                     <Checkbox
                       checked={formData.energyDips.includes(time)}
                       onCheckedChange={() => handleArrayToggle('energyDips', time)}
                     />
-                    <label className="text-sm">{time}</label>
-                  </div>
+                    <span className="text-sm">{time}</span>
+                  </label>
                 ))}
               </div>
             </div>
@@ -1112,15 +1112,15 @@ export function ScheduleItWizard() {
             </AlertDescription>
           </Alert>
 
-          <div className="flex items-center space-x-2">
+          <label className="flex items-center space-x-2 cursor-pointer">
             <Checkbox
               checked={understoodDisclaimer}
               onCheckedChange={(checked) => setUnderstoodDisclaimer(checked === true)}
             />
-            <label className="text-sm">
+            <span className="text-sm">
               I understand this schedule will not be saved
-            </label>
-          </div>
+            </span>
+          </label>
 
           {/* Action Buttons */}
           <div className="space-y-3">

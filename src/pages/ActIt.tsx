@@ -379,6 +379,7 @@ const ActIt = () => {
                             <Checkbox
                               checked={selectedGenres.includes(genre)}
                               onCheckedChange={() => toggleGenre(genre)}
+                              onClick={(e) => e.stopPropagation()}
                             />
                             <span className="text-sm">{genre}</span>
                           </div>

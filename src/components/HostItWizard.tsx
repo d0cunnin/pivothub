@@ -380,13 +380,13 @@ export function HostItWizard() {
               <Label>Primary Event Goals (select all that apply)</Label>
               <div className="space-y-2 mt-2">
                 {['Education', 'Networking', 'Fundraising', 'Celebration', 'Training', 'Community Building'].map(goal => (
-                  <div key={goal} className="flex items-center space-x-2">
+                  <label key={goal} className="flex items-center space-x-2 cursor-pointer">
                     <Checkbox
                       checked={formData.primaryGoals.includes(goal)}
                       onCheckedChange={() => handleGoalsToggle(goal)}
                     />
-                    <label className="text-sm">{goal}</label>
-                  </div>
+                    <span className="text-sm">{goal}</span>
+                  </label>
                 ))}
               </div>
             </div>
@@ -673,15 +673,15 @@ export function HostItWizard() {
             </AlertDescription>
           </Alert>
 
-          <div className="flex items-center space-x-2">
+          <label className="flex items-center space-x-2 cursor-pointer">
             <Checkbox
               checked={understoodDisclaimer}
               onCheckedChange={(checked) => setUnderstoodDisclaimer(checked === true)}
             />
-            <label className="text-sm">
+            <span className="text-sm">
               I understand this event plan will not be saved
-            </label>
-          </div>
+            </span>
+          </label>
 
           {/* Action Buttons */}
           <div className="space-y-3">

@@ -289,14 +289,15 @@ export const StartupChecklist = () => {
                       <Card key={item.id} className={`p-3 border-l-4 ${getPriorityColor(item.priority)} ${item.completed ? 'opacity-75' : ''}`}>
                         <div className="flex items-start gap-3">
                           <Checkbox
+                            id={`task-${item.id}`}
                             checked={item.completed}
                             onCheckedChange={() => toggleTask(item.id)}
                             className="mt-1"
                           />
                           <div className="flex-1">
-                            <p className={`text-sm ${item.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                            <label htmlFor={`task-${item.id}`} className={`block cursor-pointer text-sm ${item.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
                               {item.task}
-                            </p>
+                            </label>
                             <div className="flex items-center gap-2 mt-1">
                               <Clock className="h-3 w-3 text-muted-foreground" />
                               <span className="text-xs text-muted-foreground">{item.timeline}</span>

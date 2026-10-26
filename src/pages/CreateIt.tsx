@@ -328,7 +328,11 @@ export default function CreateIt() {
               : "border-border hover:border-primary/50"
           }`}
         >
-          <Checkbox checked={selected.includes(option)} onCheckedChange={() => toggleInArray(key, option)} />
+          <Checkbox
+            checked={selected.includes(option)}
+            onCheckedChange={() => toggleInArray(key, option)}
+            onClick={(e) => e.stopPropagation()}
+          />
           <span className="text-sm">{option}</span>
         </div>
       ))}
