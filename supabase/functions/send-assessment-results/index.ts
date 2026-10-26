@@ -67,7 +67,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
     
-    const { email, name, assessmentType, results, analysis }: AssessmentEmailRequest = validation.data;
+    const { email, name, assessmentType, results, analysis } = validation.data;
 
     console.log(`Sending ${assessmentType} assessment results to ${email}`);
     

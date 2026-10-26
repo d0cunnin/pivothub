@@ -21,7 +21,7 @@ serve(async (req) => {
     if (err instanceof Response) {
       return err;
     }
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : 'Bad request' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });

@@ -62,7 +62,7 @@ export async function fetchWithTimeout(
     clearTimeout(timeoutId);
     
     // Handle abort/timeout
-    if (error.name === 'AbortError') {
+    if (error instanceof Error && error.name === 'AbortError') {
       throw new AIError(
         'AI request timed out',
         'TIMEOUT',

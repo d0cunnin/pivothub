@@ -1,7 +1,7 @@
 // Shared security guard for all Edge Functions
 // Provides: authentication, rate limiting, credit deduction, CORS, audit logging
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 export interface GuardConfig {
   endpoint: string;
@@ -10,11 +10,15 @@ export interface GuardConfig {
   requireCaptcha?: boolean;
   maxReqsPerMinute?: number;
   maxBodySize?: number;
+  bodyLimit?: number;
 }
 
 export interface GuardResult {
-  supabase: SupabaseClient;
-  userId: string | null;
+  // Loose client type: functions import supabase-js from different CDN pins,
+  // and a strictly typed param rejects those structurally identical clients.
+  // deno-lint-ignore no-explicit-any
+  supabase: any;
+  userId: string;
   ip: string;
   startTime: number;
 }
@@ -38,7 +42,7 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
     requireAuth = true,
     requireCaptcha = false,
     maxReqsPerMinute = 30,
-    maxBodySize = 100_000 // 100KB default
+    maxBodySize = config.bodyLimit ?? 100_000 // 100KB default
   } = config;
 
   // Extract IP (check various headers for proxied requests)
@@ -287,17 +291,17 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
     await assertCredits(userId, cost);
   }
 
-  return { supabase, userId, ip, startTime };
+  return { supabase, userId: userId ?? 'unknown', ip, startTime };
 }
 
-function serviceRoleClient(): SupabaseClient {
+function serviceRoleClient(): any {
   return createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
   );
 }
 
-async function isAdminUser(serviceClient: SupabaseClient, userId: string): Promise<boolean> {
+async function isAdminUser(serviceClient: any, userId: string): Promise<boolean> {
   const { data } = await serviceClient
     .from('user_roles')
     .select('role')
@@ -403,7 +407,7 @@ export async function assertCredits(userId: string, cost: number): Promise<void>
  * @param requestHash - Optional hash for idempotency (prevents double-charging)
  */
 export async function deductCreditsOnSuccess(
-  supabase: SupabaseClient,
+  supabase: any,
   userId: string,
   endpoint: string,
   cost: number,
@@ -464,25 +468,30 @@ export async function deductCreditsOnSuccess(
         credits_deducted: cost,
         request_hash: requestHash,
         deducted_at: new Date().toISOString()
-      })
-      .catch(err => console.error('[CREDITS] Failed to log deduction:', err));
+      });
   }
 }
 
 // Helper to log successful/failed requests
+export interface RequestLogEntry {
+  endpoint: string;
+  userId?: string | null;
+  ip?: string;
+  userAgent?: string;
+  creditsCharged?: number;
+  success?: boolean;
+  errorMessage?: string;
+  requestDurationMs?: number;
+  durationMs?: number;
+}
+
+// Accepts either logRequest(client, entry) or logRequest(entry) - both shapes
+// are used across the functions and the client is never needed here.
 export async function logRequest(
-  supabase: SupabaseClient,
-  log: {
-    userId: string | null;
-    endpoint: string;
-    ip: string;
-    userAgent: string;
-    creditsCharged: number;
-    success: boolean;
-    errorMessage?: string;
-    requestDurationMs: number;
-  }
+  supabaseOrEntry: any,
+  maybeEntry?: RequestLogEntry
 ) {
+  const log: RequestLogEntry = maybeEntry ?? (supabaseOrEntry as RequestLogEntry);
   try {
     // Use service role client for logging (bypasses RLS)
     const serviceClient = createClient(
@@ -491,14 +500,14 @@ export async function logRequest(
     );
 
     await serviceClient.from('api_request_log').insert({
-      user_id: log.userId,
+      user_id: log.userId ?? null,
       endpoint: log.endpoint,
-      ip_address: log.ip,
-      user_agent: log.userAgent,
-      credits_charged: log.creditsCharged,
-      success: log.success,
+      ip_address: log.ip ?? 'unknown',
+      user_agent: log.userAgent ?? 'unknown',
+      credits_charged: log.creditsCharged ?? 0,
+      success: log.success ?? false,
       error_message: log.errorMessage || null,
-      request_duration_ms: log.requestDurationMs
+      request_duration_ms: log.requestDurationMs ?? log.durationMs ?? 0
     });
   } catch (e) {
     console.error('Failed to log request:', e);

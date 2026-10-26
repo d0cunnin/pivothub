@@ -461,10 +461,7 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
     console.error('Error analyzing interview answer:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     
-    await logRequest(createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    ), {
+    await logRequest({
       endpoint: "interview-feedback",
       userId,
       ip,

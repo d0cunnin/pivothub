@@ -230,7 +230,7 @@ EXAMPLES OF PREMIUM VALUE:
 
 ❌ Basic: "Network more"
 ✅ Premium: "This week, connect with 10 people on LinkedIn in your target role using this message template: 'Hi [Name], I'm impressed by your work in [specific project]. I'm transitioning into [role] and would value 15 minutes of your insights on [specific topic]. Would you be open to a brief virtual coffee next week?' Also join these 3 active communities: [Industry Slack], [LinkedIn Group Name], and attend [Specific Virtual Conference] in the upcoming months."`
-    const messages = [
+    const messages: { role: "system" | "user" | "assistant"; content: any }[] = [
       { role: "system", content: systemPrompt },
       ...conversationHistory.map((msg: any) => ({
         role: msg.isBot ? "assistant" : "user",
