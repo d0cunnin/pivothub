@@ -401,7 +401,7 @@ function formatEnhancedResults(
     const query = place.searchKeyword?.toLowerCase() || place.name.toLowerCase();
     
     // Get AI insights for this place
-    const aiData = insightsMap.get(placeId) || {};
+    const aiData: any = insightsMap.get(placeId) || {};
     
     // Determine category
     let targetCategory = categories[0]; // Default: Business Support Centers

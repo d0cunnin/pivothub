@@ -22,8 +22,8 @@ export interface ModerationResult {
 export async function moderateContent(
   text: string,
   functionName: string,
-  userId?: string,
-  riskLevel: 'high' | 'medium' = 'medium'
+  userId?: string | null,
+  riskLevel: 'high' | 'medium' | 'low' = 'medium'
 ): Promise<ModerationResult> {
   // Truncate text to 32k characters for OpenAI moderation API limit
   const truncatedText = text.slice(0, 32000);
@@ -122,7 +122,7 @@ export async function moderateContent(
 async function logModeration(
   text: string,
   functionName: string,
-  userId: string | undefined,
+  userId: string | null | undefined,
   flagged: boolean,
   categories: string[]
 ): Promise<void> {

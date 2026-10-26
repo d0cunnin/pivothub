@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
     } catch (fetchError) {
       clearTimeout(timeoutId);
       
-      if (fetchError.name === 'AbortError') {
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
         status = 'degraded';
         errorMessage = 'Request timeout (5s)';
       } else {

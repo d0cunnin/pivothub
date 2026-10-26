@@ -490,7 +490,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
         userAgent: req.headers.get('user-agent') || 'unknown',
         creditsCharged: 0,
         success: false,
-        errorMessage: `Failed to parse AI response: ${parseError.message}`,
+        errorMessage: `Failed to parse AI response: ${parseError instanceof Error ? parseError.message : String(parseError)}`,
         requestDurationMs: Date.now() - startTime
       });
       

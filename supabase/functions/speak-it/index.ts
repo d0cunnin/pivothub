@@ -99,7 +99,7 @@ Deno.serve(async (req) => {
 
     // Moderate content
     const moderationText = `${sharedData.niche} ${sharedData.targetAudience} ${sharedData.qualifications}`;
-    const moderation = await moderateContent(moderationText, supabase, userId, 'speak-it');
+    const moderation = await moderateContent(moderationText, 'speak-it', userId);
     if (moderation.flagged) {
       return new Response(JSON.stringify({ 
         error: 'Content flagged by moderation',
@@ -117,6 +117,8 @@ Deno.serve(async (req) => {
     const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     const twoWeeksLater = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
     const fourWeeksLater = new Date(Date.now() + 28 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const fiveWeeksLater = new Date(Date.now() + 35 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+    const eightWeeksLater = new Date(Date.now() + 56 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
     // Build system prompt based on path
     let systemPrompt = '';
@@ -467,7 +469,7 @@ FORMATTING REQUIREMENTS:
     if (error instanceof Response) return error;
     console.error('Error in speak-it function:', error);
     return new Response(
-      JSON.stringify({ error: error.message || 'Internal server error' }),
+      JSON.stringify({ error: error instanceof Error ? error.message : 'Internal server error' }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

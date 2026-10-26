@@ -1,5 +1,3 @@
-import { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
 interface ModelConfig {
   provider: 'openai' | 'gemini';
   model: string;
@@ -14,7 +12,8 @@ interface ModelConfig {
  * IMAGE TOOLS: Always use Gemini Nano
  */
 export async function getModelForUser(
-  supabase: SupabaseClient,
+  // deno-lint-ignore no-explicit-any
+  supabase: any,
   userId: string,
   toolType: 'text' | 'image',
   overrideModel?: string
