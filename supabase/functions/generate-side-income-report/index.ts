@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { z } from 'https://deno.land/x/zod@v3.22.4/mod.ts';
 import { generateRaw, systemUser } from "../_shared/aiGenerate.ts";
+import { assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -122,7 +123,6 @@ serve(async (req) => {
     // Initialize Supabase client for authentication
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
     // Extract the JWT from the Authorization header explicitly
     const authHeader = req.headers.get('Authorization') || req.headers.get('authorization') || '';
@@ -154,61 +154,9 @@ serve(async (req) => {
     console.log('✅ User authenticated:', user.id);
 
     
-    // Check user's credit balance before generating report
-    const serviceClient = createClient(supabaseUrl, supabaseServiceKey);
-    const { data: usageCheck, error: usageError } = await serviceClient.rpc(
-      'check_and_increment_ai_usage',
-      { p_user_id: user.id, p_tool_name: 'side-income-report', p_credits_to_use: 2 }
-    );
-    
-    if (usageError) {
-      console.error('❌ Usage check failed:', usageError);
-      return new Response(
-        JSON.stringify({ error: 'Failed to verify credit balance' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-    
-    if (!usageCheck?.can_use) {
-      console.log('⚠️ Insufficient credits:', usageCheck?.reason);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Insufficient credits',
-          reason: usageCheck?.reason,
-          remaining: usageCheck?.remaining || 0
-        }),
-        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-    
-    console.log('✅ Credits deducted:', usageCheck?.credits_charged, 'Remaining:', usageCheck?.remaining);
-
-    const creditsCharged: number = usageCheck?.credits_charged ?? 0;
-    let creditsRefunded = false;
-    const refundCredits = async (reason: string) => {
-      if (creditsRefunded || creditsCharged <= 0) return;
-      try {
-        // Re-read current usage to safely subtract
-        const { data: cur } = await serviceClient
-          .from('subscribers_public')
-          .select('monthly_ai_requests')
-          .eq('user_id', user.id)
-          .maybeSingle();
-        const newCount = Math.max(0, (cur?.monthly_ai_requests ?? creditsCharged) - creditsCharged);
-        const { error: refundErr } = await serviceClient
-          .from('subscribers_public')
-          .update({ monthly_ai_requests: newCount })
-          .eq('user_id', user.id);
-        if (refundErr) {
-          console.error('⚠️ Credit refund failed:', refundErr, 'reason:', reason);
-        } else {
-          creditsRefunded = true;
-          console.log(`💰 Refunded ${creditsCharged} credits to user ${user.id} (reason: ${reason})`);
-        }
-      } catch (e) {
-        console.error('⚠️ Refund threw:', e);
-      }
-    };
+    // Check user's credit balance before generating report (2 credits).
+    // Credits are deducted only after the report is successfully generated.
+    await assertCredits(user.id, 2);
 
     // Validate input with zod - now accepts raw assessment data
     const requestSchema = z.object({
@@ -545,18 +493,15 @@ For this request, return ONLY a JSON object containing exactly these top-level k
     if (requiredFailure || !Array.isArray(reportContent.recommended_paths)) {
       const err = requiredFailure;
       if (err?.status === 429) {
-        await refundCredits('rate-limit');
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (err?.status === 402) {
-        await refundCredits('out-of-credits');
         return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      await refundCredits(err?.truncated ? 'json-truncated' : 'generation-failed');
       return new Response(JSON.stringify({
         error: err?.truncated
-          ? 'The AI response was cut off before completing. Your credits have been refunded — please try again.'
-          : 'AI service is temporarily unavailable. Your credits have been refunded — please try again.',
+          ? 'The AI response was cut off before completing. You were not charged — please try again.'
+          : 'AI service is temporarily unavailable. You were not charged — please try again.',
         retryable: true,
       }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
@@ -565,12 +510,14 @@ For this request, return ONLY a JSON object containing exactly these top-level k
     const sanitizedReport = sanitizeObject(reportContent);
 
     // Return report directly without saving to database
+    try { await deductCreditsOnSuccess(supabase, user.id, 'generate-side-income-report', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(
       JSON.stringify({ report: sanitizedReport }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
+    if (error instanceof Response) return error;
     console.error('Error in generate-side-income-report:', error);
     return new Response(
       JSON.stringify({ error: error.message }),

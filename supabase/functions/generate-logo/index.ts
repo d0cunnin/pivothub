@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 // Validation schema
@@ -166,7 +166,8 @@ serve(async (req) => {
           }
     );
 
-    console.log('Generated logos:', logos.filter(l => l.imageURL).length, 'successful');
+    const successfulLogoCount = logos.filter(l => l.imageURL).length;
+    console.log('Generated logos:', successfulLogoCount, 'successful');
 
     await logRequest(guardResult.supabase, {
       endpoint: "generate-logo",
@@ -174,9 +175,14 @@ serve(async (req) => {
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: 2,
+      creditsCharged: successfulLogoCount > 0 ? 2 : 0,
       requestDurationMs: Date.now() - startTime
     });
+
+    // Charge only if at least one logo image was actually generated.
+    if (successfulLogoCount > 0) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-logo', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    }
 
     return new Response(
       JSON.stringify({ logos }),
@@ -184,6 +190,8 @@ serve(async (req) => {
     );
 
   } catch (error) {
+    // Guard / credit-check errors are thrown as Response objects
+    if (error instanceof Response) return error;
     console.error('Error generating logo:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     

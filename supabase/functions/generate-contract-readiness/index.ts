@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -37,22 +38,8 @@ serve(async (req) => {
       });
     }
 
-    // Check credits
-    const { data: creditCheck } = await supabaseClient.rpc("check_and_increment_ai_usage", {
-      p_user_id: user.id,
-      p_tool_name: "contract-readiness",
-      p_credits_to_use: 3,
-    });
-
-    if (!creditCheck?.can_use) {
-      return new Response(JSON.stringify({ 
-        error: "Insufficient credits",
-        reason: creditCheck?.reason || "limit_exceeded"
-      }), {
-        status: 402,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Check credits (3) - deducted only after successful generation
+    await assertCredits(user.id, 3);
 
     const { formData } = await req.json();
 
@@ -64,6 +51,7 @@ serve(async (req) => {
 
     console.log(`[generate-contract-readiness] Completed in ${Date.now() - startTime}ms for user ${user.id}`);
 
+    try { await deductCreditsOnSuccess(supabaseClient, user.id, 'generate-contract-readiness', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(JSON.stringify({
       ...scores,
       recommendations
@@ -72,6 +60,7 @@ serve(async (req) => {
     });
 
   } catch (error: any) {
+    if (error instanceof Response) return error;
     console.error("Error in generate-contract-readiness:", error);
     return new Response(JSON.stringify({ error: error.message || "An error occurred" }), {
       status: 500,

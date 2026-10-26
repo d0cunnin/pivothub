@@ -20,6 +20,7 @@ import { invokeFunction } from "@/lib/invokeFunction";
 import { useAuth } from '@/contexts/AuthContext';
 import { useUsage } from '@/contexts/UsageContext';
 import { ToolGuard } from '@/components/ToolGuard';
+import { getToolCreditCost } from '@/utils/toolCreditWeights';
 
 interface GrantFormData {
   organizationName: string;
@@ -105,8 +106,8 @@ const GRANT_RESEARCH_RESOURCES = [
 ];
 
 const FundIt = () => {
-  const { session } = useAuth();
-  const { remainingRequests, checkAndIncrementUsage } = useUsage();
+  const { session, isAdmin } = useAuth();
+  const { remainingRequests } = useUsage();
   const [formData, setFormData] = useState<GrantFormData>({
     organizationName: '',
     projectTitle: '',
@@ -205,6 +206,16 @@ const FundIt = () => {
   const generateGrantDocuments = async () => {
     if (!formData.organizationName || !formData.projectTitle || !formData.projectDescription) {
       toast.error('Please fill in the required fields: Organization Name, Project Title, and Project Description');
+      return;
+    }
+
+    // Up-front balance check only (no deduction). The server re-checks and
+    // deducts the credits only after the documents are generated successfully.
+    const creditCost = getToolCreditCost('grant-content');
+    if (!isAdmin && remainingRequests < creditCost) {
+      toast.error('Insufficient Credits', {
+        description: "You don't have enough credits. Visit Settings → Credits to add more."
+      });
       return;
     }
 

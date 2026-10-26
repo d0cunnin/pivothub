@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { extractContent } from "../_shared/aiResponse.ts";
 
@@ -106,7 +106,7 @@ serve(async (req) => {
   }
 
   try {
-    // Apply guard for auth, rate limit, and credit deduction
+    // Apply guard for auth, rate limit, and credit balance check (no deduction)
     const guardResult = await guard(req, {
       endpoint: "generate-teaching-content",
       cost: 5,
@@ -827,6 +827,8 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
           creditsCharged: 5,
           requestDurationMs: Date.now() - startTime
         });
+
+        try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
         
         return new Response(
           JSON.stringify({
@@ -1043,6 +1045,8 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
+    try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+
     return new Response(
       JSON.stringify({ content, type }),
       { 
@@ -1052,6 +1056,8 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
     )
 
   } catch (error) {
+    // Guard/credit-check failures are thrown as ready-made Responses (401/402/403/429/503)
+    if (error instanceof Response) return error;
     console.error('Error generating teaching content:', error)
     const errorMessage = error instanceof Error ? error.message : String(error);
     

@@ -1,6 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { guard, corsHeaders } from '../_shared/guard.ts';
+import { guard, corsHeaders, deductCreditsOnSuccess } from '../_shared/guard.ts';
 import { generateJson } from '../_shared/aiGenerate.ts';
 
 const ENDPOINT = '/generate-create-it-blueprint';
@@ -263,10 +263,10 @@ serve(async (req) => {
       blueprintId = saved?.id ?? null;
     }
 
-    // NOTE: Credits (70) are checked + deducted atomically on the client via
-    // the canonical check_and_increment_ai_usage RPC before this function is
-    // invoked, which also writes the AI usage log. We intentionally do NOT
-    // deduct again here to avoid double-charging.
+    // Credits (70) are only checked up front by guard(); they are deducted
+    // here, after the blueprint was generated successfully, so failed
+    // generations cost nothing. The client no longer deducts.
+    try { await deductCreditsOnSuccess(supabase, userId!, 'generate-create-it-blueprint', 70); } catch (e) { console.error('[CREDITS] deduction failed', e); }
 
     return new Response(
       JSON.stringify({ blueprint, blueprintId, modelUsed }),

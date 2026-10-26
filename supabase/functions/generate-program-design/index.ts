@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import { assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -38,22 +39,8 @@ serve(async (req) => {
       });
     }
 
-    // Check credits
-    const { data: creditCheck } = await supabaseClient.rpc("check_and_increment_ai_usage", {
-      p_user_id: user.id,
-      p_tool_name: "program-design",
-      p_credits_to_use: 4,
-    });
-
-    if (!creditCheck?.can_use) {
-      return new Response(JSON.stringify({ 
-        error: "Insufficient credits",
-        reason: creditCheck?.reason || "limit_exceeded"
-      }), {
-        status: 402,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Check credits (4) - deducted only after successful generation
+    await assertCredits(user.id, 4);
 
     const { formData } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -159,11 +146,13 @@ BUDGET:
 
     console.log(`[generate-program-design] Completed in ${Date.now() - startTime}ms for user ${user.id}`);
 
+    try { await deductCreditsOnSuccess(supabaseClient, user.id, 'generate-program-design', 4); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(JSON.stringify({ content }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
 
   } catch (error: any) {
+    if (error instanceof Response) return error;
     console.error("Error in generate-program-design:", error);
     return new Response(JSON.stringify({ error: error.message || "An error occurred" }), {
       status: 500,

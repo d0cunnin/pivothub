@@ -16,13 +16,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { getToolCreditCost } from "@/utils/toolCreditWeights";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { ToolGuard } from "@/components/ToolGuard";
 
 const DeployIt = () => {
-  const { user } = useAuth();
-  const { checkAndIncrementUsage } = useUsage();
+  const { user, isAdmin } = useAuth();
+  const { remainingRequests } = useUsage();
   const [formData, setFormData] = useState({
     agentName: "",
     purpose: "",
@@ -70,8 +71,8 @@ const DeployIt = () => {
     setBlueprint(null);
 
     try {
-      const canUse = await checkAndIncrementUsage('deploy-it');
-      if (!canUse) {
+      // Check balance only; credits are deducted by the backend after a successful result
+      if (!isAdmin && remainingRequests < getToolCreditCost('deploy-it')) {
         toast.error("Insufficient credits. Please upgrade or purchase credits.");
         setIsLoading(false);
         return;

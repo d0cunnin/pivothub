@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { generateJson, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -222,8 +222,10 @@ Return as a JSON object with this EXACT structure:
 }`;
     const userContent = `Create a comprehensive, actionable startup checklist for this ${businessType} business in ${location}. Focus on critical path tasks and realistic timelines.`;
     let checklist: any;
+    let aiGenerated = false;
     try {
       checklist = await generateJson(lovableApiKey, systemUser(systemPrompt, userContent), { maxTokens: 4000 });
+      aiGenerated = true;
     } catch (err: any) {
       if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -311,9 +313,14 @@ Return as a JSON object with this EXACT structure:
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: 2,
+      creditsCharged: aiGenerated ? 2 : 0,
       requestDurationMs: Date.now() - startTime
     });
+
+    // Charge only when the AI produced the checklist, not the static fallback.
+    if (aiGenerated) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'startup-checklist', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    }
 
     return new Response(
       JSON.stringify({ checklist }),
@@ -324,6 +331,8 @@ Return as a JSON object with this EXACT structure:
     );
 
   } catch (error) {
+    // Guard / credit-check errors are thrown as Response objects
+    if (error instanceof Response) return error;
     console.error('Error generating startup checklist:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     

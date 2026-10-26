@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
@@ -521,6 +521,7 @@ QUALITY STANDARDS:
     }
 
     let analysis;
+    let aiResultParsed = false;
     try {
       // Sanitize and parse JSON
       const sanitizedContent = aiResponseText
@@ -532,6 +533,7 @@ QUALITY STANDARDS:
         .trim();
       
       analysis = JSON.parse(sanitizedContent);
+      aiResultParsed = true;
     } catch (parseError) {
       // Fallback analysis if JSON parsing fails
       analysis = {
@@ -566,9 +568,14 @@ QUALITY STANDARDS:
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: 2,
+      creditsCharged: aiResultParsed ? 2 : 0,
       requestDurationMs: Date.now() - startTime
     });
+
+    // Charge only when the AI produced a real (parsed) result, not the fallback.
+    if (aiResultParsed) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'resume-analyzer', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    }
     
     return new Response(
       JSON.stringify({ analysis }),
@@ -579,6 +586,8 @@ QUALITY STANDARDS:
     );
 
   } catch (error) {
+    // Guard / credit-check errors are thrown as Response objects
+    if (error instanceof Response) return error;
     console.error('Error analyzing resume:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     

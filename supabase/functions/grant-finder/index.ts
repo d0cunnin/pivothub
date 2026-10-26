@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema
@@ -216,6 +216,7 @@ QUALITY STANDARDS:
     }
 
     let grants;
+    let aiResultParsed = false;
     try {
       const aiResponse = aiTextContent;
       // Sanitize and parse JSON
@@ -228,6 +229,7 @@ QUALITY STANDARDS:
         .trim();
       
       grants = JSON.parse(sanitizedContent);
+      aiResultParsed = true;
     } catch (parseError) {
       // Fallback grants if JSON parsing fails
       grants = [
@@ -268,10 +270,15 @@ QUALITY STANDARDS:
       endpoint: 'grant-finder',
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
-      creditsCharged: 2,
+      creditsCharged: aiResultParsed ? 2 : 0,
       success: true,
       requestDurationMs: Date.now() - startTime
     });
+
+    // Charge only when the AI produced real (parsed) grants, not the fallback.
+    if (aiResultParsed) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'grant-finder', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    }
 
     return new Response(
       JSON.stringify({ grants }),

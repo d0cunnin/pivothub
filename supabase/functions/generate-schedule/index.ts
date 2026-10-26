@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
     const guardResult = await guard(req, {
       endpoint: "generate-schedule",
       requireAuth: true,
-      cost: 0, // Credits deducted after successful generation
+      cost: 5, // Balance checked here; credits deducted after successful generation
       bodyLimit: 10000,
     });
 
@@ -562,7 +562,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
     console.log('Total time blocks:', Object.values(scheduleData.weeklySchedule).flat().length);
 
     // SUCCESS - Deduct credits after successful generation
-    await deductCreditsOnSuccess(supabase, userId, "generate-schedule", 3, `schedule-${userId}-${Date.now()}`);
+    await deductCreditsOnSuccess(supabase, userId, "generate-schedule", 5, `schedule-${userId}-${Date.now()}`);
 
     // Log successful request
     await logRequest(supabase, {
@@ -570,7 +570,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
       endpoint: "generate-schedule",
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
-      creditsCharged: 3,
+      creditsCharged: 5,
       success: true,
       requestDurationMs: Date.now() - startTime
     });

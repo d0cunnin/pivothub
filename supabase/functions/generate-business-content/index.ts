@@ -1,10 +1,22 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { generateJson, generateText, systemUser } from "../_shared/aiGenerate.ts";
+
+// Credit price per content type (matches the price shown on each tool's button)
+const CREDIT_COST: Record<string, number> = {
+  'business-ideas': 2,
+  'business-plan': 4,
+  'pitch-deck': 3,
+  'marketing-strategy': 3,
+  'biography': 3,
+  'business-foundation': 2,
+  'legal-docs': 2,
+  'social-media': 2,
+};
 
 // Validation schema
 const businessContentSchema = z.object({
@@ -22,10 +34,11 @@ serve(async (req) => {
   }
 
   try {
-    // Apply guard for auth, rate limit, and credit deduction
+    // Apply guard for auth and rate limit. The credit price depends on the
+    // content type, so the balance is checked after the body is validated.
     const guardResult = await guard(req, {
       endpoint: "generate-business-content",
-      cost: 3,
+      cost: 0,
       requireAuth: true,
       maxReqsPerMinute: 20
     });
@@ -45,6 +58,12 @@ serve(async (req) => {
     }
     
     const { type, data } = validation.data;
+    const creditCost = CREDIT_COST[type];
+
+    // Check (do not deduct) the balance before moderation / AI calls
+    if (guardResult.userId) {
+      await assertCredits(guardResult.userId, creditCost);
+    }
     
     // Moderate content before processing (high-risk: fail-closed)
     const moderationInput = JSON.stringify(data).slice(0, 10000);
@@ -1362,9 +1381,11 @@ Keep each section concise and actionable. Use plain text without markdown.`
         ip,
         userAgent: req.headers.get('user-agent') || 'unknown',
         success: true,
-        creditsCharged: 3,
+        creditsCharged: creditCost,
         requestDurationMs: Date.now() - startTime
       });
+
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-business-content', creditCost); } catch (e) { console.error('[CREDITS] deduction failed', e); }
 
       return new Response(
         JSON.stringify({ ideas, type }),
@@ -1412,9 +1433,11 @@ Keep each section concise and actionable. Use plain text without markdown.`
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: 3,
+      creditsCharged: creditCost,
       requestDurationMs: Date.now() - startTime
     });
+
+    try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-business-content', creditCost); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     
     return new Response(
       JSON.stringify({ content, type }),

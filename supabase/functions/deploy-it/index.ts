@@ -12,7 +12,7 @@ serve(async (req) => {
   try {
     guardResult = await guard(req, {
       endpoint: '/deploy-it',
-      cost: 10,
+      cost: 40,
       requireAuth: true,
       requireCaptcha: false
     });
@@ -107,7 +107,7 @@ Format your response as JSON with these keys:
       supabase,
       userId,
       '/deploy-it',
-      10
+      40
     );
 
     return new Response(JSON.stringify(result), {

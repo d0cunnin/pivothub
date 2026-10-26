@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from '../_shared/guard.ts';
 import { moderateContent } from "../_shared/moderation.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -485,8 +485,10 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
     }
 
     let analysis;
+    let aiAnalysisParsed = false;
     try {
       analysis = JSON.parse(aiResponseText);
+      aiAnalysisParsed = true;
       
       // Log success
       await logRequest(supabase, {
@@ -552,6 +554,11 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
         developmentAreas: ['Speak with career counselor for personalized analysis'],
         generalAdvice: 'We recommend scheduling a career counseling session to dive deeper into these results.'
       };
+    }
+
+    // Charge only when the AI produced a real (parsed) analysis, not the fallback.
+    if (aiAnalysisParsed) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'career-assessment', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     }
 
     return new Response(

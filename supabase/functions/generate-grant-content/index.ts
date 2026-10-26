@@ -2,7 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { extractContent } from "../_shared/aiResponse.ts";
 import { generateRaw, systemUser } from "../_shared/aiGenerate.ts";
@@ -50,7 +50,7 @@ serve(async (req) => {
   }
 
   try {
-    // Apply guard for auth, rate limit, and credit deduction
+    // Apply guard for auth, rate limit, and credit balance check (no deduction)
     const guardResult = await guard(req, {
       endpoint: "generate-grant-content",
       cost: 5,
@@ -220,6 +220,8 @@ Return ONLY JSON as specified (no preamble).`;
       requestDurationMs: Date.now() - startTime
     });
 
+    try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-grant-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+
     return new Response(
       JSON.stringify(grantContent),
       {
@@ -229,6 +231,8 @@ Return ONLY JSON as specified (no preamble).`;
     );
 
   } catch (error: any) {
+    // Guard/credit-check failures are thrown as ready-made Responses (401/402/403/429/503)
+    if (error instanceof Response) return error;
     console.error('Error in generate-grant-content:', error);
     
     // Use service client for error logging since guardResult might not exist if guard failed

@@ -14,7 +14,7 @@ Deno.serve(async (req) => {
     const guardResult = await guard(req, {
       endpoint: "generate-event-plan",
       requireAuth: true,
-      cost: 0, // Credits deducted after successful generation
+      cost: 4, // Balance checked here; credits deducted after successful generation
       bodyLimit: 10000,
     });
 

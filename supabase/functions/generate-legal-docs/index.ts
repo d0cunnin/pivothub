@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { moderateContent } from "../_shared/moderation.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 serve(async (req) => {
@@ -17,7 +17,7 @@ serve(async (req) => {
     // Apply guard for auth, rate limit, and credit deduction
     const guardResult = await guard(req, {
       endpoint: "generate-legal-docs",
-      cost: 3,
+      cost: 2,
       requireAuth: true,
       maxReqsPerMinute: 20
     });
@@ -301,6 +301,8 @@ Format as formal operating agreement.`;
       checklist: generateComplianceChecklist(docType, state)
     };
 
+    try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'generate-legal-docs', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+
     return new Response(
       JSON.stringify({ 
         document,
@@ -316,6 +318,8 @@ Format as formal operating agreement.`;
     );
 
   } catch (error) {
+    // Guard / credit-check errors are thrown as Response objects
+    if (error instanceof Response) return error;
     console.error('Error generating legal document:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(

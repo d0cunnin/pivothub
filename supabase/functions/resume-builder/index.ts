@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateJson, systemUser } from '../_shared/aiGenerate.ts';
+import { assertCredits, deductCreditsOnSuccess } from '../_shared/guard.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -69,14 +70,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const { data: usageData, error: usageError } = await supabase.rpc('check_and_increment_ai_usage', {
-      p_user_id: userId, p_tool_name: 'resume-builder', p_credits_to_use: 5,
-    });
-    if (usageError || !usageData?.can_use) {
-      return new Response(JSON.stringify({ error: 'Insufficient credits', reason: usageData?.reason }), {
-        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    await assertCredits(userId, 5);
 
     const systemPrompt = `You are an elite resume writer with 15+ years of experience helping professionals land interviews at Fortune 500 companies. You write ATS-friendly resumes with quantified, results-oriented achievements.
 
@@ -154,6 +148,7 @@ Return ONLY the JSON object — no preamble, no markdown fences.`;
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
+    try { await deductCreditsOnSuccess(supabase, userId, 'resume-builder', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(JSON.stringify({
       resume,
       contact: {
@@ -163,11 +158,11 @@ Return ONLY the JSON object — no preamble, no markdown fences.`;
         location: body.location || null,
       },
       creditsUsed: 5,
-      remaining: usageData.remaining,
     }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
+    if (error instanceof Response) return error;
     console.error('Resume Builder error:', error);
     return new Response(JSON.stringify({
       error: error instanceof Error ? error.message : 'Unexpected error',

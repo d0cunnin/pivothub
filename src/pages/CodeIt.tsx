@@ -12,13 +12,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { getToolCreditCost } from "@/utils/toolCreditWeights";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { ToolGuard } from "@/components/ToolGuard";
 
 const CodeIt = () => {
-  const { user } = useAuth();
-  const { checkAndIncrementUsage } = useUsage();
+  const { user, isAdmin } = useAuth();
+  const { remainingRequests } = useUsage();
   const [userCode, setUserCode] = useState("");
   const [explanation, setExplanation] = useState<{ explanation: string; expectedOutput: string; tips: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -79,8 +80,8 @@ print(a + b)`,
     setExplanation(null);
 
     try {
-      const canUse = await checkAndIncrementUsage('code-it');
-      if (!canUse) {
+      // Check balance only; credits are deducted by the backend after a successful result
+      if (!isAdmin && remainingRequests < getToolCreditCost('code-it')) {
         toast.error("Insufficient credits. Please upgrade or purchase credits.");
         setIsLoading(false);
         return;

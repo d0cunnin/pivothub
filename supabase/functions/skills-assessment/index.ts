@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from '../_shared/guard.ts';
 import { moderateContent } from "../_shared/moderation.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -727,8 +727,10 @@ Analyze the user's responses comprehensively to create a professional-grade skil
     }
 
     let assessment;
+    let aiResultParsed = false;
     try {
       assessment = JSON.parse(aiResponseText);
+      aiResultParsed = true;
       
       // Log success
       await logRequest(supabase, {
@@ -758,6 +760,11 @@ Analyze the user's responses comprehensively to create a professional-grade skil
         summary: "You have strong foundational skills but need to develop technical expertise specific to your target field.",
         timeline: "4-8 months to significant improvement"
       };
+    }
+
+    // Charge only when the AI produced a real (parsed) result, not the fallback.
+    if (aiResultParsed) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'skills-assessment', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     }
 
     return new Response(

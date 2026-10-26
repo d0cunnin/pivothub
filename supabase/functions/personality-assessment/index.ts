@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from '../_shared/guard.ts';
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from '../_shared/guard.ts';
 import { moderateContent } from "../_shared/moderation.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -493,8 +493,10 @@ serve(async (req) => {
     }
 
     let personality;
+    let aiResultParsed = false;
     try {
       personality = JSON.parse(aiResponseText);
+      aiResultParsed = true;
       
       // Log success
       await logRequest(supabase, {
@@ -542,6 +544,11 @@ serve(async (req) => {
         tips: ["Leverage your analytical skills in strategic roles", "Practice presenting ideas confidently"],
         summary: "You're a natural problem-solver who thrives in collaborative, structured environments where you can apply analytical thinking to meaningful challenges."
       };
+    }
+
+    // Charge only when the AI produced a real (parsed) result, not the fallback.
+    if (aiResultParsed) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'personality-assessment', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     }
 
     return new Response(

@@ -18,6 +18,9 @@ export interface InvokeResult<T = any> {
  */
 const DEFAULT_TIMEOUT_MS = 150_000;
 
+/** Fired after a successful call so the credit balance display can refresh. */
+export const CREDITS_CHANGED_EVENT = "pivothub:credits-changed";
+
 const TIMEOUT_MESSAGE =
   "The request took too long. Please try again — if it keeps happening, shorten your inputs.";
 
@@ -46,13 +49,14 @@ export async function invokeFunction<T = any>(
     try {
       const { data, error } = await supabase.functions.invoke(name, options);
       if (error) {
-        return { data: null, error: { message: error.message || "Request failed" } };
+        return { data: null, error: { message: (await readErrorBody(error)) || error.message || "Request failed" } };
       }
       // Edge functions return a 200 with an `{ error }` body for graceful
       // failures (rate limit, credits, timeout) — route those to the error channel.
       if (data && typeof data === "object" && "error" in data && (data as any).error) {
         return { data: null, error: { message: String((data as any).error) } };
       }
+      window.dispatchEvent(new Event(CREDITS_CHANGED_EVENT));
       return { data: data as T, error: null };
     } catch (e: any) {
       return { data: null, error: { message: e?.message || "Request failed" } };
@@ -63,5 +67,19 @@ export async function invokeFunction<T = any>(
     return await Promise.race([invokePromise, timeoutPromise]);
   } finally {
     if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+// A non-2xx response (e.g. 402 "Not enough credits") carries its message in the
+// response body; supabase-js only exposes a generic "non-2xx" message.
+async function readErrorBody(error: any): Promise<string | null> {
+  const response = error?.context;
+  if (!response || typeof response.json !== "function") return null;
+  try {
+    const body = await response.clone().json();
+    const message = body?.error || body?.message;
+    return typeof message === "string" && message ? message : null;
+  } catch {
+    return null;
   }
 }

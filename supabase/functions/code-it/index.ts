@@ -18,6 +18,9 @@ serve(async (req) => {
     });
   } catch (err) {
     console.error('Guard error:', err);
+    if (err instanceof Response) {
+      return err;
+    }
     return new Response(JSON.stringify({ error: err.message }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }

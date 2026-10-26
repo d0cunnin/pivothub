@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -558,6 +558,8 @@ FORMATTING RULES:
       creditsCharged: 3,
       requestDurationMs: Date.now() - startTime
     });
+
+    try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'generate-launch-strategy', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     
     return new Response(
       JSON.stringify({ strategy }),
@@ -568,6 +570,8 @@ FORMATTING RULES:
     );
 
   } catch (error) {
+    // Guard / credit-check errors are thrown as Response objects
+    if (error instanceof Response) return error;
     console.error('Error generating launch strategy:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     

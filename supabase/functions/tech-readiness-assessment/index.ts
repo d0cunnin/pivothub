@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import { assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -33,6 +34,9 @@ serve(async (req) => {
     if (userError || !user) {
       throw new Error('Unauthorized');
     }
+
+    // Check (but do not deduct) credits before any AI work
+    await assertCredits(user.id, 2);
 
     const { 
       localScores, 
@@ -290,6 +294,8 @@ OUTPUT FORMAT (JSON only, no additional text):
       console.error('Error logging tool usage:', logError);
     }
 
+    try { await deductCreditsOnSuccess(supabaseClient, user.id, 'tech-readiness-assessment', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+
     return new Response(
       JSON.stringify({ analysis }),
       { 
@@ -299,6 +305,8 @@ OUTPUT FORMAT (JSON only, no additional text):
     );
 
   } catch (error: any) {
+    // Credit-check errors are thrown as Response objects
+    if (error instanceof Response) return error;
     console.error('Error in tech-readiness-assessment function:', error);
     return new Response(
       JSON.stringify({ error: error.message || 'An error occurred processing your assessment' }),

@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
+import { assertCredits, deductCreditsOnSuccess } from '../_shared/guard.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -113,22 +114,8 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Check and deduct credits (3 credits)
-    const { data: usageData, error: usageError } = await supabase.rpc('check_and_increment_ai_usage', {
-      p_user_id: userId,
-      p_tool_name: 'act-it',
-      p_credits_to_use: 3,
-    });
-
-    if (usageError || !usageData?.can_use) {
-      return new Response(JSON.stringify({
-        error: 'Insufficient credits',
-        reason: usageData?.reason || 'Unknown error',
-      }), {
-        status: 403,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    // Check credits (3 credits) - deducted only after successful generation
+    await assertCredits(userId, 3);
 
     // Build the system prompt
     const formatLabel = FORMAT_LABELS[format] || format;
@@ -297,16 +284,17 @@ Optional creative next steps:
 
     console.log(`✅ Act It concept generated for user ${userId}: "${projectTitle}"`);
 
+    try { await deductCreditsOnSuccess(supabase, userId, 'act-it', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(JSON.stringify({
       concept,
       creditsUsed: 3,
-      remaining: usageData.remaining
     }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
+    if (error instanceof Response) return error;
     console.error('Act It error:', error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : 'An unexpected error occurred' 

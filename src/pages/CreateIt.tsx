@@ -92,8 +92,8 @@ const STEP_TITLES = [
 ];
 
 export default function CreateIt() {
-  const { user } = useAuth();
-  const { checkAndIncrementUsage, refreshUsage, remainingRequests } = useUsage();
+  const { user, isAdmin } = useAuth();
+  const { refreshUsage, remainingRequests } = useUsage();
   const navigate = useNavigate();
 
   const [form, setForm] = useState<CreateItFormData>(EMPTY_FORM);
@@ -188,20 +188,15 @@ export default function CreateIt() {
       }
     }
 
+    // Up-front balance check only (no deduction). The server re-checks and
+    // deducts the credits only after the blueprint is generated successfully.
+    if (!isAdmin && remainingRequests < CREDIT_COST) {
+      toast.error(`Insufficient credits. Create It costs ${CREDIT_COST} credits.`);
+      return;
+    }
+
     setGenerating(true);
     try {
-      // Verify credits >= 70 and deduct atomically (also writes the usage log).
-      const { canUse, reason } = await checkAndIncrementUsage(TOOL_NAME);
-      if (!canUse) {
-        toast.error(
-          reason === "not_logged_in"
-            ? "Please sign in to use this tool."
-            : `Insufficient credits. Create It costs ${CREDIT_COST} credits.`,
-        );
-        setGenerating(false);
-        return;
-      }
-
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         toast.error("Your session expired. Please sign in again.");

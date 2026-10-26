@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import { assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -36,22 +37,8 @@ serve(async (req) => {
       });
     }
 
-    // Check credits (3 credits required)
-    const { data: creditResult } = await supabase.rpc('check_and_increment_ai_usage', {
-      p_user_id: user.id,
-      p_credits_to_use: 3,
-      p_tool_name: 'garden-it'
-    });
-
-    if (!creditResult?.allowed) {
-      return new Response(JSON.stringify({ 
-        error: 'credits_exhausted',
-        message: 'Insufficient credits. Garden It requires 3 credits.'
-      }), {
-        status: 402,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    // Check credits (3 credits required) - deducted only after successful generation
+    await assertCredits(user.id, 3);
 
     const body = await req.json();
     const { 
@@ -218,21 +205,27 @@ Generate a comprehensive garden plan with plant recommendations appropriate for 
       });
     }
 
-    // Log usage
-    await supabase.from('tool_usage_analytics').insert({
-      user_id: user.id,
-      tool_name: 'garden-it',
-      credits_used: 3,
-      estimated_tokens: 4000,
-    });
+    if (!parsedPlan || typeof parsedPlan !== 'object' || Array.isArray(parsedPlan)) {
+      return new Response(JSON.stringify({
+        error: 'parse_error',
+        message: 'Failed to parse garden plan. Please try again.'
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    // The page requires `ok`; the model doesn't always include it.
+    if (parsedPlan.ok === undefined) parsedPlan.ok = true;
 
     console.log('Garden plan generated successfully for user:', user.id);
 
+    try { await deductCreditsOnSuccess(supabase, user.id, 'generate-garden-plan', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(JSON.stringify(parsedPlan), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
+    if (error instanceof Response) return error;
     console.error('Garden plan error:', error);
     return new Response(JSON.stringify({ 
       error: 'server_error',

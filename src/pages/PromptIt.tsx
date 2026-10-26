@@ -12,13 +12,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { getToolCreditCost } from "@/utils/toolCreditWeights";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { ToolGuard } from "@/components/ToolGuard";
 
 const PromptIt = () => {
-  const { user } = useAuth();
-  const { checkAndIncrementUsage, remainingRequests } = useUsage();
+  const { user, isAdmin } = useAuth();
+  const { remainingRequests } = useUsage();
   const [userPrompt, setUserPrompt] = useState("");
   const [feedback, setFeedback] = useState<{ analysis: string; improvedPrompt: string; explanation: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,14 +39,9 @@ const PromptIt = () => {
     setFeedback(null);
 
     try {
-      // Check credits and usage
-      const { canUse, reason } = await checkAndIncrementUsage('prompt-it');
-      if (!canUse) {
-        const msg =
-          reason === 'not_logged_in' ? 'Please sign in to use Prompt It' :
-          reason === 'over_limit' || reason === 'insufficient_credits' || reason === 'free_limit_exceeded' ? 'Insufficient credits. Please upgrade or purchase credits.' :
-          'You cannot use this tool right now. Please try again later.';
-        toast.error(msg);
+      // Check balance only; credits are deducted by the backend after a successful result
+      if (!isAdmin && remainingRequests < getToolCreditCost('prompt-it')) {
+        toast.error('Insufficient credits. Please upgrade or purchase credits.');
         setIsLoading(false);
         return;
       }
@@ -367,7 +363,7 @@ const PromptIt = () => {
                 />
                 <Button 
                   onClick={handleAnalyze} 
-                  disabled={isLoading || !userPrompt.trim() || remainingRequests <= 0}
+                  disabled={isLoading || !userPrompt.trim() || (!isAdmin && remainingRequests <= 0)}
                   className="w-full mt-4"
                   size="lg"
                 >

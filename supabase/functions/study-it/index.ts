@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
+import { assertCredits, deductCreditsOnSuccess } from '../_shared/guard.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -81,22 +82,8 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Check and deduct credits (2 credits)
-    const { data: usageData, error: usageError } = await supabase.rpc('check_and_increment_ai_usage', {
-      p_user_id: userId,
-      p_tool_name: 'study-it',
-      p_credits_to_use: 2,
-    });
-
-    if (usageError || !usageData?.can_use) {
-      return new Response(JSON.stringify({
-        error: 'Insufficient credits',
-        reason: usageData?.reason || 'Unknown error',
-      }), {
-        status: 403,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+    // Check credits (2 credits) - deducted only after successful generation
+    await assertCredits(userId, 2);
 
     // Build the system prompt with strict behavior rules
     const systemPrompt = `You are STUDY IT, a biblical reference assistant.
@@ -212,16 +199,17 @@ A list of key New Testament references connected to the topic.
 
     console.log(`✅ Study It reference generated for user ${userId}: "${topic}"`);
 
+    try { await deductCreditsOnSuccess(supabase, userId, 'study-it', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(JSON.stringify({
       content,
-      creditsUsed: 2,
-      remaining: usageData.remaining
+      creditsUsed: 2
     }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
+    if (error instanceof Response) return error;
     console.error('Study It error:', error);
     return new Response(JSON.stringify({ 
       error: error instanceof Error ? error.message : 'An unexpected error occurred' 

@@ -210,7 +210,7 @@ export function GardenItWizard() {
         }
         
         toast.error('Generation Failed', {
-          description: 'An unexpected error occurred. Please try again.',
+          description: error.message || 'An unexpected error occurred. Please try again.',
           duration: 5000,
         });
         return;

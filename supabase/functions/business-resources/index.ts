@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { guard } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -22,6 +23,18 @@ const businessResourcesSchema = z.object({
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  // Requires a signed-in user and rate-limits requests, since this calls the AI.
+  try {
+    await guard(req, { endpoint: 'business-resources', cost: 0, requireAuth: true, maxReqsPerMinute: 10 });
+  } catch (err) {
+    if (err instanceof Response) return err;
+    console.error('[business-resources] Guard error:', err);
+    return new Response(JSON.stringify({ error: 'Request could not be verified. Please sign in and try again.' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   try {

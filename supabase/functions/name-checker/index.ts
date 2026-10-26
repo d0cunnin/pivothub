@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
 // Validation schema with strict limits
@@ -154,6 +154,7 @@ serve(async (req) => {
     console.log('[BOOT] Lovable AI key exists:', !!lovableApiKey);
     console.log('[BOOT] Key prefix:', lovableApiKey?.substring(0, 10));
     let similarNames = [];
+    let aiAnalysisSucceeded = false;
     
     if (lovableApiKey) {
       try {
@@ -267,6 +268,7 @@ QUALITY STANDARDS:
         );
         try {
           similarNames = JSON.parse(aiText);
+          aiAnalysisSucceeded = true;
         } catch (parseError) {
           similarNames = [];
         }
@@ -289,10 +291,15 @@ QUALITY STANDARDS:
       endpoint: 'name-checker',
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
-      creditsCharged: 2,
+      creditsCharged: aiAnalysisSucceeded ? 2 : 0,
       success: true,
       requestDurationMs: Date.now() - startTime
     });
+
+    // Charge only when the AI trademark analysis actually succeeded.
+    if (aiAnalysisSucceeded) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'name-checker', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    }
 
     return new Response(
       JSON.stringify({

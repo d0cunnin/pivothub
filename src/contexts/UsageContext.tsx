@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { getToolCreditCost } from '@/utils/toolCreditWeights';
+import { CREDITS_CHANGED_EVENT } from "@/lib/invokeFunction";
 
 interface UsageContextType {
   monthlyRequests: number;
@@ -73,6 +74,15 @@ export const UsageProvider: React.FC<UsageProviderProps> = ({ children }) => {
     if (user) {
       refreshUsage();
     }
+  }, [user]);
+
+  // Credits are deducted server-side after a tool succeeds; refresh the
+  // displayed balance whenever a tool call completes.
+  useEffect(() => {
+    if (!user) return;
+    const onCreditsChanged = () => { refreshUsage(); };
+    window.addEventListener(CREDITS_CHANGED_EVENT, onCreditsChanged);
+    return () => window.removeEventListener(CREDITS_CHANGED_EVENT, onCreditsChanged);
   }, [user]);
 
   const checkAndIncrementUsage = async (toolName: string = 'generic'): Promise<{ canUse: boolean; reason?: string; creditsCharged?: number }> => {

@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
+import { assertCredits, deductCreditsOnSuccess } from '../_shared/guard.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -33,8 +34,7 @@ Deno.serve(async (req) => {
     const mod = await moderateContent(`${subject} ${objectives}`, 'lesson-plan', userId, 'low');
     if (mod.flagged) return new Response(JSON.stringify({ error: 'Content flagged', details: mod.categories }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
-    const { data: usage, error: uErr } = await supabase.rpc('check_and_increment_ai_usage', { p_user_id: userId, p_tool_name: 'lesson-plan', p_credits_to_use: 5 });
-    if (uErr || !usage?.can_use) return new Response(JSON.stringify({ error: 'Insufficient credits', reason: usage?.reason }), { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    await assertCredits(userId, 5);
 
     const systemPrompt = `You are an experienced curriculum designer. Produce a complete, classroom-ready lesson plan in clean Markdown.
 
@@ -88,10 +88,12 @@ Available Materials: ${materials || 'standard classroom supplies'}`;
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    return new Response(JSON.stringify({ content, creditsUsed: 5, remaining: usage.remaining }), {
+    try { await deductCreditsOnSuccess(supabase, userId, 'lesson-plan', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    return new Response(JSON.stringify({ content, creditsUsed: 5 }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {
+    if (e instanceof Response) return e;
     console.error('lesson-plan error', e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : 'Unexpected error' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }

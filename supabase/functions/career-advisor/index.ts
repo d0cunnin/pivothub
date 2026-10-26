@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts"
-import { guard, logRequest, corsHeaders } from "../_shared/guard.ts"
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 import { moderateContent } from "../_shared/moderation.ts"
 import { generateText } from "../_shared/aiGenerate.ts";
@@ -276,6 +276,8 @@ EXAMPLES OF PREMIUM VALUE:
       creditsCharged: 1,
       requestDurationMs: Date.now() - startTime
     });
+
+    try { await deductCreditsOnSuccess(guardResult.supabase, guardResult.userId!, 'career-advisor', 1); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     
     return new Response(
       JSON.stringify({ response: sanitizedResponse }),
@@ -287,6 +289,8 @@ EXAMPLES OF PREMIUM VALUE:
       }
     )
   } catch (error) {
+    // Guard / credit-check errors are thrown as Response objects
+    if (error instanceof Response) return error;
     console.error('Error in career-advisor function:', error)
     
     // Use service client in catch to ensure logging even if guard failed

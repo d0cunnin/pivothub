@@ -281,11 +281,86 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
     }
   }
 
-  // CREDIT DEDUCTION REMOVED FROM GUARD
-  // Credits are now deducted AFTER successful generation using deductCreditsOnSuccess()
-  // This prevents charging users for failed requests
+  // Credits are only checked here; they are deducted after a successful
+  // generation via deductCreditsOnSuccess(), so failed requests cost nothing.
+  if (cost > 0 && userId) {
+    await assertCredits(userId, cost);
+  }
 
   return { supabase, userId, ip, startTime };
+}
+
+function serviceRoleClient(): SupabaseClient {
+  return createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+  );
+}
+
+async function isAdminUser(serviceClient: SupabaseClient, userId: string): Promise<boolean> {
+  const { data } = await serviceClient
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .eq('role', 'admin')
+    .maybeSingle();
+  return !!data;
+}
+
+/**
+ * Verify the user can afford `cost` credits WITHOUT deducting anything.
+ * Throws a Response (402/403) when they can't, so the AI is never called.
+ * Mirrors the balance rules in the check_and_increment_ai_usage RPC.
+ */
+export async function assertCredits(userId: string, cost: number): Promise<void> {
+  if (cost <= 0) return;
+
+  const serviceClient = serviceRoleClient();
+  if (await isAdminUser(serviceClient, userId)) return;
+
+  // Apply any due monthly reset first, as check_and_increment_ai_usage does.
+  const { error: resetError } = await serviceClient.rpc('reset_monthly_ai_requests');
+  if (resetError) console.warn('[CREDITS] Monthly reset check failed:', resetError.message);
+
+  const { data: sub, error } = await serviceClient
+    .from('subscribers_public')
+    .select('monthly_ai_requests, ai_request_limit, extra_credits, rollover_credits, account_status')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[CREDITS] Balance lookup failed:', error.message);
+    throw new Response(
+      JSON.stringify({ error: 'Could not verify your credit balance. Please try again.' }),
+      { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  if (!sub) {
+    throw new Response(
+      JSON.stringify({ error: 'No credit account was found for your profile. Please sign out and back in, or contact support.' }),
+      { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  if (sub.account_status === 'suspended') {
+    throw new Response(
+      JSON.stringify({ error: 'Your account has been suspended. Please contact support.' }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
+
+  const total = (sub.ai_request_limit ?? 5) + (sub.extra_credits ?? 0) + (sub.rollover_credits ?? 0);
+  const remaining = Math.max(0, total - (sub.monthly_ai_requests ?? 0));
+  if (cost > remaining) {
+    throw new Response(
+      JSON.stringify({
+        error: `Not enough credits. This tool needs ${cost} credit${cost === 1 ? '' : 's'} and you have ${remaining} left.`,
+        code: 'INSUFFICIENT_CREDITS',
+      }),
+      { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  }
 }
 
 /**
@@ -301,23 +376,12 @@ export async function deductCreditsOnSuccess(
   cost: number,
   requestHash?: string
 ): Promise<void> {
-  if (cost === 0) return;
+  if (cost <= 0) return;
 
-  // Create service role client for admin checks
-  const serviceClient = createClient(
-    Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-  );
+  const serviceClient = serviceRoleClient();
 
-  // Check if user is admin (skip credit deduction for QA testing)
-  const { data: roleData } = await serviceClient
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userId)
-    .eq('role', 'admin')
-    .maybeSingle();
-
-  if (roleData) {
+  // Admins are exempt so the owner can test tools for free.
+  if (await isAdminUser(serviceClient, userId)) {
     console.log('[CREDITS] Admin user - skipping credit deduction');
     return;
   }
@@ -338,7 +402,7 @@ export async function deductCreditsOnSuccess(
   }
 
   // Deduct credits
-  const { data, error } = await supabase.rpc(
+  const { data, error } = await serviceClient.rpc(
     'check_and_increment_ai_usage',
     {
       p_user_id: userId,
@@ -348,7 +412,7 @@ export async function deductCreditsOnSuccess(
   );
 
   if (error || !data?.can_use) {
-    console.error('[CREDITS] Post-generation deduction failed:', error);
+    console.error('[CREDITS] Post-generation deduction failed:', error ?? data?.reason);
     // Log but don't block (user already got output)
   }
 
