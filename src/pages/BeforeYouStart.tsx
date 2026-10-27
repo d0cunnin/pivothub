@@ -197,7 +197,7 @@ const BeforeYouStart = () => {
                 Learn how PivotHub works and discover which tools are right for your journey. Get guidance on starting your path to income, clarity, career, or business growth.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
+                <Button size="lg" variant="secondary" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
                   <Link to="/assessit">
                     <Target className="w-5 h-5 mr-2" />
                     Take the Free Assessment
@@ -229,7 +229,7 @@ const BeforeYouStart = () => {
               <p className="text-xl md:text-2xl text-white/90 mb-8">
                 If you're unsure which tool is right for you, we recommend starting with <strong>Assess It</strong>. This tool helps you understand your skills, goals, and the best path forward.
               </p>
-              <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
+              <Button size="lg" variant="secondary" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
                 <Link to="/assessit">
                   <Target className="w-5 h-5 mr-2" />
                   Start with Assess It
