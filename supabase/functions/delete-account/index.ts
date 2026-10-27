@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { createStripeClient } from '../_shared/stripe.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -64,6 +65,18 @@ serve(async (req) => {
     );
 
     // Cancel any active Stripe subscriptions first
+    // Do not delete an account while its managed billing can still renew.
+    for (const environment of ['sandbox', 'live'] as const) {
+      const { data: billing, error: billingError } = await supabaseAdmin
+        .from('payment_subscriptions').select('stripe_subscription_id,status')
+        .eq('user_id', user.id).eq('environment', environment);
+      if (billingError) throw new Error('Unable to verify billing before account deletion.');
+      for (const subscription of billing ?? []) {
+        if (!['canceled', 'incomplete_expired'].includes(subscription.status)) {
+          await createStripeClient(environment).subscriptions.cancel(subscription.stripe_subscription_id);
+        }
+      }
+    }
     try {
       const { data: secureData } = await supabaseAdmin
         .from("subscribers_secure")
