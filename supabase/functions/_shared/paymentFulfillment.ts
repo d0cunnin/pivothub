@@ -25,6 +25,7 @@ export async function syncSubscription(sub:any,env:StripeEnv){
 export async function fulfillInvoice(invoice:any,env:StripeEnv){
  if(invoice.status!=='paid'||!shouldGrantInvoice(invoice.billing_reason))return;
  const stripe=createStripeClient(env),subscriptionId=identifier(invoice.parent?.subscription_details?.subscription??invoice.subscription);if(!subscriptionId)return;
+ const {data:existing}=await db().from('payment_subscriptions').select('price_id,pending_price_id').eq('environment',env).eq('stripe_subscription_id',subscriptionId).maybeSingle();
  const sub=await stripe.subscriptions.retrieve(subscriptionId);const {userId}=await syncSubscription(sub,env);
  if(identifier(invoice.customer)!==identifier(sub.customer))throw new Error('Invoice ownership mismatch');
  const lines=[];for await(const line of stripe.invoices.listLineItems(invoice.id,{limit:100}))lines.push(line);
