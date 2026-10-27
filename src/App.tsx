@@ -47,6 +47,7 @@ import AuthCallback from "./pages/AuthCallback";
 
 import { HelmetProvider } from 'react-helmet-async';
 import AppErrorBoundary from "@/components/AppErrorBoundary";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
