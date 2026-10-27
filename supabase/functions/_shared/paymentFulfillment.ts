@@ -4,12 +4,13 @@ import {paymentCatalog,isPaymentPriceId} from './paymentCatalog.ts';
 import {validatePrice,shouldGrantInvoice} from './billingPolicy.ts';
 const identifier=(value:any):string|undefined=>typeof value==='string'?value:value?.id;
 export async function syncSubscription(sub:any,env:StripeEnv){
+ const observedAt=new Date().toISOString();sub=await createStripeClient(env).subscriptions.retrieve(sub.id);
  const userId=sub.metadata?.userId;if(!userId)throw new Error('Subscription owner missing');
  const item=sub.items?.data?.[0],priceId=item?.price?.lookup_key??item?.price?.metadata?.lovable_external_id;
  if(!isPaymentPriceId(priceId)||!paymentCatalog[priceId].recurring)throw new Error('Unknown subscription price');validatePrice(item.price,priceId);
  const customer=await createStripeClient(env).customers.retrieve(identifier(sub.customer)??'');if(customer.deleted||customer.metadata.userId!==userId)throw new Error('Subscription ownership mismatch');
  const start=item.current_period_start??sub.current_period_start,end=item.current_period_end??sub.current_period_end;
- const {error}=await db().from('payment_subscriptions').upsert({user_id:userId,environment:env,stripe_subscription_id:sub.id,stripe_customer_id:customer.id,price_id:priceId,status:sub.status,current_period_start:start?new Date(start*1000).toISOString():null,current_period_end:end?new Date(end*1000).toISOString():null,cancel_at_period_end:sub.cancel_at_period_end??false,updated_at:new Date().toISOString()},{onConflict:'environment,stripe_subscription_id'});if(error)throw error;
+ const {error}=await db().from('payment_subscriptions').upsert({user_id:userId,environment:env,stripe_subscription_id:sub.id,stripe_customer_id:customer.id,price_id:priceId,status:sub.status,current_period_start:start?new Date(start*1000).toISOString():null,current_period_end:end?new Date(end*1000).toISOString():null,cancel_at_period_end:sub.cancel_at_period_end??false,sync_observed_at:observedAt,updated_at:new Date().toISOString()},{onConflict:'environment,stripe_subscription_id'});if(error)throw error;
  return {userId,priceId,start,end};
 }
 export async function fulfillInvoice(invoice:any,env:StripeEnv){
@@ -38,5 +39,6 @@ export async function fulfillSession(session:any,env:StripeEnv){
  if(!userId||!isPaymentPriceId(priceId)||paymentCatalog[priceId].recurring||packEligibilityConfirmed!=='true')throw new Error('Purchase details missing');
  const customer=await stripe.customers.retrieve(identifier(session.customer)??'');if(customer.deleted||customer.metadata.userId!==userId)throw new Error('Purchase ownership mismatch');
  const lines=await stripe.checkout.sessions.listLineItems(session.id,{limit:2});if(lines.data.length!==1||lines.data[0].quantity!==1)throw new Error('Invalid pack line');validatePrice(lines.data[0].price,priceId);
- const {error}=await db().rpc('issue_payment_grant',{p_user_id:userId,p_environment:env,p_payment_key:`checkout:${session.id}`,p_price_id:priceId,p_credits:paymentCatalog[priceId].credits,p_issued_at:new Date(session.created*1000).toISOString(),p_payment_intent_id:identifier(session.payment_intent)??null});if(error)throw error;
+ const intentId=identifier(session.payment_intent);const intent=intentId?await stripe.paymentIntents.retrieve(intentId):null;const charges=intentId?await stripe.charges.list({payment_intent:intentId,limit:1}):null;const issuedAt=charges?.data[0]?.created??session.created;
+ const {error}=await db().rpc('issue_payment_grant',{p_user_id:userId,p_environment:env,p_payment_key:`checkout:${session.id}`,p_price_id:priceId,p_credits:paymentCatalog[priceId].credits,p_issued_at:new Date(issuedAt*1000).toISOString(),p_payment_intent_id:identifier(session.payment_intent)??null});if(error)throw error;
 }

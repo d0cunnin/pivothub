@@ -15,3 +15,4 @@ export function validatePrice(price: any,id: string) {
 }
 export function canOwnCustomer(metadata: {userId?:string},userId:string) { return !metadata.userId||metadata.userId===userId; }
 export function shouldGrantInvoice(reason:string) { return ['subscription_create','subscription_cycle','subscription_update'].includes(reason); }
+export function refundedCreditDelta(amount:number,cumulativeFraction:number,alreadyRevoked:number){return Math.max(0,Math.min(amount,Math.ceil(amount*cumulativeFraction))-alreadyRevoked);}

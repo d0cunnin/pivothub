@@ -42,14 +42,16 @@ const Auth = () => {
 
   const emailsMatch = confirmEmail && email === confirmEmail;
 
-  const redirectPath = searchParams.get('redirect') || '/';
+  const requestedPath=searchParams.get('redirect')||'/';
+  const redirectPath=requestedPath.startsWith('//')?'/':requestedPath.startsWith('/')?requestedPath:`/${requestedPath}`;
+  const destination=()=>redirectPath;
 
   useEffect(() => {
     // Check if user is already logged in
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
+        navigate(destination());
       }
     };
     checkUser();
@@ -101,7 +103,8 @@ const Auth = () => {
         email,
         password,
         options: {
-          emailRedirectTo: redirectUrl
+          emailRedirectTo: redirectUrl,
+          captchaToken:turnstileToken
         }
       });
 
@@ -118,7 +121,7 @@ const Auth = () => {
             title: "Welcome!",
             description: "Your account has been created.",
           });
-          navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
+          navigate(destination());
           return;
         }
 
@@ -168,6 +171,7 @@ const Auth = () => {
 
   const handleGoogleSignIn = async (isSignUp: boolean = false) => {
     setLoading(true);
+    sessionStorage.setItem('auth-destination',redirectPath);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: `${window.location.origin}/auth/callback`,
@@ -185,7 +189,7 @@ const Auth = () => {
 
       if (result.redirected) return;
 
-      navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
+      navigate(destination());
     } catch (error) {
       toast({
         title: "Error",
@@ -235,6 +239,7 @@ const Auth = () => {
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
+        options:{captchaToken:turnstileToken},
       });
 
       if (error) {
@@ -277,7 +282,7 @@ const Auth = () => {
           title: "Success",
           description: "Welcome back!",
         });
-        navigate(redirectPath === '/' ? '/' : `/${redirectPath}`);
+        navigate(destination());
       }
     } catch (error) {
       toast({
@@ -436,6 +441,7 @@ const Auth = () => {
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Signing In..." : "Sign In"}
                 </Button>
+                <Button type="button" variant="ghost" className="w-full" disabled={loading} onClick={async()=>{if(!email){toast({title:'Enter Your Email',description:'Enter your account email first.'});return;}setLoading(true);const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/auth/reset-password',captchaToken:turnstileToken});setLoading(false);toast({title:error?'Reset Unavailable':'Check Your Email',description:error?error.message:'If that email has an account, a password reset link has been sent.',variant:error?'destructive':'default'});}}>Forgot Password?</Button>
               </form>
             </TabsContent>
             
@@ -599,11 +605,11 @@ const Auth = () => {
           
           <p className="text-xs text-muted-foreground text-center mt-4">
             By signing up, you agree to our{" "}
-            <a href="/terms-and-conditions" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+            <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
               Terms of Use
             </a>{" "}
             and{" "}
-            <a href="/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
               Privacy Policy
             </a>
             .

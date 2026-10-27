@@ -1,12 +1,16 @@
 # Purchase setup
 - [x] Audit current purchase, authentication, account, entitlement, and renewal flows against hosted configuration; findings in PAYMENT_FLOW_AUDIT.md.
 - [x] Clarify credit rollover, plan changes, refunds, account deletion, and preview-credit behavior.
-- [ ] Apply the supplied Stripe-source-of-truth policy: payment-confirmed upgrades, deferred downgrades/free transition, verified idempotent synchronization, and clear change review.
-- [ ] Present and implement the approved gap-remediation plan with regression tests.
-- [ ] Provide preview test-card and account-flow testing instructions.
+- [x] Implement Stripe-source-of-truth policy with payment-confirmed upgrades, deferred downgrades/free transition, verified synchronization and plan-change review; authenticated tests tracked separately.
+- [x] Implement the approved gap-remediation changes and price/lifecycle regression tests; hosted auth/CAPTCHA verification tracked separately.
+- [x] Provide preview test-card and account-flow testing instructions in PREVIEW_PAYMENT_TESTS.md.
 - [x] Set up existing subscription and credit-pack products in test payments.
 - [x] Correct purchase popup wording and consent reset; verified in preview.
 - [x] Connect checkout, payment confirmation, credit fulfillment, and cancellation.
 - [ ] Verify authenticated test purchase and receipt; blocked by no matching requester account and multiple app users. User must sign in to the preview or identify the account to test.
 - [x] Verify Stripe go-live setup completed; all five onboarding steps report complete.
-- [ ] Apply matching payment-event configuration in test and live; validate using fake-money purchases without charging live customers.
+- [x] Apply matching refund/dispute payment-event configuration in test and live.
+- [ ] Verify hosted email confirmation, secure email change, password reauthentication and production Cloudflare CAPTCHA; requires hosted settings and a real site configuration.
+- [ ] Complete authenticated renewal/change/refund/account/debit tests; requires a chosen non-admin preview account.
+- [ ] Verify deletion against a disposable account and complete stored-file cleanup if present; requires a disposable account with saved files.
+- [ ] Publish the updated website after verified purchases; requires the user's explicit publish request.

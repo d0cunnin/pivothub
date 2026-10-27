@@ -104,9 +104,13 @@ const TermsAndConditions = () => {
                 </p>
               </div>
 
+              <div>
+                <h3 className="text-xl font-semibold mb-4">7. Billing and Tool Credits</h3>
+                <p className="text-muted-foreground leading-relaxed">Every plan accesses every tool, subject to available Tool Credits. Paid plans renew monthly until cancelled. Paid subscription and purchased pack credits roll over and expire three calendar months after issuance. The Free plan receives 5 credits on its monthly anniversary; unused free credits do not roll over. Upgrades apply after the required prorated payment succeeds, with the allowance difference added; downgrades begin at the next renewal. Cancellation preserves the current paid period. Refund requests are reviewed individually, subject to applicable law and payment terms.</p>
+              </div>
               <div className="pt-4 border-t">
                 <p className="text-sm text-muted-foreground">
-                  Last updated: {new Date().toLocaleDateString()}
+                  Last updated: October 27, 2026
                 </p>
               </div>
             </CardContent>

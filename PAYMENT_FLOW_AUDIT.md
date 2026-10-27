@@ -1,5 +1,9 @@
 # Purchase and account audit — 27 October 2026
 
+## Remediation update
+
+The following sections describe the original audit, not the current implementation. Subsequent work installed service-only credit reservations and expiring grants, removed public credit mutation permissions, protected legacy account writes, corrected customer ownership and pending-checkout coordination, implemented payment-confirmed upgrades and deferred downgrades, added cumulative refund reconciliation and monotonic subscription synchronization, and added account identity/recovery/deletion safeguards. The payment functions have been deployed; matching refund/dispute events are configured in test and live. Stripe go-live now reports all steps completed. Public preview checks and price/lifecycle tests pass. Authenticated end-to-end verification is still blocked by the absence of a requester-matched preview account; hosted CAPTCHA/email security and production frontend publication remain outstanding. See PREVIEW_PAYMENT_TESTS.md for the current checklist and limitations.
+
 ## Scope and evidence
 
 Reviewed client account/authentication/pricing flows, server checkout/status/management/webhooks, shared gateway and credit guard, both migration directories, hosted database policies/functions, and Stripe go-live status. Public pricing and sign-in pages rendered without runtime errors. Existing catalog tests passed (7/7); the independent account audit also ran all existing tests (14/14).
