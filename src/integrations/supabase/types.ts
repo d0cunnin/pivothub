@@ -506,6 +506,78 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_credit_receipts: {
+        Row: {
+          created_at: string
+          credits: number
+          environment: string
+          id: string
+          payment_key: string
+          price_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits: number
+          environment: string
+          id?: string
+          payment_key: string
+          price_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits?: number
+          environment?: string
+          id?: string
+          payment_key?: string
+          price_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      payment_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          current_period_end: string | null
+          current_period_start: string | null
+          environment: string
+          id: string
+          price_id: string
+          status: string
+          stripe_customer_id: string
+          stripe_subscription_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          current_period_end?: string | null
+          current_period_start?: string | null
+          environment: string
+          id?: string
+          price_id: string
+          status: string
+          stripe_customer_id: string
+          stripe_subscription_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean
+          current_period_end?: string | null
+          current_period_start?: string | null
+          environment?: string
+          id?: string
+          price_id?: string
+          status?: string
+          stripe_customer_id?: string
+          stripe_subscription_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       pricing_plans: {
         Row: {
           credit_limit: number
@@ -1206,6 +1278,17 @@ export type Database = {
       floor_to_window: {
         Args: { seconds: number; ts: string }
         Returns: string
+      }
+      fulfill_payment_credits: {
+        Args: {
+          p_environment: string
+          p_payment_key: string
+          p_period_end?: string
+          p_period_start?: string
+          p_price_id: string
+          p_user_id: string
+        }
+        Returns: boolean
       }
       get_admin_cost_analysis: {
         Args: never
