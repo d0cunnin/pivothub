@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
                   <li>Comply with legal obligations and protect our rights.</li>
                 </ul>
                 <p className="text-muted-foreground leading-relaxed">
-                  <strong>Note:</strong> Data you input into our AI tools may be used to generate results or suggestions. However, we do not store or use this information beyond the session unless explicitly stated.
+                  Data submitted to tools may be processed by AI service providers. Saved assessments, reports, submissions, preferences, and usage records can remain linked to your account. Payment details are collected by Stripe; we store billing references and credit receipts, not your card number. Deleting an account removes saved content and account access; financial and security records may be retained where required.
                 </p>
               </div>
 
