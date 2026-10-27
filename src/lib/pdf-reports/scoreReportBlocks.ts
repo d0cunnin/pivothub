@@ -107,7 +107,7 @@ export function footerNote(w: PdfWriter, text: string, color: RGB = [156, 163, 1
   for (let i = 1; i <= total; i++) {
     w.doc.setPage(i);
     w.setStyle(8, color);
-    w.doc.text(pdfSafe(text), w.pageWidth / 2, w.pageHeight - 14, { align: 'center' });
+    w.doc.text(pdfSafe(text), w.pageWidth / 2, w.pageHeight - 17, { align: 'center' });
   }
 }
 

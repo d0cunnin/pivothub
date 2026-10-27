@@ -295,6 +295,7 @@ export function wrappedHeader(w: PdfWriter, title: string, subtitle: string) {
     w.header(title, subtitle);
     return;
   }
+  w.logo();
   w.setStyle(24, HEADING);
   titleLines.forEach((line, i) => w.doc.text(line, w.margin, w.y + i * 10));
   w.y += titleLines.length * 10;

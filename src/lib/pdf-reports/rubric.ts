@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { asText, cleanInline, pdfSafe, BODY, DIVIDER, HEADING, MUTED } from '../pdfWriter';
+import { drawLogo, drawBrandFooter } from '../pdfBrand';
 import { HEAD_FILL, ZEBRA_FILL, toNumber } from './scoreReportBlocks';
 
 export interface RubricCriterion {
@@ -35,6 +36,8 @@ export function generateRubricPDF(rubric: RubricData, opts: { gradeLevel?: strin
   };
 
   // Header (same look as PdfWriter.header).
+  drawLogo(doc, margin, y - 7, 7, 'light');
+  y += 12;
   style(20, HEADING);
   const titleLines: string[] = doc.splitTextToSize(cleanInline(asText(rubric?.title)) || 'Scoring Rubric', contentW);
   titleLines.forEach((line, i) => doc.text(line, margin, y + i * 8.5));
@@ -93,14 +96,9 @@ export function generateRubricPDF(rubric: RubricData, opts: { gradeLevel?: strin
       ...Object.fromEntries(scale.map((_, i) => [i + 2, { cellWidth: levelW }])),
     },
     rowPageBreak: 'avoid',
-    margin: { left: margin, right: margin, top: margin, bottom: 14 },
+    margin: { left: margin, right: margin, top: margin, bottom: 20 },
   });
 
-  const totalPages = doc.getNumberOfPages();
-  for (let i = 1; i <= totalPages; i++) {
-    doc.setPage(i);
-    style(8, [156, 163, 175]);
-    doc.text(`${pdfSafe(asText(rubric?.title) || 'Scoring rubric').slice(0, 90)} | Page ${i} of ${totalPages}`, pageW / 2, pageH - 8, { align: 'center' });
-  }
+  drawBrandFooter(doc, { note: pdfSafe(asText(rubric?.title) || 'Scoring rubric').slice(0, 120), margin });
   return doc;
 }

@@ -35,6 +35,8 @@ export function generateCapabilityStatementPDF(
   formData: CapabilityFormData
 ): jsPDF {
   const w = new PdfWriter();
+  // Sent to funders/agencies/clients under the user's name: no PivotHub branding.
+  w.brand = false;
   const businessName = asText(formData?.businessName);
   reportHeader(w, businessName || 'Capability Statement', businessName ? 'Capability Statement' : '');
 

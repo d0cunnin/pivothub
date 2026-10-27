@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { drawLogo, drawBrandFooter } from './pdfBrand';
 
 // jsPDF's built-in Helvetica only covers Windows-1252. Any other character
 // (arrows, check marks, emoji, non-breaking hyphens) prints as garbage such
@@ -113,7 +114,21 @@ export class PdfWriter {
     this.y += opts.after ?? 2;
   }
 
+  /**
+   * False for documents the user sends to others (grant proposals,
+   * capability statements, bios): no PivotHub logo or pivothub.io footer.
+   */
+  brand = true;
+
+  /** PivotHub logo at the top of the first page (the page background is light). */
+  logo() {
+    if (!this.brand) return;
+    drawLogo(this.doc, this.margin, this.y - 7, 7, 'light');
+    this.y += 12;
+  }
+
   header(title: string, subtitle: string) {
+    this.logo();
     this.setStyle(24, HEADING);
     this.doc.text(pdfSafe(title), this.margin, this.y);
     this.y += 10;
@@ -293,6 +308,10 @@ export class PdfWriter {
   }
 
   footer(text: string) {
+    if (this.brand) {
+      drawBrandFooter(this.doc, { note: pdfSafe(text), margin: this.margin });
+      return;
+    }
     const totalPages = this.doc.getNumberOfPages();
     for (let i = 1; i <= totalPages; i++) {
       this.doc.setPage(i);

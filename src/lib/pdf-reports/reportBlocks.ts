@@ -9,6 +9,7 @@ const bottomLimit = (w: PdfWriter) => w.pageHeight - w.margin - 5;
 
 /** Same look as PdfWriter.header, but long titles and subtitles wrap instead of running off the page. */
 export function reportHeader(w: PdfWriter, title: string, subtitle: string) {
+  w.logo();
   w.setStyle(24, HEADING);
   const titleLines: string[] = w.doc.splitTextToSize(pdfSafe(title), w.contentWidth);
   titleLines.forEach((line, i) => w.doc.text(line, w.margin, w.y + i * 10));
