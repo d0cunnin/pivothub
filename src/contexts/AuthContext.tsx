@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -13,6 +13,10 @@ interface AuthContextType {
   subscriptionPackage: string | null;
   subscriptionEnd: string | null;
   isAdmin: boolean;
+  cancelAtPeriodEnd: boolean;
+  pendingPriceId: string | null;
+  pendingEffectiveAt: string | null;
+  paymentStatus: string | null;
   refreshSubscription: () => Promise<void>;
   signOut: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
@@ -39,6 +43,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [subscriptionPackage, setSubscriptionPackage] = useState<string | null>(null);
   const [subscriptionEnd, setSubscriptionEnd] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [cancelAtPeriodEnd,setCancelAtPeriodEnd]=useState(false);
+  const [pendingPriceId,setPendingPriceId]=useState<string|null>(null);
+  const [pendingEffectiveAt,setPendingEffectiveAt]=useState<string|null>(null);
+  const [paymentStatus,setPaymentStatus]=useState<string|null>(null);
+  const userRef=useRef<string|undefined>();
   const { toast } = useToast();
 
   const refreshSubscription = async () => {
@@ -58,7 +67,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      if (data) {
+      if (data && currentSession.user.id===userRef.current) {
+        setCancelAtPeriodEnd(data.cancel_at_period_end??false);setPendingPriceId(data.pending_price_id??null);setPendingEffectiveAt(data.pending_effective_at??null);setPaymentStatus(data.payment_status??null);
         setSubscribed(data.subscribed || false);
         setSubscriptionTier(data.subscription_tier || null);
         setSubscriptionPackage(data.subscription_package || null);
@@ -106,43 +116,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const checkAdminStatus = async () => {
-    if (!user) {
-      console.log('[AuthContext] No user, setting isAdmin to false');
-      setIsAdmin(false);
-      return;
-    }
-
-    console.log('[AuthContext] Checking admin status for user:', user.id, user.email);
-
-    try {
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .eq('role', 'admin')
-        .maybeSingle();
-
-      if (error) {
-        console.error('[AuthContext] Error checking admin status:', error);
-        setIsAdmin(false);
-        return;
-      }
-
-      const isUserAdmin = !!data;
-      console.log('[AuthContext] Admin check result:', isUserAdmin, 'data:', data);
-      setIsAdmin(isUserAdmin);
-    } catch (error) {
-      console.error('[AuthContext] Error in admin check:', error);
-      setIsAdmin(false);
-    }
+  const checkAdminStatus=async()=>{
+    const {data:{session:current}}=await supabase.auth.getSession();if(!current){setIsAdmin(false);return;}
+    const {data,error}=await supabase.from('user_roles').select('role').eq('user_id',current.user.id).eq('role','admin').maybeSingle();
+    if(userRef.current===current.user.id)setIsAdmin(!error&&!!data);
   };
-
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setSession(session);
+        if(userRef.current!==session?.user.id){setSubscribed(false);setSubscriptionTier(null);setSubscriptionPackage(null);setSubscriptionEnd(null);setIsAdmin(false);setCancelAtPeriodEnd(false);setPendingPriceId(null);setPendingEffectiveAt(null);setPaymentStatus(null);}
+        userRef.current=session?.user.id;
+        userRef.current=session?.user.id;
+      setSession(session);
         setUser(session?.user ?? null);
         
         // Refresh subscription when user signs in
@@ -156,6 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Clear subscription data when user signs out
         if (event === 'SIGNED_OUT') {
           setSubscribed(false);
+          setSubscriptionPackage(null);setCancelAtPeriodEnd(false);
           setSubscriptionTier(null);
           setSubscriptionEnd(null);
           setIsAdmin(false);
@@ -168,6 +155,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      userRef.current=session?.user.id;
       setUser(session?.user ?? null);
       
       if (session?.user) {
@@ -183,6 +171,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(()=>{if(!user)return;const refresh=()=>{refreshSubscription();};window.addEventListener('focus',refresh);return()=>window.removeEventListener('focus',refresh);},[user?.id]);
+
   const value = {
     user,
     session,
@@ -191,7 +181,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     subscriptionTier,
     subscriptionPackage,
     subscriptionEnd,
-    isAdmin,
+    isAdmin,cancelAtPeriodEnd,pendingPriceId,pendingEffectiveAt,paymentStatus,
     refreshSubscription,
     signOut,
     signIn,

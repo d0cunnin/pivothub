@@ -52,8 +52,8 @@ export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, 
               <li>• Your secure payment form opens here; nothing is charged by continuing.</li>
               <li>• Every plan has access to every tool. Tool Credits are used when you run tools.</li>
               {!oneTime && <li>• Renews monthly until you cancel. Cancel in Account Settings to stop future renewals; your paid period remains available.</li>}
-              {isOneTime && <li>• Extra Tool Credits are valid until the end of your current billing month. This pack does not renew.</li>}
-              <li>• Tool Credits are added after payment is confirmed. Test purchases do not change live Tool Credits.</li>
+              {isOneTime && <li>• Extra Tool Credits are valid for three months after issuance. This pack does not renew.</li>}
+              <li>• Paid Tool Credits roll over and expire three months after issuance. They are added after payment is confirmed. Test purchases do not change live Tool Credits.</li>
               <li>• Billing and refund requests are subject to the payment terms shown at checkout and applicable law.</li>
             </ul>
           </div>
@@ -67,11 +67,11 @@ export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, 
             />
             <label htmlFor="checkout-terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
               I acknowledge that I have read and agree to the{" "}
-              <a href="/terms-and-conditions" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+              <a href="/terms" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
                 Terms and Conditions
               </a>{" "}
               and{" "}
-              <a href="/privacy-policy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+              <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
                 Privacy Policy
               </a>
               .{!oneTime && ' I understand that this subscription renews monthly until I cancel.'}
