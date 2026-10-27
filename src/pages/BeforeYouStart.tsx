@@ -144,7 +144,7 @@ const BeforeYouStart = () => {
                 <Button size="lg" variant="secondary" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
                   <Link to="/assessit">
                     <Target className="w-5 h-5 mr-2" />
-                    Take the Free Assessment
+                    Take an Assessment
                   </Link>
                 </Button>
                 <Button

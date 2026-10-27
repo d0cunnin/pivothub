@@ -501,7 +501,7 @@ export default function SideIncomeAssessment({ onComplete, loading = false }: Si
                 Generating Your Blueprint...
               </>
             ) : (
-              'Generate My Free Blueprint'
+              'Generate My Blueprint'
             )}
           </Button>
         </form>

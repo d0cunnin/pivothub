@@ -142,12 +142,12 @@ const Index = () => {
     {
       question: "What do I do if I just lost my job?",
       answer:
-        "Start with PivotHub's free career assessment to identify your strengths and explore new opportunities. Then use our job preparation tools to optimize your resume and practice interviews while exploring side income options.",
+        "Start with a PivotHub career assessment to identify your strengths and explore new opportunities. Then use our job preparation tools to optimize your resume and practice interviews while exploring side income options.",
     },
     {
-      question: "Is PivotHub really free?",
+      question: "Can I use PivotHub for free?",
       answer:
-        "Yes! We offer free career assessments and basic tools on the Free plan. Premium features are available for users who need advanced capabilities.",
+        "Yes. The Free plan gives you 5 credits every month to use on any tool, with no credit card required. An assessment uses 2 credits. Paid plans give you more credits each month.",
     },
     {
       question: "How quickly can I see results?",
@@ -167,7 +167,7 @@ const Index = () => {
         <meta property="og:title" content="Stuck in Transition? Build What’s Next. | PivotHub" />
         <meta
           property="og:description"
-          content="AI-powered career transition tools for people facing job loss. Free assessments, resume help, and income strategies."
+          content="AI-powered career transition tools for people facing job loss. Career assessments, resume help, and income strategies."
         />
       </Helmet>
 
@@ -214,7 +214,7 @@ const Index = () => {
               >
                 <Link to="/assessit">
                   <Target className="mr-2 h-5 w-5" />
-                  Take the Free Assessment
+                  Take an Assessment
                 </Link>
               </Button>
             </div>

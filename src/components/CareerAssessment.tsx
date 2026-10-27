@@ -412,7 +412,7 @@ export const CareerAssessment = () => {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="default" size="lg" className="transition-elegant hover:scale-105 px-8 py-3">
-          Take Free Career Assessment
+          Take a Career Assessment
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
