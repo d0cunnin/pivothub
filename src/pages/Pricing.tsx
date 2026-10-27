@@ -135,7 +135,7 @@ const Pricing = () => {
     },
     {
       name: "Starter",
-      price: "$19",
+      price: "$12",
       period: "month",
       description: "Perfect for getting started with 40 monthly credits",
       features: [
@@ -152,7 +152,7 @@ const Pricing = () => {
     },
     {
       name: "Pro",
-      price: "$39",
+      price: "$24",
       period: "month",
       description: "Ideal for regular users with 100 monthly credits",
       features: [
@@ -169,7 +169,7 @@ const Pricing = () => {
     },
     {
       name: "All-Access",
-      price: "$79",
+      price: "$49",
       period: "month",
       description: "Everything you need with 250 monthly credits",
       features: [
@@ -430,7 +430,7 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Starter Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$10</span>
+                  <span className="text-4xl font-bold text-primary">$7</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
                   25 Extra Credits
@@ -474,7 +474,7 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Boost Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$25</span>
+                  <span className="text-4xl font-bold text-primary">$18</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
                   70 Extra Credits
@@ -513,7 +513,7 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Power Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$50</span>
+                  <span className="text-4xl font-bold text-primary">$35</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
                   150 Extra Credits
@@ -580,7 +580,7 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What are AI requests?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Each tool uses a certain number of credits based on complexity: High-cost tools use 5 credits, medium-cost tools use 2 credits, and chatbots use 1 credit per message. All other tools use 2+ credits.
+                    Each tool uses a certain number of credits based on complexity. Chatbots use 1 credit per message, most tools use 2-5 credits, and the large blueprint tools use more (Deploy It 40, Create It 70). You can see every tool's price on the Before You Start page.
                   </p>
                 </div>
               </div>

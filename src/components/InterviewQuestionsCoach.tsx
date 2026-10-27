@@ -59,6 +59,8 @@ export const InterviewQuestionsCoach = () => {
   const [level, setLevel] = useState<'beginner' | 'intermediate' | 'executive'>('intermediate');
   const [questionTypes, setQuestionTypes] = useState<string[]>(['behavioral', 'technical', 'situational']);
   const [questions, setQuestions] = useState<Question[]>([]);
+  // Pass from interview-questions: feedback on each answer is included in the session price.
+  const [practiceSession, setPracticeSession] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [responses, setResponses] = useState<Response[]>([]);
@@ -107,6 +109,7 @@ export const InterviewQuestionsCoach = () => {
 
       const filteredQuestions = (data?.questions || []).filter((q: Question) => questionTypes.includes(q.type));
       setQuestions(filteredQuestions);
+      setPracticeSession(data?.practiceSession ?? null);
       setCurrentQuestionIndex(0);
       setActiveTab('practice');
       toast.success(`Generated ${filteredQuestions.length} interview questions`);
@@ -140,7 +143,8 @@ export const InterviewQuestionsCoach = () => {
           question: questions[currentQuestionIndex].text,
           answer: currentAnswer,
           questionType: questions[currentQuestionIndex].type,
-          jobTitle: jobTitle
+          jobTitle: jobTitle,
+          practiceSession: practiceSession ?? undefined
         },
         headers: {
           Authorization: `Bearer ${session.access_token}`

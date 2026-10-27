@@ -87,6 +87,8 @@ export const EnhancedInterviewCoach = () => {
   const [difficultyLevel, setDifficultyLevel] = useState([50]);
   
   const [questions, setQuestions] = useState<Question[]>([]);
+  // Pass from interview-questions: feedback on each answer is included in the session price.
+  const [practiceSession, setPracticeSession] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [responses, setResponses] = useState<Response[]>([]);
@@ -154,6 +156,7 @@ export const EnhancedInterviewCoach = () => {
       }));
 
       setQuestions(enhancedQuestions);
+      setPracticeSession(data?.practiceSession ?? null);
       setCurrentQuestionIndex(0);
       setActiveTab('practice');
       toast.success(`Generated ${enhancedQuestions.length} enhanced interview questions`);
@@ -192,7 +195,8 @@ export const EnhancedInterviewCoach = () => {
           answer: currentAnswer,
           questionType: questions[currentQuestionIndex].type,
           jobTitle: jobTitle,
-          difficulty: level
+          difficulty: level,
+          practiceSession: practiceSession ?? undefined
         },
         headers: {
           Authorization: `Bearer ${session.access_token}`

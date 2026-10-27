@@ -2,6 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
+import { createPracticeSession } from "../_shared/practiceSession.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
@@ -28,7 +29,8 @@ serve(async (req) => {
     // Apply guard for auth, rate limit, and credit deduction
     const guardResult = await guard(req, {
       endpoint: "interview-questions",
-      cost: 2,
+      // One practice session: questions plus feedback on every answer.
+      cost: 3,
       requireAuth: true,
       maxReqsPerMinute: 30
     });
@@ -313,17 +315,21 @@ QUALITY STANDARDS:
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: aiResultParsed ? 2 : 0,
+      creditsCharged: aiResultParsed ? 3 : 0,
       requestDurationMs: Date.now() - startTime
     });
 
     // Charge only when the AI produced a real (parsed) result, not the fallback.
+    let practiceSession: string | null = null;
     if (aiResultParsed) {
-      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'interview-questions', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'interview-questions', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+      // Feedback on each answer is included; allow a couple of retries.
+      const answerAllowance = Math.min(30, (Array.isArray(questions) ? questions.length : 10) + 2);
+      practiceSession = await createPracticeSession(userId, answerAllowance);
     }
     
     return new Response(
-      JSON.stringify({ questions }),
+      JSON.stringify({ questions, practiceSession }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200

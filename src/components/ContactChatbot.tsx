@@ -40,7 +40,7 @@ const FAQ_RESPONSES: Record<string, string> = {
 
   // Additional common questions
   "how do credits work": 
-    "Credits are used for AI-powered tools:\n\n• Each tool costs 1-5 credits\n• Paid plans include monthly credits\n• Unused credits roll over (up to 2× limit)\n• Extra credits: $5 for 20, $10 for 40, $15 for 60\n\nExplore Mode: 5 free credits/month, no rollover",
+    "Credits are used for AI-powered tools:\n\n• Most tools cost 1-5 credits (the big blueprint tools cost more: Create It 70, Deploy It 40)\n• Paid plans include monthly credits\n• Unused credits roll over (up to 2× limit)\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $49/mo (250)\n• Extra credit packs: $7 for 25, $18 for 70, $35 for 150\n\nExplore Mode: 5 free credits/month, no rollover",
 
   "what tools are available": 
     "PivotHub offers 8 tool categories:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant finding\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Event tools\n\nVisit /pricing for full details!",

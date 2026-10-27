@@ -23,7 +23,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'social-media': 2,               // ~3,000 tokens output
   'resume-analyzer': 2,            // ~3,000 tokens with feedback
   'resume-builder': 5,             // ~6,000 tokens (full structured resume)
-  'interview-feedback': 2,         // ~3,000 tokens with analysis
+  'interview-feedback': 0,         // Included in the practice session (2 credits without one)
   'business-foundation': 2,        // ~3,000 tokens output
   'schedule-it': 5,                // ~12,000 tokens output (Schedule It)
   'host-it': 4,                    // ~8,000 tokens output (Host It)
@@ -39,7 +39,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'business-mentor': 1,            // Chatbot, ~1,500 tokens per message
   
   // MEDIUM COST TOOLS (2 credits) - Non-chatbot tools
-  'interview-questions': 2,        // ~1,500 tokens output (Prep It)
+  'interview-questions': 3,        // One practice session: questions + feedback on every answer
   'grant-resources': 2,            // Search + formatting (Fund It)
   'name-checker': 2,               // API calls only (Build It)
   'logo-generator': 2,             // Image generation (Build It)
@@ -58,7 +58,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'side-income-report': 0,         // Free - generated after assessment
   
   // LEARN IT TOOLS
-  'prompt-it': 1,                  // ~1,500 tokens (2 free uses, then 1 credit per use)
+  'prompt-it': 1,                  // ~1,500 tokens
   'code-it': 1,                    // ~1,200 tokens output (explain code)
   'deploy-it': 40,                 // ~1,500 tokens output (AI agent blueprint) - complex agent planning
   'create-it-blueprint': 70,       // ~15,000+ tokens output (full AI platform blueprint / startup architect)

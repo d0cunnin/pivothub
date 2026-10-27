@@ -1,7 +1,11 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
+import { guard, logRequest, corsHeaders, deductCreditsOnSuccess, assertCredits } from "../_shared/guard.ts";
+import { verifyPracticeSession, useSessionAnswer } from "../_shared/practiceSession.ts";
+
+// Charged only when feedback is requested outside a paid practice session.
+const FEEDBACK_COST_WITHOUT_SESSION = 2;
 import { moderateContent } from "../_shared/moderation.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -10,7 +14,8 @@ const interviewFeedbackSchema = z.object({
   question: z.string().min(1).max(1000),
   answer: z.string().min(1).max(5000),
   questionType: z.string().max(100),
-  jobTitle: z.string().min(1).max(200)
+  jobTitle: z.string().min(1).max(200),
+  practiceSession: z.string().max(2000).optional()
 });
 
 serve(async (req) => {
@@ -26,7 +31,8 @@ serve(async (req) => {
     // Apply guard for auth, rate limit, and credit deduction
     const guardResult = await guard(req, {
       endpoint: "interview-feedback",
-      cost: 2,
+      // Price depends on whether a practice-session pass is supplied.
+      cost: 0,
       requireAuth: true,
       maxReqsPerMinute: 30
     });
@@ -45,7 +51,14 @@ serve(async (req) => {
       );
     }
     
-    const { question, answer, questionType, jobTitle } = validation.data;
+    const { question, answer, questionType, jobTitle, practiceSession } = validation.data;
+
+    const session = await verifyPracticeSession(practiceSession, userId);
+    const coveredBySession = session ? await useSessionAnswer(guardResult.supabase, session) : false;
+    const feedbackCost = coveredBySession ? 0 : FEEDBACK_COST_WITHOUT_SESSION;
+    if (feedbackCost > 0) {
+      await assertCredits(userId, feedbackCost);
+    }
     
     // Moderate content before processing (high-risk: fail-closed)
     const moderationInput = `${question} ${answer} ${questionType} ${jobTitle}`.slice(0, 10000);
@@ -438,13 +451,13 @@ DO NOT use markdown formatting like ### headers, ** bold, or * italics in the JS
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: aiResultParsed ? 2 : 0,
+      creditsCharged: aiResultParsed ? feedbackCost : 0,
       requestDurationMs: Date.now() - startTime
     });
 
     // Charge only when the AI produced a real (parsed) result, not the fallback.
-    if (aiResultParsed) {
-      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'interview-feedback', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    if (aiResultParsed && feedbackCost > 0) {
+      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'interview-feedback', feedbackCost); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     }
     
     return new Response(

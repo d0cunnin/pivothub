@@ -79,7 +79,7 @@ const PrepIt = () => {
                   onClick={() => document.getElementById('interview-coach')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <MessageSquare className="h-5 w-5" />
-                  <span>Interview Coach (2 Credits)</span>
+                  <span>Interview Coach (3 Credits)</span>
                 </Button>
                 <Button 
                   size="lg" 
@@ -227,7 +227,7 @@ const PrepIt = () => {
         <div className="flex justify-center mb-6">
           <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
             <Zap className="h-4 w-4" />
-            2 Credits
+            3 Credits per practice session (includes feedback on every answer)
           </Badge>
         </div>
         

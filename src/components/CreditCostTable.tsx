@@ -41,8 +41,7 @@ const toolsByCategory: Record<string, Tool[]> = {
   ],
   'Prep It (Career Tools)': [
     { name: 'Career Advisor Chatbot', credits: 1, note: 'per message' },
-    { name: 'Interview Questions Coach', credits: 2 },
-    { name: 'Interview Feedback Coach', credits: 2, note: 'per answer' },
+    { name: 'Interview Practice Session', credits: 3, note: 'Questions + feedback on every answer' },
     { name: 'Resume & Cover Letter Coach', credits: 2 },
     { name: 'Resume Builder', credits: 5 },
   ],
