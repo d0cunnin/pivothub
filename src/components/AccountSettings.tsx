@@ -1,3 +1,4 @@
+import { getStripeEnvironment } from "@/lib/payments/stripe";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -38,11 +39,9 @@ export const AccountSettings = () => {
         return;
       }
 
-      // Payments not yet enabled in this rebuild
-      toast({
-        title: "Payments Coming Soon",
-        description: "Subscription management will be available once payments are reconnected.",
-      });
+      const { data, error } = await supabase.functions.invoke('manage-subscription', { body: { environment: getStripeEnvironment(), action: 'cancel' } });
+      if (error || data?.error) throw new Error(data?.error ?? 'Unable to cancel subscription');
+      toast({ title: 'Renewal Cancelled', description: 'No further renewals will be charged. Your current paid period remains available.' });
 
       setCancelReason("");
       
@@ -128,43 +127,20 @@ export const AccountSettings = () => {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      
-      // Get session for authorization
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast({
-          title: "Authentication Required",
-          description: "Please sign in to purchase credits.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
+    navigate('/pricing');
+  };
 
-      // Payments not yet enabled in this rebuild
-      toast({
-        title: "Payments Coming Soon",
-        description: "Extra credit purchases will be available once payments are reconnected.",
-      });
-      return;
-    } catch (error: any) {
-      console.error('Error purchasing credits:', error);
-      
-      let errorMessage = "Failed to initiate purchase";
-      
-      if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
-        errorMessage = "You need an active subscription to purchase extra credits";
-      }
-      
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+  const handleManageBilling = async () => {
+    if (!subscribed) { navigate('/pricing'); return; }
+    const tab = window.open('about:blank', '_blank');
+    try {
+      const { data, error } = await supabase.functions.invoke('manage-subscription', { body: { environment: getStripeEnvironment(), action: 'portal', returnUrl: window.location.origin + '/pricing' } });
+      if (error || data?.error || !data?.url) throw new Error(data?.error ?? 'Unable to open billing');
+      if (tab) { tab.opener = null; tab.location.href = data.url; }
+      else toast({ title: 'Allow Popups', description: 'Allow a new tab to open your billing page.' });
+    } catch (e) {
+      tab?.close();
+      toast({ title: 'Billing Unavailable', description: e instanceof Error ? e.message : 'Please try again.', variant: 'destructive' });
     }
   };
 
@@ -200,7 +176,7 @@ export const AccountSettings = () => {
             <div className="space-y-3">
               <Label className="text-base font-semibold">Purchase Extra Credits</Label>
               <div className="text-sm text-muted-foreground mb-3">
-                Need more AI requests this month? Purchase extra credits that roll over.
+                Need more AI requests this month? Choose a pack on the pricing page. Extra Tool Credits expire at the end of your billing month.
               </div>
               <div className="grid gap-3">
                 <Button
@@ -211,9 +187,9 @@ export const AccountSettings = () => {
                 >
                   <div className="text-left">
                     <div className="font-semibold">25 Extra Credits</div>
-                    <div className="text-xs text-muted-foreground">Starter Pack - Perfect for occasional needs</div>
+                    <div className="text-xs text-muted-foreground">Small Pack - Perfect for occasional needs</div>
                   </div>
-                  <span className="font-bold text-lg">$10.00</span>
+                  <span className="font-bold text-lg">$5.00</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -225,7 +201,7 @@ export const AccountSettings = () => {
                     <div className="font-semibold">70 Extra Credits</div>
                     <div className="text-xs text-muted-foreground">Boost Pack - Best value for active users</div>
                   </div>
-                  <span className="font-bold text-lg">$25.00</span>
+                  <span className="font-bold text-lg">$10.00</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -237,7 +213,7 @@ export const AccountSettings = () => {
                     <div className="font-semibold">150 Extra Credits</div>
                     <div className="text-xs text-muted-foreground">Power Pack - Maximum credits for heavy usage</div>
                   </div>
-                  <span className="font-bold text-lg">$50.00</span>
+                  <span className="font-bold text-lg">$20.00</span>
                 </Button>
               </div>
             </div>
@@ -299,7 +275,7 @@ export const AccountSettings = () => {
                 <div className="flex-1">
                   <div className="font-semibold text-lg">Free Plan</div>
                   <div className="text-sm text-muted-foreground mt-1">
-                    Upgrade to access premium features
+                    Upgrade for more monthly Tool Credits
                   </div>
                 </div>
               </>
@@ -308,7 +284,7 @@ export const AccountSettings = () => {
           
           <div className="flex gap-3">
             <Button 
-              onClick={() => window.location.href = '/pricing'}
+              onClick={handleManageBilling}
               variant="default"
             >
               {subscribed ? 'Manage Subscription' : 'Upgrade Plan'}
