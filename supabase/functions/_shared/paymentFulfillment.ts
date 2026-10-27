@@ -25,6 +25,7 @@ export async function syncSubscription(sub:any,env:StripeEnv){
 export async function fulfillInvoice(invoice:any,env:StripeEnv){
  if(invoice.status!=='paid'||!shouldGrantInvoice(invoice.billing_reason))return;
  const stripe=createStripeClient(env),subscriptionId=identifier(invoice.parent?.subscription_details?.subscription??invoice.subscription);if(!subscriptionId)return;
+ const {data:existing}=await db().from('payment_subscriptions').select('price_id,pending_price_id').eq('environment',env).eq('stripe_subscription_id',subscriptionId).maybeSingle();
  const sub=await stripe.subscriptions.retrieve(subscriptionId);const {userId}=await syncSubscription(sub,env);
  if(identifier(invoice.customer)!==identifier(sub.customer))throw new Error('Invoice ownership mismatch');
  const lines=[];for await(const line of stripe.invoices.listLineItems(invoice.id,{limit:100}))lines.push(line);
@@ -40,7 +41,9 @@ export async function fulfillInvoice(invoice:any,env:StripeEnv){
  const paidAt=invoice.status_transitions?.paid_at??invoice.created;
  let paymentIntent=identifier(invoice.payment_intent);if(!paymentIntent){const payments=await stripe.invoicePayments.list({invoice:invoice.id,limit:10});paymentIntent=identifier(payments.data.find(p=>p.status==='paid')?.payment?.payment_intent);}
  const {error}=await db().rpc('issue_payment_grant',{p_user_id:userId,p_environment:env,p_payment_key:`invoice:${invoice.id}`,p_price_id:key,p_credits:credits,p_issued_at:new Date(paidAt*1000).toISOString(),p_period_start:new Date(line.period.start*1000).toISOString(),p_period_end:new Date(line.period.end*1000).toISOString(),p_payment_intent_id:paymentIntent??null});if(error)throw error;
- await sendConfirmation('subscription-confirmed',userId,`subscription-confirmed:invoice:${invoice.id}`,{planName:paymentCatalog[key].name,credits,amount:`$${(paymentCatalog[key].amount/100).toFixed(2)}`,periodEnd:new Date(line.period.end*1000).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}),changeType:invoice.billing_reason==='subscription_update'?'upgrade':invoice.billing_reason==='subscription_cycle'?'renewal':'new'});
+ const isDowngrade=invoice.billing_reason==='subscription_cycle'&&existing?.pending_price_id===key&&!!existing?.price_id&&existing.price_id!==key;
+ if(existing?.pending_price_id)await db().from('payment_subscriptions').update({pending_price_id:null,pending_effective_at:null}).eq('environment',env).eq('stripe_subscription_id',subscriptionId);
+ await sendConfirmation('subscription-confirmed',userId,`subscription-confirmed:invoice:${invoice.id}`,{planName:paymentCatalog[key].name,credits,amount:`$${(paymentCatalog[key].amount/100).toFixed(2)}`,periodEnd:new Date(line.period.end*1000).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}),changeType:invoice.billing_reason==='subscription_update'?'upgrade':isDowngrade?'downgrade':invoice.billing_reason==='subscription_cycle'?'renewal':'new'});
 }
 export async function fulfillSession(session:any,env:StripeEnv){
  if(!['paid','no_payment_required'].includes(session.payment_status))return;const stripe=createStripeClient(env);

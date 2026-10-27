@@ -8,7 +8,7 @@ interface Props {
   credits?: number
   amount?: string
   periodEnd?: string
-  changeType?: 'new' | 'upgrade' | 'renewal'
+  changeType?: 'new' | 'upgrade' | 'downgrade' | 'renewal'
 }
 
 const Email = ({ name, planName, credits, amount, periodEnd, changeType }: Props) => {
@@ -16,9 +16,11 @@ const Email = ({ name, planName, credits, amount, periodEnd, changeType }: Props
   const headline =
     changeType === 'upgrade'
       ? `You've upgraded to ${plan}`
-      : changeType === 'renewal'
-        ? `Your ${plan} plan has renewed`
-        : `Your ${plan} subscription is active`
+      : changeType === 'downgrade'
+        ? `You've moved to ${plan}`
+        : changeType === 'renewal'
+          ? `Your ${plan} plan has renewed`
+          : `Your ${plan} subscription is active`
   return (
     <Html lang="en" dir="ltr">
       <Head />
@@ -61,7 +63,9 @@ export const template = {
   subject: (data: Record<string, any>) =>
     data.changeType === 'upgrade'
       ? `Confirmed: you've upgraded to ${data.planName ?? 'your new plan'}`
-      : `Payment confirmed: ${data.planName ?? 'your PivotHub plan'}`,
+      : data.changeType === 'downgrade'
+        ? `Confirmed: you've moved to ${data.planName ?? 'your new plan'}`
+        : `Payment confirmed: ${data.planName ?? 'your PivotHub plan'}`,
   displayName: 'Subscription payment confirmation',
   previewData: { name: 'Jane', planName: 'Pro', credits: 100, amount: '$24.00', periodEnd: 'November 26, 2026', changeType: 'new' },
 } satisfies TemplateEntry
