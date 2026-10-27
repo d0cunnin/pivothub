@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
@@ -20,7 +21,7 @@ const businessResourcesSchema = z.object({
   specificNeeds: z.string().max(1000).optional()
 });
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -289,7 +290,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
       );
       
       console.log('Successfully enhanced results with AI insights');
-      try { await deductCreditsOnSuccess(guardClient, userId, 'business-resources', 1); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+      await deductCreditsOnSuccess(guardClient, userId, 'business-resources', 1);
       return new Response(
         JSON.stringify({ resources: enhancedResources }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
@@ -309,7 +310,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
     console.error('Error finding business resources:', error);
     return fallbackResponse();
   }
-});
+}));
 
 function formatGooglePlacesResults(places: any[], location: string) {
   const categories = [

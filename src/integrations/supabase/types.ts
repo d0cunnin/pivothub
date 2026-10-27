@@ -305,6 +305,66 @@ export type Database = {
         }
         Relationships: []
       }
+      billing_accounts: {
+        Row: {
+          environment: string
+          lock_token: string | null
+          lock_until: string | null
+          pending_price_id: string | null
+          pending_session_id: string | null
+          stripe_customer_id: string | null
+          user_id: string
+        }
+        Insert: {
+          environment: string
+          lock_token?: string | null
+          lock_until?: string | null
+          pending_price_id?: string | null
+          pending_session_id?: string | null
+          stripe_customer_id?: string | null
+          user_id: string
+        }
+        Update: {
+          environment?: string
+          lock_token?: string | null
+          lock_until?: string | null
+          pending_price_id?: string | null
+          pending_session_id?: string | null
+          stripe_customer_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      billing_reviews: {
+        Row: {
+          created_at: string
+          details: Json
+          environment: string
+          id: string
+          provider_key: string
+          reason: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json
+          environment: string
+          id?: string
+          provider_key: string
+          reason: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json
+          environment?: string
+          id?: string
+          provider_key?: string
+          reason?: string
+          status?: string
+        }
+        Relationships: []
+      }
       checkout_sessions: {
         Row: {
           created_at: string
@@ -452,6 +512,75 @@ export type Database = {
         }
         Relationships: []
       }
+      credit_grants: {
+        Row: {
+          amount: number
+          environment: string
+          expires_at: string
+          id: string
+          issued_at: string
+          price_id: string | null
+          remaining: number
+          revoked: number
+          source_key: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          environment: string
+          expires_at: string
+          id?: string
+          issued_at: string
+          price_id?: string | null
+          remaining: number
+          revoked?: number
+          source_key: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          environment?: string
+          expires_at?: string
+          id?: string
+          issued_at?: string
+          price_id?: string | null
+          remaining?: number
+          revoked?: number
+          source_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      credit_reservations: {
+        Row: {
+          amount: number
+          created_at: string
+          expires_at: string
+          id: string
+          status: string
+          tool_name: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          expires_at: string
+          id?: string
+          status?: string
+          tool_name?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          status?: string
+          tool_name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed_at: string
@@ -512,6 +641,8 @@ export type Database = {
           credits: number
           environment: string
           id: string
+          issued_at: string | null
+          payment_intent_id: string | null
           payment_key: string
           price_id: string
           user_id: string
@@ -521,6 +652,8 @@ export type Database = {
           credits: number
           environment: string
           id?: string
+          issued_at?: string | null
+          payment_intent_id?: string | null
           payment_key: string
           price_id: string
           user_id: string
@@ -530,9 +663,50 @@ export type Database = {
           credits?: number
           environment?: string
           id?: string
+          issued_at?: string | null
+          payment_intent_id?: string | null
           payment_key?: string
           price_id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      payment_event_receipts: {
+        Row: {
+          environment: string
+          event_id: string
+          event_type: string
+          processed_at: string
+        }
+        Insert: {
+          environment: string
+          event_id: string
+          event_type: string
+          processed_at?: string
+        }
+        Update: {
+          environment?: string
+          event_id?: string
+          event_type?: string
+          processed_at?: string
+        }
+        Relationships: []
+      }
+      payment_refund_receipts: {
+        Row: {
+          created_at: string
+          environment: string
+          refund_id: string
+        }
+        Insert: {
+          created_at?: string
+          environment: string
+          refund_id: string
+        }
+        Update: {
+          created_at?: string
+          environment?: string
+          refund_id?: string
         }
         Relationships: []
       }
@@ -541,8 +715,13 @@ export type Database = {
           cancel_at_period_end: boolean
           current_period_end: string | null
           current_period_start: string | null
+          entitled_price_id: string | null
           environment: string
           id: string
+          paid_period_end: string | null
+          paid_period_start: string | null
+          pending_effective_at: string | null
+          pending_price_id: string | null
           price_id: string
           status: string
           stripe_customer_id: string
@@ -554,8 +733,13 @@ export type Database = {
           cancel_at_period_end?: boolean
           current_period_end?: string | null
           current_period_start?: string | null
+          entitled_price_id?: string | null
           environment: string
           id?: string
+          paid_period_end?: string | null
+          paid_period_start?: string | null
+          pending_effective_at?: string | null
+          pending_price_id?: string | null
           price_id: string
           status: string
           stripe_customer_id: string
@@ -567,8 +751,13 @@ export type Database = {
           cancel_at_period_end?: boolean
           current_period_end?: string | null
           current_period_start?: string | null
+          entitled_price_id?: string | null
           environment?: string
           id?: string
+          paid_period_end?: string | null
+          paid_period_start?: string | null
+          pending_effective_at?: string | null
+          pending_price_id?: string | null
           price_id?: string
           status?: string
           stripe_customer_id?: string
@@ -901,6 +1090,8 @@ export type Database = {
           billing_cycle_start: string | null
           created_at: string
           extra_credits: number | null
+          free_credit_reset_at: string | null
+          free_credits_remaining: number
           free_tier_start_date: string | null
           grace_period_end: string | null
           id: string
@@ -926,6 +1117,8 @@ export type Database = {
           billing_cycle_start?: string | null
           created_at?: string
           extra_credits?: number | null
+          free_credit_reset_at?: string | null
+          free_credits_remaining?: number
           free_tier_start_date?: string | null
           grace_period_end?: string | null
           id?: string
@@ -951,6 +1144,8 @@ export type Database = {
           billing_cycle_start?: string | null
           created_at?: string
           extra_credits?: number | null
+          free_credit_reset_at?: string | null
+          free_credits_remaining?: number
           free_tier_start_date?: string | null
           grace_period_end?: string | null
           id?: string
@@ -1252,6 +1447,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      acquire_billing_lock: {
+        Args: { p_environment: string; p_user_id: string }
+        Returns: string
+      }
       check_account_lockout: { Args: { p_email: string }; Returns: Json }
       check_admin_rate_limit: {
         Args: {
@@ -1275,6 +1474,10 @@ export type Database = {
       cleanup_expired_contexts: { Args: never; Returns: undefined }
       cleanup_old_health_checks: { Args: never; Returns: undefined }
       clear_account_lockout: { Args: { p_email: string }; Returns: undefined }
+      consume_credit_reservation: {
+        Args: { p_hold_id: string; p_tool_name: string; p_user_id: string }
+        Returns: Json
+      }
       floor_to_window: {
         Args: { seconds: number; ts: string }
         Returns: string
@@ -1312,6 +1515,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_my_credit_balance: { Args: never; Returns: Json }
       get_subscriber_secure_data: {
         Args: { target_user_id?: string }
         Returns: {
@@ -1332,10 +1536,42 @@ export type Database = {
             }
             Returns: boolean
           }
+      issue_payment_grant: {
+        Args: {
+          p_credits: number
+          p_environment: string
+          p_issued_at: string
+          p_payment_intent_id?: string
+          p_payment_key: string
+          p_period_end?: string
+          p_period_start?: string
+          p_price_id: string
+          p_user_id: string
+        }
+        Returns: boolean
+      }
       mask_email: { Args: { p_email: string }; Returns: string }
+      reconcile_credit_refund: {
+        Args: {
+          p_environment: string
+          p_fraction: number
+          p_payment_intent_id: string
+          p_refund_id: string
+        }
+        Returns: undefined
+      }
       record_failed_login: {
         Args: { p_email: string; p_ip: unknown; p_user_agent?: string }
         Returns: undefined
+      }
+      refresh_credit_account: { Args: { p_user_id: string }; Returns: Json }
+      release_credit_reservation: {
+        Args: { p_hold_id: string; p_user_id: string }
+        Returns: undefined
+      }
+      reserve_ai_credits: {
+        Args: { p_amount: number; p_ttl_seconds?: number; p_user_id: string }
+        Returns: Json
       }
       reset_monthly_ai_requests: { Args: never; Returns: undefined }
       throttle_ip: {

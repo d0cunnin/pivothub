@@ -1,8 +1,9 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import { guard, corsHeaders, deductCreditsOnSuccess, logRequest } from "../_shared/guard.ts";
 import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
 import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts";
 
-Deno.serve(async (req) => {
+Deno.serve(withCreditRequest(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -601,4 +602,4 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-});
+}));

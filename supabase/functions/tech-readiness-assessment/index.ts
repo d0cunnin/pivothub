@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0';
@@ -10,7 +11,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -295,7 +296,7 @@ OUTPUT FORMAT (JSON only, no additional text):
       console.error('Error logging tool usage:', logError);
     }
 
-    try { await deductCreditsOnSuccess(supabaseClient, user.id, 'tech-readiness-assessment', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabaseClient, user.id, 'tech-readiness-assessment', 2);
 
     return new Response(
       JSON.stringify({ analysis }),
@@ -317,4 +318,4 @@ OUTPUT FORMAT (JSON only, no additional text):
       }
     );
   }
-});
+}));

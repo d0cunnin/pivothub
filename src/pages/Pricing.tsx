@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
 import { Check, Star, Coins, Zap, AlertCircle } from "lucide-react";
+import { useUsage } from "@/contexts/UsageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -18,6 +19,7 @@ import heroImage from "@/assets/hero-image.jpg";
 
 const Pricing = () => {
   const { user, subscribed, refreshSubscription } = useAuth();
+  const {refreshUsage}=useUsage();
   const [paymentPriceId, setPaymentPriceId] = useState<string | null>(null);
   const [paymentResult, setPaymentResult] = useState("");
   const { toast } = useToast();
@@ -49,12 +51,12 @@ const Pricing = () => {
           setPaymentResult(data.credits > 0
             ? data.environment === 'sandbox' ? `Test purchase confirmed: ${data.credits} Tool Credits recorded. Your live balance is unchanged.` : `Payment confirmed. ${data.credits} Tool Credits have been added to your account.`
             : 'Your payment is awaiting confirmation. Tool Credits will be added once payment is confirmed.');
-          await refreshSubscription();
+          await refreshSubscription();await refreshUsage();
         }
       } catch (e) { if (!cancelled) setPaymentResult(e instanceof Error ? e.message : 'Unable to confirm payment.'); }
     }
-    confirmPayment();
-    return () => { cancelled = true; };
+    confirmPayment();const retry=window.setInterval(confirmPayment,5000);
+    return () => { cancelled = true;window.clearInterval(retry); };
   }, [user?.id]);
 
   const handlePurchaseCredits = (credits: number) => {
@@ -227,7 +229,7 @@ const Pricing = () => {
               Running low? Add an extra credit pack anytime to keep using PivotHub tools.
             </p>
             <p className="text-base text-muted-foreground max-w-3xl mx-auto">
-              Extra credits are added immediately to your account and can be used within your current billing month.
+              Extra credits are added after payment confirmation to your account and can be used for three months after issuance.
             </p>
           </div>
 
@@ -264,11 +266,11 @@ const Pricing = () => {
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Added instantly to your account
+                    Added after payment confirmation
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Valid for current billing month
+                    Valid for three months after issuance
                   </p>
                 </div>
                 <Button
@@ -308,11 +310,11 @@ const Pricing = () => {
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Added instantly to your account
+                    Added after payment confirmation
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Valid for current billing month
+                    Valid for three months after issuance
                   </p>
                 </div>
                 <Button
@@ -347,11 +349,11 @@ const Pricing = () => {
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Added instantly to your account
+                    Added after payment confirmation
                   </p>
                   <p className="flex items-center">
                     <Check className="h-4 w-4 text-green-500 mr-2" />
-                    Valid for current billing month
+                    Valid for three months after issuance
                   </p>
                 </div>
                 <Button
@@ -368,7 +370,7 @@ const Pricing = () => {
 
           <div className="text-center mt-8">
             <p className="text-base text-muted-foreground">
-              💡 <strong>Note:</strong> Extra credits are only available for paid subscribers and expire at the end of your billing month. {!user && "Sign in to purchase credits."}
+              💡 <strong>Note:</strong> Extra credits are only available for paid subscribers and expire three months after issuance. {!user && "Sign in to purchase credits."}
             </p>
           </div>
         </div>
@@ -411,14 +413,14 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
                   <p className="text-muted-foreground text-sm">
-                    <strong>Paid plans:</strong> On your billing anniversary each month. <strong>Free plan:</strong> On your signup anniversary each month.
+                    <strong>Paid plans:</strong> Credits are issued after each paid monthly renewal and expire three months later; unused valid credits roll over. <strong>Free plan:</strong> On your signup anniversary each month.
                   </p>
                 </div>
                 
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Can I switch plans?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Yes! You can upgrade, downgrade, or switch plans anytime. Manage billing and cancellation in Account Settings. Contact support for plan changes; do not start a second subscription.
+                    Yes! You can upgrade, downgrade, or switch plans anytime. Manage billing and cancellation in Account Settings. Upgrades take effect after the prorated payment succeeds; downgrades take effect at renewal. Valid credits remain available until their expiry.
                   </p>
                 </div>
               </div>

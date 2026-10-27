@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
@@ -21,7 +22,7 @@ const businessMentorSchema = z.object({
 
 
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -325,7 +326,7 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
       requestDurationMs: Date.now() - startTime
     });
 
-    try { await deductCreditsOnSuccess(guardResult.supabase, guardResult.userId!, 'business-mentor', 1); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(guardResult.supabase, guardResult.userId!, 'business-mentor', 1);
     
     return new Response(JSON.stringify({ 
       response: sanitizedResponse 
@@ -364,4 +365,4 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-});
+}));

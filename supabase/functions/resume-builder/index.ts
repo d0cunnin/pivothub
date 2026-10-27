@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateJson, systemUser } from '../_shared/aiGenerate.ts';
@@ -23,7 +24,7 @@ interface ResumeBuilderRequest {
   tone?: 'professional' | 'modern' | 'executive';
 }
 
-Deno.serve(async (req) => {
+Deno.serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
@@ -148,7 +149,7 @@ Return ONLY the JSON object — no preamble, no markdown fences.`;
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    try { await deductCreditsOnSuccess(supabase, userId, 'resume-builder', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabase, userId, 'resume-builder', 5);
     return new Response(JSON.stringify({
       resume,
       contact: {
@@ -168,4 +169,4 @@ Return ONLY the JSON object — no preamble, no markdown fences.`;
       error: error instanceof Error ? error.message : 'Unexpected error',
     }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
-});
+}));
