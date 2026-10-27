@@ -50,10 +50,10 @@ const FAQ = () => {
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="text-left">
-                    What is Explore Mode?
+                    What is the Free plan?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month based on your signup anniversary date. For example, if you sign up on January 15th, your credits reset on the 15th of every month. Unused credits do NOT roll over—they reset to 5 each month. No credit card required. Perfect for testing tools or occasional use.
+                    The Free plan is our <strong>free forever</strong> plan that gives you 5 credits every month based on your signup anniversary date. For example, if you sign up on January 15th, your credits reset on the 15th of every month. Unused credits do NOT roll over—they reset to 5 each month. No credit card required. Perfect for testing tools or occasional use.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -64,12 +64,12 @@ const FAQ = () => {
                   <AccordionContent className="text-muted-foreground">
                     <p className="mb-3">Choose based on how often you'll use our AI-powered tools:</p>
                     <ul className="list-disc pl-6 space-y-2 mb-3">
-                      <li><strong>Explore Mode (Free):</strong> 5 credits/month — perfect for trying tools before committing</li>
+                      <li><strong>Free plan:</strong> 5 credits/month — perfect for trying tools before committing</li>
                       <li><strong>Starter ($12/month):</strong> 40 credits/month — great for occasional use</li>
                       <li><strong>Pro ($24/month):</strong> 100 credits/month — ideal for regular users</li>
                       <li><strong>All-Access ($49/month):</strong> 250 credits/month — best value for power users</li>
                     </ul>
-                    <p className="text-sm"><strong>Credit costs:</strong> Chatbots use 1 credit per message, assessments use 2 credits, and complex tools (business plans, teaching materials) use 3-5 credits. Start with Explore Mode to test tools risk-free!</p>
+                    <p className="text-sm"><strong>Credit costs:</strong> Chatbots use 1 credit per message, assessments use 2 credits, and complex tools (business plans, teaching materials) use 3-5 credits. Start with Free plan to test tools risk-free!</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -81,10 +81,10 @@ const FAQ = () => {
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="item-3">
                   <AccordionTrigger className="text-left">
-                    What are AI requests?
+                    What are credits?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Each tool uses a certain number of credits based on complexity: High-cost tools (like teaching materials) use 5 credits, medium-cost tools (like resumes) use 2 credits, and chatbots use 1 credit per message. All other tools use 2 or more credits. View tool costs before using them.
+                    Credits are how you use PivotHub's tools. Each tool uses a set number of credits based on how much AI work it does: chatbots use 1 credit per message, most tools use 2-5 credits, and the large blueprint tools use more (Deploy It 40, Create It 70). Credits are only used when your results are delivered.
                     <p className="text-sm mt-3">
                       📊 <strong>Want to see the full breakdown?</strong> Check out "How many credits does each tool cost?" below for a complete list.
                     </p>
@@ -96,7 +96,7 @@ const FAQ = () => {
                     When do my credits reset?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    <strong>Paid plans:</strong> Credits reset on the same calendar day each month (your billing anniversary). For example, if you subscribed on January 31st, your credits reset on the 31st (or last day) of every month. <strong>Explore Mode:</strong> Credits reset based on your signup date. If you signed up on the 15th, credits reset on the 15th of every month.
+                    <strong>Paid plans:</strong> Credits reset on the same calendar day each month (your billing anniversary). For example, if you subscribed on January 31st, your credits reset on the 31st (or last day) of every month. <strong>Free plan:</strong> Credits reset based on your signup date. If you signed up on the 15th, credits reset on the 15th of every month.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -105,7 +105,7 @@ const FAQ = () => {
                     How does credit rollover work?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    <strong>Paid plans:</strong> Unused credits roll over month-to-month, but rollover is capped at <strong>2× your monthly credit allotment</strong>. For example, with 50 credits/month, you can store up to 100 credits maximum. If you have 90 credits when your plan renews, you'll receive only 10 credits (not the full 50) to stay at the 100 credit cap. <strong>Explore Mode:</strong> No rollover—credits reset to 5 each month.
+                    <strong>Paid plans:</strong> Unused credits roll over month-to-month, but rollover is capped at <strong>2× your monthly credit allotment</strong>. For example, on the Starter plan (40 credits/month) you can hold up to 80 credits. If you have 70 credits when your plan renews, you'll receive only 10 credits (not the full 40) to stay at the 80-credit cap. <strong>Free plan:</strong> No rollover—credits reset to 5 each month.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -123,7 +123,7 @@ const FAQ = () => {
                       <div className="mt-6 p-4 bg-accent/10 rounded-lg border border-accent/20">
                         <h4 className="font-semibold mb-2">💡 Smart Credit Tips:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
-                          <li>• <strong>Explore Mode users:</strong> Start with chatbots (1 credit per message) or assessments (2 credits) to maximize your 5 monthly credits</li>
+                          <li>• <strong>Free plan users:</strong> Start with chatbots (1 credit per message) or assessments (2 credits) to maximize your 5 monthly credits</li>
                           <li>• <strong>Paid users:</strong> Take advantage of rollover—unused credits carry over (up to 2× your monthly limit)</li>
                           <li>• <strong>High-value tools:</strong> Save Business Plan Generator (4 credits) and Teaching Materials (5 credits) for when you're ready to create final deliverables</li>
                           <li>• <strong>Chatbots:</strong> Use Career Advisor and Business Mentor freely—they're only 1 credit per message</li>
@@ -139,14 +139,14 @@ const FAQ = () => {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     <p className="mb-3">
-                      Earn It (Side Income Blueprint) is included in <strong>all paid subscription tiers</strong> and available in Explore Mode! It uses <strong>3 credits</strong>, which covers the assessment and your full
+                      Earn It (Side Income Blueprint) is included in <strong>all paid subscription tiers</strong> and available on the Free plan! It uses <strong>3 credits</strong>, which covers the assessment and your full
                       personalized blueprint. Credits are only used once your blueprint is delivered.
                     </p>
                     <p className="mb-3">
                       <strong>Available with:</strong>
                     </p>
                     <ul className="list-disc pl-6 space-y-1 mb-3">
-                      <li><strong>Explore Mode (Free):</strong> 5 credits/month - perfect for trying Earn It</li>
+                      <li><strong>Free plan:</strong> 5 credits/month - perfect for trying Earn It</li>
                       <li><strong>Paid Plans:</strong> 40-250 credits/month - use anytime</li>
                     </ul>
                     <p>
@@ -216,7 +216,7 @@ const FAQ = () => {
                     What happens if my payment fails?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    If a payment fails, you enter a <strong>7-day grace period</strong> during which Stripe automatically retries charging your card (on Day 2 and Day 5). If payment succeeds during this time, your subscription continues normally with no disruption. If all retry attempts fail after 7 days, you'll be downgraded to Explore Mode with <strong>5 credits</strong>, and your new anniversary date will be the date of the downgrade.
+                    If a payment fails, you enter a <strong>7-day grace period</strong> during which Stripe automatically retries charging your card (on Day 2 and Day 5). If payment succeeds during this time, your subscription continues normally with no disruption. If all retry attempts fail after 7 days, you'll be moved to the Free plan with <strong>5 credits</strong>, and your new anniversary date will be the date of the downgrade.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -225,7 +225,7 @@ const FAQ = () => {
                     Can I cancel anytime?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Absolutely! Cancel your subscription anytime from your account settings. You'll continue to have full access until the end of your current billing period, then automatically move to Explore Mode.
+                    Absolutely! Cancel your subscription anytime from your account settings. You'll continue to have full access until the end of your current billing period, then automatically move to Free plan.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -234,7 +234,7 @@ const FAQ = () => {
                     What happens to my credits when I cancel?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    When you cancel a paid subscription, you retain full access until the end of your current billing period. At the end of the period, you'll be downgraded to Explore Mode with <strong>5 credits</strong>. Your new Explore Mode anniversary will be set to 30 days after your billing cycle ends. For example, if your billing cycle ends on March 15th, you'll get 5 credits immediately and they'll reset on April 15th, May 15th, June 15th, etc.
+                    When you cancel a paid subscription, you retain full access until the end of your current billing period. At the end of the period, you'll be moved to the Free plan with <strong>5 credits</strong>. Your new Free plan renewal date will be set to 30 days after your billing cycle ends. For example, if your billing cycle ends on March 15th, you'll get 5 credits immediately and they'll reset on April 15th, May 15th, June 15th, etc.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -243,7 +243,7 @@ const FAQ = () => {
                     Do you offer refunds?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final. Start with Explore Mode (free forever) to try our tools first!
+                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final. Start with the Free plan (free forever) to try our tools first!
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

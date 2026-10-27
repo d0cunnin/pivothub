@@ -292,7 +292,7 @@ export const Header = () => {
                           )}
                         </>
                       ) : (
-                        <span className="font-medium">Explore Mode</span>
+                        <span className="font-medium">Free plan</span>
                       )}
                     </div>
                   </div>

@@ -205,7 +205,7 @@ const Admin = () => {
       ...filteredUsers.map(user => [
         user.email,
         user.display_name || "",
-        user.subscribed ? "Active" : "Explore Mode",
+        user.subscribed ? "Active" : "Free plan",
         user.subscription_tier || "",
         user.subscription_package || "None",
         user.subscription_end || ""

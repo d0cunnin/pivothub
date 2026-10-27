@@ -200,7 +200,7 @@ export const AccountSettings = () => {
             <div className="space-y-3">
               <Label className="text-base font-semibold">Purchase Extra Credits</Label>
               <div className="text-sm text-muted-foreground mb-3">
-                Need more AI requests this month? Purchase extra credits that roll over.
+                Need more credits this month? Add an extra credit pack.
               </div>
               <div className="grid gap-3">
                 <Button

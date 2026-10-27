@@ -147,7 +147,7 @@ const Index = () => {
     {
       question: "Is PivotHub really free?",
       answer:
-        "Yes! We offer free career assessments and basic tools with Explore Mode. Premium features are available for users who need advanced capabilities.",
+        "Yes! We offer free career assessments and basic tools on the Free plan. Premium features are available for users who need advanced capabilities.",
     },
     {
       question: "How quickly can I see results?",

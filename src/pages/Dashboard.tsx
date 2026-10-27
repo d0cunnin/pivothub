@@ -199,7 +199,7 @@ const Dashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold capitalize">
-                    {subscribed ? getPackageDisplayName(subscriptionPackage) : 'Explore Mode'}
+                    {subscribed ? getPackageDisplayName(subscriptionPackage) : 'Free plan'}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {subscribed && subscriptionEnd

@@ -30,7 +30,7 @@ export const TrialBanner: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 text-primary">
               <Star className="w-5 h-5 fill-current" />
-              <span className="font-semibold">Welcome to Explore Mode!</span>
+              <span className="font-semibold">You're on the Free plan</span>
             </div>
             <span className="text-sm text-muted-foreground">
               Get 5 free credits every month

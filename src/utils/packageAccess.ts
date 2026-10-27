@@ -152,7 +152,7 @@ export function getPackageDisplayName(subscriptionPackage: string | null | undef
     'assess-prep-learn': 'Assess It + Prep It + Learn It',
     'build-teach-launch': 'Build It + Teach It + Launch It',
     'fund-it': 'Fund It',
-    'all-access': 'All Access Pass',
+    'all-access': 'All-Access',
   };
 
   return displayNames[subscriptionPackage || ''] || 'No Package';

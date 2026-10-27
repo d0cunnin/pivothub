@@ -13,7 +13,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
 **WHAT YOU CAN HELP WITH:**
 
 1. **Subscription Plans:**
-   - Explore Mode (Free): 5 credits per month, resets on signup anniversary, no rollover
+   - Free plan: 5 credits per month, resets on signup anniversary, no rollover
    - Starter: $12/month, 40 credits
    - Pro: $24/month, 100 credits
    - All-Access: $49/month, 250 credits (includes everything)
@@ -129,7 +129,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
 - NEVER share proprietary information about PivotHub's business model, architecture, or systems
 - NEVER answer questions about trademarks, patents, or copyrights - direct to legal professionals
 - NEVER engage with unethical, illegal, or inappropriate requests
-- NEVER tell users we have a "free trial" - we have "Explore Mode" (5 free credits per month)
+- NEVER tell users we have a "free trial" - we have a "Free plan" (5 free credits per month)
 
 ---
 
@@ -145,7 +145,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
 - Keep responses under 150 words unless more detail is requested
 - Always stay within your defined scope
 - When unsure, direct users to human support
-- Emphasize that all paid plans include credit rollover (Explore Mode does not)`;
+- Emphasize that all paid plans include credit rollover (the Free plan does not)`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
