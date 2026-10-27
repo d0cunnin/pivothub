@@ -30,7 +30,7 @@ const FAQ_RESPONSES: Record<string, string> = {
     "To manage your subscription, go to Settings (top right). There you can:\n• Change your plan\n• Cancel your subscription\n• Update your card or see past payments (Billing History & Payment Method)\n\nIf you cancel, you keep your plan until the end of the month you already paid for. Need help? Contact support@pivothub.io or call 269.998.4203",
   
   "Where can I view pricing and plans?": 
-    "View our pricing at /pricing or:\n\n• Free plan: $0 - 5 credits/month\n• Starter: $12/mo - 40 credits\n• Pro: $24/mo - 100 credits\n• All-Access: $49/mo - 250 credits\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nOn paid plans, unused credits carry over for 3 months.",
+    "View our pricing at /pricing or:\n\n• Free plan: $0 - 5 credits/month\n• Starter: $12/mo - 40 credits\n• Pro: $24/mo - 100 credits\n• All-Access: $35/mo - 250 credits\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nOn paid plans, unused credits carry over for 3 months.",
   
   "How do I contact support?": 
     "Reach our support team:\n\n📧 Email: support@pivothub.io\n📞 Phone: 269.998.4203\n📍 Address: PO Box 2025, Kalamazoo, MI 49003\n🕒 Hours: Mon-Fri, 9 AM - 6 PM EST\n\nWe typically respond within 24 hours on business days.",
@@ -40,7 +40,7 @@ const FAQ_RESPONSES: Record<string, string> = {
 
   // Additional common questions
   "how do credits work": 
-    "Credits are used for AI-powered tools:\n\n• Most tools cost 1-5 credits (the big blueprint tools cost more: Create It 70, Deploy It 40)\n• Paid plans include monthly credits\n• Credits are only used when you get your results\n• Paid credits last 3 months, so unused ones carry over\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $49/mo (250)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nFree plan: 5 free credits/month (unused ones don't carry over)",
+    "Credits are used for AI-powered tools:\n\n• Most tools cost 1-5 credits (the big blueprint tools cost more: Create It 70, Deploy It 40)\n• Paid plans include monthly credits\n• Credits are only used when you get your results\n• Paid credits last 3 months, so unused ones carry over\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $35/mo (250)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nFree plan: 5 free credits/month (unused ones don't carry over)",
 
   "what tools are available": 
     "PivotHub offers 8 tool categories:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant finding\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Event tools\n\nVisit /pricing for full details!",

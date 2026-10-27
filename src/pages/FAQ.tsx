@@ -67,7 +67,7 @@ const FAQ = () => {
                       <li><strong>Free plan:</strong> 5 credits/month — perfect for trying tools before committing</li>
                       <li><strong>Starter ($12/month):</strong> 40 credits/month — great for occasional use</li>
                       <li><strong>Pro ($24/month):</strong> 100 credits/month — ideal for regular users</li>
-                      <li><strong>All-Access ($49/month):</strong> 250 credits/month — best value for power users</li>
+                      <li><strong>All-Access ($35/month):</strong> 250 credits/month — best value for power users</li>
                     </ul>
                     <p className="text-sm"><strong>Credit costs:</strong> Chatbots use 1 credit per message, assessments use 2 credits, and complex tools (business plans, teaching materials) use 3-5 credits. Start with Free plan to test tools risk-free!</p>
                   </AccordionContent>

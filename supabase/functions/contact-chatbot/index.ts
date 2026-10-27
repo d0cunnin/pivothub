@@ -16,7 +16,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    - Free plan: 5 credits per month on the day they signed up; unused free credits do not carry over
    - Starter: $12/month, 40 credits
    - Pro: $24/month, 100 credits
-   - All-Access: $49/month, 250 credits (includes everything)
+   - All-Access: $35/month, 250 credits (includes everything)
    - Paid plan credits are added each time the monthly payment goes through and last 3 months, so unused credits carry over until then
    - Extra credit packs: $5 for 25, $10 for 70, $20 for 150 (paid plans only, one-time payment, credits last 3 months)
    - Credits are only used when a tool delivers results

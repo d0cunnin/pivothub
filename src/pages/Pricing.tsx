@@ -122,7 +122,7 @@ const Pricing = () => {
     {
       name: "All-Access",
       tagline: "Everything, for power users",
-      price: "$49",
+      price: "$35",
       credits: 250,
       tier: "all-access",
     },
