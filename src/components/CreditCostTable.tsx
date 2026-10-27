@@ -56,8 +56,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Grant Resources (External Links)', credits: 0, note: 'Free' },
   ],
   'Earn It (Side Income)': [
-    { name: 'Side Income Assessment', credits: 2 },
-    { name: 'Side Income Blueprint Report', credits: 0, note: 'Included after assessment' },
+    { name: 'Side Income Blueprint', credits: 3, note: 'Assessment + full plan with PDF' },
   ],
   'Create It (Platform Blueprint)': [
     { name: 'AI Platform Blueprint', credits: 70, note: 'Full app/platform architecture plan' },

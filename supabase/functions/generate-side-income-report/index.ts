@@ -154,9 +154,9 @@ serve(async (req) => {
     console.log('✅ User authenticated:', user.id);
 
     
-    // Check user's credit balance before generating report (2 credits).
+    // Check user's credit balance before generating report (3 credits).
     // Credits are deducted only after the report is successfully generated.
-    await assertCredits(user.id, 2);
+    await assertCredits(user.id, 3);
 
     // Validate input with zod - now accepts raw assessment data
     const requestSchema = z.object({
@@ -510,7 +510,7 @@ For this request, return ONLY a JSON object containing exactly these top-level k
     const sanitizedReport = sanitizeObject(reportContent);
 
     // Return report directly without saving to database
-    try { await deductCreditsOnSuccess(supabase, user.id, 'generate-side-income-report', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    try { await deductCreditsOnSuccess(supabase, user.id, 'generate-side-income-report', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
     return new Response(
       JSON.stringify({ report: sanitizedReport }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

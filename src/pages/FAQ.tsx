@@ -139,21 +139,19 @@ const FAQ = () => {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     <p className="mb-3">
-                      Earn It (Side Income Blueprint) is included in <strong>all paid subscription tiers</strong> and available in Explore Mode! The Side Income Assessment 
-                      uses <strong>2 credits</strong> to analyze your skills, experience, and goals. 
-                      After completing the assessment, your personalized blueprint report is generated 
-                      <strong> for free</strong>.
+                      Earn It (Side Income Blueprint) is included in <strong>all paid subscription tiers</strong> and available in Explore Mode! It uses <strong>3 credits</strong>, which covers the assessment and your full
+                      personalized blueprint. Credits are only used once your blueprint is delivered.
                     </p>
                     <p className="mb-3">
                       <strong>Available with:</strong>
                     </p>
                     <ul className="list-disc pl-6 space-y-1 mb-3">
                       <li><strong>Explore Mode (Free):</strong> 5 credits/month - perfect for trying Earn It</li>
-                      <li><strong>Paid Plans:</strong> 60-125 credits/month - use anytime</li>
+                      <li><strong>Paid Plans:</strong> 40-250 credits/month - use anytime</li>
                     </ul>
                     <p>
                       You can take the assessment multiple times to refine your side income strategy 
-                      as your situation evolves (2 credits per assessment).
+                      as your situation evolves (3 credits each time).
                     </p>
                   </AccordionContent>
                 </AccordionItem>

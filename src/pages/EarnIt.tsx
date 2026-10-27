@@ -78,10 +78,10 @@ function SideIncomeBlueprintInner() {
       navigate('/auth?redirect=/earnit');
       return;
     }
-    if (typeof remainingRequests === 'number' && remainingRequests < 2) {
+    if (typeof remainingRequests === 'number' && remainingRequests < 3) {
       toast({
         title: "Not enough credits",
-        description: `This blueprint uses 2 Tool Credits. You have ${remainingRequests} remaining.`,
+        description: `This blueprint uses 3 credits. You have ${remainingRequests} remaining.`,
         variant: "destructive",
       });
       navigate('/pricing');
@@ -123,7 +123,7 @@ function SideIncomeBlueprintInner() {
     );
   }
 
-  const startNote = "2 credits · About 10 minutes · Free account required";
+  const startNote = "3 credits · About 10 minutes · Free account required";
 
   const benefits = [
     {
@@ -150,14 +150,14 @@ function SideIncomeBlueprintInner() {
 
   const steps = [
     { title: "Answer the questions", text: "About 10 minutes. Tell us your available time, skills, income goals, and budget." },
-    { title: "Get your plan", text: "Your plan is ready right away. It uses 2 credits, charged only once your plan is delivered." },
+    { title: "Get your plan", text: "Your plan is ready right away. It uses 3 credits, charged only once your plan is delivered." },
     { title: "Download and start", text: "Save your plan as a PDF. PivotHub does not store it, so keep your copy." },
   ];
 
   const faqs = [
     {
       q: "How much does it cost?",
-      a: "2 credits. Every free account gets 5 credits each month. Credits are only used once your plan is delivered. If something goes wrong, you are not charged.",
+      a: "3 credits. Every free account gets 5 credits each month. Credits are only used once your plan is delivered. If something goes wrong, you are not charged.",
     },
     {
       q: "How long does it take?",

@@ -304,7 +304,7 @@ export default function SideIncomeReport({ assessmentId }: SideIncomeReportProps
       if (/insufficient credits/i.test(msg) || /limit_exceeded/i.test(msg)) {
         toast({
           title: "Not enough credits",
-          description: "This blueprint uses 2 Tool Credits. Upgrade your plan to continue.",
+          description: "This blueprint uses 3 credits. Upgrade your plan to continue.",
           variant: "destructive",
         });
         window.location.href = '/pricing';

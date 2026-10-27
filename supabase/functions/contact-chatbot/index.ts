@@ -33,58 +33,57 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    - Career Assessment (2 credits)
    - Skills Assessment (2 credits)
    - Personality Assessment (2 credits)
-   - Side Income Assessment (2 credits)
+   - Tech Readiness Assessment (2 credits)
 
    **Prep It:**
-   - Resume Analyzer (2 credits)
-   - Interview Questions Coach (2 credits)
-   - Interview Feedback Coach (2 credits)
-   - Cover Letter Generator (2 credits)
+   - Career Advisor Chatbot (1 credit per message)
+   - Interview Practice Session (3 credits - questions plus feedback on every answer)
+   - Resume & Cover Letter Coach (2 credits)
+   - Resume Builder (5 credits)
 
-   **Learn It:**
-   - Skills development courses (free - no credits required)
-   - Mini-courses in various topics
-   - Learning dashboard with progress tracking
+   **Learn It (tech & AI tools):**
+   - Prompt It (1 credit), Code It (1 credit), Study It (2 credits)
+   - Deploy It - AI agent blueprint (40 credits)
+
+   **Create It:**
+   - AI Platform Blueprint (70 credits)
 
    **Build It:**
    - Business Idea Generator (2 credits)
    - Business Name Checker (2 credits)
+   - Business Foundation Builder (2 credits)
    - Business Plan Generator (4 credits)
-   - Logo Generator (2 credits)
-   - Pitch Deck Generator (3 credits)
    - Marketing Strategy Generator (3 credits)
-   - Legal Documents Generator (3 credits)
-   - Social Media Content Generator (2 credits)
-   - Business Foundation Builder (3 credits)
+   - Pitch Deck Generator (3 credits)
+   - Logo Generator (2 credits)
+   - Biography Generator (3 credits)
+   - Legal Documents Generator (2 credits)
    - Startup Checklist (2 credits)
+   - Social Media Content Generator (2 credits)
    - Business Mentor Chatbot (1 credit per message)
+   - Business Resources Finder (1 credit)
 
    **Teach It:**
    - Teaching Materials Generator (5 credits)
-   - Course creation tools
-   - Educational content generator
+   - Lesson Plan Generator (5 credits), Quiz Generator (4 credits), Rubric Builder (3 credits)
 
    **Launch It:**
    - Launch Strategy Generator (3 credits)
-   - Startup resources and tools
-   - Business launch planning
 
    **Fund It:**
-   - Grant Finder (2 credits)
-   - Grant Content Generator (4 credits)
-   - Grant Resources Finder (2 credits)
+   - LOI & Grant Proposal Generator (5 credits)
+   - Grant Resources - external links (free)
 
    **Earn It:**
-   - Side Income Blueprint Assessment & Report ($9.99 one-time)
-   - Personalized income opportunity analysis
+   - Side Income Blueprint (3 credits) - assessment plus a personalized plan with income ideas, a 90-day plan and PDF
 
-   **Schedule It:**
-   - Appointment scheduling tools (2-4 credits)
-   - Time management features
-
-   **Host It:**
-   - Event hosting tools (2-4 credits)
-   - Online class management
+   **Schedule It:** Schedule Builder (5 credits)
+   **Host It:** Event Planning Generator (4 credits)
+   **Speak It:** Speaker or Podcast Launch Plan (3 credits)
+   **Garden It:** Garden Plan Generator (3 credits)
+   **Act It:** Story Concept Generator (3 credits)
+   **Develop It:** Program Builder (4), Grant Readiness (3), Community Assessment (3), Stakeholder Planner (3), Community Development Coach (1 per message)
+   **Contract It:** Capability Statement (4 credits), Contract Readiness Assessment (3 credits)
 
 4. **Technical Support:**
    - Navigation help
