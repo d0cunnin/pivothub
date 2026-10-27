@@ -29,6 +29,13 @@
       "when": 1793078174683,
       "tag": "0003_safe_account_cleanup_and_legacy_credit_retirement",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793078404371,
+      "tag": "0004_monotonic_billing_and_cumulative_refunds",
+      "breakpoints": true
     }
   ]
 }

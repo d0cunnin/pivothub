@@ -696,16 +696,22 @@ export type Database = {
         Row: {
           created_at: string
           environment: string
+          fraction: number
+          payment_intent_id: string | null
           refund_id: string
         }
         Insert: {
           created_at?: string
           environment: string
+          fraction?: number
+          payment_intent_id?: string | null
           refund_id: string
         }
         Update: {
           created_at?: string
           environment?: string
+          fraction?: number
+          payment_intent_id?: string | null
           refund_id?: string
         }
         Relationships: []
@@ -726,6 +732,7 @@ export type Database = {
           status: string
           stripe_customer_id: string
           stripe_subscription_id: string
+          sync_observed_at: string | null
           updated_at: string
           user_id: string
         }
@@ -744,6 +751,7 @@ export type Database = {
           status: string
           stripe_customer_id: string
           stripe_subscription_id: string
+          sync_observed_at?: string | null
           updated_at?: string
           user_id: string
         }
@@ -762,6 +770,7 @@ export type Database = {
           status?: string
           stripe_customer_id?: string
           stripe_subscription_id?: string
+          sync_observed_at?: string | null
           updated_at?: string
           user_id?: string
         }
