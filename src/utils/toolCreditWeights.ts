@@ -32,7 +32,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   
   // FREE TOOLS (0 credits) - No AI generation
   'contact-chatbot': 0,            // Static logic only, no AI
-  'business-resources': 0,         // Google Places API only, no AI
+  'business-resources': 1,         // Google Places + AI guidance
   
   // LOW COST TOOLS (1 credit) - Chatbot interactions only
   'career-advisor': 1,             // Chatbot, ~1,500 tokens per message

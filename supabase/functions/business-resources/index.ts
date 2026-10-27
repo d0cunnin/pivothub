@@ -2,7 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
-import { guard } from "../_shared/guard.ts";
+import { guard, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
@@ -25,9 +25,14 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  // Requires a signed-in user and rate-limits requests, since this calls the AI.
+  // Requires a signed-in user, rate-limits requests, and checks the 1-credit
+  // balance (charged only when the AI guidance is delivered).
+  let userId = '';
+  let guardClient: any = null;
   try {
-    await guard(req, { endpoint: 'business-resources', cost: 0, requireAuth: true, maxReqsPerMinute: 10 });
+    const g = await guard(req, { endpoint: 'business-resources', cost: 1, requireAuth: true, maxReqsPerMinute: 10 });
+    userId = g.userId;
+    guardClient = g.supabase;
   } catch (err) {
     if (err instanceof Response) return err;
     console.error('[business-resources] Guard error:', err);
@@ -284,6 +289,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
       );
       
       console.log('Successfully enhanced results with AI insights');
+      try { await deductCreditsOnSuccess(guardClient, userId, 'business-resources', 1); } catch (e) { console.error('[CREDITS] deduction failed', e); }
       return new Response(
         JSON.stringify({ resources: enhancedResources }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }

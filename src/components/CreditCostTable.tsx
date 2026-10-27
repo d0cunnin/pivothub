@@ -21,7 +21,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Startup Checklist', credits: 2 },
     { name: 'Social Media Content Generator', credits: 2 },
     { name: 'Business Mentor Chatbot', credits: 1, note: 'per message' },
-    { name: 'Business Resources Finder', credits: 0, note: 'Free' },
+    { name: 'Business Resources Finder', credits: 1, note: 'Includes AI guidance' },
   ],
   'Launch It (Go-to-Market)': [
     { name: 'Launch Strategy Generator', credits: 3 },
