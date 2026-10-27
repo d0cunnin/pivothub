@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://pivothub.lovable.app/sitemap.xml
+Sitemap: https://pivothub.io/sitemap.xml
 
 # Optimize crawl budget
 Crawl-delay: 1
