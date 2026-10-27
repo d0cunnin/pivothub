@@ -692,6 +692,24 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_refund_receipts: {
+        Row: {
+          created_at: string
+          environment: string
+          refund_id: string
+        }
+        Insert: {
+          created_at?: string
+          environment: string
+          refund_id: string
+        }
+        Update: {
+          created_at?: string
+          environment?: string
+          refund_id?: string
+        }
+        Relationships: []
+      }
       payment_subscriptions: {
         Row: {
           cancel_at_period_end: boolean
@@ -1518,7 +1536,30 @@ export type Database = {
             }
             Returns: boolean
           }
+      issue_payment_grant: {
+        Args: {
+          p_credits: number
+          p_environment: string
+          p_issued_at: string
+          p_payment_intent_id?: string
+          p_payment_key: string
+          p_period_end?: string
+          p_period_start?: string
+          p_price_id: string
+          p_user_id: string
+        }
+        Returns: boolean
+      }
       mask_email: { Args: { p_email: string }; Returns: string }
+      reconcile_credit_refund: {
+        Args: {
+          p_environment: string
+          p_fraction: number
+          p_payment_intent_id: string
+          p_refund_id: string
+        }
+        Returns: undefined
+      }
       record_failed_login: {
         Args: { p_email: string; p_ip: unknown; p_user_agent?: string }
         Returns: undefined

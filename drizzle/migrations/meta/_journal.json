@@ -15,6 +15,13 @@
       "when": 1793077320064,
       "tag": "0001_secure_expiring_credit_ledger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793077402640,
+      "tag": "0002_payment_confirmed_expiring_grants",
+      "breakpoints": true
     }
   ]
 }
