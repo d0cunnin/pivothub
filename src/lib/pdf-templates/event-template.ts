@@ -1,5 +1,5 @@
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import type jsPDF from 'jspdf';
+import { PdfWriter, asText, toList, pdfSafe, ACCENT, BODY, HEADING, MUTED, DIVIDER } from '../pdfWriter';
 
 interface PlatformRecommendation {
   name: string;
@@ -44,6 +44,49 @@ interface EventPlanData {
   sponsorshipPacket?: SponsorshipPacket;
 }
 
+/** "2026-11-01" -> "November 1, 2026"; anything else is returned as-is. */
+function formatEventDate(date: string): string {
+  const m = date.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return date;
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+    .toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+function hexToRgb(hex: string): [number, number, number] | null {
+  const m = asText(hex).replace('#', '').match(/^([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+  return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
+}
+
+/** "week1-2" -> "Week 1-2", "event-week" -> "Event Week", "post-event" -> "Post-Event". */
+function weekLabel(key: string): string {
+  const week = key.match(/^week\s*[-_]?\s*(.+)$/i);
+  if (week) return `Week ${week[1]}`;
+  if (/^event[-_\s]?week$/i.test(key)) return 'Event Week';
+  return key.split('-').map((part) => capitalize(part.replace(/_/g, ' '))).join('-');
+}
+
+/** A to-do line with an empty checkbox, wrapped under the text. */
+function checklistItem(w: PdfWriter, text: string) {
+  const size = 10;
+  const lineHeight = size * 0.5;
+  const textX = w.margin + 11;
+  w.setStyle(size, BODY);
+  const lines: string[] = w.doc.splitTextToSize(pdfSafe(text), w.contentWidth - 11);
+  w.ensureSpace(lineHeight * Math.min(2, lines.length));
+  w.doc.setDrawColor(...MUTED);
+  w.doc.setLineWidth(0.3);
+  w.doc.rect(w.margin + 4, w.y - 3.2, 3.6, 3.6, 'S');
+  w.setStyle(size, BODY);
+  lines.forEach((line, i) => {
+    if (i > 0) w.ensureSpace(lineHeight);
+    w.doc.text(line, textX, w.y);
+    w.y += lineHeight;
+  });
+  w.y += 2;
+}
+
 export function generateEventPlanPDF(
   eventPlan: EventPlanData,
   eventCategory: string,
@@ -51,298 +94,124 @@ export function generateEventPlanPDF(
   eventName?: string,
   eventDate?: string
 ): jsPDF {
-  const doc = new jsPDF();
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const margin = 15;
-  const maxWidth = pageWidth - 2 * margin;
-  let yPos = margin;
+  const w = new PdfWriter();
+  const subtitle = [capitalize(asText(eventCategory)), capitalize(asText(eventFormat)), eventDate ? formatEventDate(eventDate) : '']
+    .filter(Boolean)
+    .join('  |  ');
+  w.header(asText(eventName) || 'Your Event Plan', subtitle || 'Your event plan');
 
-  // Helper to check page break
-  const checkPageBreak = (spaceNeeded: number) => {
-    if (yPos + spaceNeeded > pageHeight - 20) {
-      doc.addPage();
-      yPos = margin;
-      return true;
+  const titles = toList(eventPlan.eventTitles);
+  if (titles.length) {
+    w.section('Event Title Ideas', 'Pick one, or mix and match');
+    w.bullets(titles, { numbered: true });
+    w.y += 4;
+  }
+
+  const description = asText(eventPlan.eventDescription);
+  if (description) {
+    w.section('Event Description', 'Ready to paste into your event page or flyer');
+    description.split(/\n\s*\n/).forEach((para) => w.text(para.trim(), { after: 4 }));
+    w.y += 2;
+  }
+
+  const itinerary = Array.isArray(eventPlan.eventItinerary) ? eventPlan.eventItinerary : [];
+  if (itinerary.length) {
+    w.section('Event Day Schedule');
+    const timeWidth = 26;
+    itinerary.forEach((item) => {
+      const time = asText(item?.time);
+      const activity = asText(item?.activity);
+      const duration = asText(item?.duration);
+      w.setStyle(10, HEADING, 'bold');
+      const lines: string[] = w.doc.splitTextToSize(pdfSafe(activity), w.contentWidth - timeWidth);
+      w.ensureSpace(lines.length * 5 + (duration ? 5 : 0) + 3);
+      w.setStyle(10, ACCENT, 'bold');
+      w.doc.text(pdfSafe(time), w.margin, w.y);
+      w.setStyle(10, HEADING, 'bold');
+      lines.forEach((line, i) => w.doc.text(line, w.margin + timeWidth, w.y + i * 5));
+      w.y += lines.length * 5;
+      if (duration) {
+        w.setStyle(9, MUTED);
+        w.doc.text(pdfSafe(duration), w.margin + timeWidth, w.y);
+        w.y += 5;
+      }
+      w.y += 2.5;
+    });
+    w.y += 4;
+  }
+
+  const platforms = Array.isArray(eventPlan.platformRecommendations) ? eventPlan.platformRecommendations : [];
+  if (platforms.length) {
+    w.section('Where to Host Registration', 'Platforms that fit this event');
+    platforms.forEach((platform, i) => {
+      w.subHeading(asText(platform?.name), HEADING, 12);
+      w.facts([
+        ['Best for', asText(platform?.bestFor)],
+        ['Cost', asText(platform?.pricing)],
+        ['Website', asText(platform?.url)],
+      ]);
+      const features = toList(platform?.features);
+      if (features.length) w.bullets(features, { size: 9.5 });
+      if (i < platforms.length - 1) w.y += 3;
+    });
+    w.y += 4;
+  }
+
+  const colors = Array.isArray(eventPlan.colorPalette) ? eventPlan.colorPalette : [];
+  if (colors.length) {
+    w.section('Color Palette', 'Use these on flyers, slides and signs');
+    colors.forEach((color) => {
+      w.ensureSpace(12);
+      const rgb = hexToRgb(color?.hex);
+      if (rgb) {
+        w.doc.setFillColor(...rgb);
+        w.doc.setDrawColor(...DIVIDER);
+        w.doc.roundedRect(w.margin, w.y - 5, 14, 9, 1.5, 1.5, 'FD');
+      }
+      w.setStyle(10, HEADING, 'bold');
+      w.doc.text(pdfSafe(asText(color?.name)), w.margin + 19, w.y - 0.5);
+      w.setStyle(9, MUTED);
+      w.doc.text(pdfSafe(asText(color?.hex).toUpperCase()), w.margin + 19, w.y + 3.5);
+      w.y += 12;
+    });
+    w.y += 2;
+  }
+
+  const timeline = eventPlan.marketingTimeline && typeof eventPlan.marketingTimeline === 'object'
+    ? Object.entries(eventPlan.marketingTimeline)
+    : [];
+  if (timeline.length) {
+    w.section('Marketing Timeline', 'Check off each step as you go');
+    timeline.forEach(([week, data]) => {
+      const label = weekLabel(week);
+      const phase = asText(data?.phase);
+      w.subHeading(phase ? `${label}: ${phase}` : label, ACCENT, 11);
+      toList(data?.actions).forEach((action) => checklistItem(w, action));
+      w.y += 3;
+    });
+  }
+
+  const packet = eventPlan.sponsorshipPacket;
+  if (packet && (asText(packet.introLetter) || (Array.isArray(packet.tiers) && packet.tiers.length))) {
+    w.section('Sponsorship Packet');
+    const letter = asText(packet.introLetter);
+    if (letter) {
+      w.subHeading('Letter to Potential Sponsors');
+      letter.split(/\n\s*\n/).forEach((para) => w.text(para.trim(), { after: 4 }));
+      w.y += 2;
     }
-    return false;
-  };
-
-  // Header
-  doc.setFillColor(41, 55, 72);
-  doc.rect(0, 0, pageWidth, 40, 'F');
-  
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.text(eventName || 'Event Plan', margin, 15);
-  
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text(`${eventCategory} | ${eventFormat}`, margin, 25);
-  if (eventDate) {
-    doc.text(`Event Date: ${eventDate}`, margin, 32);
-  }
-  
-  doc.setTextColor(0, 0, 0);
-  yPos = 50;
-
-  // Platform Recommendations
-  doc.setFillColor(59, 130, 246);
-  doc.rect(margin, yPos, maxWidth, 8, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Platform Recommendations', margin + 3, yPos + 5.5);
-  doc.setTextColor(0, 0, 0);
-  yPos += 12;
-
-  eventPlan.platformRecommendations.forEach((platform) => {
-    checkPageBreak(30);
-    
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${platform.name}`, margin + 3, yPos);
-    yPos += 5;
-    
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.text(`Best For: ${platform.bestFor}`, margin + 6, yPos);
-    yPos += 4;
-    doc.text(`Pricing: ${platform.pricing}`, margin + 6, yPos);
-    yPos += 4;
-    doc.text(`URL: ${platform.url}`, margin + 6, yPos);
-    yPos += 6;
-  });
-  yPos += 5;
-
-  // Event Titles
-  checkPageBreak(30);
-  doc.setFillColor(59, 130, 246);
-  doc.rect(margin, yPos, maxWidth, 8, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Event Title Options', margin + 3, yPos + 5.5);
-  doc.setTextColor(0, 0, 0);
-  yPos += 12;
-
-  eventPlan.eventTitles.forEach((title, index) => {
-    checkPageBreak(8);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`${index + 1}. ${title}`, margin + 3, yPos);
-    yPos += 6;
-  });
-  yPos += 5;
-
-  // Event Description
-  checkPageBreak(40);
-  doc.setFillColor(59, 130, 246);
-  doc.rect(margin, yPos, maxWidth, 8, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Event Description', margin + 3, yPos + 5.5);
-  doc.setTextColor(0, 0, 0);
-  yPos += 12;
-
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  const descLines = doc.splitTextToSize(eventPlan.eventDescription, maxWidth - 6);
-  descLines.forEach((line: string) => {
-    checkPageBreak(5);
-    doc.text(line, margin + 3, yPos);
-    yPos += 5;
-  });
-  yPos += 5;
-
-  // Event Itinerary (if included)
-  if (eventPlan.eventItinerary && eventPlan.eventItinerary.length > 0) {
-    checkPageBreak(40);
-    
-    doc.setFillColor(59, 130, 246);
-    doc.rect(margin, yPos, maxWidth, 8, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Event Itinerary', margin + 3, yPos + 5.5);
-    doc.setTextColor(0, 0, 0);
-    yPos += 12;
-    
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    
-    eventPlan.eventItinerary.forEach((item: any) => {
-      checkPageBreak(15);
-      
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${item.time} - ${item.activity}`, margin + 3, yPos);
-      yPos += 5;
-      
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Duration: ${item.duration}`, margin + 6, yPos);
-      doc.setTextColor(0, 0, 0);
-      yPos += 8;
-    });
-    
-    yPos += 5;
-  }
-
-  // Color Palette
-  checkPageBreak(50);
-  doc.setFillColor(59, 130, 246);
-  doc.rect(margin, yPos, maxWidth, 8, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Color Palette', margin + 3, yPos + 5.5);
-  doc.setTextColor(0, 0, 0);
-  yPos += 12;
-
-  eventPlan.colorPalette.forEach((color) => {
-    checkPageBreak(15);
-    
-    // Draw color swatch
-    const hexColor = color.hex.replace('#', '');
-    const r = parseInt(hexColor.substring(0, 2), 16);
-    const g = parseInt(hexColor.substring(2, 4), 16);
-    const b = parseInt(hexColor.substring(4, 6), 16);
-    
-    doc.setFillColor(r, g, b);
-    doc.rect(margin + 3, yPos - 4, 10, 10, 'F');
-    doc.setDrawColor(0, 0, 0);
-    doc.rect(margin + 3, yPos - 4, 10, 10, 'S');
-    
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`${color.name} (${color.hex})`, margin + 18, yPos + 2);
-    yPos += 12;
-  });
-  yPos += 5;
-
-  // Sponsorship Packet
-  if (eventPlan.sponsorshipPacket) {
-    checkPageBreak(50);
-    doc.addPage();
-    yPos = margin;
-    
-    doc.setFillColor(59, 130, 246);
-    doc.rect(margin, yPos, maxWidth, 8, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Sponsorship Packet', margin + 3, yPos + 5.5);
-    doc.setTextColor(0, 0, 0);
-    yPos += 15;
-    
-    // Intro Letter
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Letter to Potential Sponsors', margin + 3, yPos);
-    yPos += 7;
-    
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    const letterLines = doc.splitTextToSize(eventPlan.sponsorshipPacket.introLetter, maxWidth - 6);
-    letterLines.forEach((line: string) => {
-      checkPageBreak(5);
-      doc.text(line, margin + 3, yPos);
-      yPos += 5;
-    });
-    yPos += 10;
-    
-    // Sponsorship Tiers
-    checkPageBreak(30);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Sponsorship Tiers', margin + 3, yPos);
-    yPos += 10;
-    
-    eventPlan.sponsorshipPacket.tiers.forEach((tier) => {
-      checkPageBreak(40);
-      
-      // Tier header
-      doc.setFillColor(245, 245, 245);
-      doc.rect(margin, yPos, maxWidth, 8, 'F');
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${tier.name} - ${tier.amount}`, margin + 3, yPos + 5.5);
-      yPos += 10;
-      
-      // Benefits
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      tier.benefits.forEach((benefit: string) => {
-        checkPageBreak(6);
-        doc.text(`• ${benefit}`, margin + 6, yPos);
-        yPos += 5;
+    const tiers = Array.isArray(packet.tiers) ? packet.tiers : [];
+    if (tiers.length) {
+      w.subHeading('Sponsorship Levels');
+      tiers.forEach((tier) => {
+        const amount = asText(tier?.amount);
+        w.subHeading(amount ? `${asText(tier?.name)}  -  ${amount}` : asText(tier?.name), ACCENT, 10.5);
+        w.bullets(toList(tier?.benefits), { size: 9.5 });
+        w.y += 2;
       });
-      yPos += 5;
-    });
-    yPos += 10;
+    }
   }
 
-  // Marketing Timeline
-  checkPageBreak(50);
-  doc.addPage();
-  yPos = margin;
-  
-  doc.setFillColor(59, 130, 246);
-  doc.rect(margin, yPos, maxWidth, 8, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.text('6-Week Marketing Timeline', margin + 3, yPos + 5.5);
-  doc.setTextColor(0, 0, 0);
-  yPos += 15;
-
-  Object.entries(eventPlan.marketingTimeline).forEach(([week, data]) => {
-    checkPageBreak(40);
-    
-    doc.setFillColor(245, 245, 245);
-    doc.rect(margin, yPos, maxWidth, 8, 'F');
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${week.toUpperCase()}: ${data.phase}`, margin + 3, yPos + 5.5);
-    yPos += 10;
-
-    data.actions.forEach((action: string) => {
-      checkPageBreak(8);
-      doc.setFontSize(9);
-      doc.setFont('helvetica', 'normal');
-      
-      // Draw checkbox
-      doc.setDrawColor(0, 0, 0);
-      doc.rect(margin + 3, yPos - 3, 4, 4, 'S');
-      
-      const actionLines = doc.splitTextToSize(action, maxWidth - 15);
-      actionLines.forEach((line: string, idx: number) => {
-        if (idx > 0) checkPageBreak(5);
-        doc.text(line, margin + 10, yPos);
-        yPos += 5;
-      });
-    });
-    yPos += 5;
-  });
-
-  // Footer
-  const pageCount = doc.getNumberOfPages();
-  for (let i = 1; i <= pageCount; i++) {
-    doc.setPage(i);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(128, 128, 128);
-    doc.text(
-      'This event plan is not stored in PivotHub. Please save this PDF for your records.',
-      pageWidth / 2,
-      pageHeight - 10,
-      { align: 'center' }
-    );
-    doc.text(`Page ${i} of ${pageCount}`, pageWidth - margin, pageHeight - 10, { align: 'right' });
-    doc.setTextColor(0, 0, 0);
-  }
-
-  return doc;
+  w.footer('This event plan is not stored in PivotHub. Save this PDF for your records.');
+  return w.doc;
 }
