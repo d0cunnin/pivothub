@@ -21,8 +21,6 @@ export function generateGrantProposalPDF(
   contactInfo: GrantContactInfo
 ): jsPDF {
   const w = new PdfWriter();
-  // Sent to funders/agencies/clients under the user's name: no PivotHub branding.
-  w.brand = false;
   // Keep the raw text: the budget table and nested bullets are detected by
   // characters (box rules, bullets) that the PDF font cannot print.
   const raw = (v: unknown) => (typeof v === 'string' ? v : asText(v)).trim();

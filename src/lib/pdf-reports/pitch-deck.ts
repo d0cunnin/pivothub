@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { drawLogo as drawPivotHubLogo, BRAND_URL } from '../pdfBrand';
 import { asText, pdfSafe, cleanInline, HEADING, BODY, MUTED, ACCENT, DIVIDER, type RGB } from '../pdfWriter';
 
 export interface PitchSlidePDF {
@@ -72,7 +73,10 @@ export function generatePitchDeckPDF(input: {
     firstPage = false;
     pdf.setFillColor(...brand);
     pdf.rect(0, 0, pageWidth, 3, 'F');
-    if (!cover) {
+    if (cover) {
+      // Slides have a white background, so use the black-text PivotHub logo.
+      drawPivotHubLogo(pdf, margin, 10, 7, 'light');
+    } else {
       drawLogo(margin, 9, 12);
       style(10, MUTED);
       pdf.text(company, pageWidth - margin, 16, { align: 'right' });
@@ -83,6 +87,10 @@ export function generatePitchDeckPDF(input: {
     pdf.line(margin, pageHeight - 16, pageWidth - margin, pageHeight - 16);
     style(9, [148, 163, 184]);
     pdf.text(`${index + 1} / ${slides.length}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(37, 99, 235);
+    pdf.text(BRAND_URL, margin, pageHeight - 10);
+    style(9, [148, 163, 184]);
     pdf.text(date, pageWidth - margin, pageHeight - 10, { align: 'right' });
   };
 

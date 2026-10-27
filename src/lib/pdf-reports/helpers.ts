@@ -69,13 +69,3 @@ export function note(w: PdfWriter, text: string, after = 3) {
   w.text(pdfSafe(text), { size: 9, color: MUTED, after });
 }
 
-/** Page numbers only (for letters and resumes, which should not carry branding). */
-export function plainPageNumbers(w: PdfWriter) {
-  const total = w.doc.getNumberOfPages();
-  if (total < 2) return;
-  for (let i = 1; i <= total; i++) {
-    w.doc.setPage(i);
-    w.setStyle(8, [156, 163, 175]);
-    w.doc.text(`Page ${i} of ${total}`, w.pageWidth / 2, w.pageHeight - 10, { align: 'center' });
-  }
-}

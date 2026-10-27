@@ -1,6 +1,7 @@
 import type jsPDF from 'jspdf';
 import { PdfWriter, asText, pdfSafe, cleanInline, ACCENT, HEADING, BODY, MUTED, PRO, CON, type RGB } from '../pdfWriter';
-import { labeledRows, plainPageNumbers, thinRule, stripMarker, note } from './helpers';
+import { drawBrandFooter } from '../pdfBrand';
+import { labeledRows, thinRule, stripMarker, note } from './helpers';
 
 export interface ResumeAnalysisPDF {
   overallScore: number;
@@ -114,6 +115,7 @@ export function generateCoverLetterPDF(opts: {
 }): jsPDF {
   const w = new PdfWriter();
   w.y = 25;
+  w.logo();
   const name = asText(opts.yourName).trim();
   if (name) {
     w.text(name, { size: 18, color: HEADING, style: 'bold', after: 1 });
@@ -142,7 +144,7 @@ export function generateCoverLetterPDF(opts: {
     .filter(Boolean)
     .forEach((para) => w.text(para, { size: 10.5, after: 4.5 }));
 
-  plainPageNumbers(w);
+  drawBrandFooter(w.doc, { margin: w.margin });
   return w.doc;
 }
 
@@ -162,6 +164,7 @@ const isContactLine = (line: string) =>
 export function generateResumePDF(resumeText: string): jsPDF {
   const w = new PdfWriter();
   w.y = 22;
+  w.logo();
   const lines = asText(resumeText).replace(/\r/g, '').split('\n');
   let i = 0;
   while (i < lines.length && !lines[i].trim()) i++;
@@ -209,6 +212,6 @@ export function generateResumePDF(resumeText: string): jsPDF {
   }
 
   if (w.y === 22) note(w, 'No resume text was provided.');
-  plainPageNumbers(w);
+  drawBrandFooter(w.doc, { margin: w.margin });
   return w.doc;
 }

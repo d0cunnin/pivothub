@@ -31,8 +31,6 @@ export function generateBiographyPDF(input: {
   content: BiographyContentPDF;
 }): jsPDF {
   const w = new PdfWriter();
-  // Sent to funders/agencies/clients under the user's name: no PivotHub branding.
-  w.brand = false;
   const founder = asText(input.founderName);
   const business = asText(input.businessType);
   const tone = capitalize(asText(input.tone));
