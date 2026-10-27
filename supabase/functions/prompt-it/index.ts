@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { guard, deductCreditsOnSuccess, corsHeaders } from '../_shared/guard.ts';
@@ -5,7 +6,7 @@ import { generateJson, systemUser } from '../_shared/aiGenerate.ts';
 
 const BUILD_VERSION = "2025-01-12-v2";
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -122,4 +123,4 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-});
+}));

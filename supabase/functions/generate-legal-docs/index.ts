@@ -1,10 +1,11 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -301,7 +302,7 @@ Format as formal operating agreement.`;
       checklist: generateComplianceChecklist(docType, state)
     };
 
-    try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'generate-legal-docs', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(guardResult.supabase, userId!, 'generate-legal-docs', 2);
 
     return new Response(
       JSON.stringify({ 
@@ -330,7 +331,7 @@ Format as formal operating agreement.`;
       }
     );
   }
-});
+}));
 
 function generateComplianceChecklist(docType: string, state: string): string[] {
   const checklists: { [key: string]: string[] } = {

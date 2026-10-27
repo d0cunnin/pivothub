@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { guard, corsHeaders, deductCreditsOnSuccess } from '../_shared/guard.ts';
@@ -170,7 +171,7 @@ function validateBlueprint(bp: Partial<Blueprint>): Blueprint {
   return result;
 }
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -266,7 +267,7 @@ serve(async (req) => {
     // Credits (70) are only checked up front by guard(); they are deducted
     // here, after the blueprint was generated successfully, so failed
     // generations cost nothing. The client no longer deducts.
-    try { await deductCreditsOnSuccess(supabase, userId!, 'generate-create-it-blueprint', 70); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabase, userId!, 'generate-create-it-blueprint', 70);
 
     return new Response(
       JSON.stringify({ blueprint, blueprintId, modelUsed }),
@@ -285,4 +286,4 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-});
+}));

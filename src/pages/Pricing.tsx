@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
-import { Check, Coins, AlertCircle } from "lucide-react";
+import { Check, Star, Coins, Zap, AlertCircle } from "lucide-react";
+import { useUsage } from "@/contexts/UsageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { PaymentCheckout } from "@/components/PaymentCheckout";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { getStripeEnvironment } from "@/lib/payments/stripe";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Pricing = () => {
-  const { user, subscribed, subscriptionTier } = useAuth();
+  const { user, subscribed, subscriptionTier, refreshSubscription } = useAuth();
+  const navigate = useNavigate();
+  const {refreshUsage}=useUsage();
+  const [paymentPriceId, setPaymentPriceId] = useState<string | null>(null);
+  const [paymentResult, setPaymentResult] = useState("");
   const { toast } = useToast();
   const [checkoutModal, setCheckoutModal] = useState<{
     open: boolean;
     planName: string;
     price: string;
     tier: string;
+    credits?: number;
+    isOneTime?: boolean;
   }>({
     open: false,
     planName: '',
@@ -26,305 +38,358 @@ const Pricing = () => {
     tier: ''
   });
   
-  const [purchasingCredits, setPurchasingCredits] = useState(false);
 
-  const handlePurchaseCredits = async (credits: number) => {
-    if (!user) {
-      toast({
-        title: "Sign In Required",
-        description: "Please sign in to purchase extra credits.",
-        variant: "destructive",
-      });
-      window.location.href = "/auth";
-      return;
+  const purchasingCredits = false;
+  useEffect(() => {
+    const sessionId = new URLSearchParams(window.location.search).get('session_id');
+    if (!sessionId || !user) return;
+    let cancelled = false;
+    async function confirmPayment() {
+      try {
+        const { data, error } = await supabase.functions.invoke('payment-status', { body: { sessionId, environment: getStripeEnvironment() } });
+        if (error || data?.error) throw new Error(data?.error ?? 'Unable to confirm payment. Please contact support.');
+        if (!cancelled) {
+          setPaymentResult(data.credits > 0
+            ? data.environment === 'sandbox' ? `Test purchase confirmed: ${data.credits} Tool Credits recorded. Your live balance is unchanged.` : `Payment confirmed. ${data.credits} Tool Credits have been added to your account.`
+            : 'Your payment is awaiting confirmation. Tool Credits will be added once payment is confirmed.');
+          await refreshSubscription();await refreshUsage();
+        }
+      } catch (e) { if (!cancelled) setPaymentResult(e instanceof Error ? e.message : 'Unable to confirm payment.'); }
     }
+    confirmPayment();const retry=window.setInterval(confirmPayment,5000);
+    return () => { cancelled = true;window.clearInterval(retry); };
+  }, [user?.id]);
 
-    // Check if user has active paid subscription
+  const handlePurchaseCredits = (credits: number) => {
+    if (!user) { window.location.href = '/auth'; return; }
     if (!subscribed) {
-      toast({
-        title: "Subscription Required",
-        description: "Extra credits are only available for active paid subscribers. Please upgrade to a paid plan first.",
-        variant: "destructive",
-      });
-      // Scroll to subscription plans section
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      toast({ title: 'Subscription Required', description: 'Extra Tool Credits require an active paid subscription.', variant: 'destructive' });
       return;
     }
-
-    setPurchasingCredits(true);
-    try {
-      toast({
-        title: "Payments Coming Soon",
-        description: "Extra credit purchases will be available once payments are reconnected.",
-      });
-      return;
-    } catch (error: any) {
-      let errorMessage = "Failed to create checkout session. Please try again.";
-      
-      if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
-        errorMessage = "You need an active subscription to purchase extra credits";
-      }
-      
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
-    } finally {
-      setPurchasingCredits(false);
-    }
+    const packs = {
+      25: { name: 'Small Pack', price: '$5', id: 'small_pack' },
+      70: { name: 'Boost Pack', price: '$10', id: 'boost_pack' },
+      150: { name: 'Power Pack', price: '$20', id: 'power_pack' },
+    };
+    const pack = packs[credits as keyof typeof packs];
+    if (pack) setCheckoutModal({ open: true, planName: pack.name, price: pack.price, tier: pack.id, credits, isOneTime: true });
   };
 
-  const handleSubscribe = async (tier: string) => {
-    if (!user) {
-      toast({
-        title: "Sign In Required",
-        description: "Please sign in to subscribe to a plan.",
-        variant: "destructive",
-      });
-      window.location.href = "/auth";
-      return;
-    }
-
-    try {
-      toast({
-        title: "Payments Coming Soon",
-        description: "Subscription checkout will be available once payments are reconnected.",
-      });
-      return;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create checkout session. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const handleSubscribe = (tier: string) => {
+    if (!user) { window.location.href = '/auth'; return; }
+    const prices: Record<string, string> = { starter: 'starter_monthly', pro: 'pro_monthly', 'all-access': 'all_access_monthly' };
+    setPaymentPriceId(prices[tier] ?? tier);
   };
 
-  const openCheckoutModal = (planName: string, price: string, tier: string) => {
-    setCheckoutModal({
-      open: true,
-      planName,
-      price,
-      tier
-    });
+  const openCheckoutModal = (planName: string, price: string, tier: string, credits: number) => {
+    setCheckoutModal({ open: true, planName, price, tier, credits, isOneTime: false });
   };
 
-  // Shared feature wording so plans can be compared line by line.
-  const plans = [
+  const isCurrentPlan = (plan: { tier: string; isFree?: boolean }) =>
+    !!user && (plan.isFree ? !subscribed : subscribed && subscriptionTier === plan.tier);
+
+  const planButtonLabel = (plan: { name: string; tier: string; isFree?: boolean }) => {
+    if (isCurrentPlan(plan)) return "Your Current Plan";
+    if (plan.isFree) return subscribed ? "Manage in Settings" : "Start for Free";
+    if (subscribed) return `Switch to ${plan.name}`;
+    return `Choose ${plan.name}`;
+  };
+
+  const allPlans = [
     {
       name: "Free",
-      tagline: "Try PivotHub",
+      tagline: "No credit card required",
       price: "$0",
-      period: "",
-      perCredit: "No credit card required",
+      credits: 5,
       tier: "free",
       isFree: true,
-      features: [
-        { text: "5 credits per month", strong: "5 credits" },
-        { text: "Access to every tool" },
-        { text: "Credits reset monthly (no rollover)" },
-        { text: "Community access" },
-        { text: "Email support" },
-      ],
     },
     {
       name: "Starter",
-      tagline: "Get started",
+      tagline: "Get the basics",
       price: "$12",
-      period: "/mo",
-      perCredit: "About 30¢ per credit",
+      credits: 40,
       tier: "starter",
       isPopular: true,
-      features: [
-        { text: "40 credits per month", strong: "40 credits" },
-        { text: "Access to every tool" },
-        { text: "Unused credits roll over (up to 80)" },
-        { text: "Can add extra credit packs" },
-        { text: "Community access" },
-        { text: "Email support" },
-      ],
     },
     {
       name: "Pro",
-      tagline: "For regular use",
+      tagline: "For regular users",
       price: "$24",
-      period: "/mo",
-      perCredit: "About 24¢ per credit",
+      credits: 100,
       tier: "pro",
-      features: [
-        { text: "100 credits per month", strong: "100 credits" },
-        { text: "Access to every tool" },
-        { text: "Unused credits roll over (up to 200)" },
-        { text: "Can add extra credit packs" },
-        { text: "Community access" },
-        { text: "Priority email support" },
-        { text: "Early access to new features" },
-      ],
     },
     {
       name: "All-Access",
-      tagline: "For power users",
+      tagline: "Everything, for power users",
       price: "$49",
-      period: "/mo",
-      perCredit: "About 20¢ per credit",
+      credits: 250,
       tier: "all-access",
-      features: [
-        { text: "250 credits per month", strong: "250 credits" },
-        { text: "Access to every tool" },
-        { text: "Unused credits roll over (up to 500)" },
-        { text: "Can add extra credit packs" },
-        { text: "Community access" },
-        { text: "Priority email support" },
-        { text: "Early access to new features" },
-        { text: "Dedicated account manager" },
-      ],
     },
   ];
-
-  const packs = [
-    { credits: 25, price: "$5", perCredit: "20¢ per credit" },
-    { credits: 70, price: "$10", perCredit: "About 14¢ per credit", isBestValue: true },
-    { credits: 150, price: "$20", perCredit: "About 13¢ per credit" },
-  ];
-
-  const renderFeature = (feature: { text: string; strong?: string }) => {
-    if (!feature.strong) return feature.text;
-    const rest = feature.text.slice(feature.strong.length);
-    return (<><strong className="text-foreground">{feature.strong}</strong>{rest}</>);
-  };
 
   return (
     <div className="min-h-screen bg-white">
       <Header />
-
-      <section className="py-16 md:py-20 bg-gradient-hero relative overflow-hidden">
-        <div
+      <PaymentTestModeBanner />
+      {paymentResult && <div role="status" className="bg-muted border-b border-border px-6 py-4 text-center">{paymentResult}</div>}
+      {paymentPriceId && <PaymentCheckout priceId={paymentPriceId} onClose={() => setPaymentPriceId(null)} />}
+      
+      <section className="py-20 bg-gradient-hero relative overflow-hidden">
+        <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
         </div>
+        
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
+        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
+        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
+        
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center justify-center px-6 py-3 rounded-3xl bg-white/15 mb-6 backdrop-blur-sm border border-white/20">
-              <span className="text-2xl font-bold text-white tracking-wider">PRICING</span>
+          <div className="text-center max-w-5xl mx-auto">
+            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
+              <span className="text-3xl font-bold text-white tracking-wider">PRICING</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white leading-tight">
-              Simple, Credit-Based Pricing
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
+              Simple, Clear Pricing
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Start free. Every plan includes every tool. Choose how many credits you need each month.
+            <div className="text-center max-w-4xl mx-auto">
+            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              Start with the Free plan, then upgrade to Starter, Pro, or All-Access whenever you need more Tool Credits.
             </p>
+            </div>
           </div>
         </div>
+        
+        <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
 
-      {/* Plans, side by side */}
-      <section className="py-14 md:py-16 bg-muted/30">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm md:text-base text-muted-foreground mb-10">
+      {/* Subscription Plans */}
+      <section className="section-spacing-sm bg-white">
+        <div className="page-container">
+          <div className="text-center mb-10">
+            <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Every plan works with every tool. Plans differ in how many Tool Credits you get each month.
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-base text-muted-foreground mb-10">
             <span className="font-semibold text-foreground">All plans include:</span>
-            <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" />Every PivotHub tool</span>
-            <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" />Credits only used when you get results</span>
-            <span className="flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" />No contract</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Access to every tool</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Credits only used when you get results</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Email support</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Cancel anytime</span>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {plans.map((plan) => (
-              <div
+            {allPlans.map((plan) => (
+              <Card
                 key={plan.name}
-                className={`relative rounded-3xl bg-white p-7 flex flex-col shadow-sm ${plan.isPopular ? 'border-2 border-primary shadow-lg' : 'border border-border'}`}
+                className={`relative flex flex-col rounded-3xl p-2 ${plan.isPopular ? 'border-2 border-primary shadow-glow' : 'border'}`}
               >
                 {plan.isPopular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary text-primary-foreground text-xs font-bold px-4 py-1 tracking-wide">
-                    MOST POPULAR
-                  </span>
+                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
+                    <Star className="h-3 w-3 mr-1" />
+                    Most Popular
+                  </Badge>
                 )}
-                <h3 className="text-2xl font-bold text-foreground">{plan.name}</h3>
-                <p className="text-muted-foreground mb-5">{plan.tagline}</p>
-                <div className="mb-1">
-                  <span className="text-5xl font-bold text-foreground">{plan.price}</span>
-                  <span className="text-xl text-muted-foreground">{plan.period}</span>
-                </div>
-                <p className="text-sm text-muted-foreground mb-6">{plan.perCredit}</p>
-                <Button
-                  className="w-full mb-6"
-                  size="lg"
-                  variant={plan.isPopular ? "default" : "outline"}
-                  onClick={() => {
-                    if (plan.isFree) {
-                      window.location.href = "/auth?tab=signup";
-                    } else {
-                      openCheckoutModal(plan.name, plan.price, plan.tier);
-                    }
-                  }}
-                >
-                  {plan.isFree ? "Start for Free" : `Choose ${plan.name}`}
-                </Button>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  {plan.features.map((feature) => (
-                    <li key={feature.text} className="flex items-start gap-2">
-                      <Check className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span>{renderFeature(feature)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+                  <CardDescription className="text-base">{plan.tagline}</CardDescription>
+                  <div className="pt-4">
+                    <span className="text-5xl font-bold text-primary">{plan.price}</span>
+                    {!plan.isFree && <span className="text-xl text-muted-foreground">/mo</span>}
+                  </div>
+                  <p className="font-semibold text-foreground pt-2">{plan.credits} Tool Credits / month</p>
+                </CardHeader>
+                <CardContent className="flex flex-col flex-1 gap-6">
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    variant={plan.isPopular ? "default" : "outline"}
+                    disabled={isCurrentPlan(plan)}
+                    onClick={() => {
+                      if (plan.isFree) {
+                        navigate(user ? "/settings" : "/auth");
+                      } else if (subscribed) {
+                        // Existing subscribers change plans in Settings, not through a new checkout.
+                        navigate("/settings");
+                      } else {
+                        openCheckoutModal(plan.name, plan.price, plan.tier, plan.credits);
+                      }
+                    }}
+                  >
+                    {planButtonLabel(plan)}
+                  </Button>
+                  {subscribed && !plan.isFree && !isCurrentPlan(plan) && (
+                    <p className="text-sm text-muted-foreground text-center -mt-3">Plan changes are made in Settings.</p>
+                  )}
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Extra credit packs */}
-      <section className="py-14 md:py-16 bg-white">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center mb-8 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 flex items-center justify-center gap-3">
-              <Coins className="h-8 w-8 text-primary" />
-              Need More Credits?
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Add an extra credit pack anytime. Extra credits are added right away and can be used until the end of your current billing month.
+      {/* Extra Credits Section */}
+      <section className="section-spacing-sm bg-gradient-section-1">
+        <div className="page-container">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center mb-4">
+              <Coins className="h-8 w-8 text-primary mr-3" />
+              <h2 className="text-4xl font-bold">Need Extra Tool Credits?</h2>
+            </div>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-2">
+              Running low? Add an extra credit pack anytime to keep using PivotHub tools.
+            </p>
+            <p className="text-base text-muted-foreground max-w-3xl mx-auto">
+              Credits are added as soon as your payment is confirmed and last 3 months. Packs are a one-time payment and do not renew.
             </p>
           </div>
 
-          <Alert className="mb-8 bg-amber-50 border-amber-200 max-w-3xl mx-auto">
+          {/* Subscription Requirement Alert */}
+          <Alert className="mb-8 bg-amber-50 border-amber-200 max-w-4xl mx-auto">
             <AlertCircle className="h-4 w-4 text-amber-600" />
-            <AlertTitle className="text-amber-900">Available on paid plans</AlertTitle>
+            <AlertTitle className="text-amber-900">Available on Paid Plans</AlertTitle>
             <AlertDescription className="text-amber-800">
-              Extra credit packs can be added to the Starter, Pro, or All-Access plan. On the Free plan, upgrade first to add credits.
+              Extra credit packs can be added to an active Starter, Pro, or All-Access plan.
+              On the Free plan, upgrade first to buy extra credits.
             </AlertDescription>
           </Alert>
 
-          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {packs.map((pack) => (
-              <div
-                key={pack.credits}
-                className={`relative rounded-3xl bg-white p-7 text-center flex flex-col shadow-sm ${pack.isBestValue ? 'border-2 border-primary shadow-lg' : 'border border-border'}`}
-              >
-                {pack.isBestValue && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary text-primary-foreground text-xs font-bold px-4 py-1 tracking-wide">
-                    BEST VALUE
-                  </span>
-                )}
-                <h3 className="text-2xl font-bold text-foreground">{pack.credits} Credits</h3>
-                <div className="my-3">
-                  <span className="text-4xl font-bold text-foreground">{pack.price}</span>
-                  <span className="text-muted-foreground"> one time</span>
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {/* Small Pack */}
+            <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
+              <CardHeader className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-primary" />
                 </div>
-                <p className="text-sm text-muted-foreground mb-6">{pack.perCredit}</p>
+                <CardTitle className="text-2xl mb-2">Small Pack</CardTitle>
+                <div className="mb-3">
+                  <span className="text-4xl font-bold text-primary">$5</span>
+                </div>
+                <CardDescription className="text-base font-medium text-foreground">
+                  25 Extra Credits
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Perfect for occasional needs
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Added once payment is confirmed
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Credits last 3 months
+                  </p>
+                </div>
                 <Button
-                  className="w-full mt-auto"
-                  variant={pack.isBestValue ? "default" : "outline"}
-                  onClick={() => handlePurchaseCredits(pack.credits)}
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(25)}
                   disabled={purchasingCredits}
                 >
-                  Add {pack.credits} Credits
+                  {purchasingCredits ? "Processing..." : "Purchase 25 Credits"}
                 </Button>
-              </div>
-            ))}
+              </CardContent>
+            </Card>
+
+            {/* Boost Pack - Highlighted */}
+            <Card className="premium-card border-2 border-primary shadow-lg hover:shadow-glow transition-all bg-gradient-to-br from-primary/10 to-secondary/10 relative">
+              <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
+                <Star className="h-3 w-3 mr-1" />
+                Best Value
+              </Badge>
+              <CardHeader className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-primary" />
+                </div>
+                <CardTitle className="text-2xl mb-2">Boost Pack</CardTitle>
+                <div className="mb-3">
+                  <span className="text-4xl font-bold text-primary">$10</span>
+                </div>
+                <CardDescription className="text-base font-medium text-foreground">
+                  70 Extra Credits
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Perfect for active users
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Added once payment is confirmed
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Credits last 3 months
+                  </p>
+                </div>
+                <Button
+                  className="w-full"
+                  onClick={() => handlePurchaseCredits(70)}
+                  disabled={purchasingCredits}
+                >
+                  {purchasingCredits ? "Processing..." : "Purchase 70 Credits"}
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Power Pack */}
+            <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-emerald-500/5 to-green-600/5">
+              <CardHeader className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 mx-auto mb-4">
+                  <Zap className="h-8 w-8 text-emerald-500" />
+                </div>
+                <CardTitle className="text-2xl mb-2">Power Pack</CardTitle>
+                <div className="mb-3">
+                  <span className="text-4xl font-bold text-primary">$20</span>
+                </div>
+                <CardDescription className="text-base font-medium text-foreground">
+                  150 Extra Credits
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Maximum credits for heavy usage
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Added once payment is confirmed
+                  </p>
+                  <p className="flex items-center">
+                    <Check className="h-4 w-4 text-green-500 mr-2" />
+                    Credits last 3 months
+                  </p>
+                </div>
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => handlePurchaseCredits(150)}
+                  disabled={purchasingCredits}
+                >
+                  {purchasingCredits ? "Processing..." : "Purchase 150 Credits"}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-8">
+            <p className="text-base text-muted-foreground">
+              💡 <strong>Note:</strong> Extra credit packs are for paid plans only, and the credits last 3 months. {!user && "Sign in to purchase credits."}
+            </p>
           </div>
         </div>
       </section>
@@ -335,6 +400,8 @@ const Pricing = () => {
         onConfirm={() => handleSubscribe(checkoutModal.tier)}
         planName={checkoutModal.planName}
         price={checkoutModal.price}
+        credits={checkoutModal.credits}
+        isOneTime={checkoutModal.isOneTime}
       />
 
       {/* Common Questions Section */}
@@ -348,12 +415,12 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What is the Free plan?</h3>
                   <p className="text-muted-foreground text-sm">
-                    The Free plan gives you <strong>5 credits every month</strong>, renewed on the day of the month you signed up. No credit card required. It is perfect for trying the tools or occasional use.
+                    The Free plan is <strong>free forever</strong> and gives you 5 credits every month based on your signup anniversary date. No credit card required. Perfect for testing tools or occasional use.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What are credits?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What are Tool Credits?</h3>
                   <p className="text-muted-foreground text-sm">
                     Each tool uses a certain number of credits based on complexity. Chatbots use 1 credit per message, most tools use 2-5 credits, and the large blueprint tools use more (Deploy It 40, Create It 70). You can see every tool's price on the Before You Start page.
                   </p>
@@ -362,16 +429,16 @@ const Pricing = () => {
               
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">When do I get my credits?</h3>
                   <p className="text-muted-foreground text-sm">
-                    <strong>Paid plans:</strong> on your billing date each month. <strong>Free plan:</strong> on the day of the month you signed up.
+                    <strong>Paid plans:</strong> Your monthly credits are added each time your payment goes through. Each batch lasts 3 months, so unused credits carry over until then. <strong>Free plan:</strong> 5 new credits each month on the day you signed up. Unused free credits do not carry over.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Can I change plans?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">Can I switch plans?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Yes. You can upgrade or downgrade your plan at any time.
+                    Yes, anytime in Settings. Moving to a bigger plan: you pay the price difference for the rest of the month, and the extra credits are added once that payment goes through. Moving to a smaller plan: it starts on your next billing date. Credits you already have stay until they expire.
                   </p>
                 </div>
               </div>

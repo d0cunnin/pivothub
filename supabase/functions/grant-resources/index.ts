@@ -2,7 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
-import { guard } from "../_shared/guard.ts";
+import { guard,withCreditRequest,deductCreditsOnSuccess,type GuardResult } from "../_shared/guard.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -16,14 +16,15 @@ const grantResourcesSchema = z.object({
   subcategory: z.string().max(200).optional()
 });
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   // Calls paid Google APIs: signed-in users only, rate limited.
+  let guardResult:GuardResult;
   try {
-    await guard(req, { endpoint: 'grant-resources', cost: 0, requireAuth: true, maxReqsPerMinute: 10 });
+    guardResult=await guard(req, { endpoint: 'grant-resources', cost: 2, requireAuth: true, maxReqsPerMinute: 10 });
   } catch (err) {
     if (err instanceof Response) return err;
     console.error('[grant-resources] Guard error:', err);
@@ -193,6 +194,7 @@ serve(async (req) => {
 
     // Format the results
     const resources = formatGrantResourceResults(allPlaces, location);
+    await deductCreditsOnSuccess(guardResult.supabase,guardResult.userId,'grant-resources',2);
 
     return new Response(
       JSON.stringify({ resources }),
@@ -206,7 +208,7 @@ serve(async (req) => {
     console.error('Error finding grant resources:', error);
     return fallbackResponse();
   }
-});
+}));
 
 function formatGrantResourceResults(places: any[], location: string) {
   const resources = places.map((place, index) => {

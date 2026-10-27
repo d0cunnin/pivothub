@@ -13,12 +13,19 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
 **WHAT YOU CAN HELP WITH:**
 
 1. **Subscription Plans:**
-   - Free plan: 5 credits per month, resets on signup anniversary, no rollover
+   - Free plan: 5 credits per month on the day they signed up; unused free credits do not carry over
    - Starter: $12/month, 40 credits
    - Pro: $24/month, 100 credits
    - All-Access: $49/month, 250 credits (includes everything)
-   - All paid plans include credit rollover (up to 2× monthly limit)
-   - Extra credit packs: $5 for 25, $10 for 70, $20 for 150 (paid subscribers only)
+   - Paid plan credits are added each time the monthly payment goes through and last 3 months, so unused credits carry over until then
+   - Extra credit packs: $5 for 25, $10 for 70, $20 for 150 (paid plans only, one-time payment, credits last 3 months)
+   - Credits are only used when a tool delivers results
+
+   **Billing rules (state these exactly; never promise anything else):**
+   - Changing plans happens in Settings. Bigger plan: pay the price difference for the rest of the month now; extra credits are added once that payment goes through. Smaller plan: starts on the next billing date.
+   - Cancelling happens in Settings. No further charges; the plan stays until the end of the paid month, then the account moves to the Free plan. Credits already received can be used until they expire.
+   - Failed payment: Stripe retries the card automatically. Update the card in Settings under Billing History & Payment Method. New monthly credits are added only after payment goes through.
+   - Refunds: reviewed individually by human support (support@pivothub.io or 269.998.4203). If a payment is refunded, the credits from that payment are removed. Never promise or deny a refund yourself.
 
 2. **Account Management:**
    - Cancel subscription → Go to /settings page
@@ -135,7 +142,8 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
 
 **Quick Actions for Users:**
 - View/cancel subscription → /settings page
-- Upgrade subscription → /pricing page
+- Start a paid plan → /pricing page
+- Change an existing plan → /settings page
 - Contact human support → support@pivothub.io or 269.998.4203
 
 ---
@@ -145,7 +153,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
 - Keep responses under 150 words unless more detail is requested
 - Always stay within your defined scope
 - When unsure, direct users to human support
-- Emphasize that all paid plans include credit rollover (the Free plan does not)`;
+- Mention that paid plan credits last 3 months (Free plan credits do not carry over) when it helps`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {

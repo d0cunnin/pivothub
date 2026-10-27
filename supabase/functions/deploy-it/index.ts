@@ -1,9 +1,10 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { guard, deductCreditsOnSuccess, corsHeaders } from '../_shared/guard.ts';
 import { generateJson, systemUser } from '../_shared/aiGenerate.ts';
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -120,4 +121,4 @@ Format your response as JSON with these keys:
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-});
+}));

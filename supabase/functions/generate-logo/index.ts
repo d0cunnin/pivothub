@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
@@ -15,7 +16,7 @@ const logoGeneratorSchema = z.object({
   additionalPrompt: z.string().max(500).optional()
 });
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -181,7 +182,7 @@ serve(async (req) => {
 
     // Charge only if at least one logo image was actually generated.
     if (successfulLogoCount > 0) {
-      try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-logo', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+      await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-logo', 2);
     }
 
     return new Response(
@@ -214,4 +215,4 @@ serve(async (req) => {
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
-});
+}));

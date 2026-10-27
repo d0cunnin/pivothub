@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
@@ -17,7 +18,7 @@ const socialMediaSchema = z.object({
   tone: z.string().max(100)
 });
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -251,7 +252,7 @@ QUALITY CHECKLIST:
       requestDurationMs: Date.now() - startTime
     });
 
-    try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'social-media-content', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(guardResult.supabase, userId!, 'social-media-content', 2);
     
     return new Response(
       JSON.stringify({ contentCalendar }),
@@ -289,4 +290,4 @@ QUALITY CHECKLIST:
       }
     );
   }
-});
+}));

@@ -93,19 +93,21 @@ const FAQ = () => {
 
                 <AccordionItem value="item-4">
                   <AccordionTrigger className="text-left">
-                    When do my credits reset?
+                    When do I get my credits?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    <strong>Paid plans:</strong> Credits reset on the same calendar day each month (your billing anniversary). For example, if you subscribed on January 31st, your credits reset on the 31st (or last day) of every month. <strong>Free plan:</strong> Credits reset based on your signup date. If you signed up on the 15th, credits reset on the 15th of every month.
+                    <strong>Free plan:</strong> You get 5 credits every month on the day you signed up. For example, if you signed up on the 15th, you get new credits on the 15th of each month.
+                    <p className="mt-3"><strong>Paid plans:</strong> Your monthly credits are added each time your monthly payment goes through.</p>
                   </AccordionContent>
                 </AccordionItem>
 
                 <AccordionItem value="item-5">
                   <AccordionTrigger className="text-left">
-                    How does credit rollover work?
+                    Do unused credits carry over?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    <strong>Paid plans:</strong> Unused credits roll over month-to-month, but rollover is capped at <strong>2× your monthly credit allotment</strong>. For example, on the Starter plan (40 credits/month) you can hold up to 80 credits. If you have 70 credits when your plan renews, you'll receive only 10 credits (not the full 40) to stay at the 80-credit cap. <strong>Free plan:</strong> No rollover—credits reset to 5 each month.
+                    <strong>Paid plans:</strong> Yes. Each batch of paid credits lasts 3 months from the day you get it, so anything you don't use carries over until then. Credits from extra credit packs also last 3 months.
+                    <p className="mt-3"><strong>Free plan:</strong> No. Free credits do not carry over. You start fresh with 5 credits each month.</p>
                   </AccordionContent>
                 </AccordionItem>
 
@@ -124,7 +126,7 @@ const FAQ = () => {
                         <h4 className="font-semibold mb-2">💡 Smart Credit Tips:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• <strong>Free plan users:</strong> Start with chatbots (1 credit per message) or assessments (2 credits) to maximize your 5 monthly credits</li>
-                          <li>• <strong>Paid users:</strong> Take advantage of rollover—unused credits carry over (up to 2× your monthly limit)</li>
+                          <li>• <strong>Paid users:</strong> Unused credits carry over for 3 months, so you can save up for bigger tools</li>
                           <li>• <strong>High-value tools:</strong> Save Business Plan Generator (4 credits) and Teaching Materials (5 credits) for when you're ready to create final deliverables</li>
                           <li>• <strong>Chatbots:</strong> Use Career Advisor and Business Mentor freely—they're only 1 credit per message</li>
                         </ul>
@@ -158,41 +160,21 @@ const FAQ = () => {
 
                 <AccordionItem value="item-6">
                   <AccordionTrigger className="text-left">
-                    What happens if I run out of requests?
+                    What happens if I run out of credits?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    You can purchase extra credit packs (10, 25, or 50 requests) to continue using tools within your current billing month, or wait until your monthly requests reset.
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="item-7">
-                  <AccordionTrigger className="text-left">
-                    Can I switch between paths?
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    Yes! You can upgrade, downgrade, or switch to a different path anytime. Changes take effect immediately.
+                    On a paid plan, you can buy an extra credit pack anytime: 25 credits for $5, 70 credits for $10, or 150 credits for $20. Packs are a one-time payment and the credits last 3 months. On the Free plan, you can upgrade to a paid plan or wait for your next 5 credits.
                   </AccordionContent>
                 </AccordionItem>
 
                 <AccordionItem value="item-plan-changes">
                   <AccordionTrigger className="text-left">
-                    What happens if I upgrade or downgrade mid-cycle?
+                    Can I change my plan?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    <p className="mb-3">
-                      <strong>Upgrades:</strong> Your new credit limit takes effect immediately. 
-                      You'll keep any unused credits from your previous plan (subject to rollover caps) 
-                      plus gain access to your new monthly credit allowance.
-                    </p>
-                    <p className="mb-3">
-                      <strong>Downgrades:</strong> Your new credit limit takes effect immediately. 
-                      Any credits you've already used in the current cycle remain deducted. 
-                      You'll have access to your new (lower) monthly credit allowance going forward.
-                    </p>
-                    <p>
-                      Your billing anniversary date remains the same - the next charge will be 
-                      at your new plan's rate on your original billing date.
-                    </p>
+                    <p className="mb-3">Yes. Change your plan anytime in <strong>Settings</strong>.</p>
+                    <p className="mb-3"><strong>Moving to a bigger plan:</strong> You pay the price difference for the rest of this month right away. As soon as that payment goes through, you get the extra credits. For example, going from Starter (40) to Pro (100) adds 60 credits.</p>
+                    <p><strong>Moving to a smaller plan:</strong> The change starts on your next billing date. You keep your current plan until then. Credits you already have stay until they expire.</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -207,7 +189,7 @@ const FAQ = () => {
                     What payment methods do you accept?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    We accept all major credit cards through our secure payment processor, Stripe.
+                    Payments are handled securely by Stripe. You can pay with major credit and debit cards and any other options shown at checkout. PivotHub never sees or stores your card details.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -216,7 +198,7 @@ const FAQ = () => {
                     What happens if my payment fails?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    If a payment fails, you enter a <strong>7-day grace period</strong> during which Stripe automatically retries charging your card (on Day 2 and Day 5). If payment succeeds during this time, your subscription continues normally with no disruption. If all retry attempts fail after 7 days, you'll be moved to the Free plan with <strong>5 credits</strong>, and your new anniversary date will be the date of the downgrade.
+                    Stripe will try your card again automatically. Your new monthly credits are added only after the payment goes through. To fix it sooner, go to <strong>Settings</strong> and choose <strong>Billing History &amp; Payment Method</strong> to update your card. If the payment still can't be collected, your paid plan ends after the month you already paid for.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -225,7 +207,7 @@ const FAQ = () => {
                     Can I cancel anytime?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Absolutely! Cancel your subscription anytime from your account settings. You'll continue to have full access until the end of your current billing period, then automatically move to Free plan.
+                    Yes. Cancel anytime in <strong>Settings</strong>. You won't be charged again, and you keep your plan until the end of the month you already paid for. After that, your account moves to the Free plan.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -234,7 +216,7 @@ const FAQ = () => {
                     What happens to my credits when I cancel?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    When you cancel a paid subscription, you retain full access until the end of your current billing period. At the end of the period, you'll be moved to the Free plan with <strong>5 credits</strong>. Your new Free plan renewal date will be set to 30 days after your billing cycle ends. For example, if your billing cycle ends on March 15th, you'll get 5 credits immediately and they'll reset on April 15th, May 15th, June 15th, etc.
+                    Credits you already received can still be used until they expire (3 months from the day you got them). You won't receive new paid credits after your plan ends. Once you're on the Free plan, you get 5 free credits each month.
                   </AccordionContent>
                 </AccordionItem>
 
@@ -243,7 +225,7 @@ const FAQ = () => {
                     Do you offer refunds?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Due to the nature of our digital services and instant access to tools, we do not offer refunds. All sales are final. Start with the Free plan (free forever) to try our tools first!
+                    If you think you were charged by mistake or something went wrong, contact us at support@pivothub.io or 269.998.4203 with your account email and the reason. We review each refund request individually. If a payment is refunded, the credits from that payment are removed from your account.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

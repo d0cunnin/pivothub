@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -9,7 +10,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -146,7 +147,7 @@ BUDGET:
 
     console.log(`[generate-program-design] Completed in ${Date.now() - startTime}ms for user ${user.id}`);
 
-    try { await deductCreditsOnSuccess(supabaseClient, user.id, 'generate-program-design', 4); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabaseClient, user.id, 'generate-program-design', 4);
     return new Response(JSON.stringify({ content }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -159,4 +160,4 @@ BUDGET:
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-});
+}));

@@ -27,35 +27,35 @@ const FAQ_RESPONSES: Record<string, string> = {
     "To reset your password:\n1. Click your profile icon in the top right\n2. Go to Settings\n3. Navigate to Account Settings\n4. Select 'Change Password'\n\nIf you're locked out, use the 'Forgot Password' link on the login page.",
   
   "How do I update billing or cancel?": 
-    "To manage your subscription:\n1. Go to Settings (top right)\n2. Click 'Subscription' tab\n3. You can upgrade, downgrade, or cancel here\n\nCancellations take effect at the end of your billing period. Need help? Contact support@pivothub.io or call 269.998.4203",
+    "To manage your subscription, go to Settings (top right). There you can:\n• Change your plan\n• Cancel your subscription\n• Update your card or see past payments (Billing History & Payment Method)\n\nIf you cancel, you keep your plan until the end of the month you already paid for. Need help? Contact support@pivothub.io or call 269.998.4203",
   
   "Where can I view pricing and plans?": 
-    "View our pricing at /pricing or:\n\n• Free plan: $0 - 5 credits/month\n• Starter: $12/mo - 40 credits\n• Pro: $24/mo - 100 credits\n• All-Access: $49/mo - 250 credits\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nAll paid plans include credit rollover up to 2× monthly limit!",
+    "View our pricing at /pricing or:\n\n• Free plan: $0 - 5 credits/month\n• Starter: $12/mo - 40 credits\n• Pro: $24/mo - 100 credits\n• All-Access: $49/mo - 250 credits\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nOn paid plans, unused credits carry over for 3 months.",
   
   "How do I contact support?": 
     "Reach our support team:\n\n📧 Email: support@pivothub.io\n📞 Phone: 269.998.4203\n📍 Address: PO Box 2025, Kalamazoo, MI 49003\n🕒 Hours: Mon-Fri, 9 AM - 6 PM EST\n\nWe typically respond within 24 hours on business days.",
   
   "What is the Free plan?": 
-    "The Free plan:\n\n✅ 5 credits per month\n✅ Access to all platform tools\n✅ Resets on your signup anniversary\n\n⚠️ No credit rollover (free tier only)\n⚠️ Cannot purchase extra credits\n\nUpgrade to a paid plan for more credits, rollover, and extra credit purchases!",
+    "The Free plan:\n\n✅ 5 credits per month\n✅ Access to all platform tools\n✅ Resets on your signup anniversary\n\n⚠️ Unused free credits don't carry over\n⚠️ Extra credit packs are for paid plans only\n\nUpgrade to a paid plan for more credits that last 3 months and the option to buy extra packs.",
 
   // Additional common questions
   "how do credits work": 
-    "Credits are used for AI-powered tools:\n\n• Most tools cost 1-5 credits (the big blueprint tools cost more: Create It 70, Deploy It 40)\n• Paid plans include monthly credits\n• Unused credits roll over (up to 2× limit)\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $49/mo (250)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nFree plan: 5 free credits/month, no rollover",
+    "Credits are used for AI-powered tools:\n\n• Most tools cost 1-5 credits (the big blueprint tools cost more: Create It 70, Deploy It 40)\n• Paid plans include monthly credits\n• Credits are only used when you get your results\n• Paid credits last 3 months, so unused ones carry over\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $49/mo (250)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nFree plan: 5 free credits/month (unused ones don't carry over)",
 
   "what tools are available": 
     "PivotHub offers 8 tool categories:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant finding\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Event tools\n\nVisit /pricing for full details!",
 
   "cancel subscription":
-    "To cancel your subscription:\n1. Go to Settings → Subscription\n2. Click 'Cancel Subscription'\n3. Confirm cancellation\n\nYou'll retain access until your billing period ends. Credits don't refund but stay active until expiration.",
+    "To cancel your subscription:\n1. Go to Settings\n2. Click 'Cancel Subscription'\n3. Confirm\n\nYou won't be charged again, and you keep your plan until the end of the month you already paid for. Credits you already have can be used until they expire (3 months from when you got them). Then your account moves to the Free plan.",
 
   "refund policy":
-    "Refund requests are handled case-by-case. Please contact:\n\n📧 support@pivothub.io\n📞 269.998.4203\n\nInclude your account email and reason for refund. We typically respond within 1-2 business days.",
+    "We review each refund request individually. Please contact:\n\n📧 support@pivothub.io\n📞 269.998.4203\n\nInclude your account email and the reason. We typically respond within 1-2 business days. If a payment is refunded, the credits from that payment are removed from your account.",
 
   "upgrade plan":
-    "To upgrade your plan:\n1. Go to /pricing\n2. Select your desired plan\n3. Click 'Choose Plan'\n4. Complete checkout\n\nYour new credits take effect immediately, and we prorate any existing subscription!",
+    "On the Free plan? Go to /pricing, pick a plan, and complete checkout. Your credits are added once payment is confirmed.\n\nAlready on a paid plan? Change it in Settings:\n• Bigger plan: you pay the price difference for the rest of this month, then get the extra credits right away (Starter → Pro adds 60).\n• Smaller plan: starts on your next billing date.",
 
   "what is rollover":
-    "Credit Rollover (paid plans only):\n\n✅ Unused credits carry to next month\n✅ Can accumulate up to 2× your monthly limit\n✅ Example: Starter (40 credits/month) can hold up to 80 credits\n\n⚠️ Free plan (free) has NO rollover",
+    "Unused credits (paid plans):\n\n✅ Each batch of paid credits lasts 3 months from the day you get it\n✅ Anything you don't use carries over until then\n✅ Extra credit pack credits also last 3 months\n\n⚠️ Free plan credits don't carry over. You get 5 new credits each month.",
 };
 
 const FAQS: string[] = [

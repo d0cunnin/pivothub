@@ -185,7 +185,7 @@ const Dashboard = () => {
                 <CardContent>
                   <div className="text-2xl font-bold">{remainingRequests} / {totalAvailable}</div>
                   <p className="text-xs text-muted-foreground">
-                    {rolloverCredits > 0 ? `(+${rolloverCredits} rolled over)` : `Used ${monthlyRequests} this month`}
+                    {rolloverCredits > 0 ? `Includes ${rolloverCredits} paid credits` : `Used ${monthlyRequests} this month`}
                   </p>
                   <Progress value={usagePercentage} className="mt-2" />
                 </CardContent>

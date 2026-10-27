@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { AlertTriangle } from "lucide-react";
+import { CreditCard } from "lucide-react";
+import { getStripeEnvironment } from "@/lib/payments/stripe";
 
 interface CheckoutModalProps {
   open: boolean;
@@ -11,10 +12,14 @@ interface CheckoutModalProps {
   planName: string;
   price: string;
   isEbook?: boolean;
+  credits?: number;
+  isOneTime?: boolean;
 }
 
-export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, isEbook = false }: CheckoutModalProps) => {
+export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, isEbook = false, isOneTime = false, credits }: CheckoutModalProps) => {
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const oneTime = isEbook || isOneTime;
+  useEffect(() => { setTermsAccepted(false); }, [open, planName]);
 
   const handleConfirm = () => {
     if (!termsAccepted) return;
@@ -33,11 +38,11 @@ export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-amber-500" />
-            Confirm Your Purchase
+            <CreditCard className="h-5 w-5 text-primary" />
+            Review Your Purchase
           </DialogTitle>
           <DialogDescription>
-            You're about to purchase {planName} for {price}{isEbook ? '' : '/month'}.
+            {planName}: {price}{oneTime ? ' one-time payment' : ' per month'}{credits ? ` for ${credits} Tool Credits${oneTime ? '' : ' each month'}` : ''}. Applicable taxes are shown at checkout.
           </DialogDescription>
         </DialogHeader>
         
@@ -45,10 +50,13 @@ export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, 
           <div className="p-4 bg-muted rounded-lg">
             <h4 className="font-medium mb-2">Important Information:</h4>
             <ul className="text-sm text-muted-foreground space-y-1">
-              <li>• All purchases are final - no refunds offered</li>
-              <li>• You'll be redirected to secure Stripe checkout</li>
-              {!isEbook && <li>• Subscription will auto-renew monthly</li>}
-              {!isEbook && <li>• Cancel anytime from your account settings</li>}
+              <li>• The secure payment form opens next. You are not charged until you complete it.</li>
+              {oneTime
+                ? <li>• This is a one-time payment. It does not renew.</li>
+                : <li>• Renews monthly until you cancel. Cancel anytime in Settings and you keep your plan until the end of the month you paid for.</li>}
+              <li>• Credits are added once your payment is confirmed and last 3 months. Credits are only used when a tool gives you results.</li>
+              <li>• Questions about a charge or a refund? Contact support@pivothub.io. We review each refund request individually. If a payment is refunded, its credits are removed.</li>
+              {getStripeEnvironment() === 'sandbox' && <li>• Test mode: test purchases do not change your real credit balance.</li>}
             </ul>
           </div>
           
@@ -61,14 +69,14 @@ export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, 
             />
             <label htmlFor="checkout-terms" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
               I acknowledge that I have read and agree to the{" "}
-              <a href="/terms-and-conditions" className="text-primary hover:underline" target="_blank">
+              <a href="/terms" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
                 Terms and Conditions
               </a>{" "}
               and{" "}
-              <a href="/privacy-policy" className="text-primary hover:underline" target="_blank">
+              <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
                 Privacy Policy
               </a>
-              . I understand that due to the nature of digital services, no refunds are offered and all sales are final.
+              .{!oneTime && ' I understand that this subscription renews monthly until I cancel.'}
             </label>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
@@ -40,7 +41,7 @@ const grantDataSchema = z.object({
   budgetNotes: z.string().max(2000).optional(),
 });
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -220,7 +221,7 @@ Return ONLY JSON as specified (no preamble).`;
       requestDurationMs: Date.now() - startTime
     });
 
-    try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-grant-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-grant-content', 5);
 
     return new Response(
       JSON.stringify(grantContent),
@@ -262,7 +263,7 @@ Return ONLY JSON as specified (no preamble).`;
       }
     );
   }
-});
+}));
 
 function generateFallbackLOI(grantData: any): string {
   return `LETTER OF INTENT

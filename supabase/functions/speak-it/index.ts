@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
@@ -40,7 +41,7 @@ interface SpeakItRequest {
   };
 }
 
-Deno.serve(async (req) => {
+Deno.serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -453,7 +454,7 @@ FORMATTING REQUIREMENTS:
       );
     }
 
-    try { await deductCreditsOnSuccess(supabase, userId, 'speak-it', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabase, userId, 'speak-it', 3);
     return new Response(
       JSON.stringify({
         success: true,
@@ -476,4 +477,4 @@ FORMATTING REQUIREMENTS:
       }
     );
   }
-});
+}));

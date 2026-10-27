@@ -1,3 +1,6 @@
+import {PlanChange} from './PlanChange';
+import {IdentitySettings} from './IdentitySettings';
+import { getStripeEnvironment } from "@/lib/payments/stripe";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -16,7 +19,7 @@ import { CreditCard, Calendar, AlertCircle, Zap } from "lucide-react";
 export const AccountSettings = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd } = useAuth();
+  const { subscribed, subscriptionTier, subscriptionPackage, subscriptionEnd, cancelAtPeriodEnd, pendingPriceId, pendingEffectiveAt, paymentStatus, refreshSubscription } = useAuth();
   const { monthlyRequests, remainingRequests, refreshUsage } = useUsage();
   const [isLoading, setIsLoading] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
@@ -38,16 +41,14 @@ export const AccountSettings = () => {
         return;
       }
 
-      // Payments not yet enabled in this rebuild
-      toast({
-        title: "Payments Coming Soon",
-        description: "Subscription management will be available once payments are reconnected.",
-      });
+      const { data, error } = await supabase.functions.invoke('manage-subscription', { body: { environment: getStripeEnvironment(), action: 'cancel' } });
+      if (error || data?.error) throw new Error(data?.error ?? 'Unable to cancel subscription');
+      toast({ title: 'Renewal Cancelled', description: 'No further renewals will be charged. Your current paid period remains available.' });
 
       setCancelReason("");
       
       // Refresh the page to update subscription status
-      setTimeout(() => window.location.reload(), 2000);
+      await refreshSubscription();await refreshUsage();
     } catch (error) {
       console.error("Error cancelling subscription:", error);
       toast({
@@ -94,7 +95,7 @@ export const AccountSettings = () => {
         }
       });
 
-      if (error) throw error;
+      if (error || data?.error) throw new Error(data?.error ?? error?.message);
 
       toast({
         title: "Account Deleted",
@@ -128,49 +129,26 @@ export const AccountSettings = () => {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      
-      // Get session for authorization
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast({
-          title: "Authentication Required",
-          description: "Please sign in to purchase credits.",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
+    navigate('/pricing');
+  };
 
-      // Payments not yet enabled in this rebuild
-      toast({
-        title: "Payments Coming Soon",
-        description: "Extra credit purchases will be available once payments are reconnected.",
-      });
-      return;
-    } catch (error: any) {
-      console.error('Error purchasing credits:', error);
-      
-      let errorMessage = "Failed to initiate purchase";
-      
-      if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
-        errorMessage = "You need an active subscription to purchase extra credits";
-      }
-      
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+  const handleManageBilling = async () => {
+    const tab = window.open('about:blank', '_blank');
+    try {
+      const { data, error } = await supabase.functions.invoke('manage-subscription', { body: { environment: getStripeEnvironment(), action: 'portal', returnUrl: window.location.origin + '/settings' } });
+      if (error || data?.error || !data?.url) throw new Error(data?.error ?? 'Unable to open billing');
+      if (tab) { tab.opener = null; tab.location.href = data.url; }
+      else toast({ title: 'Allow Popups', description: 'Allow a new tab to open your billing page.' });
+    } catch (e) {
+      tab?.close();
+      toast({ title: 'Billing Unavailable', description: e instanceof Error ? e.message : 'Please try again.', variant: 'destructive' });
     }
   };
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold">Account Settings</h1>
+      <IdentitySettings />
       
       {/* Usage & Credits Section */}
       <Card>
@@ -190,7 +168,7 @@ export const AccountSettings = () => {
                 {monthlyRequests} <span className="text-sm font-normal text-muted-foreground">used this month</span>
               </div>
               <div className="text-sm text-muted-foreground mt-1">
-                {remainingRequests} requests remaining
+                {remainingRequests} Tool Credits remaining
               </div>
             </div>
           </div>
@@ -200,7 +178,7 @@ export const AccountSettings = () => {
             <div className="space-y-3">
               <Label className="text-base font-semibold">Purchase Extra Credits</Label>
               <div className="text-sm text-muted-foreground mb-3">
-                Need more credits this month? Add an extra credit pack.
+                Need more Tool Credits? Choose a pack on the pricing page. Pack credits last 3 months.
               </div>
               <div className="grid gap-3">
                 <Button
@@ -211,9 +189,9 @@ export const AccountSettings = () => {
                 >
                   <div className="text-left">
                     <div className="font-semibold">25 Extra Credits</div>
-                    <div className="text-xs text-muted-foreground">Starter Pack - Perfect for occasional needs</div>
+                    <div className="text-xs text-muted-foreground">Small Pack - Perfect for occasional needs</div>
                   </div>
-                  <span className="font-bold text-lg">$10.00</span>
+                  <span className="font-bold text-lg">$5.00</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -225,7 +203,7 @@ export const AccountSettings = () => {
                     <div className="font-semibold">70 Extra Credits</div>
                     <div className="text-xs text-muted-foreground">Boost Pack - Best value for active users</div>
                   </div>
-                  <span className="font-bold text-lg">$25.00</span>
+                  <span className="font-bold text-lg">$10.00</span>
                 </Button>
                 <Button
                   variant="outline"
@@ -237,7 +215,7 @@ export const AccountSettings = () => {
                     <div className="font-semibold">150 Extra Credits</div>
                     <div className="text-xs text-muted-foreground">Power Pack - Maximum credits for heavy usage</div>
                   </div>
-                  <span className="font-bold text-lg">$50.00</span>
+                  <span className="font-bold text-lg">$20.00</span>
                 </Button>
               </div>
             </div>
@@ -288,7 +266,7 @@ export const AccountSettings = () => {
                   {subscriptionEnd && (
                     <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4" />
-                      <span>Renews on {new Date(subscriptionEnd).toLocaleDateString()}</span>
+                      <span>{cancelAtPeriodEnd ? "Paid period ends" : "Next billing date"} {new Date(subscriptionEnd).toLocaleDateString()}</span>
                     </div>
                   )}
                 </div>
@@ -299,19 +277,22 @@ export const AccountSettings = () => {
                 <div className="flex-1">
                   <div className="font-semibold text-lg">Free Plan</div>
                   <div className="text-sm text-muted-foreground mt-1">
-                    Upgrade to access premium features
+                    Upgrade for more monthly Tool Credits
                   </div>
                 </div>
               </>
             )}
           </div>
           
+          {paymentStatus==='past_due' && <p role="alert" className="text-destructive">Your last payment did not go through. Update your card using Billing History & Payment Method below.</p>}
+          {pendingPriceId && pendingEffectiveAt && <p className="text-sm text-muted-foreground">Plan change scheduled for {new Date(pendingEffectiveAt).toLocaleDateString()}.</p>}
+          <PlanChange />
           <div className="flex gap-3">
             <Button 
-              onClick={() => window.location.href = '/pricing'}
+              onClick={handleManageBilling}
               variant="default"
             >
-              {subscribed ? 'Manage Subscription' : 'Upgrade Plan'}
+              Billing History & Payment Method
             </Button>
           </div>
         </CardContent>
@@ -322,7 +303,7 @@ export const AccountSettings = () => {
         <CardHeader>
           <CardTitle>Cancel Subscription</CardTitle>
           <CardDescription>
-            Cancel your paid subscription. You'll retain access until the end of your billing period.
+            You won't be charged again. You keep your plan until the end of the month you already paid for, then move to the Free plan. Credits you already have can be used until they expire.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -339,7 +320,7 @@ export const AccountSettings = () => {
           
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="outline" disabled={isLoading}>
+              <Button variant="outline" disabled={isLoading || !subscribed || cancelAtPeriodEnd}>
                 Cancel Subscription
               </Button>
             </AlertDialogTrigger>
@@ -347,8 +328,8 @@ export const AccountSettings = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Cancel Subscription?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Your subscription will be cancelled immediately, but you'll retain access until the end of your current billing period.
-                  You can resubscribe at any time.
+                  You won't be charged again. You keep your plan until the end of the month you already paid for, and your credits can be used until they expire.
+                  You can sign up again at any time.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -367,7 +348,7 @@ export const AccountSettings = () => {
         <CardHeader>
           <CardTitle className="text-destructive">Delete Account</CardTitle>
           <CardDescription>
-            Permanently delete your account and all associated data. This action cannot be undone.
+            Delete your sign-in account and saved content. Required payment and security records may be retained. This action cannot be undone.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -407,12 +388,12 @@ export const AccountSettings = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your account and remove all your data from our servers, including:
+                  This action cannot be undone. Your account and saved content will be removed. Required payment and security records may be retained. Removed content includes:
                   <ul className="list-disc list-inside mt-2 space-y-1">
                     <li>All assessment results and progress</li>
                     <li>Course enrollments and submissions</li>
                     <li>Analytics and feedback</li>
-                    <li>Subscription information</li>
+                    <li>Active account access</li>
                     <li>User profile and preferences</li>
                   </ul>
                 </AlertDialogDescription>

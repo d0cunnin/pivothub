@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -20,7 +21,7 @@ const supabaseServiceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
 const supabase = createClient(supabaseUrl!, supabaseServiceRoleKey!);
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId: string | null = null;
   let ip = 'unknown';
@@ -139,7 +140,7 @@ serve(async (req) => {
 
     // Charge only when the AI produced a real (parsed) analysis, not the fallback.
     if (aiAnalysisParsed) {
-      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'enhanced-assessment-analyzer', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+      await deductCreditsOnSuccess(guardResult.supabase, userId!, 'enhanced-assessment-analyzer', 2);
     }
     
     return new Response(JSON.stringify(analysis), {
@@ -168,7 +169,7 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-});
+}));
 
 function getSystemPromptForAssessment(assessmentType: string): string {
   const basePrompt = `You are a senior career strategist and psychologist with 20+ years of experience conducting assessments for Fortune 500 companies and helping individuals achieve career breakthroughs. You've personally guided over 3,000 successful career transitions and pivots. 

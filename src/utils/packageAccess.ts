@@ -106,22 +106,8 @@ export function hasToolAccess(
   toolName: string,
   isSubscribed: boolean = false
 ): boolean {
-  // Explore Mode users — allow access; credits will gate usage.
-  if (!isSubscribed || !subscriptionPackage) {
-    return true;
-  }
-
-  // All-access package gets everything.
-  if (subscriptionPackage === 'all-access') {
-    return true;
-  }
-
-  const packageTools = PACKAGE_TOOLS[subscriptionPackage as SubscriptionPackage];
-  if (!packageTools) {
-    return false;
-  }
-
-  return packageTools.includes(toolName);
+  // All plans share all tools; server-side credits enforce usage.
+  return true;
 }
 
 /**
@@ -153,7 +139,9 @@ export function getPackageDisplayName(subscriptionPackage: string | null | undef
     'build-teach-launch': 'Build It + Teach It + Launch It',
     'fund-it': 'Fund It',
     'all-access': 'All-Access',
+    'starter':'Starter',
+    'pro':'Pro',
   };
 
-  return displayNames[subscriptionPackage || ''] || 'No Package';
+  return displayNames[subscriptionPackage || ''] || 'Free Plan';
 }

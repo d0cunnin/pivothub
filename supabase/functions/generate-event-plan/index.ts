@@ -1,7 +1,8 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import { guard, corsHeaders, deductCreditsOnSuccess, logRequest } from "../_shared/guard.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 
-Deno.serve(async (req) => {
+Deno.serve(withCreditRequest(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -363,4 +364,4 @@ Generate event titles, description, color palette${formData.includeItinerary ? '
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-});
+}));

@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
@@ -14,7 +15,7 @@ const personalityAssessmentSchema = z.object({
     }, "Responses must contain 1-50 entries")
 });
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -548,7 +549,7 @@ serve(async (req) => {
 
     // Charge only when the AI produced a real (parsed) result, not the fallback.
     if (aiResultParsed) {
-      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'personality-assessment', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+      await deductCreditsOnSuccess(guardResult.supabase, userId!, 'personality-assessment', 2);
     }
 
     return new Response(
@@ -576,4 +577,4 @@ serve(async (req) => {
       }
     );
   }
-});
+}));

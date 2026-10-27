@@ -30,7 +30,9 @@ const AuthCallback = () => {
           toast.success('Signed in successfully!');
         }
         
-        navigate('/dashboard');
+        const target=new URLSearchParams(window.location.search).get('redirect')??sessionStorage.getItem('auth-destination')??'/dashboard';
+        sessionStorage.removeItem('auth-destination');
+        navigate(target.startsWith('/')&&!target.startsWith('//')?target:'/dashboard');
       } else {
         navigate('/auth');
       }

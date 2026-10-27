@@ -44,9 +44,11 @@ import ActIt from "./pages/ActIt";
 import StudyIt from "./pages/StudyIt";
 import BeforeYouStart from "./pages/BeforeYouStart";
 import AuthCallback from "./pages/AuthCallback";
+import PasswordRecovery from "./pages/PasswordRecovery";
 
 import { HelmetProvider } from 'react-helmet-async';
 import AppErrorBoundary from "@/components/AppErrorBoundary";
+import ScrollToTop from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -60,10 +62,14 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/auth/reset-password" element={<PasswordRecovery />} />
+            <Route path="/terms-and-conditions" element={<Navigate to="/terms" replace />} />
+            <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/teachit" element={<TeachIt />} />

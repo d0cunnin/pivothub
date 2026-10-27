@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
@@ -8,7 +9,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-Deno.serve(async (req) => {
+Deno.serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
 
   try {
@@ -88,7 +89,7 @@ Available Materials: ${materials || 'standard classroom supplies'}`;
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    try { await deductCreditsOnSuccess(supabase, userId, 'lesson-plan', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabase, userId, 'lesson-plan', 3);
     return new Response(JSON.stringify({ content, creditsUsed: 3 }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -97,4 +98,4 @@ Available Materials: ${materials || 'standard classroom supplies'}`;
     console.error('lesson-plan error', e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : 'Unexpected error' }), { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
-});
+}));

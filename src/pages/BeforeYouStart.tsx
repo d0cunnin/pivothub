@@ -101,7 +101,6 @@ const BeforeYouStart = () => {
     }
   ];
 
-
   return (
     <>
       <Helmet>
@@ -142,7 +141,7 @@ const BeforeYouStart = () => {
                 Learn how PivotHub works and discover which tools are right for your journey. Get guidance on starting your path to income, clarity, career, or business growth.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
+                <Button size="lg" variant="secondary" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
                   <Link to="/assessit">
                     <Target className="w-5 h-5 mr-2" />
                     Take the Free Assessment
@@ -174,7 +173,7 @@ const BeforeYouStart = () => {
               <p className="text-xl md:text-2xl text-white/90 mb-8">
                 If you're unsure which tool is right for you, we recommend starting with <strong>Assess It</strong>. This tool helps you understand your skills, goals, and the best path forward.
               </p>
-              <Button size="lg" variant="hero" className="shadow-glow transition-elegant hover:scale-105" asChild>
+              <Button size="lg" variant="secondary" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
                 <Link to="/assessit">
                   <Target className="w-5 h-5 mr-2" />
                   Start with Assess It
@@ -256,32 +255,18 @@ const BeforeYouStart = () => {
           </div>
         </section>
 
-        {/* Plans at a glance */}
+        {/* Section 5: Credits, Not Tiers */}
         <section className="py-20 bg-accent">
           <div className="container mx-auto px-6 lg:px-8">
-            <div className="max-w-5xl mx-auto text-center">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">
-                Plans at a Glance
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+                No Tiers. Just Credits.
               </h2>
-              <p className="text-xl text-white/90 mb-10">
-                Every plan includes every tool. Plans differ mainly in how many credits you get each month.
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-10">
+                Every plan unlocks every tool. There are no tiers and no feature lists to compare — the only thing that changes is how many Tool Credits you get each month.
               </p>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-                {[
-                  { name: 'Free', price: '$0', credits: '5 credits / month' },
-                  { name: 'Starter', price: '$12/mo', credits: '40 credits / month' },
-                  { name: 'Pro', price: '$24/mo', credits: '100 credits / month' },
-                  { name: 'All-Access', price: '$49/mo', credits: '250 credits / month' },
-                ].map((plan) => (
-                  <div key={plan.name} className="rounded-2xl bg-white p-6 text-center shadow-sm">
-                    <h3 className="text-xl font-bold text-foreground mb-1">{plan.name}</h3>
-                    <p className="text-3xl font-bold text-primary mb-1">{plan.price}</p>
-                    <p className="text-muted-foreground">{plan.credits}</p>
-                  </div>
-                ))}
-              </div>
-              <Button variant="hero" size="lg" asChild>
-                <Link to="/pricing">Compare Plans</Link>
+              <Button variant="secondary" size="lg" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
+                <Link to="/pricing">View Pricing Details</Link>
               </Button>
             </div>
           </div>
@@ -308,26 +293,26 @@ const BeforeYouStart = () => {
               <div className="mt-10 grid md:grid-cols-2 gap-6">
                 <div className="p-6 bg-blue-50 rounded-xl border border-blue-100">
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-blue-900">
-                    <span className="text-2xl">💡</span> On the Free Plan
+                    <span className="text-2xl">💡</span> For Free Plan Users
                   </h3>
                   <ul className="space-y-2 text-base text-blue-800">
                     <li>✓ You get 5 credits per month (resets on your signup anniversary)</li>
                     <li>✓ Start with assessments (2 credits each) to find your best path</li>
                     <li>✓ Use chatbots (1 credit per message) for ongoing guidance</li>
                     <li>✓ Save high-cost tools for when you upgrade</li>
-                    <li>✓ No rollover—credits reset each month</li>
+                    <li>✓ Unused free credits don't carry over to the next month</li>
                   </ul>
                 </div>
                 
                 <div className="p-6 bg-purple-50 rounded-xl border border-purple-100">
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-purple-900">
-                    <span className="text-2xl">⚡</span> On a Paid Plan
+                    <span className="text-2xl">⚡</span> For Paid Plan Users
                   </h3>
                   <ul className="space-y-2 text-base text-purple-800">
-                    <li>✓ Credits reset on your billing anniversary each month</li>
-                    <li>✓ Unused credits roll over (capped at 2× your monthly limit)</li>
+                    <li>✓ New credits are added each time your monthly payment goes through</li>
+                    <li>✓ Each batch of credits lasts 3 months, so unused ones carry over</li>
                     <li>✓ Use high-cost tools freely—you have the credits!</li>
-                    <li>✓ Build credit reserves during slow months</li>
+                    <li>✓ Save up credits during slow months for bigger tools</li>
                     <li>✓ Mix high and low-cost tools based on your needs</li>
                   </ul>
                 </div>
