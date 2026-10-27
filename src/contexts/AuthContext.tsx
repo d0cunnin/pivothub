@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { getStripeEnvironment } from '@/lib/payments/stripe';
 
 interface AuthContextType {
   user: User | null;
@@ -41,13 +42,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { toast } = useToast();
 
   const refreshSubscription = async () => {
-    if (!session) return;
+    const { data: { session: currentSession } } = await supabase.auth.getSession();
+    if (!currentSession) return;
     
     try {
       const { data, error } = await supabase.functions.invoke('check-subscription', {
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${currentSession.access_token}`,
         },
+        body: { environment: getStripeEnvironment() },
       });
 
       if (error) {
