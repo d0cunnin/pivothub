@@ -49,7 +49,7 @@ const FAQ_RESPONSES: Record<string, string> = {
     "To cancel your subscription:\n1. Go to Settings\n2. Click 'Cancel Subscription'\n3. Confirm\n\nYou won't be charged again, and you keep your plan until the end of the month you already paid for. Credits you already have can be used until they expire (3 months from when you got them). Then your account moves to the Free plan.",
 
   "refund policy":
-    "We review each refund request individually. Please contact:\n\n📧 support@pivothub.io\n📞 269.998.4203\n\nInclude your account email and the reason. We typically respond within 1-2 business days. If a payment is refunded, the credits from that payment are removed from your account.",
+    "Refunds are not automatic. Each request is reviewed individually by our team. Please contact:\n\n📧 support@pivothub.io\n📞 269.998.4203\n\nInclude your account email and the reason. We typically respond within 1-2 business days. If a payment is refunded, the credits from that payment are removed from your account.",
 
   "upgrade plan":
     "On the Free plan? Go to /pricing, pick a plan, and complete checkout. Your credits are added once payment is confirmed.\n\nAlready on a paid plan? Change it in Settings:\n• Bigger plan: you pay the price difference for the rest of this month, then get the extra credits right away (Starter → Pro adds 60).\n• Smaller plan: starts on your next billing date.",

@@ -225,7 +225,7 @@ const FAQ = () => {
                     Do you offer refunds?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    If you think you were charged by mistake or something went wrong, contact us at support@pivothub.io or 269.998.4203 with your account email and the reason. We review each refund request individually. If a payment is refunded, the credits from that payment are removed from your account.
+                    If you think you were charged by mistake or something went wrong, contact us at support@pivothub.io or 269.998.4203 with your account email and the reason. Refunds are not automatic: our team reviews each request individually. If a payment is refunded, the credits from that payment are removed from your account.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

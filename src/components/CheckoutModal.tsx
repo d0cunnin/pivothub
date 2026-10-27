@@ -55,7 +55,7 @@ export const CheckoutModal = ({ open, onOpenChange, onConfirm, planName, price, 
                 ? <li>• This is a one-time payment. It does not renew.</li>
                 : <li>• Renews monthly until you cancel. Cancel anytime in Settings and you keep your plan until the end of the month you paid for.</li>}
               <li>• Credits are added once your payment is confirmed and last 3 months. Credits are only used when a tool gives you results.</li>
-              <li>• Questions about a charge or a refund? Contact support@pivothub.io. We review each refund request individually. If a payment is refunded, its credits are removed.</li>
+              <li>• Questions about a charge or a refund? Contact support@pivothub.io. Refunds are not automatic; each request is reviewed individually. If a payment is refunded, its credits are removed.</li>
               {getStripeEnvironment() === 'sandbox' && <li>• Test mode: test purchases do not change your real credit balance.</li>}
             </ul>
           </div>
