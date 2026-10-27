@@ -24,6 +24,7 @@ async function callChat(
   systemMsg: string,
   userPrompt: string,
   timeoutMs: number,
+  maxTokens: number = MAX_TOKENS,
 ): Promise<string> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -40,7 +41,7 @@ async function callChat(
           { role: 'system', content: systemMsg },
           { role: 'user', content: userPrompt },
         ],
-        max_completion_tokens: MAX_TOKENS,
+        max_completion_tokens: maxTokens,
       }),
       signal: controller.signal,
     });
@@ -70,11 +71,12 @@ async function callChatWithRetry(
   userPrompt: string,
   timeoutMs: number,
   retries = 1,
+  maxTokens: number = MAX_TOKENS,
 ): Promise<string> {
   let lastErr: any;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      return await callChat(apiKey, model, systemMsg, userPrompt, timeoutMs);
+      return await callChat(apiKey, model, systemMsg, userPrompt, timeoutMs, maxTokens);
     } catch (err: any) {
       lastErr = err;
       if (err?.status === 402) throw err;
@@ -86,13 +88,13 @@ async function callChatWithRetry(
   throw lastErr;
 }
 
-async function generateText(apiKey: string, systemMsg: string, userPrompt: string): Promise<string> {
+async function generateText(apiKey: string, systemMsg: string, userPrompt: string, maxTokens: number = MAX_TOKENS): Promise<string> {
   try {
-    return await callChatWithRetry(apiKey, PRIMARY_MODEL, systemMsg, userPrompt, 60_000);
+    return await callChatWithRetry(apiKey, PRIMARY_MODEL, systemMsg, userPrompt, 60_000, 1, maxTokens);
   } catch (err: any) {
     if (err?.status === 402) throw err;
     console.warn(`[generate-teaching-content] Primary model failed, falling back: ${err?.message}`);
-    return await callChatWithRetry(apiKey, FALLBACK_MODEL, systemMsg, userPrompt, 55_000);
+    return await callChatWithRetry(apiKey, FALLBACK_MODEL, systemMsg, userPrompt, 55_000, 1, maxTokens);
   }
 }
 
@@ -745,41 +747,41 @@ Make the plan practical, budget-conscious, and focused on PROFITABILITY. Include
 ---MARKETING_PLAN_END---`,
       ];
 
-      const buildChunkPrompt = (blocks: string[]) => `${profileBlock}
+      const buildSectionPrompt = (block: string) => `${profileBlock}
 
-Generate ALL ${blocks.length} of the following materials in a single response. Format your response EXACTLY as shown below with clear section markers:
+Generate the following material. Start your response with its start marker and finish with its end marker, exactly as shown:
 
-${blocks.join('\n\n')}
+${block}
 
-Make all materials cohesive, professional, and actionable. Tailor everything to the instructor's expertise level and target audience.`
+Make it professional and actionable. Tailor it to the instructor's expertise level and target audience.`
 
       try {
         const SYSTEM_MSG = 'You are a senior educational content creator with 20+ years experience generating comprehensive, professional teaching materials across all formats and audiences. You understand adult learning theory, course monetization, and modern teaching platforms.';
 
-        // Three parallel chunks of two sections each — allSettled so one
-        // failed chunk degrades that pair of sections instead of failing the
-        // whole request. Slight stagger reduces rate-limit collisions.
-        const chunkDefs: number[][] = [[0, 1], [2, 3], [4, 5]];
+        // One request per section, all in parallel. Pairing two long sections
+        // in one request ran out of tokens, the end marker was never written,
+        // and those sections came back empty.
+        const MATERIALS_MAX_TOKENS = 8000;
         const results = await Promise.allSettled(
-          chunkDefs.map(async (idxs, i) => {
+          sectionBlocks.map(async (block, i) => {
             if (i > 0) await sleep(i * 150);
-            return generateText(lovableApiKey, SYSTEM_MSG, buildChunkPrompt(idxs.map((n) => sectionBlocks[n])));
+            return generateText(lovableApiKey, SYSTEM_MSG, buildSectionPrompt(block), MATERIALS_MAX_TOKENS);
           }),
         );
 
-        let fullContent = '';
+        const sectionTexts: (string | null)[] = [];
         let creditsExhausted = false;
         for (const r of results) {
           if (r.status === 'fulfilled') {
-            fullContent += r.value + '\n\n';
-          } else if ((r.reason as any)?.status === 402) {
-            creditsExhausted = true;
+            sectionTexts.push(r.value);
           } else {
-            console.error('[generate-teaching-content] Chunk failed:', (r.reason as any)?.message);
+            sectionTexts.push(null);
+            if ((r.reason as any)?.status === 402) creditsExhausted = true;
+            else console.error('[generate-teaching-content] Section failed:', (r.reason as any)?.message);
           }
         }
 
-        if (!fullContent.trim()) {
+        if (sectionTexts.every((t) => !t || !t.trim())) {
           return new Response(JSON.stringify({
             error: creditsExhausted
               ? 'Insufficient credits. Please add credits to continue.'
@@ -802,33 +804,38 @@ Make all materials cohesive, professional, and actionable. Tailor everything to 
             .trim()
         }
 
-        // Parse the response into sections
-        const extractSection = (content: string, startMarker: string, endMarker: string): string => {
-          const startIndex = content.indexOf(startMarker)
-          const endIndex = content.indexOf(endMarker)
-          if (startIndex === -1 || endIndex === -1) {
-            return 'Content not found'
-          }
-          return cleanMarkdown(content.substring(startIndex + startMarker.length, endIndex))
-        }
-
-        const webinarConcepts = extractSection(fullContent, '---WEBINAR_CONCEPTS_START---', '---WEBINAR_CONCEPTS_END---')
-        const courseOutline = extractSection(fullContent, '---COURSE_OUTLINE_START---', '---COURSE_OUTLINE_END---')
-        const handouts = extractSection(fullContent, '---HANDOUTS_START---', '---HANDOUTS_END---')
-        const lessonScript = extractSection(fullContent, '---LESSON_SCRIPT_START---', '---LESSON_SCRIPT_END---')
-        const toolsAndPlatforms = extractSection(fullContent, '---TOOLS_PLATFORMS_START---', '---TOOLS_PLATFORMS_END---')
-        const marketingPlan = extractSection(fullContent, '---MARKETING_PLAN_START---', '---MARKETING_PLAN_END---')
+        // Each response holds one section. Keep its text even if the model
+        // left out a marker (e.g. the end marker of a long, cut-off section).
+        const sectionKeys = ['WEBINAR_CONCEPTS', 'COURSE_OUTLINE', 'HANDOUTS', 'LESSON_SCRIPT', 'TOOLS_PLATFORMS', 'MARKETING_PLAN'];
+        const MISSING_SECTION = 'This section could not be generated this time. Please generate your materials again.';
+        const sections = sectionTexts.map((raw, i) => {
+          if (!raw) return '';
+          let text = raw;
+          const start = `---${sectionKeys[i]}_START---`;
+          const end = `---${sectionKeys[i]}_END---`;
+          const s0 = text.indexOf(start);
+          if (s0 !== -1) text = text.slice(s0 + start.length);
+          const e0 = text.indexOf(end);
+          if (e0 !== -1) text = text.slice(0, e0);
+          return cleanMarkdown(text.replace(/---[A-Z_]+_(START|END)---/g, ''));
+        });
+        const complete = sections.every((t) => t.length > 0);
+        const [webinarConcepts, courseOutline, handouts, lessonScript, toolsAndPlatforms, marketingPlan] =
+          sections.map((t) => t || MISSING_SECTION);
 
         await logRequest({
           endpoint: "generate-teaching-content",
           userId,
           ip,
           success: true,
-          creditsCharged: 5,
+          creditsCharged: complete ? 5 : 0,
           requestDurationMs: Date.now() - startTime
         });
 
-        try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+        // Charge only when every section was delivered.
+        if (complete) {
+          try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+        }
         
         return new Response(
           JSON.stringify({
