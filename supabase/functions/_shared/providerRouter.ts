@@ -40,7 +40,7 @@ export async function getModelForUser(
 
   return {
     provider: 'openai',
-    model: overrideModel || 'openai/gpt-5-mini',
+    model: overrideModel || 'google/gemini-3.1-flash-lite',
     apiKey: Deno.env.get('LOVABLE_API_KEY')!,
     endpoint: 'https://ai.gateway.lovable.dev/v1/chat/completions'
   };
