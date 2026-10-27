@@ -7,4 +7,4 @@ export const paymentCatalog = {
   power_pack: { name: 'Power Pack', credits: 150, amount: 2000, recurring: false, plan: null },
 } as const;
 export type PaymentPriceId = keyof typeof paymentCatalog;
-export function isPaymentPriceId(id: string): id is PaymentPriceId { return Object.hasOwn(paymentCatalog, id); }
+export function isPaymentPriceId(id: string): id is PaymentPriceId { return Object.prototype.hasOwnProperty.call(paymentCatalog, id); }
