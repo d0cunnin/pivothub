@@ -8,7 +8,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Compass, Target, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sprout } from "lucide-react";
-import { PACKAGE_TOOLS } from "@/utils/packageAccess";
 
 const BeforeYouStart = () => {
   const tools = [
@@ -101,61 +100,6 @@ const BeforeYouStart = () => {
       color: "text-green-600"
     }
   ];
-
-  const toolDisplayNames: Record<string, string> = {
-    'career-assessment': 'Career Assessment',
-    'skills-assessment': 'Skills Assessment',
-    'personality-assessment': 'Personality Assessment',
-    'side-income-assessment': 'Side Income Assessment',
-    'interview-questions': 'Interview Questions',
-    'interview-feedback': 'Interview Feedback',
-    'resume-analyzer': 'Resume Analyzer',
-    'learnit': 'Learn It',
-    'business-mentor': 'Business Mentor',
-    'business-plan': 'Business Plan',
-    'business-idea': 'Business Idea',
-    'business-foundation': 'Business Foundation',
-    'business-resources': 'Business Resources',
-    'pitch-deck': 'Pitch Deck',
-    'logo-generator': 'Logo Generator',
-    'name-checker': 'Name Checker',
-    'legal-docs': 'Legal Documents',
-    'marketing-strategy': 'Marketing Strategy',
-    'social-media': 'Social Media',
-    'teaching-materials': 'Teaching Materials',
-    'startup-checklist': 'Startup Checklist',
-    'grant-content': 'LOI & Grant Proposal Generator',
-    'tech-readiness-assessment': 'Tech Readiness Assessment',
-    'community-assessment': 'Community Assessment',
-    'career-advisor': 'Career Advisor Chatbot',
-    'resume-builder': 'Resume Builder',
-    'prompt-it': 'Prompt It',
-    'code-it': 'Code It',
-    'study-it': 'Study It',
-    'biography': 'Biography',
-    'business-docs': 'Business Documents',
-    'lesson-plan': 'Lesson Plans',
-    'quiz-generator': 'Quiz Generator',
-    'rubric-builder': 'Rubric Builder',
-    'launch-strategy': 'Launch Strategy',
-    'speak-it': 'Speak It',
-    'schedule-it': 'Schedule It',
-    'host-it': 'Host It',
-    'garden-it': 'Garden It',
-    'act-it': 'Act It',
-    'grant-finder': 'Grant Finder',
-    'grant-readiness': 'Grant Readiness',
-    'grant-resources': 'Grant Resources',
-    'side-income-report': 'Side Income Blueprint',
-  };
-
-  const getToolsList = (packageKey: string) => {
-    const tools = PACKAGE_TOOLS[packageKey as keyof typeof PACKAGE_TOOLS];
-    if (packageKey === 'all-access') {
-      return 'All tools included';
-    }
-    return tools.map(tool => toolDisplayNames[tool] || tool).join(', ');
-  };
 
   return (
     <>
