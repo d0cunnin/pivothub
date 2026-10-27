@@ -8,7 +8,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
 import { Check, Star, Coins, Zap, AlertCircle } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -29,7 +28,7 @@ const Pricing = () => {
     tier: ''
   });
   
-  const [selectedPathIndex, setSelectedPathIndex] = useState(1); // Default to Starter (index 1)
+
   const [purchasingCredits, setPurchasingCredits] = useState(false);
 
   const handlePurchaseCredits = async (credits: number) => {
@@ -116,79 +115,63 @@ const Pricing = () => {
 
   const allPlans = [
     {
-      name: "Explore Mode",
-      price: "Free",
-      period: "forever",
-      description: "Get 5 credits every month to explore our tools",
+      name: "Free",
+      tagline: "No credit card required",
+      price: "$0",
+      credits: 5,
       features: [
-        "5 credits per month (resets on signup anniversary)",
-        "Credits reset monthly (no rollover)",
-        "Use any tool (costs vary by complexity)",
-        "Access to all tool categories",
-        "Community access",
-        "Email support"
+        "5 Tool Credits each month",
+        "Credits reset monthly on your signup date",
+        "No rollover",
+        "Email support",
       ],
       tier: "free",
-      package: null,
-      gradient: "from-gray-500/10 to-gray-600/10",
-      isFree: true
+      isFree: true,
     },
     {
       name: "Starter",
+      tagline: "Get the basics",
       price: "$12",
-      period: "month",
-      description: "Perfect for getting started with 40 monthly credits",
+      credits: 40,
       features: [
-        "40 credits per month",
-        "Unused credits roll over (up to 2× monthly limit)",
-        "Access to all tools",
+        "40 Tool Credits each month",
+        "Unused credits roll over (up to 2× monthly amount)",
+        "Can buy extra credit packs",
         "Email support",
-        "Community access"
       ],
       tier: "starter",
-      package: "starter",
-      gradient: "from-blue-500/10 to-cyan-600/10",
-      accent: "border-l-4 border-blue-500",
-      isPopular: true
+      isPopular: true,
     },
     {
       name: "Pro",
+      tagline: "For regular users",
       price: "$24",
-      period: "month",
-      description: "Ideal for regular users with 100 monthly credits",
+      credits: 100,
       features: [
-        "100 credits per month",
-        "Unused credits roll over (up to 2× monthly limit)",
-        "Access to all tools",
+        "100 Tool Credits each month",
+        "Unused credits roll over (up to 2× monthly amount)",
+        "Can buy extra credit packs",
         "Priority email support",
-        "Early access to new features"
+        "Early access to new tools",
       ],
       tier: "pro",
-      package: "pro",
-      gradient: "from-emerald-500/10 to-green-600/10",
-      accent: "border-l-4 border-emerald-500"
     },
     {
       name: "All-Access",
+      tagline: "Everything, for power users",
       price: "$49",
-      period: "month",
-      description: "Everything you need with 250 monthly credits",
+      credits: 250,
       features: [
-        "250 credits per month",
-        "Unused credits roll over (up to 2× monthly limit)",
-        "Access to all tools",
+        "250 Tool Credits each month",
+        "Unused credits roll over (up to 2× monthly amount)",
+        "Can buy extra credit packs",
         "Priority support",
-        "Early access to new features",
-        "Dedicated account manager"
+        "Early access to new tools",
+        "Dedicated account manager",
       ],
       tier: "all-access",
-      package: "all_access",
-      gradient: "from-blue-500/10 to-cyan-600/10",
-      accent: "border-l-4 border-blue-500"
-    }
+    },
   ];
-  
-  const selectedPlan = allPlans[selectedPathIndex];
 
   return (
     <div className="min-h-screen bg-white">
@@ -213,11 +196,11 @@ const Pricing = () => {
               <span className="text-3xl font-bold text-white tracking-wider">PRICING</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Choose Your Path
+              Simple, Clear Pricing
             </h1>
             <div className="text-center max-w-4xl mx-auto">
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Start free with Explore Mode, then choose the path that fits your journey—or get everything with our All Access Pass.
+              Start with the Free plan, then upgrade to Starter, Pro, or All-Access whenever you need more Tool Credits.
             </p>
             </div>
           </div>
@@ -229,167 +212,68 @@ const Pricing = () => {
       {/* Subscription Plans */}
       <section className="section-spacing-sm bg-white">
         <div className="page-container">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-6">Select Your Plan</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
-              Choose the plan that matches your goals. Start free or unlock full access with a paid subscription.
+          <div className="text-center mb-10">
+            <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Every plan works with every tool. Plans differ only in how many Tool Credits you get each month.
             </p>
-            
-            <div className="text-base text-muted-foreground max-w-4xl mx-auto text-center space-y-6">
-              <div>
-                <h3 className="text-lg font-bold text-foreground mb-4">PivotHub Pricing Overview</h3>
-              </div>
-              
-              <div>
-                <h4 className="font-bold text-foreground mb-2">Explore Mode (Free)</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>5 free credits each month</li>
-                  <li>Credits reset on your signup anniversary</li>
-                  <li>No rollover</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-bold text-foreground mb-2">Paid Plans</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Starter: $12/month for 40 credits</li>
-                  <li>Pro: $24/month for 100 credits</li>
-                  <li>All-Access: $49/month for 250 credits</li>
-                  <li>Unused credits roll over (up to 2× your monthly limit)</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-foreground mb-2">Extra Credit Packs (paid plans)</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>25 credits for $5, 70 credits for $10, 150 credits for $20</li>
-                </ul>
-              </div>
-            </div>
           </div>
           
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* Plan Selector Dropdown */}
-            <div className="w-full">
-              <label className="text-lg font-semibold text-foreground mb-3 block">
-                Select Your Plan
-              </label>
-              <Select
-                value={selectedPathIndex.toString()}
-                onValueChange={(value) => setSelectedPathIndex(parseInt(value))}
-              >
-                <SelectTrigger className="w-full h-14 text-lg bg-white border-2">
-                  <SelectValue>
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold">{selectedPlan.name}</span>
-                      {selectedPlan.isPopular && (
-                        <Badge className="ml-2 bg-primary text-primary-foreground">
-                          <Star className="h-3 w-3 mr-1" />
-                          Most Popular
-                        </Badge>
-                      )}
-                    </div>
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent className="bg-white border-2 max-h-[400px] z-50">
-                  {allPlans.map((plan, index) => (
-                    <SelectItem 
-                      key={plan.name} 
-                      value={index.toString()}
-                      className="cursor-pointer py-3"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-medium">{plan.name}</span>
-                        {plan.isFree && (
-                          <Badge className="ml-2 bg-green-500 text-white text-xs">Free</Badge>
-                        )}
-                        {plan.isPopular && (
-                          <Badge className="ml-2 bg-primary text-primary-foreground text-xs">
-                            Most Popular
-                          </Badge>
-                        )}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-base text-muted-foreground mb-10">
+            <span className="font-semibold text-foreground">All plans include:</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Access to every tool</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Saved results</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Email support</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Cancel anytime</span>
+          </div>
 
-            {/* Selected Plan Details Card */}
-            <Card className={`premium-card card-padding-lg shadow-lg ${selectedPlan.accent || ''} bg-gradient-to-br ${selectedPlan.gradient || 'from-background to-background'} ${
-              selectedPlan.isPopular ? 'border-2 border-primary shadow-glow' : 
-              selectedPlan.isFree ? 'border-2 border-green-500/30' : 
-              'border-2 border-primary/20'
-            }`}>
-              <CardHeader className="text-center relative">
-                {selectedPlan.isPopular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {allPlans.map((plan) => (
+              <Card
+                key={plan.name}
+                className={`relative flex flex-col rounded-3xl p-2 ${plan.isPopular ? 'border-2 border-primary shadow-glow' : 'border'}`}
+              >
+                {plan.isPopular && (
+                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
                     <Star className="h-3 w-3 mr-1" />
                     Most Popular
                   </Badge>
                 )}
-                {selectedPlan.isFree && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-500 text-white">
-                    <Star className="h-3 w-3 mr-1" />
-                    Free Forever
-                  </Badge>
-                )}
-                <div className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-primary/10 mb-4 mt-2 border border-primary/20">
-                  <span className="text-xl font-bold text-primary tracking-wide">{selectedPlan.name.toUpperCase()}</span>
-                </div>
-                <CardTitle className="text-2xl font-bold mb-4">
-                  {selectedPlan.description}
-                </CardTitle>
-                <div className="mb-4">
-                  <span className="text-5xl font-bold text-primary">
-                    {selectedPlan.price}
-                  </span>
-                  <span className="text-xl text-muted-foreground">
-                    /{selectedPlan.period}
-                  </span>
-                </div>
-                <CardDescription className="text-lg">
-                  {selectedPlan.description}
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent className="space-y-6">
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-lg text-foreground mb-4">
-                    What's Included:
-                  </h4>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {selectedPlan.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-start">
-                        <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+                  <CardDescription className="text-base">{plan.tagline}</CardDescription>
+                  <div className="pt-4">
+                    <span className="text-5xl font-bold text-primary">{plan.price}</span>
+                    {!plan.isFree && <span className="text-xl text-muted-foreground">/mo</span>}
                   </div>
-                </div>
-                
-                <div className="pt-6">
+                  <p className="font-semibold text-foreground pt-2">{plan.credits} Tool Credits / month</p>
+                </CardHeader>
+                <CardContent className="flex flex-col flex-1 gap-6">
                   <Button
                     className="w-full"
                     size="lg"
-                    variant={selectedPlan.isPopular ? "default" : selectedPlan.isFree ? "outline" : "default"}
+                    variant={plan.isPopular ? "default" : "outline"}
                     onClick={() => {
-                      if (selectedPlan.isFree) {
+                      if (plan.isFree) {
                         window.location.href = "/auth";
                       } else {
-                        openCheckoutModal(
-                          selectedPlan.name,
-                          selectedPlan.price,
-                          selectedPlan.tier
-                        );
+                        openCheckoutModal(plan.name, plan.price, plan.tier);
                       }
                     }}
                   >
-                    {selectedPlan.isFree ? "Get Started Free" : `Get Started with ${selectedPlan.name}`}
+                    {plan.isFree ? "Start for Free" : `Choose ${plan.name}`}
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start text-sm">
+                        <Check className="h-4 w-4 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -400,10 +284,10 @@ const Pricing = () => {
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center mb-4">
               <Coins className="h-8 w-8 text-primary mr-3" />
-              <h2 className="text-4xl font-bold">Need More AI Requests?</h2>
+              <h2 className="text-4xl font-bold">Need Extra Tool Credits?</h2>
             </div>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-2">
-              Running low on monthly AI requests? Purchase extra credits anytime to keep using PivotHub tools.
+              Running low? Add an extra credit pack anytime to keep using PivotHub tools.
             </p>
             <p className="text-base text-muted-foreground max-w-3xl mx-auto">
               Extra credits are added immediately to your account and can be used within your current billing month.
@@ -415,19 +299,19 @@ const Pricing = () => {
             <AlertCircle className="h-4 w-4 text-amber-600" />
             <AlertTitle className="text-amber-900">Paid Subscription Required</AlertTitle>
             <AlertDescription className="text-amber-800">
-              Extra credits are only available to active paid subscribers (Starter, Pro, or All-Access plans).
-              Free tier users must upgrade to purchase additional credits.
+              Extra credits are only available to active paid subscribers (Starter, Pro, or All-Access).
+              Free plan users must upgrade to purchase additional credits.
             </AlertDescription>
           </Alert>
 
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Starter Pack */}
+            {/* Small Pack */}
             <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
               <CardHeader className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto mb-4">
                   <Zap className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="text-2xl mb-2">Starter Pack</CardTitle>
+                <CardTitle className="text-2xl mb-2">Small Pack</CardTitle>
                 <div className="mb-3">
                   <span className="text-4xl font-bold text-primary">$5</span>
                 </div>
@@ -570,14 +454,14 @@ const Pricing = () => {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What is Explore Mode?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What is the Free plan?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month based on your signup anniversary date. No credit card required. Perfect for testing tools or occasional use.
+                    The Free plan is <strong>free forever</strong> and that gives you 5 credits every month based on your signup anniversary date. No credit card required. Perfect for testing tools or occasional use.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What are AI requests?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What are Tool Credits?</h3>
                   <p className="text-muted-foreground text-sm">
                     Each tool uses a certain number of credits based on complexity. Chatbots use 1 credit per message, most tools use 2-5 credits, and the large blueprint tools use more (Deploy It 40, Create It 70). You can see every tool's price on the Before You Start page.
                   </p>
@@ -588,14 +472,14 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
                   <p className="text-muted-foreground text-sm">
-                    <strong>Paid plans:</strong> On your billing anniversary each month. <strong>Explore Mode:</strong> On your signup anniversary each month.
+                    <strong>Paid plans:</strong> On your billing anniversary each month. <strong>Free plan:</strong> On your signup anniversary each month.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Can I switch between paths?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">Can I switch plans?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Yes! You can upgrade, downgrade, or switch to a different path anytime. Changes take effect immediately.
+                    Yes! You can upgrade, downgrade, or switch plans anytime. Changes take effect immediately.
                   </p>
                 </div>
               </div>
