@@ -116,79 +116,63 @@ const Pricing = () => {
 
   const allPlans = [
     {
-      name: "Explore Mode",
-      price: "Free",
-      period: "forever",
-      description: "Get 5 credits every month to explore our tools",
+      name: "Free",
+      tagline: "No credit card required",
+      price: "$0",
+      credits: 5,
       features: [
-        "5 credits per month (resets on signup anniversary)",
-        "Credits reset monthly (no rollover)",
-        "Use any tool (costs vary by complexity)",
-        "Access to all tool categories",
-        "Community access",
-        "Email support"
+        "5 Tool Credits each month",
+        "Credits reset monthly on your signup date",
+        "No rollover",
+        "Email support",
       ],
       tier: "free",
-      package: null,
-      gradient: "from-gray-500/10 to-gray-600/10",
-      isFree: true
+      isFree: true,
     },
     {
       name: "Starter",
+      tagline: "Get the basics",
       price: "$12",
-      period: "month",
-      description: "Perfect for getting started with 40 monthly credits",
+      credits: 40,
       features: [
-        "40 credits per month",
-        "Unused credits roll over (up to 2× monthly limit)",
-        "Access to all tools",
+        "40 Tool Credits each month",
+        "Unused credits roll over (up to 2× monthly amount)",
+        "Can buy extra credit packs",
         "Email support",
-        "Community access"
       ],
       tier: "starter",
-      package: "starter",
-      gradient: "from-blue-500/10 to-cyan-600/10",
-      accent: "border-l-4 border-blue-500",
-      isPopular: true
+      isPopular: true,
     },
     {
       name: "Pro",
+      tagline: "For regular users",
       price: "$24",
-      period: "month",
-      description: "Ideal for regular users with 100 monthly credits",
+      credits: 100,
       features: [
-        "100 credits per month",
-        "Unused credits roll over (up to 2× monthly limit)",
-        "Access to all tools",
+        "100 Tool Credits each month",
+        "Unused credits roll over (up to 2× monthly amount)",
+        "Can buy extra credit packs",
         "Priority email support",
-        "Early access to new features"
+        "Early access to new tools",
       ],
       tier: "pro",
-      package: "pro",
-      gradient: "from-emerald-500/10 to-green-600/10",
-      accent: "border-l-4 border-emerald-500"
     },
     {
       name: "All-Access",
+      tagline: "Everything, for power users",
       price: "$49",
-      period: "month",
-      description: "Everything you need with 250 monthly credits",
+      credits: 250,
       features: [
-        "250 credits per month",
-        "Unused credits roll over (up to 2× monthly limit)",
-        "Access to all tools",
+        "250 Tool Credits each month",
+        "Unused credits roll over (up to 2× monthly amount)",
+        "Can buy extra credit packs",
         "Priority support",
-        "Early access to new features",
-        "Dedicated account manager"
+        "Early access to new tools",
+        "Dedicated account manager",
       ],
       tier: "all-access",
-      package: "all_access",
-      gradient: "from-blue-500/10 to-cyan-600/10",
-      accent: "border-l-4 border-blue-500"
-    }
+    },
   ];
-  
-  const selectedPlan = allPlans[selectedPathIndex];
 
   return (
     <div className="min-h-screen bg-white">
