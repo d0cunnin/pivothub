@@ -197,11 +197,11 @@ const Pricing = () => {
               <span className="text-3xl font-bold text-white tracking-wider">PRICING</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Choose Your Path
+              Simple, Clear Pricing
             </h1>
             <div className="text-center max-w-4xl mx-auto">
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Start free with Explore Mode, then choose the path that fits your journey—or get everything with our All Access Pass.
+              Start with the Free plan, then upgrade to Starter, Pro, or All-Access whenever you need more Tool Credits.
             </p>
             </div>
           </div>
@@ -213,43 +213,11 @@ const Pricing = () => {
       {/* Subscription Plans */}
       <section className="section-spacing-sm bg-white">
         <div className="page-container">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-6">Select Your Plan</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
-              Choose the plan that matches your goals. Start free or unlock full access with a paid subscription.
+          <div className="text-center mb-10">
+            <h2 className="text-4xl font-bold mb-4">Compare Plans</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Every plan works with every tool. Plans differ only in how many Tool Credits you get each month.
             </p>
-            
-            <div className="text-base text-muted-foreground max-w-4xl mx-auto text-center space-y-6">
-              <div>
-                <h3 className="text-lg font-bold text-foreground mb-4">PivotHub Pricing Overview</h3>
-              </div>
-              
-              <div>
-                <h4 className="font-bold text-foreground mb-2">Explore Mode (Free)</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>5 free credits each month</li>
-                  <li>Credits reset on your signup anniversary</li>
-                  <li>No rollover</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-bold text-foreground mb-2">Paid Plans</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Starter: $12/month for 40 credits</li>
-                  <li>Pro: $24/month for 100 credits</li>
-                  <li>All-Access: $49/month for 250 credits</li>
-                  <li>Unused credits roll over (up to 2× your monthly limit)</li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-bold text-foreground mb-2">Extra Credit Packs (paid plans)</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>25 credits for $5, 70 credits for $10, 150 credits for $20</li>
-                </ul>
-              </div>
-            </div>
           </div>
           
           <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-base text-muted-foreground mb-10">
