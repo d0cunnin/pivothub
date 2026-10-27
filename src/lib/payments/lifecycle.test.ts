@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {creditExpiry,planChange,validatePrice,canOwnCustomer,shouldGrantInvoice} from '../../../supabase/functions/_shared/billingPolicy';
+import {creditExpiry,planChange,validatePrice,canOwnCustomer,shouldGrantInvoice,refundedCreditDelta} from '../../../supabase/functions/_shared/billingPolicy';
 describe('Billing lifecycle rules',()=>{
  it('paid credits expire three calendar months after issue',()=>expect(creditExpiry(new Date('2026-10-27T05:00:00Z')).toISOString()).toBe('2027-01-27T05:00:00.000Z'));
  it('three month expiry clamps month-end dates',()=>expect(creditExpiry(new Date('2026-01-31T00:00:00Z')).toISOString()).toBe('2026-04-30T00:00:00.000Z'));
@@ -8,4 +8,6 @@ describe('Billing lifecycle rules',()=>{
  it('never transfers a customer owned by another account',()=>expect(canOwnCustomer({userId:'other'},'current')).toBe(false));
  it('rejects yearly billing for the monthly Starter price',()=>expect(()=>validatePrice({unit_amount:1200,currency:'usd',billing_scheme:'per_unit',type:'recurring',recurring:{interval:'year',interval_count:1,usage_type:'licensed'}},'starter_monthly')).toThrow());
  it('does not grant monthly allowances on manual invoices',()=>expect(shouldGrantInvoice('manual')).toBe(false));
+ it('repeated partial refunds round cumulative credits only once',()=>expect(refundedCreditDelta(25,0.02,1)).toBe(0));
+ it('a full refund never revokes more than the issued allowance',()=>expect(refundedCreditDelta(40,1,10)).toBe(30));
 });
