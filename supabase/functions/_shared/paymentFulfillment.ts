@@ -2,7 +2,16 @@ import {createStripeClient,type StripeEnv} from './stripe.ts';
 import {db} from './paymentHttp.ts';
 import {paymentCatalog,isPaymentPriceId} from './paymentCatalog.ts';
 import {validatePrice,shouldGrantInvoice} from './billingPolicy.ts';
+import {sendTemplateEmail} from './transactional-email-templates/send-email.ts';
 const identifier=(value:any):string|undefined=>typeof value==='string'?value:value?.id;
+// Confirmation emails are best-effort: a send failure must never fail payment fulfillment.
+async function sendConfirmation(template:'subscription-confirmed'|'pack-confirmed',userId:string,idempotencyKey:string,templateData:Record<string,unknown>){
+ try{
+  const {data,error}=await db().auth.admin.getUserById(userId);if(error||!data.user?.email)return;
+  const name=(data.user.user_metadata?.display_name as string|undefined)??undefined;
+  await sendTemplateEmail(template,data.user.email,{templateData:{name,...templateData},idempotencyKey});
+ }catch(error){console.error(`${template} email failed`,error instanceof Error?error.message:error);}
+}
 export async function syncSubscription(sub:any,env:StripeEnv){
  const observedAt=new Date().toISOString();sub=await createStripeClient(env).subscriptions.retrieve(sub.id);
  const userId=sub.metadata?.userId;if(!userId)throw new Error('Subscription owner missing');
