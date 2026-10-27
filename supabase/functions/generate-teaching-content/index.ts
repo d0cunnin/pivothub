@@ -4,6 +4,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { moderateContent } from "../_shared/moderation.ts";
 import { extractContent } from "../_shared/aiResponse.ts";
+import { CONTENT_POLICY } from "../_shared/aiGenerate.ts";
 
 // Validation schema
 const teachingContentSchema = z.object({
@@ -39,7 +40,7 @@ async function callChat(
       body: JSON.stringify({
         model,
         messages: [
-          { role: 'system', content: systemMsg },
+          { role: 'system', content: systemMsg + CONTENT_POLICY },
           { role: 'user', content: userPrompt },
         ],
         max_completion_tokens: maxTokens,

@@ -300,7 +300,7 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
         "📝 Write 5 excitements and 3 concerns"
       ],
       "week2": [
-        "🎓 Take 1 free intro course (Coursera/YouTube)",
+        "🎓 Take 1 free intro course (YouTube or your public library)",
         "👥 Join 1 Reddit/Facebook community and lurk",
         "🗣️ LinkedIn message for 15-min informational chat"
       ],

@@ -294,10 +294,10 @@ PROFILE OPTIMIZATION:
 • Personal Branding: Canva (design - free), About.me (landing page - free)
 
 SKILL DEVELOPMENT RESOURCES (Match to specific skill gaps identified):
-• Certifications: Coursera ($49/month - coursera.org), LinkedIn Learning ($29.99/month), Google Career Certificates (free-$49)
+• Certifications: LinkedIn Learning ($29.99/month), industry certifications from professional bodies (e.g., PMI for project management, CompTIA for IT)
 • Coding: freeCodeCamp (free - freecodecamp.org), Codecademy (free/$19.99/month), LeetCode (free/$35/month for interview prep)
 • Design: Skillshare ($32/month - skillshare.com), Udemy (courses $10-200 - udemy.com), Adobe tutorials (free)
-• Business: Harvard Business School Online (online.hbs.edu - $1,950+ per course), Coursera MBAs
+• Business: Harvard Business School Online (online.hbs.edu - $1,950+ per course)
 
 CAREER RESEARCH TOOLS:
 • Salary Data: Glassdoor (free - glassdoor.com), Levels.fyi (tech salaries - free - levels.fyi), Payscale (payscale.com)

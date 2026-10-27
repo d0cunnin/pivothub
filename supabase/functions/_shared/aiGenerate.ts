@@ -49,6 +49,22 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
  * Returns the parsed gateway response body. Thrown errors are tagged with
  * `err.status` when the failure came from an HTTP status.
  */
+/**
+ * Site-wide content rule added to every AI request: PivotHub does not
+ * promote these providers.
+ */
+export const CONTENT_POLICY = `
+
+=== CONTENT RULE (ALWAYS FOLLOW) ===
+Never mention, recommend, or link to Coursera, Google Career Certificates, or Grow with Google. When suggesting learning, use other options or describe the kind of course or certification to look for.`;
+
+/** Adds CONTENT_POLICY to the system message (or adds one if missing). */
+export function withContentPolicy(messages: ChatMessage[]): ChatMessage[] {
+  const i = messages.findIndex((m) => m.role === "system");
+  if (i === -1) return [{ role: "system", content: CONTENT_POLICY.trim() }, ...messages];
+  return messages.map((m, j) => (j === i ? { ...m, content: `${m.content}${CONTENT_POLICY}` } : m));
+}
+
 export async function callChat(
   apiKey: string,
   model: string,
@@ -59,7 +75,7 @@ export async function callChat(
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const body: Record<string, unknown> = { model, messages };
+    const body: Record<string, unknown> = { model, messages: withContentPolicy(messages) };
     if (opts.maxTokens) body.max_completion_tokens = opts.maxTokens;
     if (opts.responseFormat) body.response_format = opts.responseFormat;
 

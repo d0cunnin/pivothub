@@ -420,19 +420,19 @@ Analyze the user's responses comprehensively to create a professional-grade skil
       "freeAndLowCostResources": [
         {
           "skill": "Customer service / Communication",
-          "resource": "Google Career Certificates - Customer Service",
-          "cost": "Free (7-day trial, cancel after completion) or $49/month",
-          "duration": "3-6 months at 10 hrs/week",
-          "outcome": "Google certification for resume",
-          "url": "coursera.org/google-career-certificates"
+          "resource": "Free online customer service courses through your public library",
+          "cost": "Free with a library card",
+          "duration": "4-8 weeks at 5 hrs/week",
+          "outcome": "Course completion you can list on your resume",
+          "url": "Ask your local library about its free online learning programs"
         },
         {
           "skill": "Basic tech / IT support",
-          "resource": "Google IT Support Professional Certificate",
-          "cost": "Free trial or $49/month",
-          "duration": "6 months at 10 hrs/week",
+          "resource": "CompTIA A+ certification (the standard entry-level IT support certification)",
+          "cost": "Exam fee; free study videos on YouTube",
+          "duration": "3-6 months at 10 hrs/week",
           "outcome": "Entry-level IT support jobs ($40k-$55k)",
-          "url": "coursera.org/google-certificates"
+          "url": "comptia.org"
         },
         {
           "skill": "Data entry / Excel / Office skills",

@@ -148,10 +148,10 @@ JOB SEARCH RESOURCES:
 • Freelance: Upwork (upwork.com), Toptal (toptal.com), Contra (contra.com)
 
 SKILL DEVELOPMENT PLATFORMS:
-• General: Coursera (coursera.org), Udemy (udemy.com), LinkedIn Learning ($29.99/month)
+• General: Udemy (udemy.com), LinkedIn Learning ($29.99/month), free online courses through public libraries
 • Tech: Pluralsight ($29/month), Codecademy (free/$19.99/month), freeCodeCamp (free)
 • Business: Harvard Business School Online (online.hbs.edu), General Assembly (generalassemb.ly)
-• Certifications: Google Career Certificates, AWS Training, PMI (PMP certification)
+• Certifications: AWS Training, PMI (PMP certification), CompTIA (IT certifications)
 
 CAREER TOOLS:
 • Resume Builders: Resume.io, Novoresume, Canva (free templates)
@@ -197,7 +197,7 @@ Always include these elements (adapt based on question):
 
 5. RESOURCES (ALWAYS INCLUDE with specific tools, URLs, and pricing)
    • Job Boards: Name 2-3 specific platforms with URLs (e.g., "Search LinkedIn Jobs (linkedin.com/jobs) and BuiltIn (builtin.com) for tech roles")
-   • Learning Platforms: Recommend specific courses (e.g., "Complete Google's Project Management Certificate on Coursera ($49/month)")
+   • Learning Platforms: Recommend specific courses (e.g., "Study for PMI's entry-level CAPM project management certification (pmi.org)")
    • Salary Data: Reference specific sources (e.g., "Glassdoor shows $85-110K range for this role in your city")
    • Tools: Name specific platforms with free/paid options (e.g., "Use Canva (free) or Resume.io ($2.95/month) for resume design")
    • Communities: Specific groups or forums (e.g., "Join the Product Manager HQ Slack community or r/ProductManagement on Reddit")
