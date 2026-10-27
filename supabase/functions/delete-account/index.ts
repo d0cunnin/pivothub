@@ -1,172 +1,22 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { createStripeClient } from '../_shared/stripe.ts';
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-const deleteSchema = z.object({
-  confirmation: z.literal("DELETE"),
-  reason: z.string().max(500).optional()
-});
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+import {createStripeClient} from '../_shared/stripe.ts';
+import {billingLock,releaseBillingLock} from '../_shared/billingAccount.ts';
+import {corsHeaders,z,db,json,userFor} from '../_shared/paymentHttp.ts';
+Deno.serve(async(req)=>{
+ if(req.method==='OPTIONS')return new Response('ok',{headers:corsHeaders});if(req.method!=='POST')return json({error:'Method not allowed'},405);
+ const locks:Array<{environment:'sandbox'|'live';token:string;userId:string}>=[];
+ try{
+  const user=await userFor(req);const body=z.object({confirmation:z.literal('DELETE'),reason:z.string().max(500).optional()}).safeParse(await req.json());if(!body.success)return json({error:'Type DELETE to confirm'},400);
+  const {data:admin,error:roleError}=await db().from('user_roles').select('role').eq('user_id',user.id).eq('role','admin').maybeSingle();if(roleError)throw roleError;if(admin)return json({error:'Administrator accounts cannot be deleted here. Contact support for account ownership changes.'},403);
+  for(const environment of ['sandbox','live'] as const){
+   const token=await billingLock(user.id,environment);locks.push({environment,token,userId:user.id});const stripe=createStripeClient(environment);
+   const {data:account,error}=await db().from('billing_accounts').select('stripe_customer_id,pending_session_id').eq('user_id',user.id).eq('environment',environment).maybeSingle();if(error)throw error;
+   const customers=await stripe.customers.search({query:`metadata['userId']:'${user.id}'`,limit:100});const ids=new Set(customers.data.map(c=>c.id));if(account?.stripe_customer_id)ids.add(account.stripe_customer_id);
+   const {data:legacy,error:legacyError}=await db().from('subscribers_secure').select('stripe_customer_id').eq('user_id',user.id).maybeSingle();if(legacyError)throw legacyError;
+   if(legacy?.stripe_customer_id&&!ids.has(legacy.stripe_customer_id)&&environment==='live')throw new Error('Legacy billing requires support review before deletion. No data has been deleted.');
+   if(account?.pending_session_id){const session=await stripe.checkout.sessions.retrieve(account.pending_session_id);if(session.status==='open')await stripe.checkout.sessions.expire(session.id);if(session.status==='complete'&&session.payment_status==='unpaid')throw new Error('A payment is pending. Contact support before deleting your account.');}
+   for(const id of ids){const customer=await stripe.customers.retrieve(id);if(customer.deleted||customer.metadata.userId!==user.id)throw new Error('Billing ownership cannot be verified');const list=await stripe.subscriptions.list({customer:id,status:'all',limit:100});for(const sub of list.data){if(sub.schedule)await stripe.subscriptionSchedules.cancel(typeof sub.schedule==='string'?sub.schedule:sub.schedule.id);else if(!['canceled','incomplete_expired'].includes(sub.status))await stripe.subscriptions.cancel(sub.id);}}
   }
-
-  try {
-    // Get authenticated user
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: "Authentication required" }),
-        { status: 401, headers: corsHeaders }
-      );
-    }
-
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-    
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: "Invalid authentication" }),
-        { status: 401, headers: corsHeaders }
-      );
-    }
-
-    // Validate input - user must type "DELETE" to confirm
-    const requestBody = await req.json();
-    const validation = deleteSchema.safeParse(requestBody);
-    if (!validation.success) {
-      return new Response(
-        JSON.stringify({ 
-          error: "Invalid confirmation", 
-          message: "You must type DELETE to confirm account deletion" 
-        }),
-        { status: 400, headers: corsHeaders }
-      );
-    }
-
-    console.log(`Starting account deletion for user ${user.id}. Reason: ${validation.data.reason || 'Not provided'}`);
-
-    // Use service role to delete user data
-    const supabaseAdmin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
-
-    // Cancel any active Stripe subscriptions first
-    // Do not delete an account while its managed billing can still renew.
-    for (const environment of ['sandbox', 'live'] as const) {
-      const { data: billing, error: billingError } = await supabaseAdmin
-        .from('payment_subscriptions').select('stripe_subscription_id,status')
-        .eq('user_id', user.id).eq('environment', environment);
-      if (billingError) throw new Error('Unable to verify billing before account deletion.');
-      for (const subscription of billing ?? []) {
-        if (!['canceled', 'incomplete_expired'].includes(subscription.status)) {
-          await createStripeClient(environment).subscriptions.cancel(subscription.stripe_subscription_id);
-        }
-      }
-    }
-    try {
-      const { data: secureData } = await supabaseAdmin
-        .from("subscribers_secure")
-        .select("stripe_customer_id")
-        .eq("user_id", user.id)
-        .single();
-
-      if (secureData?.stripe_customer_id) {
-        const stripeKey = Deno.env.get("stripe_restrictedkey_payments");
-        if (stripeKey) {
-          // Cancel all active subscriptions
-          const subscriptionsResponse = await fetch(
-            `https://api.stripe.com/v1/subscriptions?customer=${secureData.stripe_customer_id}&status=active`,
-            { headers: { "Authorization": `Bearer ${stripeKey}` } }
-          );
-          
-          const subscriptionsData = await subscriptionsResponse.json();
-          if (subscriptionsData.data) {
-            for (const sub of subscriptionsData.data) {
-              await fetch(`https://api.stripe.com/v1/subscriptions/${sub.id}`, {
-                method: "DELETE",
-                headers: { "Authorization": `Bearer ${stripeKey}` },
-              });
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error cancelling Stripe subscriptions:", error);
-      // Continue with account deletion
-    }
-
-    // Delete user data from all tables (RLS policies will handle cascade)
-    // The ON DELETE CASCADE on auth.users will handle most cleanup
-    const tables = [
-      "activity_submissions",
-      "lesson_progress",
-      "quiz_results",
-      "user_progress",
-      "tool_usage_analytics",
-      "result_feedback",
-      "assessment_results",
-      "course_enrollments",
-      "side_income_assessments",
-      "side_income_reports",
-      "conversation_context",
-      "user_preferences",
-      "subscribers_public",
-      "subscribers_secure",
-      "subscription_audit_log",
-      "profiles"
-    ];
-
-    for (const table of tables) {
-      try {
-        await supabaseAdmin
-          .from(table)
-          .delete()
-          .eq("user_id", user.id);
-      } catch (error) {
-        console.error(`Error deleting from ${table}:`, error);
-        // Continue with other tables
-      }
-    }
-
-    // Finally, delete the auth user (this will cascade to any remaining data)
-    const { error: deleteUserError } = await supabaseAdmin.auth.admin.deleteUser(
-      user.id
-    );
-
-    if (deleteUserError) {
-      console.error("Error deleting user from auth:", deleteUserError);
-      throw new Error("Failed to delete user account");
-    }
-
-    console.log(`Account successfully deleted for user ${user.id}`);
-
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: "Your account has been permanently deleted." 
-      }),
-      { status: 200, headers: corsHeaders }
-    );
-
-  } catch (error) {
-    console.error("Error in delete-account function:", error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      { status: 500, headers: corsHeaders }
-    );
-  }
+  const {error:cleanup}=await db().rpc('delete_my_account_content',{p_user_id:user.id});if(cleanup)throw cleanup;
+  const {error}=await db().auth.admin.deleteUser(user.id);if(error)throw error;return json({success:true,message:'Your account and saved content were deleted. Required financial and security records may be retained.'});
+ }catch(error){return json({error:error instanceof Error?error.message:'Unable to delete account safely'},500);}finally{for(const lock of locks)await releaseBillingLock(lock.userId,lock.environment,lock.token).catch(()=>{});}
 });
