@@ -4,13 +4,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Helmet } from "react-helmet-async";
 import { StructuredData, generateServiceSchema } from "@/components/StructuredData";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, CalendarCheck, DollarSign, Lightbulb, Wrench } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import SideIncomeAssessment from "@/components/SideIncomeAssessment";
 import SideIncomeReport from "@/components/SideIncomeReport";
 import { ReportErrorBoundary } from "@/components/ReportErrorBoundary";
@@ -122,6 +123,64 @@ function SideIncomeBlueprintInner() {
     );
   }
 
+  const startNote = "2 credits · About 10 minutes · Free account required";
+
+  const benefits = [
+    {
+      icon: Lightbulb,
+      title: "Income ideas matched to you",
+      text: "3-5 side income ideas ranked by how well they fit your time, skills, budget, and comfort with risk.",
+    },
+    {
+      icon: DollarSign,
+      title: "Real numbers for each idea",
+      text: "Startup costs, hours per week, time to your first dollar, and month-by-month income estimates.",
+    },
+    {
+      icon: CalendarCheck,
+      title: "A 90-day plan",
+      text: "Week-by-week steps for your first three months, plus quick wins and actions to take this week.",
+    },
+    {
+      icon: Wrench,
+      title: "Tools and resources",
+      text: "Platforms, tools, and communities to help you get started. Download everything as a PDF.",
+    },
+  ];
+
+  const steps = [
+    { title: "Answer the questions", text: "About 10 minutes. Tell us your available time, skills, income goals, and budget." },
+    { title: "Get your plan", text: "Your plan is ready right away. It uses 2 credits, charged only once your plan is delivered." },
+    { title: "Download and start", text: "Save your plan as a PDF. PivotHub does not store it, so keep your copy." },
+  ];
+
+  const faqs = [
+    {
+      q: "How much does it cost?",
+      a: "2 credits. Every free account gets 5 credits each month. Credits are only used once your plan is delivered. If something goes wrong, you are not charged.",
+    },
+    {
+      q: "How long does it take?",
+      a: "About 10 minutes to answer the questions. Your plan is created right after you finish.",
+    },
+    {
+      q: "Do I need special skills or experience?",
+      a: "No. The questions ask about your current skills and experience so the ideas match where you are starting, whether you are a beginner or a seasoned professional.",
+    },
+    {
+      q: "Can I do this with a full-time job?",
+      a: "Yes. You tell us how many hours you have each week, and the ideas and timelines are matched to that.",
+    },
+    {
+      q: "Is my plan saved?",
+      a: "No. PivotHub does not store your plan. Download the PDF when it is ready so you have a copy.",
+    },
+    {
+      q: "What if I live outside the US?",
+      a: "Many ideas, like freelancing, online services, and digital products, work from anywhere. Tax and legal tips are general, so check the rules where you live.",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
@@ -131,363 +190,113 @@ function SideIncomeBlueprintInner() {
         <meta property="og:description" content="Discover personalized side income opportunities that match your skills and schedule." />
         <link rel="canonical" href="https://pivothub.lovable.app/earnit" />
       </Helmet>
-      
+
       <StructuredData data={serviceSchema} />
-      
+
       <Header />
-      
-      {/* Hero Section */}
+
+      {/* Hero */}
       <section className="py-20 bg-primary relative overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
         </div>
-        
         <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
-        
+
         <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">EARN IT</span>
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center justify-center px-6 py-3 rounded-3xl bg-white/15 mb-8 backdrop-blur-sm border border-white/20">
+              <span className="text-2xl font-bold text-white tracking-wider">EARN IT</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Discover Income Opportunities That Fit Your Life
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
+              Find Side Income That Fits Your Life
             </h1>
-            <div className="text-center max-w-4xl mx-auto">
-              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-6 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                From freelancing to side businesses - discover legitimate ways to earn extra income that align with your skills, schedule, and goals.
-              </p>
-              <p className="text-lg text-white/80 mb-10 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                Get a custom plan based on your unique situation, skills, and goals
-              </p>
-            </div>
-            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
-              <Button 
-                variant="hero" 
-                size="lg" 
-                className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg"
-                onClick={() => document.getElementById('blueprint-info')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Get Your Blueprint
-              </Button>
-            </div>
+            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
+              Answer a short questionnaire and get a personalized plan with income ideas matched to your skills, schedule, and budget, plus a 90-day plan to get started.
+            </p>
+            <Button
+              variant="hero"
+              size="lg"
+              className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg"
+              onClick={handleStartAssessment}
+            >
+              Get My Side Income Plan
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            <p className="mt-4 text-sm text-white/80">{startNote}</p>
           </div>
         </div>
       </section>
 
-      {/* Introduction Section */}
-      <section className="py-8 bg-white relative overflow-hidden">
-        <div className="page-container">
-          <div className="grid lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto mb-8">
-            <div>
-              <p className="text-xl md:text-2xl text-foreground leading-relaxed text-left">
-                Stop wasting time on side hustle ideas that do not fit your life. The Earn It Blueprint helps you discover three income opportunities that align with your skills, time, financial goals, and comfort level. It gives you a clear roadmap to start earning within 90 days whether you are a stay-at-home parent, working professional, retiree, or student.
-              </p>
-            </div>
-            <div className="relative overflow-hidden rounded-2xl shadow-xl">
-              <img 
-                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png" 
-                alt="Successful entrepreneur with keys to new opportunities" 
-                className="w-full h-80 object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works - Enhanced */}
-      <section id="blueprint-info" className="py-12 bg-accent relative overflow-hidden">
-        <div className="page-container">
+      {/* What you'll get */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-                  How It Works
-                </h2>
-              </div>
-            </div>
-            <p className="text-lg text-white/90 mb-12 text-left">
-              Two simple steps to your personalized income plan
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">What You'll Get</h2>
+            <p className="text-lg text-muted-foreground text-center mb-10">
+              A clear, personal plan instead of guessing which side hustle to try.
             </p>
-
-            <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
-              <Card className="bg-white p-8">
-                <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
-                  1
-                </div>
-                <CardTitle className="text-xl mb-4 text-center text-foreground">Complete Assessment</CardTitle>
-                <CardContent className="p-0 space-y-3">
-                  <p className="text-foreground text-sm leading-relaxed">
-                    <strong>8-minute assessment</strong> that digs deep into your unique situation. We'll ask about your current skills, work experience, available time per week, financial goals, risk tolerance, and preferred income types.
-                  </p>
-                  <p className="text-foreground text-sm leading-relaxed">
-                    <strong>Pro tip:</strong> The more detailed your answers, the more personalized your recommendations. Our AI analyzes 50+ data points to match you with the perfect opportunities. Take your time and be honest—there are no wrong answers.
-                  </p>
-                  <div className="mt-4 p-3 bg-success/10 rounded-lg">
-                    <p className="text-xs text-foreground font-medium">
-                      ✓ Requires active account
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-white p-8">
-                <div className="w-16 h-16 bg-gradient-hero rounded-xl flex items-center justify-center mx-auto mb-6 text-white font-bold text-2xl shadow-glow">
-                  2
-                </div>
-                <CardTitle className="text-xl mb-4 text-center text-foreground">Get Your Blueprint</CardTitle>
-                <CardContent className="p-0 space-y-3">
-                  <p className="text-foreground text-sm leading-relaxed">
-                    <strong>Instant delivery</strong> of your personalized blueprint the moment you complete the assessment. Your custom plan is generated immediately using <strong>2 Tool Credits</strong> from your plan.
-                  </p>
-                  <p className="text-foreground text-sm leading-relaxed">
-                    Download it as PDF and access your blueprint anytime from any device.
-                  </p>
-                  <div className="mt-4 p-3 bg-success/10 rounded-lg">
-                    <p className="text-xs text-foreground font-medium">
-                      ✓ Uses credits from your plan
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {benefits.map(({ icon: Icon, title, text }) => (
+                <Card key={title} className="premium-card h-full">
+                  <CardContent className="p-6 flex gap-4">
+                    <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">{title}</h3>
+                      <p className="text-muted-foreground">{text}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Final CTA - Ready to Build Your Side Income */}
-      <section className="py-12 bg-white relative overflow-hidden">
-        <div className="page-container">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="bg-gradient-card p-12 rounded-2xl shadow-elegant">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Ready to Build Your Side Income?
-              </h2>
-              <p className="text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Get your custom blueprint with your subscription. Three personalized income ideas with a complete 90-day plan.
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-6 mb-8">
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">3 Custom Income Ideas</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">90-Day Launch Plan</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">All Templates Included</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-primary text-xl">✓</span>
-                  <span className="text-sm">Included</span>
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <div className="inline-block p-6 bg-gradient-card rounded-2xl border-2 border-primary/20">
-                  <span className="text-5xl font-bold bg-gradient-hero bg-clip-text text-transparent">2 CREDITS</span>
-                  <p className="text-sm text-muted-foreground mt-2">Sign in required • Uses 2 Tool Credits</p>
-                </div>
-              </div>
-
-              <Button 
-                size="lg" 
-                onClick={handleStartAssessment}
-                disabled={loading}
-                className="text-lg px-16 py-7 shadow-glow hover:scale-105 transition-elegant mb-6"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  'Get Your Blueprint'
-                )}
-              </Button>
-
-              <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-primary">✓</span>
-                  <span>Account required</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-primary">⚡</span>
-                  <span>Instant delivery • 8-minute assessment</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-primary">💰</span>
-                  <span>3 personalized income ideas with 90-day plan</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* What's Included - Detailed */}
-      <section className="py-12 bg-accent relative overflow-hidden">
-        <div className="page-container">
+      {/* How it works */}
+      <section className="py-16 bg-muted/40">
+        <div className="container mx-auto px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">What's Included in Your Blueprint</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-10">How It Works</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {steps.map((step, i) => (
+                <div key={step.title} className="rounded-2xl bg-white border p-6 text-center shadow-sm">
+                  <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground font-bold flex items-center justify-center mx-auto mb-4">
+                    {i + 1}
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
+                  <p className="text-muted-foreground">{step.text}</p>
+                </div>
+              ))}
             </div>
-            <p className="text-lg text-white mb-12 text-left">
-              Everything you need to launch your side income in 90 days or less
-            </p>
-
-            <div className="space-y-6 mb-12">
-              <Card className="premium-card">
-                <CardHeader>
-                  <div className="flex items-start gap-4">
-                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary text-lg font-bold">✓</span>
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-2xl mb-2">3 Custom Income Ideas</CardTitle>
-                      <CardDescription>AI-analyzed opportunities ranked by your unique feasibility score</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4 pl-14">
-                  <div>
-                    <h4 className="font-semibold mb-2">Each Idea Includes:</h4>
-                    <ul className="text-sm text-muted-foreground space-y-2">
-                      <li>• <strong>Income Potential:</strong> Realistic ranges based on part-time effort</li>
-                      <li>• <strong>Startup Costs:</strong> Detailed breakdown of initial investment needed</li>
-                      <li>• <strong>Time to First Dollar:</strong> When you can expect your first payment</li>
-                      <li>• <strong>Time Commitment:</strong> Hours per week required at each stage</li>
-                      <li>• <strong>Skill Requirements:</strong> What you need and how to fill gaps</li>
-                      <li>• <strong>Competition Analysis:</strong> Market demand vs. supply in your area</li>
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-
+            <div className="text-center mt-10">
+              <Button variant="hero" size="lg" className="px-10" onClick={handleStartAssessment}>
+                Get My Side Income Plan
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <p className="mt-3 text-sm text-muted-foreground">{startNote}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-12 bg-white relative overflow-hidden">
-        <div className="page-container">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Frequently Asked Questions</h2>
-            </div>
-            <p className="text-lg text-foreground/80 mb-12 text-left">
-              Everything you need to know before getting started
-            </p>
-
-            <div className="space-y-4">
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">How is this personalized to me?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Your blueprint is generated using advanced AI that analyzes 50+ data points from your assessment, including your current skills, work experience, available time, financial goals, risk tolerance, preferred work style, and personal circumstances. The system compares your profile against a database of 200+ proven income models to recommend the 3 best matches with personalized feasibility scores, customized timelines, and tailored action steps.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">What if I don't like my recommendations?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Your blueprint includes 3 different income ideas ranked by feasibility, giving you options to choose from. Each recommendation is matched to your profile, but you can focus on whichever opportunity excites you most. Additionally, the blueprint explains why each idea was recommended, helping you understand the logic and potentially discover opportunities you hadn't considered.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">Can I get a refund?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Due to the instant digital delivery and personalized nature of the blueprint, all sales are final. However, we're confident you'll find tremendous value in your customized plan. If you have concerns about the quality or accuracy of your blueprint, please contact our support team and we'll work with you to address any issues.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">How long does the assessment take?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    The assessment typically takes 15-20 minutes to complete. We recommend taking your time and providing detailed, honest answers—the quality of your blueprint depends on the quality of your responses. You can pause and resume if needed, though most users prefer to complete it in one sitting while their thoughts are fresh.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">Do I need any special skills or experience?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    No! The blueprint is designed for all experience levels, from complete beginners to seasoned professionals. The assessment asks about your current skills and experience to ensure recommendations match your starting point. Many successful users started with no relevant experience—the blueprint identifies opportunities where you can leverage what you already know or learn quickly.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">Can I do this if I have a full-time job?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Absolutely! Many of our most successful users maintain full-time jobs while building side income. The assessment asks about your available time per week, and recommendations are matched accordingly. Timelines are flexible—if you can only dedicate 5-10 hours per week, your plan adapts with realistic milestones. You're not required to quit your job or take major risks.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">What if I live outside the US?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    The blueprint works for international users! Most recommended income ideas (freelancing, online services, digital products, consulting) can be done from anywhere with an internet connection. The tax and legal guide covers general principles, but you'll need to research country-specific regulations. Many platforms mentioned in templates and resources serve global markets.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">Is this legitimate or a scam?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    This is 100% legitimate. You receive a comprehensive, AI-generated personalized blueprint immediately after completing your assessment. No pyramid schemes, no "get rich quick" promises, no recurring charges. Just practical, actionable guidance based on proven income models. Payment is processed securely through Stripe, and you get lifetime access to your plan. We're transparent about realistic timelines and income expectations—this is about building sustainable side income, not overnight wealth.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="premium-card">
-                <CardHeader>
-                  <CardTitle className="text-lg">Will I get ongoing support after purchase?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Your $27 purchase includes lifetime access to your blueprint and all included templates. You can revisit your plan, track progress, and reference materials anytime through your account. While we don't offer 1-on-1 coaching, your blueprint is designed to be self-sufficient with clear, step-by-step guidance. If you have technical issues accessing your blueprint, our support team is available to help.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+      {/* FAQ */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-8">Common Questions</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq) => (
+                <AccordionItem key={faq.q} value={faq.q}>
+                  <AccordionTrigger className="text-left text-base font-semibold">{faq.q}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground text-base leading-relaxed">{faq.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>
