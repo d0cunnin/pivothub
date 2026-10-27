@@ -8,7 +8,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Compass, Target, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sprout } from "lucide-react";
-import { PACKAGE_TOOLS } from "@/utils/packageAccess";
 
 const BeforeYouStart = () => {
   const tools = [
@@ -101,61 +100,6 @@ const BeforeYouStart = () => {
       color: "text-green-600"
     }
   ];
-
-  const toolDisplayNames: Record<string, string> = {
-    'career-assessment': 'Career Assessment',
-    'skills-assessment': 'Skills Assessment',
-    'personality-assessment': 'Personality Assessment',
-    'side-income-assessment': 'Side Income Assessment',
-    'interview-questions': 'Interview Questions',
-    'interview-feedback': 'Interview Feedback',
-    'resume-analyzer': 'Resume Analyzer',
-    'learnit': 'Learn It',
-    'business-mentor': 'Business Mentor',
-    'business-plan': 'Business Plan',
-    'business-idea': 'Business Idea',
-    'business-foundation': 'Business Foundation',
-    'business-resources': 'Business Resources',
-    'pitch-deck': 'Pitch Deck',
-    'logo-generator': 'Logo Generator',
-    'name-checker': 'Name Checker',
-    'legal-docs': 'Legal Documents',
-    'marketing-strategy': 'Marketing Strategy',
-    'social-media': 'Social Media',
-    'teaching-materials': 'Teaching Materials',
-    'startup-checklist': 'Startup Checklist',
-    'grant-content': 'LOI & Grant Proposal Generator',
-    'tech-readiness-assessment': 'Tech Readiness Assessment',
-    'community-assessment': 'Community Assessment',
-    'career-advisor': 'Career Advisor Chatbot',
-    'resume-builder': 'Resume Builder',
-    'prompt-it': 'Prompt It',
-    'code-it': 'Code It',
-    'study-it': 'Study It',
-    'biography': 'Biography',
-    'business-docs': 'Business Documents',
-    'lesson-plan': 'Lesson Plans',
-    'quiz-generator': 'Quiz Generator',
-    'rubric-builder': 'Rubric Builder',
-    'launch-strategy': 'Launch Strategy',
-    'speak-it': 'Speak It',
-    'schedule-it': 'Schedule It',
-    'host-it': 'Host It',
-    'garden-it': 'Garden It',
-    'act-it': 'Act It',
-    'grant-finder': 'Grant Finder',
-    'grant-readiness': 'Grant Readiness',
-    'grant-resources': 'Grant Resources',
-    'side-income-report': 'Side Income Blueprint',
-  };
-
-  const getToolsList = (packageKey: string) => {
-    const tools = PACKAGE_TOOLS[packageKey as keyof typeof PACKAGE_TOOLS];
-    if (packageKey === 'all-access') {
-      return 'All tools included';
-    }
-    return tools.map(tool => toolDisplayNames[tool] || tool).join(', ');
-  };
 
   return (
     <>
@@ -311,77 +255,19 @@ const BeforeYouStart = () => {
           </div>
         </section>
 
-        {/* Section 5: Subscription Visibility */}
+        {/* Section 5: Credits, Not Tiers */}
         <section className="py-20 bg-accent">
           <div className="container mx-auto px-6 lg:px-8">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center text-white">
-                What Is Included in Each Tier
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+                No Tiers. Just Credits.
               </h2>
-              <div className="space-y-6">
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Explore Mode</CardTitle>
-                    <CardDescription>5 free credits per month to try any tool</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      All tools available with credit limitations
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Assess It + Prep It + Learn It Package</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('assess-prep-learn')}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Build It + Teach It + Launch It Package</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('build-teach-launch')}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Fund It Package</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('fund-it')}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card border-primary">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">All Access Pass</CardTitle>
-                    <CardDescription>Unlimited access to every tool</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('all-access')}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <div className="mt-12 text-center">
-                <Button variant="secondary" size="lg" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
-                  <Link to="/pricing">View Pricing Details</Link>
-                </Button>
-              </div>
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-10">
+                Every plan unlocks every tool. There are no tiers and no feature lists to compare — the only thing that changes is how many Tool Credits you get each month.
+              </p>
+              <Button variant="secondary" size="lg" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
+                <Link to="/pricing">View Pricing Details</Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -407,7 +293,7 @@ const BeforeYouStart = () => {
               <div className="mt-10 grid md:grid-cols-2 gap-6">
                 <div className="p-6 bg-blue-50 rounded-xl border border-blue-100">
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-blue-900">
-                    <span className="text-2xl">💡</span> For Explore Mode Users
+                    <span className="text-2xl">💡</span> For Free Plan Users
                   </h3>
                   <ul className="space-y-2 text-base text-blue-800">
                     <li>✓ You get 5 credits per month (resets on your signup anniversary)</li>
