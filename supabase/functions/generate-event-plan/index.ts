@@ -210,7 +210,7 @@ ${formData.needsSponsorshipPacket ? `
 
 Generate event titles, description, color palette${formData.includeItinerary ? ', event itinerary,' : ''}${formData.needsSponsorshipPacket ? ', sponsorship packet,' : ''} and 6-week marketing timeline.`;
 
-    // Fast Gemini Flash primary with gpt-5-mini fallback, budgeted under the
+    // Fast Gemini Flash primary with Gemini Flash Lite fallback, budgeted under the
     // ~150s edge limit. Previously gpt-5 with stacked 120s + 60s timeouts that
     // could exceed the limit and die with a silent 504.
     let content: string;
