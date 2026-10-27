@@ -1,14 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ChevronDown, User, LogOut } from "lucide-react";
-import { useEffect } from "react";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ChevronDown, User, LogOut, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { TrialBanner } from '@/components/TrialBanner';
 
+const mobileSections: { title: string; links: [string, string][] }[] = [
+  { title: "Start", links: [["Start Here", "/before-you-start"], ["Our Story", "/about"], ["Pricing", "/pricing"]] },
+  { title: "Upskill", links: [["Assess It", "/assessit"], ["Prep It", "/prepit"]] },
+  { title: "Learn It", links: [["Prompt It", "/promptit"], ["Code It", "/codeit"], ["Deploy It", "/deployit"], ["Create It", "/createit"], ["Study It", "/studyit"]] },
+  { title: "Make Money", links: [["Earn It", "/earnit"], ["Build It", "/buildit"], ["Teach It", "/teachit"]] },
+  { title: "Plan It", links: [["Launch It", "/launchit"], ["Schedule It", "/scheduleit"], ["Host It", "/hostit"], ["Speak It", "/speakit"], ["Garden It", "/gardenit"], ["Act It", "/actit"]] },
+  { title: "Grow It", links: [["Fund It", "/fundit"], ["Contract It", "/contractit"], ["Develop It", "/developit"]] },
+];
+
 export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { user, signOut, isAdmin, subscribed, subscriptionTier, subscriptionEnd, checkAdminStatus } = useAuth();
 
   useEffect(() => {
@@ -51,7 +62,7 @@ export const Header = () => {
             />
           </Link>
           
-          <nav className="flex items-center justify-center flex-1 mx-2 md:mx-8">
+          <nav className="hidden lg:flex items-center justify-center flex-1 mx-2 md:mx-8">
             <div className="flex items-center space-x-2 md:space-x-4 text-xs md:text-sm">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -260,7 +271,7 @@ export const Header = () => {
             {user ? (
               <>
                 {isAdmin && (
-                  <Link to="/admin">
+                  <Link to="/admin" className="hidden sm:block">
                     <Button variant="outline" className="border-primary text-primary hover:bg-primary/10">
                       Admin
                     </Button>
@@ -268,9 +279,9 @@ export const Header = () => {
                 )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center space-x-2">
+                    <Button variant="ghost" className="flex items-center space-x-2" aria-label="Account">
                       <User className="h-4 w-4" />
-                      <span>Account</span>
+                      <span className="hidden sm:inline">Account</span>
                     </Button>
                   </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-card border border-border shadow-lg z-50">
@@ -332,7 +343,7 @@ export const Header = () => {
               </>
             ) : (
               <>
-                <Link to="/auth">
+                <Link to="/auth" className="hidden sm:block">
                   <Button variant="ghost">Sign In</Button>
                 </Link>
                 <Link to="/auth?tab=signup">
@@ -340,6 +351,40 @@ export const Header = () => {
                 </Link>
               </>
             )}
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-72 overflow-y-auto">
+                <SheetTitle className="text-left mb-4">Menu</SheetTitle>
+                <nav className="flex flex-col gap-5 pb-8">
+                  {mobileSections.map((section) => (
+                    <div key={section.title}>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">{section.title}</p>
+                      <div className="flex flex-col">
+                        {section.links.map(([label, to]) => (
+                          <Link
+                            key={to}
+                            to={to}
+                            onClick={() => setMobileOpen(false)}
+                            className={`py-2 text-base hover:text-primary ${location.pathname === to ? 'text-primary font-medium' : 'text-foreground'}`}
+                          >
+                            {label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  {!user && (
+                    <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                      <Button variant="outline" className="w-full">Sign In</Button>
+                    </Link>
+                  )}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
