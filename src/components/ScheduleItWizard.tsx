@@ -122,51 +122,6 @@ export function ScheduleItWizard() {
     }
   };
 
-  const validateTimeFormats = (): { isValid: boolean; issues: string[] } => {
-    const issues: string[] = [];
-    
-    // Safe patterns that should NOT be flagged
-    const safePatterns = [
-      /\b\d{1,2}\s*(hours?|hrs?|minutes?|mins?)\b/gi,  // "10 hours", "5 hrs"
-      /\b24\/7\b/gi,                                    // "24/7"
-      /\ball\s+day\b/gi,                                // "all day"
-      /\b\d{2}:\d{2}-\d{2}:\d{2}\b/g,                  // Military time "14:00-22:00"
-      /\b\d+-\d+\s+(days?|times?|per|week)\b/gi        // "3-5 days per week"
-    ];
-    
-    const fieldsToCheck = {
-      'Work Schedule Details': formData.workScheduleDetails,
-      'School Schedule': formData.schoolCommitment,
-      'Family Commitments': formData.familyCommitments,
-    };
-    
-    Object.entries(fieldsToCheck).forEach(([fieldName, value]) => {
-      if (!value) return;
-      
-      // Check if value matches any safe pattern
-      const isSafe = safePatterns.some(pattern => pattern.test(value));
-      if (isSafe) return;
-      
-      // Pattern to detect times without AM/PM (e.g., "9-5", "2:30-6:30")
-      const ambiguousTimePattern = /\b(\d{1,2})(:\d{2})?\s*[-–to]\s*(\d{1,2})(:\d{2})?\b(?!\s*(AM|PM|am|pm))/gi;
-      
-      // Pattern to detect single times without AM/PM (e.g., "at 3", "8", "3:30")
-      const singleTimePattern = /\b(at\s+)?(\d{1,2})(:\d{2})?\b(?!\s*(AM|PM|am|pm|hours?|hrs?|minutes?|mins?))/gi;
-      
-      const hasAmbiguousRange = ambiguousTimePattern.test(value);
-      const hasSingleTime = singleTimePattern.test(value);
-      
-      if (hasAmbiguousRange || hasSingleTime) {
-        issues.push(`${fieldName}: Please specify AM/PM for all times`);
-      }
-    });
-    
-    return {
-      isValid: issues.length === 0,
-      issues
-    };
-  };
-
   const nextStep = () => {
     if (step < totalSteps) setStep(step + 1);
   };
@@ -212,15 +167,6 @@ export function ScheduleItWizard() {
       return;
     }
 
-    // Validate time formats
-    const timeValidation = validateTimeFormats();
-    if (!timeValidation.isValid) {
-      toast.error('⚠️ Please add AM/PM to your times:', {
-        description: timeValidation.issues.join('\n'),
-        duration: 8000,
-      });
-      return;
-    }
 
     setIsGenerating(true);
 
@@ -278,8 +224,8 @@ export function ScheduleItWizard() {
         }
         
         if (status === 402) {
-          toast.error('AI Service Unavailable', {
-            description: 'Please add credits to continue using this feature.',
+          toast.error('Not Enough Credits', {
+            description: 'Schedule It uses 5 credits. Upgrade your plan or add a credit pack to continue.',
             duration: 6000,
           });
           return;
@@ -299,7 +245,7 @@ export function ScheduleItWizard() {
         
         if (data.error === 'credits_exhausted') {
           toast.error('AI Service Unavailable', {
-            description: 'The AI service has run out of credits. Please add credits in Settings → Cloud & AI balance.',
+            description: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.',
             duration: 10000,
           });
           return;
@@ -471,7 +417,7 @@ export function ScheduleItWizard() {
                   placeholder="e.g., Rotating: Week 1 Mon-Fri 7 AM - 3 PM, Week 2 Mon-Fri 3 PM - 11 PM"
                   rows={3}
                 />
-                <p className="text-xs text-amber-600 mt-1">⚠️ Always include AM or PM for all times</p>
+                <p className="text-xs text-muted-foreground mt-1">Tip: adding AM or PM to times helps us get your schedule right.</p>
               </div>
             )}
 
@@ -1049,7 +995,7 @@ export function ScheduleItWizard() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                This will use 3 credits to generate your personalized schedule using AI.
+                This will use 5 credits to generate your personalized schedule. Credits are only used once your schedule is ready.
               </AlertDescription>
             </Alert>
 

@@ -49,6 +49,8 @@ Deno.serve(withCreditRequest(async (req) => {
 
 CRITICAL: You MUST respond with ONLY valid JSON. No markdown, no code blocks, no explanations, no preamble - just the raw JSON object exactly as specified below.
 
+TIMES WITHOUT AM/PM: Users often write times like "9-5" or "pick up at 3". Infer AM or PM from context (for example, work 9-5 means 9 AM to 5 PM; school pickup at 3 means 3 PM; a night-shift worker's 11-7 means 11 PM to 7 AM). Use the most realistic reading for this person and never reject or skip their input because AM/PM is missing.
+
 IMPORTANT CONSTRAINTS:
 - **MAXIMUM 5-6 activities per day** (provide more detail)
 - **Keep activity descriptions under 35 characters** (readable but informative)
