@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     const mod = await moderateContent(assignment, 'rubric-builder', userId, 'low');
     if (mod.flagged) return new Response(JSON.stringify({ error: 'Content flagged', details: mod.categories }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
-    await assertCredits(userId, 3);
+    await assertCredits(userId, 2);
 
     const c = Math.min(Math.max(parseInt(criteriaCount) || 5, 3), 8);
     const levelsParam = parseInt(scaleLevels) || 4;
@@ -77,8 +77,8 @@ Rules:
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    try { await deductCreditsOnSuccess(supabase, userId, 'rubric-builder', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
-    return new Response(JSON.stringify({ rubric, creditsUsed: 3 }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    try { await deductCreditsOnSuccess(supabase, userId, 'rubric-builder', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    return new Response(JSON.stringify({ rubric, creditsUsed: 2 }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (e) {
     if (e instanceof Response) return e;
     console.error('rubric-builder error', e);

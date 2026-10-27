@@ -65,7 +65,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
 
    **Teach It:**
    - Teaching Materials Generator (5 credits)
-   - Lesson Plan Generator (3 credits), Quiz Generator (4 credits), Rubric Builder (3 credits)
+   - Lesson Plan Generator (3 credits), Quiz Generator (2 credits), Rubric Builder (2 credits)
 
    **Launch It:**
    - Launch Strategy Generator (3 credits)

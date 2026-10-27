@@ -195,7 +195,7 @@ const TeachIt = () => {
             <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">Quizzes with answer keys — multiple choice, true/false, or short answer.</p>
           </div>
           <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />4 Credits</Badge>
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />2 Credits</Badge>
           </div>
           <ToolGuard toolName="quiz-generator"><QuizGenerator /></ToolGuard>
         </div>
@@ -211,7 +211,7 @@ const TeachIt = () => {
             <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">Multi-level scoring rubrics with observable, level-by-level descriptors.</p>
           </div>
           <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />3 Credits</Badge>
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />2 Credits</Badge>
           </div>
           <ToolGuard toolName="rubric-builder"><RubricBuilder /></ToolGuard>
         </div>

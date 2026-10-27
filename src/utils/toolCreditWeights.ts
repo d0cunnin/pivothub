@@ -85,8 +85,8 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
 
   // TEACH IT TOOLS (educator suite)
   'lesson-plan': 3,                // standards-aligned lesson plan
-  'quiz-generator': 4,             // ~5,000 tokens output (quiz + answer key)
-  'rubric-builder': 3,             // ~4,000 tokens output (multi-level scoring rubric)
+  'quiz-generator': 2,             // quiz + answer key
+  'rubric-builder': 2,             // multi-level scoring rubric
 };
 
 export function getToolCreditCost(toolName: string): number {

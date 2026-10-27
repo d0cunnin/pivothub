@@ -31,7 +31,7 @@ Deno.serve(async (req) => {
     const mod = await moderateContent(topic, 'quiz-generator', userId, 'low');
     if (mod.flagged) return new Response(JSON.stringify({ error: 'Content flagged', details: mod.categories }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
-    await assertCredits(userId, 4);
+    await assertCredits(userId, 2);
 
     const n = Math.min(Math.max(parseInt(numQuestions) || 10, 3), 25);
     const type = ['multiple-choice', 'short-answer', 'true-false', 'mixed'].includes(questionType) ? questionType : 'mixed';
@@ -75,8 +75,8 @@ Rules:
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    try { await deductCreditsOnSuccess(supabase, userId, 'quiz-generator', 4); } catch (e) { console.error('[CREDITS] deduction failed', e); }
-    return new Response(JSON.stringify({ quiz, creditsUsed: 4 }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    try { await deductCreditsOnSuccess(supabase, userId, 'quiz-generator', 2); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    return new Response(JSON.stringify({ quiz, creditsUsed: 2 }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (e) {
     if (e instanceof Response) return e;
     console.error('quiz-generator error', e);

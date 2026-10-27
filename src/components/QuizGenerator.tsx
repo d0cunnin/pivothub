@@ -45,7 +45,7 @@ export default function QuizGenerator() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setQuiz(data.quiz);
-      toast.success('Quiz generated! (4 credits used)');
+      toast.success('Quiz generated! (2 credits used)');
     } catch (e: any) { toast.error(e.message || 'Generation failed'); }
     finally { setLoading(false); }
   };
@@ -137,7 +137,7 @@ export default function QuizGenerator() {
               </div>
             </div>
             <Button onClick={handleGenerate} disabled={loading} size="lg" className="w-full">
-              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating…</> : <>Generate Quiz (4 Credits)</>}
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating…</> : <>Generate Quiz (2 Credits)</>}
             </Button>
           </CardContent>
         </>

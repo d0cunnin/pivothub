@@ -48,8 +48,8 @@ const toolsByCategory: Record<string, Tool[]> = {
   'Teach It (Education Tools)': [
     { name: 'Teaching Materials Generator', credits: 5 },
     { name: 'Lesson Plan Generator', credits: 3 },
-    { name: 'Quiz Generator', credits: 4 },
-    { name: 'Rubric Builder', credits: 3 },
+    { name: 'Quiz Generator', credits: 2 },
+    { name: 'Rubric Builder', credits: 2 },
   ],
   'Fund It (Grant Tools)': [
     { name: 'LOI & Grant Proposal Generator', credits: 5 },

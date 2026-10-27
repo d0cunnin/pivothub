@@ -43,7 +43,7 @@ export default function RubricBuilder() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setRubric(data.rubric);
-      toast.success('Rubric generated! (3 credits used)');
+      toast.success('Rubric generated! (2 credits used)');
     } catch (e: any) { toast.error(e.message || 'Generation failed'); }
     finally { setLoading(false); }
   };
@@ -114,7 +114,7 @@ export default function RubricBuilder() {
               </div>
             </div>
             <Button onClick={handleGenerate} disabled={loading} size="lg" className="w-full">
-              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating…</> : <>Generate Rubric (3 Credits)</>}
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating…</> : <>Generate Rubric (2 Credits)</>}
             </Button>
           </CardContent>
         </>
