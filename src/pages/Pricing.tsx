@@ -119,12 +119,6 @@ const Pricing = () => {
       tagline: "No credit card required",
       price: "$0",
       credits: 5,
-      features: [
-        "5 Tool Credits each month",
-        "Credits reset monthly on your signup date",
-        "No rollover",
-        "Email support",
-      ],
       tier: "free",
       isFree: true,
     },
@@ -133,12 +127,6 @@ const Pricing = () => {
       tagline: "Get the basics",
       price: "$12",
       credits: 40,
-      features: [
-        "40 Tool Credits each month",
-        "Unused credits roll over (up to 2× monthly amount)",
-        "Can buy extra credit packs",
-        "Email support",
-      ],
       tier: "starter",
       isPopular: true,
     },
@@ -147,13 +135,6 @@ const Pricing = () => {
       tagline: "For regular users",
       price: "$24",
       credits: 100,
-      features: [
-        "100 Tool Credits each month",
-        "Unused credits roll over (up to 2× monthly amount)",
-        "Can buy extra credit packs",
-        "Priority email support",
-        "Early access to new tools",
-      ],
       tier: "pro",
     },
     {
@@ -161,14 +142,6 @@ const Pricing = () => {
       tagline: "Everything, for power users",
       price: "$49",
       credits: 250,
-      features: [
-        "250 Tool Credits each month",
-        "Unused credits roll over (up to 2× monthly amount)",
-        "Can buy extra credit packs",
-        "Priority support",
-        "Early access to new tools",
-        "Dedicated account manager",
-      ],
       tier: "all-access",
     },
   ];
@@ -263,14 +236,6 @@ const Pricing = () => {
                   >
                     {plan.isFree ? "Start for Free" : `Choose ${plan.name}`}
                   </Button>
-                  <ul className="space-y-3">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start text-sm">
-                        <Check className="h-4 w-4 text-primary mr-2 flex-shrink-0 mt-0.5" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </CardContent>
               </Card>
             ))}
