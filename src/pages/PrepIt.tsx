@@ -17,7 +17,7 @@ const PrepIt = () => {
   const serviceSchema = generateServiceSchema(
     "Job Preparation Services",
     "Career Coaching",
-    "https://pivothub.lovable.app/prepit"
+    "https://pivothub.io/prepit"
   );
 
   return (

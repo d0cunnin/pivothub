@@ -20,12 +20,12 @@ export const organizationSchema = {
   "@type": "Organization",
   "name": "PivotHub",
   "description": "Career transition and income solutions for people facing job loss",
-  "url": "https://pivothub.lovable.app",
-  "logo": "https://pivothub.lovable.app/favicon.png",
+  "url": "https://pivothub.io",
+  "logo": "https://pivothub.io/favicon.png",
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "Customer Support",
-    "url": "https://pivothub.lovable.app/contact"
+    "url": "https://pivothub.io/contact"
   }
 };
 

@@ -16,7 +16,7 @@ const AssessIt = () => {
   const serviceSchema = generateServiceSchema(
     "AI Career Assessment",
     "Career Counseling",
-    "https://pivothub.lovable.app/assessit"
+    "https://pivothub.io/assessit"
   );
 
   return (

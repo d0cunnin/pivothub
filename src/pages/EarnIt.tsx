@@ -31,7 +31,7 @@ function SideIncomeBlueprintInner() {
   const serviceSchema = generateServiceSchema(
     "Side Income Assessment",
     "Financial Counseling",
-    "https://pivothub.lovable.app/earnit"
+    "https://pivothub.io/earnit"
   );
 
   const handleAssessmentComplete = useCallback(async (assessmentData: any) => {
