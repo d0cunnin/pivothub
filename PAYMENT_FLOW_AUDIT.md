@@ -51,6 +51,7 @@ No authenticated purchase, identity update, renewal, refund, or deletion was exe
 15. Validate catalog type/monthly cadence as well as amount/currency. Consolidate catalog consumption, version active SQL in one deployment workflow, and add lifecycle tests.
 16. Free-tier reset endpoint resets before the true monthly anniversary. Correct calendar-based due checks. Grant Resources advertises two credits but its endpoint is configured as zero; align with the established tool-credit rule.
 17. Shared guard allows loose origin matching and fails open for some throttling/CAPTCHA infrastructure failures. Review within authentication/credit scope; do not assume client-only checks establish hosted protection.
+18. Public sign-in screenshot displays a Cloudflare "For testing only" notice. Production challenge configuration must be checked and replaced with a real site configuration if still using a test key; the hosted enforcement settings remain unverified.
 
 ## Decisions required before the remediation plan
 

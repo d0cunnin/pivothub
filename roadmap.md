@@ -1,5 +1,5 @@
 # Purchase setup
-- [ ] Audit current purchase, authentication, account, entitlement, and renewal flows against hosted configuration.
+- [x] Audit current purchase, authentication, account, entitlement, and renewal flows against hosted configuration; findings in PAYMENT_FLOW_AUDIT.md.
 - [ ] Clarify credit rollover, plan changes, refunds, account deletion, and preview-credit behavior.
 - [ ] Present and implement the approved gap-remediation plan with regression tests.
 - [ ] Provide preview test-card and account-flow testing instructions.
