@@ -8,7 +8,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CheckoutModal } from "@/components/CheckoutModal";
 import { Check, Star, Coins, Zap, AlertCircle } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -29,7 +28,7 @@ const Pricing = () => {
     tier: ''
   });
   
-  const [selectedPathIndex, setSelectedPathIndex] = useState(1); // Default to Starter (index 1)
+
   const [purchasingCredits, setPurchasingCredits] = useState(false);
 
   const handlePurchaseCredits = async (credits: number) => {
@@ -285,10 +284,10 @@ const Pricing = () => {
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center mb-4">
               <Coins className="h-8 w-8 text-primary mr-3" />
-              <h2 className="text-4xl font-bold">Need More AI Requests?</h2>
+              <h2 className="text-4xl font-bold">Need Extra Tool Credits?</h2>
             </div>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-2">
-              Running low on monthly AI requests? Purchase extra credits anytime to keep using PivotHub tools.
+              Running low? Add an extra credit pack anytime to keep using PivotHub tools.
             </p>
             <p className="text-base text-muted-foreground max-w-3xl mx-auto">
               Extra credits are added immediately to your account and can be used within your current billing month.
@@ -300,19 +299,19 @@ const Pricing = () => {
             <AlertCircle className="h-4 w-4 text-amber-600" />
             <AlertTitle className="text-amber-900">Paid Subscription Required</AlertTitle>
             <AlertDescription className="text-amber-800">
-              Extra credits are only available to active paid subscribers (Starter, Pro, or All-Access plans).
-              Free tier users must upgrade to purchase additional credits.
+              Extra credits are only available to active paid subscribers (Starter, Pro, or All-Access).
+              Free plan users must upgrade to purchase additional credits.
             </AlertDescription>
           </Alert>
 
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {/* Starter Pack */}
+            {/* Small Pack */}
             <Card className="premium-card border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-lg bg-gradient-to-br from-blue-500/5 to-cyan-600/5">
               <CardHeader className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mx-auto mb-4">
                   <Zap className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle className="text-2xl mb-2">Starter Pack</CardTitle>
+                <CardTitle className="text-2xl mb-2">Small Pack</CardTitle>
                 <div className="mb-3">
                   <span className="text-4xl font-bold text-primary">$5</span>
                 </div>
@@ -455,14 +454,14 @@ const Pricing = () => {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What is Explore Mode?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What is the Free plan?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Explore Mode is our <strong>free forever</strong> tier that gives you 5 credits every month based on your signup anniversary date. No credit card required. Perfect for testing tools or occasional use.
+                    The Free plan is <strong>free forever</strong> and that gives you 5 credits every month based on your signup anniversary date. No credit card required. Perfect for testing tools or occasional use.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">What are AI requests?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">What are Tool Credits?</h3>
                   <p className="text-muted-foreground text-sm">
                     Each tool uses a certain number of credits based on complexity. Chatbots use 1 credit per message, most tools use 2-5 credits, and the large blueprint tools use more (Deploy It 40, Create It 70). You can see every tool's price on the Before You Start page.
                   </p>
@@ -473,14 +472,14 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">When do my credits reset?</h3>
                   <p className="text-muted-foreground text-sm">
-                    <strong>Paid plans:</strong> On your billing anniversary each month. <strong>Explore Mode:</strong> On your signup anniversary each month.
+                    <strong>Paid plans:</strong> On your billing anniversary each month. <strong>Free plan:</strong> On your signup anniversary each month.
                   </p>
                 </div>
                 
                 <div>
-                  <h3 className="font-semibold text-foreground mb-2">Can I switch between paths?</h3>
+                  <h3 className="font-semibold text-foreground mb-2">Can I switch plans?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Yes! You can upgrade, downgrade, or switch to a different path anytime. Changes take effect immediately.
+                    Yes! You can upgrade, downgrade, or switch plans anytime. Changes take effect immediately.
                   </p>
                 </div>
               </div>
