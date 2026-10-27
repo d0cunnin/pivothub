@@ -1,0 +1,122 @@
+import type jsPDF from 'jspdf';
+import { PdfWriter, asText, toList, ACCENT, CON, HEADING } from '../pdfWriter';
+import { footerNote, notice, scoreBar, table, toNumber } from './scoreReportBlocks';
+
+export interface TechReadinessScores {
+  cognitive: number;
+  behavioral: number;
+  interest: number;
+  overall: number;
+  mathDiagnostic: number;
+}
+
+const fitLabel = (level: any) =>
+  level === 'strong' ? 'Strong Fit' : level === 'moderate' ? 'Moderate Fit' : 'Needs Preparation';
+const band = (score: number, labels: [string, string, string]) =>
+  score >= 75 ? labels[0] : score >= 60 ? labels[1] : labels[2];
+
+/**
+ * Builds the Tech Readiness Assessment PDF from the local scores and the
+ * AI analysis returned by the tech-readiness-assessment edge function.
+ */
+export function generateTechReadinessPDF(results: any, scores: TechReadinessScores): jsPDF {
+  const w = new PdfWriter();
+  w.header('Tech Readiness Assessment Report', 'How ready you are for a career in tech, and where to go next');
+  notice(w, 'This file is not stored. Please download to save a copy.', CON, { bold: true });
+
+  // Scores
+  w.section('Your Scores', 'Each score is out of 100 unless noted');
+  const rows: [string, number, number, string, string][] = [
+    ['Overall Tech Compatibility', scores.overall, 100, `${scores.overall}/100`, fitLabel(results?.techFitLevel)],
+    ['Cognitive Readiness', scores.cognitive, 100, `${scores.cognitive}/100`, band(scores.cognitive, ['Strong', 'Good', 'Needs Work'])],
+    ['Behavioral Readiness', scores.behavioral, 100, `${scores.behavioral}/100`, band(scores.behavioral, ['Strong', 'Good', 'Needs Work'])],
+    ['Interest Alignment', scores.interest, 100, `${scores.interest}/100`, band(scores.interest, ['High', 'Moderate', 'Low'])],
+    ['Math for Tech Diagnostic', scores.mathDiagnostic, 5, `${scores.mathDiagnostic}/5`, scores.mathDiagnostic >= 3 ? 'Proficient' : 'Needs Practice'],
+  ];
+  rows.forEach(([label, value, max, valueText, assessment]) => scoreBar(w, label, value, max, `${valueText}  -  ${assessment}`));
+  w.y += 2;
+
+  const summary = asText(results?.overallAssessment);
+  if (summary) {
+    w.section('What Your Results Mean');
+    summary.split(/\n\s*\n/).forEach((para) => w.text(para.trim(), { after: 4 }));
+    w.y += 2;
+  }
+
+  const pathways: any[] = Array.isArray(results?.topTechPathways) ? results.topTechPathways : [];
+  if (pathways.length) {
+    w.section('Recommended Tech Pathways', 'Ranked by how well each fits you');
+    pathways.forEach((pathway, index) => {
+      w.ensureSpace(28);
+      w.badge(`#${index + 1}`, 18);
+      w.setStyle(13, HEADING, 'bold');
+      const fitScore = toNumber(pathway?.fitScore);
+      const fit = fitScore !== null ? `  (${fitScore}% fit)` : '';
+      const titleLines: string[] = w.doc.splitTextToSize(asText(pathway?.title) + fit, w.contentWidth - 24);
+      titleLines.forEach((line, i) => w.doc.text(line, w.margin + 24, w.y + i * 6));
+      w.y += titleLines.length * 6 + 3;
+      const reason = asText(pathway?.reason);
+      if (reason) {
+        w.subHeading('Why it fits you', ACCENT, 10);
+        w.text(reason, { after: 3 });
+      }
+      w.facts([['Key skills', asText(pathway?.keySkills)]]);
+      if (index < pathways.length - 1) w.y += 4;
+    });
+    w.y += 4;
+  }
+
+  const strengths = toList(results?.strengthAreas);
+  if (strengths.length) {
+    w.section('Your Strengths');
+    w.bullets(strengths);
+    w.y += 4;
+  }
+
+  const improvements: any[] = Array.isArray(results?.improvementAreas) ? results.improvementAreas : [];
+  if (improvements.length) {
+    w.section('Areas to Build Up');
+    improvements.forEach((area) => {
+      const level = toNumber(area?.currentLevel);
+      if (level !== null) scoreBar(w, asText(area?.area), level, 100, `Current: ${level}/100`, CON);
+      else w.subHeading(asText(area?.area), HEADING, 10.5);
+      w.text(asText(area?.recommendation), { size: 9.5, after: 5 });
+    });
+    w.y += 2;
+  }
+
+  if (results?.mathDiagnosticFlag && asText(results?.mathImprovementPlan)) {
+    w.section('Math Skills Need Practice');
+    notice(w, 'Practicing these math basics will make technical training much easier.', CON);
+    w.markdown(asText(results.mathImprovementPlan));
+    w.y += 4;
+  }
+
+  const courses: any[] = Array.isArray(results?.recommendedCourses) ? results.recommendedCourses : [];
+  if (courses.length) {
+    w.section('Recommended PivotHub Courses');
+    table(
+      w,
+      ['Course', 'Why it helps'],
+      courses.map((c) => [asText(c?.title), asText(c?.reason)]),
+      { firstColumnBold: true, columnStyles: { 0: { cellWidth: 52 } } },
+    );
+  }
+
+  const alternates = toList(results?.alternateTracks);
+  if (alternates.length) {
+    w.section('Other Paths Worth Considering');
+    w.bullets(alternates);
+    w.y += 4;
+  }
+
+  const steps = toList(results?.nextSteps);
+  if (steps.length) {
+    w.section('Your Next Steps');
+    w.bullets(steps, { numbered: true });
+  }
+
+  w.footer('Generated by PivotHub Tech Readiness Assessment');
+  footerNote(w, 'This file is not stored on our servers. Save this copy for your records.', CON);
+  return w.doc;
+}

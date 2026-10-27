@@ -9,7 +9,7 @@ import { Loader2, FileDown, Sparkles, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from '@/lib/invokeFunction';
 import { toast } from 'sonner';
-import jsPDF from 'jspdf';
+import { generateQuizPDF } from '@/lib/pdf-reports/quiz';
 
 interface Question {
   id: number;
@@ -52,51 +52,7 @@ export default function QuizGenerator() {
 
   const handlePDF = () => {
     if (!quiz) return;
-    const doc = new jsPDF();
-    const pageW = doc.internal.pageSize.getWidth();
-    const pageH = doc.internal.pageSize.getHeight();
-    const margin = 18;
-    const maxW = pageW - margin * 2;
-    let y = margin;
-
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
-    doc.text(quiz.title, margin, y); y += 8;
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-    const ins = doc.splitTextToSize(quiz.instructions, maxW);
-    doc.text(ins, margin, y); y += ins.length * 5 + 4;
-
-    quiz.questions.forEach(q => {
-      if (y > pageH - margin - 20) { doc.addPage(); y = margin; }
-      doc.setFont('helvetica', 'bold');
-      const head = doc.splitTextToSize(`${q.id}. ${q.prompt}`, maxW);
-      doc.text(head, margin, y); y += head.length * 5;
-      doc.setFont('helvetica', 'normal');
-      if (q.type === 'multiple-choice' && q.options) {
-        q.options.forEach((opt, i) => {
-          const letter = String.fromCharCode(65 + i);
-          const w = doc.splitTextToSize(`  ${letter}. ${opt}`, maxW - 4);
-          doc.text(w, margin + 4, y); y += w.length * 5;
-        });
-      } else if (q.type === 'true-false') {
-        doc.text('  True / False', margin + 4, y); y += 5;
-      } else {
-        doc.text('  ____________________________________________', margin + 4, y); y += 8;
-      }
-      y += 3;
-    });
-
-    // Answer key
-    doc.addPage(); y = margin;
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
-    doc.text('Answer Key', margin, y); y += 8;
-    doc.setFontSize(10); doc.setFont('helvetica', 'normal');
-    quiz.questions.forEach(q => {
-      if (y > pageH - margin) { doc.addPage(); y = margin; }
-      const line = doc.splitTextToSize(`${q.id}. ${q.answer}${q.explanation ? ` — ${q.explanation}` : ''}`, maxW);
-      doc.text(line, margin, y); y += line.length * 5 + 1;
-    });
-
-    doc.save(`quiz-${form.topic.replace(/\s+/g, '-')}.pdf`);
+    generateQuizPDF(quiz).save(`quiz-${form.topic.replace(/\s+/g, '-')}.pdf`);
   };
 
   return (

@@ -10,7 +10,7 @@ import { Loader2, FileDown, Sparkles } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from '@/lib/invokeFunction';
 import { toast } from 'sonner';
-import jsPDF from 'jspdf';
+import { generateRubricPDF } from '@/lib/pdf-reports/rubric';
 
 interface Criterion {
   name: string;
@@ -50,42 +50,7 @@ export default function RubricBuilder() {
 
   const handlePDF = () => {
     if (!rubric) return;
-    const doc = new jsPDF({ orientation: 'landscape' });
-    const pageW = doc.internal.pageSize.getWidth();
-    const pageH = doc.internal.pageSize.getHeight();
-    const margin = 14;
-    let y = margin;
-
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
-    doc.text(rubric.title, margin, y); y += 8;
-
-    const colWidth = (pageW - margin * 2 - 50) / rubric.scale.length;
-    const rowH = 18;
-
-    doc.setFontSize(9); doc.setFont('helvetica', 'bold');
-    doc.text('Criterion', margin, y + 5);
-    rubric.scale.forEach((s, i) => {
-      doc.text(s, margin + 50 + i * colWidth + 2, y + 5);
-    });
-    y += rowH;
-
-    doc.setFont('helvetica', 'normal');
-    rubric.criteria.forEach(c => {
-      if (y > pageH - margin - rowH) { doc.addPage(); y = margin; }
-      doc.setFont('helvetica', 'bold');
-      const nameLines = doc.splitTextToSize(`${c.name} (${c.weight}%)`, 48);
-      doc.text(nameLines, margin, y + 5);
-      doc.setFont('helvetica', 'normal');
-      rubric.scale.forEach((s, i) => {
-        const d = c.descriptors[s] || '';
-        const wrapped = doc.splitTextToSize(d, colWidth - 4);
-        doc.text(wrapped, margin + 50 + i * colWidth + 2, y + 5);
-      });
-      doc.line(margin, y, pageW - margin, y);
-      y += Math.max(rowH, 5 * Math.max(...rubric.scale.map(s => doc.splitTextToSize(c.descriptors[s] || '', colWidth - 4).length)));
-    });
-
-    doc.save(`rubric-${form.assignment.slice(0, 20).replace(/\s+/g, '-')}.pdf`);
+    generateRubricPDF(rubric, { gradeLevel: form.gradeLevel }).save(`rubric-${form.assignment.slice(0, 20).replace(/\s+/g, '-')}.pdf`);
   };
 
   return (

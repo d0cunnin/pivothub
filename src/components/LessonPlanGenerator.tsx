@@ -10,7 +10,7 @@ import { invokeFunction } from '@/lib/invokeFunction';
 import { toast } from 'sonner';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import jsPDF from 'jspdf';
+import { generateLessonPlanPDF } from '@/lib/pdf-reports/lessonPlan';
 
 export default function LessonPlanGenerator() {
   const [loading, setLoading] = useState(false);
@@ -47,30 +47,8 @@ export default function LessonPlanGenerator() {
 
   const handlePDF = () => {
     if (!content) return;
-    const doc = new jsPDF();
-    const pageW = doc.internal.pageSize.getWidth();
-    const pageH = doc.internal.pageSize.getHeight();
-    const margin = 18;
-    let y = margin;
-    const lines = content.split('\n');
-    for (const line of lines) {
-      if (y > pageH - margin) { doc.addPage(); y = margin; }
-      if (line.startsWith('## ')) {
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(14);
-        const w = doc.splitTextToSize(line.replace('## ', ''), pageW - margin * 2);
-        doc.text(w, margin, y); y += w.length * 7 + 3;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-      } else if (line.startsWith('### ')) {
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
-        const w = doc.splitTextToSize(line.replace('### ', ''), pageW - margin * 2);
-        doc.text(w, margin, y); y += w.length * 6 + 2;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-      } else if (line.trim()) {
-        const w = doc.splitTextToSize(line.replace(/^[-*]\s/, '• '), pageW - margin * 2);
-        doc.text(w, margin, y); y += w.length * 5 + 1;
-      } else { y += 3; }
-    }
-    doc.save(`lesson-plan-${form.subject.replace(/\s+/g, '-')}.pdf`);
+    generateLessonPlanPDF(content, { subject: form.subject, gradeLevel: form.gradeLevel, duration: form.duration })
+      .save(`lesson-plan-${form.subject.replace(/\s+/g, '-')}.pdf`);
   };
 
   return (
