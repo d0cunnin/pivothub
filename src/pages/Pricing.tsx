@@ -250,20 +250,19 @@ const Pricing = () => {
               </div>
               
               <div>
-                <h4 className="font-bold text-foreground mb-2">Package Plans ($15–$18 per month)</h4>
+                <h4 className="font-bold text-foreground mb-2">Paid Plans</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>Access to specialized toolkits</li>
-                  <li>Monthly credits included</li>
+                  <li>Starter: $12/month for 40 credits</li>
+                  <li>Pro: $24/month for 100 credits</li>
+                  <li>All-Access: $49/month for 250 credits</li>
                   <li>Unused credits roll over (up to 2× your monthly limit)</li>
                 </ul>
               </div>
-              
+
               <div>
-                <h4 className="font-bold text-foreground mb-2">All Access Pass ($29 per month)</h4>
+                <h4 className="font-bold text-foreground mb-2">Extra Credit Packs (paid plans)</h4>
                 <ul className="list-disc list-inside space-y-1">
-                  <li>Access to every toolkit on the platform</li>
-                  <li>Largest monthly credit bundle</li>
-                  <li>Priority support</li>
+                  <li>25 credits for $5, 70 credits for $10, 150 credits for $20</li>
                 </ul>
               </div>
             </div>
@@ -430,7 +429,7 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Starter Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$7</span>
+                  <span className="text-4xl font-bold text-primary">$5</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
                   25 Extra Credits
@@ -474,7 +473,7 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Boost Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$18</span>
+                  <span className="text-4xl font-bold text-primary">$10</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
                   70 Extra Credits
@@ -513,7 +512,7 @@ const Pricing = () => {
                 </div>
                 <CardTitle className="text-2xl mb-2">Power Pack</CardTitle>
                 <div className="mb-3">
-                  <span className="text-4xl font-bold text-primary">$35</span>
+                  <span className="text-4xl font-bold text-primary">$20</span>
                 </div>
                 <CardDescription className="text-base font-medium text-foreground">
                   150 Extra Credits

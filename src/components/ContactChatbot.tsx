@@ -30,7 +30,7 @@ const FAQ_RESPONSES: Record<string, string> = {
     "To manage your subscription:\n1. Go to Settings (top right)\n2. Click 'Subscription' tab\n3. You can upgrade, downgrade, or cancel here\n\nCancellations take effect at the end of your billing period. Need help? Contact support@pivothub.io or call 269.998.4203",
   
   "Where can I view pricing and plans?": 
-    "View our pricing at /pricing or:\n\n• Explore Mode: Free - 5 credits/month\n• Assess+Prep+Learn: $18/mo - 75 credits\n• Build+Teach+Launch: $18/mo - 75 credits\n• Fund It: $15/mo - 60 credits\n• All Access Pass: $29/mo - 125 credits (most popular)\n\nAll paid plans include credit rollover up to 2× monthly limit!",
+    "View our pricing at /pricing or:\n\n• Explore Mode: Free - 5 credits/month\n• Starter: $12/mo - 40 credits\n• Pro: $24/mo - 100 credits\n• All-Access: $49/mo - 250 credits (most popular)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nAll paid plans include credit rollover up to 2× monthly limit!",
   
   "How do I contact support?": 
     "Reach our support team:\n\n📧 Email: support@pivothub.io\n📞 Phone: 269.998.4203\n📍 Address: PO Box 2025, Kalamazoo, MI 49003\n🕒 Hours: Mon-Fri, 9 AM - 6 PM EST\n\nWe typically respond within 24 hours on business days.",
@@ -40,7 +40,7 @@ const FAQ_RESPONSES: Record<string, string> = {
 
   // Additional common questions
   "how do credits work": 
-    "Credits are used for AI-powered tools:\n\n• Most tools cost 1-5 credits (the big blueprint tools cost more: Create It 70, Deploy It 40)\n• Paid plans include monthly credits\n• Unused credits roll over (up to 2× limit)\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $49/mo (250)\n• Extra credit packs: $7 for 25, $18 for 70, $35 for 150\n\nExplore Mode: 5 free credits/month, no rollover",
+    "Credits are used for AI-powered tools:\n\n• Most tools cost 1-5 credits (the big blueprint tools cost more: Create It 70, Deploy It 40)\n• Paid plans include monthly credits\n• Unused credits roll over (up to 2× limit)\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $49/mo (250)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nExplore Mode: 5 free credits/month, no rollover",
 
   "what tools are available": 
     "PivotHub offers 8 tool categories:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant finding\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Event tools\n\nVisit /pricing for full details!",
