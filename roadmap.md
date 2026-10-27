@@ -1,5 +1,6 @@
 # Purchase setup
-- [ ] Set up existing subscription and credit-pack products in test payments.
-- [ ] Correct purchase popup wording and consent reset.
-- [ ] Connect checkout, payment confirmation, credit fulfillment, and cancellation.
-- [ ] Verify a test purchase and Tool Credits; explain live activation steps.
+- [x] Set up existing subscription and credit-pack products in test payments.
+- [x] Correct purchase popup wording and consent reset; verified in preview.
+- [x] Connect checkout, payment confirmation, credit fulfillment, and cancellation.
+- [ ] Verify authenticated test purchase and receipt; blocked by no matching requester account and multiple app users. User must sign in to the preview or identify the account to test.
+- [ ] Activate live payments; user must claim the payment account and complete verification in Payments.
