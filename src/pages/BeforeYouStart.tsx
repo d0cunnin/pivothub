@@ -311,77 +311,19 @@ const BeforeYouStart = () => {
           </div>
         </section>
 
-        {/* Section 5: Subscription Visibility */}
+        {/* Section 5: Credits, Not Tiers */}
         <section className="py-20 bg-accent">
           <div className="container mx-auto px-6 lg:px-8">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center text-white">
-                What Is Included in Each Tier
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
+                No Tiers. Just Credits.
               </h2>
-              <div className="space-y-6">
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Explore Mode</CardTitle>
-                    <CardDescription>5 free credits per month to try any tool</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      All tools available with credit limitations
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Assess It + Prep It + Learn It Package</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('assess-prep-learn')}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Build It + Teach It + Launch It Package</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('build-teach-launch')}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">Fund It Package</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('fund-it')}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card className="premium-card border-primary">
-                  <CardHeader>
-                    <CardTitle className="text-2xl">All Access Pass</CardTitle>
-                    <CardDescription>Unlimited access to every tool</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-base md:text-lg text-muted-foreground">
-                      {getToolsList('all-access')}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <div className="mt-12 text-center">
-                <Button variant="secondary" size="lg" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
-                  <Link to="/pricing">View Pricing Details</Link>
-                </Button>
-              </div>
+              <p className="text-xl md:text-2xl text-white/90 leading-relaxed mb-10">
+                Every plan unlocks every tool. There are no tiers and no feature lists to compare — the only thing that changes is how many Tool Credits you get each month.
+              </p>
+              <Button variant="secondary" size="lg" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
+                <Link to="/pricing">View Pricing Details</Link>
+              </Button>
             </div>
           </div>
         </section>
