@@ -2,7 +2,16 @@ import {createStripeClient,type StripeEnv} from './stripe.ts';
 import {db} from './paymentHttp.ts';
 import {paymentCatalog,isPaymentPriceId} from './paymentCatalog.ts';
 import {validatePrice,shouldGrantInvoice} from './billingPolicy.ts';
+import {sendTemplateEmail} from './transactional-email-templates/send-email.ts';
 const identifier=(value:any):string|undefined=>typeof value==='string'?value:value?.id;
+// Confirmation emails are best-effort: a send failure must never fail payment fulfillment.
+async function sendConfirmation(template:'subscription-confirmed'|'pack-confirmed',userId:string,idempotencyKey:string,templateData:Record<string,unknown>){
+ try{
+  const {data,error}=await db().auth.admin.getUserById(userId);if(error||!data.user?.email)return;
+  const name=(data.user.user_metadata?.display_name as string|undefined)??undefined;
+  await sendTemplateEmail(template,data.user.email,{templateData:{name,...templateData},idempotencyKey});
+ }catch(error){console.error(`${template} email failed`,error instanceof Error?error.message:error);}
+}
 export async function syncSubscription(sub:any,env:StripeEnv){
  const observedAt=new Date().toISOString();sub=await createStripeClient(env).subscriptions.retrieve(sub.id);
  const userId=sub.metadata?.userId;if(!userId)throw new Error('Subscription owner missing');
@@ -31,6 +40,7 @@ export async function fulfillInvoice(invoice:any,env:StripeEnv){
  const paidAt=invoice.status_transitions?.paid_at??invoice.created;
  let paymentIntent=identifier(invoice.payment_intent);if(!paymentIntent){const payments=await stripe.invoicePayments.list({invoice:invoice.id,limit:10});paymentIntent=identifier(payments.data.find(p=>p.status==='paid')?.payment?.payment_intent);}
  const {error}=await db().rpc('issue_payment_grant',{p_user_id:userId,p_environment:env,p_payment_key:`invoice:${invoice.id}`,p_price_id:key,p_credits:credits,p_issued_at:new Date(paidAt*1000).toISOString(),p_period_start:new Date(line.period.start*1000).toISOString(),p_period_end:new Date(line.period.end*1000).toISOString(),p_payment_intent_id:paymentIntent??null});if(error)throw error;
+ await sendConfirmation('subscription-confirmed',userId,`subscription-confirmed:invoice:${invoice.id}`,{planName:paymentCatalog[key].name,credits,amount:`$${(paymentCatalog[key].amount/100).toFixed(2)}`,periodEnd:new Date(line.period.end*1000).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric',timeZone:'UTC'}),changeType:invoice.billing_reason==='subscription_update'?'upgrade':invoice.billing_reason==='subscription_cycle'?'renewal':'new'});
 }
 export async function fulfillSession(session:any,env:StripeEnv){
  if(!['paid','no_payment_required'].includes(session.payment_status))return;const stripe=createStripeClient(env);
@@ -41,4 +51,5 @@ export async function fulfillSession(session:any,env:StripeEnv){
  const lines=await stripe.checkout.sessions.listLineItems(session.id,{limit:2});if(lines.data.length!==1||lines.data[0].quantity!==1)throw new Error('Invalid pack line');validatePrice(lines.data[0].price,priceId);
  const intentId=identifier(session.payment_intent);const intent=intentId?await stripe.paymentIntents.retrieve(intentId):null;const charges=intentId?await stripe.charges.list({payment_intent:intentId,limit:1}):null;const issuedAt=charges?.data[0]?.created??session.created;
  const {error}=await db().rpc('issue_payment_grant',{p_user_id:userId,p_environment:env,p_payment_key:`checkout:${session.id}`,p_price_id:priceId,p_credits:paymentCatalog[priceId].credits,p_issued_at:new Date(issuedAt*1000).toISOString(),p_payment_intent_id:identifier(session.payment_intent)??null});if(error)throw error;
+ await sendConfirmation('pack-confirmed',userId,`pack-confirmed:checkout:${session.id}`,{packName:paymentCatalog[priceId].name,credits:paymentCatalog[priceId].credits,amount:`$${(paymentCatalog[priceId].amount/100).toFixed(2)}`});
 }
