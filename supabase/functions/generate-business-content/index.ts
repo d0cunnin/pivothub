@@ -1394,7 +1394,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
       );
     }
 
-    // Fast Gemini Flash primary with gpt-5-mini fallback, budgeted under the
+    // Fast Gemini Flash primary with Gemini Flash Lite fallback, budgeted under the
     // ~150s edge limit. The previous GPT-5 call with stacked 120s + 60s
     // timeouts regularly exceeded that limit and the request died with a 504.
     const maxTokens = type === 'business-plan' ? 8000 : type === 'business-foundation' ? 4000 : type === 'marketing-strategy' ? 6000 : 2000;

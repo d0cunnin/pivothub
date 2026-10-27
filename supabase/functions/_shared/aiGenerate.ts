@@ -6,7 +6,7 @@
  * under the ~150s edge runtime limit instead of dying with a silent 504.
  *
  * Strategy: a fast primary model (Gemini 3.8 Flash) with a budgeted timeout,
- * falling back to a secondary model (gpt-5-mini) only if the primary fails.
+ * falling back to a secondary model (Gemini 3.1 Flash Lite) only if the primary fails.
  * Transient gateway errors are retried once; timeouts are NOT retried on the
  * same model (they fall through to the fallback) so the total request time
  * stays bounded:  primary (~50s) + fallback (~70s) = ~120s < 150s.
@@ -17,7 +17,7 @@ import { extractContent, extractJson } from "./aiResponse.ts";
 const AI_GATEWAY_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
 export const DEFAULT_PRIMARY_MODEL = "google/gemini-3.8-flash";
-export const DEFAULT_FALLBACK_MODEL = "openai/gpt-5-mini";
+export const DEFAULT_FALLBACK_MODEL = "google/gemini-3.1-flash-lite";
 
 const DEFAULT_PRIMARY_TIMEOUT_MS = 50_000;
 const DEFAULT_FALLBACK_TIMEOUT_MS = 70_000;
