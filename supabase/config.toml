@@ -1,1 +1,12 @@
 project_id = "xkeczmvrrjqucfzaxtrz"
+
+[functions.create-checkout]
+verify_jwt = false
+[functions.payments-webhook]
+verify_jwt = false
+[functions.payment-status]
+verify_jwt = false
+[functions.manage-subscription]
+verify_jwt = false
+[functions.check-subscription]
+verify_jwt = false

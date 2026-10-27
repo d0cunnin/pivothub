@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,16 +11,23 @@ import { Check, Star, Coins, Zap, AlertCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { PaymentCheckout } from "@/components/PaymentCheckout";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { getStripeEnvironment } from "@/lib/payments/stripe";
 import heroImage from "@/assets/hero-image.jpg";
 
 const Pricing = () => {
-  const { user, subscribed, subscriptionTier } = useAuth();
+  const { user, subscribed, refreshSubscription } = useAuth();
+  const [paymentPriceId, setPaymentPriceId] = useState<string | null>(null);
+  const [paymentResult, setPaymentResult] = useState("");
   const { toast } = useToast();
   const [checkoutModal, setCheckoutModal] = useState<{
     open: boolean;
     planName: string;
     price: string;
     tier: string;
+    credits?: number;
+    isOneTime?: boolean;
   }>({
     open: false,
     planName: '',
@@ -29,88 +36,50 @@ const Pricing = () => {
   });
   
 
-  const [purchasingCredits, setPurchasingCredits] = useState(false);
-
-  const handlePurchaseCredits = async (credits: number) => {
-    if (!user) {
-      toast({
-        title: "Sign In Required",
-        description: "Please sign in to purchase extra credits.",
-        variant: "destructive",
-      });
-      window.location.href = "/auth";
-      return;
+  const purchasingCredits = false;
+  useEffect(() => {
+    const sessionId = new URLSearchParams(window.location.search).get('session_id');
+    if (!sessionId || !user) return;
+    let cancelled = false;
+    async function confirmPayment() {
+      try {
+        const { data, error } = await supabase.functions.invoke('payment-status', { body: { sessionId, environment: getStripeEnvironment() } });
+        if (error || data?.error) throw new Error(data?.error ?? 'Unable to confirm payment. Please contact support.');
+        if (!cancelled) {
+          setPaymentResult(data.credits > 0
+            ? data.environment === 'sandbox' ? `Test purchase confirmed: ${data.credits} Tool Credits recorded. Your live balance is unchanged.` : `Payment confirmed. ${data.credits} Tool Credits have been added to your account.`
+            : 'Your payment is awaiting confirmation. Tool Credits will be added once payment is confirmed.');
+          await refreshSubscription();
+        }
+      } catch (e) { if (!cancelled) setPaymentResult(e instanceof Error ? e.message : 'Unable to confirm payment.'); }
     }
+    confirmPayment();
+    return () => { cancelled = true; };
+  }, [user?.id]);
 
-    // Check if user has active paid subscription
+  const handlePurchaseCredits = (credits: number) => {
+    if (!user) { window.location.href = '/auth'; return; }
     if (!subscribed) {
-      toast({
-        title: "Subscription Required",
-        description: "Extra credits are only available for active paid subscribers. Please upgrade to a paid plan first.",
-        variant: "destructive",
-      });
-      // Scroll to subscription plans section
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      toast({ title: 'Subscription Required', description: 'Extra Tool Credits require an active paid subscription.', variant: 'destructive' });
       return;
     }
-
-    setPurchasingCredits(true);
-    try {
-      toast({
-        title: "Payments Coming Soon",
-        description: "Extra credit purchases will be available once payments are reconnected.",
-      });
-      return;
-    } catch (error: any) {
-      let errorMessage = "Failed to create checkout session. Please try again.";
-      
-      if (error?.message?.includes('SUBSCRIPTION_REQUIRED')) {
-        errorMessage = "You need an active subscription to purchase extra credits";
-      }
-      
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
-    } finally {
-      setPurchasingCredits(false);
-    }
+    const packs = {
+      25: { name: 'Small Pack', price: '$5', id: 'small_pack' },
+      70: { name: 'Boost Pack', price: '$10', id: 'boost_pack' },
+      150: { name: 'Power Pack', price: '$20', id: 'power_pack' },
+    };
+    const pack = packs[credits as keyof typeof packs];
+    if (pack) setCheckoutModal({ open: true, planName: pack.name, price: pack.price, tier: pack.id, credits, isOneTime: true });
   };
 
-  const handleSubscribe = async (tier: string) => {
-    if (!user) {
-      toast({
-        title: "Sign In Required",
-        description: "Please sign in to subscribe to a plan.",
-        variant: "destructive",
-      });
-      window.location.href = "/auth";
-      return;
-    }
-
-    try {
-      toast({
-        title: "Payments Coming Soon",
-        description: "Subscription checkout will be available once payments are reconnected.",
-      });
-      return;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create checkout session. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const handleSubscribe = (tier: string) => {
+    if (!user) { window.location.href = '/auth'; return; }
+    const prices: Record<string, string> = { starter: 'starter_monthly', pro: 'pro_monthly', 'all-access': 'all_access_monthly' };
+    setPaymentPriceId(prices[tier] ?? tier);
   };
 
-  const openCheckoutModal = (planName: string, price: string, tier: string) => {
-    setCheckoutModal({
-      open: true,
-      planName,
-      price,
-      tier
-    });
+  const openCheckoutModal = (planName: string, price: string, tier: string, credits: number) => {
+    setCheckoutModal({ open: true, planName, price, tier, credits, isOneTime: false });
   };
 
   const allPlans = [
@@ -149,6 +118,9 @@ const Pricing = () => {
   return (
     <div className="min-h-screen bg-white">
       <Header />
+      <PaymentTestModeBanner />
+      {paymentResult && <div role="status" className="bg-muted border-b border-border px-6 py-4 text-center">{paymentResult}</div>}
+      {paymentPriceId && <PaymentCheckout priceId={paymentPriceId} onClose={() => setPaymentPriceId(null)} />}
       
       <section className="py-20 bg-gradient-hero relative overflow-hidden">
         <div 
@@ -230,7 +202,7 @@ const Pricing = () => {
                       if (plan.isFree) {
                         window.location.href = "/auth";
                       } else {
-                        openCheckoutModal(plan.name, plan.price, plan.tier);
+                        openCheckoutModal(plan.name, plan.price, plan.tier, plan.credits);
                       }
                     }}
                   >
@@ -408,6 +380,8 @@ const Pricing = () => {
         onConfirm={() => handleSubscribe(checkoutModal.tier)}
         planName={checkoutModal.planName}
         price={checkoutModal.price}
+        credits={checkoutModal.credits}
+        isOneTime={checkoutModal.isOneTime}
       />
 
       {/* Common Questions Section */}
@@ -444,7 +418,7 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">Can I switch plans?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Yes! You can upgrade, downgrade, or switch plans anytime. Changes take effect immediately.
+                    Yes! You can upgrade, downgrade, or switch plans anytime. Manage billing and cancellation in Account Settings. Contact support for plan changes; do not start a second subscription.
                   </p>
                 </div>
               </div>
