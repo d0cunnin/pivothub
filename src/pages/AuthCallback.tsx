@@ -45,7 +45,7 @@ const AuthCallback = () => {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
-        <h2 className="text-xl font-semibold text-foreground">Completing sign in...</h2>
+        <h1 className="text-xl font-semibold text-foreground">Completing sign in...</h1>
         <p className="text-muted-foreground">Please wait while we verify your account</p>
       </div>
     </div>

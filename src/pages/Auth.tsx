@@ -301,7 +301,7 @@ const Auth = () => {
       <div className="w-full max-w-md space-y-4">
         <Card className="w-full">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-bold">Welcome to PivotHub</CardTitle>
+            <CardTitle as="h1" className="text-2xl font-bold">Welcome to PivotHub</CardTitle>
             <CardDescription>
               Sign in to access your career and business development tools
             </CardDescription>
