@@ -50,6 +50,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import AppErrorBoundary from "@/components/AppErrorBoundary";
 import ScrollToTop from "@/components/ScrollToTop";
 import CanonicalUrl from "@/components/CanonicalUrl";
+import HomeScreenPrompt from "@/components/HomeScreenPrompt";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +66,7 @@ const App = () => (
           <BrowserRouter>
           <ScrollToTop />
           <CanonicalUrl />
+          <HomeScreenPrompt />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />

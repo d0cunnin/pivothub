@@ -7,3 +7,6 @@
 - Account/environment billing coordination serializes checkout and plan changes; provider idempotency and a service-only customer mapping prevent duplicate subscriptions and cross-account ownership.
 - Charging handlers run in an AsyncLocalStorage request scope so each successful debit consumes its exact server-issued reservation and failed requests release theirs.
 - Payment webhook processing and return polling acquire account/environment billing locks; observed-time guards reject stale subscription snapshots and cumulative refunds avoid repeated rounding.
+
+# Home-screen support
+- Keep installability manifest-only; the global mobile prompt uses a browser-provided install event when available and platform instructions otherwise, without adding service workers or offline caching.
