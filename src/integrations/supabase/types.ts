@@ -1478,6 +1478,10 @@ export type Database = {
         Args: { p_hold_id: string; p_tool_name: string; p_user_id: string }
         Returns: Json
       }
+      delete_my_account_content: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
       floor_to_window: {
         Args: { seconds: number; ts: string }
         Returns: string
