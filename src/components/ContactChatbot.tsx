@@ -30,7 +30,7 @@ const FAQ_RESPONSES: Record<string, string> = {
     "To manage your subscription:\n1. Go to Settings (top right)\n2. Click 'Subscription' tab\n3. You can upgrade, downgrade, or cancel here\n\nCancellations take effect at the end of your billing period. Need help? Contact support@pivothub.io or call 269.998.4203",
   
   "Where can I view pricing and plans?": 
-    "View our pricing at /pricing or:\n\n• Explore Mode: Free - 5 credits/month\n• Starter: $12/mo - 40 credits\n• Pro: $24/mo - 100 credits\n• All-Access: $49/mo - 250 credits (most popular)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nAll paid plans include credit rollover up to 2× monthly limit!",
+    "View our pricing at /pricing or:\n\n• Explore Mode: Free - 5 credits/month\n• Starter: $12/mo - 40 credits\n• Pro: $24/mo - 100 credits\n• All-Access: $49/mo - 250 credits\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nAll paid plans include credit rollover up to 2× monthly limit!",
   
   "How do I contact support?": 
     "Reach our support team:\n\n📧 Email: support@pivothub.io\n📞 Phone: 269.998.4203\n📍 Address: PO Box 2025, Kalamazoo, MI 49003\n🕒 Hours: Mon-Fri, 9 AM - 6 PM EST\n\nWe typically respond within 24 hours on business days.",

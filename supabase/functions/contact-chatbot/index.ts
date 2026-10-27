@@ -16,7 +16,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    - Explore Mode (Free): 5 credits per month, resets on signup anniversary, no rollover
    - Starter: $12/month, 40 credits
    - Pro: $24/month, 100 credits
-   - All-Access: $49/month, 250 credits (most popular - includes everything)
+   - All-Access: $49/month, 250 credits (includes everything)
    - All paid plans include credit rollover (up to 2× monthly limit)
    - Extra credit packs: $5 for 25, $10 for 70, $20 for 150 (paid subscribers only)
 
