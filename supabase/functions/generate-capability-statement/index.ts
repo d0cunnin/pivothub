@@ -91,7 +91,7 @@ serve(withCreditRequest(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-});
+}));
 
 const SYSTEM_PROMPT = `You are a government contracting expert creating Capability Statements. Generate professional, concise, government-ready content.
 
@@ -179,7 +179,7 @@ function buildCapabilityPrompt(formData: any): string {
         if (ref.value) parts.push(`Value: ${ref.value}`);
         if (ref.contractNumber) parts.push(`Contract #: ${ref.contractNumber}`);
       }
-    }));
+    });
   } else if (formData.relevantExperience) {
     parts.push("\nRELEVANT EXPERIENCE:");
     parts.push(formData.relevantExperience);

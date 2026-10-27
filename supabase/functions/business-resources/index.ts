@@ -310,7 +310,7 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
     console.error('Error finding business resources:', error);
     return fallbackResponse();
   }
-});
+}));
 
 function formatGooglePlacesResults(places: any[], location: string) {
   const categories = [
@@ -454,7 +454,7 @@ function formatEnhancedResults(
   // Sort resources within each category by AI relevance score (highest first)
   categories.forEach(cat => {
     cat.resources.sort((a, b) => (b.relevanceScore || 0) - (a.relevanceScore || 0));
-  }));
+  });
 
   const totalResources = categories.reduce((sum, cat) => sum + cat.resources.length, 0);
   const activeCategories = categories.filter(cat => cat.resources.length > 0);

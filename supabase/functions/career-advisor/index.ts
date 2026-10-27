@@ -308,7 +308,7 @@ EXAMPLES OF PREMIUM VALUE:
       creditsCharged: 0,
       errorMessage: error instanceof Error ? error.message : 'Unknown error',
       requestDurationMs: Date.now() - startTime
-    }));
+    });
     
     return new Response(
       JSON.stringify({ 
@@ -324,4 +324,4 @@ EXAMPLES OF PREMIUM VALUE:
       }
     )
   }
-})
+}))

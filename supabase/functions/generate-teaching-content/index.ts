@@ -1077,7 +1077,7 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       creditsCharged: 0,
       errorMessage,
       requestDurationMs: Date.now() - startTime
-    }));
+    });
     
     return new Response(
       JSON.stringify({ error: errorMessage }),
@@ -1087,4 +1087,4 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       }
     )
   }
-})
+}))

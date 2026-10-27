@@ -1488,7 +1488,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
       creditsCharged: 0,
       errorMessage,
       requestDurationMs: Date.now() - startTime
-    }));
+    });
     
     return new Response(
       JSON.stringify({ error: errorMessage }),
@@ -1498,4 +1498,4 @@ Keep each section concise and actionable. Use plain text without markdown.`
       }
     )
   }
-})
+}))

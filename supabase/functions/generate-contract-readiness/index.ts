@@ -68,7 +68,7 @@ serve(withCreditRequest(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-});
+}));
 
 function calculateScores(formData: any): { localScore: number; stateScore: number; federalScore: number; dodScore: number; overallScore: number } {
   let localScore = 0;
@@ -340,7 +340,7 @@ async function generateRecommendations(formData: any, scores: any): Promise<any[
         "Consider GSA Schedule contracts for recurring opportunities",
         "Document all government work for future proposals"
       ]
-    }));
+    });
   }
 
   return recommendations;
