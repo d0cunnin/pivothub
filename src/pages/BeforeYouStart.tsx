@@ -293,7 +293,7 @@ const BeforeYouStart = () => {
               <div className="mt-10 grid md:grid-cols-2 gap-6">
                 <div className="p-6 bg-blue-50 rounded-xl border border-blue-100">
                   <h3 className="font-semibold text-lg mb-3 flex items-center gap-2 text-blue-900">
-                    <span className="text-2xl">💡</span> For Explore Mode Users
+                    <span className="text-2xl">💡</span> For Free Plan Users
                   </h3>
                   <ul className="space-y-2 text-base text-blue-800">
                     <li>✓ You get 5 credits per month (resets on your signup anniversary)</li>
