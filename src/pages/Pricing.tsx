@@ -29,7 +29,7 @@ const Pricing = () => {
     tier: ''
   });
   
-  const [selectedPathIndex, setSelectedPathIndex] = useState(3); // Default to All-Access (index 3)
+  const [selectedPathIndex, setSelectedPathIndex] = useState(1); // Default to Starter (index 1)
   const [purchasingCredits, setPurchasingCredits] = useState(false);
 
   const handlePurchaseCredits = async (credits: number) => {
@@ -148,7 +148,8 @@ const Pricing = () => {
       tier: "starter",
       package: "starter",
       gradient: "from-blue-500/10 to-cyan-600/10",
-      accent: "border-l-4 border-blue-500"
+      accent: "border-l-4 border-blue-500",
+      isPopular: true
     },
     {
       name: "Pro",
@@ -183,8 +184,7 @@ const Pricing = () => {
       tier: "all-access",
       package: "all_access",
       gradient: "from-blue-500/10 to-cyan-600/10",
-      accent: "border-l-4 border-blue-500",
-      isAllAccess: true
+      accent: "border-l-4 border-blue-500"
     }
   ];
   
@@ -282,7 +282,7 @@ const Pricing = () => {
                   <SelectValue>
                     <div className="flex items-center gap-3">
                       <span className="font-semibold">{selectedPlan.name}</span>
-                      {selectedPlan.isAllAccess && (
+                      {selectedPlan.isPopular && (
                         <Badge className="ml-2 bg-primary text-primary-foreground">
                           <Star className="h-3 w-3 mr-1" />
                           Most Popular
@@ -303,7 +303,7 @@ const Pricing = () => {
                         {plan.isFree && (
                           <Badge className="ml-2 bg-green-500 text-white text-xs">Free</Badge>
                         )}
-                        {plan.isAllAccess && (
+                        {plan.isPopular && (
                           <Badge className="ml-2 bg-primary text-primary-foreground text-xs">
                             Most Popular
                           </Badge>
@@ -317,12 +317,12 @@ const Pricing = () => {
 
             {/* Selected Plan Details Card */}
             <Card className={`premium-card card-padding-lg shadow-lg ${selectedPlan.accent || ''} bg-gradient-to-br ${selectedPlan.gradient || 'from-background to-background'} ${
-              selectedPlan.isAllAccess ? 'border-2 border-primary shadow-glow' : 
+              selectedPlan.isPopular ? 'border-2 border-primary shadow-glow' : 
               selectedPlan.isFree ? 'border-2 border-green-500/30' : 
               'border-2 border-primary/20'
             }`}>
               <CardHeader className="text-center relative">
-                {selectedPlan.isAllAccess && (
+                {selectedPlan.isPopular && (
                   <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
                     <Star className="h-3 w-3 mr-1" />
                     Most Popular
@@ -372,7 +372,7 @@ const Pricing = () => {
                   <Button
                     className="w-full"
                     size="lg"
-                    variant={selectedPlan.isAllAccess ? "default" : selectedPlan.isFree ? "outline" : "default"}
+                    variant={selectedPlan.isPopular ? "default" : selectedPlan.isFree ? "outline" : "default"}
                     onClick={() => {
                       if (selectedPlan.isFree) {
                         window.location.href = "/auth";
