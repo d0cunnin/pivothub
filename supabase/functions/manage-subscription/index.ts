@@ -26,7 +26,7 @@ Deno.serve(async(req)=>{
    return json({cancelled:action==='cancel',effectiveDate:new Date(item.current_period_end*1000).toISOString()});
   }
   const current=item.price.lookup_key??item.price.metadata?.lovable_external_id;if(!isPaymentPriceId(current)||!priceId||!isPaymentPriceId(priceId))throw new Error('Invalid plan');
-  if(priceId===current)return json({error:'You are already on this plan'},409);if(sub.status!=='active'||sub.pending_update)throw new Error('Resolve your pending or overdue payment before changing plans');
+  if(priceId===current)return json({error:'You are already on this plan'},409);if(sub.status!=='active'||sub.pending_update||sub.cancel_at_period_end)throw new Error('Resolve your pending or overdue payment before changing plans');
   const direction=planChange(current,priceId),prices=await stripe.prices.list({lookup_keys:[priceId],active:true,limit:1}),price=prices.data[0];if(!price)throw new Error('New price unavailable');validatePrice(price,priceId);
   if(sub.schedule)throw new Error('A plan change is already scheduled. Cancel the scheduled change before choosing another plan.');
   if(action==='preview'){

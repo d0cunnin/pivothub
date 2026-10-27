@@ -127,8 +127,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       async (event, session) => {
         if(userRef.current!==session?.user.id){setSubscribed(false);setSubscriptionTier(null);setSubscriptionPackage(null);setSubscriptionEnd(null);setIsAdmin(false);setCancelAtPeriodEnd(false);setPendingPriceId(null);setPendingEffectiveAt(null);setPaymentStatus(null);}
         userRef.current=session?.user.id;
-        userRef.current=session?.user.id;
-      setSession(session);
+        setSession(session);
         setUser(session?.user ?? null);
         
         // Refresh subscription when user signs in
