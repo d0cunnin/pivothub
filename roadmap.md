@@ -12,4 +12,5 @@
 - [x] Apply matching refund/dispute payment-event configuration in test and live.
 - [ ] Verify hosted email confirmation, secure email change, password reauthentication and production Cloudflare CAPTCHA; requires hosted settings and a real site configuration.
 - [ ] Complete authenticated renewal/change/refund/account/debit tests; requires a chosen non-admin preview account.
+- [ ] Verify deletion against a disposable account and complete stored-file cleanup if present; requires a disposable account with saved files.
 - [ ] Publish the updated website after verified purchases; requires the user's explicit publish request.
