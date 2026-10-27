@@ -330,10 +330,10 @@ const FundIt = () => {
         formData.organizationName,
         formData.projectTitle,
         {
-          name: formData.contactPersonName || 'Contact Person',
-          title: formData.contactTitle || 'Title',
-          email: formData.contactEmail || 'email@example.com',
-          phone: formData.contactPhone || '(555) 555-5555',
+          name: formData.contactPersonName || '',
+          title: formData.contactTitle || '',
+          email: formData.contactEmail || '',
+          phone: formData.contactPhone || '',
         }
       );
       pdf.save(`${formData.organizationName.replace(/\s+/g, '-')}-LOI.pdf`);
@@ -357,10 +357,10 @@ const FundIt = () => {
         formData.organizationName,
         formData.projectTitle,
         {
-          name: formData.contactPersonName || 'Contact Person',
-          title: formData.contactTitle || 'Title',
-          email: formData.contactEmail || 'email@example.com',
-          phone: formData.contactPhone || '(555) 555-5555',
+          name: formData.contactPersonName || '',
+          title: formData.contactTitle || '',
+          email: formData.contactEmail || '',
+          phone: formData.contactPhone || '',
         }
       );
       pdf.save(`${formData.organizationName.replace(/\s+/g, '-')}-grant-proposal.pdf`);
