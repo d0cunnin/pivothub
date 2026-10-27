@@ -49,6 +49,7 @@ import PasswordRecovery from "./pages/PasswordRecovery";
 import { HelmetProvider } from 'react-helmet-async';
 import AppErrorBoundary from "@/components/AppErrorBoundary";
 import ScrollToTop from "@/components/ScrollToTop";
+import CanonicalUrl from "@/components/CanonicalUrl";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
           <ScrollToTop />
+          <CanonicalUrl />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />

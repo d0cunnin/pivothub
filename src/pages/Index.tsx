@@ -169,7 +169,6 @@ const Index = () => {
           property="og:description"
           content="AI-powered career transition tools for people facing job loss. Free assessments, resume help, and income strategies."
         />
-        <link rel="canonical" href="https://pivothub.lovable.app/" />
       </Helmet>
 
       <StructuredData data={organizationSchema} />

@@ -188,7 +188,6 @@ function SideIncomeBlueprintInner() {
         <meta name="description" content="Discover personalized side income opportunities that match your skills, time, and goals. From freelancing to side businesses - find what works for your lifestyle." />
         <meta property="og:title" content="Side Income Blueprint | PivotHub" />
         <meta property="og:description" content="Discover personalized side income opportunities that match your skills and schedule." />
-        <link rel="canonical" href="https://pivothub.lovable.app/earnit" />
       </Helmet>
 
       <StructuredData data={serviceSchema} />

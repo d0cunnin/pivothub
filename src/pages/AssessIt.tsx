@@ -26,7 +26,6 @@ const AssessIt = () => {
         <meta name="description" content="Lost your job? Take our free AI-powered career assessment to discover your strengths, skills, and ideal career path. Get personalized recommendations in minutes." />
         <meta property="og:title" content="Free Career Assessment After Job Loss | PivotHub" />
         <meta property="og:description" content="Discover your strengths and find your perfect career path with AI-powered assessments." />
-        <link rel="canonical" href="https://pivothub.lovable.app/assessit" />
       </Helmet>
       
       <StructuredData data={serviceSchema} />
