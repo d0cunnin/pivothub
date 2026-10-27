@@ -27,7 +27,6 @@ const PrepIt = () => {
         <meta name="description" content="Prepare for your next employment opportunity with AI-powered resume optimization, interview coaching, and career advisor support. Get expert guidance for career success." />
         <meta property="og:title" content="Job Preparation Services | PivotHub" />
         <meta property="og:description" content="Get expert career coaching with AI-powered resume optimization and interview preparation." />
-        <link rel="canonical" href="https://pivothub.lovable.app/prepit" />
       </Helmet>
       
       <StructuredData data={serviceSchema} />
