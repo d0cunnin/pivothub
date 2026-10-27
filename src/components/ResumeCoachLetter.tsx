@@ -20,8 +20,7 @@ import {
   Copy,
   FileDown
 } from 'lucide-react';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { generateResumeGuidePDF, generateCoverLetterPDF, generateResumePDF } from '@/lib/pdf-reports/resume-coach';
 
 interface ResumeAnalysis {
   overallScore: number;
@@ -270,130 +269,33 @@ export const ResumeCoachLetter = () => {
   const downloadResumeGuidePDF = () => {
     if (!analysis) return;
 
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const margin = 72;
-    let yPos = margin;
-
-    const addFooter = (pageNum: number) => {
-      doc.setFontSize(8);
-      doc.setTextColor(100);
-      doc.text('Resume Optimization Guide - PivotHub Professional Career Services', pageWidth / 2, pageHeight - 10, { align: 'center' });
-    };
-
-    const checkPageBreak = (spaceNeeded: number) => {
-      if (yPos + spaceNeeded > pageHeight - 25) {
-        addFooter(doc.getNumberOfPages());
-        doc.addPage();
-        yPos = margin;
-        return true;
-      }
-      return false;
-    };
-
-    const addText = (text: string, fontSize: number = 10, isBold: boolean = false) => {
-      doc.setFontSize(fontSize);
-      doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-      doc.setTextColor(0);
-      const lines = doc.splitTextToSize(text, pageWidth - 2 * margin);
-      
-      for (const line of lines) {
-        checkPageBreak(fontSize * 0.5);
-        doc.text(line, margin, yPos);
-        yPos += fontSize * 0.5;
-      }
-    };
-
-    // Cover Page
-    doc.setFillColor(41, 128, 185);
-    doc.rect(0, 0, pageWidth, 100, 'F');
-    doc.setTextColor(255);
-    doc.setFontSize(28);
-    doc.text('RESUME OPTIMIZATION GUIDE', pageWidth / 2, 40, { align: 'center' });
-    doc.setFontSize(18);
-    doc.text('Professional Career Services', pageWidth / 2, 60, { align: 'center' });
-    doc.setFontSize(12);
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2, 80, { align: 'center' });
-    doc.text(`Overall Score: ${analysis.overallScore}/100`, pageWidth / 2, 95, { align: 'center' });
-
-    addFooter(1);
-
-    // Analysis Results
-    doc.addPage();
-    yPos = margin;
-    
-    doc.setFillColor(41, 128, 185);
-    doc.rect(0, 0, pageWidth, 20, 'F');
-    doc.setTextColor(255);
-    doc.setFontSize(16);
-    doc.text('RESUME ANALYSIS RESULTS', pageWidth / 2, 13, { align: 'center' });
-    yPos = 30;
-
-    doc.setTextColor(0);
-    addText(`Overall Score: ${analysis.overallScore}/100`, 14, true);
-    yPos += 5;
-
-    analysis.issues.forEach((issue, index) => {
-      checkPageBreak(30);
-      yPos += 5;
-      addText(`${index + 1}. ${issue.category.toUpperCase()} (${issue.severity})`, 12, true);
-      addText(`Issue: ${issue.description}`, 10);
-      addText(`Suggestion: ${issue.suggestion}`, 10);
-      addText(`Location: ${issue.location}`, 9);
-      yPos += 5;
-    });
-
-    // Improvements
-    doc.addPage();
-    yPos = margin;
-    
-    doc.setFillColor(41, 128, 185);
-    doc.rect(0, 0, pageWidth, 20, 'F');
-    doc.setTextColor(255);
-    doc.setFontSize(16);
-    doc.text('RECOMMENDED IMPROVEMENTS', pageWidth / 2, 13, { align: 'center' });
-    yPos = 30;
-
-    doc.setTextColor(0);
-    analysis.improvedBulletPoints.forEach((item, index) => {
-      checkPageBreak(40);
-      yPos += 5;
-      addText(`Example ${index + 1}:`, 12, true);
-      addText(`Before: ${item.original}`, 10);
-      addText(`After: ${item.improved}`, 10, true);
-      addText(`Why: ${item.explanation}`, 9);
-      yPos += 5;
-    });
-
-    // Improved Summary
-    if (analysis.improvedSummary) {
-      checkPageBreak(50);
-      yPos += 10;
-      addText('PROFESSIONAL SUMMARY UPGRADE:', 12, true);
-      yPos += 5;
-      addText(`Before: ${analysis.improvedSummary.original}`, 10);
-      yPos += 5;
-      addText(`After: ${analysis.improvedSummary.improved}`, 10, true);
-      yPos += 5;
-      addText(`Explanation: ${analysis.improvedSummary.explanation}`, 9);
-    }
-
-    addFooter(doc.getNumberOfPages());
-
+    const doc = generateResumeGuidePDF(analysis);
     doc.save(`resume-optimization-guide-${new Date().toISOString().split('T')[0]}.pdf`);
     
     toast.success('PDF Downloaded! Your resume optimization guide has been saved.');
   };
 
-  // Download functionality (mock)
+  // Download functionality (DOCX is still a plain-text mock)
   const downloadDocument = (content: string, filename: string, format: 'pdf' | 'docx') => {
-    // In real implementation, this would convert to PDF/DOCX
+    if (format === 'pdf') {
+      const doc = filename === 'cover-letter'
+        ? generateCoverLetterPDF({
+            letter: content,
+            yourName: coverLetterData.yourName,
+            jobTitle: coverLetterData.jobTitle,
+            companyName: coverLetterData.companyName,
+          })
+        : generateResumePDF(content);
+      doc.save(`${filename}.pdf`);
+      toast.success(`${filename} downloaded as PDF`);
+      return;
+    }
+    // In real implementation, this would convert to DOCX
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${filename}.${format === 'pdf' ? 'pdf' : 'docx'}`;
+    a.download = `${filename}.docx`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

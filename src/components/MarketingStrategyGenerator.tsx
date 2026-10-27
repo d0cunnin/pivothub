@@ -9,7 +9,7 @@ import { sanitizeAIContent } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
-import jsPDF from 'jspdf';
+import { generateMarketingStrategyPDF } from '@/lib/pdf-reports/marketing-strategy';
 
 interface MarketingStrategy {
   phase: string;
@@ -292,147 +292,7 @@ export const MarketingStrategyGenerator = () => {
   };
 
   const downloadStrategyAsPDF = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const margin = 72; // 1 inch = 72 points
-    let yPosition = 20;
-    
-    // Disclaimer text for footer
-    const disclaimer = "DISCLAIMER: This marketing strategy is provided for educational and planning purposes only. PivotHub does not guarantee specific results, revenue, or ROI. Success depends on proper implementation, market conditions, budget allocation, and external factors beyond our control. All projections are hypothetical. Individual results may vary.";
-    
-    // Function to add footer to every page
-    const addFooter = (pageNum: number) => {
-      doc.setFontSize(7);
-      doc.setTextColor(100);
-      const disclaimerLines = doc.splitTextToSize(disclaimer, pageWidth - 40);
-      doc.text(disclaimerLines, pageWidth / 2, pageHeight - 25, { 
-        align: 'center',
-        maxWidth: pageWidth - 40
-      });
-      doc.setFontSize(8);
-      doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 10, { 
-        align: 'center' 
-      });
-    };
-    
-    // Function to check if we need a new page
-    const checkNewPage = (neededSpace: number) => {
-      if (yPosition + neededSpace > pageHeight - 40) {
-        addFooter(doc.getCurrentPageInfo().pageNumber);
-        doc.addPage();
-        yPosition = 20;
-        return true;
-      }
-      return false;
-    };
-    
-    // Cover Page
-    doc.setFillColor(41, 128, 185);
-    doc.rect(0, 0, pageWidth, 80, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(32);
-    doc.text('Marketing Strategy', pageWidth / 2, 35, { align: 'center' });
-    doc.setFontSize(18);
-    const businessLines = doc.splitTextToSize(businessType, pageWidth - 40);
-    doc.text(businessLines, pageWidth / 2, 50, { align: 'center' });
-    doc.setFontSize(12);
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2, 70, { align: 'center' });
-    
-    // Reset colors for content
-    doc.setTextColor(0, 0, 0);
-    yPosition = 100;
-    
-    // Business Overview
-    doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
-    doc.text('Business Overview', margin, yPosition);
-    yPosition += 10;
-    
-    doc.setFontSize(10);
-    doc.setFont(undefined, 'normal');
-    doc.text(`Target Market: ${targetMarket}`, margin, yPosition);
-    yPosition += 7;
-    doc.text(`Budget: ${budget}`, margin, yPosition);
-    yPosition += 7;
-    doc.text(`Current Stage: ${currentStage}`, margin, yPosition);
-    yPosition += 7;
-    doc.text(`Primary Goals: ${goals}`, margin, yPosition);
-    yPosition += 15;
-    
-    addFooter(1);
-    
-    // Strategy Phases
-    strategy.forEach((phase, index) => {
-      checkNewPage(60);
-      
-      // Phase Header
-      doc.setFillColor(41, 128, 185);
-      doc.rect(margin, yPosition, pageWidth - 2 * margin, 12, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(14);
-      doc.setFont(undefined, 'bold');
-      doc.text(`${index + 1}. ${phase.phase}`, margin + 5, yPosition + 8);
-      
-      yPosition += 18;
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(10);
-      doc.setFont(undefined, 'normal');
-      doc.text(`Timeline: ${phase.timeline}`, margin, yPosition);
-      yPosition += 7;
-      doc.text(`Budget Allocation: ${phase.budget}`, margin, yPosition);
-      yPosition += 10;
-      
-      // Objectives
-      checkNewPage(30);
-      doc.setFont(undefined, 'bold');
-      doc.text('Objectives:', margin, yPosition);
-      yPosition += 7;
-      doc.setFont(undefined, 'normal');
-      
-      phase.objectives.forEach(obj => {
-        checkNewPage(10);
-        const objLines = doc.splitTextToSize(`• ${obj}`, pageWidth - 2 * margin - 5);
-        doc.text(objLines, margin + 5, yPosition);
-        yPosition += objLines.length * 5;
-      });
-      yPosition += 5;
-      
-      // Tactics
-      checkNewPage(30);
-      doc.setFont(undefined, 'bold');
-      doc.text('Marketing Tactics:', margin, yPosition);
-      yPosition += 7;
-      doc.setFont(undefined, 'normal');
-      
-      phase.tactics.forEach(tactic => {
-        checkNewPage(10);
-        const tacticLines = doc.splitTextToSize(`• ${tactic}`, pageWidth - 2 * margin - 5);
-        doc.text(tacticLines, margin + 5, yPosition);
-        yPosition += tacticLines.length * 5;
-      });
-      yPosition += 5;
-      
-      // Metrics
-      checkNewPage(30);
-      doc.setFont(undefined, 'bold');
-      doc.text('Key Metrics:', margin, yPosition);
-      yPosition += 7;
-      doc.setFont(undefined, 'normal');
-      
-      phase.metrics.forEach(metric => {
-        checkNewPage(10);
-        const metricLines = doc.splitTextToSize(`• ${metric}`, pageWidth - 2 * margin - 5);
-        doc.text(metricLines, margin + 5, yPosition);
-        yPosition += metricLines.length * 5;
-      });
-      yPosition += 15;
-    });
-    
-    // Add footer to last page
-    addFooter(doc.getCurrentPageInfo().pageNumber);
-    
-    // Save PDF
+    const doc = generateMarketingStrategyPDF({ businessType, targetMarket, budget, goals, currentStage, strategy });
     doc.save(`marketing-strategy-${businessType.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.pdf`);
   };
 

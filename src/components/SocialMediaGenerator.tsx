@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Hash, Share2, Calendar, Copy, Download, FileText, Image, Video } from 'lucide-react';
 import { toast } from 'sonner';
-import jsPDF from 'jspdf';
+import { generateSocialCalendarPDF } from '@/lib/pdf-reports/social-media-calendar';
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 
@@ -123,81 +123,13 @@ export const SocialMediaGenerator = () => {
   const downloadPDF = () => {
     if (contentCalendar.length === 0) return;
 
-    const pdf = new jsPDF();
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 72;
-    let yPos = margin;
-
-    // Title
-    pdf.setFontSize(20);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('30-Day Social Media Content Calendar', margin, yPos);
-    yPos += 10;
-
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-    pdf.text(`Business: ${businessName}`, margin, yPos);
-    yPos += 6;
-    pdf.text(`Niche: ${businessNiche}`, margin, yPos);
-    yPos += 6;
-    pdf.text(`Platforms: ${selectedPlatforms.map(p => PLATFORMS.find(plat => plat.id === p)?.name).join(', ')}`, margin, yPos);
-    yPos += 6;
-    pdf.text(`Tone: ${tone}`, margin, yPos);
-    yPos += 6;
-    pdf.text(`Generated: ${new Date().toLocaleDateString()}`, margin, yPos);
-    yPos += 12;
-
-    // Content Calendar
-    contentCalendar.forEach((post, index) => {
-      // Check if we need a new page
-      if (yPos > pageHeight - 60) {
-        pdf.addPage();
-        yPos = margin;
-      }
-
-      // Day header
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(`Day ${post.day} - ${post.date} (${post.platform})`, margin, yPos);
-      yPos += 7;
-
-      // Content type
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'italic');
-      pdf.text(`Content Type: ${post.contentType}`, margin, yPos);
-      yPos += 7;
-
-      // Caption
-      pdf.setFont('helvetica', 'normal');
-      const captionLines = pdf.splitTextToSize(post.caption, pageWidth - 2 * margin);
-      pdf.text(captionLines, margin, yPos);
-      yPos += captionLines.length * 5;
-
-      // Hashtags
-      pdf.setFont('helvetica', 'normal');
-      const hashtagText = post.hashtags.join(' ');
-      const hashtagLines = pdf.splitTextToSize(hashtagText, pageWidth - 2 * margin);
-      pdf.text(hashtagLines, margin, yPos);
-      yPos += hashtagLines.length * 5;
-
-      // Visual suggestion
-      pdf.setFont('helvetica', 'italic');
-      const visualLines = pdf.splitTextToSize(`Visual: ${post.visualSuggestion}`, pageWidth - 2 * margin);
-      pdf.text(visualLines, margin, yPos);
-      yPos += visualLines.length * 5;
-
-      // Best time
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`Best Time: ${post.bestTime}`, margin, yPos);
-      yPos += 10;
-
-      // Separator
-      pdf.setDrawColor(200, 200, 200);
-      pdf.line(margin, yPos, pageWidth - margin, yPos);
-      yPos += 8;
+    const pdf = generateSocialCalendarPDF({
+      businessName,
+      businessNiche,
+      platforms: selectedPlatforms.map(p => PLATFORMS.find(plat => plat.id === p)?.name || p),
+      tone,
+      posts: contentCalendar,
     });
-
     pdf.save(`${businessName.replace(/\s+/g, '-')}-content-calendar.pdf`);
     toast.success('PDF downloaded successfully!');
   };

@@ -11,7 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import { PitchDeckPresentation } from './PitchDeckPresentation';
-import jsPDF from 'jspdf';
+import { generatePitchDeckPDF } from '@/lib/pdf-reports/pitch-deck';
 
 interface PitchData {
   companyName: string;
@@ -100,74 +100,12 @@ export const PitchDeckGenerator = () => {
   };
 
   const exportAsPDF = () => {
-    const pdf = new jsPDF('landscape', 'mm', 'a4');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 20;
-    const contentWidth = pageWidth - (margin * 2);
-
-    slides.forEach((slide, index) => {
-      if (index > 0) {
-        pdf.addPage();
-      }
-
-      // Add subtle background color
-      pdf.setFillColor(249, 250, 251);
-      pdf.rect(0, 0, pageWidth, pageHeight, 'F');
-
-      // Add company branding header
-      if (logoPreview) {
-        try {
-          pdf.addImage(logoPreview, 'PNG', margin, 10, 20, 20);
-        } catch (e) {
-          console.error('Error adding logo:', e);
-        }
-      }
-      
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 116, 139);
-      pdf.text(formData.companyName || 'Company Name', pageWidth - margin, 15, { align: 'right' });
-
-      // Slide title
-      pdf.setFontSize(24);
-      pdf.setTextColor(51, 65, 85);
-      pdf.setFont('helvetica', 'bold');
-      const titleY = 45;
-      pdf.text(slide.title, margin, titleY, { maxWidth: contentWidth });
-
-      // Slide content
-      pdf.setFontSize(14);
-      pdf.setTextColor(71, 85, 105);
-      pdf.setFont('helvetica', 'normal');
-      const contentY = titleY + 15;
-      
-      const lines = slide.content.split('\n').filter(line => line.trim());
-      let currentY = contentY;
-      
-      lines.forEach((line, lineIndex) => {
-        if (currentY > pageHeight - 40) return; // Prevent overflow
-        
-        const cleanLine = line.replace(/^[•\-\*]\s*/, '');
-        const wrappedLines = pdf.splitTextToSize(cleanLine, contentWidth - 10);
-        
-        // Bullet point
-        pdf.setFontSize(16);
-        pdf.text('•', margin, currentY);
-        
-        // Content
-        pdf.setFontSize(14);
-        pdf.text(wrappedLines, margin + 8, currentY, { maxWidth: contentWidth - 10 });
-        
-        currentY += (wrappedLines.length * 8) + 5;
-      });
-
-      // Footer with page number
-      pdf.setFontSize(10);
-      pdf.setTextColor(148, 163, 184);
-      pdf.text(`${index + 1} / ${slides.length}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-      pdf.text(new Date().toLocaleDateString(), pageWidth - margin, pageHeight - 10, { align: 'right' });
+    const pdf = generatePitchDeckPDF({
+      companyName: formData.companyName,
+      slides,
+      logo: logoPreview || undefined,
+      primaryColor: formData.primaryColor,
     });
-
     pdf.save(`pitch-deck-${formData.companyName.replace(/\s+/g, '-').toLowerCase() || 'startup'}-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 

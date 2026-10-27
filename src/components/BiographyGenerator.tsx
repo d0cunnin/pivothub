@@ -10,8 +10,7 @@ import { sanitizeAIContent, parseAISections } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 import { useToast } from '@/hooks/use-toast';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { generateBiographyPDF } from '@/lib/pdf-reports/biography';
 
 interface BiographyContent {
   founderBio100: string;
@@ -149,90 +148,7 @@ export const BiographyGenerator = () => {
   const downloadBiographyAsPDF = () => {
     if (!content) return;
 
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const margin = 72;
-    let yPos = margin;
-
-    const addFooter = (pageNum: number) => {
-      doc.setFontSize(8);
-      doc.setTextColor(100);
-      const disclaimerText = "Professional biographies provided for business and marketing purposes. Content is AI-generated and should be reviewed for accuracy.";
-      const wrapped = doc.splitTextToSize(disclaimerText, pageWidth - 40);
-      doc.text(wrapped, pageWidth / 2, pageHeight - 20, { align: 'center' });
-      doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-    };
-
-    const checkPageBreak = (spaceNeeded: number) => {
-      if (yPos + spaceNeeded > pageHeight - 35) {
-        addFooter(doc.getNumberOfPages());
-        doc.addPage();
-        yPos = margin;
-        return true;
-      }
-      return false;
-    };
-
-    const addSection = (title: string, content: string, isFirstSection: boolean = false) => {
-      if (!isFirstSection) {
-        checkPageBreak(40);
-        yPos += 10;
-      }
-      
-      doc.setFillColor(41, 128, 185);
-      doc.rect(margin - 5, yPos, pageWidth - 2 * margin + 10, 12, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text(title, pageWidth / 2, yPos + 8, { align: 'center' });
-      yPos += 18;
-      
-      doc.setTextColor(0);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'normal');
-      const lines = doc.splitTextToSize(content, pageWidth - 2 * margin);
-      
-      for (const line of lines) {
-        checkPageBreak(10);
-        doc.text(line, margin, yPos);
-        yPos += 6;
-      }
-    };
-
-    doc.setFillColor(41, 128, 185);
-    doc.rect(0, 0, pageWidth, 100, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(28);
-    doc.text('BIOGRAPHY PACKAGE', pageWidth / 2, 35, { align: 'center' });
-    doc.setFontSize(18);
-    doc.text(founderName, pageWidth / 2, 55, { align: 'center' });
-    doc.setFontSize(14);
-    doc.text(businessType, pageWidth / 2, 70, { align: 'center' });
-    doc.setFontSize(12);
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2, 85, { align: 'center' });
-    
-    yPos = 120;
-    doc.setTextColor(0);
-    doc.setFontSize(10);
-    doc.text(`Writing Tone: ${tone.charAt(0).toUpperCase() + tone.slice(1)}`, pageWidth / 2, yPos, { align: 'center' });
-    
-    addFooter(1);
-
-    doc.addPage();
-    yPos = margin;
-
-    addSection('FOUNDER BIOGRAPHY (100 WORDS)', content.founderBio100, true);
-    addSection('FOUNDER BIOGRAPHY (250 WORDS)', content.founderBio250);
-    addSection('FOUNDER BIOGRAPHY (500 WORDS)', content.founderBio500);
-    addSection('BUSINESS BIOGRAPHY (100 WORDS)', content.businessBio100);
-    addSection('BUSINESS BIOGRAPHY (200 WORDS)', content.businessBio200);
-    addSection('BUSINESS BIOGRAPHY (500 WORDS)', content.businessBio500);
-    addSection('VISION STATEMENT', content.vision);
-    addSection('MISSION STATEMENT', content.mission);
-
-    addFooter(doc.getNumberOfPages());
-
+    const doc = generateBiographyPDF({ founderName, businessType, tone, content });
     doc.save(`biography-package-${founderName.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.pdf`);
     
     toast({
