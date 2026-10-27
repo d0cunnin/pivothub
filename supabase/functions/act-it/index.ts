@@ -103,7 +103,7 @@ Deno.serve(async (req) => {
 
     // Moderate content
     const moderationText = `${projectTitle} ${genres.join(' ')} ${centralTheme || ''} ${targetAudience || ''}`;
-    const moderation = await moderateContent(moderationText, supabase, userId, 'act-it');
+    const moderation = await moderateContent(moderationText, 'act-it', userId, 'medium');
     if (moderation.flagged) {
       return new Response(JSON.stringify({ 
         error: 'Content flagged by moderation',

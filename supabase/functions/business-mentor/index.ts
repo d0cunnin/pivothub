@@ -269,7 +269,7 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
     const messages: { role: 'system' | 'user' | 'assistant'; content: any }[] = [
       { role: 'system', content: systemPrompt },
       ...conversationHistory.map((msg: any) => ({
-        role: msg.isBot ? 'assistant' : 'user',
+        role: (msg.isBot ? 'assistant' : 'user') as 'assistant' | 'user',
         content: msg.text
       })),
       { role: 'user', content: message }
