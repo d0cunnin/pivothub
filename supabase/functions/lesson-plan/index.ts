@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
     const mod = await moderateContent(`${subject} ${objectives}`, 'lesson-plan', userId, 'low');
     if (mod.flagged) return new Response(JSON.stringify({ error: 'Content flagged', details: mod.categories }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
-    await assertCredits(userId, 5);
+    await assertCredits(userId, 3);
 
     const systemPrompt = `You are an experienced curriculum designer. Produce a complete, classroom-ready lesson plan in clean Markdown.
 
@@ -88,8 +88,8 @@ Available Materials: ${materials || 'standard classroom supplies'}`;
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    try { await deductCreditsOnSuccess(supabase, userId, 'lesson-plan', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
-    return new Response(JSON.stringify({ content, creditsUsed: 5 }), {
+    try { await deductCreditsOnSuccess(supabase, userId, 'lesson-plan', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    return new Response(JSON.stringify({ content, creditsUsed: 3 }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {

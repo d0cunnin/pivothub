@@ -34,7 +34,7 @@ export default function LessonPlanGenerator() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setContent(data.content);
-      toast.success('Lesson plan generated! (5 credits used)');
+      toast.success('Lesson plan generated! (3 credits used)');
     } catch (e: any) { toast.error(e.message || 'Generation failed'); }
     finally { setLoading(false); }
   };
@@ -90,7 +90,7 @@ export default function LessonPlanGenerator() {
             </div>
             <div><Label>Learning Objectives *</Label><Textarea rows={4} value={form.objectives} onChange={e => update('objectives', e.target.value)} placeholder="Students will be able to solve two-step linear equations..." /></div>
             <Button onClick={handleGenerate} disabled={loading} size="lg" className="w-full">
-              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating…</> : <>Generate Lesson Plan (5 Credits)</>}
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating…</> : <>Generate Lesson Plan (3 Credits)</>}
             </Button>
           </CardContent>
         </>

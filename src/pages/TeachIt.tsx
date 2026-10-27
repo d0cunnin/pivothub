@@ -179,7 +179,7 @@ const TeachIt = () => {
             <p className="text-lg text-foreground mt-4 max-w-3xl mx-auto">Standards-aligned lesson plans with warm-up, instruction, practice, and assessment.</p>
           </div>
           <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />5 Credits</Badge>
+            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2"><Zap className="h-4 w-4" />3 Credits</Badge>
           </div>
           <ToolGuard toolName="lesson-plan"><LessonPlanGenerator /></ToolGuard>
         </div>

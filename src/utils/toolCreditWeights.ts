@@ -84,7 +84,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'study-it': 2,                   // ~4,000 tokens output (biblical reference with etymology + scriptures)
 
   // TEACH IT TOOLS (educator suite)
-  'lesson-plan': 5,                // ~5,000 tokens output (standards-aligned lesson plan)
+  'lesson-plan': 3,                // standards-aligned lesson plan
   'quiz-generator': 4,             // ~5,000 tokens output (quiz + answer key)
   'rubric-builder': 3,             // ~4,000 tokens output (multi-level scoring rubric)
 };
