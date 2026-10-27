@@ -123,7 +123,7 @@ export default function ClientOnboarding() {
 
             <Card className="premium-card">
               <CardHeader>
-                <CardTitle className="text-2xl">
+                <CardTitle as="h1" className="text-2xl">
                   {step === 1 && "Describe your project"}
                   {step === 2 && "Budget and timeline"}
                   {step === 3 && "Specific requirements"}

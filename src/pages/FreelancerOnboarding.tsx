@@ -133,7 +133,7 @@ export default function FreelancerOnboarding() {
 
             <Card className="premium-card">
               <CardHeader>
-                <CardTitle className="text-2xl">
+                <CardTitle as="h1" className="text-2xl">
                   {step === 1 && "Tell us about yourself"}
                   {step === 2 && "What are your skills?"}
                   {step === 3 && "Set your rates"}
