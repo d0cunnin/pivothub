@@ -1,19 +1,23 @@
-import { verifyWebhook } from '../_shared/stripe.ts';
-import { syncSubscription, fulfillInvoice, fulfillSession } from '../_shared/paymentFulfillment.ts';
-import { corsHeaders, json } from '../_shared/paymentHttp.ts';
+import {verifyWebhook,createStripeClient} from '../_shared/stripe.ts';
+import {syncSubscription,fulfillInvoice,fulfillSession} from '../_shared/paymentFulfillment.ts';
+import {corsHeaders,json,db} from '../_shared/paymentHttp.ts';
 Deno.serve(async(req)=>{
- if(req.method==='OPTIONS')return new Response('ok',{headers:corsHeaders});
- if(req.method!=='POST')return json({error:'Method not allowed'},405);
- const env=new URL(req.url).searchParams.get('env');
- if(env!=='sandbox' && env!=='live')return json({error:'Invalid environment'},400);
- let event;
- try{event=await verifyWebhook(req,env);}catch(error){console.error('Webhook signature rejected');return json({error:'Invalid signature'},400);}
+ if(req.method==='OPTIONS')return new Response('ok',{headers:corsHeaders});if(req.method!=='POST')return json({error:'Method not allowed'},405);
+ const env=new URL(req.url).searchParams.get('env');if(env!=='sandbox'&&env!=='live')return json({error:'Invalid environment'},400);
+ let event;try{event=await verifyWebhook(req,env);}catch{return json({error:'Invalid signature'},400);}
  try{
-  if(event.type.startsWith('customer.subscription.')) {
-   const stripe=(await import('../_shared/stripe.ts')).createStripeClient(env);
-   await syncSubscription(await stripe.subscriptions.retrieve(event.data.object.id),env);
-  } else if(event.type==='invoice.paid') await fulfillInvoice(event.data.object,env);
-  else if(['checkout.session.completed','checkout.session.async_payment_succeeded'].includes(event.type)) await fulfillSession(event.data.object,env);
+  const {data:done,error:read}=await db().from('payment_event_receipts').select('event_id').eq('environment',env).eq('event_id',event.id).maybeSingle();if(read)throw read;if(done)return json({received:true,duplicate:true});
+  const stripe=createStripeClient(env),object=event.data.object;
+  if(event.type.startsWith('customer.subscription.'))await syncSubscription(await stripe.subscriptions.retrieve(object.id),env);
+  else if(event.type==='invoice.paid')await fulfillInvoice(await stripe.invoices.retrieve(object.id),env);
+  else if(['checkout.session.completed','checkout.session.async_payment_succeeded'].includes(event.type))await fulfillSession(await stripe.checkout.sessions.retrieve(object.id),env);
+  else if(['checkout.session.expired','checkout.session.async_payment_failed'].includes(event.type)){const {error}=await db().from('billing_accounts').update({pending_session_id:null,pending_price_id:null}).eq('environment',env).eq('pending_session_id',object.id);if(error)throw error;}
+  else if(['charge.refunded','charge.refund.updated','refund.updated','refund.created'].includes(event.type)){
+   const charge=await stripe.charges.retrieve(typeof object.charge==='string'?object.charge:object.object==='charge'?object.id:object.charge?.id);
+   for await(const refund of stripe.refunds.list({charge:charge.id,limit:100})){if(refund.status!=='succeeded')continue;const {error}=await db().rpc('reconcile_credit_refund',{p_environment:env,p_refund_id:refund.id,p_payment_intent_id:typeof charge.payment_intent==='string'?charge.payment_intent:charge.payment_intent?.id,p_fraction:refund.amount/charge.amount});if(error)throw error;}
+  }else if(event.type.startsWith('charge.dispute.')){const {error}=await db().from('billing_reviews').upsert({environment:env,provider_key:object.id,reason:'Payment dispute requires review',details:{status:object.status,charge:object.charge}},{onConflict:'environment,provider_key'});if(error)throw error;}
+  else if(event.type==='invoice.payment_failed'){const subscription=object.parent?.subscription_details?.subscription??object.subscription;if(subscription)await syncSubscription(await stripe.subscriptions.retrieve(typeof subscription==='string'?subscription:subscription.id),env);}
+  const {error}=await db().from('payment_event_receipts').upsert({environment:env,event_id:event.id,event_type:event.type},{onConflict:'environment,event_id'});if(error)throw error;
   return json({received:true});
- }catch(error){console.error('Payment fulfillment failed',error instanceof Error?error.message:'Unknown failure');return json({error:'Payment fulfillment pending retry'},500);}
+ }catch(error){console.error('Payment processing failed',error instanceof Error?error.message:error);return json({error:'Payment processing pending retry'},500);}
 });
