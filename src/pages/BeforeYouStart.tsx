@@ -378,7 +378,7 @@ const BeforeYouStart = () => {
               </div>
 
               <div className="mt-12 text-center">
-                <Button variant="hero" size="lg" asChild>
+                <Button variant="secondary" size="lg" className="shadow-glow transition-elegant hover:scale-105 hover:-translate-y-1" asChild>
                   <Link to="/pricing">View Pricing Details</Link>
                 </Button>
               </div>
