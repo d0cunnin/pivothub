@@ -2,4 +2,6 @@
 - All provider calls use the shared gateway Stripe client with an explicit test/live environment; managed credentials are not direct API keys.
 - User-linked checkout derives ownership from verified authentication and resolves a Customer carrying userId metadata to prevent cross-account billing.
 - Verified payment fulfillment uses the service-only idempotent receipt function; test receipts never mutate live Tool Credits because preview and production share one database.
-- Managed subscription credits reset only after a paid invoice; cancellation preserves the current paid period and blocks future renewals.
+- Verified paid invoice lines issue immutable expiring credit grants; subscription status alone never grants paid allowances, and cancellation preserves the current paid period.
+- Credit grants and request-specific holds are the credit authority; subscribers_public is a compatibility balance projection, and test grants never affect live tool balances.
+- Account/environment billing coordination serializes checkout and plan changes; provider idempotency and a service-only customer mapping prevent duplicate subscriptions and cross-account ownership.

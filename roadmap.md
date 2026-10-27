@@ -1,6 +1,7 @@
 # Purchase setup
 - [x] Audit current purchase, authentication, account, entitlement, and renewal flows against hosted configuration; findings in PAYMENT_FLOW_AUDIT.md.
-- [ ] Clarify credit rollover, plan changes, refunds, account deletion, and preview-credit behavior.
+- [x] Clarify credit rollover, plan changes, refunds, account deletion, and preview-credit behavior.
+- [ ] Apply the supplied Stripe-source-of-truth policy: payment-confirmed upgrades, deferred downgrades/free transition, verified idempotent synchronization, and clear change review.
 - [ ] Present and implement the approved gap-remediation plan with regression tests.
 - [ ] Provide preview test-card and account-flow testing instructions.
 - [x] Set up existing subscription and credit-pack products in test payments.
