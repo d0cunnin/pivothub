@@ -268,128 +268,61 @@ const Pricing = () => {
             </div>
           </div>
           
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* Plan Selector Dropdown */}
-            <div className="w-full">
-              <label className="text-lg font-semibold text-foreground mb-3 block">
-                Select Your Plan
-              </label>
-              <Select
-                value={selectedPathIndex.toString()}
-                onValueChange={(value) => setSelectedPathIndex(parseInt(value))}
-              >
-                <SelectTrigger className="w-full h-14 text-lg bg-white border-2">
-                  <SelectValue>
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold">{selectedPlan.name}</span>
-                      {selectedPlan.isPopular && (
-                        <Badge className="ml-2 bg-primary text-primary-foreground">
-                          <Star className="h-3 w-3 mr-1" />
-                          Most Popular
-                        </Badge>
-                      )}
-                    </div>
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent className="bg-white border-2 max-h-[400px] z-50">
-                  {allPlans.map((plan, index) => (
-                    <SelectItem 
-                      key={plan.name} 
-                      value={index.toString()}
-                      className="cursor-pointer py-3"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-medium">{plan.name}</span>
-                        {plan.isFree && (
-                          <Badge className="ml-2 bg-green-500 text-white text-xs">Free</Badge>
-                        )}
-                        {plan.isPopular && (
-                          <Badge className="ml-2 bg-primary text-primary-foreground text-xs">
-                            Most Popular
-                          </Badge>
-                        )}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-base text-muted-foreground mb-10">
+            <span className="font-semibold text-foreground">All plans include:</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Access to every tool</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Saved results</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Email support</span>
+            <span className="flex items-center"><Check className="h-4 w-4 text-primary mr-1" />Cancel anytime</span>
+          </div>
 
-            {/* Selected Plan Details Card */}
-            <Card className={`premium-card card-padding-lg shadow-lg ${selectedPlan.accent || ''} bg-gradient-to-br ${selectedPlan.gradient || 'from-background to-background'} ${
-              selectedPlan.isPopular ? 'border-2 border-primary shadow-glow' : 
-              selectedPlan.isFree ? 'border-2 border-green-500/30' : 
-              'border-2 border-primary/20'
-            }`}>
-              <CardHeader className="text-center relative">
-                {selectedPlan.isPopular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-primary text-primary-foreground">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {allPlans.map((plan) => (
+              <Card
+                key={plan.name}
+                className={`relative flex flex-col rounded-3xl p-2 ${plan.isPopular ? 'border-2 border-primary shadow-glow' : 'border'}`}
+              >
+                {plan.isPopular && (
+                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
                     <Star className="h-3 w-3 mr-1" />
                     Most Popular
                   </Badge>
                 )}
-                {selectedPlan.isFree && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-500 text-white">
-                    <Star className="h-3 w-3 mr-1" />
-                    Free Forever
-                  </Badge>
-                )}
-                <div className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-primary/10 mb-4 mt-2 border border-primary/20">
-                  <span className="text-xl font-bold text-primary tracking-wide">{selectedPlan.name.toUpperCase()}</span>
-                </div>
-                <CardTitle className="text-2xl font-bold mb-4">
-                  {selectedPlan.description}
-                </CardTitle>
-                <div className="mb-4">
-                  <span className="text-5xl font-bold text-primary">
-                    {selectedPlan.price}
-                  </span>
-                  <span className="text-xl text-muted-foreground">
-                    /{selectedPlan.period}
-                  </span>
-                </div>
-                <CardDescription className="text-lg">
-                  {selectedPlan.description}
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent className="space-y-6">
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-lg text-foreground mb-4">
-                    What's Included:
-                  </h4>
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {selectedPlan.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-start">
-                        <Check className="h-5 w-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">{feature}</span>
-                      </div>
-                    ))}
+                <CardHeader>
+                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+                  <CardDescription className="text-base">{plan.tagline}</CardDescription>
+                  <div className="pt-4">
+                    <span className="text-5xl font-bold text-primary">{plan.price}</span>
+                    {!plan.isFree && <span className="text-xl text-muted-foreground">/mo</span>}
                   </div>
-                </div>
-                
-                <div className="pt-6">
+                  <p className="font-semibold text-foreground pt-2">{plan.credits} Tool Credits / month</p>
+                </CardHeader>
+                <CardContent className="flex flex-col flex-1 gap-6">
                   <Button
                     className="w-full"
                     size="lg"
-                    variant={selectedPlan.isPopular ? "default" : selectedPlan.isFree ? "outline" : "default"}
+                    variant={plan.isPopular ? "default" : "outline"}
                     onClick={() => {
-                      if (selectedPlan.isFree) {
+                      if (plan.isFree) {
                         window.location.href = "/auth";
                       } else {
-                        openCheckoutModal(
-                          selectedPlan.name,
-                          selectedPlan.price,
-                          selectedPlan.tier
-                        );
+                        openCheckoutModal(plan.name, plan.price, plan.tier);
                       }
                     }}
                   >
-                    {selectedPlan.isFree ? "Get Started Free" : `Get Started with ${selectedPlan.name}`}
+                    {plan.isFree ? "Start for Free" : `Choose ${plan.name}`}
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start text-sm">
+                        <Check className="h-4 w-4 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
