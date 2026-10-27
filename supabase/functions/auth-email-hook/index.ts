@@ -20,6 +20,8 @@ const SENDER_DOMAIN = "notify.pivothub.io"
 const ROOT_DOMAIN = "pivothub.io"
 const FROM_DOMAIN = "pivothub.io"
 const SITE_URL = `https://${ROOT_DOMAIN}`
+// Never send the old lovable.app address in any link; always use pivothub.io.
+const toLiveDomain = (url: string) => (url ?? "").replace(/pivothub\.lovable\.app/g, ROOT_DOMAIN)
 
 // Template mapping for preview mode
 const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
@@ -135,7 +137,7 @@ const handler = createAuthEmailHandler({
           siteName: SITE_NAME,
           siteUrl: SITE_URL,
           recipient: data.email,
-          confirmationUrl: data.url,
+          confirmationUrl: toLiveDomain(data.url),
         }),
     },
     invite: {
@@ -144,7 +146,7 @@ const handler = createAuthEmailHandler({
         React.createElement(InviteEmail, {
           siteName: SITE_NAME,
           siteUrl: SITE_URL,
-          confirmationUrl: data.url,
+          confirmationUrl: toLiveDomain(data.url),
         }),
     },
     magiclink: {
@@ -152,7 +154,7 @@ const handler = createAuthEmailHandler({
       render: (data) =>
         React.createElement(MagicLinkEmail, {
           siteName: SITE_NAME,
-          confirmationUrl: data.url,
+          confirmationUrl: toLiveDomain(data.url),
         }),
     },
     recovery: {
@@ -160,7 +162,7 @@ const handler = createAuthEmailHandler({
       render: (data) =>
         React.createElement(RecoveryEmail, {
           siteName: SITE_NAME,
-          confirmationUrl: data.url,
+          confirmationUrl: toLiveDomain(data.url),
         }),
     },
     email_change: {
@@ -171,7 +173,7 @@ const handler = createAuthEmailHandler({
           oldEmail: data.old_email ?? '',
           email: data.email,
           newEmail: data.new_email ?? '',
-          confirmationUrl: data.url,
+          confirmationUrl: toLiveDomain(data.url),
         }),
     },
     reauthentication: {
