@@ -173,16 +173,32 @@ GRANT EXECUTE ON FUNCTION public.consume_ai_credit_hold(uuid, integer, text) TO 
 -- ---------------------------------------------------------------------------
 -- 4. No more automatic admin for the first signup. The owner already holds the
 --    admin role; leaving this on means anyone becomes admin if user_roles is
---    ever emptied.
+--    ever emptied. The triggers live on auth.users, which hosted projects may
+--    not let migrations alter, so neutralize the trigger function instead.
 -- ---------------------------------------------------------------------------
-DROP TRIGGER IF EXISTS on_auth_user_created_admin ON auth.users;
-DROP TRIGGER IF EXISTS on_auth_user_created_grant_admin ON auth.users;
+CREATE OR REPLACE FUNCTION public.auto_grant_first_user_admin()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  RETURN NEW;
+END;
+$$;
 
 -- ---------------------------------------------------------------------------
 -- 5. Only admins may change course media files. Older policies let any
 --    signed-in user upload, overwrite or delete them. Read policies are left
 --    unchanged.
 -- ---------------------------------------------------------------------------
-DROP POLICY IF EXISTS "Authenticated users can upload course media" ON storage.objects;
-DROP POLICY IF EXISTS "Authenticated users can update course media" ON storage.objects;
-DROP POLICY IF EXISTS "Authenticated users can delete course media" ON storage.objects;
+-- storage.objects may not be alterable by the migration role on hosted
+-- projects; skip (with a notice) rather than abort the whole migration.
+DO $$
+BEGIN
+  DROP POLICY IF EXISTS "Authenticated users can upload course media" ON storage.objects;
+  DROP POLICY IF EXISTS "Authenticated users can update course media" ON storage.objects;
+  DROP POLICY IF EXISTS "Authenticated users can delete course media" ON storage.objects;
+EXCEPTION WHEN insufficient_privilege THEN
+  RAISE NOTICE 'Skipped course media storage policies: insufficient privilege on storage.objects';
+END $$;
