@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts"
@@ -20,7 +21,7 @@ const careerAdvisorSchema = z.object({
 // Moderation uses shared helper from _shared/moderation.ts (logs to moderation_log, fails open)
 
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -277,7 +278,7 @@ EXAMPLES OF PREMIUM VALUE:
       requestDurationMs: Date.now() - startTime
     });
 
-    try { await deductCreditsOnSuccess(guardResult.supabase, guardResult.userId!, 'career-advisor', 1); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(guardResult.supabase, guardResult.userId!, 'career-advisor', 1);
     
     return new Response(
       JSON.stringify({ response: sanitizedResponse }),
@@ -307,7 +308,7 @@ EXAMPLES OF PREMIUM VALUE:
       creditsCharged: 0,
       errorMessage: error instanceof Error ? error.message : 'Unknown error',
       requestDurationMs: Date.now() - startTime
-    });
+    }));
     
     return new Response(
       JSON.stringify({ 

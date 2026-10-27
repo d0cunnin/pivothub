@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -9,7 +10,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -108,7 +109,7 @@ TOPICS YOU CAN HELP WITH:
 
     console.log(`[community-dev-coach] Completed in ${Date.now() - startTime}ms for user ${user.id}`);
 
-    try { await deductCreditsOnSuccess(supabaseClient, user.id, 'community-dev-coach', 1); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabaseClient, user.id, 'community-dev-coach', 1);
     return new Response(JSON.stringify({ response: responseContent }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -121,4 +122,4 @@ TOPICS YOU CAN HELP WITH:
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
-});
+}));

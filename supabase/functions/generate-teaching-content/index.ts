@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
@@ -98,7 +99,7 @@ async function generateText(apiKey: string, systemMsg: string, userPrompt: strin
   }
 }
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -834,7 +835,7 @@ Make it professional and actionable. Tailor it to the instructor's expertise lev
 
         // Charge only when every section was delivered.
         if (complete) {
-          try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+          await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5);
         }
         
         return new Response(
@@ -1052,7 +1053,7 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    try { await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5);
 
     return new Response(
       JSON.stringify({ content, type }),
@@ -1076,7 +1077,7 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       creditsCharged: 0,
       errorMessage,
       requestDurationMs: Date.now() - startTime
-    });
+    }));
     
     return new Response(
       JSON.stringify({ error: errorMessage }),

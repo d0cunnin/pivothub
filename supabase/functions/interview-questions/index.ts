@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
@@ -16,7 +17,7 @@ const interviewQuestionsSchema = z.object({
   jobDescription: z.string().max(5000).optional()
 });
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   const startTime = Date.now();
   let userId = 'unknown';
   let ip = 'unknown';
@@ -322,7 +323,7 @@ QUALITY STANDARDS:
     // Charge only when the AI produced a real (parsed) result, not the fallback.
     let practiceSession: string | null = null;
     if (aiResultParsed) {
-      try { await deductCreditsOnSuccess(guardResult.supabase, userId!, 'interview-questions', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+      await deductCreditsOnSuccess(guardResult.supabase, userId!, 'interview-questions', 3);
       // Feedback on each answer is included; allow a couple of retries.
       const answerAllowance = Math.min(30, (Array.isArray(questions) ? questions.length : 10) + 2);
       practiceSession = await createPracticeSession(userId, answerAllowance);
@@ -364,4 +365,4 @@ QUALITY STANDARDS:
       }
     );
   }
-});
+}));

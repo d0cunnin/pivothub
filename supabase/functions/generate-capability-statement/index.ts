@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -9,7 +10,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -77,7 +78,7 @@ serve(async (req) => {
 
     console.log(`[generate-capability-statement] Completed in ${Date.now() - startTime}ms for user ${user.id}`);
 
-    try { await deductCreditsOnSuccess(supabaseClient, user.id, 'generate-capability-statement', 4); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabaseClient, user.id, 'generate-capability-statement', 4);
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
@@ -178,7 +179,7 @@ function buildCapabilityPrompt(formData: any): string {
         if (ref.value) parts.push(`Value: ${ref.value}`);
         if (ref.contractNumber) parts.push(`Contract #: ${ref.contractNumber}`);
       }
-    });
+    }));
   } else if (formData.relevantExperience) {
     parts.push("\nRELEVANT EXPERIENCE:");
     parts.push(formData.relevantExperience);

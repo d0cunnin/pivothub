@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
@@ -8,7 +9,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -219,7 +220,7 @@ Generate a comprehensive garden plan with plant recommendations appropriate for 
 
     console.log('Garden plan generated successfully for user:', user.id);
 
-    try { await deductCreditsOnSuccess(supabase, user.id, 'generate-garden-plan', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabase, user.id, 'generate-garden-plan', 3);
     return new Response(JSON.stringify(parsedPlan), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -235,4 +236,4 @@ Generate a comprehensive garden plan with plant recommendations appropriate for 
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
-});
+}));

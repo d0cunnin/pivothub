@@ -3,6 +3,13 @@
 
 import { AsyncLocalStorage } from 'node:async_hooks';
 const creditRequest = new AsyncLocalStorage<{holdId?: string; userId: string}>();
+export function withCreditRequest(handler:(req:Request)=>Promise<Response>) {
+ return (req:Request)=>creditRequest.run({userId:''},async()=>{
+  try{return await handler(req);}finally{
+   const current=creditRequest.getStore();if(current?.holdId)await serviceRoleClient().rpc('release_credit_reservation',{p_user_id:current.userId,p_hold_id:current.holdId});
+  }
+ });
+}
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
@@ -351,7 +358,7 @@ export async function assertCredits(userId: string, cost: number): Promise<void>
  const {data:hold,error}=await serviceClient.rpc('reserve_ai_credits',{p_user_id:userId,p_amount:cost,p_ttl_seconds:600});
  if(error)throw new Response(JSON.stringify({error:'Could not reserve Tool Credits. Please try again.'}),{status:503,headers:{...corsHeaders,'Content-Type':'application/json'}});
  if(!hold?.ok)throw creditRefusal(hold?.reason,cost,hold?.remaining??0);
- creditRequest.enterWith({userId,holdId:hold.hold_id});
+ const request=creditRequest.getStore();if(!request)throw new Error('Credit request scope missing');request.userId=userId;request.holdId=hold.hold_id;
 }
 export async function deductCreditsOnSuccess(_supabase:any,userId:string,endpoint:string,cost:number,_requestHash?:string):Promise<void>{
  if(cost<=0)return;const serviceClient=serviceRoleClient();if(await isAdminUser(serviceClient,userId))return;

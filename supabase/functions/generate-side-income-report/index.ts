@@ -1,3 +1,4 @@
+import { withCreditRequest } from '../_shared/guard.ts';
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
@@ -114,7 +115,7 @@ function sanitizeObject(obj: any): any {
   return obj;
 }
 
-serve(async (req) => {
+serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -510,7 +511,7 @@ For this request, return ONLY a JSON object containing exactly these top-level k
     const sanitizedReport = sanitizeObject(reportContent);
 
     // Return report directly without saving to database
-    try { await deductCreditsOnSuccess(supabase, user.id, 'generate-side-income-report', 3); } catch (e) { console.error('[CREDITS] deduction failed', e); }
+    await deductCreditsOnSuccess(supabase, user.id, 'generate-side-income-report', 3);
     return new Response(
       JSON.stringify({ report: sanitizedReport }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -524,4 +525,4 @@ For this request, return ONLY a JSON object containing exactly these top-level k
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
-});
+}));
