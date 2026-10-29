@@ -10,7 +10,7 @@ import { CHAT_STYLE_RULES } from "../_shared/chatStyle.ts";
 
 // Input validation schema
 const chatMessageSchema = z.object({
-  text: z.string().trim().min(1).max(2000),
+  text: z.string().trim().min(1).max(20000),
   isBot: z.boolean()
 })
 
@@ -100,9 +100,11 @@ SAFETY: Refuse any request about sexual content, crime, self-harm, suicide, viol
 ${CHAT_STYLE_RULES}`
     const messages: { role: "system" | "user" | "assistant"; content: any }[] = [
       { role: "system", content: systemPrompt },
-      ...conversationHistory.map((msg: any) => ({
+      // Only recent turns, with long earlier replies shortened, so old
+      // answers don't crowd out (or set the style for) the new one.
+      ...conversationHistory.slice(-10).map((msg: any) => ({
         role: (msg.isBot ? "assistant" : "user") as "assistant" | "user",
-        content: msg.text
+        content: msg.isBot && msg.text.length > 1500 ? `${msg.text.slice(0, 1500)}…` : msg.text
       })),
       { role: "user", content: message }
     ]
