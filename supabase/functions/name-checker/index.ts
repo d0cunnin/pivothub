@@ -4,6 +4,10 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import {
+  normalizeBusinessName, normalizeDomain, buildDomainLabels, normalizeHandle,
+  interpretDnsResult, SOCIAL_PLATFORMS,
+} from "../_shared/nameNormalization.ts";
 
 // Validation schema with strict limits
 const nameCheckerSchema = z.object({
@@ -54,107 +58,54 @@ serve(withCreditRequest(async (req) => {
       );
     }
     
-    const { businessName } = validation.data;
+    const normalized = normalizeBusinessName(validation.data.businessName);
+    const businessName = normalized.display;
+    const comparisonName = normalized.comparison;
+    const variations = buildDomainLabels(normalized.slug).slice(0, MAX_DOMAIN_VARIANTS);
 
-    // Clean up the business name for domain checking
-    const cleanName = businessName.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const variations = [
-      cleanName,
-      cleanName + 'co',
-      cleanName + 'inc',
-      cleanName + 'llc',
-      cleanName + 'app',
-      cleanName + 'online'
-    ].slice(0, MAX_DOMAIN_VARIANTS); // Limit variations
-
-    // Check domain availability for common TLDs (LIMITED)
     const tlds = ['.com', '.net', '.org', '.io', '.co'].slice(0, MAX_TLD_CHECKS);
-    const domainChecks = [];
+    const domainChecks: { domain: string; status: string; available: boolean | null }[] = [];
     let dnsQueryCount = 0;
 
     for (const variation of variations) {
       if (dnsQueryCount >= MAX_DNS_QUERIES) break;
-
       for (const tld of tlds) {
         if (dnsQueryCount >= MAX_DNS_QUERIES) break;
-
-        const domain = variation + tld;
+        const domain = normalizeDomain(variation + tld);
+        if (!domain) continue;
+        dnsQueryCount++;
+        let dnsData: any = null;
         try {
-          dnsQueryCount++;
-
-          // DNS lookup with timeout using Google's DNS API (more reliable than Deno.resolveDns)
-          const timeoutPromise = new Promise((_, reject) => 
+          const timeoutPromise = new Promise((_, reject) =>
             setTimeout(() => reject(new Error('DNS timeout')), DNS_TIMEOUT_MS)
           );
-          
-          const dnsPromise = fetch(`https://dns.google/resolve?name=${domain}&type=A`, {
-            method: 'GET',
+          const dnsPromise = fetch(`https://dns.google/resolve?name=${encodeURIComponent(domain)}&type=A`, {
             headers: { 'Accept': 'application/dns-json' }
           }).then(res => res.json());
-
-          const dnsData = await Promise.race([dnsPromise, timeoutPromise]) as any;
-          
-          domainChecks.push({
-            domain,
-            available: dnsData.Status !== 0 || !dnsData.Answer,
-            price: '$12.99/year'
-          });
-        } catch (error) {
-          // If DNS lookup fails or times out, assume available
-          domainChecks.push({
-            domain,
-            available: true,
-            price: '$12.99/year'
-          });
+          dnsData = await Promise.race([dnsPromise, timeoutPromise]);
+        } catch {
+          dnsData = null; // failed lookup stays unverified, never "available"
         }
+        const status = interpretDnsResult(dnsData);
+        domainChecks.push({ domain, status, available: status === 'taken' ? false : null });
       }
     }
 
-    // Check social media handles (simulated - real implementation would use APIs)
-    const socialPlatforms = [
-      { name: 'Instagram', baseUrl: 'https://instagram.com/' },
-      { name: 'Twitter', baseUrl: 'https://twitter.com/' },
-      { name: 'Facebook', baseUrl: 'https://facebook.com/' },
-      { name: 'LinkedIn', baseUrl: 'https://linkedin.com/company/' },
-      { name: 'YouTube', baseUrl: 'https://youtube.com/c/' },
-      { name: 'TikTok', baseUrl: 'https://tiktok.com/@' }
-    ];
-
-    const socialChecks = [];
-    for (const platform of socialPlatforms) {
-      const handles = [cleanName, businessName.toLowerCase().replace(/\s+/g, ''), businessName.toLowerCase().replace(/\s+/g, '_')];
-      
-      for (const handle of handles) {
-        try {
-          // Simple HTTP check to see if profile exists
-          const response = await fetch(platform.baseUrl + handle, {
-            method: 'HEAD',
-            redirect: 'manual'
-          });
-          
-          socialChecks.push({
-            platform: platform.name,
-            handle,
-            available: response.status === 404,
-            url: platform.baseUrl + handle
-          });
-          break; // Only check first available handle per platform
-        } catch (error) {
-          socialChecks.push({
-            platform: platform.name,
-            handle,
-            available: true, // Assume available on error
-            url: platform.baseUrl + handle
-          });
-          break;
-        }
-      }
-    }
+    // Social platforms block automated profile lookups, so handles are returned
+    // as platform-valid suggestions for manual checking, not availability claims.
+    const socialChecks = Object.entries(SOCIAL_PLATFORMS).map(([platform, cfg]) => {
+      const handle = normalizeHandle(businessName, platform);
+      return {
+        platform,
+        handle,
+        status: handle ? 'unverified' : 'invalid',
+        available: null,
+        url: handle ? cfg.url + handle : null,
+      };
+    });
 
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    console.log('[BOOT] Lovable AI key exists:', !!lovableApiKey);
-    console.log('[BOOT] Key prefix:', lovableApiKey?.substring(0, 10));
-    let similarNames = [];
+    let similarNames: any[] = [];
     let aiAnalysisSucceeded = false;
     
     if (lovableApiKey) {
@@ -228,7 +179,11 @@ Provide analysis beyond basic name search:
 • Famous marks doctrine application
 • Genericness and descriptiveness assessment
 • Rebranding cost estimate if conflicts found`,
-            `Conduct a comprehensive business name trademark conflict analysis for "${businessName}".
+            `Conduct a preliminary business name conflict analysis for "${businessName}" (case-insensitive comparison value: "${comparisonName}").
+
+CASE RULE: Capitalization does not make names different. "${comparisonName}", its uppercase form, and any mixed-case form are the SAME name. Compare on spelling, sound, wording and commercial context only.
+
+EVIDENCE RULE: You have no live access to USPTO or state databases. Only list well-known, real businesses or marks you are confident exist. Never invent registrations, businesses, or search results. Describe risks as possible, not definite. If you are not confident of any conflicts, return [].
 
 SEARCH CATEGORIES:
 1. EXACT MATCHES: Identical names in any industry or trademark class
@@ -268,7 +223,10 @@ QUALITY STANDARDS:
           { maxTokens: 1500 },
         );
         try {
-          similarNames = JSON.parse(aiText);
+          const cleaned = aiText.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '');
+          const parsed = JSON.parse(cleaned);
+          if (!Array.isArray(parsed)) throw new Error('not an array');
+          similarNames = parsed.slice(0, 12);
           aiAnalysisSucceeded = true;
         } catch (parseError) {
           similarNames = [];
@@ -305,15 +263,17 @@ QUALITY STANDARDS:
     return new Response(
       JSON.stringify({
         businessName,
-        domains: domainChecks.slice(0, 15), // Limit results
+        comparisonName,
+        domains: domainChecks.slice(0, 15),
         socialMedia: socialChecks,
         similarBusinesses: similarNames,
+        aiAnalysisSucceeded,
         summary: {
-          domainsAvailable: domainChecks.filter(d => d.available).length,
+          domainsTaken: domainChecks.filter(d => d.status === 'taken').length,
+          domainsNoRecords: domainChecks.filter(d => d.status === 'no_records').length,
           domainsTotal: domainChecks.length,
-          socialAvailable: socialChecks.filter(s => s.available).length,
           socialTotal: socialChecks.length,
-          riskLevel: similarNames.length > 5 ? 'High' : similarNames.length > 2 ? 'Medium' : 'Low'
+          riskLevel: !aiAnalysisSucceeded ? 'Unknown' : similarNames.length > 5 ? 'High' : similarNames.length > 2 ? 'Medium' : 'Low'
         }
       }),
       {
