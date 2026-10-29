@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState, useRef, useEffect } from "react";
 import { ToolGuard } from "@/components/ToolGuard";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
@@ -1504,6 +1505,7 @@ const DevelopIt = () => {
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-5xl mx-auto">
+          <ToolAbout about='Five community development tools in one place. Use the tabs to pick the one you need.' forWho='Nonprofits, community leaders, youth and faith-based programs.' />
           <WhatYouGet
             heading="Five tools in one place — here's what each gives you"
             items={[

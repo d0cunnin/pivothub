@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState } from 'react';
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
@@ -237,6 +238,7 @@ const SpeakIt = () => {
         
         <main id="speak-content" className="flex-grow container mx-auto px-4 py-12">
           <ToolCreditBar cost={3} />
+          <ToolAbout about='Prepare a speech or presentation with a clear message, structure, and delivery tips.' forWho='Speakers, presenters, pastors, students, and professionals.' />
           <WhatYouGet items={[
             { icon: Mic, name: "Speaker launch plan", description: "How to find your topics, build a speaker kit and land your first stages." },
             { icon: Podcast, name: "Podcast launch plan", description: "Your show format, first episodes, equipment list and launch steps." },

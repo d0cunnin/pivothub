@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState } from 'react';
 import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 import { Header } from '@/components/Header';
@@ -232,6 +233,7 @@ const ActIt = () => {
         
         <main id="act-content" className="flex-grow container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto">
+            <ToolAbout about='Turn your idea into a story package — characters, scenes, and script pages you can perform or develop.' forWho='Writers, actors, drama groups, and storytellers.' />
             <WhatYouGet heading="Your story package" items={[
               { icon: Clapperboard, name: "Story concept", description: "A logline and concept brief that captures your idea." },
               { icon: Theater, name: "Characters & plot", description: "Character profiles and a plot outline you can build a script from." },

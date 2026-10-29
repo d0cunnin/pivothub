@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState } from "react";
 import { ToolGuard } from "@/components/ToolGuard";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
@@ -1614,6 +1615,7 @@ const ContractIt = () => {
 
         <main className="page-container section-spacing">
           <div className="content-width">
+            <ToolAbout about='Two tools that help you win government contracts. Use the tabs to switch between them.' forWho='Small businesses pursuing local, state, or federal contracts.' />
             <WhatYouGet
               heading="Two tools in one place — here's what each gives you"
               items={[
