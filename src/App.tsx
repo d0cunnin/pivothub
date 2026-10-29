@@ -51,6 +51,7 @@ import AppErrorBoundary from "@/components/AppErrorBoundary";
 import ScrollToTop from "@/components/ScrollToTop";
 import CanonicalUrl from "@/components/CanonicalUrl";
 import HomeScreenPrompt from "@/components/HomeScreenPrompt";
+import ToolPageAppearance from "@/components/ToolPageAppearance";
 
 const queryClient = new QueryClient();
 
@@ -76,27 +77,27 @@ const App = () => (
             <Route path="/privacy-policy" element={<Navigate to="/privacy" replace />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/teachit" element={<TeachIt />} />
-          <Route path="/launchit" element={<LaunchIt />} />
-          <Route path="/scheduleit" element={<ScheduleIt />} />
-          <Route path="/hostit" element={<HostIt />} />
-          <Route path="/gardenit" element={<GardenIt />} />
-          <Route path="/speakit" element={<SpeakIt />} />
-            <Route path="/actit" element={<ActIt />} />
-            <Route path="/studyit" element={<StudyIt />} />
+            <Route path="/teachit" element={<ToolPageAppearance><TeachIt /></ToolPageAppearance>} />
+          <Route path="/launchit" element={<ToolPageAppearance><LaunchIt /></ToolPageAppearance>} />
+          <Route path="/scheduleit" element={<ToolPageAppearance><ScheduleIt /></ToolPageAppearance>} />
+          <Route path="/hostit" element={<ToolPageAppearance><HostIt /></ToolPageAppearance>} />
+          <Route path="/gardenit" element={<ToolPageAppearance><GardenIt /></ToolPageAppearance>} />
+          <Route path="/speakit" element={<ToolPageAppearance><SpeakIt /></ToolPageAppearance>} />
+            <Route path="/actit" element={<ToolPageAppearance><ActIt /></ToolPageAppearance>} />
+            <Route path="/studyit" element={<ToolPageAppearance><StudyIt /></ToolPageAppearance>} />
             <Route path="/before-you-start" element={<BeforeYouStart />} />
             <Route path="/courses" element={<Navigate to="/" replace />} />
-            <Route path="/promptit" element={<PromptIt />} />
-            <Route path="/codeit" element={<CodeIt />} />
-            <Route path="/deployit" element={<DeployIt />} />
-            <Route path="/createit" element={<CreateIt />} />
+            <Route path="/promptit" element={<ToolPageAppearance><PromptIt /></ToolPageAppearance>} />
+            <Route path="/codeit" element={<ToolPageAppearance><CodeIt /></ToolPageAppearance>} />
+            <Route path="/deployit" element={<ToolPageAppearance><DeployIt /></ToolPageAppearance>} />
+            <Route path="/createit" element={<ToolPageAppearance><CreateIt /></ToolPageAppearance>} />
             <Route path="/learnit" element={<Navigate to="/" replace />} />
-            <Route path="/assessit" element={<AssessIt />} />
-            <Route path="/prepit" element={<PrepIt />} />
-            <Route path="/buildit" element={<BuildIt />} />
-            <Route path="/fundit" element={<FundIt />} />
-            <Route path="/contractit" element={<ContractIt />} />
-            <Route path="/developit" element={<DevelopIt />} />
+            <Route path="/assessit" element={<ToolPageAppearance><AssessIt /></ToolPageAppearance>} />
+            <Route path="/prepit" element={<ToolPageAppearance><PrepIt /></ToolPageAppearance>} />
+            <Route path="/buildit" element={<ToolPageAppearance><BuildIt /></ToolPageAppearance>} />
+            <Route path="/fundit" element={<ToolPageAppearance><FundIt /></ToolPageAppearance>} />
+            <Route path="/contractit" element={<ToolPageAppearance><ContractIt /></ToolPageAppearance>} />
+            <Route path="/developit" element={<ToolPageAppearance><DevelopIt /></ToolPageAppearance>} />
             <Route path="/freelancer-marketplace" element={<FreelancerMarketplace />} />
             <Route path="/freelancer-onboarding" element={<FreelancerOnboarding />} />
             <Route path="/client-onboarding" element={<ClientOnboarding />} />
@@ -108,7 +109,7 @@ const App = () => (
             <Route path="/blog" element={<Blog />} />
             <Route path="/terms" element={<TermsAndConditions />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/earnit" element={<EarnIt />} />
+            <Route path="/earnit" element={<ToolPageAppearance><EarnIt /></ToolPageAppearance>} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/dashboard" element={<Dashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
