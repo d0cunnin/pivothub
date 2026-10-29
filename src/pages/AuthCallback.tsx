@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { safeRedirect } from '@/lib/safeRedirect';
+import { signupAttributionMetadata, trackSignUp } from "@/lib/analytics";
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
@@ -26,6 +27,14 @@ const AuthCallback = () => {
         const isNewUser = (now.getTime() - userCreatedAt.getTime()) < 120000; // 2 minutes
         
         if (isNewUser) {
+          // Email sign-ups were counted when the account was created; count
+          // new Google accounts here and save where the visitor came from.
+          if (session.user.app_metadata?.provider !== 'email') {
+            trackSignUp('google', session.user.id);
+            if (!session.user.user_metadata?.signup_attribution) {
+              supabase.auth.updateUser({ data: signupAttributionMetadata() }).catch(() => {});
+            }
+          }
           toast.success('Welcome! Your account has been created.');
         } else {
           toast.success('Signed in successfully!');

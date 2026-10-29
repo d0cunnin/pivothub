@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Lock, Mail, Eye, EyeOff, AlertTriangle, Check, X, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getToolCreditCost, getToolCostTier } from "@/utils/toolCreditWeights";
+import { signupAttributionMetadata, trackSignUp } from "@/lib/analytics";
 
 interface ToolGuardProps {
   children: React.ReactNode;
@@ -213,15 +214,18 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
         return;
       }
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: window.location.origin
+          emailRedirectTo: window.location.origin,
+          data: signupAttributionMetadata()
         }
       });
       
       if (error) throw error;
+      // An empty identities list means the email was already registered.
+      if (data.user && data.user.identities?.length) trackSignUp('email', data.user.id);
       
       toast({
         title: "Success!",

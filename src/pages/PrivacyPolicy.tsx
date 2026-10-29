@@ -107,7 +107,14 @@ const PrivacyPolicy = () => {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">6. Your Rights</h3>
+                <h3 className="text-xl font-semibold mb-4">6. Analytics and Cookies</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  We use Google Analytics to understand which pages and tools are most helpful and how visitors find us (for example, from a social media post). It records things like pages viewed, the tools used, the website or campaign that referred you, and general device information. We do not send your name, email address, or anything you type into our tools to Google Analytics, and we do not use it for advertising. You can opt out at any time using the notice on our site; if you have already made a choice, clear this site's data in your browser to see the notice again. When you create an account, we also store which website or campaign referred you with your account.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xl font-semibold mb-4">7. Your Rights</h3>
                 <p className="text-muted-foreground leading-relaxed mb-2">
                   Depending on your location, you may have rights under applicable data protection laws to:
                 </p>
@@ -122,21 +129,21 @@ const PrivacyPolicy = () => {
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">7. Children's Privacy</h3>
+                <h3 className="text-xl font-semibold mb-4">8. Children's Privacy</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Our website is not intended for anyone under the legal adult age of 18 years old. We do not knowingly collect information from anyone under 18 years of age. If we discover that we have inadvertently collected personal information from someone under 18, we will delete that information promptly.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">8. Changes to This Policy</h3>
+                <h3 className="text-xl font-semibold mb-4">9. Changes to This Policy</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   We may update this Privacy Policy at any time. Changes will be posted on this page with an updated effective date.
                 </p>
               </div>
 
               <div>
-                <h3 className="text-xl font-semibold mb-4">9. Contact Us</h3>
+                <h3 className="text-xl font-semibold mb-4">10. Contact Us</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   If you have any questions or concerns about this policy, please contact us through our contact page.
                 </p>

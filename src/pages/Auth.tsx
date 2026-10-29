@@ -14,6 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Mail, Lock, Eye, EyeOff, Check, X, MailCheck } from "lucide-react";
 import { z } from 'zod';
 import Turnstile from 'react-turnstile';
+import { signupAttributionMetadata, trackSignUp } from "@/lib/analytics";
 
 // Password validation schema
 const passwordSchema = z.string()
@@ -105,7 +106,8 @@ const Auth = () => {
         password,
         options: {
           emailRedirectTo: redirectUrl,
-          captchaToken:turnstileToken
+          captchaToken:turnstileToken,
+          data: signupAttributionMetadata()
         }
       });
 
@@ -118,6 +120,7 @@ const Auth = () => {
       } else {
         // If a session was returned, email confirmation is disabled — user is signed in
         if (data.session) {
+          if (data.user) trackSignUp('email', data.user.id);
           toast({
             title: "Welcome!",
             description: "Your account has been created.",
@@ -136,6 +139,9 @@ const Auth = () => {
           setActiveTab('signin');
           return;
         }
+
+        // Account created (awaiting email confirmation).
+        if (data.user) trackSignUp('email', data.user.id);
 
         // Track signup with IP for fraud detection (non-blocking)
         if (data.user) {

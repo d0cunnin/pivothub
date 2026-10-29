@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { FunctionInvokeOptions } from "@supabase/supabase-js";
+import { trackToolComplete } from "@/lib/analytics";
 
 /**
  * Normalized result shape for an edge-function call. Either `data` holds the
@@ -57,6 +58,7 @@ export async function invokeFunction<T = any>(
         return { data: null, error: { message: String((data as any).error) } };
       }
       window.dispatchEvent(new Event(CREDITS_CHANGED_EVENT));
+      trackToolComplete(name);
       return { data: data as T, error: null };
     } catch (e: any) {
       return { data: null, error: { message: e?.message || "Request failed" } };

@@ -49,6 +49,7 @@ import PasswordRecovery from "./pages/PasswordRecovery";
 import { HelmetProvider } from 'react-helmet-async';
 import AppErrorBoundary from "@/components/AppErrorBoundary";
 import ScrollToTop from "@/components/ScrollToTop";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 import CanonicalUrl from "@/components/CanonicalUrl";
 import HomeScreenPrompt from "@/components/HomeScreenPrompt";
 import ToolPageAppearance from "@/components/ToolPageAppearance";
@@ -66,6 +67,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
           <ScrollToTop />
+          <AnalyticsTracker />
           <CanonicalUrl />
           <HomeScreenPrompt />
           <Routes>

@@ -3,6 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { getStripeEnvironment } from '@/lib/payments/stripe';
+import { signupAttributionMetadata, trackSignUp } from "@/lib/analytics";
 
 interface AuthContextType {
   user: User | null;
@@ -82,16 +83,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (email: string, password: string, displayName?: string) => {
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: redirectUrl,
         data: {
-          display_name: displayName
+          display_name: displayName,
+          ...signupAttributionMetadata()
         }
       }
     });
+    if (!error && data.user && data.user.identities?.length) trackSignUp('email', data.user.id);
 
     return { error };
   };
