@@ -1,5 +1,5 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
-import { BookOpen, Languages, ScrollText } from "lucide-react";
+import { BookOpen as IntroBookOpen, Languages as IntroLanguages, ScrollText as IntroScrollText } from "lucide-react";
 import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -160,7 +160,7 @@ const StudyIt = () => {
             </div>
           </div>
         </section>
-      <ToolIntro about='Look up any biblical word or concept. Study It gives reference information only — no commentary or opinions.' forWho='Bible students, teachers, ministry leaders, and anyone studying scripture.' items={[{ icon: BookOpen, name: 'Definitions', description: 'Clear meanings of the word or concept you search.' }, { icon: Languages, name: 'Original language', description: "Hebrew or Greek roots, etymology, and Strong's Concordance entries." }, { icon: ScrollText, name: 'Scripture references', description: 'Where the word appears in the Old and New Testament.' }]} />
+      <ToolIntro about='Look up any biblical word or concept. Study It gives reference information only — no commentary or opinions.' forWho='Bible students, teachers, ministry leaders, and anyone studying scripture.' items={[{ icon: IntroBookOpen, name: 'Definitions', description: 'Clear meanings of the word or concept you search.' }, { icon: IntroLanguages, name: 'Original language', description: "Hebrew or Greek roots, etymology, and Strong's Concordance entries." }, { icon: IntroScrollText, name: 'Scripture references', description: 'Where the word appears in the Old and New Testament.' }]} />
         
         <main id="study-content" className="flex-grow container mx-auto px-4 py-12">
 

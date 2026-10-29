@@ -1,5 +1,5 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
-import { CalendarCheck, DollarSign, Lightbulb } from "lucide-react";
+import { CalendarCheck as IntroCalendarCheck, DollarSign as IntroDollarSign, Lightbulb as IntroLightbulb } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -231,7 +231,7 @@ function SideIncomeBlueprintInner() {
           </div>
         </div>
       </section>
-      <ToolIntro about='Answer a short questionnaire and get side income ideas matched to your skills, schedule, and budget.' forWho='Anyone looking for extra income alongside a job or other commitments.' items={[{ icon: Lightbulb, name: 'Income ideas', description: 'Side income options that fit your life.' }, { icon: DollarSign, name: 'Earning estimates', description: 'A realistic look at what each idea could earn.' }, { icon: CalendarCheck, name: '90-day plan', description: 'Week-by-week steps to get your first income coming in.' }]} />
+      <ToolIntro about='Answer a short questionnaire and get side income ideas matched to your skills, schedule, and budget.' forWho='Anyone looking for extra income alongside a job or other commitments.' items={[{ icon: IntroLightbulb, name: 'Income ideas', description: 'Side income options that fit your life.' }, { icon: IntroDollarSign, name: 'Earning estimates', description: 'A realistic look at what each idea could earn.' }, { icon: IntroCalendarCheck, name: '90-day plan', description: 'Week-by-week steps to get your first income coming in.' }]} />
 
       {/* What you'll get */}
       <section className="py-16 bg-white">

@@ -1,5 +1,5 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
-import { Brain, Compass, Laptop, Target } from "lucide-react";
+import { Brain as IntroBrain, Compass as IntroCompass, Laptop as IntroLaptop, Target as IntroTarget } from "lucide-react";
 import { Header } from "@/components/Header";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { Footer } from "@/components/Footer";
@@ -80,7 +80,7 @@ const AssessIt = () => {
           </div>
         </div>
       </section>
-      <ToolIntro about='Take short assessments that show your strengths, skills, personality, and readiness for tech work, then get career suggestions that fit you.' forWho='Job seekers, people who lost a job, and anyone thinking about a career change.' items={[{ icon: Compass, name: 'Career assessment', description: 'Career paths that match your interests and experience.' }, { icon: Target, name: 'Skills assessment', description: 'A picture of your strongest skills and where to grow.' }, { icon: Brain, name: 'Personality assessment', description: 'How your work style fits different roles and teams.' }, { icon: Laptop, name: 'Tech readiness', description: 'How ready you are for tech roles and what to learn next.' }]} />
+      <ToolIntro about='Take short assessments that show your strengths, skills, personality, and readiness for tech work, then get career suggestions that fit you.' forWho='Job seekers, people who lost a job, and anyone thinking about a career change.' items={[{ icon: IntroCompass, name: 'Career assessment', description: 'Career paths that match your interests and experience.' }, { icon: IntroTarget, name: 'Skills assessment', description: 'A picture of your strongest skills and where to grow.' }, { icon: IntroBrain, name: 'Personality assessment', description: 'How your work style fits different roles and teams.' }, { icon: IntroLaptop, name: 'Tech readiness', description: 'How ready you are for tech roles and what to learn next.' }]} />
 
       {/* Assessment Tools - Featured Section */}
       <section id="take-your-assessment-today" className="py-12 bg-white relative overflow-hidden">

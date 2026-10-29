@@ -1,5 +1,5 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
-import { Brain, Briefcase, FileText, MessageSquare } from "lucide-react";
+import { Brain as IntroBrain, Briefcase as IntroBriefcase, FileText as IntroFileText, MessageSquare as IntroMessageSquare } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -96,7 +96,7 @@ const PrepIt = () => {
           </div>
         </div>
       </section>
-      <ToolIntro about='Get ready for your next job. Chat with a career advisor, practice interview questions, improve your resume, and build a new one.' forWho='Job seekers preparing for applications and interviews.' items={[{ icon: Brain, name: 'Career advisor', description: 'Personal answers to your career questions, one message at a time.' }, { icon: MessageSquare, name: 'Interview practice', description: 'Likely interview questions with tips on how to answer them.' }, { icon: FileText, name: 'Resume coaching', description: 'Feedback and rewrites to make your resume stronger.' }, { icon: Briefcase, name: 'Resume builder', description: 'A clean, finished resume you can download.' }]} />
+      <ToolIntro about='Get ready for your next job. Chat with a career advisor, practice interview questions, improve your resume, and build a new one.' forWho='Job seekers preparing for applications and interviews.' items={[{ icon: IntroBrain, name: 'Career advisor', description: 'Personal answers to your career questions, one message at a time.' }, { icon: IntroMessageSquare, name: 'Interview practice', description: 'Likely interview questions with tips on how to answer them.' }, { icon: IntroFileText, name: 'Resume coaching', description: 'Feedback and rewrites to make your resume stronger.' }, { icon: IntroBriefcase, name: 'Resume builder', description: 'A clean, finished resume you can download.' }]} />
 
       {/* Career Advisor AI */}
       <section id="career-advisor" className="py-16 bg-white relative overflow-hidden">

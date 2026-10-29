@@ -1,5 +1,5 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
-import { Award, BookOpen, ClipboardList, ListChecks } from "lucide-react";
+import { Award as IntroAward, BookOpen as IntroBookOpen, ClipboardList as IntroClipboardList, ListChecks as IntroListChecks } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ const TeachIt = () => {
           </div>
         </div>
       </section>
-      <ToolIntro about='Turn what you know into teaching materials you can sell or use in class. Pick a tool below to create course materials, lesson plans, quizzes, or grading rubrics.' forWho='Coaches, trainers, teachers, and experts who want to teach or sell courses.' items={[{ icon: BookOpen, name: 'Course materials', description: 'Course outlines and teaching content built around your topic and audience.' }, { icon: ClipboardList, name: 'Lesson plans', description: 'Step-by-step lesson plans with goals, activities, and timing.' }, { icon: ListChecks, name: 'Quizzes', description: 'Ready-to-use quiz questions with answer keys.' }, { icon: Award, name: 'Grading rubrics', description: 'Clear scoring guides so students know how work is graded.' }]} />
+      <ToolIntro about='Turn what you know into teaching materials you can sell or use in class. Pick a tool below to create course materials, lesson plans, quizzes, or grading rubrics.' forWho='Coaches, trainers, teachers, and experts who want to teach or sell courses.' items={[{ icon: IntroBookOpen, name: 'Course materials', description: 'Course outlines and teaching content built around your topic and audience.' }, { icon: IntroClipboardList, name: 'Lesson plans', description: 'Step-by-step lesson plans with goals, activities, and timing.' }, { icon: IntroListChecks, name: 'Quizzes', description: 'Ready-to-use quiz questions with answer keys.' }, { icon: IntroAward, name: 'Grading rubrics', description: 'Clear scoring guides so students know how work is graded.' }]} />
 
       {/* Why Teach Section */}
       <section className="pt-16 pb-8 bg-white relative overflow-hidden">
