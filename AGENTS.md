@@ -1,4 +1,5 @@
 # Payment architecture
+- Complimentary admin awards use a service-only atomic audited RPC, with due monthly installments materialized into the live credit ledger during balance refresh; this prevents future credits or complimentary awards from becoming payment entitlements or revenue.
 - All provider calls use the shared gateway Stripe client with an explicit test/live environment; managed credentials are not direct API keys.
 - User-linked checkout derives ownership from verified authentication and resolves a Customer carrying userId metadata to prevent cross-account billing.
 - Verified payment fulfillment uses the service-only idempotent receipt function; test receipts never mutate live Tool Credits because preview and production share one database.
