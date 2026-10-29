@@ -12,7 +12,7 @@ interface Props {
 const Email = ({ name, packName, credits, amount }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Your {packName ?? 'credit pack'} is ready — {credits ?? ''} Tool Credits added</Preview>
+    <Preview>{`Your ${packName ?? 'credit pack'} is ready — ${credits ?? ''} Tool Credits added`}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Heading style={brand}>PivotHub</Heading>
