@@ -1,4 +1,5 @@
 # Purchase setup
+- [ ] Restore secure complimentary Grant Access with monthly scheduling, audit, dialog, tests and a 40-credit test-user balance check.
 - [x] Audit current purchase, authentication, account, entitlement, and renewal flows against hosted configuration; findings in PAYMENT_FLOW_AUDIT.md.
 - [x] Clarify credit rollover, plan changes, refunds, account deletion, and preview-credit behavior.
 - [x] Implement Stripe-source-of-truth policy with payment-confirmed upgrades, deferred downgrades/free transition, verified synchronization and plan-change review; authenticated tests tracked separately.
