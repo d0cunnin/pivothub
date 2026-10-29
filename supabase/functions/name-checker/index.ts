@@ -105,9 +105,7 @@ serve(withCreditRequest(async (req) => {
     });
 
     const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
-    console.log('[BOOT] Lovable AI key exists:', !!lovableApiKey);
-    console.log('[BOOT] Key prefix:', lovableApiKey?.substring(0, 10));
-    let similarNames = [];
+    let similarNames: any[] = [];
     let aiAnalysisSucceeded = false;
     
     if (lovableApiKey) {
@@ -181,7 +179,11 @@ Provide analysis beyond basic name search:
 • Famous marks doctrine application
 • Genericness and descriptiveness assessment
 • Rebranding cost estimate if conflicts found`,
-            `Conduct a comprehensive business name trademark conflict analysis for "${businessName}".
+            `Conduct a preliminary business name conflict analysis for "${businessName}" (case-insensitive comparison value: "${comparisonName}").
+
+CASE RULE: Capitalization does not make names different. "${comparisonName}", its uppercase form, and any mixed-case form are the SAME name. Compare on spelling, sound, wording and commercial context only.
+
+EVIDENCE RULE: You have no live access to USPTO or state databases. Only list well-known, real businesses or marks you are confident exist. Never invent registrations, businesses, or search results. Describe risks as possible, not definite. If you are not confident of any conflicts, return [].
 
 SEARCH CATEGORIES:
 1. EXACT MATCHES: Identical names in any industry or trademark class
@@ -221,7 +223,10 @@ QUALITY STANDARDS:
           { maxTokens: 1500 },
         );
         try {
-          similarNames = JSON.parse(aiText);
+          const cleaned = aiText.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '');
+          const parsed = JSON.parse(cleaned);
+          if (!Array.isArray(parsed)) throw new Error('not an array');
+          similarNames = parsed.slice(0, 12);
           aiAnalysisSucceeded = true;
         } catch (parseError) {
           similarNames = [];
@@ -258,15 +263,17 @@ QUALITY STANDARDS:
     return new Response(
       JSON.stringify({
         businessName,
-        domains: domainChecks.slice(0, 15), // Limit results
+        comparisonName,
+        domains: domainChecks.slice(0, 15),
         socialMedia: socialChecks,
         similarBusinesses: similarNames,
+        aiAnalysisSucceeded,
         summary: {
-          domainsAvailable: domainChecks.filter(d => d.available).length,
+          domainsTaken: domainChecks.filter(d => d.status === 'taken').length,
+          domainsNoRecords: domainChecks.filter(d => d.status === 'no_records').length,
           domainsTotal: domainChecks.length,
-          socialAvailable: socialChecks.filter(s => s.available).length,
           socialTotal: socialChecks.length,
-          riskLevel: similarNames.length > 5 ? 'High' : similarNames.length > 2 ? 'Medium' : 'Low'
+          riskLevel: !aiAnalysisSucceeded ? 'Unknown' : similarNames.length > 5 ? 'High' : similarNames.length > 2 ? 'Medium' : 'Low'
         }
       }),
       {
