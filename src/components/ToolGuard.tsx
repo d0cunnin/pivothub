@@ -326,6 +326,7 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
         // Signed-out visitors can't use any tool: block every control and ask them to sign in
         if (user || isAdmin) return;
         const target = e.target as HTMLElement;
+        if (target.closest('[role="tab"], a')) return;
         if (target.closest('button, input, textarea, select, label, [role="button"], [role="radio"], [role="checkbox"], [role="combobox"], [role="slider"]')) {
           e.preventDefault();
           e.stopPropagation();
