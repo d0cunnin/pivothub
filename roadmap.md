@@ -19,3 +19,4 @@
 - [x] Phase 2: Applied scoped tool-page typography, tabs, form and output styling; polished Develop It explanations; all 19 tool routes opened without page errors, Develop It tabs and form navigation verified on desktop/phone, 25 existing tests passed.
 - [ ] Verify signed-in tool results after visual changes; blocked because the requester has no matching preview account. No paid generation attempted.
 - [ ] Phase 3: Dashboard appearance; waiting for Phase 2 review.
+- [x] Phase 2b: shared tool banner on Develop It / Contract It, "what you'll get" cards, tab-switch hints on all tabbed tools
