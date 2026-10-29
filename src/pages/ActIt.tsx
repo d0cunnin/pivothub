@@ -232,7 +232,7 @@ const ActIt = () => {
         
         <main id="act-content" className="flex-grow container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto">
-            <WhatYouGet items={[
+            <WhatYouGet heading="Your story package" items={[
               { icon: Clapperboard, name: "Story concept", description: "A logline and concept brief that captures your idea." },
               { icon: Theater, name: "Characters & plot", description: "Character profiles and a plot outline you can build a script from." },
               { icon: Download, name: "PDF to keep", description: "Download your story package as a PDF for pitches or planning." },
