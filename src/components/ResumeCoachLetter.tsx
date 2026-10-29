@@ -22,6 +22,7 @@ import {
   FileDown
 } from 'lucide-react';
 import { invokeFunction } from '@/lib/invokeFunction';
+import { readResumeFile, RESUME_FILE_ACCEPT } from '@/lib/resumeFile';
 import { generateResumeGuidePDF, generateCoverLetterPDF, generateResumePDF } from '@/lib/pdf-reports/resume-coach';
 
 interface ResumeAnalysis {
@@ -127,20 +128,16 @@ export const ResumeCoachLetter = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Handle file upload
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const text = e.target?.result as string;
-          setResumeText(text);
-          toast.success('Resume uploaded successfully');
-        };
-        reader.readAsText(file);
-      } else {
-        toast.error('Please upload a .txt file or paste your resume text');
-      }
+    event.target.value = '';
+    if (!file) return;
+    try {
+      const text = await readResumeFile(file);
+      setResumeText(text);
+      toast.success('Resume uploaded. Check the text below, then click Analyze.');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Could not read that file. Please paste your resume text instead.');
     }
   };
 
@@ -341,12 +338,12 @@ export const ResumeCoachLetter = () => {
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                     <Upload className="h-8 w-8 mx-auto mb-4 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground mb-2">
-                      Upload your resume (.txt file)
+                      Upload your resume (PDF, Word or .txt)
                     </p>
                     <input
                       ref={fileInputRef}
                       type="file"
-                      accept=".txt"
+                      accept={RESUME_FILE_ACCEPT}
                       onChange={handleFileUpload}
                       className="hidden"
                     />

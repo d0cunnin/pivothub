@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
+import { useSpeechToText } from "@/hooks/useSpeechToText";
 import { sanitizeAIContent } from "@/lib/utils";
 import { 
   MessageSquare, 
@@ -84,7 +85,13 @@ export const InterviewQuestionsCoach = () => {
   const [currentAnswer, setCurrentAnswer] = useState('');
   const [responses, setResponses] = useState<Response[]>([]);
   const [stories, setStories] = useState<Story[]>([]);
-  const [isRecording, setIsRecording] = useState(false);
+  // Voice practice: spoken words are added to the answer box.
+  const voice = useSpeechToText(
+    (text) => setCurrentAnswer((prev) => (prev.trim() ? `${prev.trimEnd()} ${text}` : text)),
+    (message) => toast.error(message),
+  );
+  const { stop: stopVoice } = voice;
+  useEffect(() => { stopVoice(); }, [currentQuestionIndex, stopVoice]);
   const [isMockInterview, setIsMockInterview] = useState(false);
   const [mockInterviewTime, setMockInterviewTime] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -142,6 +149,7 @@ export const InterviewQuestionsCoach = () => {
 
   // Submit answer for feedback
   const submitAnswer = async () => {
+    stopVoice();
     if (!currentAnswer.trim()) {
       toast.error('Please provide an answer');
       return;
@@ -368,12 +376,14 @@ export const InterviewQuestionsCoach = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Button
-                      variant="outline"
+                      variant={voice.listening ? "destructive" : "outline"}
                       size="sm"
-                      onClick={() => setIsRecording(!isRecording)}
+                      onClick={() => (voice.listening ? voice.stop() : voice.start())}
+                      aria-pressed={voice.listening}
+                      title={voice.supported ? "Speak your answer and it will be typed into the box" : "Voice typing works in Chrome, Edge and Safari"}
                     >
-                      {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                      {isRecording ? 'Stop Recording' : 'Voice Practice'}
+                      {voice.listening ? <MicOff className="h-4 w-4 mr-1" /> : <Mic className="h-4 w-4 mr-1" />}
+                      {voice.listening ? 'Stop Speaking' : 'Speak Your Answer'}
                     </Button>
                   </div>
                 </div>
@@ -384,8 +394,13 @@ export const InterviewQuestionsCoach = () => {
 
                 <div className="space-y-4">
                   <label className="text-sm font-medium">Your Answer</label>
+                    {voice.listening && (
+                      <p className="text-sm text-primary" role="status">
+                        Listening... speak your answer. {voice.interim && <span className="text-muted-foreground italic">{voice.interim}</span>}
+                      </p>
+                    )}
                     <Textarea
-                      placeholder="Type your answer here... Use the STAR method: Situation, Task, Action, Result"
+                      placeholder="Type or speak your answer here... Use the STAR method: Situation, Task, Action, Result"
                       value={currentAnswer}
                       onChange={(e) => setCurrentAnswer(e.target.value)}
                       rows={6}
