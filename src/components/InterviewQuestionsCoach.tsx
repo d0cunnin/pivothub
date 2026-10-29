@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -235,6 +236,7 @@ export const InterviewQuestionsCoach = () => {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabSwitchHint />
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="setup">Setup</TabsTrigger>
           <TabsTrigger value="practice">Practice</TabsTrigger>

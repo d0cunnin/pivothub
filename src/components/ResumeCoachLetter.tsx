@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -315,6 +316,7 @@ export const ResumeCoachLetter = () => {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabSwitchHint />
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="upload">Upload Resume</TabsTrigger>
           <TabsTrigger value="analysis">Analysis</TabsTrigger>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -582,6 +583,7 @@ export default function CreateIt() {
 
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
           <Tabs defaultValue="create" className="w-full">
+            <TabSwitchHint />
             <TabsList className="mb-6">
               <TabsTrigger value="create">Create</TabsTrigger>
               <TabsTrigger value="history">My Blueprints {history.length > 0 && `(${history.length})`}</TabsTrigger>
