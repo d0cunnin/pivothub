@@ -1,4 +1,5 @@
 import { Header } from "@/components/Header";
+import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -90,6 +91,7 @@ const AssessIt = () => {
             </p>
           </div>
 
+          <ToolCreditBar cost="2 credits per assessment" />
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             <Card className="p-8 bg-gradient-card/40 backdrop-blur-sm border border-white/20 hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
               <div className="w-16 h-16 bg-gradient-hero rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">

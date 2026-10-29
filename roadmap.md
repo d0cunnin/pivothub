@@ -21,3 +21,4 @@
 - [ ] Phase 3: Dashboard appearance; waiting for Phase 2 review.
 - [x] Phase 2b: shared tool banner on Develop It / Contract It, "what you'll get" cards, tab-switch hints on all tabbed tools
 - [x] Phase 3: dashboard appearance (welcome banner, credits, quick links)
+- [x] Phase 2c: Plan It pages get "what you'll get" cards; credit box (required + remaining) on every tool page

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
@@ -233,6 +234,7 @@ function SideIncomeBlueprintInner() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
+            <ToolCreditBar cost={3} />
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">What You'll Get</h2>
             <p className="text-lg text-muted-foreground text-center mb-10">
               A clear, personal plan instead of guessing which side hustle to try.

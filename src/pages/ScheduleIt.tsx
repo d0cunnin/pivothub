@@ -1,4 +1,6 @@
 import { Header } from "@/components/Header";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
+import { CalendarDays, ListChecks, Download } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-image.jpg";
@@ -52,6 +54,16 @@ const ScheduleIt = () => {
               </Button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="pt-16 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <WhatYouGet heading="What you'll get" items={[
+            { icon: CalendarDays, name: "Weekly schedule", description: "A realistic week laid out hour by hour around your work, family and goals." },
+            { icon: ListChecks, name: "Priorities & habits", description: "Your top priorities turned into daily habits you can actually keep." },
+            { icon: Download, name: "PDF to print", description: "Download your schedule as a PDF to print or keep on your phone." },
+          ]} />
         </div>
       </section>
 

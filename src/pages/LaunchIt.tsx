@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
+import { Rocket, Target } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -218,9 +221,20 @@ const LaunchIt = () => {
         </div>
       </section>
 
+      <section className="pt-16 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <WhatYouGet heading="What you'll get" items={[
+            { icon: Rocket, name: "Launch roadmap", description: "A step-by-step plan from pre-launch to launch day, built around your goals and resources." },
+            { icon: Target, name: "Audience & messaging", description: "Who to reach first and what to say to them, in plain language." },
+            { icon: Download, name: "PDF to keep", description: "Download your full launch strategy as a PDF to share or work from." },
+          ]} />
+        </div>
+      </section>
+
       {/* Form Section */}
       <section id="launch-form" className="py-16 bg-white relative overflow-hidden">
         <div className="container mx-auto px-4">
+          <ToolCreditBar cost={3} />
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-12 max-w-6xl mx-auto">
             <div>
               <div className="inline-block p-6 bg-gradient-card rounded-2xl shadow-elegant backdrop-blur-sm mb-4">
@@ -243,12 +257,6 @@ const LaunchIt = () => {
           
           <div className="max-w-4xl mx-auto">
             {/* Credit Badge */}
-            <div className="flex justify-center mb-6">
-              <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-                <Zap className="h-4 w-4" />
-                3 Credits
-              </Badge>
-            </div>
 
             {/* Form */}
             <Card className="p-8 mb-8 bg-card/50 backdrop-blur-sm border-primary/20">

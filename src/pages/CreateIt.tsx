@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -582,6 +583,7 @@ export default function CreateIt() {
         </section>
 
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
+          <ToolCreditBar cost={70} />
           <Tabs defaultValue="create" className="w-full">
             <TabSwitchHint />
             <TabsList className="mb-6">
