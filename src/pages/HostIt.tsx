@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { Header } from "@/components/Header";
 import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 import { PartyPopper, ClipboardList, Wallet } from "lucide-react";
@@ -66,6 +67,7 @@ const HostIt = () => {
 
       <section className="pt-16 bg-white">
         <div className="container mx-auto px-4 max-w-5xl">
+          <ToolAbout about='Plan an in-person, virtual, or hybrid event — from the idea to logistics, speakers, sponsors, and promotion.' forWho='Event hosts, organizers, nonprofits, and small businesses.' />
           <WhatYouGet heading="What you'll get" items={[
             { icon: PartyPopper, name: "Event plan", description: "A full plan for your event — theme, venue ideas, guest flow and run of show." },
             { icon: ClipboardList, name: "Checklist & timeline", description: "Countdown tasks so you know what to do each week before the big day." },

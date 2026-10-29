@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState } from "react";
 import { ToolGuard } from "@/components/ToolGuard";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
@@ -224,6 +225,7 @@ const LaunchIt = () => {
 
       <section className="pt-16 bg-white">
         <div className="container mx-auto px-4 max-w-5xl">
+          <ToolAbout about='Plan the launch of your product, service, or business with a clear strategy, timeline, and marketing plan.' forWho='New business owners and anyone launching something new.' />
           <WhatYouGet heading="What you'll get" items={[
             { icon: Rocket, name: "Launch roadmap", description: "A step-by-step plan from pre-launch to launch day, built around your goals and resources." },
             { icon: Target, name: "Audience & messaging", description: "Who to reach first and what to say to them, in plain language." },

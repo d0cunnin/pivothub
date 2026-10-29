@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useEffect, useState } from "react";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
@@ -582,6 +583,16 @@ export default function CreateIt() {
           </div>
         </section>
 
+        <ToolIntro
+          about="Design a complete, build-ready blueprint for your AI-powered platform. Answer guided questions and get a plan you can hand to a developer, agency, or AI builder."
+          forWho="Founders and creators planning an AI app or platform."
+          items={[
+            { icon: Sparkles, name: "Platform blueprint", description: "Your idea, audience, and core features laid out clearly." },
+            { icon: Zap, name: "Tech stack & architecture", description: "Recommended tools and how the pieces fit together." },
+            { icon: ChevronRight, name: "Roadmap & monetization", description: "Build phases plus ways your platform can make money." },
+            { icon: Sparkles, name: "AI build prompt", description: "A ready-to-paste prompt for AI app builders." },
+          ]}
+        />
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
           <ToolCreditBar cost={70} />
           <Tabs defaultValue="create" className="w-full">

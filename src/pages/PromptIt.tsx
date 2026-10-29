@@ -1,3 +1,5 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
+import { GraduationCap as IntroGraduationCap, Search as IntroSearch, Wand2 as IntroWand2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -148,6 +150,7 @@ const PromptIt = () => {
           </div>
         </div>
       </section>
+      <ToolIntro about='Learn how to talk to AI tools like a professional. Read the lessons, then paste in your own prompt and get it analyzed and improved.' forWho='Anyone who uses ChatGPT, Gemini, or other AI tools and wants better answers.' items={[{ icon: IntroGraduationCap, name: 'Prompt lessons', description: 'Free lessons with examples, common mistakes, and a checklist.' }, { icon: IntroSearch, name: 'Prompt analysis', description: 'A review of your prompt showing what is strong and what is missing.' }, { icon: IntroWand2, name: 'Improved prompt', description: 'A rewritten prompt you can copy and use right away.' }]} />
 
       <main id="prompt-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="prompt-it">

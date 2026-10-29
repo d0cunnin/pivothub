@@ -1,3 +1,4 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { Header } from "@/components/Header";
 import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 import { Sprout, Leaf, ShoppingCart } from "lucide-react";
@@ -58,6 +59,7 @@ const GardenIt = () => {
 
       <section className="pt-16 bg-white">
         <div className="container mx-auto px-4 max-w-5xl">
+          <ToolAbout about='Get a garden plan made for your space, climate, and goals — what to plant, when, and how to care for it.' forWho='Home gardeners, community gardens, and beginners.' />
           <WhatYouGet heading="What you'll get" items={[
             { icon: Sprout, name: "Garden plan", description: "A layout of what to plant and where, matched to your space and climate." },
             { icon: Leaf, name: "Plant cards", description: "Care notes for each plant — watering, sunlight and when to harvest." },

@@ -1,3 +1,5 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
+import { FileText as IntroFileText, Mail as IntroMail, Search as IntroSearch } from "lucide-react";
 import React, { useState } from 'react';
 import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Header } from '@/components/Header';
@@ -410,6 +412,7 @@ const FundIt = () => {
         
         <div className="section-divider absolute bottom-0 left-0"></div>
       </section>
+      <ToolIntro about='Write grant proposals and letters of intent with AI help, and find places to search for grants that fit your work.' forWho='Nonprofits, small businesses, and community groups seeking funding.' items={[{ icon: IntroFileText, name: 'Grant proposal', description: 'A full draft proposal with your need, plan, and goals.' }, { icon: IntroMail, name: 'Letter of intent', description: 'A short letter introducing your project to a funder.' }, { icon: IntroSearch, name: 'Grant research links', description: 'Where to search federal, state, foundation, and corporate grants.' }]} />
       
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">

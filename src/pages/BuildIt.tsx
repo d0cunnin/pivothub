@@ -1,3 +1,5 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
+import { FileText as IntroFileText, Lightbulb as IntroLightbulb, Megaphone as IntroMegaphone, Palette as IntroPalette, Presentation as IntroPresentation, Search as IntroSearch } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Helmet } from 'react-helmet-async';
@@ -78,6 +80,7 @@ const BuildIt = () => {
           </div>
         </div>
       </section>
+      <ToolIntro about='Start your business step by step — from your first idea and name to a business plan, marketing, pitch deck, logo, and bio.' forWho='New and aspiring business owners.' items={[{ icon: IntroLightbulb, name: 'Business ideas', description: 'Ideas that match your skills and interests.' }, { icon: IntroSearch, name: 'Name check', description: 'Help checking whether your business name is available.' }, { icon: IntroFileText, name: 'Business plan', description: 'A written plan covering your offer, market, and money.' }, { icon: IntroMegaphone, name: 'Marketing strategy', description: 'Where and how to reach your customers.' }, { icon: IntroPresentation, name: 'Pitch deck', description: 'Slide content for pitching to partners or investors.' }, { icon: IntroPalette, name: 'Logo & bio', description: 'Logo ideas and a professional bio.' }]} />
 
       {/* Quick Start */}
       <section className="section-spacing-sm bg-white relative overflow-hidden">

@@ -1,3 +1,5 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
+import { Bot as IntroBot, ListChecks as IntroListChecks, MessageSquare as IntroMessageSquare } from "lucide-react";
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -161,6 +163,7 @@ const DeployIt = () => {
           </div>
         </div>
       </section>
+      <ToolIntro about="Plan your own AI agent before you build it in OpenAI's Agent Builder. Answer questions about what your agent should do and get a clear build plan." forWho='Business owners and creators who want an AI assistant for their work.' items={[{ icon: IntroBot, name: 'Agent design', description: 'What your agent does, who it helps, and how it should behave.' }, { icon: IntroListChecks, name: 'Setup steps', description: 'Step-by-step instructions for building it in Agent Builder.' }, { icon: IntroMessageSquare, name: 'Starter instructions', description: 'Ready-to-paste instructions that tell your agent how to act.' }]} />
 
       <main id="deploy-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="deploy-it">
