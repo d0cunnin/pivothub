@@ -12,3 +12,4 @@
 - Keep installability manifest-only; the global mobile prompt uses a browser-provided install event when available and platform instructions otherwise, without adding service workers or offline caching.
 # Visual refresh
 - Keep visual refresh changes scoped to the page being refreshed and reuse existing semantic tokens and controls, so later phases cannot alter unrelated workflows or styling.
+- Apply cross-tool visual styling through the opt-in ToolPageAppearance wrapper and its scoped stylesheet; keep tool children, shared UI primitives, and non-tool routes untouched to preserve behavior and isolate later phases.

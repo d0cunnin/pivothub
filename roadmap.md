@@ -16,5 +16,5 @@
 - [ ] Publish the updated website after verified purchases; requires the user's explicit publish request.
 # Visual refresh — appearance only
 - [x] Phase 1: Polish the homepage, tool cards, and section hierarchy; preserved all existing link destinations; verified desktop, tablet, phone layouts, menu, and homepage actions.
-- [ ] Phase 2: Tool-page appearance; waiting for Phase 1 review.
+- [ ] Phase 2: Apply scoped tool-page typography, tabs, form and output styling; polish Develop It explanations; verify existing workflows without paid generation.
 - [ ] Phase 3: Dashboard appearance; waiting for Phase 2 review.

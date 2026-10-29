@@ -1493,7 +1493,7 @@ const DevelopIt = () => {
       
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-8">
+          <div className="develop-intro text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Develop It</h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               AI-guided tools for community development, neighborhood revitalization, nonprofit work, 
@@ -1501,7 +1501,7 @@ const DevelopIt = () => {
             </p>
           </div>
 
-          <div className="text-left mb-8 space-y-3 max-w-3xl mx-auto">
+          <div className="develop-overview text-left mb-8 space-y-3 max-w-3xl mx-auto">
             <p className="text-muted-foreground">
               <strong className="text-foreground">Program Builder</strong> — Turn your program idea into a structured, 
               funder-ready design. Answer questions about your goals, target population, activities, and timeline, 
@@ -1536,7 +1536,7 @@ const DevelopIt = () => {
             </p>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="develop-workspace w-full">
             <TabsList className="grid w-full grid-cols-5 mb-6">
               <TabsTrigger value="program-builder" className="flex flex-col md:flex-row items-center gap-1 text-xs md:text-sm">
                 <Building2 className="h-4 w-4" />
