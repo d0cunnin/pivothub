@@ -14,3 +14,7 @@
 - [ ] Complete authenticated renewal/change/refund/account/debit tests; requires a chosen non-admin preview account.
 - [ ] Verify deletion against a disposable account and complete stored-file cleanup if present; requires a disposable account with saved files.
 - [ ] Publish the updated website after verified purchases; requires the user's explicit publish request.
+# Visual refresh — appearance only
+- [x] Phase 1: Polish the homepage, tool cards, and section hierarchy; preserved all existing link destinations; verified desktop, tablet, phone layouts, menu, and homepage actions.
+- [ ] Phase 2: Tool-page appearance; waiting for Phase 1 review.
+- [ ] Phase 3: Dashboard appearance; waiting for Phase 2 review.
