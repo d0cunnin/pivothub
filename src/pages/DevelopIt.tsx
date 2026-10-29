@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { ToolGuard } from "@/components/ToolGuard";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -1515,6 +1516,7 @@ const DevelopIt = () => {
           />
 
           <ToolCreditBar cost="1–4 credits per tool" />
+<ToolGuard toolName="developit" showCreditInfo={false}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="develop-workspace w-full">
             <TabSwitchHint text="Click a tab below to switch between the five tools. Your answers in each tool stay put while you switch." />
             <TabsList className="grid w-full grid-cols-5 mb-6">
@@ -1808,6 +1810,7 @@ const DevelopIt = () => {
               </Card>
             </TabsContent>
           </Tabs>
+</ToolGuard>
         </div>
       </main>
 

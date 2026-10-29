@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ToolGuard } from "@/components/ToolGuard";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 import { Rocket, Target } from "lucide-react";
@@ -259,6 +260,7 @@ const LaunchIt = () => {
             {/* Credit Badge */}
 
             {/* Form */}
+<ToolGuard toolName="launchit" showCreditInfo={false}>
             <Card className="p-8 mb-8 bg-card/50 backdrop-blur-sm border-primary/20">
             <div className="space-y-6">
               {/* Idea Category */}
@@ -427,6 +429,7 @@ const LaunchIt = () => {
               </Button>
             </div>
             </Card>
+</ToolGuard>
 
             {/* Generated Strategy */}
             {strategy && (
