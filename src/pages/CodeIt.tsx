@@ -1,3 +1,5 @@
+import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
+import { Bug, Code, GraduationCap } from "lucide-react";
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -173,6 +175,7 @@ print(a + b)`,
           </div>
         </div>
       </section>
+      <ToolIntro about='Learn coding by doing. Ask questions, practice with guided exercises, and get explanations in plain language.' forWho='Beginners and career-changers who want to understand or start coding.' items={[{ icon: Code, name: 'Working code examples', description: 'Code samples explained line by line.' }, { icon: GraduationCap, name: 'Step-by-step lessons', description: 'Guided practice that builds your skills one piece at a time.' }, { icon: Bug, name: 'Help fixing problems', description: 'Plain-language explanations of errors and how to fix them.' }]} />
 
       <main id="code-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="code-it">
