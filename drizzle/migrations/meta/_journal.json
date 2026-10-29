@@ -43,6 +43,13 @@
       "when": 1793294831023,
       "tag": "0005_restrict_course_buckets_admin_only",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793312546847,
+      "tag": "0006_complimentary_admin_credit_awards",
+      "breakpoints": true
     }
   ]
 }
