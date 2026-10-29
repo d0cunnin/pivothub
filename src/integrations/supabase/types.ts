@@ -83,6 +83,50 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_credit_awards: {
+        Row: {
+          admin_user_id: string
+          created_at: string
+          id: string
+          monthly_credits: number
+          months: number
+          note: string
+          plan: string
+          starts_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_user_id: string
+          created_at?: string
+          id: string
+          monthly_credits: number
+          months: number
+          note?: string
+          plan: string
+          starts_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_user_id?: string
+          created_at?: string
+          id?: string
+          monthly_credits?: number
+          months?: number
+          note?: string
+          plan?: string
+          starts_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_credit_awards_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admin_rate_limits: {
         Row: {
           action_count: number
@@ -1540,6 +1584,18 @@ export type Database = {
           user_id: string
         }[]
       }
+      grant_admin_credits: {
+        Args: {
+          p_admin_id: string
+          p_credits: number
+          p_months: number
+          p_note: string
+          p_plan: string
+          p_request_id: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
       has_role:
         | { Args: { _role: string }; Returns: boolean }
         | {
@@ -1564,6 +1620,10 @@ export type Database = {
         Returns: boolean
       }
       mask_email: { Args: { p_email: string }; Returns: string }
+      materialize_admin_credit_awards: {
+        Args: { p_user_id: string }
+        Returns: undefined
+      }
       reconcile_credit_refund: {
         Args: {
           p_environment: string
