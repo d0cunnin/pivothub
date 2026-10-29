@@ -1,4 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { z } from 'npm:zod@3.23.8';
 import { requireAdminMfa } from '../_shared/adminMfaGuard.ts';
@@ -30,8 +30,8 @@ Deno.serve(async req => {
     const admin = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
     const guard = await requireAdminMfa(admin, user.id);
     if (guard.error) return json({ error: guard.error }, 403);
-    const { data: assurance, error: assuranceError } = await client.auth.mfa.getAuthenticatorAssuranceLevel();
-    if (assuranceError || assurance?.currentLevel !== 'aal2') return json({ error: 'Complete MFA verification before granting credits.' }, 403);
+    const { data: verified, error: claimsError } = await client.auth.getClaims(authHeader.slice(7));
+    if (claimsError || verified?.claims.sub !== user.id || verified.claims.aal !== 'aal2') return json({ error: 'Complete MFA verification before granting credits.' }, 403);
     let body: unknown;
     try { body = await req.json(); } catch { return json({ error: 'Invalid request body.' }, 400); }
     const parsed = bodySchema.safeParse(body);
