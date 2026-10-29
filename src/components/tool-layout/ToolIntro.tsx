@@ -16,11 +16,9 @@ const DEFAULT_STEPS = [
   "Review, copy, or download your results and put them to work.",
 ];
 
-/** Presentation only: explains a tool and lists what the user receives. */
-export function ToolIntro({ about, forWho, steps = DEFAULT_STEPS, heading, items }: ToolIntroProps) {
+/** Presentation only: the "About this tool" card with a short how-it-works strip. */
+export function ToolAbout({ about, forWho, steps = DEFAULT_STEPS }: Pick<ToolIntroProps, "about" | "forWho" | "steps">) {
   return (
-    <section className="py-12 bg-background">
-      <div className="container mx-auto px-4 max-w-5xl">
         <div className="mb-10 rounded-lg border border-border bg-card p-6">
           <h2 className="text-2xl font-bold text-foreground mb-3">About this tool</h2>
           <p className="text-muted-foreground leading-relaxed">{about}</p>
@@ -41,6 +39,15 @@ export function ToolIntro({ about, forWho, steps = DEFAULT_STEPS, heading, items
             ))}
           </ol>
         </div>
+  );
+}
+
+/** Presentation only: explains a tool and lists what the user receives. */
+export function ToolIntro({ about, forWho, steps, heading, items }: ToolIntroProps) {
+  return (
+    <section className="py-12 bg-background">
+      <div className="container mx-auto px-4 max-w-5xl">
+        <ToolAbout about={about} forWho={forWho} steps={steps} />
         <WhatYouGet heading={heading} items={items} />
       </div>
     </section>
