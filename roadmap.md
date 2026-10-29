@@ -20,3 +20,4 @@
 - [ ] Verify signed-in tool results after visual changes; blocked because the requester has no matching preview account. No paid generation attempted.
 - [ ] Phase 3: Dashboard appearance; waiting for Phase 2 review.
 - [x] Phase 2b: shared tool banner on Develop It / Contract It, "what you'll get" cards, tab-switch hints on all tabbed tools
+- [x] Phase 3: dashboard appearance (welcome banner, credits, quick links)
