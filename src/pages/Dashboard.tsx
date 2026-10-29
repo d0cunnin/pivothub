@@ -165,22 +165,41 @@ const Dashboard = () => {
       <PlatformOnboarding open={showOnboarding} onOpenChange={setShowOnboarding} />
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-background via-background to-primary/5">
         <Header />
-        <main className="flex-1 pt-24 pb-16">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="mb-8">
-              <h1 className="text-4xl font-bold mb-2">My Dashboard</h1>
-              <p className="text-muted-foreground">
-                Welcome back! Here's an overview of your activity and progress.
-              </p>
+        <section className="bg-gradient-to-r from-primary to-secondary text-primary-foreground">
+          <div className="container mx-auto px-4 max-w-7xl py-12">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+              <div>
+                <p className="text-sm uppercase tracking-wider text-primary-foreground/80 mb-2">My Dashboard</p>
+                <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome back</h1>
+                <p className="text-primary-foreground/90">Here's an overview of your activity and progress.</p>
+              </div>
+              <div className="rounded-xl bg-primary-foreground/15 border border-primary-foreground/25 px-6 py-4 backdrop-blur-sm">
+                <p className="text-xs uppercase tracking-wider text-primary-foreground/80">Tool Credits left</p>
+                <p className="text-3xl font-bold flex items-center gap-2"><Zap className="h-6 w-6" />{remainingRequests}</p>
+              </div>
             </div>
+            <div className="mt-8 flex flex-wrap gap-2">
+              {[
+                ["Assess It", "/assessit"], ["Prep It", "/prepit"], ["Earn It", "/earnit"],
+                ["Launch It", "/launchit"], ["Fund It", "/fundit"], ["Create It", "/createit"],
+              ].map(([label, to]) => (
+                <Link key={to} to={to} className="rounded-full border border-primary-foreground/30 bg-primary-foreground/10 px-4 py-1.5 text-sm hover:bg-primary-foreground/20 transition-colors">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+        <main className="flex-1 pt-10 pb-16">
+          <div className="container mx-auto px-4 max-w-7xl">
 
             {/* Stats Grid */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
               {/* AI Usage Card */}
-              <Card>
+              <Card className="border-t-4 border-t-primary">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">AI Requests</CardTitle>
-                  <Zap className="h-4 w-4 text-muted-foreground" />
+                  <CardTitle className="text-sm font-medium">Tool Credits</CardTitle>
+                  <Zap className="h-4 w-4 text-primary" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{remainingRequests} / {totalAvailable}</div>
