@@ -160,13 +160,6 @@ const StudyIt = () => {
         </section>
         
         <main id="study-content" className="flex-grow container mx-auto px-4 py-12">
-          {/* Credit Badge */}
-          <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-              <Zap className="h-4 w-4" />
-              2 Credits
-            </Badge>
-          </div>
 
           {/* Description Notice */}
           <div className="max-w-4xl mx-auto mb-8">

@@ -282,14 +282,6 @@ const PrepIt = () => {
           </div>
         </div>
         
-        {/* Credit Badge */}
-        <div className="flex justify-center mb-6">
-          <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-            <Zap className="h-4 w-4" />
-            2 Credits
-          </Badge>
-        </div>
-        
         <ToolGuard toolName="resume-analyzer">
             <ResumeCoachLetter />
           </ToolGuard>
