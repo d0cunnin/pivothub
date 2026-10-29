@@ -260,20 +260,13 @@ const PrepIt = () => {
                 </div>
               </div>
             </div>
-            <div className="grid md:grid-cols-3 gap-4 text-center">
+            <div className="grid md:grid-cols-2 gap-4 text-center">
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <TrendingUp className="h-4 w-4 text-white" />
                 </div>
                 <h4 className="font-semibold text-foreground mb-1">Results-Oriented Writing</h4>
                 <p className="text-sm text-muted-foreground">Transform duties into quantifiable achievements with specific metrics and business impact</p>
-              </div>
-              <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
-                <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
-                  <FileText className="h-4 w-4 text-white" />
-                </div>
-                <h4 className="font-semibold text-foreground mb-1">ATS-Friendly Resumes</h4>
-                <p className="text-sm text-muted-foreground">Make your resume easy for hiring software and recruiters to read, with clear formatting and honest keywords that match the job</p>
               </div>
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
