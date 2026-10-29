@@ -1,4 +1,6 @@
 import { Header } from "@/components/Header";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
+import { PartyPopper, ClipboardList, Wallet } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-image.jpg";
@@ -62,17 +64,20 @@ const HostIt = () => {
         </div>
       </section>
 
+      <section className="pt-16 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <WhatYouGet heading="What you'll get" items={[
+            { icon: PartyPopper, name: "Event plan", description: "A full plan for your event — theme, venue ideas, guest flow and run of show." },
+            { icon: ClipboardList, name: "Checklist & timeline", description: "Countdown tasks so you know what to do each week before the big day." },
+            { icon: Wallet, name: "Budget guide", description: "A budget breakdown so you can see where your money goes." },
+          ]} />
+        </div>
+      </section>
+
       {/* Event Wizard */}
       <section id="event-form" className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Credit Badge */}
-            <div className="flex justify-center mb-6">
-              <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-                <Zap className="h-4 w-4" />
-                4 Credits
-              </Badge>
-            </div>
             
             <ToolGuard toolName="host-it">
               <HostItWizard />

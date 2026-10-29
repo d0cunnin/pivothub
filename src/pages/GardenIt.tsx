@@ -1,4 +1,6 @@
 import { Header } from "@/components/Header";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
+import { Sprout, Leaf, ShoppingCart } from "lucide-react";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-image.jpg";
@@ -51,6 +53,16 @@ const GardenIt = () => {
               </Button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="pt-16 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <WhatYouGet heading="What you'll get" items={[
+            { icon: Sprout, name: "Garden plan", description: "A layout of what to plant and where, matched to your space and climate." },
+            { icon: Leaf, name: "Plant cards", description: "Care notes for each plant — watering, sunlight and when to harvest." },
+            { icon: ShoppingCart, name: "Shopping list", description: "Everything you need to buy to get started, in one list." },
+          ]} />
         </div>
       </section>
 

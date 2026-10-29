@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -234,13 +236,12 @@ const SpeakIt = () => {
         </section>
         
         <main id="speak-content" className="flex-grow container mx-auto px-4 py-12">
-          {/* Credit Badge */}
-          <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-              <Zap className="h-4 w-4" />
-              3 Credits
-            </Badge>
-          </div>
+          <ToolCreditBar cost={3} />
+          <WhatYouGet items={[
+            { icon: Mic, name: "Speaker launch plan", description: "How to find your topics, build a speaker kit and land your first stages." },
+            { icon: Podcast, name: "Podcast launch plan", description: "Your show format, first episodes, equipment list and launch steps." },
+            { icon: Download, name: "PDF to keep", description: "Download your full plan as a PDF to work from." },
+          ]} />
 
           {/* Path Toggle */}
           <Card className="mb-8">

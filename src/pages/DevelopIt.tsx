@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -1513,6 +1514,7 @@ const DevelopIt = () => {
             ]}
           />
 
+          <ToolCreditBar cost="1–4 credits per tool" />
           <Tabs value={activeTab} onValueChange={setActiveTab} className="develop-workspace w-full">
             <TabSwitchHint text="Click a tab below to switch between the five tools. Your answers in each tool stay put while you switch." />
             <TabsList className="grid w-full grid-cols-5 mb-6">

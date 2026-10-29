@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -230,12 +231,12 @@ const ActIt = () => {
         </section>
         
         <main id="act-content" className="flex-grow container mx-auto px-4 py-12">
-          {/* Credit Badge */}
-          <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-              <Zap className="h-4 w-4" />
-              3 Credits
-            </Badge>
+          <div className="max-w-4xl mx-auto">
+            <WhatYouGet items={[
+              { icon: Clapperboard, name: "Story concept", description: "A logline and concept brief that captures your idea." },
+              { icon: Theater, name: "Characters & plot", description: "Character profiles and a plot outline you can build a script from." },
+              { icon: Download, name: "PDF to keep", description: "Download your story package as a PDF for pitches or planning." },
+            ]} />
           </div>
 
           {/* Description Notice */}
