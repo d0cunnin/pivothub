@@ -322,7 +322,23 @@ export const ToolGuard: React.FC<ToolGuardProps> = ({
       )}
 
       {/* Wrap the tool component */}
-      <div onClick={(e) => {
+      <div onClickCapture={(e) => {
+        // Signed-out visitors can't use any tool: block every control and ask them to sign in
+        if (user || isAdmin) return;
+        const target = e.target as HTMLElement;
+        if (target.closest('button, input, textarea, select, label, [role="button"], [role="radio"], [role="checkbox"], [role="combobox"], [role="slider"]')) {
+          e.preventDefault();
+          e.stopPropagation();
+          setShowAuthModal(true);
+        }
+      }} onFocusCapture={(e) => {
+        if (user || isAdmin) return;
+        const target = e.target as HTMLElement;
+        if (target.matches('input, textarea, select')) {
+          target.blur();
+          setShowAuthModal(true);
+        }
+      }} onClick={(e) => {
         // Only trigger if click is on an element with data-toolguard-trigger="true"
         const target = e.target as HTMLElement;
         if (!target.closest('[data-toolguard-trigger="true"]')) {
