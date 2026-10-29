@@ -449,7 +449,6 @@ const FundIt = () => {
 
           {/* Grant Generator Form and Results */}
           <section className="mb-16">
-<ToolGuard toolName="fundit" showCreditInfo={false}>
             {/* Credit Badge */}
             <div className="flex justify-center mb-6">
               <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
@@ -1036,7 +1035,6 @@ const FundIt = () => {
               </div>
             </div>
           </section>
-</ToolGuard>
 
           {/* Grant Research Resources Section */}
           <section className="mb-12">
