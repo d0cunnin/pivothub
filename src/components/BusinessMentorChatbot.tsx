@@ -7,6 +7,7 @@ import { Send, Bot, User, Lightbulb } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { useToast } from "@/hooks/use-toast";
+import { ChatMessageText } from "@/components/ChatMessageText";
 
 const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
 
@@ -191,7 +192,7 @@ export const BusinessMentorChatbot = () => {
                 >
                   <div className="flex items-start space-x-3">
                     {message.isBot && <Bot className="h-5 w-5 mt-0.5 flex-shrink-0" />}
-                    <p className="text-sm leading-relaxed">{message.text}</p>
+                    <ChatMessageText text={message.text} isBot={message.isBot} />
                     {!message.isBot && <User className="h-5 w-5 mt-0.5 flex-shrink-0" />}
                   </div>
                 </div>

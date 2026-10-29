@@ -7,7 +7,7 @@ import { Send, GraduationCap, User, AlertCircle, RotateCcw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
-import { sanitizeAIContent } from "@/lib/utils";
+import { ChatMessageText } from "@/components/ChatMessageText";
 
 const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
 
@@ -39,7 +39,7 @@ export const CareerAdvisorChatbot = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and upskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
+      text: "Hi! I'm your AI Career Advisor. Tell me a little about where you are now and where you'd like to go, and I'll help you plan your next steps. What would you like help with today?",
       isBot: true,
       timestamp: new Date(),
     },
@@ -50,7 +50,6 @@ export const CareerAdvisorChatbot = () => {
 
   const getAIResponse = async (userMessage: string): Promise<string> => {
     try {
-      console.log('🚀 Sending request to career advisor:', { message: userMessage });
       
       // Get session for authorization
       const { data: { session } } = await supabase.auth.getSession();
@@ -68,7 +67,6 @@ export const CareerAdvisorChatbot = () => {
         }
       });
 
-      console.log('📦 Response data:', data);
       
       if (error) {
         console.error('❌ Supabase error:', error);
@@ -81,15 +79,6 @@ export const CareerAdvisorChatbot = () => {
 
       // Enhanced response validation
       const rawResponse = data?.response;
-      console.log('🔍 Raw response details:', {
-        exists: rawResponse !== undefined && rawResponse !== null,
-        type: typeof rawResponse,
-        length: rawResponse?.length || 0,
-        trimmedLength: rawResponse?.trim()?.length || 0,
-        value: rawResponse,
-        isEmpty: !rawResponse,
-        isWhitespace: rawResponse && !rawResponse.trim()
-      });
 
       if (!rawResponse || typeof rawResponse !== 'string' || !rawResponse.trim()) {
         console.error('❌ Invalid response content:', {
@@ -101,8 +90,8 @@ export const CareerAdvisorChatbot = () => {
         throw new Error('AI returned empty or invalid response');
       }
 
-      const sanitizedResponse = sanitizeAIContent(rawResponse.trim());
-      console.log('✅ Valid AI response:', { length: sanitizedResponse.length, content: sanitizedResponse });
+      // Replies are rendered as markdown (lists, bold), so keep the formatting.
+      const sanitizedResponse = rawResponse.trim();
       return sanitizedResponse;
     } catch (error) {
       console.error('💥 Error getting AI response:', error);
@@ -128,11 +117,6 @@ export const CareerAdvisorChatbot = () => {
 
     try {
       const aiResponse = await getAIResponse(messageText);
-      console.log('🎯 AI Response received:', { 
-        response: aiResponse, 
-        length: aiResponse?.length,
-        type: typeof aiResponse 
-      });
       
       // Enhanced bot response validation
       const responseText = aiResponse || "I apologize, but I didn't generate a proper response. Could you please try asking again?";
@@ -144,15 +128,9 @@ export const CareerAdvisorChatbot = () => {
         timestamp: new Date(),
       };
       
-      console.log('💬 Adding bot message to state:', botResponse);
       
       setMessages(prev => {
         const newMessages = [...prev, botResponse];
-        console.log('📝 Updated messages array:', {
-          totalMessages: newMessages.length,
-          lastMessage: newMessages[newMessages.length - 1],
-          allMessages: newMessages.map(m => ({ id: m.id, isBot: m.isBot, textLength: m.text.length }))
-        });
         return newMessages;
       });
     } catch (error) {
@@ -183,7 +161,7 @@ export const CareerAdvisorChatbot = () => {
     setMessages([
       {
         id: "1",
-        text: "Hi! I'm your AI Career Advisor. I'm here to help you navigate your career transition and upskilling journey. I can provide personalized guidance on career changes, skills development, job searching, and much more. What career challenge can I help you with today?",
+        text: "Hi! I'm your AI Career Advisor. Tell me a little about where you are now and where you'd like to go, and I'll help you plan your next steps. What would you like help with today?",
         isBot: true,
         timestamp: new Date(),
       },
@@ -229,12 +207,6 @@ export const CareerAdvisorChatbot = () => {
           <div className="space-y-4">
             {messages.map((message) => {
               // Debug logging for each rendered message
-              console.log('🎨 Rendering message:', {
-                id: message.id,
-                isBot: message.isBot,
-                textLength: message.text.length,
-                text: message.text.substring(0, 50) + (message.text.length > 50 ? '...' : '')
-              });
               
               return (
                 <div
@@ -250,15 +222,7 @@ export const CareerAdvisorChatbot = () => {
                   >
                     <div className="flex items-start space-x-3">
                       {message.isBot && <GraduationCap className="h-5 w-5 mt-0.5 flex-shrink-0" />}
-                      <p className="text-sm leading-relaxed">
-                        {message.text || "[Empty message - please report this bug]"}
-                        {/* Temporary debug indicator */}
-                        {message.isBot && (
-                          <span className="ml-2 text-xs opacity-50">
-                            [Bot:{message.text.length}chars]
-                          </span>
-                        )}
-                      </p>
+                      <ChatMessageText text={message.text} isBot={message.isBot} />
                       {!message.isBot && <User className="h-5 w-5 mt-0.5 flex-shrink-0" />}
                     </div>
                   </div>
