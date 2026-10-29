@@ -670,8 +670,8 @@ turtle.done()`}</code>
           {/* User Input Section */}
           {/* Credit Badge */}
           <div className="flex justify-center mb-6">
-            <div className="bg-white/95 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg border border-gray-200">
-              <Badge variant="default" className="gap-2 text-base px-4 py-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
+            <div className="rounded-xl border border-border bg-card px-5 py-3 shadow-sm">
+              <Badge variant="default" className="gap-2 text-sm px-4 py-1.5 rounded-full bg-primary text-primary-foreground hover:bg-primary border-0">
                 <Zap className="h-4 w-4" />
                 <span className="font-semibold">1 credit per use</span>
               </Badge>

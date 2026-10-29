@@ -172,14 +172,6 @@ const DeployIt = () => {
             </AlertDescription>
           </Alert>
           
-          {/* Credit Badge */}
-          <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-              <Zap className="h-4 w-4" />
-              40 Credits
-            </Badge>
-          </div>
-          
           {/* Technical Requirements Notice */}
           <Alert className="mb-8 border-yellow-500/50 bg-yellow-500/10">
             <AlertTriangle className="h-5 w-5 text-yellow-500" />
