@@ -329,8 +329,9 @@ export const ResumeCoachLetter = () => {
               <div>
                 <h3 className="text-lg font-semibold mb-4">📄 Resume & Cover Letter Optimization</h3>
       <p className="text-muted-foreground mb-6">
-        Analyze your resume and cover letter with detailed feedback. Transform job duties into results-oriented achievements that bypass AI filters and improve your interview callback rate. Download your optimization guide as PDF.
+        Analyze your resume and cover letter with detailed feedback. Turn job duties into clear, results-oriented achievements that hiring software and recruiters can easily read. Download your optimization guide as PDF.
       </p>
+      <p className="text-xs text-muted-foreground -mt-4 mb-6">PivotHub gives suggestions only. Every employer and hiring system works differently, so we can't guarantee interviews, job offers, or how any applicant tracking system will read or rank your resume.</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">

@@ -250,7 +250,7 @@ const PrepIt = () => {
             </div>
             <div className="text-left max-w-4xl mx-auto mb-6">
               <p className="text-lg text-foreground leading-relaxed mb-4">
-                Analyze your resume and transform generic job duties into powerful, results-oriented statements that bypass AI filters. Learn to write quantifiable achievements like "Saved company $500,000 by analyzing data and finding errors" or "Wrote 55 documents ensuring compliance with regulatory bodies, avoiding $2M+ in fines."
+                Analyze your resume and transform generic job duties into powerful, results-oriented statements that are clear to both hiring software and recruiters. Learn to write quantifiable achievements like "Saved company $500,000 by analyzing data and finding errors" or "Wrote 55 documents ensuring compliance with regulatory bodies, avoiding $2M+ in fines."
               </p>
               
               <div className="bg-gradient-card/30 p-4 rounded-xl backdrop-blur-sm border border-white/10 mb-6">
@@ -272,8 +272,8 @@ const PrepIt = () => {
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">
                   <FileText className="h-4 w-4 text-white" />
                 </div>
-                <h4 className="font-semibold text-foreground mb-1">ATS Bypass Expertise</h4>
-                <p className="text-sm text-muted-foreground">Optimize for applicant tracking systems with keyword matching and formatting that gets past AI filters</p>
+                <h4 className="font-semibold text-foreground mb-1">ATS-Friendly Resumes</h4>
+                <p className="text-sm text-muted-foreground">Make your resume easy for hiring software and recruiters to read, with clear formatting and honest keywords that match the job</p>
               </div>
               <div className="bg-gradient-card/30 p-4 rounded-lg backdrop-blur-sm border border-white/10">
                 <div className="w-8 h-8 bg-gradient-hero rounded-lg flex items-center justify-center mx-auto mb-2">

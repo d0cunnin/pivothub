@@ -47,6 +47,9 @@ const TermsAndConditions = () => {
                 <p className="text-muted-foreground leading-relaxed">
                   We do not guarantee the accuracy, legality, completeness, or usefulness of any AI-generated content, and we make no warranties, expressed or implied, as to the outcomes or decisions based on such content.
                 </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Career, resume, and interview tools provide suggestions only. We do not guarantee interviews, job offers, employment, income, or how any employer or applicant tracking system will read, score, or rank your resume. You are responsible for reviewing all content for accuracy before using it.
+                </p>
                 <p className="text-muted-foreground leading-relaxed mb-2">
                   By using this website, you acknowledge and agree that:
                 </p>

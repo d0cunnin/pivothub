@@ -243,6 +243,7 @@ export default function ResumeBuilder() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5" /> Resume Builder</CardTitle>
             <CardDescription>Turn your own information into a clean, ATS-friendly resume. We only use what you enter here and never make up employers, dates, numbers or certifications.</CardDescription>
+            <p className="text-xs text-muted-foreground">PivotHub gives suggestions only. Every employer and hiring system works differently, so we can't guarantee interviews, job offers, or how any applicant tracking system will read or rank your resume.</p>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
