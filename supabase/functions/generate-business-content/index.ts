@@ -1214,6 +1214,7 @@ CRITICAL WRITING STANDARDS:
 4. Use active voice and strong verbs
 5. Focus on achievements, impact, and credibility
 6. Be specific with numbers, dates, and measurable accomplishments when provided
+7. TRUTH RULE (most important): use ONLY facts the founder provided. Never invent employers, job titles, dates, years of experience, degrees, certifications, awards, recognition, media mentions, clients, numbers or results. If a section asks for something they did not provide (for example awards or metrics), leave it out and write less rather than make it up.
 7. Avoid clichés and buzzwords (e.g., "passionate", "game-changer", "synergy")
 8. Write in third person for bios
 

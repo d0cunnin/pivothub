@@ -301,7 +301,7 @@ const PrepIt = () => {
               </h2>
             </div>
             <p className="text-lg text-foreground leading-relaxed mb-4">
-              Generate a complete, ATS-friendly resume from scratch with quantified, results-oriented bullets tailored to your target role.
+              Turn your own work history, skills and education into a clean, ATS-friendly resume tailored to your target role. Nothing is made up.
             </p>
           </div>
           <ToolGuard toolName="resume-builder">

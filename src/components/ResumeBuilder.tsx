@@ -15,6 +15,7 @@ import jsPDF from 'jspdf';
 interface ExperienceItem {
   title: string;
   company: string;
+  location?: string;
   dates: string;
   bullets: string[];
 }
@@ -22,22 +23,31 @@ interface EducationItem {
   credential: string;
   institution: string;
   year: string;
+  details?: string;
 }
 interface ResumePayload {
   headline: string;
   summary: string;
   coreSkills: string[];
   experience: ExperienceItem[];
+  volunteer?: ExperienceItem[];
   education: EducationItem[];
   certifications: string[];
   keywords: string[];
+  suggestions?: string[];
 }
 interface ContactPayload {
   fullName: string;
   email: string | null;
   phone: string | null;
   location: string | null;
+  linkedin?: string | null;
 }
+
+const roleHeading = (r: ExperienceItem) =>
+  `${r.title} — ${r.company}${r.location ? `, ${r.location}` : ''}`;
+const educationLine = (e: EducationItem) =>
+  `${e.credential} — ${e.institution}${e.details ? ` | ${e.details}` : ''}${e.year ? ` (${e.year})` : ''}`;
 
 export default function ResumeBuilder() {
   const [loading, setLoading] = useState(false);
@@ -56,6 +66,8 @@ export default function ResumeBuilder() {
     workHistory: '',
     education: '',
     certifications: '',
+    linkedin: '',
+    volunteer: '',
     tone: 'professional' as 'professional' | 'modern' | 'executive',
   });
 
@@ -95,7 +107,7 @@ export default function ResumeBuilder() {
     if (!resume || !contact) return '';
     const lines: string[] = [];
     lines.push(contact.fullName.toUpperCase());
-    const contactBits = [contact.email, contact.phone, contact.location].filter(Boolean);
+    const contactBits = [contact.email, contact.phone, contact.location, contact.linkedin].filter(Boolean);
     if (contactBits.length) lines.push(contactBits.join(' | '));
     lines.push('');
     if (resume.headline) { lines.push(resume.headline); lines.push(''); }
@@ -105,13 +117,21 @@ export default function ResumeBuilder() {
     lines.push(resume.coreSkills.join(' • ')); lines.push('');
     lines.push('EXPERIENCE');
     resume.experience.forEach(e => {
-      lines.push(`${e.title} — ${e.company} (${e.dates})`);
+      lines.push(`${roleHeading(e)} (${e.dates})`);
       e.bullets.forEach(b => lines.push(`  • ${b}`));
       lines.push('');
     });
+    if (resume.volunteer?.length) {
+      lines.push('VOLUNTEER EXPERIENCE');
+      resume.volunteer.forEach(e => {
+        lines.push(`${roleHeading(e)} (${e.dates})`);
+        e.bullets.forEach(b => lines.push(`  • ${b}`));
+        lines.push('');
+      });
+    }
     if (resume.education?.length) {
       lines.push('EDUCATION');
-      resume.education.forEach(e => lines.push(`${e.credential} — ${e.institution} (${e.year})`));
+      resume.education.forEach(e => lines.push(educationLine(e)));
       lines.push('');
     }
     if (resume.certifications?.length) {
@@ -142,7 +162,7 @@ export default function ResumeBuilder() {
     doc.setFont('helvetica', 'bold'); doc.setFontSize(20);
     doc.text(contact.fullName, margin, y); y += 8;
     doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
-    const cb = [contact.email, contact.phone, contact.location].filter(Boolean).join(' | ');
+    const cb = [contact.email, contact.phone, contact.location, contact.linkedin].filter(Boolean).join(' | ');
     if (cb) { doc.text(cb, margin, y); y += 6; }
     if (resume.headline) { doc.setFont('helvetica', 'italic'); doc.text(resume.headline, margin, y); y += 8; }
 
@@ -169,14 +189,17 @@ export default function ResumeBuilder() {
       doc.text(lines, margin, y); y += lines.length * 5 + 2;
     });
 
-    section('EXPERIENCE', () => {
-      resume.experience.forEach(exp => {
+    const roles = (items: ExperienceItem[]) => {
+      items.forEach(exp => {
         ensureSpace(10);
+        doc.setFont('helvetica', 'normal');
+        const datesWidth = doc.getTextWidth(exp.dates) + 4;
         doc.setFont('helvetica', 'bold');
-        doc.text(`${exp.title} — ${exp.company}`, margin, y);
+        const heading = doc.splitTextToSize(roleHeading(exp), maxW - datesWidth);
+        doc.text(heading, margin, y);
         doc.setFont('helvetica', 'normal');
         doc.text(exp.dates, pageW - margin, y, { align: 'right' });
-        y += 5;
+        y += heading.length * 5;
         exp.bullets.forEach(b => {
           const lines = doc.splitTextToSize(`• ${b}`, maxW - 4);
           ensureSpace(lines.length * 5);
@@ -184,13 +207,18 @@ export default function ResumeBuilder() {
         });
         y += 3;
       });
-    });
+    };
+
+    section('EXPERIENCE', () => roles(resume.experience));
+    if (resume.volunteer?.length) section('VOLUNTEER EXPERIENCE', () => roles(resume.volunteer!));
 
     if (resume.education?.length) {
       section('EDUCATION', () => {
         resume.education.forEach(ed => {
           ensureSpace(6);
-          doc.text(`${ed.credential} — ${ed.institution} (${ed.year})`, margin, y); y += 5;
+          const lines = doc.splitTextToSize(educationLine(ed), maxW);
+          ensureSpace(lines.length * 5);
+          doc.text(lines, margin, y); y += lines.length * 5;
         });
       });
     }
@@ -214,7 +242,7 @@ export default function ResumeBuilder() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2"><Sparkles className="h-5 w-5" /> Resume Builder</CardTitle>
-            <CardDescription>Generate an ATS-friendly resume with quantified, results-oriented bullets.</CardDescription>
+            <CardDescription>Turn your own information into a clean, ATS-friendly resume. We only use what you enter here and never make up employers, dates, numbers or certifications.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
@@ -237,6 +265,10 @@ export default function ResumeBuilder() {
               <div>
                 <Label>Location</Label>
                 <Input value={form.location} onChange={e => update('location', e.target.value)} placeholder="Austin, TX" />
+              </div>
+              <div>
+                <Label>LinkedIn or Website (optional)</Label>
+                <Input value={form.linkedin} onChange={e => update('linkedin', e.target.value)} placeholder="linkedin.com/in/janedoe" />
               </div>
               <div>
                 <Label>Years of Experience</Label>
@@ -264,7 +296,12 @@ export default function ResumeBuilder() {
             </div>
             <div>
               <Label>Work History *</Label>
-              <Textarea rows={6} value={form.workHistory} onChange={e => update('workHistory', e.target.value)} placeholder="List jobs with title, company, dates, and 1-2 sentence description of responsibilities and impact. Example:&#10;Sr PM at Acme (2020-Present): Led mobile app redesign...&#10;PM at Beta (2017-2020): Owned billing product..." />
+              <Textarea rows={6} value={form.workHistory} onChange={e => update('workHistory', e.target.value)} placeholder="For each job: title, employer, city, dates, and what you did. Include real numbers if you have them. Example:&#10;Tutor, Private tutoring, Ann Arbor MI (2023-Present): Tutored 6 students a week in chemistry...&#10;Cashier, Kroger, Ann Arbor MI (2020-2021): Handled checkout and customer questions..." />
+              <p className="text-xs text-muted-foreground mt-1">Anything you leave out (like dates) shows as a blank such as [Dates] for you to fill in.</p>
+            </div>
+            <div>
+              <Label>Volunteer Experience (optional)</Label>
+              <Textarea rows={3} value={form.volunteer} onChange={e => update('volunteer', e.target.value)} placeholder="Toy Drive Volunteer, Ann Arbor Cares, Ann Arbor MI (2024): Sorted and packed donated toys..." />
             </div>
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -297,6 +334,18 @@ export default function ResumeBuilder() {
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
+            {(buildPlainText().includes('[') || (resume.suggestions?.length ?? 0) > 0) && (
+              <section className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100">
+                <h3 className="font-semibold mb-2">Before you send this resume</h3>
+                <ul className="list-disc pl-5 text-sm space-y-1">
+                  {buildPlainText().includes('[') && (
+                    <li>Replace every blank in [brackets] (like [Dates] or [Company Name]) with your real details, or delete it.</li>
+                  )}
+                  {resume.suggestions?.map((t, i) => <li key={i}>{t}</li>)}
+                  <li>Read every line and make sure it is true for you.</li>
+                </ul>
+              </section>
+            )}
             <section>
               <h3 className="font-semibold mb-2">Professional Summary</h3>
               <p className="text-sm leading-relaxed">{resume.summary}</p>
@@ -312,8 +361,8 @@ export default function ResumeBuilder() {
               <div className="space-y-4">
                 {resume.experience.map((exp, i) => (
                   <div key={i}>
-                    <div className="flex justify-between text-sm font-medium">
-                      <span>{exp.title} — {exp.company}</span>
+                    <div className="flex flex-wrap justify-between gap-x-4 text-sm font-medium">
+                      <span>{roleHeading(exp)}</span>
                       <span className="text-muted-foreground">{exp.dates}</span>
                     </div>
                     <ul className="list-disc pl-5 text-sm mt-1 space-y-1">
@@ -323,11 +372,29 @@ export default function ResumeBuilder() {
                 ))}
               </div>
             </section>
+            {(resume.volunteer?.length ?? 0) > 0 && (
+              <section>
+                <h3 className="font-semibold mb-2">Volunteer Experience</h3>
+                <div className="space-y-4">
+                  {resume.volunteer!.map((exp, i) => (
+                    <div key={i}>
+                      <div className="flex flex-wrap justify-between gap-x-4 text-sm font-medium">
+                        <span>{roleHeading(exp)}</span>
+                        <span className="text-muted-foreground">{exp.dates}</span>
+                      </div>
+                      <ul className="list-disc pl-5 text-sm mt-1 space-y-1">
+                        {exp.bullets.map((b, j) => <li key={j}>{b}</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
             {resume.education?.length > 0 && (
               <section>
                 <h3 className="font-semibold mb-2">Education</h3>
                 <ul className="text-sm space-y-1">
-                  {resume.education.map((e, i) => <li key={i}>{e.credential} — {e.institution} ({e.year})</li>)}
+                  {resume.education.map((e, i) => <li key={i}>{educationLine(e)}</li>)}
                 </ul>
               </section>
             )}
