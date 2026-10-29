@@ -211,7 +211,7 @@ const Dashboard = () => {
               </Card>
 
               {/* Subscription Card */}
-              <Card>
+              <Card className="border-t-4 border-t-secondary">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Plan</CardTitle>
                   <CreditCard className="h-4 w-4 text-muted-foreground" />
@@ -229,7 +229,7 @@ const Dashboard = () => {
               </Card>
 
               {/* Tools Used Card */}
-              <Card>
+              <Card className="border-t-4 border-t-accent">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Tools Used</CardTitle>
                   <Activity className="h-4 w-4 text-muted-foreground" />
