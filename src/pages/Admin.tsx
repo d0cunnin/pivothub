@@ -66,8 +66,7 @@ const Admin = () => {
         .select("id, display_name");
 
       const { data: secureData, error: secureError } = await supabase
-        .from("subscribers_secure")
-        .select("user_id, email");
+        .rpc("get_subscriber_secure_data");
 
       const { data: subscribers, error: subscribersError } = await supabase
         .from("subscribers_public")
@@ -84,7 +83,7 @@ const Admin = () => {
 
         return {
           id: profile.id,
-          email: secure?.email || "",
+          email: secure?.email_masked || "",
           display_name: profile.display_name,
           subscribed: subscription?.subscribed || false,
           subscription_tier: subscription?.subscription_tier,
@@ -441,7 +440,7 @@ const Admin = () => {
           <div className="space-y-4">
             <div>
               <Label htmlFor="tier">Monthly Tool Credits</Label>
-              <Select value={tier} onValueChange={setTier}>
+              <Select value={tier} onValueChange={value => { setTier(value); setGrantRequestId(crypto.randomUUID()); }}>
                 <SelectTrigger id="tier">
                   <SelectValue />
                 </SelectTrigger>
@@ -461,7 +460,7 @@ const Admin = () => {
 
             <div>
               <Label htmlFor="duration">Duration</Label>
-              <Select value={duration} onValueChange={setDuration}>
+              <Select value={duration} onValueChange={value => { setDuration(value); setGrantRequestId(crypto.randomUUID()); }}>
                 <SelectTrigger id="duration">
                   <SelectValue />
                 </SelectTrigger>
@@ -482,7 +481,8 @@ const Admin = () => {
                 id="notes"
                 placeholder="e.g., Beta tester, Partner access, etc."
                 value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                onChange={(e) => { setNotes(e.target.value); setGrantRequestId(crypto.randomUUID()); }}
+                maxLength={2000}
               />
             </div>
           </div>
