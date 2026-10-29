@@ -301,12 +301,6 @@ const PrepIt = () => {
               Generate a complete, ATS-friendly resume from scratch with quantified, results-oriented bullets tailored to your target role.
             </p>
           </div>
-          <div className="flex justify-center mb-6">
-            <Badge variant="secondary" className="text-lg px-6 py-2 flex items-center gap-2">
-              <Sparkles className="h-4 w-4" />
-              5 Credits
-            </Badge>
-          </div>
           <ToolGuard toolName="resume-builder">
             <ResumeBuilder />
           </ToolGuard>
