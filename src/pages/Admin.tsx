@@ -29,6 +29,8 @@ import { SignupAuditViewer } from "@/components/admin/SignupAuditViewer";
 import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
 import { AIUsageMonitor } from "@/components/admin/AIUsageMonitor";
 import { AIUsageAlerts } from "@/components/admin/AIUsageAlerts";
+import { useAuth } from "@/contexts/AuthContext";
+import { monthlyAdminCredits } from "../../supabase/functions/_shared/adminCreditPolicy";
 
 interface UserWithSubscription {
   id: string;
@@ -43,11 +45,14 @@ interface UserWithSubscription {
 const Admin = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { refreshSubscription } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserWithSubscription | null>(null);
   const [grantModalOpen, setGrantModalOpen] = useState(false);
-  const [tier, setTier] = useState("Pro");
-  const [duration, setDuration] = useState("1-month");
+  const [tier, setTier] = useState("starter");
+  const [duration, setDuration] = useState("1");
+  const [customCredits, setCustomCredits] = useState("40");
+  const [grantRequestId, setGrantRequestId] = useState(() => crypto.randomUUID());
   const [notes, setNotes] = useState("");
   const [userDetailModalOpen, setUserDetailModalOpen] = useState(false);
   const [selectedUserDetail, setSelectedUserDetail] = useState<{ id: string; email: string } | null>(null);
@@ -94,22 +99,34 @@ const Admin = () => {
 
   // Grant access mutation
   const grantAccessMutation = useMutation({
-    mutationFn: async (params: { userId: string; tier: string; duration: string; notes: string }) => {
+    mutationFn: async (params: { userId: string; plan: string; months: number; note: string; requestId: string; customCredits?: number }) => {
       // Get session for authorization
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        throw new Error("Please sign in to manage subscriptions");
+        throw new Error("Please sign in to grant Tool Credits");
       }
 
-      // Payments not yet enabled in this rebuild — stub admin grant
-      throw new Error("Subscription management is disabled until payments are reconnected.");
+      monthlyAdminCredits(params.plan, params.customCredits);
+      const { data, error } = await supabase.functions.invoke("admin-grant-credits", { body: params });
+      if (error) {
+        let message = error.message;
+        if (error.context instanceof Response) {
+          const details = await error.context.json().catch(() => null);
+          message = details?.error || message;
+        }
+        throw new Error(message);
+      }
+      if (data?.error) throw new Error(data.error);
+      return data as { credits: number; months: number; balance: { remaining: number } };
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
-        title: "Access Granted",
-        description: "Subscription has been successfully granted to the user.",
+        title: "Complimentary Tool Credits Granted",
+        description: `${data.credits} Tool Credits per month for ${data.months} month(s). New available balance: ${data.balance.remaining} Tool Credits.`,
       });
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      queryClient.invalidateQueries();
+      void refreshSubscription();
       setGrantModalOpen(false);
       setSelectedUser(null);
       setNotes("");
@@ -127,14 +144,21 @@ const Admin = () => {
     if (!selectedUser) return;
     grantAccessMutation.mutate({
       userId: selectedUser.id,
-      tier,
-      duration,
-      notes,
+      plan: tier,
+      months: Number(duration),
+      note: notes,
+      requestId: grantRequestId,
+      customCredits: tier === "custom" ? Number(customCredits) : undefined,
     });
   };
 
   const openGrantModal = (user: UserWithSubscription) => {
     setSelectedUser(user);
+    setGrantRequestId(crypto.randomUUID());
+    setTier("starter");
+    setDuration("1");
+    setCustomCredits("40");
+    setNotes("");
     setGrantModalOpen(true);
   };
 
@@ -408,26 +432,32 @@ const Admin = () => {
       <Dialog open={grantModalOpen} onOpenChange={setGrantModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Grant Subscription Access</DialogTitle>
+            <DialogTitle>Grant Complimentary Tool Credits</DialogTitle>
             <DialogDescription>
-              Manually grant subscription access to {selectedUser?.email}
+              Grant credits to {selectedUser?.display_name || selectedUser?.email || selectedUser?.id}. No paid subscription or charge is created.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <div>
-              <Label htmlFor="tier">Subscription Tier</Label>
+              <Label htmlFor="tier">Monthly Tool Credits</Label>
               <Select value={tier} onValueChange={setTier}>
                 <SelectTrigger id="tier">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Pro">Pro</SelectItem>
-                  <SelectItem value="Premium">Premium</SelectItem>
-                  <SelectItem value="Enterprise">Enterprise</SelectItem>
+                  <SelectItem value="starter">Starter — 40/month</SelectItem>
+                  <SelectItem value="pro">Pro — 100/month</SelectItem>
+                  <SelectItem value="all-access">All-Access — 250/month</SelectItem>
+                  <SelectItem value="custom">Custom credits</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+
+            {tier === "custom" && <div>
+              <Label htmlFor="custom-credits">Credits per month</Label>
+              <Input id="custom-credits" type="number" min={1} max={100000} step={1} value={customCredits} onChange={event => { setCustomCredits(event.target.value); setGrantRequestId(crypto.randomUUID()); }} />
+            </div>}
 
             <div>
               <Label htmlFor="duration">Duration</Label>
@@ -436,14 +466,15 @@ const Admin = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1-month">1 Month</SelectItem>
-                  <SelectItem value="3-months">3 Months</SelectItem>
-                  <SelectItem value="6-months">6 Months</SelectItem>
-                  <SelectItem value="1-year">1 Year</SelectItem>
-                  <SelectItem value="lifetime">Lifetime</SelectItem>
+                  <SelectItem value="1">1 Month</SelectItem>
+                  <SelectItem value="3">3 Months</SelectItem>
+                  <SelectItem value="6">6 Months</SelectItem>
+                  <SelectItem value="12">12 Months</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+
+            <p className="text-sm text-muted-foreground">The first month's credits are available now. Later credits start each monthly anniversary. Each month's credits expire three months after issuance; billing stays unchanged.</p>
 
             <div>
               <Label htmlFor="notes">Notes (Optional)</Label>
