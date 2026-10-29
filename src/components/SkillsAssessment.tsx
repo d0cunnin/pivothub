@@ -10,6 +10,7 @@ import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { AssessmentAnalysisStatus } from "@/components/AssessmentAnalysisStatus";
 import { sanitizeAIContent } from "@/lib/utils";
 import { toast } from "sonner";
 import { generateSkillsAssessmentPDF } from '@/lib/pdf-reports/skillsAssessment';
@@ -585,6 +586,8 @@ export const SkillsAssessment = () => {
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   const totalQuestions = skillCategories.reduce((sum, category) => sum + category.questions.length, 0);
   const answeredQuestions = Object.keys(answers).length;
@@ -609,10 +612,23 @@ export const SkillsAssessment = () => {
       setCurrentCategoryIndex(prev => prev + 1);
       setCurrentQuestionIndex(0);
     } else {
-      // Calculate results when assessment is complete
-      const finalResults = await calculateResults();
+      await finishAssessment(updatedAnswers);
+    }
+  };
+
+  // Results are shown only after the analysis succeeds (that is when credits
+  // are charged). On failure the answers are kept so the user can retry.
+  const finishAssessment = async (finalAnswers: Record<string, string>) => {
+    setAnalysisError(null);
+    setIsAnalyzing(true);
+    try {
+      const finalResults = await calculateResults(finalAnswers);
       setResults(finalResults);
       setShowEmailPrompt(true);
+    } catch (error) {
+      setAnalysisError(error instanceof Error ? error.message : 'Something went wrong. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -635,78 +651,44 @@ export const SkillsAssessment = () => {
     setShowResultsModal(false);
     setShowEmailPrompt(false);
     setSelectedAnswer("");
+    setAnalysisError(null);
     setIsOpen(false);
   };
 
-  const calculateResults = async (): Promise<SkillResults> => {
-    try {
-      // Get auth token for the request
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Please sign in to use this tool");
-      }
-
-      const response = await invokeFunction('enhanced-assessment-analyzer', {
-        body: {
-          assessmentType: 'skills',
-          responses: answers,
-          userProfile: {}
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      });
-
-      if (response.data && !response.error) {
-        // Store AI assessment for detailed insights
-        setAiAssessment(response.data);
-        setShowResultsModal(true);
-        
-        // Transform AI response to match existing interface
-        const results: SkillResults = {};
-        
-        skillCategories.forEach(category => {
-          let correctAnswers = 0;
-          category.questions.forEach(question => {
-            const userAnswer = answers[question.id];
-            if (userAnswer === question.correctAnswer) {
-              correctAnswers++;
-            }
-          });
-          
-          let level: "Strong" | "Moderate" | "Needs improvement";
-          if (correctAnswers >= 8) {
-            level = "Strong";
-          } else if (correctAnswers >= 5) {
-            level = "Moderate";
-          } else {
-            level = "Needs improvement";
-          }
-          
-          results[category.id] = {
-            score: correctAnswers,
-            level
-          };
-        });
-        
-        return results;
-      }
-    } catch (error) {
-      console.error('Error getting AI skills assessment:', error);
+  const calculateResults = async (finalAnswers: Record<string, string>): Promise<SkillResults> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw new Error("Please sign in to see your results.");
     }
 
-    // Fallback to original calculation
+    const response = await invokeFunction('enhanced-assessment-analyzer', {
+      body: {
+        assessmentType: 'skills',
+        responses: finalAnswers,
+        userProfile: {}
+      },
+      headers: {
+        Authorization: `Bearer ${session.access_token}`
+      }
+    });
+    if (response.error || !response.data) {
+      throw new Error(response.error?.message || 'We could not analyze your answers. Please try again.');
+    }
+
+    // Store AI assessment for detailed insights
+    setAiAssessment(response.data);
+    setShowResultsModal(true);
+
+    // Per-category scores from the user's own answers, shown with the AI insights.
     const results: SkillResults = {};
-    
     skillCategories.forEach(category => {
       let correctAnswers = 0;
       category.questions.forEach(question => {
-        const userAnswer = answers[question.id];
-        if (userAnswer === question.correctAnswer) {
+        if (finalAnswers[question.id] === question.correctAnswer) {
           correctAnswers++;
         }
       });
-      
+
       let level: "Strong" | "Moderate" | "Needs improvement";
       if (correctAnswers >= 8) {
         level = "Strong";
@@ -715,13 +697,13 @@ export const SkillsAssessment = () => {
       } else {
         level = "Needs improvement";
       }
-      
+
       results[category.id] = {
         score: correctAnswers,
         level
       };
     });
-    
+
     return results;
   };
 
@@ -760,7 +742,13 @@ export const SkillsAssessment = () => {
           </DialogTitle>
         </DialogHeader>
 
-        {showEmailPrompt ? (
+        {isAnalyzing || analysisError ? (
+          <AssessmentAnalysisStatus
+            analyzing={isAnalyzing}
+            error={analysisError}
+            onRetry={() => finishAssessment(answers)}
+          />
+        ) : showEmailPrompt ? (
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>

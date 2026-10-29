@@ -62,7 +62,7 @@ Format your response as JSON with these keys:
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (err?.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       console.error('[code-it] Generation failed:', err?.message);
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

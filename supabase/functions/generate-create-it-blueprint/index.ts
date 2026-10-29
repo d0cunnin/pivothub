@@ -236,7 +236,7 @@ serve(withCreditRequest(async (req) => {
     }
 
     if (creditsExhausted && Object.keys(merged).length === 0) {
-      throw new Error('AI credits exhausted. Please add credits in Settings.');
+      throw new Error('Our AI service is temporarily unavailable. Please try again later. You were not charged.');
     }
 
     const blueprint = validateBlueprint(merged);

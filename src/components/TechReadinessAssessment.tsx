@@ -10,6 +10,7 @@ import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { AssessmentAnalysisStatus } from "@/components/AssessmentAnalysisStatus";
 import { toast } from "@/hooks/use-toast";
 import { generateTechReadinessPDF } from "@/lib/pdf-reports/techReadiness";
 
@@ -149,13 +150,16 @@ export const TechReadinessAssessment = () => {
   const [results, setResults] = useState<TechAssessmentResults | null>(null);
   const [localScores, setLocalScores] = useState<LocalScores | null>(null);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
+  const [submittedAnswers, setSubmittedAnswers] = useState<number[] | null>(null);
   const [assessmentStartTime, setAssessmentStartTime] = useState<string>("");
   const [sessionId] = useState<string>(() => `tech-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
   const [questionDifficulty, setQuestionDifficulty] = useState<'easy' | 'medium' | 'hard'>('medium');
 
   // Timer effect
   useEffect(() => {
-    if (isOpen && !showResults && !showEmailPrompt && timeRemaining > 0) {
+    // The timer stops once the answers are submitted.
+    if (isOpen && !showResults && !showEmailPrompt && !submittedAnswers && timeRemaining > 0) {
       const timer = setInterval(() => {
         setTimeRemaining(prev => {
           if (prev <= 1) {
@@ -167,7 +171,7 @@ export const TechReadinessAssessment = () => {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [isOpen, showResults, showEmailPrompt, timeRemaining]);
+  }, [isOpen, showResults, showEmailPrompt, submittedAnswers, timeRemaining]);
 
   // Warning at 5 minutes
   useEffect(() => {
@@ -301,12 +305,13 @@ export const TechReadinessAssessment = () => {
   const handleSubmit = async (finalAnswers: number[]) => {
     const timeElapsed = 6000 - timeRemaining;
 
-    // Calculate local scores immediately
+    // Scores are computed now but only shown with the full report, which is
+    // when credits are charged. On failure the answers are kept for a retry.
     const scores = calculateLocalScores(finalAnswers);
     setLocalScores(scores);
-    setShowEmailPrompt(true);
+    setSubmittedAnswers(finalAnswers);
+    setAnalysisError(null);
 
-    // Generate detailed report with GPT-5
     setIsGeneratingReport(true);
     try {
       // Get session for authorization
@@ -356,6 +361,7 @@ export const TechReadinessAssessment = () => {
 
       setResults(data.analysis);
       setIsGeneratingReport(false);
+      setShowEmailPrompt(true);
       
       toast({
         title: "Report Generated! ✅",
@@ -364,12 +370,7 @@ export const TechReadinessAssessment = () => {
     } catch (error: any) {
       console.error('Error generating tech readiness report:', error);
       setIsGeneratingReport(false);
-      
-      toast({
-        title: "Report Generation Error",
-        description: error.message || "We encountered an issue generating your personalized report. You can still view your scores.",
-        variant: "destructive",
-      });
+      setAnalysisError(error?.message || 'We could not create your report. Please try again.');
     }
   };
 
@@ -397,6 +398,8 @@ export const TechReadinessAssessment = () => {
     setResults(null);
     setLocalScores(null);
     setIsGeneratingReport(false);
+    setAnalysisError(null);
+    setSubmittedAnswers(null);
     setQuestionDifficulty('medium');
   };
 
@@ -427,7 +430,13 @@ export const TechReadinessAssessment = () => {
           </DialogTitle>
         </DialogHeader>
 
-        {showEmailPrompt ? (
+        {isGeneratingReport || analysisError ? (
+          <AssessmentAnalysisStatus
+            analyzing={isGeneratingReport}
+            error={analysisError}
+            onRetry={() => submittedAnswers && handleSubmit(submittedAnswers)}
+          />
+        ) : showEmailPrompt ? (
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>

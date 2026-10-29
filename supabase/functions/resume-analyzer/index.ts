@@ -515,14 +515,13 @@ QUALITY STANDARDS:
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (err?.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       console.error('[resume-analyzer] Generation failed:', err?.message);
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     let analysis;
-    let aiResultParsed = false;
     try {
       // Sanitize and parse JSON
       const sanitizedContent = aiResponseText
@@ -534,33 +533,13 @@ QUALITY STANDARDS:
         .trim();
       
       analysis = JSON.parse(sanitizedContent);
-      aiResultParsed = true;
     } catch (parseError) {
-      // Fallback analysis if JSON parsing fails
-      analysis = {
-        overallScore: 70,
-        atsScore: 65,
-        keywordMatching: 50,
-        readabilityScore: 75,
-        professionalFormatting: 70,
-        categories: [
-          {
-            name: "Overall Analysis",
-            score: 70,
-            issues: [
-              {
-                category: "content",
-                severity: "high",
-                description: "Resume needs optimization for ATS and hiring managers",
-                suggestion: "Focus on adding quantified achievements, relevant keywords, and strong action verbs throughout your resume.",
-                location: "Multiple sections",
-                example: "Use metrics: 'Increased sales by 30%' instead of 'Improved sales'"
-              }
-            ]
-          }
-        ],
-        summary: "Your resume shows potential but needs optimization for ATS systems and hiring managers. Focus on adding specific metrics, relevant keywords, and stronger action verbs to improve your chances of landing interviews."
-      };
+      // No canned fallback: the user can retry and is not charged.
+      console.error('[resume-analyzer] Could not parse AI response');
+      return new Response(
+        JSON.stringify({ error: 'We could not finish analyzing your resume. Please try again. You were not charged.' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     await logRequest(guardResult.supabase, {
@@ -569,14 +548,11 @@ QUALITY STANDARDS:
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: aiResultParsed ? 2 : 0,
+      creditsCharged: 2,
       requestDurationMs: Date.now() - startTime
     });
 
-    // Charge only when the AI produced a real (parsed) result, not the fallback.
-    if (aiResultParsed) {
-      await deductCreditsOnSuccess(guardResult.supabase, userId!, 'resume-analyzer', 2);
-    }
+    await deductCreditsOnSuccess(guardResult.supabase, userId!, 'resume-analyzer', 2);
     
     return new Response(
       JSON.stringify({ analysis }),

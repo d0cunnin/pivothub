@@ -10,6 +10,7 @@ import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { AssessmentAnalysisStatus } from "@/components/AssessmentAnalysisStatus";
 import { sanitizeAIContent } from "@/lib/utils";
 import { toast } from "sonner";
 import { generatePersonalityAssessmentPDF } from '@/lib/pdf-reports/personalityAssessment';
@@ -160,6 +161,8 @@ export const PersonalityAssessment = () => {
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [results, setResults] = useState<any>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   const handleAnswer = (value: string) => {
     const score = parseInt(value);
@@ -172,8 +175,22 @@ export const PersonalityAssessment = () => {
     if (currentQuestion < personalityQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      await calculateResults();
+      await finishAssessment(answers);
+    }
+  };
+
+  // Results are shown only after the analysis succeeds (that is when credits
+  // are charged). On failure the answers are kept so the user can retry.
+  const finishAssessment = async (finalAnswers: number[]) => {
+    setAnalysisError(null);
+    setIsAnalyzing(true);
+    try {
+      await calculateResults(finalAnswers);
       setShowEmailPrompt(true);
+    } catch (error) {
+      setAnalysisError(error instanceof Error ? error.message : 'Something went wrong. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -183,77 +200,71 @@ export const PersonalityAssessment = () => {
     }
   };
 
-  const calculateResults = async () => {
-    try {
-      // Get auth token for the request
-      const { data: { session } } = await supabase.auth.getSession();
-      const authToken = session?.access_token;
-
-      const response = await invokeFunction('enhanced-assessment-analyzer', {
-        body: {
-          assessmentType: 'personality',
-          responses: answers,
-          userProfile: {}
-        },
-        headers: authToken ? { Authorization: `Bearer ${authToken}` } : {}
-      });
-
-      if (response.data && !response.error) {
-        // Sanitize AI content in results
-        const sanitizedResults = {
-          ...response.data,
-          interpretation: response.data.interpretation ? sanitizeAIContent(response.data.interpretation) : response.data.interpretation,
-          actionPlan: response.data.actionPlan ? sanitizeAIContent(response.data.actionPlan) : response.data.actionPlan,
-          traitScores: response.data.traitScores?.map((trait: any) => ({
-            ...trait,
-            interpretation: trait.interpretation ? sanitizeAIContent(trait.interpretation) : trait.interpretation
-          })),
-          topStrengths: response.data.topStrengths?.map((strength: any) => ({
-            ...strength,
-            interpretation: strength.interpretation ? sanitizeAIContent(strength.interpretation) : strength.interpretation
-          }))
-        };
-        setResults(sanitizedResults);
-        return sanitizedResults;
-      }
-    } catch (error) {
-      console.error('Error getting AI personality assessment:', error);
-    }
-
-    // Fallback to original calculation
+  // Trait scores from the user's own answers; the AI analysis adds to these.
+  const scoreTraits = (finalAnswers: number[]) => {
     const traitScores = Array(10).fill(0);
-    
-    for (let i = 0; i < answers.length; i++) {
+    for (let i = 0; i < finalAnswers.length; i++) {
       const traitIndex = Math.floor(i / 10);
       const questionNumber = i + 1;
-      
-      let score = answers[i];
+      let score = finalAnswers[i];
       if (reverseScoreQuestions.includes(questionNumber)) {
         score = 6 - score; // Reverse score
       }
-      
       traitScores[traitIndex] += score;
     }
-
-    const averageScores = traitScores.map(score => score / 10);
-    
-    const interpretedResults = averageScores.map((score, index) => ({
-      trait: traitNames[index],
-      score: score,
-      level: score >= 4.0 ? "Strong" : score >= 3.0 ? "Moderate" : "Developing",
-      interpretation: getInterpretation(index, score)
-    }));
-
-    const calculatedResults = {
+    const interpretedResults = traitScores.map((total, index) => {
+      const score = total / 10;
+      return {
+        trait: traitNames[index],
+        score,
+        level: score >= 4.0 ? "Strong" : score >= 3.0 ? "Moderate" : "Developing",
+        interpretation: getInterpretation(index, score)
+      };
+    });
+    return {
       traitScores: interpretedResults,
       topStrengths: interpretedResults
         .filter(r => r.level === "Strong")
         .sort((a, b) => b.score - a.score)
         .slice(0, 3)
     };
-    setResults(calculatedResults);
-    return calculatedResults;
-    setShowResultsModal(true);
+  };
+
+  // Cleans AI text; the AI sometimes returns objects or lists instead of text.
+  const cleanAi = (value: any): any => {
+    if (typeof value === 'string') return sanitizeAIContent(value);
+    if (Array.isArray(value)) return value.map(cleanAi);
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, cleanAi(v)]));
+    }
+    return value;
+  };
+
+  const calculateResults = async (finalAnswers: number[]) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw new Error("Please sign in to see your results.");
+    }
+
+    const response = await invokeFunction('enhanced-assessment-analyzer', {
+      body: {
+        assessmentType: 'personality',
+        responses: finalAnswers,
+        userProfile: {}
+      },
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    });
+    if (response.error || !response.data) {
+      throw new Error(response.error?.message || 'We could not analyze your answers. Please try again.');
+    }
+
+    const local = scoreTraits(finalAnswers);
+    const ai = cleanAi(response.data);
+    // Trait scores always come from the answers (the results screen expects
+    // numeric 1-5 scores); everything else is the AI's analysis.
+    const combined = { ...ai, ...local };
+    setResults(combined);
+    return combined;
   };
 
   const getInterpretation = (traitIndex: number, score: number) => {
@@ -320,6 +331,7 @@ export const PersonalityAssessment = () => {
     setShowResultsModal(false);
     setShowEmailPrompt(false);
     setResults(null);
+    setAnalysisError(null);
   };
 
   const downloadPersonalityAssessmentPDF = () => {
@@ -345,7 +357,13 @@ export const PersonalityAssessment = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        {showEmailPrompt ? (
+        {isAnalyzing || analysisError ? (
+          <AssessmentAnalysisStatus
+            analyzing={isAnalyzing}
+            error={analysisError}
+            onRetry={() => finishAssessment(answers)}
+          />
+        ) : showEmailPrompt ? (
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>

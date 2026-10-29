@@ -1027,7 +1027,7 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       }
       if (err?.status === 402) {
         return new Response(JSON.stringify({
-          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.'
+          error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.'
         }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       console.error('[generate-teaching-content] Generation failed:', err?.message);

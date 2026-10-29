@@ -21,6 +21,7 @@ import {
   Copy,
   FileDown
 } from 'lucide-react';
+import { invokeFunction } from '@/lib/invokeFunction';
 import { generateResumeGuidePDF, generateCoverLetterPDF, generateResumePDF } from '@/lib/pdf-reports/resume-coach';
 
 interface ResumeAnalysis {
@@ -56,6 +57,52 @@ interface CoverLetterData {
   whyCompany: string;
   relevantSkills: string;
   yearsExperience: string;
+}
+
+type IssueCategory = ResumeAnalysis['issues'][number]['category'];
+const toIssueCategory = (raw: unknown): IssueCategory => {
+  const c = String(raw || '').split('|')[0].toLowerCase();
+  if (c === 'metrics' || c === 'language' || c === 'formatting') return c;
+  if (c === 'ats') return 'formatting';
+  return 'content';
+};
+
+/** Maps the resume-analyzer response onto the coach's results view. */
+function toResumeAnalysis(a: any): ResumeAnalysis {
+  const list = (v: any): any[] => (Array.isArray(v) ? v : []);
+  const issues = list(a?.categories).flatMap((c: any) =>
+    list(c?.issues).map((i: any) => ({
+      category: toIssueCategory(i?.category),
+      severity: (['high', 'medium', 'low'].includes(i?.severity) ? i.severity : 'medium') as 'high' | 'medium' | 'low',
+      description: String(i?.description || ''),
+      suggestion: [i?.suggestion, i?.example].filter(Boolean).join(' '),
+      location: String(i?.location || c?.name || ''),
+    }))
+  );
+  const improvedBulletPoints = [
+    ...list(a?.quantificationAnalysis?.weakBullets).map((b: any) => ({
+      original: String(b?.original || ''),
+      improved: String(b?.improved || ''),
+      explanation: String(b?.metricsToAdd || ''),
+    })),
+    ...list(a?.achievementAmplification).map((b: any) => ({
+      original: String(b?.original || ''),
+      improved: String(b?.improved || ''),
+      explanation: String(b?.technique || ''),
+    })),
+  ].filter((b) => b.improved);
+  const improvements = list(a?.improvements);
+  const summaryFix = improvements.find((i: any) => /summary/i.test(i?.section || '')) ?? improvements[0];
+  return {
+    overallScore: Number(a?.overallScore) || 0,
+    issues,
+    improvedBulletPoints,
+    improvedSummary: {
+      original: String(summaryFix?.original || ''),
+      improved: String(summaryFix?.improved || ''),
+      explanation: String(summaryFix?.explanation || a?.summary || ''),
+    },
+  };
 }
 
 export const ResumeCoachLetter = () => {
@@ -104,76 +151,30 @@ export const ResumeCoachLetter = () => {
       return;
     }
 
+    if (resumeText.trim().length < 50) {
+      toast.error('Please paste your full resume (at least a few lines) so we can analyze it.');
+      return;
+    }
+
     setLoading(true);
     try {
-      // Simulate AI analysis - in real implementation, this would call your AI service
-      const mockAnalysis: ResumeAnalysis = {
-        overallScore: 72,
-        issues: [
-          {
-            category: 'language',
-            severity: 'high',
-            description: 'Passive language detected',
-            suggestion: 'Use strong action verbs like "Led," "Achieved," "Implemented"',
-            location: 'Professional Experience section'
-          },
-          {
-            category: 'metrics',
-            severity: 'high',
-            description: 'Missing quantifiable results',
-            suggestion: 'Add specific numbers, percentages, or metrics to show impact',
-            location: 'Multiple bullet points'
-          },
-          {
-            category: 'content',
-            severity: 'medium',
-            description: 'Generic job duties listed',
-            suggestion: 'Focus on achievements and outcomes rather than daily tasks',
-            location: 'Current role description'
-          },
-          {
-            category: 'formatting',
-            severity: 'low',
-            description: 'Inconsistent tense usage',
-            suggestion: 'Use past tense for previous roles, present tense for current role',
-            location: 'Throughout document'
-          }
-        ],
-        improvedBulletPoints: [
-          {
-            original: 'Responsible for managing social media accounts',
-            improved: 'Managed 5 social media accounts, increasing engagement by 45% and follower growth by 2,300 over 6 months',
-            explanation: 'Added specific metrics and quantified the impact of the work'
-          },
-          {
-            original: 'Worked with team to complete projects',
-            improved: 'Collaborated with cross-functional team of 8 members to deliver 12 projects on time, resulting in 15% increase in client satisfaction',
-            explanation: 'Specified team size, project count, and measurable outcome'
-          },
-          {
-            original: 'Helped customers with their problems',
-            improved: 'Resolved 95% of customer inquiries within 24 hours, maintaining 4.8/5 customer satisfaction rating across 500+ interactions',
-            explanation: 'Quantified resolution rate, timeframe, and customer satisfaction metrics'
-          }
-        ],
-        improvedSummary: {
-          original: 'Experienced professional with good communication skills and ability to work in teams.',
-          improved: 'Results-driven Marketing Professional with 5+ years of experience driving 40% revenue growth through data-driven digital campaigns. Proven track record of leading cross-functional teams and delivering projects that exceed client expectations by 25%. Expert in social media strategy, content marketing, and performance analytics.',
-          explanation: 'Added specific years of experience, quantified achievements, and relevant technical skills'
-        }
-      };
-
-      setAnalysis(mockAnalysis);
+      const { data, error } = await invokeFunction<{ analysis: any }>('resume-analyzer', {
+        body: { resumeText: resumeText.trim() }
+      });
+      if (error || !data?.analysis) {
+        throw new Error(error?.message || 'We could not analyze your resume. Please try again.');
+      }
+      setAnalysis(toResumeAnalysis(data.analysis));
       setActiveTab('analysis');
       toast.success('Resume analysis completed');
     } catch (error) {
-      toast.error('Failed to analyze resume. Please try again.');
+      const message = error instanceof Error ? error.message : 'Failed to analyze resume. Please try again.';
+      toast.error(/not charged/i.test(message) ? message : `${message} You were not charged.`);
     } finally {
       setLoading(false);
     }
   };
 
-  // Generate cover letter
   const generateCoverLetter = async () => {
     if (!coverLetterData.jobTitle || !coverLetterData.companyName) {
       toast.error('Please provide job title and company name');

@@ -301,7 +301,7 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (err?.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       console.error('[business-mentor] Generation failed:', err?.message);
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -354,14 +354,11 @@ Context: You're chatting with an entrepreneur who needs guidance on their busine
       requestDurationMs: Date.now() - startTime
     });
     
-    // Provide helpful fallback response
-    const fallbackResponse = "I apologize, but I'm having trouble connecting right now. Here's some general advice: Start by clearly defining your target customer and their biggest pain point. Focus on solving one problem really well before expanding. Would you like to share more about your specific business challenge so I can provide more targeted guidance when the connection is restored?";
-    
-    return new Response(JSON.stringify({ 
-      response: fallbackResponse,
-      error: 'Temporary service issue'
+    // No canned advice: the user sees an error and can resend (not charged).
+    return new Response(JSON.stringify({
+      error: "Sorry, I couldn't respond just now. Please try again. You were not charged."
     }), {
-      status: 200, // Return 200 to provide fallback response
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }

@@ -83,7 +83,7 @@ serve(withCreditRequest(async (req) => {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (err?.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       console.error('[enhanced-assessment-analyzer] Generation failed:', err?.message);
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -91,7 +91,6 @@ serve(withCreditRequest(async (req) => {
     console.log('AI Response received:', content.substring(0, 200) + '...');
     
     let analysis;
-    let aiAnalysisParsed = false;
     try {
       // Sanitize and parse JSON
       const sanitizedContent = content
@@ -103,10 +102,14 @@ serve(withCreditRequest(async (req) => {
         .trim();
       
       analysis = JSON.parse(sanitizedContent);
-      aiAnalysisParsed = true;
     } catch (parseError) {
+      // No free fallback: results are only delivered (and charged) when the
+      // AI analysis is complete. The user can retry with the same answers.
       console.error('Failed to parse AI response as JSON:', parseError);
-      analysis = createFallbackAnalysis(assessmentType, responses);
+      return new Response(
+        JSON.stringify({ error: 'We could not finish analyzing your answers. Please try again. You were not charged.' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     // Save results to database if user is authenticated
@@ -134,14 +137,11 @@ serve(withCreditRequest(async (req) => {
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: aiAnalysisParsed ? 2 : 0,
+      creditsCharged: 2,
       requestDurationMs: Date.now() - startTime
     });
 
-    // Charge only when the AI produced a real (parsed) analysis, not the fallback.
-    if (aiAnalysisParsed) {
-      await deductCreditsOnSuccess(guardResult.supabase, userId!, 'enhanced-assessment-analyzer', 2);
-    }
+    await deductCreditsOnSuccess(guardResult.supabase, userId!, 'enhanced-assessment-analyzer', 2);
     
     return new Response(JSON.stringify(analysis), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -354,82 +354,5 @@ Analyze personality assessment responses and provide comprehensive personality i
 
     default:
       return basePrompt;
-  }
-}
-
-function createFallbackAnalysis(assessmentType: string, responses: any): any {
-  const fallbackBase = {
-    overallScore: 7,
-    actionPlan: {
-      immediate: ["Review your assessment results", "Identify key areas for improvement"],
-      shortTerm: ["Set specific learning goals", "Seek feedback from mentors"],
-      longTerm: ["Develop a comprehensive career plan", "Track your progress regularly"]
-    }
-  };
-
-  switch (assessmentType) {
-    case 'career':
-      return {
-        ...fallbackBase,
-        primaryInterests: ["Technology", "Communication", "Problem Solving"],
-        topCareerPaths: [{
-          title: "Professional Development Specialist",
-          match: 8,
-          description: "Based on your responses, this field aligns with your interests",
-          requirements: ["Bachelor's degree", "Communication skills"],
-          growthOutlook: "Growing field with good opportunities"
-        }],
-        skillsNeeded: ["Leadership", "Communication", "Technical skills"],
-        personalityAlignment: "Your responses suggest you work well in collaborative environments",
-        nextSteps: "Focus on identifying your strongest interests and researching related career paths",
-        resources: ["Career exploration websites", "Professional networking groups", "Informational interviews"]
-      };
-
-    case 'skills':
-      return {
-        ...fallbackBase,
-        skillCategories: [{
-          category: "General Skills",
-          score: 7,
-          level: "Intermediate",
-          strengths: ["Basic competency demonstrated"],
-          improvements: ["Continue practicing and learning"]
-        }],
-        topSkills: ["Communication", "Problem solving", "Adaptability"],
-        skillGaps: ["Advanced technical skills", "Leadership experience"],
-        learningPath: [{
-          step: "Focus on your strongest skills first",
-          timeframe: "1-3 months",
-          resources: ["Online courses", "Practice exercises"]
-        }],
-        careerImpact: "Developing these skills will enhance your career prospects",
-        certifications: ["Industry-relevant certifications"],
-        practiceOpportunities: ["Volunteer work", "Side projects"]
-      };
-
-    case 'personality':
-      return {
-        ...fallbackBase,
-        personalityType: "Balanced Professional",
-        keyTraits: [{
-          trait: "Adaptability",
-          score: 4,
-          description: "Shows flexibility in various situations",
-          careerRelevance: "Important for most career paths"
-        }],
-        strengths: ["Balanced approach", "Willingness to learn", "Professional attitude"],
-        workStyle: "Works well in structured environments with clear expectations",
-        careerFit: [{
-          field: "Professional Services",
-          match: 8,
-          reasoning: "Matches your demonstrated traits and preferences"
-        }],
-        developmentAreas: ["Leadership skills", "Specialized expertise"],
-        workEnvironmentTips: ["Seek clear expectations", "Build professional relationships"],
-        relationshipStyle: "Collaborative and professional"
-      };
-
-    default:
-      return fallbackBase;
   }
 }

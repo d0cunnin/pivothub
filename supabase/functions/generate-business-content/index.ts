@@ -1368,7 +1368,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
         const error = err?.status === 429
           ? 'Rate limit exceeded. Please wait 1-2 minutes and try again.'
           : err?.status === 402
-            ? 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.'
+            ? 'Our AI service is temporarily unavailable. Please try again later. You were not charged.'
             : 'AI service is temporarily unavailable. Please try again in a moment.';
         return new Response(JSON.stringify({ error }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
@@ -1409,7 +1409,7 @@ Keep each section concise and actionable. Use plain text without markdown.`
       }
       if (err?.status === 402) {
         return new Response(JSON.stringify({
-          error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.'
+          error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.'
         }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       console.error('[generate-business-content] Generation failed:', err?.message);

@@ -96,7 +96,7 @@ serve(withCreditRequest(async (req) => {
     
     if (!geocodeResponse.ok) {
       console.error('Geocoding API request failed:', geocodeResponse.status);
-      return fallbackResponse();
+      return unavailableResponse();
     }
 
     const geocodeData = await geocodeResponse.json();
@@ -104,7 +104,7 @@ serve(withCreditRequest(async (req) => {
 
     if (geocodeData.status !== 'OK' || !geocodeData.results || geocodeData.results.length === 0) {
       console.error('Geocoding failed or no results:', geocodeData.status, geocodeData.error_message);
-      return fallbackResponse();
+      return unavailableResponse();
     }
 
     const { lat, lng } = geocodeData.results[0].geometry.location;
@@ -196,7 +196,7 @@ serve(withCreditRequest(async (req) => {
 
     if (allPlaces.length === 0) {
       console.log('No places found from Google Places API, using fallback');
-      return fallbackResponse();
+      return unavailableResponse();
     }
 
     // Phase 2: Add AI-powered strategic guidance with Gemini 3.8 Flash
@@ -297,18 +297,14 @@ ${JSON.stringify(allPlaces.slice(0, 10).map(p => ({
       );
 
     } catch (aiError) {
-      console.error('AI enhancement failed, falling back to unenhanced Google Places results:', aiError);
-      // Graceful degradation: return Google Places data without AI enhancement
-      const resources = formatGooglePlacesResults(allPlaces, location);
-      return new Response(
-        JSON.stringify({ resources }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-      );
+      // Results are only delivered (and charged) with the AI guidance.
+      console.error('AI enhancement failed:', aiError);
+      return unavailableResponse();
     }
 
   } catch (error) {
     console.error('Error finding business resources:', error);
-    return fallbackResponse();
+    return unavailableResponse();
   }
 }));
 
@@ -483,54 +479,10 @@ function formatEnhancedResults(
   };
 }
 
-function fallbackResponse() {
-  const resources = {
-    categories: [
-      {
-        category: "Business Support Centers",
-        description: "Local SBDC and SCORE offices",
-        resources: [
-          {
-            id: "1",
-            name: "Small Business Development Center (SBDC)",
-            description: "Free business consulting and low-cost training for small businesses. SBDCs are located in every state.",
-            type: "organization",
-            url: "https://www.sba.gov/local-assistance/find/",
-            cost: "Free",
-            rating: 4.8,
-            pros: ["Free consulting", "Expert advisors", "Workshops and training"],
-            cons: ["Appointment required", "Limited availability"],
-            bestFor: "All small businesses and startups",
-            location: "Nationwide",
-            contactInfo: "Find your local SBDC office"
-          },
-          {
-            id: "2",
-            name: "SCORE Business Mentoring",
-            description: "Free mentoring from experienced business professionals. SCORE has chapters nationwide.",
-            type: "organization",
-            url: "https://www.score.org",
-            cost: "Free",
-            rating: 4.7,
-            pros: ["Experienced mentors", "Free service", "Local chapters"],
-            cons: ["Volunteer availability varies"],
-            bestFor: "Entrepreneurs seeking mentorship",
-            location: "Nationwide",
-            contactInfo: "(800) 634-0245"
-          }
-        ]
-      }
-    ],
-    totalResources: 2,
-    recommendedFirst: ["1", "2"],
-    summary: "Connect with your local SBDC or SCORE chapter for personalized business support. Visit sba.gov/local-assistance to find resources in your area."
-  };
-
+/** Shown when resources could not be found; nothing is charged. */
+function unavailableResponse() {
   return new Response(
-    JSON.stringify({ resources }),
-    {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200
-    }
+    JSON.stringify({ error: 'We could not find resources right now. Please try again in a moment. You were not charged.' }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
   );
 }

@@ -9,6 +9,7 @@ import { CheckCircle, Target, TrendingUp, Users, Heart, Wrench, Calculator, Shie
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { AssessmentAnalysisStatus } from "@/components/AssessmentAnalysisStatus";
 import { sanitizeAIContent } from "@/lib/utils";
 import { toast } from "sonner";
 import { generateCareerReportPDF } from "@/lib/careerReportPdf";
@@ -263,6 +264,8 @@ export const CareerAssessment = () => {
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [showEmailPrompt, setShowEmailPrompt] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState<any>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   const totalQuestions = careerAreas.length * 10;
   const currentQuestionNumber = currentArea * 10 + currentStatement + 1;
@@ -289,10 +292,23 @@ export const CareerAssessment = () => {
       setCurrentArea(prev => prev + 1);
       setCurrentStatement(0);
     } else {
-      // Calculate results when assessment is complete
-      const calculatedResults = await calculateResults(updatedResponses);
+      await finishAssessment(updatedResponses);
+    }
+  };
+
+  // Results are shown only after the analysis succeeds (that is when credits
+  // are charged). On failure the answers are kept so the user can retry.
+  const finishAssessment = async (finalResponses: Record<string, number[]>) => {
+    setAnalysisError(null);
+    setIsAnalyzing(true);
+    try {
+      const calculatedResults = await calculateResults(finalResponses);
       setResults(calculatedResults);
       setShowEmailPrompt(true);
+    } catch (error) {
+      setAnalysisError(error instanceof Error ? error.message : 'Something went wrong. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -307,43 +323,20 @@ export const CareerAssessment = () => {
   };
 
   const calculateResults = async (responses: Record<string, number[]>): Promise<AssessmentResults> => {
-    try {
-      // Get session for authorization
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Please sign in to use this tool");
-      }
-
-      // Call the AI assessment API
-      const { data, error } = await invokeFunction('career-assessment', {
-        body: {
-          responses: responses
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      });
-
-      if (error) {
-        console.error('Career assessment error:', error);
-        // Show toast notification to user
-        import('@/hooks/use-toast').then(({ toast }) => {
-          toast({
-            title: "Assessment Analysis Incomplete",
-            description: "We encountered an issue analyzing your results. You'll receive basic recommendations instead of the full AI analysis.",
-            variant: "destructive",
-          });
-        });
-        throw error;
-      }
-      if ((data as any)?.error) throw new Error((data as any).error);
-
-      if (data?.analysis && Array.isArray(data.analysis.recommendations)) {
-        setAiAnalysis(data.analysis);
-      }
-    } catch (error) {
-      console.error('Error getting AI career assessment:', error);
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      throw new Error("Please sign in to see your results.");
     }
+
+    const { data, error } = await invokeFunction('career-assessment', {
+      body: { responses },
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    });
+    if (error) throw new Error(error.message);
+    if (!data?.analysis || !Array.isArray(data.analysis.recommendations)) {
+      throw new Error('We could not analyze your answers. Please try again.');
+    }
+    setAiAnalysis(data.analysis);
 
     // Interest-area scores come from the user's own answers so they line up
     // with careerAreas; the AI analysis (careers, salaries, next steps) goes
@@ -377,6 +370,7 @@ export const CareerAssessment = () => {
     setShowResults(false);
     setShowEmailPrompt(false);
     setAiAnalysis(null);
+    setAnalysisError(null);
     setIsOpen(false);
   };
 
@@ -422,7 +416,13 @@ export const CareerAssessment = () => {
           </DialogTitle>
         </DialogHeader>
 
-        {showEmailPrompt ? (
+        {isAnalyzing || analysisError ? (
+          <AssessmentAnalysisStatus
+            analyzing={isAnalyzing}
+            error={analysisError}
+            onRetry={() => finishAssessment(responses)}
+          />
+        ) : showEmailPrompt ? (
           <div className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>

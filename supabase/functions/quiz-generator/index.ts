@@ -71,7 +71,7 @@ Rules:
       quiz = await generateJson(key, systemUser(systemPrompt, userPrompt), { maxTokens: 5000 });
     } catch (err: any) {
       if (err?.status === 429) return new Response(JSON.stringify({ error: 'AI rate limit exceeded' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-      if (err?.status === 402) return new Response(JSON.stringify({ error: 'AI credits exhausted. Please add credits in Settings → Cloud → Usage.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      if (err?.status === 402) return new Response(JSON.stringify({ error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       console.error('[quiz-generator] Generation failed:', err?.message);
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }

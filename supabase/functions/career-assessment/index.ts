@@ -480,17 +480,15 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       if (err?.status === 402) {
-        return new Response(JSON.stringify({ error: 'AI credits exhausted. Add credits in Settings.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
       console.error('[career-assessment] Generation failed:', err?.message);
       return new Response(JSON.stringify({ error: 'AI service is temporarily unavailable. Please try again in a moment.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     let analysis;
-    let aiAnalysisParsed = false;
     try {
       analysis = JSON.parse(aiResponseText);
-      aiAnalysisParsed = true;
       
       // Log success
       await logRequest(supabase, {
@@ -503,65 +501,16 @@ Refuse requests related to: Falsifying credentials, illegal activities, or uneth
         requestDurationMs: Date.now() - startTime
       });
     } catch (parseError) {
-      console.error('Failed to parse AI response, generating fallback analysis from actual responses');
-      
-      // Calculate which areas had highest scores from responses
-      const areaScores = Object.entries(responses).map(([area, scores]) => ({
-        area,
-        totalScore: Array.isArray(scores) 
-          ? scores.reduce((sum: number, val: any) => sum + Number(val), 0)
-          : 0,
-        avgScore: Array.isArray(scores)
-          ? scores.reduce((sum: number, val: any) => sum + Number(val), 0) / scores.length
-          : 0
-      })).sort((a, b) => b.totalScore - a.totalScore);
-
-      const topAreas = areaScores.slice(0, 5);
-
-      // Map area IDs to career titles
-      const areaToCareer: Record<string, string> = {
-        'healthcare': 'Healthcare Professional',
-        'trades': 'Skilled Trades Specialist',
-        'stem': 'STEM Professional',
-        'social-services': 'Social Services Worker',
-        'finance': 'Financial Analyst',
-        'law-safety': 'Public Safety Officer',
-        'customer-service': 'Customer Success Manager',
-        'education': 'Education Professional',
-        'entrepreneurship': 'Entrepreneur / Business Owner',
-        'nonprofit': 'Nonprofit Program Manager',
-        'real-estate': 'Real Estate Professional',
-        'marketing-sales': 'Marketing / Sales Professional',
-        'human-resources': 'HR Specialist'
-      };
-
-      analysis = {
-        recommendations: topAreas.map(area => ({
-          title: areaToCareer[area.area] || area.area,
-          fitScore: Math.round((area.avgScore / 5) * 100),
-          description: `Based on your assessment responses, you showed strong interest in ${area.area}`,
-          whyGoodFit: `Your responses indicate ${area.avgScore >= 4 ? 'strong' : 'moderate'} alignment with this field`,
-          requiredSkills: ['To be determined - full AI analysis unavailable'],
-          skillsTheyHave: ['Assessment data available'],
-          skillGaps: ['Further research needed'],
-          education: 'Varies by specific role',
-          salaryRange: '$45k-$85k (varies widely)',
-          marketOutlook: 'Contact a career counselor for detailed outlook',
-          transitionTime: '3-12 months depending on background',
-          challenges: ['Further research needed'],
-          nextSteps: ['Research specific roles in this field', 'Speak with a career advisor']
-        })),
-        summary: `Based on your responses, you showed the strongest interest in: ${topAreas.map(a => a.area).join(', ')}. Note: This is a basic analysis - full AI assessment was unavailable.`,
-        keyStrengths: ['Assessment data available - AI analysis needed for detailed insights'],
-        developmentAreas: ['Speak with career counselor for personalized analysis'],
-        generalAdvice: 'We recommend scheduling a career counseling session to dive deeper into these results.'
-      };
+      // No free fallback: results are only delivered (and charged) when the
+      // AI analysis is complete. The user can retry with the same answers.
+      console.error('[career-assessment] Could not parse AI response');
+      return new Response(
+        JSON.stringify({ error: 'We could not finish analyzing your answers. Please try again. You were not charged.' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    // Charge only when the AI produced a real (parsed) analysis, not the fallback.
-    if (aiAnalysisParsed) {
-      await deductCreditsOnSuccess(guardResult.supabase, userId!, 'career-assessment', 2);
-    }
+    await deductCreditsOnSuccess(guardResult.supabase, userId!, 'career-assessment', 2);
 
     return new Response(
       JSON.stringify({ analysis }),

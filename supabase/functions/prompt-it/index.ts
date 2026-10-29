@@ -84,7 +84,7 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
       }
       if (err?.status === 402) {
         return new Response(JSON.stringify({
-          error: 'AI credits exhausted. Please add credits in Settings.'
+          error: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.'
         }), {
           status: 200,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
