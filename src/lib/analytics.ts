@@ -11,7 +11,7 @@
  */
 
 /** GA4 Measurement ID ("G-XXXXXXXXXX"), from GA Admin > Data streams > Web. */
-export const GA_MEASUREMENT_ID: string = (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined) ?? '';
+export const GA_MEASUREMENT_ID: string = (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined) || 'G-SWJ68P86C8';
 
 const FIRST_TOUCH_KEY = 'ph_attr_first';
 const LAST_TOUCH_KEY = 'ph_attr_last';
