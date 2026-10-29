@@ -28,6 +28,7 @@ import { CostAnalytics } from "@/components/admin/CostAnalytics";
 import { SignupAuditViewer } from "@/components/admin/SignupAuditViewer";
 import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
 import { AIUsageMonitor } from "@/components/admin/AIUsageMonitor";
+import { AdminTwoStepGate } from "@/components/admin/AdminTwoStepGate";
 import { AIUsageAlerts } from "@/components/admin/AIUsageAlerts";
 import { useAuth } from "@/contexts/AuthContext";
 import { monthlyAdminCredits } from "../../supabase/functions/_shared/adminCreditPolicy";
@@ -49,6 +50,7 @@ const Admin = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserWithSubscription | null>(null);
   const [grantModalOpen, setGrantModalOpen] = useState(false);
+  const [mfaVerified, setMfaVerified] = useState(false);
   const [tier, setTier] = useState("starter");
   const [duration, setDuration] = useState("1");
   const [customCredits, setCustomCredits] = useState("40");
@@ -438,6 +440,7 @@ const Admin = () => {
           </DialogHeader>
 
           <div className="space-y-4">
+            <AdminTwoStepGate onVerifiedChange={setMfaVerified} />
             <div>
               <Label htmlFor="tier">Monthly Tool Credits</Label>
               <Select value={tier} onValueChange={value => { setTier(value); setGrantRequestId(crypto.randomUUID()); }}>
@@ -491,7 +494,7 @@ const Admin = () => {
             <Button variant="outline" onClick={() => setGrantModalOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleGrantAccess} disabled={grantAccessMutation.isPending}>
+            <Button onClick={handleGrantAccess} disabled={grantAccessMutation.isPending || !mfaVerified}>
               {grantAccessMutation.isPending ? "Granting..." : "Grant Access"}
             </Button>
           </DialogFooter>

@@ -105,7 +105,7 @@ export const UserDetailModal = ({ userId, userEmail, isOpen, onClose }: UserDeta
             <div className="space-y-2">
             <div className="flex gap-2">
                 <Badge variant={subscription?.subscribed ? "default" : "secondary"}>
-                  {subscription?.subscribed ? "Active" : "Inactive"}
+                  {subscription?.subscribed ? "Active paid plan" : "Free plan"}
                 </Badge>
               </div>
               {subscription?.subscription_tier && (
