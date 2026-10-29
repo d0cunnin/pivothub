@@ -353,7 +353,7 @@ export default function ClientOnboarding() {
                         Next Step
                       </Button>
                     ) : (
-                      <Button onClick={handleSubmit} className="bg-gradient-hero">
+                      <Button onClick={handleSubmit} className="bg-primary">
                         <Briefcase className="h-4 w-4 mr-2" />
                         Post Project
                       </Button>

@@ -518,7 +518,7 @@ export const EnhancedResumeCoach = () => {
                     />
                     <Button 
                       onClick={() => fileInputRef.current?.click()}
-                      className="bg-gradient-primary"
+                      className="bg-primary"
                     >
                       Choose File
                     </Button>
@@ -675,7 +675,7 @@ export const EnhancedResumeCoach = () => {
                   </div>
 
                   <div className="flex justify-center">
-                    <Button onClick={() => setActiveTab('improvements')} className="bg-gradient-primary">
+                    <Button onClick={() => setActiveTab('improvements')} className="bg-primary">
                       View AI Improvements
                       <Wand2 className="h-4 w-4 ml-2" />
                     </Button>
@@ -760,7 +760,7 @@ export const EnhancedResumeCoach = () => {
                         {improvements.length} improvements identified
                       </p>
                     </div>
-                    <Button onClick={applyAllImprovements} className="bg-gradient-primary">
+                    <Button onClick={applyAllImprovements} className="bg-primary">
                       Apply All Improvements
                       <CheckCircle className="h-4 w-4 ml-2" />
                     </Button>

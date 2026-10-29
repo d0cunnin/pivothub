@@ -423,7 +423,7 @@ export default function FreelancerOnboarding() {
                         Next Step
                       </Button>
                     ) : (
-                      <Button onClick={handleSubmit} className="bg-gradient-hero">
+                      <Button onClick={handleSubmit} className="bg-primary">
                         Create Profile
                       </Button>
                     )}
