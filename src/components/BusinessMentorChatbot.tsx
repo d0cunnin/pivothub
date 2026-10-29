@@ -8,6 +8,24 @@ import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { useToast } from "@/hooks/use-toast";
 
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
+
 interface Message {
   id: string;
   text: string;
@@ -74,27 +92,7 @@ export const BusinessMentorChatbot = () => {
     } catch (error) {
       console.error('Error getting AI response:', error);
       
-      // Check for inappropriate content error
-      if (error instanceof Error && error.message.includes('inappropriate content')) {
-        throw error;
-      }
-      
-      // Enhanced fallback responses based on message content
-      const lowercaseMessage = message.toLowerCase();
-      
-      if (lowercaseMessage.includes("idea") || lowercaseMessage.includes("start")) {
-        return "Great question! Start by identifying a problem you're passionate about solving. Look at your skills, experiences, and what frustrates you daily. The best businesses solve real problems for real people. What specific area or industry interests you most?";
-      }
-      
-      if (lowercaseMessage.includes("funding") || lowercaseMessage.includes("money") || lowercaseMessage.includes("capital")) {
-        return "There are several funding options: bootstrapping (using your own money), angel investors, venture capital, crowdfunding, and small business loans. Start with your own savings and revenue when possible to maintain control. What stage is your business at currently?";
-      }
-      
-      if (lowercaseMessage.includes("marketing") || lowercaseMessage.includes("customer")) {
-        return "Focus on understanding your target audience first. Use social media, content marketing, networking, and word-of-mouth. Start with one channel and master it before expanding. Who is your ideal customer, and where do they spend their time?";
-      }
-      
-      return "That's an interesting point! In my experience, successful entrepreneurs focus on solving real problems for real people. I'd love to help you think through this - can you tell me more about your specific situation or challenge?";
+      throw error;
     }
   };
 
@@ -137,9 +135,15 @@ export const BusinessMentorChatbot = () => {
         return;
       }
       
+      toast({
+        title: "Couldn't get a response",
+        description: describeFailure(error),
+        variant: "destructive",
+      });
+
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I apologize, but I'm having trouble right now. Please try rephrasing your question or ask again in a moment.",
+        text: "Sorry, I couldn't respond just now. Please try again. You were not charged.",
         isBot: true,
         timestamp: new Date(),
       };

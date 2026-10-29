@@ -9,6 +9,25 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { MapPin, ExternalLink, Phone, Clock, Star, ChevronDown, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
+import { toast } from "sonner";
+
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged|support@/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
 
 interface BusinessResource {
   id: string;
@@ -70,7 +89,7 @@ export const BusinessResourceFinder = () => {
 
       if (!fnData || !fnData.resources || !Array.isArray(fnData.resources.categories)) {
         console.error('Invalid response structure:', fnData);
-        throw new Error('Invalid response from server');
+        throw new Error('The result came back incomplete. Please try again. If this keeps happening, contact support@pivothub.io.');
       }
 
       const data = fnData;
@@ -106,35 +125,7 @@ export const BusinessResourceFinder = () => {
       setStrategicSummary(data.resources.summary || "");
     } catch (error) {
       console.error('Error finding resources:', error);
-      // Fallback to mock resources
-      const mockResources: BusinessResource[] = [
-        {
-          id: "1",
-          name: "Small Business Development Center",
-          type: "Business Support",
-          description: "Free business consulting and low-cost training for small businesses",
-          address: "123 Business Ave, Suite 100",
-          phone: "(555) 123-4567",
-          website: "www.sbdc-local.org",
-          hours: "Mon-Fri 9AM-5PM",
-          rating: 4.8,
-          services: ["Business Planning", "Financial Consulting", "Marketing Help", "Legal Guidance"]
-        },
-        {
-          id: "2",
-          name: "Community Investment Fund",
-          type: "Funding",
-          description: "Local investment fund supporting startups and small businesses",
-          address: "456 Finance St, Floor 3",
-          phone: "(555) 234-5678",
-          website: "www.communityinvest.org",
-          hours: "Mon-Fri 8AM-6PM",
-          rating: 4.5,
-          services: ["Microloans", "Seed Funding", "Business Grants", "Investment Matching"]
-        }
-      ];
-      
-      setResources(mockResources);
+      toast.error("Couldn't find resources", { description: describeFailure(error) });
     } finally {
       setIsSearching(false);
     }

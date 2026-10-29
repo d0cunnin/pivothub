@@ -11,6 +11,24 @@ import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import { generateMarketingStrategyPDF } from '@/lib/pdf-reports/marketing-strategy';
 
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged|support@/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
+
 interface MarketingStrategy {
   phase: string;
   timeline: string;
@@ -61,7 +79,7 @@ export const MarketingStrategyGenerator = () => {
 
       if (!data?.content || data.content.trim().length < 300) {
         console.error('Empty or invalid content response:', data);
-        throw new Error('Received incomplete marketing strategy. Please try again.');
+        throw new Error('The result came back incomplete. Please try again. If this keeps happening, contact support@pivothub.io.');
       }
 
       // Parse AI response into structured strategy format
@@ -72,61 +90,7 @@ export const MarketingStrategyGenerator = () => {
       toast.success('Marketing strategy generated!');
     } catch (error) {
       console.error('Error generating strategy:', error);
-      // Fallback strategy based on user input
-      const fallbackStrategies = [
-        {
-          phase: "Phase 1: Foundation & Brand Building",
-          timeline: "Months 1-4",
-          objectives: [
-            `Establish ${businessType} brand presence`,
-            "Build core marketing infrastructure",
-            "Define brand voice and messaging"
-          ],
-          tactics: [
-            "Create professional website with SEO optimization",
-            "Set up social media profiles on relevant platforms",
-            "Develop brand guidelines and visual identity",
-            "Launch basic content marketing strategy"
-          ],
-          budget: "35% of total budget",
-          metrics: ["Website traffic", "Social media followers", "Brand awareness surveys"]
-        },
-        {
-          phase: "Phase 2: Audience Engagement & Lead Generation",
-          timeline: "Months 5-8",
-          objectives: [
-            "Generate qualified leads from target market",
-            "Build engaged community around brand",
-            "Establish thought leadership"
-          ],
-          tactics: [
-            "Launch targeted advertising campaigns",
-            "Create valuable content (blogs, videos, podcasts)",
-            "Implement email marketing automation",
-            "Partner with influencers in your industry"
-          ],
-          budget: "40% of total budget",
-          metrics: ["Lead generation rate", "Email subscribers", "Engagement rates"]
-        },
-        {
-          phase: "Phase 3: Conversion & Scale",
-          timeline: "Months 9-12",
-          objectives: [
-            "Optimize conversion rates",
-            "Scale successful marketing channels",
-            "Expand to new market segments"
-          ],
-          tactics: [
-            "A/B test landing pages and sales funnels",
-            "Increase ad spend on high-performing campaigns",
-            "Launch referral and loyalty programs",
-            "Explore new marketing channels and partnerships"
-          ],
-          budget: "25% of total budget",
-          metrics: ["Conversion rate", "Customer acquisition cost", "Revenue growth"]
-        }
-      ];
-      setStrategy(fallbackStrategies);
+      toast.error("Couldn't create your marketing strategy", { description: describeFailure(error) });
     } finally {
       setIsGenerating(false);
     }

@@ -7,8 +7,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { FileText, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { generateBusinessPlanPDF } from '@/lib/pdf-reports/businessPlanPdf';
+
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged|support@/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
 
 interface BusinessPlanData {
   businessName: string;
@@ -53,7 +72,7 @@ export const BusinessPlanGenerator = () => {
         throw new Error("Please sign in to use this tool");
       }
 
-      const { data, error } = await supabase.functions.invoke('generate-business-content', {
+      const { data, error } = await invokeFunction('generate-business-content', {
         body: {
           type: 'business-plan',
           data: formData
@@ -75,46 +94,14 @@ export const BusinessPlanGenerator = () => {
 
       if (!data?.content || data.content.trim().length < 200) {
         console.error('Empty or invalid content response:', data);
-        throw new Error('Received incomplete business plan. Please try again.');
+        throw new Error('The result came back incomplete. Please try again. If this keeps happening, contact support@pivothub.io.');
       }
 
       setGeneratedPlan(data.content);
       toast.success('Business plan generated!');
     } catch (error) {
       console.error('Error generating business plan:', error);
-      // Fallback to mock data if API fails
-      const plan = `
-BUSINESS PLAN: ${formData.businessName || "Your Business"}
-
-EXECUTIVE SUMMARY
-${formData.businessName || "Your Business"} is a ${formData.businessType || "innovative"} ${formData.industry || "business"} venture that aims to ${formData.uniqueValue || "provide exceptional value to customers through innovative solutions"}.
-
-BUSINESS DESCRIPTION
-Our ${formData.businessType || "company"} operates in the ${formData.industry || "service"} industry, targeting ${formData.targetMarket || "consumers seeking quality solutions"}. We utilize a ${formData.businessModel || "direct-to-consumer"} business model to deliver value.
-
-MARKET ANALYSIS
-Target Market: ${formData.targetMarket || "Our primary target market consists of consumers who value quality and innovation"}
-Competitive Advantage: ${formData.competitiveAdvantage || "We differentiate ourselves through superior customer service and innovative product offerings"}
-
-MARKETING & SALES STRATEGY
-${formData.marketingStrategy || "Our marketing strategy focuses on digital channels, word-of-mouth referrals, and strategic partnerships to reach our target audience effectively"}
-
-FINANCIAL PROJECTIONS
-Initial Investment: $${formData.startupCosts || "50,000"}
-Projected Revenue: ${formData.revenueProjections || "We project steady growth with break-even expected within 18 months"}
-
-IMPLEMENTATION PLAN
-Phase 1: Business Setup & Initial Launch (Months 1-3)
-Phase 2: Market Penetration & Growth (Months 4-12)
-Phase 3: Expansion & Scaling (Months 13-24)
-
-RISK ANALYSIS
-We have identified key risks and developed mitigation strategies to ensure business continuity and success.
-
-CONCLUSION
-${formData.businessName || "This business"} represents a compelling opportunity in the ${formData.industry || "market"} with strong potential for growth and profitability.
-      `;
-      setGeneratedPlan(plan);
+      toast.error("Couldn't create your plan", { description: describeFailure(error) });
     } finally {
       setIsGenerating(false);
     }

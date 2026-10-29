@@ -13,6 +13,24 @@ import { toast } from 'sonner';
 import { PitchDeckPresentation } from './PitchDeckPresentation';
 import { generatePitchDeckPDF } from '@/lib/pdf-reports/pitch-deck';
 
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged|support@/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
+
 interface PitchData {
   companyName: string;
   presenterName: string;
@@ -168,7 +186,7 @@ export const PitchDeckGenerator = () => {
 
       if (!data?.content || data.content.trim().length < 200) {
         console.error('Empty or invalid content response:', data);
-        throw new Error('Received incomplete pitch deck content. Please try again.');
+        throw new Error('The result came back incomplete. Please try again. If this keeps happening, contact support@pivothub.io.');
       }
 
       // Parse AI response into slide format
@@ -177,73 +195,14 @@ export const PitchDeckGenerator = () => {
       
       if (generatedSlides.length < 5) {
         console.error('Too few slides generated:', generatedSlides.length);
-        throw new Error('Failed to generate complete pitch deck. Please try again.');
+        throw new Error('The result came back incomplete. Please try again. If this keeps happening, contact support@pivothub.io.');
       }
       
       setSlides(generatedSlides);
       toast.success('Pitch deck generated!');
     } catch (error) {
       console.error('Error generating pitch deck:', error);
-      // Enhanced fallback with bullet points
-      const generatedSlides: Slide[] = [
-        {
-          title: "Title / Cover",
-          content: `• ${formData.companyName || 'Your Company'}\n• Presenter: ${formData.presenterName || 'Your Name'}\n• Transforming the market with innovative solutions`
-        },
-        {
-          title: "Problem",
-          content: formData.problem 
-            ? `• ${formData.problem.split('.')[0]}\n• Current solutions are inadequate\n• Market needs better approach`
-            : "• Market challenges exist\n• Current solutions fall short\n• Growing demand for innovation"
-        },
-        {
-          title: "Solution",
-          content: formData.solution 
-            ? `• ${formData.solution.split('.')[0]}\n• Innovative approach to market needs\n• Proven technology foundation`
-            : "• Innovative solution addressing core problems\n• Technology-driven approach\n• Validated with early users"
-        },
-        {
-          title: "Market Opportunity",
-          content: formData.marketSize 
-            ? `• Total addressable market: ${formData.marketSize}\n• Rapid market growth trajectory\n• Strong customer demand signals`
-            : "• Large addressable market\n• Growing at significant rate\n• Strong customer demand"
-        },
-        {
-          title: "Product / Technology",
-          content: formData.solution 
-            ? `• ${formData.solution.split('.')[0]}\n• Scalable platform architecture\n• Proprietary technology advantage`
-            : "• Advanced product capabilities\n• Scalable technology platform\n• Continuous innovation pipeline"
-        },
-        {
-          title: "Business Model",
-          content: formData.businessModel 
-            ? `• Revenue model: ${formData.businessModel}\n• Attractive unit economics\n• Multiple revenue streams`
-            : "• Subscription-based revenue model\n• Strong unit economics\n• Scalable customer acquisition"
-        },
-        {
-          title: "Go-to-Market Strategy",
-          content: formData.goToMarketStrategy 
-            ? `• ${formData.goToMarketStrategy.split('.')[0]}\n• Multi-channel customer acquisition\n• Strategic partnership approach`
-            : "• Direct sales and digital marketing\n• Strategic partnerships\n• Phased market expansion"
-        },
-        {
-          title: "Competition / Differentiation",
-          content: formData.competition 
-            ? `• Key competitors: ${formData.competition}\n• Superior product capabilities\n• Strong customer satisfaction\n• Defensible market position`
-            : "• Competitive but fragmented market\n• Clear differentiation strategy\n• Strong competitive advantages"
-        },
-        {
-          title: "Financials / Traction",
-          content: formData.traction 
-            ? `• ${formData.traction}\n• Funding: ${formData.fundingAmount || 'Seeking investment'}\n• Strong growth metrics\n• Path to profitability`
-            : "• Early traction with customers\n• Growing revenue\n• Clear path to profitability"
-        },
-        {
-          title: "Team & Ask / Closing",
-          content: `• Team: ${formData.teamBackground || 'Experienced team with proven track record'}\n• Funding ask: ${formData.fundingAmount || 'Investment amount TBD'}\n• ${formData.useOfFunds || 'Fuel growth and market expansion'}\n• Contact us to join our journey`
-        }
-      ];
-      setSlides(generatedSlides);
+      toast.error("Couldn't create your pitch deck", { description: describeFailure(error) });
     } finally {
       setIsGenerating(false);
     }

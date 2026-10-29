@@ -15,6 +15,24 @@ import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { generateBusinessFoundationPDF } from '@/lib/pdf-reports/businessFoundationPdf';
 
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged|support@/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
+
 interface FoundationData {
   businessName: string;
   industry: string;
@@ -165,7 +183,7 @@ export const BusinessFoundationBuilder = () => {
       }
 
       if (!data?.content || data.content.length < 300) {
-        throw new Error('Foundation content too short. Please try again.');
+        throw new Error('The result came back incomplete. Please try again. If this keeps happening, contact support@pivothub.io.');
       }
 
       const sanitizedContent = sanitizeAIContent(data.content);
@@ -174,24 +192,7 @@ export const BusinessFoundationBuilder = () => {
       toast.success("Business foundation created successfully!");
     } catch (error) {
       console.error('Error generating business foundation:', error);
-      toast.error("Failed to generate business foundation. Please try again.");
-      
-      // Fallback results
-      setResults({
-        vision: `To become the leading ${formData.industry} provider, transforming how customers experience ${formData.passion || 'our services'}.`,
-        mission: `We empower ${formData.customers || 'our customers'} by delivering innovative ${formData.industry} solutions that solve real problems and create lasting value.`,
-        values: formData.values || `Integrity, Innovation, Customer Focus, Excellence, Continuous Improvement`,
-        pillars: `Quality, Innovation, Customer Success, Sustainability`,
-        goals: formData.goals || `Achieve market leadership, deliver exceptional customer satisfaction, build a sustainable business model`,
-        objectives: `Increase customer base by 50% annually, maintain 95% customer satisfaction, achieve profitability within 18 months`,
-        problemStatement: `Current ${formData.industry} solutions are inadequate, leaving customers frustrated with limited options, high costs, or poor service quality.`,
-        solution: `We provide a comprehensive ${formData.industry} platform that combines cutting-edge technology with exceptional customer service to deliver superior results.`,
-        targetAudience: `Our primary target audience includes ${formData.customers || 'businesses and individuals'} who value quality, innovation, and exceptional service in the ${formData.industry} space.`,
-        idealCustomerProfile: formData.idealCustomer || `Mid-sized businesses with 50-500 employees seeking ${formData.industry} solutions`,
-        marketSize: `The ${formData.industry} market represents a significant opportunity with strong growth potential driven by digital transformation and changing customer expectations.`,
-        businessModel: formData.businessModel || `Subscription-based model with tiered pricing to serve different customer segments`,
-        goToMarketStrategy: formData.goToMarket || `Digital marketing, strategic partnerships, and content marketing to reach target audience effectively`
-      });
+      toast.error("Couldn't create your business foundation", { description: describeFailure(error) });
     } finally {
       setIsGenerating(false);
     }

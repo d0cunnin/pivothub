@@ -27,6 +27,24 @@ import {
   Plus
 } from 'lucide-react';
 
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
+
 interface Question {
   id: string;
   text: string;
@@ -116,7 +134,7 @@ export const InterviewQuestionsCoach = () => {
       toast.success(`Generated ${filteredQuestions.length} interview questions`);
     } catch (error) {
       console.error('Error generating questions:', error);
-      toast.error('Failed to generate questions. Please try again.');
+      toast.error("Couldn't generate questions", { description: describeFailure(error) });
     } finally {
       setLoading(false);
     }
@@ -177,26 +195,8 @@ export const InterviewQuestionsCoach = () => {
       }
     } catch (error) {
       console.error('Error analyzing answer:', error);
-      // Fallback feedback
-      const mockFeedback = `Your answer demonstrates good understanding. Consider using the STAR method more explicitly. The response shows relevant experience but could benefit from more specific metrics and outcomes. Try to quantify your achievements where possible.`;
-      
-      const response_data: Response = {
-        questionId: questions[currentQuestionIndex].id,
-        answer: currentAnswer,
-        feedback: sanitizeAIContent(mockFeedback),
-        score: Math.floor(Math.random() * 3) + 3, // Random score 3-5
-        timestamp: new Date()
-      };
-
-      setResponses([...responses, response_data]);
-      setCurrentAnswer('');
-      
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      } else {
-        setActiveTab('results');
-        toast.success('Interview practice completed!');
-      }
+      // Keep the answer in place so the user can resubmit it.
+      toast.error("Couldn't get feedback on your answer", { description: describeFailure(error) });
     } finally {
       setLoading(false);
     }

@@ -9,6 +9,24 @@ import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 import { sanitizeAIContent } from "@/lib/utils";
 
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
+
 interface Message {
   id: string;
   text: string;
@@ -92,20 +110,6 @@ export const CareerAdvisorChatbot = () => {
     }
   };
 
-  const getFallbackResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase();
-    
-    if (lowerMessage.includes('career') || lowerMessage.includes('job')) {
-      return "I understand you're asking about career guidance. While I'm temporarily having connection issues, I recommend starting with a self-assessment of your skills and interests. What specific career area would you like to explore?";
-    }
-    
-    if (lowerMessage.includes('skill')) {
-      return "Skills development is crucial for career growth. Focus on both technical skills relevant to your target field and soft skills like communication and problem-solving. What skills are you most interested in developing?";
-    }
-    
-    return "I apologize for the technical difficulty. In the meantime, consider these key career development areas: skills assessment, industry research, networking, and creating a strong professional profile. What aspect would you like to discuss further?";
-  };
-
   const handleSendMessage = async (messageOverride?: string) => {
     const messageText = messageOverride || inputMessage;
     if (!messageText.trim() || isTyping) return;
@@ -153,20 +157,21 @@ export const CareerAdvisorChatbot = () => {
       });
     } catch (error) {
       console.error('Error getting AI response:', error);
-      setError("I'm having trouble connecting right now. Here's some general guidance:");
-      
-      const fallbackResponse: Message = {
+      const description = describeFailure(error);
+      setError(description);
+
+      const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: getFallbackResponse(messageText),
+        text: "Sorry, I couldn't respond just now. Please try again. You were not charged.",
         isBot: true,
         timestamp: new Date(),
       };
-      
-      setMessages(prev => [...prev, fallbackResponse]);
-      
+
+      setMessages(prev => [...prev, errorResponse]);
+
       toast({
-        title: "Connection Issue",
-        description: "I'm having trouble accessing my full capabilities. You're receiving basic guidance for now.",
+        title: "Couldn't get a response",
+        description,
         variant: "destructive",
       });
     } finally {

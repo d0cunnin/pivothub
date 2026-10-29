@@ -8,6 +8,24 @@ import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 
+const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
+
+// User-facing failure text. On failure no results are shown, and credits are
+// only charged server-side when real AI results are delivered.
+const describeFailure = (error: unknown): string => {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : typeof (error as { message?: unknown } | null)?.message === "string"
+          ? (error as { message: string }).message
+          : "";
+  const message = raw.trim() || GENERIC_FAILURE_MESSAGE;
+  if (/not (been )?charged|support@/i.test(message)) return message;
+  return `${/[.!?]$/.test(message) ? message : `${message}.`} You were not charged.`;
+};
+
 interface ChecklistItem {
   id: string;
   task: string;
@@ -35,10 +53,7 @@ export const StartupChecklist = () => {
       
       if (!session) {
         console.error('No session found');
-        setIsGenerating(false);
-        toast.error('Please sign in to generate personalized checklist');
-        // Fall through to fallback checklist
-        throw new Error('Authentication required');
+        throw new Error('Please sign in to generate personalized checklist');
       }
 
       // Use Supabase SDK with proper authentication
@@ -59,7 +74,7 @@ export const StartupChecklist = () => {
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
       if (!data?.checklist || !Array.isArray(data.checklist.phases)) {
-        throw new Error('No checklist received');
+        throw new Error('The result came back incomplete. Please try again. If this keeps happening, contact support@pivothub.io.');
       }
 
       // Transform AI response to match existing interface
@@ -85,43 +100,7 @@ export const StartupChecklist = () => {
       toast.success('Startup checklist generated successfully!');
     } catch (error) {
       console.error('Error generating checklist:', error);
-      // Fallback to basic checklist
-      const baseChecklist: ChecklistItem[] = [
-        { id: '1', task: 'Create vision statement', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
-        { id: '2', task: 'Create mission statement', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
-        { id: '3', task: 'Define problem statement', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
-        { id: '4', task: 'Define solution', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
-        { id: '5', task: 'Identify target audience', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
-        { id: '6', task: 'Research market size', category: 'Foundation', timeline: 'Week 1', completed: false, priority: 'high' },
-        { id: '7', task: 'Define business model', category: 'Foundation', timeline: 'Week 1-2', completed: false, priority: 'high' },
-        { id: '8', task: 'Create go-to-market strategy', category: 'Foundation', timeline: 'Week 1-2', completed: false, priority: 'high' },
-        { id: '9', task: 'Validate business idea and market research', category: 'Planning', timeline: 'Week 1-2', completed: false, priority: 'high' },
-        { id: '10', task: 'Write business plan', category: 'Planning', timeline: 'Week 2-3', completed: false, priority: 'high' },
-        { id: '11', task: 'Secure initial funding/capital', category: 'Finance', timeline: 'Week 2-4', completed: false, priority: 'high' },
-        { id: '12', task: 'Choose and register business name', category: 'Legal', timeline: 'Week 2', completed: false, priority: 'high' },
-        { id: '13', task: 'File business formation documents', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
-        { id: '14', task: 'Obtain EIN (Tax ID Number)', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
-        { id: '15', task: 'Open business bank account', category: 'Finance', timeline: 'Week 4', completed: false, priority: 'high' },
-        { id: '16', task: 'Get business insurance', category: 'Legal', timeline: 'Week 4-5', completed: false, priority: 'medium' },
-        { id: '17', task: 'Obtain necessary licenses and permits', category: 'Legal', timeline: 'Week 4-6', completed: false, priority: 'high' },
-        { id: '18', task: 'Set up accounting system', category: 'Finance', timeline: 'Week 5', completed: false, priority: 'medium' },
-        { id: '19', task: 'Create marketing materials', category: 'Marketing', timeline: 'Week 3-4', completed: false, priority: 'medium' },
-        { id: '20', task: 'Build website and online presence', category: 'Marketing', timeline: 'Week 4-6', completed: false, priority: 'high' }
-      ];
-
-      // Add structure-specific items
-      if (businessStructure === 'corporation') {
-        baseChecklist.push(
-          { id: '21', task: 'Draft corporate bylaws', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' },
-          { id: '22', task: 'Issue stock certificates', category: 'Legal', timeline: 'Week 4', completed: false, priority: 'medium' }
-        );
-      } else if (businessStructure === 'llc') {
-        baseChecklist.push(
-          { id: '21', task: 'Create operating agreement', category: 'Legal', timeline: 'Week 3', completed: false, priority: 'high' }
-        );
-      }
-
-      setChecklist(baseChecklist.sort((a, b) => a.timeline.localeCompare(b.timeline)));
+      toast.error("Couldn't create your checklist", { description: describeFailure(error) });
     } finally {
       setIsGenerating(false);
     }
