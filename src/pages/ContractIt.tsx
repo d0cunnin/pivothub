@@ -19,6 +19,9 @@ import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { generateCapabilityStatementPDF } from "@/lib/pdf-templates/capability-statement-template";
 import { Helmet } from "react-helmet-async";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 
 // Types
 interface CapabilityFormData {
