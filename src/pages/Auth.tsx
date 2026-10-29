@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { safeRedirect } from '@/lib/safeRedirect';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,7 +44,7 @@ const Auth = () => {
   const emailsMatch = confirmEmail && email === confirmEmail;
 
   const requestedPath=searchParams.get('redirect')||'/';
-  const redirectPath=requestedPath.startsWith('//')?'/':requestedPath.startsWith('/')?requestedPath:`/${requestedPath}`;
+  const redirectPath=safeRedirect(requestedPath.startsWith('/')?requestedPath:`/${requestedPath}`);
   const destination=()=>redirectPath;
 
   useEffect(() => {
