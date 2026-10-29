@@ -24,6 +24,9 @@ import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { Helmet } from "react-helmet-async";
 import ReactMarkdown from "react-markdown";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 
 // Types
 interface ProgramBuilderForm {
@@ -1511,7 +1514,7 @@ const DevelopIt = () => {
           />
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="develop-workspace w-full">
-            <TabsSwitchHintSlot />
+            <TabSwitchHint text="Click a tab below to switch between the five tools. Your answers in each tool stay put while you switch." />
             <TabsList className="grid w-full grid-cols-5 mb-6">
               <TabsTrigger value="program-builder" className="flex flex-col md:flex-row items-center gap-1 text-xs md:text-sm">
                 <Building2 className="h-4 w-4" />
