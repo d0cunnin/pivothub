@@ -1,8 +1,8 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronRight, CheckCircle, Rocket, Target } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
+import { ArrowUpRight, ArrowRight, CheckCircle, Rocket, Target, BriefcaseBusiness, CalendarDays, Sprout, Mic, ClipboardCheck, GraduationCap, Lightbulb, HandCoins, FileCheck2, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
@@ -11,88 +11,85 @@ import {
   webApplicationSchema,
   generateFAQSchema,
 } from "@/components/StructuredData";
-import reskillIcon from "@/assets/reskill-icon.jpg";
-import jobprepIcon from "@/assets/jobprep-icon.jpg";
-import hireyourselfIcon from "@/assets/hireyourself-icon.jpg";
 import heroVideo from "@/assets/hero-video.mp4";
 
 const Index = () => {
   const features = [
     {
-      icon: reskillIcon,
+      icon: ClipboardCheck,
       title: "Assess It",
       description: "Assess, improve, and grow with confidence.",
       link: "/assessit",
       badge: "Start here",
     },
     {
-      icon: jobprepIcon,
+      icon: BriefcaseBusiness,
       title: "Prep It",
       description: "Prepare for career success with expert guidance.",
       link: "/prepit",
     },
     {
-      icon: hireyourselfIcon,
+      icon: HandCoins,
       title: "Earn It",
       description: "Discover the right income opportunities for your lifestyle.",
       link: "/earnit",
     },
     {
-      icon: reskillIcon,
+      icon: GraduationCap,
       title: "Teach It",
       description: "Monetize your expertise by teaching others what you know best.",
       link: "/teachit",
     },
     {
-      icon: reskillIcon,
+      icon: CalendarDays,
       title: "Host It",
       description: "Create and manage events that bring people together.",
       link: "/hostit",
     },
     {
-      icon: reskillIcon,
+      icon: CalendarDays,
       title: "Schedule It",
       description: "Organize your time and appointments with ease.",
       link: "/scheduleit",
     },
     {
-      icon: reskillIcon,
+      icon: Lightbulb,
       title: "Build It",
       description: "Turn your ideas into reality step by step.",
       link: "/buildit",
     },
     {
-      icon: reskillIcon,
+      icon: Rocket,
       title: "Launch It",
       description: "Get everything ready to go live with ease.",
       link: "/launchit",
     },
     {
-      icon: reskillIcon,
+      icon: HandCoins,
       title: "Fund It",
       description: "Explore funding options and strategies.",
       link: "/fundit",
     },
     {
-      icon: reskillIcon,
+      icon: Building2,
       title: "Develop It",
       description: "Design community programs and prepare for government contracts.",
       link: "/developit",
     },
     {
-      icon: hireyourselfIcon,
+      icon: FileCheck2,
       title: "Contract It",
       description: "Build capability statements and assess contract readiness.",
       link: "/contractit",
     },
     {
-      icon: reskillIcon,
+      icon: Mic,
       title: "Speak It",
       description: "Launch your voice as a speaker or podcaster with professional guidance.",
       link: "/speakit",
     },
     {
-      icon: reskillIcon,
+      icon: Sprout,
       title: "Garden It",
       description: "Plan your garden by location and season.",
       link: "/gardenit",
@@ -177,309 +174,144 @@ const Index = () => {
 
       <Header />
 
-      {/* Hero Section - White background with video, dark text */}
-      <section className="relative bg-background py-16 md:py-24 overflow-hidden">
-        {/* Background Video */}
-        <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover">
-          <source src={heroVideo} type="video/mp4" />
-        </video>
-
-        {/* Semi-transparent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/90 to-secondary/80"></div>
-
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight">
-              AI tools that help you grow, pivot, and move forward
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-              Learn new skills, launch ideas, and build income-ready projects with practical AI tools.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90 border-2 border-white text-lg px-10 py-6 shadow-2xl hover:scale-105 transition-elegant group"
-                asChild
-              >
-                <Link to="/before-you-start">
-                  <Rocket className="mr-2 h-5 w-5" />
-                  Start Here
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-transparent text-white border-2 border-white hover:bg-white/15 hover:text-white text-lg px-10 py-6 transition-elegant"
-                asChild
-              >
-                <Link to="/assessit">
-                  <Target className="mr-2 h-5 w-5" />
-                  Take an Assessment
-                </Link>
-              </Button>
-            </div>
-            <p className="mt-6 text-white/85 text-sm">
-              Free to start · No credit card required ·{" "}
-              <button
-                type="button"
-                className="underline underline-offset-4 hover:text-white"
-                onClick={() => document.getElementById("explore-hub")?.scrollIntoView({ behavior: "smooth" })}
-              >
-                or explore all tools
-              </button>
-            </p>
-          </div>
-        </div>
-
-        {/* Wave Separator */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-          <svg
-            className="relative block w-full h-24"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-              className="fill-primary/10"
-            ></path>
-          </svg>
-        </div>
-      </section>
-
-      {/* Features Section - Dark background, light text */}
-      <section
-        id="explore-hub"
-        className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-16 md:py-24 pb-28 md:pb-36 overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
-        <div className="absolute top-20 right-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-20 left-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl"></div>
-
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Explore What You Can Do With PivotHub</h2>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              From learning new skills to launching your first idea, PivotHub gives you the AI-driven tools to make it
-              happen.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <Link key={feature.title} to={feature.link}>
-                <Card
-                  className="bg-accent/90 backdrop-blur-sm border-accent hover:bg-accent transition-all duration-300 hover:scale-105 hover:shadow-2xl group animate-fade-in h-full"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CardHeader>
-                    <div className="flex items-center justify-between gap-2">
-                      <CardTitle className="text-white text-xl">{feature.title}</CardTitle>
-                      {feature.badge && (
-                        <span className="rounded-full bg-white text-primary text-xs font-bold px-3 py-1 whitespace-nowrap">
-                          {feature.badge}
-                        </span>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-white/90 text-base">{feature.description}</CardDescription>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Diagonal Separator */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-          <svg
-            className="relative block w-full h-24"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path d="M1200 120L0 16.48V0h1200z" className="fill-muted"></path>
-          </svg>
-        </div>
-      </section>
-
-      {/* How It Works Section - White background */}
-      <section className="relative bg-white py-16 md:py-24 overflow-hidden">
-        <div className="container mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">How It Works</h2>
-            <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
-              PivotHub makes it easy to go from idea to impact.
-            </p>
-          </div>
-
-          {/* Visual Showcase */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
-            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <img
-                src="/lovable-uploads/a2d8ed6b-e7a3-4bba-b5d7-9c2dd209ea3d.png"
-                alt="Professional woman collaborating with team"
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex items-end p-6">
-                <p className="text-white font-bold text-lg">Your Career Success Story</p>
+      <main className="home-refresh">
+        <section className="relative isolate overflow-hidden bg-primary text-primary-foreground">
+          <video autoPlay loop muted playsInline aria-hidden="true" className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden">
+            <source src={heroVideo} type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-primary/85" />
+          <div className="page-container relative py-16 md:py-20 lg:py-24">
+            <div className="max-w-3xl">
+              <p className="mb-5 flex items-center gap-3 text-sm font-medium text-primary-foreground/85">
+                <span className="h-px w-8 bg-primary-foreground/60" /> Your next chapter starts here
+              </p>
+              <h1 className="text-5xl font-bold leading-tight md:text-6xl">PivotHub</h1>
+              <p className="mt-4 max-w-2xl text-3xl font-semibold leading-snug md:text-4xl">
+                AI tools that help you grow, pivot, and move forward.
+              </p>
+              <p className="mt-6 max-w-xl text-lg leading-relaxed text-primary-foreground/85">
+                Learn new skills, launch ideas, and build income-ready projects with practical AI tools.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button size="lg" variant="heroWhite" className="h-12 border-card px-6 hover:scale-100" asChild>
+                  <Link to="/before-you-start"><Rocket className="h-4 w-4" />Start Here<ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+                <Button size="lg" variant="outline" className="h-12 border-primary-foreground/50 bg-transparent px-6 text-primary-foreground hover:scale-100 hover:bg-primary-foreground/10 hover:text-primary-foreground" asChild>
+                  <Link to="/assessit"><Target className="h-4 w-4" />Take an Assessment</Link>
+                </Button>
               </div>
-            </div>
-            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <img
-                src="/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png"
-                alt="Entrepreneur with keys representing business ownership"
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-secondary/90 to-transparent flex items-end p-6">
-                <p className="text-white font-bold text-lg">Build Your Business</p>
-              </div>
-            </div>
-            <div className="relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500">
-              <img
-                src="/lovable-uploads/15ff2b92-41d2-4845-9967-ed77d59d05c2.jpg"
-                alt="Team learning and growing together"
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-accent/90 to-transparent flex items-end p-6">
-                <p className="text-white font-bold text-lg">Learn & Grow Together</p>
+              <div className="mt-6 flex flex-wrap items-center gap-x-2 text-sm text-primary-foreground/85">
+                <span>Free to start · No credit card required ·</span>
+                <Button variant="link" className="h-auto p-0 text-primary-foreground underline underline-offset-4" onClick={() => document.getElementById("explore-hub")?.scrollIntoView({ behavior: "smooth" })}>or explore all tools</Button>
               </div>
             </div>
           </div>
+        </section>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {steps.map((step, index) => (
-              <div key={step.number} className="relative animate-fade-in" style={{ animationDelay: `${index * 0.2}s` }}>
-                <Card className="h-full bg-background border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:scale-105 group">
-                  <CardHeader>
-                    <div className="text-7xl font-bold text-primary mb-4 group-hover:text-accent transition-colors">
-                      {step.number}
-                    </div>
-                    <CardTitle className="text-2xl mb-3">{step.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-lg">{step.description}</p>
-                  </CardContent>
-                </Card>
-
-                {/* Arrow connector between cards */}
-                {index < steps.length - 1 && (
-                  <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                    <ChevronRight className="h-8 w-8 text-primary" />
+        <section id="explore-hub" className="scroll-mt-6 bg-background pt-12 pb-28 md:pt-16 md:pb-36">
+          <div className="page-container">
+            <div className="mb-10 max-w-3xl">
+              <p className="mb-3 text-sm font-semibold text-secondary">Explore the hub</p>
+              <h2 className="text-3xl font-bold leading-tight md:text-4xl">Explore What You Can Do With PivotHub</h2>
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-foreground/70">
+                From learning new skills to launching your first idea, PivotHub gives you the AI-driven tools to make it happen.
+              </p>
+            </div>
+            <div className="space-y-10">
+              {[
+                { title: "Career & skills", titles: ["Assess It", "Prep It"] },
+                { title: "Income & ideas", titles: ["Earn It", "Teach It", "Build It"] },
+                { title: "Planning & launching", titles: ["Host It", "Schedule It", "Launch It", "Speak It", "Garden It"] },
+                { title: "Funding & growth", titles: ["Fund It", "Develop It", "Contract It"] },
+              ].map((category) => (
+                <div key={category.title}>
+                  <div className="mb-4 flex items-center gap-4">
+                    <h3 className="shrink-0 text-base font-semibold text-foreground">{category.title}</h3>
+                    <span className="h-px flex-1 bg-border" />
                   </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Wave Separator */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-          <svg
-            className="relative block w-full h-24"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
-              className="fill-primary"
-            ></path>
-          </svg>
-        </div>
-      </section>
-
-      {/* Testimonials Section - Dark background */}
-      <section className="relative bg-gradient-to-br from-primary to-primary/90 text-white py-16 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
-
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Real People. Real Results.</h2>
-            <p className="text-xl text-white/90 max-w-3xl mx-auto">
-              See how creators, entrepreneurs, and learners are transforming ideas into reality with PivotHub.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card
-                key={testimonial.name}
-                className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all duration-300 hover:scale-105 animate-fade-in"
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                <CardHeader>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-secondary flex items-center justify-center text-white font-bold text-xl">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                    <div>
-                      <CardTitle className="text-white text-lg">{testimonial.name}</CardTitle>
-                      <CardDescription className="text-white/70">{testimonial.role}</CardDescription>
-                    </div>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {features.filter((feature) => category.titles.includes(feature.title)).map((feature) => {
+                      const Icon = feature.icon;
+                      return (
+                        <Link key={feature.title} to={feature.link} className="group rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                          <Card className="h-full border-border bg-card shadow-none transition-colors duration-200 group-hover:border-secondary/50 group-hover:bg-secondary/5">
+                            <CardHeader className="p-5 pb-3">
+                              <div className="mb-5 flex items-center justify-between gap-2">
+                                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-secondary/10 text-secondary"><Icon className="h-5 w-5" /></span>
+                                {feature.badge ? <span className="rounded-md bg-secondary/10 px-2 py-1 text-xs font-semibold text-secondary">{feature.badge}</span> : <ArrowUpRight className="h-4 w-4 text-foreground/40 transition-colors group-hover:text-secondary" />}
+                              </div>
+                              <h4 className="text-xl font-semibold text-card-foreground">{feature.title}</h4>
+                            </CardHeader>
+                            <CardContent className="p-5 pt-0"><CardDescription className="text-sm leading-relaxed text-foreground/70">{feature.description}</CardDescription></CardContent>
+                          </Card>
+                        </Link>
+                      );
+                    })}
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/90 text-base leading-relaxed italic">"{testimonial.quote}"</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Diagonal Separator */}
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-          <svg
-            className="relative block w-full h-24"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1200 120"
-            preserveAspectRatio="none"
-          >
-            <path d="M1200 120L0 16.48V0h1200z" className="fill-accent"></path>
-          </svg>
-        </div>
-      </section>
-
-      {/* CTA Section - Aqua/gradient background */}
-      <section className="relative bg-gradient-to-br from-accent to-secondary py-16 md:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/[0.1] bg-[size:20px_20px]"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
-
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center animate-fade-in">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-white">Start Building Today</h2>
-            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
-              Your next chapter begins here. Get access to AI-powered tools that help you grow smarter and faster.
-            </p>
-            <Link to="/auth?tab=signup">
-              <Button
-                size="lg"
-                className="bg-white text-primary hover:bg-white/90 text-lg px-12 py-6 shadow-2xl hover:scale-105 transition-elegant group"
-              >
-                Join PivotHub Free
-                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-
-            <div className="mt-12 flex flex-wrap justify-center gap-8 text-white/80">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                <span>No credit card required</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                <span>Start free</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5" />
-                <span>Cancel anytime</span>
-              </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <section className="border-y border-border bg-muted/50 py-12 md:py-16">
+          <div className="page-container">
+            <div className="mb-10">
+              <h2 className="text-3xl font-bold md:text-4xl">How It Works</h2>
+              <p className="mt-4 text-lg text-foreground/70">PivotHub makes it easy to go from idea to impact.</p>
+            </div>
+            <div className="grid gap-8 md:grid-cols-3">
+              {steps.map((step, index) => {
+                const images = [
+                  { src: "/lovable-uploads/a2d8ed6b-e7a3-4bba-b5d7-9c2dd209ea3d.png", alt: "Professional woman collaborating with team", caption: "Your Career Success Story" },
+                  { src: "/lovable-uploads/a848a1b8-cd18-4243-a70f-0ba5af49802a.png", alt: "Entrepreneur with keys representing business ownership", caption: "Build Your Business" },
+                  { src: "/lovable-uploads/15ff2b92-41d2-4845-9967-ed77d59d05c2.jpg", alt: "Team learning and growing together", caption: "Learn & Grow Together" },
+                ];
+                const image = images[index];
+                return (
+                  <div key={step.number}>
+                    {image && <figure><img src={image.src} alt={image.alt} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover" /><figcaption className="mt-3 text-sm font-medium text-secondary">{image.caption}</figcaption></figure>}
+                    <div className="mt-6 flex items-baseline gap-3"><span className="text-sm font-semibold text-primary">{step.number}</span><h3 className="text-xl font-semibold">{step.title}</h3></div>
+                    <p className="mt-3 text-base leading-relaxed text-foreground/70">{step.description}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-background py-12 md:py-16">
+          <div className="page-container">
+            <div className="mb-10 max-w-2xl">
+              <h2 className="text-3xl font-bold md:text-4xl">Real People. Real Results.</h2>
+              <p className="mt-4 text-lg leading-relaxed text-foreground/70">See how creators, entrepreneurs, and learners are transforming ideas into reality with PivotHub.</p>
+            </div>
+            <div className="grid gap-6 md:grid-cols-3">
+              {testimonials.map((testimonial) => (
+                <Card key={testimonial.name} className="flex flex-col border-border bg-card shadow-none">
+                  <CardContent className="flex-1 p-6"><p className="text-base leading-relaxed text-foreground/80">“{testimonial.quote}”</p></CardContent>
+                  <CardHeader className="flex-row items-center gap-3 p-6 pt-0">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 font-semibold text-primary">{testimonial.name.charAt(0)}</span>
+                    <div><h3 className="text-base font-semibold">{testimonial.name}</h3><CardDescription className="mt-1 text-sm text-foreground/60">{testimonial.role}</CardDescription></div>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-secondary py-12 text-secondary-foreground md:py-16">
+          <div className="page-container">
+            <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
+              <div className="max-w-2xl"><h2 className="text-3xl font-bold md:text-4xl">Start Building Today</h2><p className="mt-4 text-lg leading-relaxed text-secondary-foreground/85">Your next chapter begins here. Get access to AI-powered tools that help you grow smarter and faster.</p></div>
+              <Button size="lg" variant="heroWhite" className="h-12 shrink-0 border-card px-6 hover:scale-100" asChild><Link to="/auth?tab=signup">Join PivotHub Free<ArrowRight className="h-4 w-4" /></Link></Button>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3 border-t border-secondary-foreground/20 pt-6 text-sm text-secondary-foreground/85">
+              {["No credit card required", "Start free", "Cancel anytime"].map((text) => <span key={text} className="flex items-center gap-2"><CheckCircle className="h-4 w-4" />{text}</span>)}
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>
