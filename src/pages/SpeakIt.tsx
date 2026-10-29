@@ -20,7 +20,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from 'sonner';
 import { ToolGuard } from '@/components/ToolGuard';
-import { EmailResultsPrompt } from '@/components/EmailResultsPrompt';
 import { generateSpeakItPDF } from '@/lib/pdf-reports/speak-it';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -746,10 +745,6 @@ const SpeakIt = () => {
                   </Button>
                 </div>
 
-                <EmailResultsPrompt
-                  assessmentType="speak-it"
-                  results={{ plan: generatedPlan }}
-                />
               </CardContent>
             </Card>
           )}

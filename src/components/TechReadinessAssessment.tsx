@@ -7,7 +7,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Monitor, Clock, AlertTriangle, Download } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
-import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { AssessmentAnalysisStatus } from "@/components/AssessmentAnalysisStatus";
@@ -467,29 +466,17 @@ export const TechReadinessAssessment = () => {
               )}
               {isGeneratingReport && (
                 <p className="text-muted-foreground mb-4 animate-pulse">
-                  ⏳ Generating your personalized report with GPT-5...
+                  Preparing your personalized report...
                 </p>
               )}
               {!isGeneratingReport && results && (
                 <p className="text-muted-foreground mb-4">
-                  Would you like to receive your detailed results by email?
+                  Your results are ready. Download your full report as a PDF to keep, or view your results now.
                 </p>
               )}
             </div>
             {!isGeneratingReport && results && (
               <>
-                <EmailResultsPrompt
-                  assessmentType="tech-readiness"
-                  results={results}
-                  onEmailSent={() => {
-                    setShowResults(true);
-                    setShowEmailPrompt(false);
-                  }}
-                  onSkip={() => {
-                    setShowResults(true);
-                    setShowEmailPrompt(false);
-                  }}
-                />
                 <div className="text-center flex gap-4 justify-center">
                   <Button
                     variant="outline"

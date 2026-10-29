@@ -7,7 +7,6 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain, ArrowLeft, ArrowRight, CheckCircle, TrendingUp, Download } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
-import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { AssessmentAnalysisStatus } from "@/components/AssessmentAnalysisStatus";
@@ -368,22 +367,14 @@ export const PersonalityAssessment = () => {
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>
               <p className="text-muted-foreground mb-6">
-                Would you like to receive your detailed results by email?
+                Your results are ready. Download your full report as a PDF to keep, or view your results now.
               </p>
             </div>
-            <EmailResultsPrompt
-              assessmentType="personality"
-              results={results}
-              onEmailSent={() => {
-                setShowResultsModal(true);
-                setShowEmailPrompt(false);
-              }}
-              onSkip={() => {
-                setShowResultsModal(true);
-                setShowEmailPrompt(false);
-              }}
-            />
-            <div className="text-center">
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              <Button onClick={downloadPersonalityAssessmentPDF}>
+                <Download className="h-4 w-4 mr-2" />
+                Download PDF
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => {
@@ -558,6 +549,7 @@ export const PersonalityAssessment = () => {
       
       <AssessmentResultsModal
         isOpen={showResultsModal}
+        onDownloadPdf={downloadPersonalityAssessmentPDF}
         onClose={() => setShowResultsModal(false)}
         assessmentType="personality"
         results={results}

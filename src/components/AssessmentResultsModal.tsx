@@ -1,18 +1,13 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { invokeFunction } from "@/lib/invokeFunction";
-import { useToast } from "@/hooks/use-toast";
 import { 
   CheckCircle, 
   TrendingUp, 
-  Mail, 
+  
   Download, 
   Target, 
   BookOpen, 
@@ -27,14 +22,11 @@ interface AssessmentResultsModalProps {
   onClose: () => void;
   assessmentType: 'career' | 'skills' | 'personality';
   results: any;
+  /** Downloads the full branded PDF report. */
+  onDownloadPdf?: () => void;
 }
 
-export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, results }: AssessmentResultsModalProps) => {
-  const [emailAddress, setEmailAddress] = useState("");
-  const [userName, setUserName] = useState("");
-  const [isSending, setIsSending] = useState(false);
-  const [emailSent, setEmailSent] = useState(false);
-  const { toast } = useToast();
+export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, results, onDownloadPdf }: AssessmentResultsModalProps) => {
 
   // Early return if results is null or undefined
   if (!results) {
@@ -65,62 +57,6 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
     if (score >= 6) return "Intermediate";
     if (score >= 4) return "Developing";
     return "Beginner";
-  };
-
-  const sendResultsEmail = async () => {
-    if (!emailAddress || !userName) {
-      toast({
-        title: "Missing Information",
-        description: "Please enter your name and email address to receive your results.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSending(true);
-    try {
-      // Get session for authorization
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast({
-          title: "Authentication Required",
-          description: "Please sign in to send results.",
-          variant: "destructive",
-        });
-        setIsSending(false);
-        return;
-      }
-
-      const { error } = await invokeFunction('send-assessment-results', {
-        body: {
-          email: emailAddress,
-          name: userName,
-          assessmentType,
-          results: results,
-          analysis: results
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      });
-
-      if (error) throw new Error(error.message);
-
-      setEmailSent(true);
-      toast({
-        title: "Results Sent! 📧",
-        description: "Your detailed assessment results have been sent to your email.",
-      });
-    } catch (error) {
-      console.error('Error sending results email:', error);
-      toast({
-        title: "Email Failed",
-        description: error instanceof Error && error.message ? error.message : "Unable to send email. Please try again or contact support.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSending(false);
-    }
   };
 
   const getAssessmentIcon = () => {
@@ -844,88 +780,22 @@ export const AssessmentResultsModal = ({ isOpen, onClose, assessmentType, result
           
           {renderActionPlan()}
 
-          {/* Email Results Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Mail className="mr-2 h-5 w-5" />
-                Get Your Detailed Results
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {!emailSent ? (
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    📊 Get your comprehensive assessment report including:
-                  </p>
-                  <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground mb-4">
-                    <div className="flex items-center space-x-1">
-                      <CheckCircle className="h-3 w-3" />
-                      <span>Detailed score breakdown</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <CheckCircle className="h-3 w-3" />
-                      <span>Personalized action plan</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <CheckCircle className="h-3 w-3" />
-                      <span>Career recommendations</span>
-                    </div>
-                    <div className="flex items-center space-x-1">
-                      <CheckCircle className="h-3 w-3" />
-                      <span>Learning resources</span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="userName">Your Name</Label>
-                      <Input
-                        id="userName"
-                        type="text"
-                        placeholder="Enter your name"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="emailAddress">Email Address</Label>
-                      <Input
-                        id="emailAddress"
-                        type="email"
-                        placeholder="Enter your email"
-                        value={emailAddress}
-                        onChange={(e) => setEmailAddress(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    onClick={sendResultsEmail}
-                    disabled={isSending}
-                    className="w-full"
-                  >
-                    {isSending ? (
-                      "Sending Results..."
-                    ) : (
-                      <>
-                        <Mail className="mr-2 h-4 w-4" />
-                        Send Detailed Results to Email
-                      </>
-                    )}
-                  </Button>
-                </div>
-              ) : (
-                <div className="text-center py-4">
-                  <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Results Sent Successfully!</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Check your email for your comprehensive assessment report with detailed insights and action plans.
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          {onDownloadPdf && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Save Your Results</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-muted-foreground">
+                  Download your full report as a PDF, including your scores, action plan and recommendations. PivotHub does not store it, so keep your copy.
+                </p>
+                <Button onClick={onDownloadPdf}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Download PDF
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
           <div className="flex justify-center">
             <Button variant="outline" onClick={onClose}>

@@ -576,6 +576,7 @@ export const CareerAssessment = () => {
       
       <AssessmentResultsModal
         isOpen={showResultsModal}
+        onDownloadPdf={downloadCareerAssessmentPDF}
         onClose={() => setShowResultsModal(false)}
         assessmentType="career"
         results={results}

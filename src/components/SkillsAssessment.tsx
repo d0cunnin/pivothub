@@ -7,7 +7,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, Calculator, BookOpen, Monitor, ClipboardList, Search, Users, Wrench, Download } from "lucide-react";
 import { AssessmentResultsModal } from "./AssessmentResultsModal";
-import { EmailResultsPrompt } from "./EmailResultsPrompt";
 import { supabase } from "@/integrations/supabase/client";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { AssessmentAnalysisStatus } from "@/components/AssessmentAnalysisStatus";
@@ -753,22 +752,14 @@ export const SkillsAssessment = () => {
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-2">Assessment Complete! 🎉</h3>
               <p className="text-muted-foreground mb-6">
-                Would you like to receive your detailed results by email?
+                Your results are ready. Download your full report as a PDF to keep, or view your results now.
               </p>
             </div>
-            <EmailResultsPrompt
-              assessmentType="skills"
-              results={aiAssessment || results}
-              onEmailSent={() => {
-                setShowResults(true);
-                setShowEmailPrompt(false);
-              }}
-              onSkip={() => {
-                setShowResults(true);
-                setShowEmailPrompt(false);
-              }}
-            />
-            <div className="text-center">
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              <Button onClick={downloadSkillsAssessmentPDF}>
+                <Download className="h-4 w-4 mr-2" />
+                Download PDF
+              </Button>
               <Button
                 variant="outline"
                 onClick={() => {
@@ -1012,6 +1003,7 @@ export const SkillsAssessment = () => {
 
       <AssessmentResultsModal
         isOpen={showResultsModal}
+        onDownloadPdf={downloadSkillsAssessmentPDF}
         onClose={() => setShowResultsModal(false)}
         assessmentType="skills"
         results={aiAssessment}
