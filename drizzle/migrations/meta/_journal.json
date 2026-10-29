@@ -36,6 +36,13 @@
       "when": 1793078404371,
       "tag": "0004_monotonic_billing_and_cumulative_refunds",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793294831023,
+      "tag": "0005_restrict_course_buckets_admin_only",
+      "breakpoints": true
     }
   ]
 }
