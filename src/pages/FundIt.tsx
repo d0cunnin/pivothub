@@ -460,6 +460,7 @@ const FundIt = () => {
             <div className="flex flex-col gap-8">
               {/* Form Section */}
               <div className="max-w-5xl mx-auto w-full">
+<ToolGuard toolName="grant-content" showCreditInfo={false}>
                 <Card className="h-fit">
                   <CardHeader className="pb-6">
                     <CardTitle className="flex items-center gap-2 text-xl">
@@ -957,6 +958,7 @@ const FundIt = () => {
                     </ToolGuard>
                   </CardContent>
                 </Card>
+</ToolGuard>
               </div>
 
               {/* Results Section */}
