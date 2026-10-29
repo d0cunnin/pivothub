@@ -596,7 +596,7 @@ export const EnhancedInterviewCoach = () => {
                     <Button 
                       onClick={submitAnswer} 
                       disabled={loading || !currentAnswer.trim()}
-                      className="bg-gradient-primary"
+                      className="bg-primary"
                     >
                       {loading ? 'Getting AI Feedback...' : 'Get AI Feedback'}
                     </Button>
@@ -849,7 +849,7 @@ export const EnhancedInterviewCoach = () => {
                   </div>
                   
                   <div className="flex gap-3 mt-6">
-                    <Button onClick={() => setActiveTab('setup')} className="bg-gradient-primary">
+                    <Button onClick={() => setActiveTab('setup')} className="bg-primary">
                       New Practice Session
                     </Button>
                     <Button variant="outline">
