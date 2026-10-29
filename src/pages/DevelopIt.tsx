@@ -24,6 +24,9 @@ import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { Helmet } from "react-helmet-async";
 import ReactMarkdown from "react-markdown";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 
 // Types
 interface ProgramBuilderForm {
@@ -1491,52 +1494,27 @@ const DevelopIt = () => {
       </Helmet>
       <Header />
       
+      <ToolHero
+        badge="DEVELOP IT"
+        title="Community Development Tools"
+        subtitle="AI-guided tools for community development, neighborhood revitalization, nonprofit work, youth programs, faith-based outreach, and social impact initiatives."
+      />
+
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="max-w-5xl mx-auto">
-          <div className="develop-intro text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Develop It</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              AI-guided tools for community development, neighborhood revitalization, nonprofit work, 
-              youth programs, faith-based outreach, and social impact initiatives.
-            </p>
-          </div>
-
-          <div className="develop-overview text-left mb-8 space-y-3 max-w-3xl mx-auto">
-            <p className="text-muted-foreground">
-              <strong className="text-foreground">Program Builder</strong> — Turn your program idea into a structured, 
-              funder-ready design. Answer questions about your goals, target population, activities, and timeline, 
-              and receive a complete Program Design Summary with SMART outcomes, a delivery model, and a pitch paragraph 
-              you can paste into proposals.
-            </p>
-            
-            <p className="text-muted-foreground">
-              <strong className="text-foreground">Grant Readiness</strong> — Find out if your organization is ready 
-              to pursue grants. Share your mission, project details, and capacity, and get a readiness snapshot highlighting 
-              your strengths and gaps, plus draft narrative sections (needs statement, project description, evaluation plan) 
-              you can adapt for applications.
-            </p>
-            
-            <p className="text-muted-foreground">
-              <strong className="text-foreground">Community Assessment</strong> — Describe your community's needs, 
-              assets, and opportunities. Provide information about who lives there, the key challenges, existing resources, 
-              and what residents are saying. You'll receive a Community Assessment Summary ready for grant applications, 
-              presentations, or planning documents.
-            </p>
-            
-            <p className="text-muted-foreground">
-              <strong className="text-foreground">Stakeholder Planner</strong> — Plan who you need to engage and how. 
-              Select your stakeholder groups (residents, officials, funders, partners), define their roles and influence, 
-              and receive a strategy with talking points, communication methods, and an outreach timeline.
-            </p>
-            
-            <p className="text-muted-foreground">
-              <strong className="text-foreground">Dev Coach</strong> — Ask any community development question and get 
-              real-time AI coaching. Whether you're starting a youth program, handling pushback from leadership, or figuring 
-              out how to measure impact, the coach provides step-by-step guidance and practical options you can act on.
-            </p>
-          </div>
+          <WhatYouGet
+            heading="Five tools in one place — here's what each gives you"
+            items={[
+              { icon: Building2, name: "Program Builder", description: "A funder-ready Program Design Summary with SMART outcomes, a delivery model, and a pitch paragraph for proposals." },
+              { icon: FileText, name: "Grant Readiness", description: "A readiness snapshot of your strengths and gaps, plus draft needs statement, project description, and evaluation plan." },
+              { icon: MapPin, name: "Community Assessment", description: "A Community Assessment Summary covering needs, assets, and opportunities — ready for grants and presentations." },
+              { icon: Users, name: "Stakeholder Planner", description: "An engagement strategy with talking points, communication methods, and an outreach timeline." },
+              { icon: MessageCircle, name: "Dev Coach", description: "Real-time coaching with step-by-step guidance for any community development question." },
+            ]}
+          />
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="develop-workspace w-full">
+            <TabSwitchHint text="Click a tab below to switch between the five tools. Your answers in each tool stay put while you switch." />
             <TabsList className="grid w-full grid-cols-5 mb-6">
               <TabsTrigger value="program-builder" className="flex flex-col md:flex-row items-center gap-1 text-xs md:text-sm">
                 <Building2 className="h-4 w-4" />

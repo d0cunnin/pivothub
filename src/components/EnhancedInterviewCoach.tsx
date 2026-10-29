@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -287,6 +288,7 @@ export const EnhancedInterviewCoach = () => {
   return (
     <div className="w-full max-w-7xl mx-auto">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabSwitchHint />
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           <TabsTrigger value="setup">Setup</TabsTrigger>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -970,6 +971,7 @@ const FundIt = () => {
                     </CardHeader>
                     <CardContent>
                       <Tabs defaultValue="proposal" className="w-full">
+                        <TabSwitchHint />
                         <TabsList className="grid w-full grid-cols-2 mb-4">
                           <TabsTrigger value="proposal">Grant Proposal</TabsTrigger>
                           <TabsTrigger value="loi">Letter of Intent</TabsTrigger>

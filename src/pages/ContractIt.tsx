@@ -19,6 +19,9 @@ import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { generateCapabilityStatementPDF } from "@/lib/pdf-templates/capability-statement-template";
 import { Helmet } from "react-helmet-async";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
+import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
+import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 
 // Types
 interface CapabilityFormData {
@@ -1601,16 +1604,24 @@ const ContractIt = () => {
       <div className="min-h-screen bg-background">
         <Header />
         
+        <ToolHero
+          badge="CONTRACT IT"
+          title="Government Contracting Tools"
+          subtitle="Professional tools to help you succeed in federal, state, and local government contracting."
+        />
+
         <main className="page-container section-spacing">
           <div className="content-width">
-            <div className="text-center mb-8">
-              <h1 className="section-header">Contract It</h1>
-              <p className="section-description max-w-2xl mx-auto">
-                Professional tools to help you succeed in government contracting
-              </p>
-            </div>
+            <WhatYouGet
+              heading="Two tools in one place — here's what each gives you"
+              items={[
+                { icon: FileText, name: "Capability Statement", description: "A professional, one-page capability statement you can download as a PDF and send to contracting officers." },
+                { icon: ClipboardCheck, name: "Contract Readiness", description: "A readiness score showing where you stand, what's missing, and the next steps to become contract-ready." },
+              ]}
+            />
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabSwitchHint text="Click a tab below to switch between the two tools. Your answers in each tool stay put while you switch." />
               <TabsList className="grid w-full grid-cols-2 mb-8">
                 <TabsTrigger value="capability" className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
