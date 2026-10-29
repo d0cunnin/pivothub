@@ -21,7 +21,7 @@ export function createStripeClient(env: StripeEnv): Stripe {
       return fetch(gatewayUrl, {
         ...init,
         headers: {
-          ...Object.fromEntries(new Headers(init?.headers ?? (input instanceof Request ? input.headers : undefined)).entries()),
+          ...Object.fromEntries(new Headers((init as RequestInit | undefined)?.headers ?? (input instanceof Request ? input.headers : undefined)).entries()),
           'X-Connection-Api-Key': connectionApiKey,
           'Lovable-API-Key': lovableApiKey,
         },
