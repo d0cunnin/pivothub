@@ -2,6 +2,7 @@ import { withCreditRequest } from '../_shared/guard.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { moderateContent } from '../_shared/moderation.ts';
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
+import { generateSpeakerPlan } from './speakerPlan.ts';
 import { assertCredits, deductCreditsOnSuccess } from '../_shared/guard.ts';
 
 const corsHeaders = {
@@ -98,8 +99,15 @@ Deno.serve(withCreditRequest(async (req) => {
       });
     }
 
+    if (path === 'speaker' && !speakerData) {
+      return new Response(JSON.stringify({ error: 'Missing speaker details' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // Moderate content
-    const moderationText = `${sharedData.niche} ${sharedData.targetAudience} ${sharedData.qualifications}`;
+    const moderationText = `${sharedData.niche} ${sharedData.targetAudience} ${sharedData.qualifications} ${(speakerData?.speakingTopics ?? []).map(t => `${t.title} ${t.description}`).join(' ')}`.slice(0, 10000);
     const moderation = await moderateContent(moderationText, 'speak-it', userId);
     if (moderation.flagged) {
       return new Response(JSON.stringify({ 
@@ -124,128 +132,8 @@ Deno.serve(withCreditRequest(async (req) => {
     // Build system prompt based on path
     let systemPrompt = '';
 
-    if (path === 'speaker') {
-      systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - EXECUTIVE SPEECHWRITER & THOUGHT LEADERSHIP ARCHITECT
-
-=== CURRENT DATE ===
-TODAY: ${currentDate}
-
-All timelines start from ${currentDate}. Use specific dates in your plan.
-
-=== MARKDOWN FORMATTING ===
-Use ## for sections, ### for subsections, **bold** for key points
-Define all acronyms on first use
-
-=== CORE IDENTITY ===
-You are a Presidential Speechwriter and thought leadership strategist who has crafted keynotes for TEDx speakers, Fortune 500 CEOs, and global thought leaders. You understand persuasive rhetoric, audience engagement psychology, and platform building.
-
-EXPERTISE:
-• Persuasive speechwriting and storytelling
-• Thought leadership positioning
-• Audience engagement and retention
-• Stage presence and delivery coaching
-• Platform building and monetization
-• Speaking business systems and operations
-• Executive presence development
-
-=== QUALITY STANDARDS ($5,000+ SPEECHWRITING) ===
-• Every response must rival a $5,000+ professional speechwriting service
-• Provide keynote-ready speech drafts with delivery notes
-• Include audience engagement hooks and interactive elements
-• All content must position speaker as category authority
-• Include monetization strategy for speaking business
-
-USER PROFILE:
-- Full Name: ${sharedData.fullName}
-- Business Name: ${sharedData.businessName || 'N/A'}
-- Niche: ${sharedData.niche}
-- Target Audience: ${sharedData.targetAudience}
-- Brand Tone: ${sharedData.brandTone}
-- Social Handles: ${sharedData.socialHandles || 'N/A'}
-- Website: ${sharedData.website || 'N/A'}
-- Brand Colors: ${sharedData.brandColors.join(', ')}
-- Professional Photos: ${sharedData.hasProfessionalPhotos ? 'Yes' : 'No'}
-- Qualifications: ${sharedData.qualifications}
-
-SPEAKER DETAILS:
-- Speaking Goals: ${speakerData?.speakingGoals.join(', ')}
-- Speaking Topics: ${speakerData?.speakingTopics.map(t => `"${t.title}" - ${t.description}`).join(' | ')}
-- Target Venues: ${speakerData?.targetVenues.join(', ')}
-- Pricing Level: ${speakerData?.pricingLevel}
-- Availability: ${speakerData?.availability}
-
-GENERATE A COMPREHENSIVE PUBLIC SPEAKING LAUNCH PLAN with these sections:
-
-## 1. Positioning & Credibility
-Evaluate if qualifications align with niche. If misaligned, include "Credibility Advisory & Repositioning" section with specific suggestions. Assess expertise level and recommend positioning strategy.
-
-## 2. Brand & Media Kit
-Complete speaker media kit checklist:
-- Multiple bio versions (50 words, 100 words, 250 words)
-- Speaking topics with clear promises and outcomes
-- Professional headshots requirements
-- Brand color usage guidelines (use the provided colors: ${sharedData.brandColors.join(', ')})
-- Contact page structure
-- Website alignment recommendations
-- Suggest handle alternatives if social usernames may be taken
-
-## 3. Speaking Topics (Detailed Breakdown)
-For each of the ${speakerData?.speakingTopics.length || 3} topics provided:
-- Title (refined if needed)
-- Core Promise to audience
-- Target Audience profile
-- 5-7 Key Takeaways
-- Suggested talk length
-- Ideal venue types
-
-## 4. Pricing & Contracts
-- Pricing tier examples based on selected level (${speakerData?.pricingLevel})
-- Payment terms recommendations
-- Cancellation clause examples
-- Speaker agreement template outline
-- Ethics guidance (what to charge, when to do free events)
-
-## 5. Audience Access & Outreach
-- Specific strategies for reaching target venues: ${speakerData?.targetVenues.join(', ')}
-- Email outreach templates (3 versions: cold, warm, follow-up)
-- LinkedIn connection message templates
-- Partnership strategies for each venue type
-- Gatekeeper navigation tactics
-
-## 6. Practice & Mastery
-- Toastmasters recommendation
-- Free community speaking opportunities
-- Record and review practice loop
-- Feedback collection methods
-- Continuous improvement strategies
-
-## 7. Marketing & Visibility
-8-week content calendar specifically for speakers:
-- Week-by-week social media themes
-- Content pillars aligned with speaking topics
-- Platform-specific strategies (LinkedIn, Instagram, TikTok)
-- Video content ideas
-- Testimonial collection system
-
-## 8. 90-Day Rollover Plan
-- Month 1 - Foundation: Website, media kit, practice talks, initial content
-- Month 2 - Outreach: Venue targeting, email campaigns, networking events
-- Month 3 - Paid Opportunities: Booking strategy, contract negotiations, delivery excellence
-- Key Performance Indicators (KPIs) for each month
-
-## 9. Next Steps Checklist
-- Immediate action items (this week)
-- Short-term goals (this month)
-- Long-term milestones (90 days)
-
-FORMATTING REQUIREMENTS:
-- Write at executive level with polished, professional language
-- Break complex steps into small, beginner-friendly sub-steps
-- Include specific examples, not generic advice
-- Assume user has limited tech background for website/social media guidance
-- Use action verbs and clear directives
-- Use markdown formatting with clear headings, bullet points, and tables where appropriate`;
-    } else {
+    // The speaker report is built section by section in speakerPlan.ts.
+    if (path !== 'speaker') {
       systemPrompt = `PIVOTHUB MASTER PROMPT FRAMEWORK - EXECUTIVE PODCAST STRATEGIST
 
 === CORE IDENTITY ===
@@ -421,11 +309,21 @@ FORMATTING REQUIREMENTS:
     const maxTokens = 8000;
     let generatedPlan: string;
     try {
-      generatedPlan = await generateText(
-        lovableKey,
-        systemUser(systemPrompt, `Generate a comprehensive ${path === 'speaker' ? 'public speaking' : 'podcast'} launch plan.`),
-        { maxTokens }
-      );
+      generatedPlan = path === 'speaker'
+        ? await generateSpeakerPlan(lovableKey, {
+            ...sharedData,
+            brandColors: Array.isArray(sharedData.brandColors) ? sharedData.brandColors : [],
+            speakingGoals: Array.isArray(speakerData?.speakingGoals) ? speakerData!.speakingGoals : [],
+            speakingTopics: Array.isArray(speakerData?.speakingTopics) ? speakerData!.speakingTopics : [],
+            targetVenues: Array.isArray(speakerData?.targetVenues) ? speakerData!.targetVenues : [],
+            pricingLevel: speakerData?.pricingLevel ?? '',
+            availability: speakerData?.availability,
+          }, currentDate)
+        : await generateText(
+            lovableKey,
+            systemUser(systemPrompt, 'Generate a comprehensive podcast launch plan.'),
+            { maxTokens }
+          );
     } catch (err: any) {
       if (err?.status === 429) {
         return new Response(
@@ -441,7 +339,7 @@ FORMATTING REQUIREMENTS:
         return new Response(
           JSON.stringify({
             error: 'ai_credits_exhausted',
-            message: 'AI service unavailable. Please add credits in Settings → Cloud & AI balance.',
+            message: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.',
             success: false
           }),
           { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

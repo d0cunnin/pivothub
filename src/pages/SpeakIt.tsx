@@ -686,7 +686,7 @@ const SpeakIt = () => {
                     {isGenerating ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Generating Your Plan...
+                        Building Your Plan (about 1-2 minutes)...
                       </>
                     ) : (
                       <>
@@ -702,7 +702,7 @@ const SpeakIt = () => {
             /* Results Section */
             <Card>
               <CardHeader>
-                <CardTitle>Your {selectedPath === 'speaker' ? 'Speaking' : 'Podcast'} Launch Plan</CardTitle>
+                <CardTitle>{selectedPath === 'speaker' ? 'Your Speaker Development & Launch Strategy' : 'Your Podcast Launch Plan'}</CardTitle>
                 <CardDescription>
                   Your comprehensive plan has been generated. Download the PDF to save your copy.
                 </CardDescription>
@@ -722,6 +722,11 @@ const SpeakIt = () => {
                           li: ({node, ...props}) => <li className="my-1" {...props} />,
                           p: ({node, ...props}) => <p className="my-2 leading-relaxed" {...props} />,
                           blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-accent pl-4 italic my-4" {...props} />,
+                          table: ({node, ...props}) => (
+                            <div className="overflow-x-auto my-4 not-prose">
+                              <table className="w-full text-sm border-collapse [&_th]:border [&_td]:border [&_th]:p-2 [&_td]:p-2 [&_th]:bg-muted [&_th]:text-left [&_td]:align-top" {...props} />
+                            </div>
+                          ),
                         }}
                       >
                         {generatedPlan}
