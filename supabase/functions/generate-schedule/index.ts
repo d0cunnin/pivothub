@@ -2,6 +2,7 @@ import { withCreditRequest } from '../_shared/guard.ts';
 import { guard, corsHeaders, deductCreditsOnSuccess, logRequest } from "../_shared/guard.ts";
 import { getModelForUser, validateProvider } from "../_shared/providerRouter.ts";
 import { fetchWithTimeout, handleAIError, AIError } from "../_shared/aiTimeout.ts";
+import { CONTENT_POLICY } from "../_shared/aiGenerate.ts";
 
 Deno.serve(withCreditRequest(async (req) => {
   if (req.method === "OPTIONS") {
@@ -246,7 +247,7 @@ ${truncatedData.downtimeHours ? `4. Protects ${truncatedData.downtimeHours}h for
             body: JSON.stringify({
               model: 'google/gemini-3.8-flash',  // Bypass OpenAI routing, faster JSON generation
               messages: [
-                { role: "system", content: systemPrompt },
+                { role: "system", content: systemPrompt + CONTENT_POLICY },
                 { role: "user", content: userPrompt },
               ],
               max_completion_tokens: 5500,  // Increased for richer 5-6 activities/day

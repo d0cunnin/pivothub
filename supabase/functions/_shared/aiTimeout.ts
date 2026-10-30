@@ -103,7 +103,7 @@ export function handleAIError(
     
     switch (error.code) {
       case 'CREDITS_EXHAUSTED':
-        userMessage = 'AI service is currently unavailable. Please add credits in Settings → Cloud & AI balance.';
+        userMessage = 'Our AI service is temporarily unavailable. Please try again later. You were not charged.';
         break;
       case 'RATE_LIMIT_EXCEEDED':
         userMessage = 'AI service is experiencing high demand. Please try again in a few moments.';

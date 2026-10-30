@@ -235,7 +235,7 @@ Generate event titles, description, color palette${formData.includeItinerary ? '
         return new Response(
           JSON.stringify({
             error: 'ai_credits_exhausted',
-            message: 'AI service unavailable. Please add credits in Settings → Cloud & AI balance.'
+            message: 'Our AI service is temporarily unavailable. Please try again later. You were not charged.'
           }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
