@@ -5,6 +5,7 @@ import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard, logRequest, corsHeaders, deductCreditsOnSuccess } from "../_shared/guard.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
+import { generateCoveredReport } from '../_shared/coveredReport.ts';
 
 // Validation schema
 const launchStrategySchema = z.object({
@@ -527,7 +528,7 @@ FORMATTING RULES:
     const maxTokens = 7000;
     let strategy: string;
     try {
-      strategy = await generateText(apiKey, systemUser(systemPrompt, `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.`), { maxTokens });
+      strategy = await generateCoveredReport(apiKey, systemUser(systemPrompt, `Create a comprehensive, premium-quality launch strategy for this ${ideaCategory} project following the complete framework. This should feel like a $5,000 consulting deliverable.`), { maxTokens }, { 'Launch goal': launchGoals, 'Support you asked for': desiredSupport });
     } catch (err: any) {
       if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });

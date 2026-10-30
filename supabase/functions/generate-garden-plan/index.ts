@@ -3,6 +3,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { generateText, systemUser } from "../_shared/aiGenerate.ts";
 import { assertCredits, deductCreditsOnSuccess } from "../_shared/guard.ts";
+import { generateCoveredReport } from '../_shared/coveredReport.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -166,7 +167,7 @@ Generate a comprehensive garden plan with plant recommendations appropriate for 
 
     let content: string;
     try {
-      content = await generateText(LOVABLE_API_KEY, systemUser(systemPrompt, userPrompt), { maxTokens: 4000 });
+      content = await generateCoveredReport(LOVABLE_API_KEY, systemUser(systemPrompt, userPrompt), { maxTokens: 4000 }, { 'Plant': whatToGrow ?? [], 'Priority': priorities ?? [] });
     } catch (err: any) {
       if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'rate_limit_exceeded' }), {

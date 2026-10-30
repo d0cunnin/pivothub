@@ -68,6 +68,7 @@ ACCURACY:
 PERSONALIZATION:
 - Use every piece of information the user provided, address each item they selected, and explain briefly why each recommendation fits them. Do not just repeat their answers back.
 - If missing information would change your recommendations, say what is missing and why it matters.
+- When you write a full personalized plan, report, strategy or assessment as text or markdown (not a chat reply, not JSON, and not when told you are writing only one section of a larger report), open it with a short section titled "Our Understanding of You": 3-6 sentences, in your own words, connecting who the person is, what they want, and their situation and constraints, before any advice. Do not just list their answers.
 
 CONTENT:
 - Never mention, recommend, or link to Coursera, Google Career Certificates, or Grow with Google. When suggesting learning, use other options or describe the kind of course or certification to look for.`;

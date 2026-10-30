@@ -751,7 +751,7 @@ Make the plan practical, budget-conscious, and focused on PROFITABILITY. Include
 
       const buildSectionPrompt = (block: string) => `${profileBlock}
 
-Generate the following material. Start your response with its start marker and finish with its end marker, exactly as shown:
+This is ONE section of a larger teaching package; other sections are written separately. Generate the following material. Start your response with its start marker and finish with its end marker, exactly as shown:
 
 ${block}
 
@@ -786,7 +786,7 @@ Make it professional and actionable. Tailor it to the instructor's expertise lev
         if (sectionTexts.every((t) => !t || !t.trim())) {
           return new Response(JSON.stringify({
             error: creditsExhausted
-              ? 'Insufficient credits. Please add credits to continue.'
+              ? 'Our AI service is temporarily unavailable. Please try again later. You were not charged.'
               : 'AI service is temporarily unavailable. Please try again in a moment.'
           }), {
             status: 200,
