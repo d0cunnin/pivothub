@@ -1,4 +1,5 @@
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
+import { checkSection } from './speakerChecks.ts';
 
 /**
  * Builds an individualized Speaker Development & Launch Strategy.
@@ -86,7 +87,9 @@ const SECTIONS: Section[] = [
   {
     title: '1. Your Starting Point & Positioning',
     maxTokens: 4500,
-    task: () => `Write the profile review and positioning section, with these subsections in order:
+    task: () => `Write the profile review and positioning section. Before giving any advice, show that you understood this person. Use these subsections in order:
+### Our Understanding of You
+A 5-7 sentence summary, in your own words, of who this person is, what they want from speaking, who they want to reach, what they already have to work with (background, topics, website, photos, availability, pricing level) and their main constraints or gaps. Synthesize and connect the details (for example how their background relates to their topics and chosen venues); do not list their answers back. End with: "If anything here is not right, update your answers and generate a new plan."
 ### What You Bring
 Group the person's actual background into strengths that matter for speaking (not a list of their form answers). Facts only.
 ### What We Are Inferring
@@ -204,24 +207,56 @@ Three specific actions to take in the next 7 days.`,
  * caller does not charge for an incomplete report.
  */
 export async function generateSpeakerPlan(apiKey: string, input: SpeakerInput, today: string): Promise<string> {
+  const started = Date.now();
   const system = `You are an experienced public speaking coach and small-business advisor. You are writing ONE section of a personalized Speaker Development & Launch Strategy for the person below. Other sections are written separately, so stay within your section.
 
 ${profileBlock(input, today)}
 
 ${RULES}`;
+  const write = (i: number, fixes?: string[]) =>
+    generateText(
+      apiKey,
+      systemUser(
+        system,
+        fixes?.length
+          ? `${SECTIONS[i].task(input)}\n\nA quality check of your previous version of this section found these problems. Write the full section again and fix every one:\n${fixes.map((f) => `- ${f}`).join('\n')}`
+          : SECTIONS[i].task(input),
+      ),
+      { maxTokens: SECTIONS[i].maxTokens },
+    );
 
-  const results = await Promise.all(
-    SECTIONS.map((section) =>
-      generateText(apiKey, systemUser(system, section.task(input)), { maxTokens: section.maxTokens }),
-    ),
-  );
+  const results = await Promise.all(SECTIONS.map((_, i) => write(i)));
+
+  // Quality check against the form answers; rewrite failing sections once
+  // when there is time left before the platform's request limit.
+  let issues = results.map((text, i) => checkSection(i, text, input));
+  const failing = issues.map((list, i) => (list.length ? i : -1)).filter((i) => i >= 0);
+  if (failing.length) {
+    console.log('[speak-it] quality check issues:', JSON.stringify(issues));
+    if (Date.now() - started < 70_000) {
+      const rewrites = await Promise.allSettled(failing.map((i) => write(i, issues[i])));
+      rewrites.forEach((r, k) => {
+        const i = failing[k];
+        if (r.status !== 'fulfilled') return;
+        const after = checkSection(i, r.value, input);
+        if (after.length <= issues[i].length) { results[i] = r.value; issues[i] = after; }
+      });
+    }
+  }
 
   const name = input.businessName?.trim() ? `${input.fullName} (${input.businessName.trim()})` : input.fullName;
   const intro = `# Speaker Development & Launch Strategy for ${name}
 
 Prepared ${today}. This plan is based only on what you entered. Anything marked **draft** is suggested wording for you to edit, anything marked **(inferred)** is our reasoning rather than something you told us, and items in [brackets] are details for you to fill in.`;
 
-  return [intro, ...SECTIONS.map((s, i) => `## ${s.title}\n\n${stripLeadingTitle(results[i], s.title)}`)].join('\n\n');
+  const remaining = issues.flat();
+  const reviewNote = remaining.length
+    ? `## Please Review\n\nOur automatic check flagged a few things in this report. Please review them before using it:\n\n${remaining.map((r) => `- ${r}`).join('\n')}`
+    : '';
+
+  return [intro, ...SECTIONS.map((s, i) => `## ${s.title}\n\n${stripLeadingTitle(results[i], s.title)}`), reviewNote]
+    .filter(Boolean)
+    .join('\n\n');
 }
 
 /** Removes a repeated section title if the AI added one anyway. */
