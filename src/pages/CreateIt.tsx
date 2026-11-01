@@ -104,13 +104,7 @@ export default function CreateIt() {
   const [generating, setGenerating] = useState(false);
   const [blueprint, setBlueprint] = useState<CreateItBlueprint | null>(null);
   const [view, setView] = useState<"wizard" | "result">("wizard");
-  const [history, setHistory] = useState<SavedBlueprint[]>([]);
-  const [loadingHistory, setLoadingHistory] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (user) loadHistory();
-  }, [user]);
 
   const update = <K extends keyof CreateItFormData>(key: K, value: CreateItFormData[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -123,24 +117,6 @@ export default function CreateIt() {
         [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value],
       };
     });
-
-  const loadHistory = async () => {
-    if (!user) return;
-    setLoadingHistory(true);
-    try {
-      const { data, error } = await supabase
-        .from("create_it_blueprints")
-        .select("id, platform_name, platform_description, industry, platform_type, blueprint_json, created_at")
-        .order("created_at", { ascending: false })
-        .limit(25);
-      if (error) throw error;
-      setHistory((data || []) as unknown as SavedBlueprint[]);
-    } catch (err) {
-      console.error("Failed to load blueprint history:", err);
-    } finally {
-      setLoadingHistory(false);
-    }
-  };
 
   const validateStep = (s: number): string | null => {
     switch (s) {
@@ -248,6 +224,18 @@ export default function CreateIt() {
   };
 
   const handleRegenerate = () => {
+    setBlueprint(null);
+    setView("wizard");
+    handleGenerate();
+  };
+
+  const handleCreateAnother = () => {
+    setForm(EMPTY_FORM);
+    setBlueprint(null);
+    setStep(1);
+    setView("wizard");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const copyBuildPrompt = async () => {
     if (!blueprint?.aiBuildPrompt) return;
