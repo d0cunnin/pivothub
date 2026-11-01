@@ -181,108 +181,6 @@ const DeployIt = () => {
             </AlertDescription>
           </Alert>
 
-          {/* Understanding AI Agents Section */}
-          <Card className="mb-12 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
-            <CardHeader>
-              <CardTitle>Understanding AI Agents</CardTitle>
-              <CardDescription>Learn the fundamentals of AI agents</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="what-is-agent">
-                  <AccordionTrigger>What is an AI Agent?</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="text-muted-foreground">
-                      An AI assistant follows instructions to help with a specific task, such as drafting replies, explaining lessons, or summarizing information. Some platforms also support actions like scheduling or organizing files, but those require separate connections and permissions. Deploy It provides the instructions and setup guide; it does not connect your accounts or perform those actions for you.
-                    </p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="how-work">
-                  <AccordionTrigger>How Your Setup Guide Becomes an Assistant</AccordionTrigger>
-                  <AccordionContent>
-                    <ol className="list-decimal pl-6 space-y-2 text-muted-foreground">
-                      <li><strong className="text-foreground">Choose a goal:</strong> For example, help draft replies to customer questions.</li>
-                      <li><strong className="text-foreground">Get your guide:</strong> PivotHub writes setup steps and assistant instructions.</li>
-                      <li><strong className="text-foreground">Open your platform:</strong> Sign in to your own ChatGPT, Gemini, Claude, or other chosen account.</li>
-                      <li><strong className="text-foreground">Set it up:</strong> Follow the guide and paste in the instructions. Configure any optional connections yourself.</li>
-                      <li><strong className="text-foreground">Test and review:</strong> Try sample questions and check the answers before relying on the assistant.</li>
-                    </ol>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="use-cases">
-                  <AccordionTrigger>Example Use Cases</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 text-muted-foreground">
-                      <div>
-                        <p className="font-semibold text-foreground">Education:</p>
-                        <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Tutor Agent: Answers student questions and creates practice quizzes</li>
-                          <li>Research Assistant: Finds and summarizes academic papers</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Business:</p>
-                        <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Customer Service Agent: Handles support tickets automatically</li>
-                          <li>Sales Assistant: Schedules meetings and follows up with leads</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Content Creation:</p>
-                        <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Social Media Manager: Posts content on schedule and responds to comments</li>
-                          <li>Writing Assistant: Drafts blog posts based on your outline</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="safety">
-                  <AccordionTrigger>Safety, Privacy, and Ethics Checklist</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-3 text-muted-foreground">
-                      <p className="font-semibold text-foreground">Before deploying your agent, check:</p>
-                      <ul className="list-disc pl-6 space-y-2">
-                        <li><strong className="text-foreground">Data Privacy:</strong> What information does your agent access? Is it sensitive?</li>
-                        <li><strong className="text-foreground">Permissions:</strong> Only give your agent access to what it needs</li>
-                        <li><strong className="text-foreground">Transparency:</strong> Make sure users know they're talking to an AI</li>
-                        <li><strong className="text-foreground">Monitoring:</strong> Regularly check what your agent is doing</li>
-                        <li><strong className="text-foreground">Limits:</strong> Set boundaries on what actions it can take without asking you first</li>
-                        <li><strong className="text-foreground">Backup:</strong> Have a way to stop or override the agent if needed</li>
-                      </ul>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="troubleshooting">
-                  <AccordionTrigger>Troubleshooting & Improvement Tips</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="space-y-4 text-muted-foreground">
-                      <div>
-                        <p className="font-semibold text-foreground">Agent not understanding instructions?</p>
-                        <p>→ Make your instructions more specific and add examples</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Agent making mistakes?</p>
-                        <p>→ Review its actions and adjust the safety rules or permissions</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Agent too slow?</p>
-                        <p>→ Simplify the task or break it into smaller steps</p>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">Want to improve results?</p>
-                        <p>→ Give the agent clear examples of good vs. bad outputs</p>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </CardContent>
-          </Card>
 
           {/* Input Form */}
           <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
@@ -297,10 +195,10 @@ const DeployIt = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="agentName">Agent Name / Purpose *</Label>
+                <Label htmlFor="agentName">Assistant Name *</Label>
                 <Input
                   id="agentName"
-                  placeholder="e.g., Email Organizer"
+                  placeholder="e.g., Customer Support Helper or Study Buddy"
                   value={formData.agentName}
                   onChange={(e) => setFormData({ ...formData, agentName: e.target.value })}
                 />
@@ -417,6 +315,109 @@ const DeployIt = () => {
                   </>
                 )}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Understanding AI Assistants Section */}
+          <Card className="mb-12 bg-gradient-card/30 backdrop-blur-sm border border-white/10">
+            <CardHeader>
+              <CardTitle>Understanding AI Assistants</CardTitle>
+              <CardDescription>Helpful background on AI assistants</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="what-is-agent">
+                  <AccordionTrigger>What is an AI Assistant?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="text-muted-foreground">
+                      An AI assistant follows instructions to help with a specific task, such as drafting replies, explaining lessons, or summarizing information. Some platforms also support actions like scheduling or organizing files, but those require separate connections and permissions. Deploy It provides the instructions and setup guide; it does not connect your accounts or perform those actions for you.
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="how-work">
+                  <AccordionTrigger>How Your Setup Guide Becomes an Assistant</AccordionTrigger>
+                  <AccordionContent>
+                    <ol className="list-decimal pl-6 space-y-2 text-muted-foreground">
+                      <li><strong className="text-foreground">Choose a goal:</strong> For example, help draft replies to customer questions.</li>
+                      <li><strong className="text-foreground">Get your guide:</strong> PivotHub writes setup steps and assistant instructions.</li>
+                      <li><strong className="text-foreground">Open your platform:</strong> Sign in to your own ChatGPT, Gemini, Claude, or other chosen account.</li>
+                      <li><strong className="text-foreground">Set it up:</strong> Follow the guide and paste in the instructions. Configure any optional connections yourself.</li>
+                      <li><strong className="text-foreground">Test and review:</strong> Try sample questions and check the answers before relying on the assistant.</li>
+                    </ol>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="use-cases">
+                  <AccordionTrigger>Example Use Cases</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4 text-muted-foreground">
+                      <div>
+                        <p className="font-semibold text-foreground">Education:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Tutor Assistant: Answers student questions and creates practice quizzes</li>
+                          <li>Research Assistant: Finds and summarizes academic papers</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Business:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Customer Service Assistant: Handles support tickets automatically</li>
+                          <li>Sales Assistant: Schedules meetings and follows up with leads</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Content Creation:</p>
+                        <ul className="list-disc pl-6 mt-2 space-y-1">
+                          <li>Social Media Manager: Posts content on schedule and responds to comments</li>
+                          <li>Writing Assistant: Drafts blog posts based on your outline</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="safety">
+                  <AccordionTrigger>Safety, Privacy, and Ethics Checklist</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-3 text-muted-foreground">
+                      <p className="font-semibold text-foreground">Before setting up your assistant, check:</p>
+                      <ul className="list-disc pl-6 space-y-2">
+                        <li><strong className="text-foreground">Data Privacy:</strong> What information does your assistant access? Is it sensitive?</li>
+                        <li><strong className="text-foreground">Permissions:</strong> Only give your assistant access to what it needs</li>
+                        <li><strong className="text-foreground">Transparency:</strong> Make sure users know they're talking to an AI</li>
+                        <li><strong className="text-foreground">Monitoring:</strong> Regularly check what your assistant is doing</li>
+                        <li><strong className="text-foreground">Limits:</strong> Set boundaries on what actions it can take without asking you first</li>
+                        <li><strong className="text-foreground">Backup:</strong> Have a way to stop or override the assistant if needed</li>
+                      </ul>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="troubleshooting">
+                  <AccordionTrigger>Troubleshooting & Improvement Tips</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="space-y-4 text-muted-foreground">
+                      <div>
+                        <p className="font-semibold text-foreground">Assistant not understanding instructions?</p>
+                        <p>→ Make your instructions more specific and add examples</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Assistant making mistakes?</p>
+                        <p>→ Review its actions and adjust the safety rules or permissions</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Assistant too slow?</p>
+                        <p>→ Simplify the task or break it into smaller steps</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-foreground">Want to improve results?</p>
+                        <p>→ Give the assistant clear examples of good vs. bad outputs</p>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </CardContent>
           </Card>
 
