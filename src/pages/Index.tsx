@@ -12,9 +12,22 @@ import {
   generateFAQSchema,
 } from "@/components/StructuredData";
 import heroVideo from "@/assets/hero-video.mp4";
+import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 
 const Index = () => {
   const features = [
+    {
+      icon: Lightbulb,
+      title: "Deploy It",
+      description: "AI Assistant Setup Guide: get instructions and a PDF to set up an assistant in your own AI account. Not hosting or automatic deployment.",
+      link: "/deployit",
+    },
+    {
+      icon: Rocket,
+      title: "Create It",
+      description: "App & Platform Blueprint: plan features, technology, and build steps, with a PDF and AI build prompt. A plan—not a finished app.",
+      link: "/createit",
+    },
     {
       icon: ClipboardCheck,
       title: "Assess It",
@@ -223,6 +236,7 @@ const Index = () => {
                 { title: "Income & ideas", titles: ["Earn It", "Teach It", "Build It"] },
                 { title: "Planning & launching", titles: ["Host It", "Schedule It", "Launch It", "Speak It", "Garden It"] },
                 { title: "Funding & growth", titles: ["Fund It", "Develop It", "Contract It"] },
+                { title: "AI assistants & app ideas", titles: ["Deploy It", "Create It"] },
               ].map((category) => (
                 <div key={category.title}>
                   <div className="mb-4 flex items-center gap-4">
@@ -253,6 +267,8 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <ToolPurposeComparison />
 
         <section className="border-y border-border bg-muted/50 py-12 md:py-16">
           <div className="page-container">
