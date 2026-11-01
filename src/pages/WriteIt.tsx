@@ -59,6 +59,10 @@ const WriteIt = () => {
   const [publishOpen, setPublishOpen] = useState(false);
   const [authorName, setAuthorName] = useState("");
   const [toDelete, setToDelete] = useState<WriteItProject | null>(null);
+  // Which chapter outlines are expanded. Chapters that have an outline open by default.
+  const [openOutlines, setOpenOutlines] = useState<string[]>([]);
+  const withOutlines = (p: WriteItProject | null) => (p?.chapters ?? []).filter((c) => c.outline.trim()).map((c) => c.id);
+  useEffect(() => { if (tab === "outlines") setOpenOutlines(withOutlines(project)); }, [tab, project?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const refresh = useCallback(async () => {
     if (!user) return;
@@ -161,9 +165,12 @@ const WriteIt = () => {
       const data = await call(chapter ? "outline" : "outlines", chapter ? { chapterNumber: index + 1 } : {}, project, project.inputs);
       const outlines: Record<string, string> = data.outlines ?? {};
       const next = { ...project, chapters: project.chapters.map((c, i) => (outlines[i + 1] ? { ...c, outline: outlines[i + 1] } : c)) };
+      const created = Object.keys(outlines).length;
+      if (!created) throw new Error("No outlines came back. Please try again. You were not charged.");
       setProject(next);
+      setOpenOutlines((open) => [...new Set([...open, ...withOutlines(next)])]);
       await persist(next, true);
-      toast.success(chapter ? "Outline updated" : "Chapter outlines are ready");
+      toast.success(chapter ? "Outline updated" : `Outlines ready for ${created} chapter${created === 1 ? "" : "s"}. They're shown below.`);
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
@@ -488,12 +495,22 @@ const WriteIt = () => {
         <TabsContent value="outlines">
           <Card>
             <CardContent className="pt-6 space-y-4">
-              <p className="text-sm text-muted-foreground">Outlines are planning notes for you to write from, not chapter text. Edit them as your ideas grow.</p>
+              <div className="rounded-md bg-muted/50 p-3 text-sm space-y-1">
+                <p><span className="font-medium">Outline</span> = your plan for the chapter (the AI creates it; you can edit it). <span className="font-medium">Writing status</span> = how far <em>you</em> have written that chapter. Change it as you go.</p>
+                <p className="text-muted-foreground">Outlines are planning notes, not chapter text.</p>
+              </div>
               <Button disabled={busy !== null || !project.chapters.length} onClick={() => generateOutlines()}>
                 {busy === "outlines" ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Outlining every chapter (about a minute)...</>
-                  : <><ListTree className="h-4 w-4 mr-2" /> {outlinedCount ? "Re-create" : "Create"} outlines for all chapters ({WRITE_IT_COSTS.outlines} credits)</>}
+                  : <><ListTree className="h-4 w-4 mr-2" /> {outlinedCount ? "Replace all outlines with new ones" : "Create outlines for all chapters"} ({WRITE_IT_COSTS.outlines} credits)</>}
               </Button>
-              <Accordion type="multiple" className="w-full">
+              {project.chapters.length > 0 && (
+                <div className="flex flex-wrap items-center gap-3 text-sm">
+                  <span className="text-muted-foreground">{outlinedCount} of {project.chapters.length} chapters outlined. Click a chapter to show or hide its outline.</span>
+                  <button type="button" className="text-primary hover:underline" onClick={() => setOpenOutlines(project.chapters.map((c) => c.id))}>Expand all</button>
+                  <button type="button" className="text-primary hover:underline" onClick={() => setOpenOutlines([])}>Collapse all</button>
+                </div>
+              )}
+              <Accordion type="multiple" className="w-full" value={openOutlines} onValueChange={setOpenOutlines}>
                 {groupByPart(project.chapters, project.plan.parts).flatMap((g) => g.chapters).map((c) => {
                   const n = project.chapters.findIndex((x) => x.id === c.id) + 1;
                   return (
@@ -501,12 +518,15 @@ const WriteIt = () => {
                       <AccordionTrigger className="text-left">
                         <span className="flex flex-wrap items-center gap-2">
                           Chapter {n}: {c.title}
-                          <Badge variant={statusVariant(c.status)} className="font-normal">{c.status}</Badge>
-                          {!c.outline && <span className="text-xs text-muted-foreground">(no outline yet)</span>}
+                          {c.outline.trim()
+                            ? <Badge className="font-normal bg-emerald-600 hover:bg-emerald-600 text-white"><Check className="h-3 w-3 mr-1" />Outline ready</Badge>
+                            : <span className="text-xs text-muted-foreground">(no outline yet)</span>}
+                          <Badge variant={statusVariant(c.status)} className="font-normal">Writing: {c.status}</Badge>
                         </span>
                       </AccordionTrigger>
                       <AccordionContent className="space-y-3">
                         <div className="flex flex-wrap gap-2 items-center">
+                          <span className="text-sm text-muted-foreground">Writing status:</span>
                           <Select value={c.status} onValueChange={(v) => edit((p) => ({ ...p, chapters: p.chapters.map((x) => (x.id === c.id ? { ...x, status: v as ProgressStatus } : x)) }))}>
                             <SelectTrigger className="w-44" aria-label={`Status for chapter ${n}`}><SelectValue /></SelectTrigger>
                             <SelectContent>{PROGRESS_STATUSES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
