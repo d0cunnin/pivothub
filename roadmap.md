@@ -1,4 +1,6 @@
 # Purchase setup
+- [x] Add one-time custom admin Tool Credit awards and retain preset monthly plans; migration applied, admin-grant-credits deployed, 21 policy/ledger tests pass for exact balance, no renewal, expiry, retries and billing isolation.
+- [ ] Verify one-time award through the signed-in admin screen; blocked because session minting finds no requesting-user app account and no confirmed recipient. No real-user credits issued.
 - [x] Expand Business Foundation demographics helper for individual, business, organization, and government customers; seven customer-profile tests pass and preview builds successfully.
 - [ ] Verify demographics helper application through a signed-in account; blocked because the requester has no matching app account/session. No paid generation attempted.
 - [x] Restore secure complimentary Grant Access with due monthly installments, atomic audit, updated dialog and balance feedback; deployed; 32 grant/payment tests pass, including an isolated test user's exact 40-credit increase.
