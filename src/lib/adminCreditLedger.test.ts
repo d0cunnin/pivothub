@@ -32,6 +32,7 @@ beforeAll(async () => {
     CREATE TABLE credit_deduction_log(user_id uuid,endpoint text,credits_deducted integer,request_hash text);
   `);
   await db.exec(readFileSync('drizzle/migrations/0006_complimentary_admin_credit_awards.sql', 'utf8'));
+  await db.exec(readFileSync('drizzle/migrations/0007_one_time_custom_admin_credits.sql', 'utf8'));
   await db.query('INSERT INTO profiles VALUES ($1)', [userId]);
   await db.query("INSERT INTO user_roles VALUES ($1,'admin')", [adminId]);
   await db.query('INSERT INTO subscribers_public(user_id) VALUES ($1)', [userId]);
@@ -81,5 +82,39 @@ describe.sequential('complimentary credit ledger', () => {
     await db.exec('UPDATE credit_grants SET remaining=0 WHERE issued_at<=now(); UPDATE subscribers_public SET free_credits_remaining=0');
     await db.query("INSERT INTO credit_reservations(id,user_id,amount,expires_at,status) VALUES ($1,$2,1,now()+interval '5 minutes','held')", [awardId, userId]);
     await expect(db.query("SELECT consume_credit_reservation($1,$2,'test')", [userId, awardId])).rejects.toThrow('Reserved credits no longer available');
+  });
+  it('adds exactly 73 custom credits immediately as a one-time award', async () => {
+    const before = await balance();
+    const result = await db.query<{ result: { grant_type: string; balance: { remaining: number } } }>(
+      'SELECT public.grant_admin_credits($1,$2,$3,$4,$5,$6,$7) AS result',
+      ['00000000-0000-4000-8000-000000000005', adminId, userId, 'custom', 73, 1, 'One-time courtesy'],
+    );
+    expect(result.rows[0].result).toMatchObject({ grant_type: 'one_time', balance: { remaining: before + 73 } });
+  });
+  it('does not issue a second custom installment next month', async () => {
+    await db.exec("UPDATE admin_credit_awards SET starts_at=now()-interval '1 month' WHERE plan='custom'");
+    await balance();
+    const result = await db.query<{ amount: number }>("SELECT amount FROM credit_grants WHERE source_key LIKE 'admin:00000000-0000-4000-8000-000000000005:%'");
+    expect(result.rows).toEqual([{ amount: 73 }]);
+  });
+  it('retains three-month expiry for custom credits', async () => {
+    const result = await db.query<{ correct: boolean }>("SELECT expires_at=issued_at+interval '3 months' AS correct FROM credit_grants WHERE source_key='admin:00000000-0000-4000-8000-000000000005:0'");
+    expect(result.rows[0].correct).toBe(true);
+  });
+  it('does not duplicate custom credits or audit entries on retry', async () => {
+    const before = await balance();
+    const auditBefore = (await db.query('SELECT * FROM admin_audit_log')).rows.length;
+    await db.query('SELECT public.grant_admin_credits($1,$2,$3,$4,$5,$6,$7)', ['00000000-0000-4000-8000-000000000005', adminId, userId, 'custom', 73, 1, 'One-time courtesy']);
+    expect(await balance()).toBe(before);
+    expect((await db.query('SELECT * FROM admin_audit_log')).rows).toHaveLength(auditBefore);
+  });
+  it('rejects recurring custom awards', async () => {
+    await expect(db.query('SELECT public.grant_admin_credits($1,$2,$3,$4,$5,$6,$7)', ['00000000-0000-4000-8000-000000000006', adminId, userId, 'custom', 73, 3, 'Invalid recurring award'])).rejects.toThrow('one-time award');
+  });
+  it('audits the one-time amount without creating payment entitlements', async () => {
+    const result = await db.query<{ details: Record<string, unknown> }>("SELECT details FROM admin_audit_log WHERE details->>'grant_type'='one_time'");
+    expect(result.rows[0].details).toMatchObject({ credits: 73, months: 1, plan: 'custom', note: 'One-time courtesy' });
+    expect((await db.query('SELECT * FROM payment_subscriptions')).rows).toHaveLength(0);
+    expect((await db.query<{ subscribed: boolean }>('SELECT subscribed FROM subscribers_public')).rows[0].subscribed).toBe(false);
   });
 });
