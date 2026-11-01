@@ -81,7 +81,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    - Grant Resources - external links (free)
 
    **Earn It:**
-   - Side Income Blueprint (3 credits) - assessment plus a personalized plan with income ideas, a 90-day plan and PDF
+   - Side Income Blueprint (5 credits) - assessment plus a personalized plan with income ideas, a 90-day plan and PDF
 
    **Schedule It:** Schedule Builder (5 credits)
    **Host It:** Event Planning Generator (4 credits)
