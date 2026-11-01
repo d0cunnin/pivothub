@@ -220,7 +220,7 @@ QUALITY STANDARDS:
 • Provide actionable recommendations
 • Note if conflicts are registered trademarks vs. common law`
           ),
-          { maxTokens: 1500 },
+          { maxTokens: 3000 },
         );
         try {
           const cleaned = aiText.trim().replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '');

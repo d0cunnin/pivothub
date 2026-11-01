@@ -71,7 +71,7 @@ CRITICAL: Return ONLY valid JSON with no additional text or markdown. Your entir
       result = await generateJson<PromptAnalysis>(
         LOVABLE_API_KEY,
         systemUser(systemPrompt, `Analyze this prompt: "${prompt}"`),
-        { maxTokens: 1200 }
+        { maxTokens: 3000 }
       );
     } catch (err: any) {
       if (err?.status === 429) {

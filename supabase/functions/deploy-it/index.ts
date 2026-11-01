@@ -92,7 +92,7 @@ Format your response as JSON with these keys:
 
     let result: any;
     try {
-      result = await generateJson(LOVABLE_API_KEY, systemUser(systemPrompt, userPrompt), { maxTokens: 1500 });
+      result = await generateJson(LOVABLE_API_KEY, systemUser(systemPrompt, userPrompt), { maxTokens: 6000 });
     } catch (err: any) {
       if (err?.status === 429) {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait 1-2 minutes and try again.' }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
