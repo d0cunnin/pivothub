@@ -916,6 +916,48 @@ export type Database = {
         }
         Relationships: []
       }
+      publish_it_projects: {
+        Row: {
+          ai_summary: string | null
+          assessment: Json
+          costs: Json
+          created_at: string
+          id: string
+          isbn_records: Json
+          progress: Json
+          project_name: string
+          updated_at: string
+          user_id: string
+          write_it_project_id: string | null
+        }
+        Insert: {
+          ai_summary?: string | null
+          assessment?: Json
+          costs?: Json
+          created_at?: string
+          id?: string
+          isbn_records?: Json
+          progress?: Json
+          project_name: string
+          updated_at?: string
+          user_id: string
+          write_it_project_id?: string | null
+        }
+        Update: {
+          ai_summary?: string | null
+          assessment?: Json
+          costs?: Json
+          created_at?: string
+          id?: string
+          isbn_records?: Json
+          progress?: Json
+          project_name?: string
+          updated_at?: string
+          user_id?: string
+          write_it_project_id?: string | null
+        }
+        Relationships: []
+      }
       quiz_results: {
         Row: {
           answers: Json
