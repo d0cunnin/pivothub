@@ -24,6 +24,7 @@ import { getToolCreditCost } from "@/utils/toolCreditWeights";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { ToolGuard } from "@/components/ToolGuard";
+import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 
 const DeployIt = () => {
   const { user, isAdmin } = useAuth();
@@ -162,15 +163,16 @@ const DeployIt = () => {
               <span className="text-3xl font-bold text-white tracking-wider">DEPLOY IT</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Build Your Own AI Agent
+              Deploy It — AI Assistant Setup Guide
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              Plan your own AI assistant and get step-by-step setup instructions you can follow
+              Get instructions and a PDF guide to set up your own AI assistant—not website hosting or a finished chatbot.
             </p>
           </div>
         </div>
       </section>
-      <ToolIntro about="Describe the AI assistant you want, pick a platform like ChatGPT or Gemini (or let us recommend one), and get a plain-language setup guide with ready-to-paste instructions." forWho='Business owners and creators who want an AI assistant for their work.' items={[{ icon: IntroBot, name: 'Agent design', description: 'What your agent does, who it helps, and how it should behave.' }, { icon: IntroListChecks, name: 'Setup steps', description: 'Step-by-step instructions for setting it up on the platform you choose.' }, { icon: IntroMessageSquare, name: 'Starter instructions', description: 'Ready-to-paste instructions that tell your agent how to act.' }]} />
+      <ToolIntro about="Describe the assistant you want—for example, a helper that drafts customer replies or explains lessons. Pick ChatGPT, Gemini, Claude, or another supported platform (or ask for a recommendation). Get ready-to-paste instructions and a downloadable PDF setup guide. You create the assistant yourself using your own account on that platform; some features may require a separate paid plan." forWho='Business owners, educators, and creators who want a task-focused AI assistant without starting from scratch.' steps={['Describe what your assistant should do and who it helps.', 'Get personalized instructions and download your setup guide.', 'Follow the guide in your own account on the recommended platform.']} items={[{ icon: IntroBot, name: 'Assistant design', description: 'Its purpose, audience, tone, and safety rules.' }, { icon: IntroListChecks, name: 'PDF setup guide', description: 'Steps to follow on your chosen platform—not automatic deployment.' }, { icon: IntroMessageSquare, name: 'Ready-to-paste instructions', description: 'Instructions that tell your assistant how to respond.' }]} />
+      <ToolPurposeComparison />
 
       <main id="deploy-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="deploy-it">
@@ -193,22 +195,20 @@ const DeployIt = () => {
                   <AccordionTrigger>What is an AI Agent?</AccordionTrigger>
                   <AccordionContent>
                     <p className="text-muted-foreground">
-                      An AI agent is like a smart assistant that can do tasks for you automatically. Think of it as a robot helper that understands instructions, 
-                      makes decisions, and takes actions on your behalf. Unlike simple chatbots that just answer questions, AI agents can actually DO things - 
-                      like managing your calendar, organizing files, sending emails, or analyzing data.
+                      An AI assistant follows instructions to help with a specific task, such as drafting replies, explaining lessons, or summarizing information. Some platforms also support actions like scheduling or organizing files, but those require separate connections and permissions. Deploy It provides the instructions and setup guide; it does not connect your accounts or perform those actions for you.
                     </p>
                   </AccordionContent>
                 </AccordionItem>
 
                 <AccordionItem value="how-work">
-                  <AccordionTrigger>How AI Agents Work (Step-by-Step)</AccordionTrigger>
+                  <AccordionTrigger>How Your Setup Guide Becomes an Assistant</AccordionTrigger>
                   <AccordionContent>
                     <ol className="list-decimal pl-6 space-y-2 text-muted-foreground">
-                      <li><strong className="text-foreground">You give it a goal:</strong> "Organize my inbox by priority"</li>
-                      <li><strong className="text-foreground">Agent understands:</strong> AI reads your instruction and figures out what needs to be done</li>
-                      <li><strong className="text-foreground">Agent plans:</strong> It breaks the task into smaller steps (read emails, categorize them, move to folders)</li>
-                      <li><strong className="text-foreground">Agent acts:</strong> It connects to your email and performs the actions</li>
-                      <li><strong className="text-foreground">Agent reports back:</strong> "Done! I organized 47 emails into 3 folders"</li>
+                      <li><strong className="text-foreground">Choose a goal:</strong> For example, help draft replies to customer questions.</li>
+                      <li><strong className="text-foreground">Get your guide:</strong> PivotHub writes setup steps and assistant instructions.</li>
+                      <li><strong className="text-foreground">Open your platform:</strong> Sign in to your own ChatGPT, Gemini, Claude, or other chosen account.</li>
+                      <li><strong className="text-foreground">Set it up:</strong> Follow the guide and paste in the instructions. Configure any optional connections yourself.</li>
+                      <li><strong className="text-foreground">Test and review:</strong> Try sample questions and check the answers before relying on the assistant.</li>
                     </ol>
                   </AccordionContent>
                 </AccordionItem>
