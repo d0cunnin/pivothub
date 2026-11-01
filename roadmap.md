@@ -1,4 +1,6 @@
 # Purchase setup
+- [x] Expand Business Foundation demographics helper for individual, business, organization, and government customers; seven customer-profile tests pass and preview builds successfully.
+- [ ] Verify demographics helper application through a signed-in account; blocked because the requester has no matching app account/session. No paid generation attempted.
 - [x] Restore secure complimentary Grant Access with due monthly installments, atomic audit, updated dialog and balance feedback; deployed; 32 grant/payment tests pass, including an isolated test user's exact 40-credit increase.
 - [ ] Verify Grant Access through an MFA-authenticated admin session against a confirmed live test account; blocked by no requester app account/session and no confirmed test recipient. No live complimentary credits issued.
 - [x] Audit current purchase, authentication, account, entitlement, and renewal flows against hosted configuration; findings in PAYMENT_FLOW_AUDIT.md.
