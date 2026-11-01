@@ -830,13 +830,13 @@ Make it professional and actionable. Tailor it to the instructor's expertise lev
           userId,
           ip,
           success: true,
-          creditsCharged: complete ? 5 : 0,
+          creditsCharged: complete ? 6 : 0,
           requestDurationMs: Date.now() - startTime
         });
 
         // Charge only when every section was delivered.
         if (complete) {
-          await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5);
+          await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 6);
         }
         
         return new Response(
@@ -1054,7 +1054,7 @@ Include timing notes and speaker cues. Make it conversational and engaging. Use 
       }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
-    await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 5);
+    await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-teaching-content', 6);
 
     return new Response(
       JSON.stringify({ content, type }),

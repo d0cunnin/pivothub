@@ -217,11 +217,11 @@ Return ONLY JSON as specified (no preamble).`;
       ip,
       userAgent: req.headers.get('user-agent') || 'unknown',
       success: true,
-      creditsCharged: 5,
+      creditsCharged: 7,
       requestDurationMs: Date.now() - startTime
     });
 
-    await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-grant-content', 5);
+    await deductCreditsOnSuccess(guardResult.supabase, userId, 'generate-grant-content', 7);
 
     return new Response(
       JSON.stringify(grantContent),

@@ -948,7 +948,7 @@ const FundIt = () => {
                         ) : (
                           <>
                             <Send className="h-4 w-4 mr-2" />
-                            Generate Grant Documents (5 Credits)
+                            Generate Grant Documents (7 Credits)
                           </>
                         )}
                       </Button>
