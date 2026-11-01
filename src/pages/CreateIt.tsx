@@ -247,63 +247,7 @@ export default function CreateIt() {
     }
   };
 
-  const handleSave = async () => {
-    if (!blueprint || !user) return;
-    try {
-      const { error } = await supabase.from("create_it_blueprints").insert([{
-        user_id: user.id,
-        platform_name: form.appName,
-        platform_description: form.platformDescription,
-        industry: form.primaryPurpose || undefined,
-        platform_type: form.platformType || undefined,
-        blueprint_json: blueprint as unknown as never,
-      }]);
-      if (error) throw error;
-      await loadHistory();
-      toast.success("Saved to your blueprint history!");
-    } catch (err) {
-      console.error("Save failed:", err);
-      toast.error("Could not save the blueprint.");
-    }
-  };
-
   const handleRegenerate = () => {
-    setBlueprint(null);
-    setView("wizard");
-    handleGenerate();
-  };
-
-  const handleCreateAnother = () => {
-    setForm(EMPTY_FORM);
-    setBlueprint(null);
-    setStep(1);
-    setView("wizard");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const viewSaved = (saved: SavedBlueprint) => {
-    setForm({
-      ...EMPTY_FORM,
-      appName: saved.platform_name,
-      platformDescription: saved.platform_description || "",
-      primaryPurpose: saved.industry || "",
-      platformType: saved.platform_type || "",
-    });
-    setBlueprint(saved.blueprint_json);
-    setView("result");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const deleteSaved = async (id: string) => {
-    try {
-      const { error } = await supabase.from("create_it_blueprints").delete().eq("id", id);
-      if (error) throw error;
-      setHistory((prev) => prev.filter((b) => b.id !== id));
-      toast.success("Blueprint deleted.");
-    } catch (err) {
-      toast.error("Could not delete the blueprint.");
-    }
-  };
 
   const copyBuildPrompt = async () => {
     if (!blueprint?.aiBuildPrompt) return;
@@ -621,15 +565,7 @@ export default function CreateIt() {
             </CardContent>
           </Card>
           <ToolCreditBar cost={CREDIT_COST} />
-          <Tabs defaultValue="create" className="w-full">
-            <TabSwitchHint />
-            <TabsList className="mb-6">
-              <TabsTrigger value="create">Create</TabsTrigger>
-              <TabsTrigger value="history">My Blueprints {history.length > 0 && `(${history.length})`}</TabsTrigger>
-            </TabsList>
-
-            {/* ---------------- Create tab ---------------- */}
-            <TabsContent value="create">
+          <div className="w-full">
               {view === "wizard" && (
                 <Card>
                   <CardHeader>
@@ -697,15 +633,15 @@ export default function CreateIt() {
                             ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Regenerating...</>
                             : <><RefreshCw className="mr-2 h-4 w-4" /> Regenerate</>}
                         </Button>
-                        <Button variant="outline" onClick={handleSave}>
-                          <Save className="mr-2 h-4 w-4" /> Save
+                        <Button variant="outline" onClick={copyBuildPrompt}>
+                          <Copy className="mr-2 h-4 w-4" /> Copy Build Prompt
                         </Button>
                         <Button variant="ghost" onClick={handleCreateAnother}>
                           <Sparkles className="mr-2 h-4 w-4" /> Create Another
                         </Button>
                       </div>
                       <p className="text-xs text-muted-foreground mt-3">
-                        Regenerate uses another {CREDIT_COST} credits.
+                        Blueprints are not saved. Download the PDF or copy the build prompt before leaving this page. Regenerate uses another {CREDIT_COST} credits.
                       </p>
                     </CardContent>
                   </Card>
@@ -745,53 +681,7 @@ export default function CreateIt() {
                   </Card>
                 </div>
               )}
-            </TabsContent>
-
-            {/* ---------------- History tab ---------------- */}
-            <TabsContent value="history">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Saved Blueprints</CardTitle>
-                  <CardDescription>View, re-download, or remove your previous blueprints.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {loadingHistory ? (
-                    <div className="space-y-3">
-                      {[1, 2, 3].map((i) => <div key={i} className="h-16 bg-muted animate-pulse rounded" />)}
-                    </div>
-                  ) : history.length === 0 ? (
-                    <div className="text-center py-10 text-muted-foreground">
-                      <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                      <p>No saved blueprints yet.</p>
-                      <p className="text-sm">Generate your first blueprint to see it here.</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {history.map((b) => (
-                        <div key={b.id} className="flex items-center justify-between p-4 rounded-lg border">
-                          <div className="min-w-0">
-                            <div className="font-medium truncate">{b.platform_name}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {b.industry ? `${b.industry} · ` : ""}
-                              {new Date(b.created_at).toLocaleString()}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <Button size="sm" variant="outline" onClick={() => viewSaved(b)}>
-                              View <ArrowRight className="ml-1 h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="ghost" onClick={() => deleteSaved(b.id)}>
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          </div>
 
           {view === "result" && (
             <Alert className="mt-6">
