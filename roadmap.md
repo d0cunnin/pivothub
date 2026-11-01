@@ -1,3 +1,6 @@
+# Tool purpose clarification
+- [ ] Clarify Deploy It and Create It on their pages, navigation, homepage, visitor guide, credit listing, and FAQ without changing tool behavior or costs.
+- [ ] Verify the public explanations and links in the preview.
 # Purchase setup
 - [x] Add one-time custom admin Tool Credit awards and retain preset monthly plans; migration applied, admin-grant-credits deployed, 21 policy/ledger tests pass for exact balance, no renewal, expiry, retries and billing isolation.
 - [ ] Verify one-time award through the signed-in admin screen; blocked because session minting finds no requesting-user app account and no confirmed recipient. No real-user credits issued.
