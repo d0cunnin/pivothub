@@ -102,33 +102,54 @@ const getCostLabel = (credits: number): string => {
   return `${credits} Credits`;
 };
 
+const desktopColumns: string[][] = [
+  ['Build It (Business Tools)', 'Launch It (Go-to-Market)', 'Schedule It (Time Management)', 'Host It (Event Planning)', 'Garden It (Gardening)'],
+  ['Teach It (Education Tools)', 'Develop It (Community Programs)', 'Speak It (Voice & Content)', 'Earn It (Side Income)', 'Create It (Platform Blueprint)', 'Fund It (Grant Tools)'],
+  ['Prep It (Career Tools)', 'Learn It (Tech & AI Tools)', 'Assess It (Self-Discovery)', 'Contract It (Government Contracting)', 'Act It (Story Studio)'],
+];
+
+const CategoryCard = ({ category, tools }: { category: string; tools: Tool[] }) => (
+  <Card className="overflow-hidden break-inside-avoid mb-4 w-full inline-block">
+    <CardHeader className="bg-accent/5 pb-3">
+      <CardTitle className="text-lg">{category}</CardTitle>
+    </CardHeader>
+    <CardContent className="pt-4">
+      <div className="space-y-3">
+        {tools.map((tool, index) => (
+          <div key={index} className="flex items-start justify-between gap-3">
+            <div className="flex-1">
+              <p className="text-sm font-medium leading-tight">{tool.name}</p>
+              {tool.note && (
+                <p className="text-xs text-muted-foreground mt-0.5">{tool.note}</p>
+              )}
+            </div>
+            <Badge variant={getCostBadgeVariant(tool.credits)} className="shrink-0 text-xs">
+              {getCostLabel(tool.credits)}
+            </Badge>
+          </div>
+        ))}
+      </div>
+    </CardContent>
+  </Card>
+);
+
 export const CreditCostTable = () => {
   return (
-    <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
-      {Object.entries(toolsByCategory).map(([category, tools]) => (
-        <Card key={category} className="overflow-hidden break-inside-avoid mb-4 w-full inline-block">
-          <CardHeader className="bg-accent/5 pb-3">
-            <CardTitle className="text-lg">{category}</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-4">
-            <div className="space-y-3">
-              {tools.map((tool, index) => (
-                <div key={index} className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <p className="text-sm font-medium leading-tight">{tool.name}</p>
-                    {tool.note && (
-                      <p className="text-xs text-muted-foreground mt-0.5">{tool.note}</p>
-                    )}
-                  </div>
-                  <Badge variant={getCostBadgeVariant(tool.credits)} className="shrink-0 text-xs">
-                    {getCostLabel(tool.credits)}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+    <>
+      <div className="hidden lg:grid grid-cols-3 gap-4 items-start">
+        {desktopColumns.map((col, i) => (
+          <div key={i} className="flex flex-col">
+            {col.filter((c) => toolsByCategory[c]).map((category) => (
+              <CategoryCard key={category} category={category} tools={toolsByCategory[category]} />
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="lg:hidden columns-1 md:columns-2 gap-4">
+        {Object.entries(toolsByCategory).map(([category, tools]) => (
+          <CategoryCard key={category} category={category} tools={tools} />
+        ))}
+      </div>
+    </>
   );
 };
