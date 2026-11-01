@@ -35,7 +35,6 @@ import {
   BLUEPRINT_SECTIONS, CreateItBlueprint, CreateItFormData, EMPTY_FORM,
 } from "@/types/createit";
 import { downloadCreateItBlueprintPDF } from "@/lib/CreateItBlueprintPDF";
-import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 
 const TOOL_NAME = "create-it-blueprint";
 const CREDIT_COST = 10;
@@ -550,7 +549,6 @@ export default function CreateIt() {
               </CardContent>
             </Card>
           </main>
-          <ToolPurposeComparison />
           <Footer />
         </div>
       </>
@@ -596,7 +594,6 @@ export default function CreateIt() {
             { icon: Sparkles, name: "AI build prompt", description: "A ready-to-paste prompt for AI app builders." },
           ]}
         />
-        <ToolPurposeComparison />
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
           <Card className="mb-8">
             <CardHeader>
@@ -608,12 +605,12 @@ export default function CreateIt() {
             <CardContent>
               <ul className="grid gap-3 sm:grid-cols-2 text-sm">
                 {[
-                  ["Booking app", "Clients book and pay for appointments at a salon, tutoring business or cleaning service, with automatic reminders."],
-                  ["Online course or membership site", "Sell lessons or a monthly membership, with an AI study helper that answers students' questions."],
-                  ["AI customer helper", "A chat assistant on your website that answers common questions about your business 24/7."],
-                  ["Local marketplace", "Connect local sellers, vendors or freelancers with customers, and take a small fee on each sale."],
-                  ["Community or nonprofit app", "Volunteer sign-ups, event calendars and online donations for a church, school group or nonprofit."],
-                  ["Job seeker or career tool", "Track job applications, prepare for interviews or build resumes for a community you serve."],
+                  ["Service booking platform", "Customers choose appointment slots and pay deposits; staff manage schedules and client records."],
+                  ["Online learning platform", "Students enroll in courses, complete quizzes and track their progress; instructors manage lessons and enrollments."],
+                  ["Business management app", "A team manages customer accounts, projects, invoices and reports from a shared dashboard."],
+                  ["Local vendor marketplace", "Buyers browse listings and place orders; sellers manage inventory, sales and commission payouts."],
+                  ["Membership & resource directory", "Members sign in to access resources, manage profiles and register for events; organizers manage memberships."],
+                  ["Job board or career portal", "Employers post openings and review applicants; job seekers create profiles, apply and track applications."],
                 ].map(([name, text]) => (
                   <li key={name} className="rounded-lg border p-3">
                     <p className="font-semibold">{name}</p>

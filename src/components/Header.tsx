@@ -10,7 +10,7 @@ import { TrialBanner } from '@/components/TrialBanner';
 const mobileSections: { title: string; links: [string, string][] }[] = [
   { title: "Start", links: [["Start Here", "/before-you-start"], ["Our Story", "/about"], ["Pricing", "/pricing"]] },
   { title: "Upskill", links: [["Assess It", "/assessit"], ["Prep It", "/prepit"]] },
-  { title: "Learn It", links: [["Prompt It", "/promptit"], ["Code It", "/codeit"], ["Deploy It — AI Assistant Setup", "/deployit"], ["Create It — App Blueprint", "/createit"], ["Study It", "/studyit"]] },
+  { title: "Learn It", links: [["Prompt It", "/promptit"], ["Code It", "/codeit"], ["Deploy It", "/deployit"], ["Create It", "/createit"], ["Study It", "/studyit"]] },
   { title: "Make Money", links: [["Earn It", "/earnit"], ["Build It", "/buildit"], ["Teach It", "/teachit"]] },
   { title: "Plan It", links: [["Launch It", "/launchit"], ["Schedule It", "/scheduleit"], ["Host It", "/hostit"], ["Speak It", "/speakit"], ["Garden It", "/gardenit"], ["Act It", "/actit"]] },
   { title: "Grow It", links: [["Fund It", "/fundit"], ["Contract It", "/contractit"], ["Develop It", "/developit"]] },
@@ -148,15 +148,13 @@ export const Header = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/deployit" className="flex flex-col items-start w-full cursor-pointer whitespace-normal">
-                      <span>Deploy It</span>
-                      <span className="text-xs text-muted-foreground">AI Assistant Setup Guide</span>
+                    <Link to="/deployit" className="flex w-full cursor-pointer">
+                      Deploy It
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/createit" className="flex flex-col items-start w-full cursor-pointer whitespace-normal">
-                      <span>Create It</span>
-                      <span className="text-xs text-muted-foreground">App &amp; Platform Blueprint</span>
+                    <Link to="/createit" className="flex w-full cursor-pointer">
+                      Create It
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>

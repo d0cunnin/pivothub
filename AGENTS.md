@@ -13,6 +13,6 @@
 - Keep customer-profile serialization in a pure frontend helper shared by the demographics form and its tests, so selected individual and organizational details reach the existing generation input without cross-type leakage.
 - Keep installability manifest-only; the global mobile prompt uses a browser-provided install event when available and platform instructions otherwise, without adding service workers or offline caching.
 # Visual refresh
-- Reuse the public ToolPurposeComparison presentation for Deploy It / Create It explanations; keep generation, authentication, and billing separate from visitor guidance.
+- Keep each tool's visitor guidance independent and presentation-only, separate from generation, authentication, and billing.
 - Keep visual refresh changes scoped to the page being refreshed and reuse existing semantic tokens and controls, so later phases cannot alter unrelated workflows or styling.
 - Apply cross-tool visual styling through the opt-in ToolPageAppearance wrapper and its scoped stylesheet; keep tool children, shared UI primitives, and non-tool routes untouched to preserve behavior and isolate later phases.

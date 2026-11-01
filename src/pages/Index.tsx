@@ -12,7 +12,6 @@ import {
   generateFAQSchema,
 } from "@/components/StructuredData";
 import heroVideo from "@/assets/hero-video.mp4";
-import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 
 const Index = () => {
   const features = [
@@ -268,7 +267,6 @@ const Index = () => {
           </div>
         </section>
 
-        <ToolPurposeComparison />
 
         <section className="border-y border-border bg-muted/50 py-12 md:py-16">
           <div className="page-container">

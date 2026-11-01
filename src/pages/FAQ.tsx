@@ -5,7 +5,6 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { CreditCostTable } from "@/components/CreditCostTable";
-import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 import {
   Accordion,
   AccordionContent,
@@ -49,14 +48,6 @@ const FAQ = () => {
             <div className="mb-12">
               <h2 className="section-header mb-6">Getting Started</h2>
               <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="deploy-or-create">
-                  <AccordionTrigger className="text-left">What is the difference between Deploy It and Create It?</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    <p className="mb-3"><strong>Deploy It — AI Assistant Setup Guide:</strong> Describe an assistant for tasks like drafting customer replies or tutoring. Get instructions to paste into your chosen AI platform and a downloadable PDF setup guide. You create the assistant using your own account there; PivotHub does not deploy or host it.</p>
-                    <p className="mb-3"><strong>Create It — App &amp; Platform Blueprint:</strong> Describe an app, website, or online platform idea. Get a blueprint covering features, recommended technology, build steps, revenue ideas, and a prompt for an AI app builder. You build separately using the plan; it is not a finished app.</p>
-                    <p><strong>Quick choice:</strong> Want an assistant in an existing AI platform? Choose <Link className="text-primary underline" to="/deployit">Deploy It</Link>. Want to plan your own app or website? Choose <Link className="text-primary underline" to="/createit">Create It</Link>.</p>
-                  </AccordionContent>
-                </AccordionItem>
                 <AccordionItem value="item-1">
                   <AccordionTrigger className="text-left">
                     What is the Free plan?
@@ -254,7 +245,6 @@ const FAQ = () => {
         </div>
       </section>
 
-      <ToolPurposeComparison />
       <Footer />
     </div>
   );

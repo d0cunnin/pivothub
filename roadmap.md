@@ -1,4 +1,5 @@
 # Tool purpose clarification
+- [ ] Remove Deploy It/Create It comparison blocks and FAQ, restore simple menu names, and replace assistant-like Create It examples with standalone software ideas; verify preview without changing tool behavior or costs.
 - [x] Clarify Deploy It and Create It on their pages, navigation, homepage, visitor guide, credit listing, FAQ, pricing, dashboard, and static help responses without changing generation, permissions, billing, or costs.
 - [x] Verify public explanations across six preview routes, comparison/menu/sign-in links, no page errors, and seven existing blueprint tests; no paid generation or publishing performed.
 # Purchase setup
