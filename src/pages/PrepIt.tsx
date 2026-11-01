@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { Brain as IntroBrain, Briefcase as IntroBriefcase, FileText as IntroFileText, MessageSquare as IntroMessageSquare } from "lucide-react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -36,33 +37,13 @@ const PrepIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-primary relative overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        
-        {/* Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
-        
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">PREP IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Prepare for Your Next Employment Opportunity
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Polish your resume, master interviews, and get personalized career guidance with our AI-powered coaching tools
-            </p>
-            <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
+      <ToolHero
+        badge="PREP IT · CAREER TOOLS"
+        title="Prepare for Your Next Employment Opportunity"
+        subtitle="Polish your resume, master interviews, and get personalized career guidance with our AI-powered coaching tools"
+        credits={"1–3 Credits per tool"}
+      >
+        <div className="animate-fade-in space-y-4" style={{ animationDelay: '0.4s' }}>
               <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
                 <Button 
                   size="lg" 
@@ -93,9 +74,7 @@ const PrepIt = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+      </ToolHero>
       <ToolIntro about='Get ready for your next job. Chat with a career advisor, practice interview questions, improve your resume, and build a new one.' forWho='Job seekers preparing for applications and interviews.' items={[{ icon: IntroBrain, name: 'Career advisor', description: 'Personal answers to your career questions, one message at a time.' }, { icon: IntroMessageSquare, name: 'Interview practice', description: 'Likely interview questions with tips on how to answer them.' }, { icon: IntroFileText, name: 'Resume coaching', description: 'Feedback and rewrites to make your resume stronger.' }, { icon: IntroBriefcase, name: 'Resume builder', description: 'A clean, finished resume you can download.' }]} />
 
       {/* Career Advisor AI */}

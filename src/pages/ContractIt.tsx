@@ -1608,9 +1608,10 @@ const ContractIt = () => {
         <Header />
         
         <ToolHero
-          badge="CONTRACT IT"
+          badge="CONTRACT IT · GOVERNMENT CONTRACTING"
           title="Government Contracting Tools"
           subtitle="Professional tools to help you succeed in federal, state, and local government contracting."
+        credits="3–4 Credits per tool"
         />
 
         <main className="page-container section-spacing">

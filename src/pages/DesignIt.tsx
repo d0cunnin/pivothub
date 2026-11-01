@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { toast } from "sonner";
 import {
   ArrowLeft, Columns2, Download, Eye, FileText, History, Image as ImageIcon, Lightbulb, Loader2, Palette, Plus, RefreshCw, Save,
@@ -631,17 +632,12 @@ const DesignIt = () => {
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <section className="relative h-[320px] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0">
-            <img src={heroImage} alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80" />
-          </div>
-          <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-            <Badge className="mb-4 bg-white/15 text-white border-white/30">DESIGN IT · CONCEPT STUDIO</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Design It</h1>
-            <p className="text-lg text-white/90">Imagine It. Design It. Develop It.</p>
-          </div>
-        </section>
+        <ToolHero
+        badge="DESIGN IT · CONCEPT STUDIO"
+        title="Design It"
+        subtitle="Imagine It. Design It. Develop It."
+        credits={`${costs.concept} Credits per concept`}
+      />
 
         <ToolIntro
           about="Develop your idea into a structured design concept. Describe what you want to create, explore different creative directions, generate concept visuals when you choose to, refine the design step by step and keep every version organised. Works for products, brands, fashion, interiors, digital interfaces, events, architectural concepts and other creative projects."

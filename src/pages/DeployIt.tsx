@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { Bot as IntroBot, ListChecks as IntroListChecks, MessageSquare as IntroMessageSquare } from "lucide-react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -143,36 +144,12 @@ const DeployIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-primary relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
-        
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-4 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">DEPLOY IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Deploy It — AI Assistant Setup Guide
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              Get instructions and a PDF guide to set up your own AI assistant—not website hosting or a finished chatbot.
-            </p>
-            <Badge variant="secondary" className="text-base px-4 py-2">
-              <Zap className="h-4 w-4 mr-2" /> 3 Credits
-            </Badge>
-          </div>
-        </div>
-      </section>
+      <ToolHero
+        badge="DEPLOY IT · AI ASSISTANT SETUP"
+        title="Deploy It — AI Assistant Setup Guide"
+        subtitle="Get instructions and a PDF guide to set up your own AI assistant—not website hosting or a finished chatbot."
+        credits={"3 Credits"}
+      />
       <ToolIntro about="Describe the assistant you want—for example, a helper that drafts customer replies or explains lessons. Pick ChatGPT, Gemini, Claude, or another supported platform (or ask for a recommendation). Get ready-to-paste instructions and a downloadable PDF setup guide. You create the assistant yourself using your own account on that platform; some features may require a separate paid plan." forWho='Business owners, educators, and creators who want a task-focused AI assistant without starting from scratch.' steps={['Describe what your assistant should do and who it helps.', 'Get personalized instructions and download your setup guide.', 'Follow the guide in your own account on the recommended platform.']} items={[{ icon: IntroBot, name: 'Assistant design', description: 'Its purpose, audience, tone, and safety rules.' }, { icon: IntroListChecks, name: 'PDF setup guide', description: 'Steps to follow on your chosen platform—not automatic deployment.' }, { icon: IntroMessageSquare, name: 'Ready-to-paste instructions', description: 'Instructions that tell your assistant how to respond.' }]} />
 
       <main id="deploy-content" className="flex-grow container mx-auto px-4 py-12">

@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { Brain as IntroBrain, Compass as IntroCompass, Laptop as IntroLaptop, Target as IntroTarget } from "lucide-react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { Header } from "@/components/Header";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { Footer } from "@/components/Footer";
@@ -36,34 +37,13 @@ const AssessIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-12 bg-primary relative overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        
-        {/* Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
-        
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">ASSESS IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Uncertain About Your Next Career Move?
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-8 font-light leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              Our AI-powered assessments help professionals discover their strengths, identify in-demand skills, evaluate tech career readiness, and find careers that match their experience
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
+      <ToolHero
+        badge="ASSESS IT · CAREER ASSESSMENTS"
+        title="Uncertain About Your Next Career Move?"
+        subtitle="Our AI-powered assessments help professionals discover their strengths, identify in-demand skills, evaluate tech career readiness, and find careers that match their experience"
+        credits={"2 Credits per assessment"}
+      >
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <ToolGuard toolName="career-assessment" showCreditInfo={false}>
                 <CareerAssessment />
               </ToolGuard>
@@ -77,9 +57,7 @@ const AssessIt = () => {
                 <TechReadinessAssessment />
               </ToolGuard>
             </div>
-          </div>
-        </div>
-      </section>
+      </ToolHero>
       <ToolIntro about='Take short assessments that show your strengths, skills, personality, and readiness for tech work, then get career suggestions that fit you.' forWho='Job seekers, people who lost a job, and anyone thinking about a career change.' items={[{ icon: IntroCompass, name: 'Career assessment', description: 'Career paths that match your interests and experience.' }, { icon: IntroTarget, name: 'Skills assessment', description: 'A picture of your strongest skills and where to grow.' }, { icon: IntroBrain, name: 'Personality assessment', description: 'How your work style fits different roles and teams.' }, { icon: IntroLaptop, name: 'Tech readiness', description: 'How ready you are for tech roles and what to learn next.' }]} />
 
       {/* Assessment Tools - Featured Section */}

@@ -1498,9 +1498,10 @@ const DevelopIt = () => {
       <Header />
       
       <ToolHero
-        badge="DEVELOP IT"
+        badge="DEVELOP IT · COMMUNITY PROGRAMS"
         title="Community Development Tools"
         subtitle="AI-guided tools for community development, neighborhood revitalization, nonprofit work, youth programs, faith-based outreach, and social impact initiatives."
+        credits="1–4 Credits per tool"
       />
 
       <main className="flex-1 container mx-auto px-4 py-8">

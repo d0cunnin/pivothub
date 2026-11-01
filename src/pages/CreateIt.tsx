@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState } from "react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -486,22 +487,12 @@ export default function CreateIt() {
         <Header />
 
         {/* Hero */}
-        <section className="relative h-[320px] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0">
-            <img src={heroImage} alt="Create It" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80" />
-          </div>
-          <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-            <Badge className="mb-4 bg-white/15 text-white border-white/30">CREATE IT · APP PLANNING</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Create It — App &amp; Platform Blueprint</h1>
-            <p className="text-lg text-white/90 mb-4">
-              Plan your app or website before building it. Get a blueprint and build prompt—not a finished app.
-            </p>
-            <Badge variant="secondary" className="text-base px-4 py-2">
-              <Zap className="h-4 w-4 mr-2" /> {CREDIT_COST} Credits
-            </Badge>
-          </div>
-        </section>
+        <ToolHero
+        badge="CREATE IT · APP PLANNING"
+        title="Create It — App & Platform Blueprint"
+        subtitle="Plan your app or website before building it. Get a blueprint and build prompt—not a finished app."
+        credits={`${CREDIT_COST} Credits`}
+      />
 
         <ToolIntro
           about="Turn an idea—such as a booking app, course website, or community platform—into a downloadable blueprint. Answer guided questions to get features, recommended technology, build phases, revenue ideas, and a ready-to-paste prompt for an AI app builder like Lovable. You or a developer use that plan to build the product separately; Create It does not code, host, or publish a finished app."

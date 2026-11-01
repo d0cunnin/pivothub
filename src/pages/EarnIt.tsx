@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { CalendarCheck as IntroCalendarCheck, DollarSign as IntroDollarSign, Lightbulb as IntroLightbulb } from "lucide-react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { useState, useEffect, useCallback } from "react";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -198,27 +199,14 @@ function SideIncomeBlueprintInner() {
       <Header />
 
       {/* Hero */}
-      <section className="py-20 bg-primary relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center justify-center px-6 py-3 rounded-3xl bg-white/15 mb-8 backdrop-blur-sm border border-white/20">
-              <span className="text-2xl font-bold text-white tracking-wider">EARN IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
-              Find Side Income That Fits Your Life
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 mb-10 leading-relaxed">
-              Answer a short questionnaire and get a personalized plan with income ideas matched to your skills, schedule, and budget, plus a 90-day plan to get started.
-            </p>
-            <Button
+      <ToolHero
+        badge="EARN IT · SIDE INCOME"
+        title="Find Side Income That Fits Your Life"
+        subtitle="Answer a short questionnaire and get a personalized plan with income ideas matched to your skills, schedule, and budget, plus a 90-day plan to get started."
+        credits={"5 Credits"}
+      >
+        <div className="flex flex-col items-center">
+        <Button
               variant="hero"
               size="lg"
               className="shadow-glow transition-elegant hover:scale-105 px-12 py-6 text-lg"
@@ -228,9 +216,8 @@ function SideIncomeBlueprintInner() {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <p className="mt-4 text-sm text-white/80">{startNote}</p>
-          </div>
         </div>
-      </section>
+      </ToolHero>
       <ToolIntro about='Answer a short questionnaire and get side income ideas matched to your skills, schedule, and budget.' forWho='Anyone looking for extra income alongside a job or other commitments.' items={[{ icon: IntroLightbulb, name: 'Income ideas', description: 'Side income options that fit your life.' }, { icon: IntroDollarSign, name: 'Earning estimates', description: 'A realistic look at what each idea could earn.' }, { icon: IntroCalendarCheck, name: '90-day plan', description: 'Week-by-week steps to get your first income coming in.' }]} />
 
       {/* What you'll get */}

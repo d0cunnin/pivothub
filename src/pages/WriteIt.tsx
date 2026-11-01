@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
@@ -588,17 +589,12 @@ const WriteIt = () => {
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <section className="relative h-[320px] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0">
-            <img src={heroImage} alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80" />
-          </div>
-          <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-            <Badge className="mb-4 bg-white/15 text-white border-white/30">WRITE IT · BOOK PLANNING</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Write It</h1>
-            <p className="text-lg text-white/90">Organize Your Ideas. Structure Your Book.</p>
-          </div>
-        </section>
+        <ToolHero
+        badge="WRITE IT · BOOK PLANNING"
+        title="Write It"
+        subtitle="Organize Your Ideas. Structure Your Book."
+        credits={`${WRITE_IT_COSTS.plan} Credits per book plan`}
+      />
 
         <ToolIntro
           about="Plan your book before you write it. Describe your idea and Write It helps you shape the concept, choose a title, pick a structure that fits your type of book, build a table of contents, outline every chapter and set a writing schedule. Write It does not write your book; you do."

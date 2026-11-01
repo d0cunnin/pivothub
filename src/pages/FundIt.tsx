@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { FileText as IntroFileText, Mail as IntroMail, Search as IntroSearch } from "lucide-react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import React, { useState } from 'react';
 import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Header } from '@/components/Header';
@@ -384,34 +385,12 @@ const FundIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-hero hero-glow overflow-hidden relative">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        
-        <div className="floating-orb top-16 right-16 w-40 h-40 bg-primary/8 animate-float"></div>
-        <div className="floating-orb bottom-24 left-16 w-32 h-32 bg-secondary/10 animate-float" style={{ animationDelay: '2s' }}></div>
-        <div className="floating-orb top-1/3 right-1/3 w-24 h-24 bg-accent/12 animate-float" style={{ animationDelay: '4s' }}></div>
-        
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">FUND IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-              Grant Writing & Research
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-12 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
-              AI-powered grant proposals + curated funding resources
-            </p>
-          </div>
-        </div>
-        
-        <div className="section-divider absolute bottom-0 left-0"></div>
-      </section>
+      <ToolHero
+        badge="FUND IT · GRANT TOOLS"
+        title="Grant Writing & Research"
+        subtitle="AI-powered grant proposals + curated funding resources"
+        credits={"7 Credits"}
+      />
       <ToolIntro about='Write grant proposals and letters of intent with AI help, and find places to search for grants that fit your work.' forWho='Nonprofits, small businesses, and community groups seeking funding.' items={[{ icon: IntroFileText, name: 'Grant proposal', description: 'A full draft proposal with your need, plan, and goals.' }, { icon: IntroMail, name: 'Letter of intent', description: 'A short letter introducing your project to a funder.' }, { icon: IntroSearch, name: 'Grant research links', description: 'Where to search federal, state, foundation, and corporate grants.' }]} />
       
       <div className="container mx-auto px-4 py-12">

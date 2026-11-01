@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
@@ -531,17 +532,12 @@ const PublishIt = () => {
       </Helmet>
       <div className="min-h-screen flex flex-col">
         <Header />
-        <section className="relative h-[320px] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0">
-            <img src={heroImage} alt="" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80" />
-          </div>
-          <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-            <Badge className="mb-4 bg-white/15 text-white border-white/30">PUBLISH IT · PUBLISHING GUIDE</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Publish It</h1>
-            <p className="text-lg text-white/90">From Manuscript to Marketplace.</p>
-          </div>
-        </section>
+        <ToolHero
+        badge="PUBLISH IT · PUBLISHING GUIDE"
+        title="Publish It"
+        subtitle="From Manuscript to Marketplace."
+        credits={`${PLAN_COST} Credits per plan`}
+      />
 
         <ToolIntro
           about="Understand the publishing process and follow clear steps. Check your readiness, choose your formats, compare IngramSpark and Amazon KDP, learn about ISBNs and copyright, and plan print, e-book and audiobook publishing with links to each official site. Publish It does not upload, format or publish your book; you submit directly on the platforms you choose."

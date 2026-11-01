@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState } from "react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { ToolGuard } from "@/components/ToolGuard";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
@@ -186,30 +187,13 @@ const LaunchIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-primary relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-        
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">LAUNCH IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Take it to the public
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              Generate a complete, customized launch strategy for your project, product, or business idea. From concept to market, we'll help you create a winning plan.
-            </p>
-            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+      <ToolHero
+        badge="LAUNCH IT · GO-TO-MARKET"
+        title="Take it to the public"
+        subtitle="Generate a complete, customized launch strategy for your project, product, or business idea. From concept to market, we'll help you create a winning plan."
+        credits={"3 Credits"}
+      >
+        <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Button 
                 variant="hero" 
                 size="lg" 
@@ -219,9 +203,7 @@ const LaunchIt = () => {
                 Get Started Now
             </Button>
             </div>
-          </div>
-        </div>
-      </section>
+      </ToolHero>
 
       <section className="pt-16 bg-white">
         <div className="container mx-auto px-4 max-w-5xl">

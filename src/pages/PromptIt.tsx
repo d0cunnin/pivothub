@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { GraduationCap as IntroGraduationCap, Search as IntroSearch, Wand2 as IntroWand2 } from "lucide-react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -120,36 +121,12 @@ const PromptIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-primary relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-        <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
-        
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">PROMPT IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              The Art of Talking to AI
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-4 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              Learn how professionals communicate with AI
-            </p>
-            <p className="text-lg md:text-xl text-white/80 mb-10 animate-fade-in max-w-3xl mx-auto" style={{ animationDelay: '0.3s' }}>
-              Master the language of prompting so every response is smart, relevant, and specific
-            </p>
-          </div>
-        </div>
-      </section>
+      <ToolHero
+        badge="PROMPT IT · AI PROMPTING"
+        title="The Art of Talking to AI"
+        subtitle="Learn how professionals communicate with AI. Master the language of prompting so every response is smart, relevant, and specific"
+        credits={"1 Credit"}
+      />
       <ToolIntro about='Learn how to talk to AI tools like a professional. Read the lessons, then paste in your own prompt and get it analyzed and improved.' forWho='Anyone who uses ChatGPT, Gemini, or other AI tools and wants better answers.' items={[{ icon: IntroGraduationCap, name: 'Prompt lessons', description: 'Free lessons with examples, common mistakes, and a checklist.' }, { icon: IntroSearch, name: 'Prompt analysis', description: 'A review of your prompt showing what is strong and what is missing.' }, { icon: IntroWand2, name: 'Improved prompt', description: 'A rewritten prompt you can copy and use right away.' }]} />
 
       <main id="prompt-content" className="flex-grow container mx-auto px-4 py-12">

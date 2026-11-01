@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { useState } from 'react';
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { WhatYouGet } from "@/components/tool-layout/WhatYouGet";
 import { Header } from '@/components/Header';
@@ -195,33 +196,13 @@ const SpeakIt = () => {
         <Header />
         
         {/* Hero Section */}
-        <section className="py-20 bg-primary relative overflow-hidden">
-          {/* Background Image with Overlay */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${heroImage})` }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-          </div>
-          
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-          <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-          <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-          <div className="absolute top-1/2 right-1/4 w-16 h-16 bg-primary/20 rounded-full blur-md"></div>
-          
-          <div className="container mx-auto px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-5xl mx-auto">
-              <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-                <span className="text-3xl font-bold text-white tracking-wider">SPEAK IT</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up text-center">
-                Launch Your Voice
-              </h1>
-              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto text-center" style={{ animationDelay: '0.2s' }}>
-                Professional launch strategies for speakers and podcasters
-              </p>
-              <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+        <ToolHero
+        badge="SPEAK IT · VOICE & CONTENT"
+        title="Launch Your Voice"
+        subtitle="Professional launch strategies for speakers and podcasters"
+        credits={"3 Credits"}
+      >
+        <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
                 <Button 
                   variant="hero" 
                   size="lg" 
@@ -231,9 +212,7 @@ const SpeakIt = () => {
                   Start Your Journey
                 </Button>
               </div>
-            </div>
-          </div>
-        </section>
+      </ToolHero>
         
         <main id="speak-content" className="flex-grow container mx-auto px-4 py-12">
           <ToolCreditBar cost={3} />

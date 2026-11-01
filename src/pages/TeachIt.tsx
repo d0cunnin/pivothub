@@ -1,5 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
 import { Award as IntroAward, BookOpen as IntroBookOpen, ClipboardList as IntroClipboardList, ListChecks as IntroListChecks } from "lucide-react";
+import { ToolHero } from "@/components/tool-layout/ToolHero";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -19,30 +20,13 @@ const TeachIt = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="py-20 bg-primary relative overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80"></div>
-        </div>
-        
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-accent"></div>
-        <div className="absolute top-10 right-10 w-32 h-32 bg-secondary/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 left-10 w-24 h-24 bg-accent/15 rounded-full blur-lg"></div>
-        
-        <div className="container mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-5xl mx-auto">
-            <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-8 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
-              <span className="text-3xl font-bold text-white tracking-wider">TEACH IT</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
-              Monetize your knowledge
-            </h1>
-            <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              Turn your knowledge into income by teaching others what you know best.
-            </p>
-            <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+      <ToolHero
+        badge="TEACH IT · EDUCATION TOOLS"
+        title="Monetize your knowledge"
+        subtitle="Turn your knowledge into income by teaching others what you know best."
+        credits={"2–6 Credits per tool"}
+      >
+        <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
               <Button 
                 variant="hero" 
                 size="lg" 
@@ -52,9 +36,7 @@ const TeachIt = () => {
                 Get Started Now
               </Button>
             </div>
-          </div>
-        </div>
-      </section>
+      </ToolHero>
       <ToolIntro about='Turn what you know into teaching materials you can sell or use in class. Pick a tool below to create course materials, lesson plans, quizzes, or grading rubrics.' forWho='Coaches, trainers, teachers, and experts who want to teach or sell courses.' items={[{ icon: IntroBookOpen, name: 'Course materials', description: 'Course outlines and teaching content built around your topic and audience.' }, { icon: IntroClipboardList, name: 'Lesson plans', description: 'Step-by-step lesson plans with goals, activities, and timing.' }, { icon: IntroListChecks, name: 'Quizzes', description: 'Ready-to-use quiz questions with answer keys.' }, { icon: IntroAward, name: 'Grading rubrics', description: 'Clear scoring guides so students know how work is graded.' }]} />
 
       {/* Why Teach Section */}

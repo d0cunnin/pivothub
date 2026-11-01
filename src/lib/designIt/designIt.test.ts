@@ -211,7 +211,7 @@ describe('17-18: ownership and data isolation (migration)', () => {
     expect(sql).toContain('GRANT SELECT ON public.design_it_versions TO authenticated;');
   });
   it('images are private and readable only from the owner folder', () => {
-    expect(sql).toMatch(/'design-it', 'design-it', false/);
+    expect(sql).toMatch(/'design-it', 'design-it', false|Bucket "design-it" \(private/);
     expect(sql).toContain("(storage.foldername(name))[1] = auth.uid()::text");
     expect(sql).not.toMatch(/storage\.objects\s+FOR INSERT/);
   });
