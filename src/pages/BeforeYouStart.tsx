@@ -7,10 +7,27 @@ import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 import { Compass, Target, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sprout } from "lucide-react";
 
 const BeforeYouStart = () => {
   const tools = [
+    {
+      icon: Compass,
+      title: "Deploy It — AI Assistant Setup Guide",
+      description: "Describe an assistant that helps with customer replies, lessons, or other tasks. Get ready-to-paste instructions and a PDF setup guide for your chosen AI platform. You set it up in your own account; this tool does not launch or host an assistant for you.",
+      cta: "Plan My AI Assistant",
+      link: "/deployit",
+      color: "text-primary"
+    },
+    {
+      icon: Rocket,
+      title: "Create It — App & Platform Blueprint",
+      description: "Plan an app, website, or online platform before building it. Get a downloadable blueprint with features, recommended technology, build steps, revenue ideas, and a prompt for an AI app builder. You receive a plan—not a finished app—and build it separately yourself or with a developer.",
+      cta: "Plan My App",
+      link: "/createit",
+      color: "text-secondary"
+    },
     {
       icon: Target,
       title: "Assess It",
@@ -254,6 +271,8 @@ const BeforeYouStart = () => {
             </div>
           </div>
         </section>
+
+        <ToolPurposeComparison />
 
         {/* Section 5: Credits, Not Tiers */}
         <section className="py-20 bg-accent">

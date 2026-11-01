@@ -35,6 +35,7 @@ import {
   BLUEPRINT_SECTIONS, CreateItBlueprint, CreateItFormData, EMPTY_FORM,
 } from "@/types/createit";
 import { downloadCreateItBlueprintPDF } from "@/lib/CreateItBlueprintPDF";
+import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 
 const TOOL_NAME = "create-it-blueprint";
 const CREDIT_COST = 10;
@@ -537,9 +538,9 @@ export default function CreateIt() {
             <Card className="max-w-lg w-full text-center">
               <CardHeader>
                 <Sparkles className="h-12 w-12 mx-auto text-primary mb-3" />
-                <CardTitle className="text-2xl">Create It — AI Startup Architect</CardTitle>
+                <CardTitle className="text-2xl">Create It — App &amp; Platform Blueprint</CardTitle>
                 <CardDescription>
-                  Sign in to design a complete, build-ready blueprint for your AI-powered platform.
+                  Turn an app, website, or online platform idea into a downloadable plan: features, recommended technology, build steps, revenue ideas, and a prompt for an AI app builder. You receive a blueprint—not a finished or published app. Sign in to create yours.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -549,6 +550,7 @@ export default function CreateIt() {
               </CardContent>
             </Card>
           </main>
+          <ToolPurposeComparison />
           <Footer />
         </div>
       </>
@@ -572,10 +574,10 @@ export default function CreateIt() {
             <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-secondary/80" />
           </div>
           <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-            <Badge className="mb-4 bg-white/15 text-white border-white/30">CREATE IT · AI STARTUP ARCHITECT</Badge>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Build Your AI Platform Blueprint</h1>
+            <Badge className="mb-4 bg-white/15 text-white border-white/30">CREATE IT · APP PLANNING</Badge>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Create It — App &amp; Platform Blueprint</h1>
             <p className="text-lg text-white/90 mb-4">
-              A complete, build-ready plan you can hand to a developer, agency, or AI builder.
+              Plan your app or website before building it. Get a blueprint and build prompt—not a finished app.
             </p>
             <Badge variant="secondary" className="text-base px-4 py-2">
               <Zap className="h-4 w-4 mr-2" /> {CREDIT_COST} Credits
@@ -584,8 +586,9 @@ export default function CreateIt() {
         </section>
 
         <ToolIntro
-          about="Turn your app or platform idea into a complete, step-by-step blueprint you can build from yourself. Answer guided questions and get your plan, the recommended tools, and a ready-to-paste prompt for AI app builders like Lovable."
-          forWho="Founders and creators preparing to build an AI app or platform."
+          about="Turn an idea—such as a booking app, course website, or community platform—into a downloadable blueprint. Answer guided questions to get features, recommended technology, build phases, revenue ideas, and a ready-to-paste prompt for an AI app builder like Lovable. You or a developer use that plan to build the product separately; Create It does not code, host, or publish a finished app."
+          forWho="Entrepreneurs, nonprofits, and creators who want a clear plan before building an app or website."
+          steps={['Describe your idea, audience, and what your app should do.', 'Review your blueprint and download the PDF or copy the build prompt.', 'Use the plan with a developer or AI app builder to build separately.']}
           items={[
             { icon: Sparkles, name: "Platform blueprint", description: "Your idea, audience, and core features laid out clearly." },
             { icon: Zap, name: "Tech stack & architecture", description: "Recommended tools and how the pieces fit together." },
@@ -593,12 +596,13 @@ export default function CreateIt() {
             { icon: Sparkles, name: "AI build prompt", description: "A ready-to-paste prompt for AI app builders." },
           ]}
         />
+        <ToolPurposeComparison />
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>What You Can Build</CardTitle>
+              <CardTitle>Ideas You Can Plan with Create It</CardTitle>
               <CardDescription>
-                Any app, website or online platform you have in mind. A few examples:
+                Create a blueprint for an app, website, or online platform. These are ideas to plan—not products PivotHub builds automatically:
               </CardDescription>
             </CardHeader>
             <CardContent>

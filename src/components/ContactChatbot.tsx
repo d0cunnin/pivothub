@@ -23,6 +23,8 @@ const QUICK_ACTIONS = [
 
 // Static FAQ responses - no AI, no API calls, no credits
 const FAQ_RESPONSES: Record<string, string> = {
+  "What is the difference between Deploy It and Create It?":
+    "Deploy It — AI Assistant Setup Guide: get ready-to-paste instructions and a PDF setup guide for an assistant in a platform such as ChatGPT, Gemini, or Claude. You set it up in your own account. PivotHub does not deploy or host it. Visit /deployit.\n\nCreate It — App & Platform Blueprint: get a downloadable plan for an app, website, or online platform, including features, recommended technology, build steps, revenue ideas, and an AI build prompt. You build separately; it is not a finished app. Visit /createit.\n\nChoose Deploy It for an assistant in an existing AI platform; choose Create It to plan your own app or website.",
   "How do I reset my password?": 
     "To reset your password:\n1. Click your profile icon in the top right\n2. Go to Settings\n3. Navigate to Account Settings\n4. Select 'Change Password'\n\nIf you're locked out, use the 'Forgot Password' link on the login page.",
   
@@ -43,7 +45,7 @@ const FAQ_RESPONSES: Record<string, string> = {
     "Credits are used for AI-powered tools:\n\n• Most tools cost 1-7 credits (the Create It blueprint costs 10)\n• Paid plans include monthly credits\n• Credits are only used when you get your results\n• Paid credits last 3 months, so unused ones carry over\n• Plans: Starter $12/mo (40 credits), Pro $24/mo (100), All-Access $35/mo (250)\n• Extra credit packs: $5 for 25, $10 for 70, $20 for 150\n\nFree plan: 5 free credits/month (unused ones don't carry over)",
 
   "what tools are available": 
-    "PivotHub offers 8 tool categories:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant finding\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Event tools\n\nVisit /pricing for full details!",
+    "PivotHub's tools include:\n\n📊 Assess It - Career/skills assessments\n📝 Prep It - Resume/interview coaching\n🏢 Build It - Business planning tools\n👨‍🏫 Teach It - Teaching materials\n🚀 Launch It - Startup resources\n💰 Fund It - Grant tools\n💵 Earn It - Side income blueprint\n📅 Schedule It & Host It - Scheduling and event plans\n\nDeploy It - PDF setup guide and instructions for an AI assistant you set up yourself\nCreate It - App or website blueprint and build prompt, not a finished app\n\nVisit /before-you-start for tool explanations and the full credit list!",
 
   "cancel subscription":
     "To cancel your subscription:\n1. Go to Settings\n2. Click 'Cancel Subscription'\n3. Confirm\n\nYou won't be charged again, and you keep your plan until the end of the month you already paid for. Credits you already have can be used until they expire (3 months from when you got them). Then your account moves to the Free plan.",
@@ -59,6 +61,7 @@ const FAQ_RESPONSES: Record<string, string> = {
 };
 
 const FAQS: string[] = [
+  "What is the difference between Deploy It and Create It?",
   "How do I reset my password?",
   "How do I update billing or cancel?",
   "Where can I view pricing and plans?",
@@ -162,6 +165,10 @@ export const ContactChatbot = () => {
     }
 
     // Keyword-based matching
+    if (/\b(?:deploy|create)\s*it\b/.test(input)) {
+      return FAQ_RESPONSES["What is the difference between Deploy It and Create It?"];
+    }
+
     if (input.includes("password") || input.includes("reset")) {
       return FAQ_RESPONSES["How do I reset my password?"];
     }

@@ -59,13 +59,13 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Side Income Blueprint', credits: 5, note: 'Assessment + full plan with PDF' },
   ],
   'Create It (Platform Blueprint)': [
-    { name: 'AI Platform Blueprint', credits: 10, note: 'Full app/platform architecture plan' },
+    { name: 'App & Platform Blueprint', credits: 10, note: 'PDF plan + AI build prompt; not a finished app' },
   ],
   'Learn It (Tech & AI Tools)': [
     { name: 'Prompt It', credits: 1 },
     { name: 'Code It', credits: 1 },
     { name: 'Study It', credits: 2 },
-    { name: 'Deploy It (AI Agent Setup Guide)', credits: 3 },
+    { name: 'Deploy It (AI Assistant Setup Guide)', credits: 3, note: 'PDF guide + instructions; you set up the assistant' },
   ],
   'Act It (Story Studio)': [
     { name: 'Story Concept Generator', credits: 3, note: 'Characters, plot outline + PDF' },
