@@ -22,7 +22,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'business-idea': 2,              // ~4,000 tokens output
   'social-media': 2,               // ~3,000 tokens output
   'resume-analyzer': 2,            // ~3,000 tokens with feedback
-  'resume-builder': 5,             // ~6,000 tokens (full structured resume)
+  'resume-builder': 3,             // ~6,000 tokens (full structured resume)
   'interview-feedback': 0,         // Included in the practice session (2 credits without one)
   'business-foundation': 2,        // ~3,000 tokens output
   'schedule-it': 5,                // ~12,000 tokens output (Schedule It)
@@ -40,7 +40,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   
   // MEDIUM COST TOOLS (2 credits) - Non-chatbot tools
   'interview-questions': 3,        // One practice session: questions + feedback on every answer
-  'grant-resources': 2,            // Search + formatting (Fund It)
+  'grant-resources': 0,            // Search + formatting (Fund It)
   'name-checker': 2,               // API calls only (Build It)
   'logo-generator': 2,             // Image generation (Build It)
   'startup-checklist': 2,          // Simple generation (Build It)
@@ -60,7 +60,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   // LEARN IT TOOLS
   'prompt-it': 1,                  // ~1,500 tokens
   'code-it': 1,                    // ~1,200 tokens output (explain code)
-  'deploy-it': 5,                  // AI agent setup guide
+  'deploy-it': 3,                  // AI agent setup guide
   'create-it-blueprint': 10,       // full AI platform blueprint (5 parallel AI calls)
   
   // CONTRACT IT TOOLS

@@ -393,7 +393,7 @@ const DeployIt = () => {
                 <div className="flex items-center gap-3">
                 <Badge variant="default" className="text-base px-4 py-2">
                   <Zap className="h-4 w-4 mr-2" />
-                  5 Credits
+                  3 Credits
                 </Badge>
                   <span className="text-sm text-muted-foreground">
                     Only charged when your guide is ready. Downloads as PDF.

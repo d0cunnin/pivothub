@@ -43,7 +43,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Career Advisor Chatbot', credits: 1, note: 'per message' },
     { name: 'Interview Practice Session', credits: 3, note: 'Questions + feedback on every answer' },
     { name: 'Resume & Cover Letter Coach', credits: 2 },
-    { name: 'Resume Builder', credits: 5 },
+    { name: 'Resume Builder', credits: 3 },
   ],
   'Teach It (Education Tools)': [
     { name: 'Teaching Materials Generator', credits: 5 },
@@ -65,7 +65,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Prompt It', credits: 1 },
     { name: 'Code It', credits: 1 },
     { name: 'Study It', credits: 2 },
-    { name: 'Deploy It (AI Agent Setup Guide)', credits: 5 },
+    { name: 'Deploy It (AI Agent Setup Guide)', credits: 3 },
   ],
   'Act It (Story Studio)': [
     { name: 'Story Concept Generator', credits: 3, note: 'Characters, plot outline + PDF' },

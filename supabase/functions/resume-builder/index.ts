@@ -73,7 +73,7 @@ Deno.serve(withCreditRequest(async (req) => {
       });
     }
 
-    await assertCredits(userId, 5);
+    await assertCredits(userId, 3);
 
     const systemPrompt = `You are an expert resume writer. You turn the candidate's own information into a clear, ATS-friendly resume. A resume is a factual document the candidate signs off on, so accuracy matters more than impressiveness.
 
@@ -165,7 +165,7 @@ Return ONLY the JSON object — no preamble, no markdown fences.`;
 
     resume = enforceProvidedFacts(resume, body);
 
-    await deductCreditsOnSuccess(supabase, userId, 'resume-builder', 5);
+    await deductCreditsOnSuccess(supabase, userId, 'resume-builder', 3);
     return new Response(JSON.stringify({
       resume,
       contact: {
@@ -175,7 +175,7 @@ Return ONLY the JSON object — no preamble, no markdown fences.`;
         location: body.location || null,
         linkedin: body.linkedin || null,
       },
-      creditsUsed: 5,
+      creditsUsed: 3,
     }), {
       status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

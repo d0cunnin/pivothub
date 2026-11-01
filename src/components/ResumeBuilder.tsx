@@ -94,7 +94,7 @@ export default function ResumeBuilder() {
       if (!data?.resume) throw new Error('No resume returned.');
       setResume(data.resume);
       setContact(data.contact);
-      toast.success('Resume generated! (5 credits used)');
+      toast.success('Resume generated! (3 credits used)');
     } catch (e: any) {
       console.error(e);
       toast.error(e.message || 'Failed to generate resume.');
@@ -315,7 +315,7 @@ export default function ResumeBuilder() {
               </div>
             </div>
             <Button onClick={handleGenerate} disabled={loading} size="lg" className="w-full">
-              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Building Resume…</> : <><Sparkles className="mr-2 h-4 w-4" />Generate Resume (5 Credits)</>}
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Building Resume…</> : <><Sparkles className="mr-2 h-4 w-4" />Generate Resume (3 Credits)</>}
             </Button>
           </CardContent>
         </Card>

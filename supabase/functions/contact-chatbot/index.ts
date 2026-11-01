@@ -45,11 +45,11 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    - Career Advisor Chatbot (1 credit per message)
    - Interview Practice Session (3 credits - questions plus feedback on every answer)
    - Resume & Cover Letter Coach (2 credits)
-   - Resume Builder (5 credits)
+   - Resume Builder (3 credits)
 
    **Learn It (tech & AI tools):**
    - Prompt It (1 credit), Code It (1 credit), Study It (2 credits)
-   - Deploy It - AI agent setup guide (5 credits)
+   - Deploy It - AI agent setup guide (3 credits)
 
    **Create It:**
    - AI Platform Blueprint (10 credits)

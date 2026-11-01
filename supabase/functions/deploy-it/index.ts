@@ -5,7 +5,7 @@ import { systemUser } from '../_shared/aiGenerate.ts';
 import { generateCoveredReport } from '../_shared/coveredReport.ts';
 import { moderateContent } from '../_shared/moderation.ts';
 
-const COST = 5;
+const COST = 3;
 
 const PLATFORMS: Record<string, string> = {
   'chatgpt': 'ChatGPT (custom GPT)',

@@ -594,6 +594,31 @@ export default function CreateIt() {
           ]}
         />
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle>What You Can Build</CardTitle>
+              <CardDescription>
+                Any app, website or online platform you have in mind. A few examples:
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="grid gap-3 sm:grid-cols-2 text-sm">
+                {[
+                  ["Booking app", "Clients book and pay for appointments at a salon, tutoring business or cleaning service, with automatic reminders."],
+                  ["Online course or membership site", "Sell lessons or a monthly membership, with an AI study helper that answers students' questions."],
+                  ["AI customer helper", "A chat assistant on your website that answers common questions about your business 24/7."],
+                  ["Local marketplace", "Connect local sellers, vendors or freelancers with customers, and take a small fee on each sale."],
+                  ["Community or nonprofit app", "Volunteer sign-ups, event calendars and online donations for a church, school group or nonprofit."],
+                  ["Job seeker or career tool", "Track job applications, prepare for interviews or build resumes for a community you serve."],
+                ].map(([name, text]) => (
+                  <li key={name} className="rounded-lg border p-3">
+                    <p className="font-semibold">{name}</p>
+                    <p className="text-muted-foreground">{text}</p>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
           <ToolCreditBar cost={CREDIT_COST} />
           <Tabs defaultValue="create" className="w-full">
             <TabSwitchHint />
