@@ -1495,6 +1495,51 @@ export type Database = {
         }
         Relationships: []
       }
+      write_it_projects: {
+        Row: {
+          chapters: Json
+          created_at: string
+          id: string
+          inputs: Json
+          plan: Json
+          project_name: string
+          publish_package: Json | null
+          roadmap: Json
+          sent_to_publish_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chapters?: Json
+          created_at?: string
+          id?: string
+          inputs?: Json
+          plan?: Json
+          project_name: string
+          publish_package?: Json | null
+          roadmap?: Json
+          sent_to_publish_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chapters?: Json
+          created_at?: string
+          id?: string
+          inputs?: Json
+          plan?: Json
+          project_name?: string
+          publish_package?: Json | null
+          roadmap?: Json
+          sent_to_publish_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
