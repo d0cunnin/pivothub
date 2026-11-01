@@ -394,7 +394,7 @@ export const BusinessFoundationBuilder = () => {
               <div className="space-y-2">
                 <Label className="text-sm font-semibold">Gender</Label>
                 <div className="grid grid-cols-2 gap-2">
-                  {["Male", "Female"].map(option => (
+                  {["Male", "Female", "N/A"].map(option => (
                     <div key={option} className="flex items-center space-x-2">
                       <Checkbox
                         id={`gender-${option}`}
