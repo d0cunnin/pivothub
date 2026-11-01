@@ -7,6 +7,11 @@ const demographics: IndividualDemographics = {
 };
 
 describe("customer profile helper", () => {
+  it("preserves a not-applicable gender in the applied profile", () => {
+    const profile = buildCustomerProfile(["Individuals"], { ...demographics, gender: ["N/A"] }, emptyOrganizationProfile);
+    expect(profile).toContain("Gender: N/A.");
+    expect(profile).not.toContain("Female");
+  });
   it.each(["Businesses", "Organizations / nonprofits", "Government agencies", "Other"] as const)("supports %s without leaking individual selections", type => {
     const profile = buildCustomerProfile([type], demographics, { ...emptyOrganizationProfile, decisionMakers: "Procurement director", budget: "$50,000", purchasingProcess: "RFP" });
     expect(profile).toContain(type);
