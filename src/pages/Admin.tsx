@@ -52,6 +52,7 @@ const Admin = () => {
   const [grantModalOpen, setGrantModalOpen] = useState(false);
   const [mfaVerified, setMfaVerified] = useState(false);
   const [tier, setTier] = useState("starter");
+  const [grantType, setGrantType] = useState("one-time");
   const [duration, setDuration] = useState("1");
   const [customCredits, setCustomCredits] = useState("40");
   const [grantRequestId, setGrantRequestId] = useState(() => crypto.randomUUID());
@@ -118,12 +119,14 @@ const Admin = () => {
         throw new Error(message);
       }
       if (data?.error) throw new Error(data.error);
-      return data as { credits: number; months: number; balance: { remaining: number } };
+      return data as { credits: number; months: number; grant_type: string; balance: { remaining: number } };
     },
     onSuccess: (data) => {
       toast({
         title: "Complimentary Tool Credits Granted",
-        description: `${data.credits} Tool Credits per month for ${data.months} month(s). New available balance: ${data.balance.remaining} Tool Credits.`,
+        description: data.grant_type === "one_time"
+          ? `Added ${data.credits} one-time Tool Credits to ${selectedUser?.display_name || selectedUser?.email || "the user"}. New balance: ${data.balance.remaining} Tool Credits.`
+          : `${data.credits} Tool Credits per month for ${data.months} month(s). New available balance: ${data.balance.remaining} Tool Credits.`,
       });
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       queryClient.invalidateQueries();
@@ -145,11 +148,11 @@ const Admin = () => {
     if (!selectedUser) return;
     grantAccessMutation.mutate({
       userId: selectedUser.id,
-      plan: tier,
-      months: Number(duration),
+      plan: grantType === "one-time" ? "custom" : tier,
+      months: grantType === "one-time" ? 1 : Number(duration),
       note: notes,
       requestId: grantRequestId,
-      customCredits: tier === "custom" ? Number(customCredits) : undefined,
+      customCredits: grantType === "one-time" ? Number(customCredits) : undefined,
     });
   };
 
@@ -157,6 +160,8 @@ const Admin = () => {
     setSelectedUser(user);
     setGrantRequestId(crypto.randomUUID());
     setTier("starter");
+    setGrantType("one-time");
+    setMfaVerified(false);
     setDuration("1");
     setCustomCredits("40");
     setNotes("");
@@ -442,6 +447,16 @@ const Admin = () => {
           <div className="space-y-4">
             <AdminTwoStepGate onVerifiedChange={setMfaVerified} />
             <div>
+              <Label htmlFor="grant-type">Grant type</Label>
+              <Select value={grantType} onValueChange={value => { setGrantType(value); setGrantRequestId(crypto.randomUUID()); }}>
+                <SelectTrigger id="grant-type"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="one-time">One-Time Custom Credits</SelectItem>
+                  <SelectItem value="monthly">Complimentary Monthly Plan</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {grantType === "monthly" && <div>
               <Label htmlFor="tier">Monthly Tool Credits</Label>
               <Select value={tier} onValueChange={value => { setTier(value); setGrantRequestId(crypto.randomUUID()); }}>
                 <SelectTrigger id="tier">
@@ -451,17 +466,16 @@ const Admin = () => {
                   <SelectItem value="starter">Starter — 40/month</SelectItem>
                   <SelectItem value="pro">Pro — 100/month</SelectItem>
                   <SelectItem value="all-access">All-Access — 250/month</SelectItem>
-                  <SelectItem value="custom">Custom credits</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div>}
 
-            {tier === "custom" && <div>
-              <Label htmlFor="custom-credits">Credits per month</Label>
+            {grantType === "one-time" && <div>
+              <Label htmlFor="custom-credits">Tool Credits to add</Label>
               <Input id="custom-credits" type="number" min={1} max={100000} step={1} value={customCredits} onChange={event => { setCustomCredits(event.target.value); setGrantRequestId(crypto.randomUUID()); }} />
             </div>}
 
-            <div>
+            {grantType === "monthly" && <div>
               <Label htmlFor="duration">Duration</Label>
               <Select value={duration} onValueChange={value => { setDuration(value); setGrantRequestId(crypto.randomUUID()); }}>
                 <SelectTrigger id="duration">
@@ -474,9 +488,11 @@ const Admin = () => {
                   <SelectItem value="12">12 Months</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div>}
 
-            <p className="text-sm text-muted-foreground">The first month's credits are available now. Later credits start each monthly anniversary. Each month's credits expire three months after issuance; billing stays unchanged.</p>
+            <p className="text-sm text-muted-foreground">{grantType === "one-time"
+              ? "Adds Tool Credits immediately. No subscription, automatic renewals, or billing changes. Credits expire three months after issuance."
+              : "The first month's credits are available now. Later credits start each monthly anniversary. Each month's credits expire three months after issuance; billing stays unchanged."}</p>
 
             <div>
               <Label htmlFor="notes">Notes (Optional)</Label>
@@ -494,8 +510,8 @@ const Admin = () => {
             <Button variant="outline" onClick={() => setGrantModalOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleGrantAccess} disabled={grantAccessMutation.isPending || !mfaVerified}>
-              {grantAccessMutation.isPending ? "Granting..." : "Grant Access"}
+            <Button onClick={handleGrantAccess} disabled={grantAccessMutation.isPending || !mfaVerified || (grantType === "one-time" && (!Number.isInteger(Number(customCredits)) || Number(customCredits) < 1 || Number(customCredits) > 100000))}>
+              {grantAccessMutation.isPending ? "Granting..." : grantType === "one-time" ? "Add Tool Credits" : "Grant Access"}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -2,7 +2,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { z } from 'npm:zod@3.23.8';
 import { requireAdminMfa } from '../_shared/adminMfaGuard.ts';
-import { monthlyAdminCredits, validAdminDuration, MAX_CUSTOM_CREDITS } from '../_shared/adminCreditPolicy.ts';
+import { monthlyAdminCredits, validAdminDuration, validAdminAwardDuration, MAX_CUSTOM_CREDITS } from '../_shared/adminCreditPolicy.ts';
 
 const bodySchema = z.object({
   requestId: z.string().uuid(),
@@ -11,7 +11,7 @@ const bodySchema = z.object({
   customCredits: z.number().int().positive().max(MAX_CUSTOM_CREDITS).optional(),
   months: z.number().int().refine(validAdminDuration, 'Choose 1, 3, 6 or 12 months.'),
   note: z.string().trim().max(2000),
-});
+}).refine(input => validAdminAwardDuration(input.plan, input.months), 'Custom Tool Credits must be a one-time award.');
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
   status, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
 });

@@ -11,3 +11,7 @@ export function monthlyAdminCredits(plan: string, customCredits?: number): numbe
 export function validAdminDuration(months: number): boolean {
   return ADMIN_CREDIT_DURATIONS.some(value => value === months);
 }
+
+export function validAdminAwardDuration(plan: string, months: number): boolean {
+  return plan === 'custom' ? months === 1 : validAdminDuration(months);
+}
