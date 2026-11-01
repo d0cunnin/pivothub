@@ -57,6 +57,34 @@
       "when": 1793503915048,
       "tag": "0007_one_time_custom_admin_credits",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793540434254,
+      "tag": "0008_write_it_projects",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793540459717,
+      "tag": "0009_publish_it_projects",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793540552466,
+      "tag": "0010_design_it",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793540561676,
+      "tag": "0011_publish_it_paid_plans",
+      "breakpoints": true
     }
   ]
 }
