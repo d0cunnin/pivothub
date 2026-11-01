@@ -342,9 +342,9 @@ const Dashboard = () => {
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <Rocket className="h-5 w-5" />
-                      My AI Platform Blueprints
+                      My App &amp; Platform Blueprints
                     </CardTitle>
-                    <CardDescription>Your saved Create It blueprints and downloads</CardDescription>
+                    <CardDescription>Your saved Create It plans and downloads—not finished apps</CardDescription>
                   </div>
                   <Button variant="outline" size="sm" asChild>
                     <Link to="/createit">
@@ -384,7 +384,7 @@ const Dashboard = () => {
                   <div className="text-center py-8 text-muted-foreground">
                     <Rocket className="h-12 w-12 mx-auto mb-3 opacity-30" />
                     <p>No platform blueprints yet</p>
-                    <p className="text-sm">Use Create It to design your first AI-powered platform</p>
+                    <p className="text-sm">Use Create It to plan your app or website before building it</p>
                     <Button className="mt-4" asChild>
                       <Link to="/createit">Open Create It</Link>
                     </Button>
