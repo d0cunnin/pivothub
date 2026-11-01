@@ -84,6 +84,7 @@ describe.sequential('complimentary credit ledger', () => {
     await expect(db.query("SELECT consume_credit_reservation($1,$2,'test')", [userId, awardId])).rejects.toThrow('Reserved credits no longer available');
   });
   it('adds exactly 73 custom credits immediately as a one-time award', async () => {
+    await db.exec("UPDATE credit_reservations SET status='released' WHERE status='held'");
     const before = await balance();
     const result = await db.query<{ result: { grant_type: string; balance: { remaining: number } } }>(
       'SELECT public.grant_admin_credits($1,$2,$3,$4,$5,$6,$7) AS result',
