@@ -6,6 +6,7 @@ import { generateJson } from '../_shared/aiGenerate.ts';
 
 const ENDPOINT = '/generate-create-it-blueprint';
 const MAX_TOKENS = 5000;
+const CREDIT_COST = 10;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -180,7 +181,7 @@ serve(withCreditRequest(async (req) => {
   try {
     guardResult = await guard(req, {
       endpoint: ENDPOINT,
-      cost: 70,
+      cost: CREDIT_COST,
       requireAuth: true,
       requireCaptcha: false,
       maxBodySize: 50_000,
@@ -225,18 +226,34 @@ serve(withCreditRequest(async (req) => {
 
     const merged: Partial<Blueprint> = {};
     let creditsExhausted = false;
-    for (const r of results) {
+    const failed: number[] = [];
+    results.forEach((r, i) => {
       if (r.status === 'fulfilled') {
         Object.assign(merged, r.value);
-      } else if ((r.reason as any)?.status === 402) {
-        creditsExhausted = true;
       } else {
+        if ((r.reason as any)?.status === 402) creditsExhausted = true;
         console.error(`[${ENDPOINT}] Chunk failed:`, (r.reason as any)?.message);
+        failed.push(i);
       }
+    });
+
+    // Retry failed parts once so customers get the whole blueprint.
+    if (failed.length && !creditsExhausted) {
+      const retries = await Promise.allSettled(failed.map((i) => generateChunk(LOVABLE_API_KEY, CHUNKS[i], skillLevel, userPrompt)));
+      retries.forEach((r, k) => {
+        if (r.status === 'fulfilled') { Object.assign(merged, r.value); failed[k] = -1; }
+        else console.error(`[${ENDPOINT}] Chunk retry failed:`, (r.reason as any)?.message);
+      });
     }
 
-    if (creditsExhausted && Object.keys(merged).length === 0) {
-      throw new Error('Our AI service is temporarily unavailable. Please try again later. You were not charged.');
+    // Only a complete blueprint is delivered and charged.
+    if (failed.some((i) => i >= 0)) {
+      return new Response(
+        JSON.stringify({ error: creditsExhausted
+          ? 'Our AI service is temporarily unavailable. Please try again later. You were not charged.'
+          : 'We could not finish every part of your blueprint. Please try again. You were not charged.' }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      );
     }
 
     const blueprint = validateBlueprint(merged);
@@ -264,10 +281,10 @@ serve(withCreditRequest(async (req) => {
       blueprintId = saved?.id ?? null;
     }
 
-    // Credits (70) are only checked up front by guard(); they are deducted
+    // Credits are only checked up front by guard(); they are deducted
     // here, after the blueprint was generated successfully, so failed
     // generations cost nothing. The client no longer deducts.
-    await deductCreditsOnSuccess(supabase, userId!, 'generate-create-it-blueprint', 70);
+    await deductCreditsOnSuccess(supabase, userId!, 'generate-create-it-blueprint', CREDIT_COST);
 
     return new Response(
       JSON.stringify({ blueprint, blueprintId, modelUsed }),

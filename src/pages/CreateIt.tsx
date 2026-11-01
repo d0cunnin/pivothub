@@ -37,7 +37,7 @@ import {
 import { downloadCreateItBlueprintPDF } from "@/lib/CreateItBlueprintPDF";
 
 const TOOL_NAME = "create-it-blueprint";
-const CREDIT_COST = 70;
+const CREDIT_COST = 10;
 const TOTAL_STEPS = 7;
 
 const TARGET_AUDIENCE_EXAMPLES = [
@@ -594,7 +594,7 @@ export default function CreateIt() {
           ]}
         />
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
-          <ToolCreditBar cost={70} />
+          <ToolCreditBar cost={CREDIT_COST} />
           <Tabs defaultValue="create" className="w-full">
             <TabSwitchHint />
             <TabsList className="mb-6">

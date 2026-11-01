@@ -61,7 +61,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   'prompt-it': 1,                  // ~1,500 tokens
   'code-it': 1,                    // ~1,200 tokens output (explain code)
   'deploy-it': 5,                  // AI agent setup guide
-  'create-it-blueprint': 70,       // ~15,000+ tokens output (full AI platform blueprint / startup architect)
+  'create-it-blueprint': 10,       // full AI platform blueprint (5 parallel AI calls)
   
   // CONTRACT IT TOOLS
   'capability-statement': 4,       // ~4,000 tokens output (government capability statement)

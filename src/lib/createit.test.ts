@@ -9,8 +9,8 @@ import {
 import { generateCreateItBlueprintPDF } from "@/lib/CreateItBlueprintPDF";
 
 describe("Create It — credit configuration", () => {
-  it("charges 70 credits for the blueprint generator", () => {
-    expect(getToolCreditCost("create-it-blueprint")).toBe(70);
+  it("charges 10 credits for the blueprint generator", () => {
+    expect(getToolCreditCost("create-it-blueprint")).toBe(10);
   });
 
   it("is classified as a high-cost tool", () => {

@@ -52,7 +52,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    - Deploy It - AI agent setup guide (5 credits)
 
    **Create It:**
-   - AI Platform Blueprint (70 credits)
+   - AI Platform Blueprint (10 credits)
 
    **Build It:**
    - Business Idea Generator (2 credits)
