@@ -305,7 +305,6 @@ const Admin = () => {
             </TabsContent>
 
             <TabsContent value="ai-usage" className="space-y-6">
-              <AIUsageAlerts />
               <AIUsageMonitor />
             </TabsContent>
 
