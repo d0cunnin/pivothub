@@ -71,6 +71,20 @@
       "when": 1793540459717,
       "tag": "0009_publish_it_projects",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793540552466,
+      "tag": "0010_design_it",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793540561676,
+      "tag": "0011_publish_it_paid_plans",
+      "breakpoints": true
     }
   ]
 }

@@ -625,6 +625,159 @@ export type Database = {
         }
         Relationships: []
       }
+      design_it_operations: {
+        Row: {
+          action: string
+          cost: number
+          created_at: string
+          error: string | null
+          finished_at: string | null
+          id: string
+          project_id: string | null
+          request_id: string
+          status: string
+          user_id: string
+          version_id: string | null
+        }
+        Insert: {
+          action: string
+          cost?: number
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          project_id?: string | null
+          request_id: string
+          status?: string
+          user_id: string
+          version_id?: string | null
+        }
+        Update: {
+          action?: string
+          cost?: number
+          created_at?: string
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          project_id?: string | null
+          request_id?: string
+          status?: string
+          user_id?: string
+          version_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_it_operations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "design_it_projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "design_it_operations_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "design_it_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      design_it_projects: {
+        Row: {
+          brief: Json
+          category: string
+          created_at: string
+          id: string
+          project_name: string
+          selected_direction: Json | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          brief?: Json
+          category: string
+          created_at?: string
+          id?: string
+          project_name: string
+          selected_direction?: Json | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          brief?: Json
+          category?: string
+          created_at?: string
+          id?: string
+          project_name?: string
+          selected_direction?: Json | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      design_it_versions: {
+        Row: {
+          content: Json
+          created_at: string
+          credits_charged: number
+          id: string
+          image_bytes: number
+          image_path: string | null
+          kind: string
+          label: string
+          parent_version_id: string | null
+          project_id: string
+          user_id: string
+          version_number: number
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          credits_charged?: number
+          id?: string
+          image_bytes?: number
+          image_path?: string | null
+          kind: string
+          label?: string
+          parent_version_id?: string | null
+          project_id: string
+          user_id: string
+          version_number?: number
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          credits_charged?: number
+          id?: string
+          image_bytes?: number
+          image_path?: string | null
+          kind?: string
+          label?: string
+          parent_version_id?: string | null
+          project_id?: string
+          user_id?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "design_it_versions_parent_version_id_fkey"
+            columns: ["parent_version_id"]
+            isOneToOne: false
+            referencedRelation: "design_it_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "design_it_versions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "design_it_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lesson_progress: {
         Row: {
           completed_at: string
@@ -1648,6 +1801,20 @@ export type Database = {
           subscription_package: string
           total_cost_usd: number
           total_credits: number
+        }[]
+      }
+      get_design_it_storage_summary: {
+        Args: never
+        Returns: {
+          credits_charged_30d: number
+          failed_operations_30d: number
+          images_generated_30d: number
+          operations_30d: number
+          projects: number
+          stored_bytes: number
+          stored_images: number
+          users_with_images: number
+          users_with_projects: number
         }[]
       }
       get_my_billing_profile: {
