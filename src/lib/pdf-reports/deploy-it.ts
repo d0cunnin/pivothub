@@ -1,6 +1,7 @@
 import type jsPDF from 'jspdf';
 import { PdfWriter, asText, toList } from '../pdfWriter';
-import { rawText, renderAiText, wrappedHeader } from './toolReportBlocks';
+import { rawText, wrappedHeader } from './toolReportBlocks';
+import { richMarkdown } from './markdownBlocks';
 
 export interface AgentConfig {
   agentName: string;
@@ -9,50 +10,30 @@ export interface AgentConfig {
   tone?: string;
   tools?: string[];
   safetyRules?: string;
+  platform?: string;
 }
 
-export interface AgentBlueprint {
-  blueprint: string;
-  tips?: string;
-  resources?: string[];
-}
-
-/** Deploy It: AI agent configuration plus the generated implementation blueprint. */
-export function generateDeployItPDF(config: AgentConfig, blueprint: AgentBlueprint): jsPDF {
+/** Deploy It: the user's agent details plus the generated setup guide (markdown). */
+export function generateDeployItPDF(config: AgentConfig, guide: string): jsPDF {
   const w = new PdfWriter();
-  wrappedHeader(w, 'AI Agent Blueprint', asText(config?.agentName) || 'Your AI Agent');
+  wrappedHeader(w, 'AI Agent Setup Guide', asText(config?.agentName) || 'Your AI Agent');
 
-  w.section('Agent Setup');
+  w.section('What You Asked For');
   w.facts([
-    ['Agent Name', asText(config?.agentName)],
-    ['Purpose', asText(config?.purpose)],
-    ['Who It Helps', asText(config?.whoItHelps)],
+    ['Agent name', asText(config?.agentName)],
+    ['What it should do', asText(config?.purpose)],
+    ['Who it helps', asText(config?.whoItHelps)],
+    ['Platform', asText(config?.platform)],
     ['Tone', asText(config?.tone)],
-    ['Connected Tools', toList(config?.tools).join(', ')],
-    ['Safety Rules', asText(config?.safetyRules)],
+    ['Tools to connect', toList(config?.tools).join(', ')],
+    ['Safety rules', asText(config?.safetyRules)],
   ]);
   w.y += 2;
 
-  const plan = rawText(blueprint?.blueprint);
-  if (plan) {
-    w.section('Implementation Blueprint');
-    renderAiText(w, plan, { demote: true });
-    w.y += 2;
-  }
+  // The guide's own "##" sections render as section titles; its copy-and-paste
+  // instructions (a code block) render in a gray box.
+  richMarkdown(w, rawText(guide));
 
-  const tips = rawText(blueprint?.tips);
-  if (tips) {
-    w.section('Tips & Recommendations');
-    renderAiText(w, tips, { demote: true });
-    w.y += 2;
-  }
-
-  const resources = toList(blueprint?.resources);
-  if (resources.length) {
-    w.section('Helpful Resources');
-    resources.forEach((r) => w.richParagraph(r.replace(/^\s*(?:[•*-]|\d+[.)])\s+/, ''), { indent: 4, marker: '•', after: 1.5 }));
-  }
-
-  w.footer('');
+  w.footer('Platform menus change often. If a step looks different, check the platform\'s help page.');
   return w.doc;
 }

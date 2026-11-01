@@ -12,7 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Bot, AlertTriangle, Download, Zap } from "lucide-react";
+import { Loader2, Bot, Download, Zap } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { generateDeployItPDF } from '@/lib/pdf-reports/deploy-it';
 import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
@@ -32,9 +34,10 @@ const DeployIt = () => {
     whoItHelps: "",
     tone: "",
     tools: [] as string[],
-    safetyRules: ""
+    safetyRules: "",
+    platform: "not-sure"
   });
-  const [blueprint, setBlueprint] = useState<{ blueprint: string; tips: string; resources: string[] } | null>(null);
+  const [guide, setGuide] = useState<{ guide: string; platform: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const toneOptions = [
@@ -45,6 +48,15 @@ const DeployIt = () => {
     "Empathetic",
     "Humorous",
     "Encouraging"
+  ];
+
+  const platformOptions = [
+    { value: "not-sure", label: "Not sure: recommend one for me" },
+    { value: "chatgpt", label: "ChatGPT (custom GPT)" },
+    { value: "gemini", label: "Google Gemini (Gem)" },
+    { value: "claude", label: "Claude (Project)" },
+    { value: "copilot", label: "Microsoft Copilot (agent)" },
+    { value: "automation", label: "Zapier or Make (automation)" },
   ];
 
   const toolOptions = [
@@ -70,7 +82,7 @@ const DeployIt = () => {
     }
 
     setIsLoading(true);
-    setBlueprint(null);
+    setGuide(null);
 
     try {
       // Check balance only; credits are deducted by the backend after a successful result
@@ -96,30 +108,30 @@ const DeployIt = () => {
       });
 
       if (error || data?.error) {
-        throw new Error(error?.message || data?.error || 'Failed to generate blueprint');
+        throw new Error(error?.message || data?.error || 'We could not create your guide. Please try again.');
       }
 
-      if (!data?.blueprint || data.blueprint.length < 300) {
-        throw new Error('Blueprint too short. Please try again.');
+      if (!data?.guide) {
+        throw new Error('We could not create your guide. Please try again. You were not charged.');
       }
 
-      setBlueprint(data);
-      toast.success("Agent blueprint generated successfully!");
+      setGuide(data);
+      toast.success("Your setup guide is ready!");
     } catch (error: any) {
-      console.error('Error generating blueprint:', error);
-      toast.error(error.message || "Failed to generate blueprint");
+      console.error('Error generating guide:', error);
+      toast.error(error.message || "We could not create your guide. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   const downloadBlueprintPDF = () => {
-    if (!blueprint) return;
+    if (!guide) return;
     
     try {
-      const doc = generateDeployItPDF(formData, blueprint);
-      doc.save(`${formData.agentName.replace(/[^a-z0-9]/gi, '_')}_AI_Agent_Blueprint_${Date.now()}.pdf`);
-      toast.success('Blueprint downloaded as PDF!');
+      const doc = generateDeployItPDF({ ...formData, platform: guide.platform }, guide.guide);
+      doc.save(`${formData.agentName.replace(/[^a-z0-9]/gi, '_')}_AI_Agent_Setup_Guide.pdf`);
+      toast.success('Setup guide downloaded as PDF!');
     } catch (error) {
       console.error('PDF export error:', error);
       toast.error('Failed to export PDF');
@@ -149,63 +161,23 @@ const DeployIt = () => {
             <div className="inline-flex items-center justify-center px-8 py-4 rounded-3xl bg-white/15 mb-4 shadow-glow backdrop-blur-sm animate-fade-in-scale border border-white/20">
               <span className="text-3xl font-bold text-white tracking-wider">DEPLOY IT</span>
             </div>
-            <div className="animate-fade-in mb-8" style={{ animationDelay: '0.1s' }}>
-              <Badge variant="outline" className="text-lg px-6 py-3 bg-blue-500/20 text-white border-blue-300/50">
-                Coming Soon - Beta Access
-              </Badge>
-            </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight animate-slide-up">
               Build Your Own AI Agent
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
-              Design and plan your AI agent through OpenAI's Agent Builder
+              Plan your own AI assistant and get step-by-step setup instructions you can follow
             </p>
           </div>
         </div>
       </section>
-      <ToolIntro about="Plan your own AI agent before you build it in OpenAI's Agent Builder. Answer questions about what your agent should do and get a clear build plan." forWho='Business owners and creators who want an AI assistant for their work.' items={[{ icon: IntroBot, name: 'Agent design', description: 'What your agent does, who it helps, and how it should behave.' }, { icon: IntroListChecks, name: 'Setup steps', description: 'Step-by-step instructions for building it in Agent Builder.' }, { icon: IntroMessageSquare, name: 'Starter instructions', description: 'Ready-to-paste instructions that tell your agent how to act.' }]} />
+      <ToolIntro about="Describe the AI assistant you want, pick a platform like ChatGPT or Gemini (or let us recommend one), and get a plain-language setup guide with ready-to-paste instructions." forWho='Business owners and creators who want an AI assistant for their work.' items={[{ icon: IntroBot, name: 'Agent design', description: 'What your agent does, who it helps, and how it should behave.' }, { icon: IntroListChecks, name: 'Setup steps', description: 'Step-by-step instructions for setting it up on the platform you choose.' }, { icon: IntroMessageSquare, name: 'Starter instructions', description: 'Ready-to-paste instructions that tell your agent how to act.' }]} />
 
       <main id="deploy-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="deploy-it">
-          {/* Beta Notice */}
-          <Alert className="mb-8 border-blue-500/50 bg-blue-500/10">
-            <AlertDescription className="text-blue-600 dark:text-blue-400">
-              <p className="font-semibold text-lg mb-2">🚀 Feature In Development</p>
-              <p>Deploy It is currently in beta. While the blueprint generator is functional, full deployment automation is coming soon.</p>
-            </AlertDescription>
-          </Alert>
-          
-          {/* Technical Requirements Notice */}
-          <Alert className="mb-8 border-yellow-500/50 bg-yellow-500/10">
-            <AlertTriangle className="h-5 w-5 text-yellow-500" />
-            <AlertDescription className="text-yellow-600 dark:text-yellow-400">
-              <p className="font-semibold text-yellow-600 dark:text-yellow-400 text-lg mb-3">
-                ⚠️ Technical Requirements Notice
-              </p>
-              <p className="mb-3">
-                <strong>Deploy It is designed for tech-comfortable users</strong> who can handle manual technical operations and troubleshooting. 
-                You will need to be able to:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 mb-4">
-                <li>Understand basic technical terminology (APIs, integrations, authentication, webhooks)</li>
-                <li>Follow multi-step technical instructions independently without guidance</li>
-                <li>Troubleshoot technical issues as they arise using documentation and forums</li>
-                <li>Have a good grasp of how software tools connect and work together</li>
-                <li>Navigate developer platforms and configure technical settings</li>
-              </ul>
-              <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-md">
-                <p className="font-semibold mb-2">
-                  🚫 This is NOT for beginners:
-                </p>
-                <p>
-                  If you feel lost when dealing with technology or prefer guided, step-by-step support, 
-                  this tool may be too advanced for you.
-                </p>
-              </div>
-              <p className="mt-4 text-sm">
-                <strong>Note:</strong> You will receive a detailed blueprint PDF, but <strong>implementing it requires 
-                technical knowledge, problem-solving abilities, and the ability to troubleshoot issues independently.</strong>
-              </p>
+          <Alert className="mb-8 border-primary/30 bg-primary/5">
+            <AlertDescription>
+              <p className="font-semibold mb-1">How this works</p>
+              <p>PivotHub writes your plan, the instructions to paste in, and the setup steps. You then create the assistant yourself on the platform you choose, using your own account there. Some platforms and features need a paid plan, and the guide tells you when.</p>
             </AlertDescription>
           </Alert>
 
@@ -319,11 +291,10 @@ const DeployIt = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Bot className="h-5 w-5 text-accent" />
-                Design Your AI Agent
+                Describe Your AI Assistant
               </CardTitle>
               <CardDescription>
-                Fill in the details to create a custom blueprint for your AI agent. 
-                <strong className="block mt-1">Your blueprint will be generated as a downloadable PDF document.</strong>
+                Tell us what you want it to do. You'll get a step-by-step setup guide you can also download as a PDF.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -373,6 +344,20 @@ const DeployIt = () => {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="platform">Where do you want to build it?</Label>
+                <Select value={formData.platform} onValueChange={(value) => setFormData({ ...formData, platform: value })}>
+                  <SelectTrigger id="platform">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {platformOptions.map(p => (
+                      <SelectItem key={p.value} value={p.value}>{p.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
                 <Label>Tools to connect (optional)</Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {toolOptions.map(tool => (
@@ -408,10 +393,10 @@ const DeployIt = () => {
                 <div className="flex items-center gap-3">
                 <Badge variant="default" className="text-base px-4 py-2">
                   <Zap className="h-4 w-4 mr-2" />
-                  40 Credits Required
+                  5 Credits
                 </Badge>
                   <span className="text-sm text-muted-foreground">
-                    Blueprint downloads as PDF
+                    Only charged when your guide is ready. Downloads as PDF.
                   </span>
                 </div>
               </div>
@@ -425,12 +410,12 @@ const DeployIt = () => {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating Blueprint...
+                    Writing Your Guide (about a minute)...
                   </>
                 ) : (
                   <>
                     <Bot className="mr-2 h-4 w-4" />
-                    Generate Agent Blueprint
+                    Create My Setup Guide
                   </>
                 )}
               </Button>
@@ -438,50 +423,35 @@ const DeployIt = () => {
           </Card>
 
           {/* AI Output Section */}
-          {blueprint && (
+          {guide && (
             <Card className="mb-8 bg-gradient-card/30 backdrop-blur-sm border border-accent/20">
               <CardHeader>
-                <CardTitle className="text-accent">Your Custom AI Agent Blueprint</CardTitle>
-                <CardDescription>Follow these steps to create your agent in OpenAI's Agent Builder</CardDescription>
+                <CardTitle className="text-accent">Your AI Assistant Setup Guide</CardTitle>
+                <CardDescription>Platform: {guide.platform}. Menus change often; if a step looks different, check the platform's help page.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div>
-                  <h3 className="font-semibold text-lg mb-3">Step-by-Step Plan</h3>
-                  <div className="prose prose-sm max-w-none text-muted-foreground whitespace-pre-wrap bg-background/50 p-6 rounded-lg border border-accent/20">
-                    {blueprint.blueprint}
-                  </div>
+                <div className="prose prose-sm md:prose-base max-w-none dark:prose-invert bg-background/50 p-6 rounded-lg border border-accent/20 prose-pre:whitespace-pre-wrap prose-pre:bg-muted prose-pre:text-foreground">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      table: ({ node, ...props }) => (
+                        <div className="overflow-x-auto not-prose my-4">
+                          <table className="w-full text-sm border-collapse [&_th]:border [&_td]:border [&_th]:p-2 [&_td]:p-2 [&_th]:bg-muted [&_th]:text-left" {...props} />
+                        </div>
+                      ),
+                    }}
+                  >
+                    {guide.guide}
+                  </ReactMarkdown>
                 </div>
 
-                {blueprint.tips && (
-                  <div>
-                    <h3 className="font-semibold text-lg mb-3 text-accent">💡 Tips</h3>
-                    <p className="text-muted-foreground whitespace-pre-wrap">{blueprint.tips}</p>
-                  </div>
-                )}
-
-                {blueprint.resources && blueprint.resources.length > 0 && (
-                  <div>
-                    <h3 className="font-semibold text-lg mb-3 text-accent">📚 Resources</h3>
-                    <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                      {blueprint.resources.map((resource, index) => (
-                        <li key={index}>{resource}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <div className="mt-6 pt-6 border-t border-accent/20">
-                  <Button 
-                    onClick={downloadBlueprintPDF}
-                    size="lg"
-                    className="w-full"
-                    variant="default"
-                  >
+                <div className="pt-6 border-t border-accent/20">
+                  <Button onClick={downloadBlueprintPDF} size="lg" className="w-full">
                     <Download className="mr-2 h-5 w-5" />
-                    Download Blueprint as PDF
+                    Download Setup Guide as PDF
                   </Button>
                   <p className="text-xs text-muted-foreground text-center mt-2">
-                    Save your AI agent blueprint for implementation
+                    PivotHub does not store your guide, so keep your copy.
                   </p>
                 </div>
               </CardContent>

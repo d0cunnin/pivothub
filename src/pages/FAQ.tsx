@@ -84,7 +84,7 @@ const FAQ = () => {
                     What are credits?
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
-                    Credits are how you use PivotHub's tools. Each tool uses a set number of credits based on how much AI work it does: chatbots use 1 credit per message, most tools use 2-5 credits, and the large blueprint tools use more (Deploy It 40, Create It 70). Credits are only used when your results are delivered.
+                    Credits are how you use PivotHub's tools. Each tool uses a set number of credits based on how much AI work it does: chatbots use 1 credit per message, most tools use 2-5 credits, and the Create It blueprint uses 70. Credits are only used when your results are delivered.
                     <p className="text-sm mt-3">
                       📊 <strong>Want to see the full breakdown?</strong> Check out "How many credits does each tool cost?" below for a complete list.
                     </p>

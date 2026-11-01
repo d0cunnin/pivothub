@@ -422,7 +422,7 @@ const Pricing = () => {
                 <div>
                   <h3 className="font-semibold text-foreground mb-2">What are Tool Credits?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Each tool uses a certain number of credits based on complexity. Chatbots use 1 credit per message, most tools use 2-5 credits, and the large blueprint tools use more (Deploy It 40, Create It 70). You can see every tool's price on the Before You Start page.
+                    Each tool uses a certain number of credits based on complexity. Chatbots use 1 credit per message, most tools use 2-5 credits, and the Create It blueprint uses 70. You can see every tool's price on the Before You Start page.
                   </p>
                 </div>
               </div>

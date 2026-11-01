@@ -65,7 +65,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Prompt It', credits: 1 },
     { name: 'Code It', credits: 1 },
     { name: 'Study It', credits: 2 },
-    { name: 'Deploy It (AI Agent Blueprint)', credits: 40 },
+    { name: 'Deploy It (AI Agent Setup Guide)', credits: 5 },
   ],
   'Act It (Story Studio)': [
     { name: 'Story Concept Generator', credits: 3, note: 'Characters, plot outline + PDF' },

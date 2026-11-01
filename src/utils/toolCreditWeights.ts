@@ -60,7 +60,7 @@ export const TOOL_CREDIT_COSTS: Record<string, number> = {
   // LEARN IT TOOLS
   'prompt-it': 1,                  // ~1,500 tokens
   'code-it': 1,                    // ~1,200 tokens output (explain code)
-  'deploy-it': 40,                 // ~1,500 tokens output (AI agent blueprint) - complex agent planning
+  'deploy-it': 5,                  // AI agent setup guide
   'create-it-blueprint': 70,       // ~15,000+ tokens output (full AI platform blueprint / startup architect)
   
   // CONTRACT IT TOOLS
