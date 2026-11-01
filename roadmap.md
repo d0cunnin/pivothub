@@ -1,4 +1,5 @@
 # Purchase setup
+- [ ] Expand Business Foundation demographics helper for individual, business, organization, and government customers; verify profile application and tests.
 - [x] Restore secure complimentary Grant Access with due monthly installments, atomic audit, updated dialog and balance feedback; deployed; 32 grant/payment tests pass, including an isolated test user's exact 40-credit increase.
 - [ ] Verify Grant Access through an MFA-authenticated admin session against a confirmed live test account; blocked by no requester app account/session and no confirmed test recipient. No live complimentary credits issued.
 - [x] Audit current purchase, authentication, account, entitlement, and renewal flows against hosted configuration; findings in PAYMENT_FLOW_AUDIT.md.

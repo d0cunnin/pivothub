@@ -14,6 +14,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { invokeFunction } from "@/lib/invokeFunction";
 import { toast } from "sonner";
 import { generateBusinessFoundationPDF } from '@/lib/pdf-reports/businessFoundationPdf';
+import { buildCustomerProfile, customerTypes, emptyOrganizationProfile, organizationFields, type CustomerType } from '@/lib/customerProfile';
 
 const GENERIC_FAILURE_MESSAGE = "Something went wrong. Please try again.";
 
@@ -78,6 +79,8 @@ export const BusinessFoundationBuilder = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [results, setResults] = useState<FoundationResults | null>(null);
   const [showDemographics, setShowDemographics] = useState(false);
+  const [selectedCustomerTypes, setSelectedCustomerTypes] = useState<CustomerType[]>(["Individuals"]);
+  const [organizationProfile, setOrganizationProfile] = useState(emptyOrganizationProfile);
   
   // Demographics state
   const [demographics, setDemographics] = useState({
@@ -102,32 +105,8 @@ export const BusinessFoundationBuilder = () => {
   };
 
   const applyDemographics = () => {
-    let profile = "";
-    
-    if (demographics.gender.length > 0) {
-      profile += `Gender: ${demographics.gender.join(", ")}. `;
-    }
-    if (demographics.ageRange.length > 0) {
-      profile += `Age: ${demographics.ageRange.join(", ")}. `;
-    }
-    if (demographics.maritalStatus.length > 0) {
-      profile += `Marital Status: ${demographics.maritalStatus.join(", ")}. `;
-    }
-    if (demographics.lgbtqia) {
-      profile += `Inclusive of LGBTQIA+ community. `;
-    }
-    if (demographics.religiousAffiliation.length > 0) {
-      profile += `Religious Affiliation: ${demographics.religiousAffiliation.join(", ")}. `;
-    }
-    if (demographics.incomeBracket) {
-      profile += `Income: ${demographics.incomeBracket}. `;
-    }
-    if (demographics.education.length > 0) {
-      profile += `Education: ${demographics.education.join(", ")}. `;
-    }
-    if (demographics.occupation.length > 0) {
-      profile += `Occupation: ${demographics.occupation.join(", ")}. `;
-    }
+    const profile = buildCustomerProfile(selectedCustomerTypes, demographics, organizationProfile);
+    if (!profile) return;
 
     setFormData(prev => ({ 
       ...prev, 
@@ -361,7 +340,7 @@ export const BusinessFoundationBuilder = () => {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="idealCustomer">Ideal Customer Profile - Describe your perfect customer in detail (demographics, psychographics, behaviors)</Label>
+            <Label htmlFor="idealCustomer">Ideal Customer Profile - Describe your perfect customer: individuals, businesses, organizations, or government agencies</Label>
             <Button
               type="button"
               variant="outline"
@@ -374,8 +353,42 @@ export const BusinessFoundationBuilder = () => {
           </div>
           
           {showDemographics && (
-            <Card className="p-4 space-y-4 bg-muted/30">
-              <p className="text-sm text-muted-foreground">Select demographic options to help build your ideal customer profile:</p>
+            <div className="p-4 space-y-4 bg-muted/30 border rounded-md">
+              <fieldset className="space-y-2">
+                <legend className="text-sm font-semibold">Customer type</legend>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {customerTypes.map((type, index) => (
+                    <div key={type} className="flex items-center gap-2">
+                      <Checkbox
+                        id={`customer-type-${index}`}
+                        checked={selectedCustomerTypes.includes(type)}
+                        onCheckedChange={(checked) => setSelectedCustomerTypes(prev => checked === true
+                          ? [...prev.filter(item => item !== type), type]
+                          : prev.filter(item => item !== type))}
+                      />
+                      <Label htmlFor={`customer-type-${index}`} className="cursor-pointer">{type}</Label>
+                    </div>
+                  ))}
+                </div>
+              </fieldset>
+
+              {selectedCustomerTypes.some(type => type !== "Individuals") && (
+                <fieldset className="space-y-4 border-t pt-4">
+                  <legend className="text-sm font-semibold">Organizational customer profile</legend>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {organizationFields.map(({ key, label, placeholder }) => (
+                      <div key={key} className="space-y-2 min-w-0">
+                        <Label htmlFor={`organization-${key}`}>{label}</Label>
+                        <Input id={`organization-${key}`} placeholder={placeholder} value={organizationProfile[key]}
+                          onChange={event => setOrganizationProfile(prev => ({ ...prev, [key]: event.target.value }))} />
+                      </div>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
+
+              {selectedCustomerTypes.includes("Individuals") && (
+              <div className="space-y-4">
               
               {/* Gender */}
               <div className="space-y-2">
@@ -522,10 +535,13 @@ export const BusinessFoundationBuilder = () => {
                 </div>
               </div>
 
-              <Button type="button" onClick={applyDemographics} variant="outline" className="w-full">
+              </div>
+              )}
+
+              <Button type="button" onClick={applyDemographics} disabled={!selectedCustomerTypes.length} variant="outline" className="w-full">
                 Apply Demographics to Profile
               </Button>
-            </Card>
+            </div>
           )}
           
           <Textarea
