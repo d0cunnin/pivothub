@@ -104,9 +104,9 @@ const getCostLabel = (credits: number): string => {
 
 export const CreditCostTable = () => {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
       {Object.entries(toolsByCategory).map(([category, tools]) => (
-        <Card key={category} className="overflow-hidden">
+        <Card key={category} className="overflow-hidden break-inside-avoid mb-4 w-full inline-block">
           <CardHeader className="bg-accent/5 pb-3">
             <CardTitle className="text-lg">{category}</CardTitle>
           </CardHeader>
