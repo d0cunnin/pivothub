@@ -23,8 +23,10 @@ const QUICK_ACTIONS = [
 
 // Static FAQ responses - no AI, no API calls, no credits
 const FAQ_RESPONSES: Record<string, string> = {
-  "What is the difference between Deploy It and Create It?":
-    "Deploy It — AI Assistant Setup Guide: get ready-to-paste instructions and a PDF setup guide for an assistant in a platform such as ChatGPT, Gemini, or Claude. You set it up in your own account. PivotHub does not deploy or host it. Visit /deployit.\n\nCreate It — App & Platform Blueprint: get a downloadable plan for an app, website, or online platform, including features, recommended technology, build steps, revenue ideas, and an AI build prompt. You build separately; it is not a finished app. Visit /createit.\n\nChoose Deploy It for an assistant in an existing AI platform; choose Create It to plan your own app or website.",
+  "What is Deploy It for?":
+    "Deploy It helps you plan a task-focused AI assistant. Get ready-to-paste instructions and a PDF setup guide for a platform such as ChatGPT, Gemini, or Claude. You set it up in your own account; PivotHub does not deploy or host it. Visit /deployit.",
+  "What is Create It for?":
+    "Create It helps you plan a standalone app, website, or online platform, such as a booking platform, learning site, or marketplace. Get a downloadable blueprint with features, recommended technology, build steps, revenue ideas, and an AI build prompt. You build separately; it is not a finished app. Visit /createit.",
   "How do I reset my password?": 
     "To reset your password:\n1. Click your profile icon in the top right\n2. Go to Settings\n3. Navigate to Account Settings\n4. Select 'Change Password'\n\nIf you're locked out, use the 'Forgot Password' link on the login page.",
   
@@ -61,7 +63,6 @@ const FAQ_RESPONSES: Record<string, string> = {
 };
 
 const FAQS: string[] = [
-  "What is the difference between Deploy It and Create It?",
   "How do I reset my password?",
   "How do I update billing or cancel?",
   "Where can I view pricing and plans?",
@@ -165,8 +166,11 @@ export const ContactChatbot = () => {
     }
 
     // Keyword-based matching
-    if (/\b(?:deploy|create)\s*it\b/.test(input)) {
-      return FAQ_RESPONSES["What is the difference between Deploy It and Create It?"];
+    if (/\bdeploy\s*it\b/.test(input)) {
+      return FAQ_RESPONSES["What is Deploy It for?"];
+    }
+    if (/\bcreate\s*it\b/.test(input)) {
+      return FAQ_RESPONSES["What is Create It for?"];
     }
 
     if (input.includes("password") || input.includes("reset")) {

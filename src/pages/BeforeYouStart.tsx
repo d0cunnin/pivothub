@@ -7,7 +7,6 @@ import heroImage from "@/assets/hero-image.jpg";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 import { Compass, Target, DollarSign, Rocket, Calendar, Banknote, Users, Briefcase, GraduationCap, Mic, Sprout } from "lucide-react";
 
 const BeforeYouStart = () => {
@@ -272,7 +271,6 @@ const BeforeYouStart = () => {
           </div>
         </section>
 
-        <ToolPurposeComparison />
 
         {/* Section 5: Credits, Not Tiers */}
         <section className="py-20 bg-accent">

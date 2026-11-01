@@ -24,7 +24,6 @@ import { getToolCreditCost } from "@/utils/toolCreditWeights";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
 import { ToolGuard } from "@/components/ToolGuard";
-import { ToolPurposeComparison } from "@/components/tool-layout/ToolPurposeComparison";
 
 const DeployIt = () => {
   const { user, isAdmin } = useAuth();
@@ -172,7 +171,6 @@ const DeployIt = () => {
         </div>
       </section>
       <ToolIntro about="Describe the assistant you want—for example, a helper that drafts customer replies or explains lessons. Pick ChatGPT, Gemini, Claude, or another supported platform (or ask for a recommendation). Get ready-to-paste instructions and a downloadable PDF setup guide. You create the assistant yourself using your own account on that platform; some features may require a separate paid plan." forWho='Business owners, educators, and creators who want a task-focused AI assistant without starting from scratch.' steps={['Describe what your assistant should do and who it helps.', 'Get personalized instructions and download your setup guide.', 'Follow the guide in your own account on the recommended platform.']} items={[{ icon: IntroBot, name: 'Assistant design', description: 'Its purpose, audience, tone, and safety rules.' }, { icon: IntroListChecks, name: 'PDF setup guide', description: 'Steps to follow on your chosen platform—not automatic deployment.' }, { icon: IntroMessageSquare, name: 'Ready-to-paste instructions', description: 'Instructions that tell your assistant how to respond.' }]} />
-      <ToolPurposeComparison />
 
       <main id="deploy-content" className="flex-grow container mx-auto px-4 py-12">
         <ToolGuard toolName="deploy-it">
