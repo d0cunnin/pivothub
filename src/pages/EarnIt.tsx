@@ -84,7 +84,7 @@ function SideIncomeBlueprintInner() {
     if (typeof remainingRequests === 'number' && remainingRequests < 3) {
       toast({
         title: "Not enough credits",
-        description: `This blueprint uses 3 credits. You have ${remainingRequests} remaining.`,
+        description: `This blueprint uses 5 credits. You have ${remainingRequests} remaining.`,
         variant: "destructive",
       });
       navigate('/pricing');
@@ -126,7 +126,7 @@ function SideIncomeBlueprintInner() {
     );
   }
 
-  const startNote = "3 credits · About 10 minutes · Free account required";
+  const startNote = "5 credits · About 10 minutes · Free account required";
 
   const benefits = [
     {
@@ -153,14 +153,14 @@ function SideIncomeBlueprintInner() {
 
   const steps = [
     { title: "Answer the questions", text: "About 10 minutes. Tell us your available time, skills, income goals, and budget." },
-    { title: "Get your plan", text: "Your plan is ready right away. It uses 3 credits, charged only once your plan is delivered." },
+    { title: "Get your plan", text: "Your plan is ready right away. It uses 5 credits, charged only once your plan is delivered." },
     { title: "Download and start", text: "Save your plan as a PDF. PivotHub does not store it, so keep your copy." },
   ];
 
   const faqs = [
     {
       q: "How much does it cost?",
-      a: "3 credits. Every free account gets 5 credits each month. Credits are only used once your plan is delivered. If something goes wrong, you are not charged.",
+      a: "5 credits. Every free account gets 5 credits each month. Credits are only used once your plan is delivered. If something goes wrong, you are not charged.",
     },
     {
       q: "How long does it take?",
@@ -237,7 +237,7 @@ function SideIncomeBlueprintInner() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
-            <ToolCreditBar cost={3} />
+            <ToolCreditBar cost={5} />
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-3">What You'll Get</h2>
             <p className="text-lg text-muted-foreground text-center mb-10">
               A clear, personal plan instead of guessing which side hustle to try.

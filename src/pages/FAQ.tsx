@@ -141,7 +141,7 @@ const FAQ = () => {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     <p className="mb-3">
-                      Earn It (Side Income Blueprint) is included in <strong>all paid subscription tiers</strong> and available on the Free plan! It uses <strong>3 credits</strong>, which covers the assessment and your full
+                      Earn It (Side Income Blueprint) is included in <strong>all paid subscription tiers</strong> and available on the Free plan! It uses <strong>5 credits</strong>, which covers the assessment and your full
                       personalized blueprint. Credits are only used once your blueprint is delivered.
                     </p>
                     <p className="mb-3">
