@@ -1,7 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
-import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -14,12 +13,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
-  Loader2, Zap, ChevronRight, ChevronLeft, Download, RefreshCw, Save,
-  Sparkles, Rocket, FileText, Trash2, Copy, Check, ArrowRight,
+  Loader2, Zap, ChevronRight, ChevronLeft, Download, RefreshCw,
+  Sparkles, Rocket, FileText, Copy, Check, ArrowRight,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -79,15 +77,6 @@ const SKILL_LEVELS = [
   { value: "Enterprise", description: "Scale, security, compliance, and observability." },
 ];
 
-interface SavedBlueprint {
-  id: string;
-  platform_name: string;
-  platform_description: string | null;
-  industry: string | null;
-  platform_type: string | null;
-  blueprint_json: CreateItBlueprint;
-  created_at: string;
-}
 
 const STEP_TITLES = [
   "Platform Overview", "Core Features", "Platform Type", "Monetization",
@@ -104,13 +93,7 @@ export default function CreateIt() {
   const [generating, setGenerating] = useState(false);
   const [blueprint, setBlueprint] = useState<CreateItBlueprint | null>(null);
   const [view, setView] = useState<"wizard" | "result">("wizard");
-  const [history, setHistory] = useState<SavedBlueprint[]>([]);
-  const [loadingHistory, setLoadingHistory] = useState(false);
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    if (user) loadHistory();
-  }, [user]);
 
   const update = <K extends keyof CreateItFormData>(key: K, value: CreateItFormData[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -123,24 +106,6 @@ export default function CreateIt() {
         [key]: arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value],
       };
     });
-
-  const loadHistory = async () => {
-    if (!user) return;
-    setLoadingHistory(true);
-    try {
-      const { data, error } = await supabase
-        .from("create_it_blueprints")
-        .select("id, platform_name, platform_description, industry, platform_type, blueprint_json, created_at")
-        .order("created_at", { ascending: false })
-        .limit(25);
-      if (error) throw error;
-      setHistory((data || []) as unknown as SavedBlueprint[]);
-    } catch (err) {
-      console.error("Failed to load blueprint history:", err);
-    } finally {
-      setLoadingHistory(false);
-    }
-  };
 
   const validateStep = (s: number): string | null => {
     switch (s) {
@@ -222,7 +187,6 @@ export default function CreateIt() {
       setBlueprint(data.blueprint as CreateItBlueprint);
       setView("result");
       await refreshUsage();
-      await loadHistory();
       toast.success("Your AI platform blueprint is ready!");
     } catch (err) {
       console.error("Error generating blueprint:", err);
@@ -247,26 +211,6 @@ export default function CreateIt() {
     }
   };
 
-  const handleSave = async () => {
-    if (!blueprint || !user) return;
-    try {
-      const { error } = await supabase.from("create_it_blueprints").insert([{
-        user_id: user.id,
-        platform_name: form.appName,
-        platform_description: form.platformDescription,
-        industry: form.primaryPurpose || undefined,
-        platform_type: form.platformType || undefined,
-        blueprint_json: blueprint as unknown as never,
-      }]);
-      if (error) throw error;
-      await loadHistory();
-      toast.success("Saved to your blueprint history!");
-    } catch (err) {
-      console.error("Save failed:", err);
-      toast.error("Could not save the blueprint.");
-    }
-  };
-
   const handleRegenerate = () => {
     setBlueprint(null);
     setView("wizard");
@@ -279,30 +223,6 @@ export default function CreateIt() {
     setStep(1);
     setView("wizard");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const viewSaved = (saved: SavedBlueprint) => {
-    setForm({
-      ...EMPTY_FORM,
-      appName: saved.platform_name,
-      platformDescription: saved.platform_description || "",
-      primaryPurpose: saved.industry || "",
-      platformType: saved.platform_type || "",
-    });
-    setBlueprint(saved.blueprint_json);
-    setView("result");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const deleteSaved = async (id: string) => {
-    try {
-      const { error } = await supabase.from("create_it_blueprints").delete().eq("id", id);
-      if (error) throw error;
-      setHistory((prev) => prev.filter((b) => b.id !== id));
-      toast.success("Blueprint deleted.");
-    } catch (err) {
-      toast.error("Could not delete the blueprint.");
-    }
   };
 
   const copyBuildPrompt = async () => {
@@ -621,15 +541,7 @@ export default function CreateIt() {
             </CardContent>
           </Card>
           <ToolCreditBar cost={CREDIT_COST} />
-          <Tabs defaultValue="create" className="w-full">
-            <TabSwitchHint />
-            <TabsList className="mb-6">
-              <TabsTrigger value="create">Create</TabsTrigger>
-              <TabsTrigger value="history">My Blueprints {history.length > 0 && `(${history.length})`}</TabsTrigger>
-            </TabsList>
-
-            {/* ---------------- Create tab ---------------- */}
-            <TabsContent value="create">
+          <div className="w-full">
               {view === "wizard" && (
                 <Card>
                   <CardHeader>
@@ -697,15 +609,15 @@ export default function CreateIt() {
                             ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Regenerating...</>
                             : <><RefreshCw className="mr-2 h-4 w-4" /> Regenerate</>}
                         </Button>
-                        <Button variant="outline" onClick={handleSave}>
-                          <Save className="mr-2 h-4 w-4" /> Save
+                        <Button variant="outline" onClick={copyBuildPrompt}>
+                          <Copy className="mr-2 h-4 w-4" /> Copy Build Prompt
                         </Button>
                         <Button variant="ghost" onClick={handleCreateAnother}>
                           <Sparkles className="mr-2 h-4 w-4" /> Create Another
                         </Button>
                       </div>
                       <p className="text-xs text-muted-foreground mt-3">
-                        Regenerate uses another {CREDIT_COST} credits.
+                        Blueprints are not saved. Download the PDF or copy the build prompt before leaving this page. Regenerate uses another {CREDIT_COST} credits.
                       </p>
                     </CardContent>
                   </Card>
@@ -745,53 +657,7 @@ export default function CreateIt() {
                   </Card>
                 </div>
               )}
-            </TabsContent>
-
-            {/* ---------------- History tab ---------------- */}
-            <TabsContent value="history">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Saved Blueprints</CardTitle>
-                  <CardDescription>View, re-download, or remove your previous blueprints.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {loadingHistory ? (
-                    <div className="space-y-3">
-                      {[1, 2, 3].map((i) => <div key={i} className="h-16 bg-muted animate-pulse rounded" />)}
-                    </div>
-                  ) : history.length === 0 ? (
-                    <div className="text-center py-10 text-muted-foreground">
-                      <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                      <p>No saved blueprints yet.</p>
-                      <p className="text-sm">Generate your first blueprint to see it here.</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {history.map((b) => (
-                        <div key={b.id} className="flex items-center justify-between p-4 rounded-lg border">
-                          <div className="min-w-0">
-                            <div className="font-medium truncate">{b.platform_name}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {b.industry ? `${b.industry} · ` : ""}
-                              {new Date(b.created_at).toLocaleString()}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <Button size="sm" variant="outline" onClick={() => viewSaved(b)}>
-                              View <ArrowRight className="ml-1 h-4 w-4" />
-                            </Button>
-                            <Button size="sm" variant="ghost" onClick={() => deleteSaved(b.id)}>
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+          </div>
 
           {view === "result" && (
             <Alert className="mt-6">

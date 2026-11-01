@@ -260,26 +260,8 @@ serve(withCreditRequest(async (req) => {
     const modelUsed = 'google/gemini-3.8-flash';
 
 
-    // Store history (RLS: user_id must equal auth.uid()).
-    let blueprintId: string | null = null;
-    const { data: saved, error: saveError } = await supabase
-      .from('create_it_blueprints')
-      .insert({
-        user_id: userId,
-        platform_name: body.appName,
-        platform_description: body.platformDescription,
-        industry: body.primaryPurpose || null,
-        platform_type: body.platformType || null,
-        blueprint_json: blueprint as unknown as Record<string, unknown>,
-      })
-      .select('id')
-      .maybeSingle();
-
-    if (saveError) {
-      console.error(`[${ENDPOINT}] Failed to save blueprint:`, saveError.message);
-    } else {
-      blueprintId = saved?.id ?? null;
-    }
+    // Blueprints are never stored: users download the PDF or copy the prompt.
+    const blueprintId: string | null = null;
 
     // Credits are only checked up front by guard(); they are deducted
     // here, after the blueprint was generated successfully, so failed
