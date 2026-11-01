@@ -117,9 +117,7 @@ REVOKE ALL ON public.design_it_operations FROM anon, authenticated;
 GRANT SELECT ON public.design_it_operations TO authenticated;
 
 -- ---------------------------------------------------------------- storage
-INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES ('design-it', 'design-it', false, 10485760, ARRAY['image/png', 'image/jpeg', 'image/webp'])
-ON CONFLICT (id) DO UPDATE SET public = false, file_size_limit = EXCLUDED.file_size_limit, allowed_mime_types = EXCLUDED.allowed_mime_types;
+-- Bucket "design-it" (private, 10MB) is created with the storage tool, not SQL.
 
 DROP POLICY IF EXISTS "Users read own design-it files" ON storage.objects;
 DROP POLICY IF EXISTS "Users delete own design-it files" ON storage.objects;
