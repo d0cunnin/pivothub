@@ -167,6 +167,9 @@ const DeployIt = () => {
             <p className="text-xl md:text-2xl lg:text-3xl text-white/90 mb-10 font-light leading-relaxed animate-fade-in max-w-4xl mx-auto" style={{ animationDelay: '0.2s' }}>
               Get instructions and a PDF guide to set up your own AI assistant—not website hosting or a finished chatbot.
             </p>
+            <Badge variant="secondary" className="text-base px-4 py-2">
+              <Zap className="h-4 w-4 mr-2" /> 3 Credits
+            </Badge>
           </div>
         </div>
       </section>
