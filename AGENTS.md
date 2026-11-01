@@ -16,3 +16,6 @@
 - Keep each tool's visitor guidance independent and presentation-only, separate from generation, authentication, and billing.
 - Keep visual refresh changes scoped to the page being refreshed and reuse existing semantic tokens and controls, so later phases cannot alter unrelated workflows or styling.
 - Apply cross-tool visual styling through the opt-in ToolPageAppearance wrapper and its scoped stylesheet; keep tool children, shared UI primitives, and non-tool routes untouched to preserve behavior and isolate later phases.
+# Design It
+- Design It AI results are immutable versions written only by the service-role edge function after verifying project ownership; each paid request carries a client request id logged in design_it_operations so repeats never run or charge twice, and credits are consumed only after the result is saved.
+- Saved-project storage is never promised as permanent or unlimited; optional limits come from configuration and only block new images, never existing work or downloads.

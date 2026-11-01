@@ -70,6 +70,9 @@ const PrivacyPolicy = () => {
                 <p className="text-muted-foreground leading-relaxed">
                   Data submitted to tools may be processed by AI service providers. Saved assessments, reports, submissions, preferences, and usage records can remain linked to your account. Payment details are collected by Stripe; we store billing references and credit receipts, not your card number. Deleting an account removes saved content and account access; financial and security records may be retained where required.
                 </p>
+                <p className="text-muted-foreground leading-relaxed mt-3" id="saved-projects">
+                  <strong className="text-foreground">Saved projects and storage.</strong> Projects you save in tools such as Design It, Write It and Publish It, including generated images, are stored subject to PivotHub's current storage capacity, your subscription terms and this policy. We do not offer permanent, unlimited or guaranteed storage, or a set retention period. Storage limits may apply and may change; any changes to storage limits or retention will be communicated. Please download copies of work you want to keep. Viewing or downloading saved work does not use AI credits. Saved work is not deleted solely because you change or downgrade your plan except as described in this policy.
+                </p>
               </div>
 
               <div>

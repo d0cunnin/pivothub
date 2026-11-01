@@ -88,6 +88,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    **Speak It:** Speaker or Podcast Launch Plan (3 credits)
    **Write It:** Book planning: concept, titles, table of contents (3 credits), all chapter outlines (3 credits), single outline / new table of contents / writing roadmap (1 credit each). It plans and outlines books; it does not write them.
    **Publish It:** Free publishing plan: readiness check, roadmap, IngramSpark and KDP print steps, ISBN and copyright guidance, e-book and audiobook guides, cost planner (optional personalized summary: 2 credits). It does not upload, format or publish books; authors submit on the platforms.
+   **Design It:** Design concept studio for products, brands, fashion, interiors, digital interfaces, events, architectural concepts and creative projects. Brief, saving, version history and comparisons are free. Initial concept (3 credits), 3 more creative directions (2), concept image (3 per image), text refinement (2), image revision (3), text and image refinement (4), AI comparison (1), final summary (2). Each paid step shows its cost and asks for confirmation. Architectural outputs are concepts only, not construction drawings or certifications.
    **Garden It:** Garden Plan Generator (3 credits)
    **Act It:** Story Concept Generator (3 credits)
    **Develop It:** Program Builder (4), Grant Readiness (3), Community Assessment (3), Stakeholder Planner (3), Community Development Coach (1 per message)

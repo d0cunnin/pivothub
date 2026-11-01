@@ -11,6 +11,7 @@ import { Footer } from "@/components/Footer";
 import { ToolIntro } from "@/components/tool-layout/ToolIntro";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
 import { ToolGuard } from "@/components/ToolGuard";
+import { StorageNotice } from "@/components/StorageNotice";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -295,6 +296,7 @@ const WriteIt = () => {
             </div>
           </div>
         ))}
+        <StorageNotice />
       </CardContent>
     </Card>
   );

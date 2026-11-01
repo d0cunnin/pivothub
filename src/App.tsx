@@ -42,6 +42,7 @@ import GardenIt from "./pages/GardenIt";
 import SpeakIt from "./pages/SpeakIt";
 import WriteIt from "./pages/WriteIt";
 import PublishIt from "./pages/PublishIt";
+import DesignIt from "./pages/DesignIt";
 import ActIt from "./pages/ActIt";
 import StudyIt from "./pages/StudyIt";
 import BeforeYouStart from "./pages/BeforeYouStart";
@@ -89,6 +90,7 @@ const App = () => (
           <Route path="/speakit" element={<ToolPageAppearance><SpeakIt /></ToolPageAppearance>} />
           <Route path="/writeit" element={<ToolPageAppearance><WriteIt /></ToolPageAppearance>} />
           <Route path="/publishit" element={<ToolPageAppearance><PublishIt /></ToolPageAppearance>} />
+          <Route path="/designit" element={<ToolPageAppearance><DesignIt /></ToolPageAppearance>} />
             <Route path="/actit" element={<ToolPageAppearance><ActIt /></ToolPageAppearance>} />
             <Route path="/studyit" element={<ToolPageAppearance><StudyIt /></ToolPageAppearance>} />
             <Route path="/before-you-start" element={<BeforeYouStart />} />

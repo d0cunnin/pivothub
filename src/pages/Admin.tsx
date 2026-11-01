@@ -25,6 +25,7 @@ import { ActivityFeed } from "@/components/admin/ActivityFeed";
 import { AssessmentAnalytics } from "@/components/admin/AssessmentAnalytics";
 import { AnalyticsDashboard } from "@/components/AnalyticsDashboard";
 import { CostAnalytics } from "@/components/admin/CostAnalytics";
+import { DesignItStorageMonitor } from "@/components/admin/DesignItStorageMonitor";
 import { SignupAuditViewer } from "@/components/admin/SignupAuditViewer";
 import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
 import { AIUsageMonitor } from "@/components/admin/AIUsageMonitor";
@@ -401,6 +402,7 @@ const Admin = () => {
 
             <TabsContent value="cost" className="space-y-6">
               <CostAnalytics />
+              <DesignItStorageMonitor />
             </TabsContent>
 
             <TabsContent value="activity" className="space-y-6">

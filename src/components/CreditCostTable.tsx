@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { DEFAULT_DESIGN_IT_COSTS } from "@/lib/designIt/logic";
 
 interface Tool {
   name: string;
@@ -44,6 +45,17 @@ const toolsByCategory: Record<string, Tool[]> = {
   'Publish It (Publishing Guide)': [
     { name: 'Publishing Plan, Roadmap & Platform Guides', credits: 0, note: 'Free' },
     { name: 'Personalized Publishing Summary', credits: 2, note: 'Optional' },
+  ],
+  'Design It (Design Concepts)': [
+    { name: 'Design Brief, Saving, Versions & Comparisons', credits: 0, note: 'Free' },
+    { name: 'Initial Design Concept', credits: DEFAULT_DESIGN_IT_COSTS.concept },
+    { name: 'Three More Creative Directions', credits: DEFAULT_DESIGN_IT_COSTS.directions },
+    { name: 'Concept Visual (image)', credits: DEFAULT_DESIGN_IT_COSTS.image, note: 'per image' },
+    { name: 'Text-only Refinement', credits: DEFAULT_DESIGN_IT_COSTS.refine_text },
+    { name: 'Image Revision', credits: DEFAULT_DESIGN_IT_COSTS.refine_image },
+    { name: 'Text and Image Refinement', credits: DEFAULT_DESIGN_IT_COSTS.refine_both },
+    { name: 'AI Version Comparison', credits: DEFAULT_DESIGN_IT_COSTS.compare },
+    { name: 'Final Design Summary', credits: DEFAULT_DESIGN_IT_COSTS.summary },
   ],
   'Garden It (Gardening)': [
     { name: 'Garden Plan Generator', credits: 3, note: 'Complete garden plan + shopping list' },
@@ -112,7 +124,7 @@ const getCostLabel = (credits: number): string => {
 };
 
 const desktopColumns: string[][] = [
-  ['Build It (Business Tools)', 'Launch It (Go-to-Market)', 'Schedule It (Time Management)', 'Host It (Event Planning)', 'Garden It (Gardening)'],
+  ['Build It (Business Tools)', 'Launch It (Go-to-Market)', 'Schedule It (Time Management)', 'Host It (Event Planning)', 'Design It (Design Concepts)', 'Garden It (Gardening)'],
   ['Teach It (Education Tools)', 'Develop It (Community Programs)', 'Speak It (Voice & Content)', 'Write It (Book Planning)', 'Publish It (Publishing Guide)', 'Earn It (Side Income)', 'Create It (Platform Blueprint)', 'Fund It (Grant Tools)'],
   ['Prep It (Career Tools)', 'Learn It (Tech & AI Tools)', 'Assess It (Self-Discovery)', 'Contract It (Government Contracting)', 'Act It (Story Studio)'],
 ];
