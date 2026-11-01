@@ -41,6 +41,10 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'All Chapter Outlines', credits: 3 },
     { name: 'One Chapter Outline, New Table of Contents, or Writing Roadmap', credits: 1, note: 'each' },
   ],
+  'Publish It (Publishing Guide)': [
+    { name: 'Publishing Plan, Roadmap & Platform Guides', credits: 0, note: 'Free' },
+    { name: 'Personalized Publishing Summary', credits: 2, note: 'Optional' },
+  ],
   'Garden It (Gardening)': [
     { name: 'Garden Plan Generator', credits: 3, note: 'Complete garden plan + shopping list' },
   ],
@@ -109,7 +113,7 @@ const getCostLabel = (credits: number): string => {
 
 const desktopColumns: string[][] = [
   ['Build It (Business Tools)', 'Launch It (Go-to-Market)', 'Schedule It (Time Management)', 'Host It (Event Planning)', 'Garden It (Gardening)'],
-  ['Teach It (Education Tools)', 'Develop It (Community Programs)', 'Speak It (Voice & Content)', 'Write It (Book Planning)', 'Earn It (Side Income)', 'Create It (Platform Blueprint)', 'Fund It (Grant Tools)'],
+  ['Teach It (Education Tools)', 'Develop It (Community Programs)', 'Speak It (Voice & Content)', 'Write It (Book Planning)', 'Publish It (Publishing Guide)', 'Earn It (Side Income)', 'Create It (Platform Blueprint)', 'Fund It (Grant Tools)'],
   ['Prep It (Career Tools)', 'Learn It (Tech & AI Tools)', 'Assess It (Self-Discovery)', 'Contract It (Government Contracting)', 'Act It (Story Studio)'],
 ];
 

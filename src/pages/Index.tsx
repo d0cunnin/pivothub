@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
-import { ArrowUpRight, ArrowRight, CheckCircle, Rocket, Target, BriefcaseBusiness, CalendarDays, Sprout, Mic, ClipboardCheck, GraduationCap, Lightbulb, HandCoins, FileCheck2, Building2, BookOpen } from "lucide-react";
+import { ArrowUpRight, ArrowRight, CheckCircle, Rocket, Target, BriefcaseBusiness, CalendarDays, Sprout, Mic, ClipboardCheck, GraduationCap, Lightbulb, HandCoins, FileCheck2, Building2, BookOpen, BookCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
@@ -105,6 +105,12 @@ const Index = () => {
       title: "Write It",
       description: "Plan your book: concept, title, table of contents, chapter outlines and a writing roadmap. You write the book.",
       link: "/writeit",
+    },
+    {
+      icon: BookCheck,
+      title: "Publish It",
+      description: "Publishing guide: readiness check, IngramSpark and KDP steps, ISBN, copyright, e-books and audiobooks. You publish on the platforms.",
+      link: "/publishit",
     },
     {
       icon: Sprout,
@@ -239,7 +245,7 @@ const Index = () => {
               {[
                 { title: "Career & skills", titles: ["Assess It", "Prep It"] },
                 { title: "Income & ideas", titles: ["Earn It", "Teach It", "Build It"] },
-                { title: "Planning & launching", titles: ["Host It", "Schedule It", "Launch It", "Speak It", "Write It", "Garden It"] },
+                { title: "Planning & launching", titles: ["Host It", "Schedule It", "Launch It", "Speak It", "Write It", "Publish It", "Garden It"] },
                 { title: "Funding & growth", titles: ["Fund It", "Develop It", "Contract It"] },
                 { title: "AI assistants & app ideas", titles: ["Deploy It", "Create It"] },
               ].map((category) => (

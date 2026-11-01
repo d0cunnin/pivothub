@@ -249,7 +249,7 @@ const WriteIt = () => {
     setProject(next);
     await persist(next, true);
     setPublishOpen(false);
-    toast.success("Your book details are saved for Publish It.");
+    toast.success("Saved. Open Publish It to import this book.", { action: { label: "Open Publish It", onClick: () => { window.location.href = "/publishit"; } } });
   };
 
   const openProject = (p: WriteItProject) => {
@@ -627,7 +627,7 @@ const WriteIt = () => {
             <DialogTitle>Send to Publish It</DialogTitle>
             <DialogDescription>
               We'll save your title, subtitle, author name, category, concept, description, audience and table of contents for Publish It.
-              Publish It is coming soon; your details will be ready for it. An outline is not a finished manuscript, so Publish It will still ask whether your manuscript is ready.
+              After saving, open Publish It and choose this book under "Import its details". An outline is not a finished manuscript, so Publish It will still ask whether your manuscript is ready.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-1">

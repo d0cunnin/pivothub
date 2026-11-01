@@ -12,7 +12,7 @@ const mobileSections: { title: string; links: [string, string][] }[] = [
   { title: "Upskill", links: [["Assess It", "/assessit"], ["Prep It", "/prepit"]] },
   { title: "Learn It", links: [["Prompt It", "/promptit"], ["Code It", "/codeit"], ["Deploy It", "/deployit"], ["Create It", "/createit"], ["Study It", "/studyit"]] },
   { title: "Make Money", links: [["Earn It", "/earnit"], ["Build It", "/buildit"], ["Teach It", "/teachit"]] },
-  { title: "Plan It", links: [["Launch It", "/launchit"], ["Schedule It", "/scheduleit"], ["Host It", "/hostit"], ["Speak It", "/speakit"], ["Write It", "/writeit"], ["Garden It", "/gardenit"], ["Act It", "/actit"]] },
+  { title: "Plan It", links: [["Launch It", "/launchit"], ["Schedule It", "/scheduleit"], ["Host It", "/hostit"], ["Speak It", "/speakit"], ["Write It", "/writeit"], ["Publish It", "/publishit"], ["Garden It", "/gardenit"], ["Act It", "/actit"]] },
   { title: "Grow It", links: [["Fund It", "/fundit"], ["Contract It", "/contractit"], ["Develop It", "/developit"]] },
 ];
 
@@ -186,7 +186,7 @@ export const Header = () => {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center space-x-1">
                     <span 
-                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/launchit', '/scheduleit', '/hostit', '/speakit', '/writeit', '/gardenit', '/actit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
+                      className={`text-foreground hover:text-primary transition-colors whitespace-nowrap cursor-pointer ${['/launchit', '/scheduleit', '/hostit', '/speakit', '/writeit', '/publishit', '/gardenit', '/actit'].includes(location.pathname) ? 'text-primary font-medium' : ''}`}
                     >
                       Plan It
                     </span>
@@ -219,6 +219,11 @@ export const Header = () => {
                   <DropdownMenuItem asChild>
                     <Link to="/writeit" className="flex w-full cursor-pointer">
                       Write It
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/publishit" className="flex w-full cursor-pointer">
+                      Publish It
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
