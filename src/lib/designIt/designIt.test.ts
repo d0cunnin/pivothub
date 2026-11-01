@@ -250,3 +250,22 @@ describe('19-20: storage tracking and downgrade policy', () => {
     }
   });
 });
+
+describe('visual color picking', () => {
+  it('adds picked colors as "Name #HEX" without duplicates and removes them cleanly', async () => {
+    const { addColor, removeColor } = await import('./logic');
+    let t = addColor('', 'Navy', '#1b2a4a');
+    expect(t).toBe('Navy #1B2A4A');
+    t = addColor(t, 'Gold', '#C9A227');
+    expect(addColor(t, 'Navy', '#1B2A4A')).toBe(t);
+    expect(hexColors(t)).toEqual(['#1B2A4A', '#C9A227']);
+    expect(removeColor(t, '#1B2A4A')).toBe('Gold #C9A227');
+    expect(removeColor('warm tones, Navy #1B2A4A', '#1B2A4A')).toBe('warm tones');
+    expect(removeColor('navy #1B2A4A and gold #C9A227', '#C9A227')).toBe('navy #1B2A4A and gold');
+    expect(addColor('warm and calm, ', '', '#ff0000')).toBe('warm and calm, #FF0000');
+  });
+  it('every swatch and palette color is a valid HEX the AI will receive', async () => {
+    const { COLOR_SWATCHES, COLOR_PALETTES } = await import('./categories');
+    [...COLOR_SWATCHES, ...COLOR_PALETTES.flatMap((p) => p.colors)].forEach((c) => expect(hexColors(c.hex)).toEqual([c.hex.toUpperCase()]));
+  });
+});

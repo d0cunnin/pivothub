@@ -80,6 +80,27 @@ export function userSpecifications(b: DesignBrief): [string, string][] {
   return rows.filter(([, v]) => v && v.trim());
 }
 
+// ---------------------------------------------------------------- colors
+/** Add a picked color to the color preferences text as "Name #HEX" (no duplicates). */
+export function addColor(text: string, name: string, hex: string): string {
+  const code = hex.toUpperCase();
+  if (hexColors(text).includes(code)) return text;
+  const entry = name ? `${name} ${code}` : code;
+  const base = text.trim().replace(/[,\s]+$/, "");
+  return (base ? `${base}, ${entry}` : entry).slice(0, 500);
+}
+
+/** Remove a color (and its name, when it was added as "Name #HEX") from the text. */
+export function removeColor(text: string, hex: string): string {
+  const code = hex.toUpperCase();
+  return text.split(",").map((seg) => {
+    const codes = hexColors(seg);
+    if (!codes.includes(code)) return seg;
+    if (codes.length === 1 && /^\s*[A-Za-z][A-Za-z ]{0,30}\s*#[0-9A-Fa-f]{3,6}\s*$/.test(seg)) return "";
+    return seg.replace(new RegExp(`\\s*${code}\\b`, "i"), "");
+  }).map((s) => s.trim()).filter(Boolean).join(", ");
+}
+
 // ---------------------------------------------------------------- versions
 export const latestOf = (versions: DesignVersion[], kinds: VersionKind[]) =>
   [...versions].sort((a, b) => b.version_number - a.version_number).find((v) => kinds.includes(v.kind)) ?? null;

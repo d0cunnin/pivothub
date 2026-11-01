@@ -3,7 +3,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DESIGN_CATEGORIES, DESIGN_STYLES, categoryById, type DesignCategoryId, type GeneralOptionalField } from "@/lib/designIt/categories";
-import { changeCategory, hexColors, type DesignBrief } from "@/lib/designIt/logic";
+import { changeCategory, type DesignBrief } from "@/lib/designIt/logic";
+import { ColorChooser } from "./ColorChooser";
 
 /** Category picker: a compact grid of buttons. */
 export function CategoryPicker({ value, onChange }: { value: DesignCategoryId | null; onChange: (c: DesignCategoryId) => void }) {
@@ -40,7 +41,6 @@ export function BriefForm({ value, onChange }: { value: DesignBrief; onChange: (
   const cat = categoryById(value.category);
   const set = (k: keyof DesignBrief, v: string) => onChange({ ...value, [k]: v });
   const setDetail = (k: string, v: string) => onChange({ ...value, details: { ...value.details, [k]: v } });
-  const hex = hexColors(value.colors);
 
   return (
     <div className="space-y-5">
@@ -96,17 +96,10 @@ export function BriefForm({ value, onChange }: { value: DesignBrief; onChange: (
             ? <Field id="di-custom-style" label="Describe your style" required max={200} value={value.customStyle} onChange={(v) => set("customStyle", v)} />
             : <div className="hidden sm:block" />}
           <div className="space-y-1 sm:col-span-2">
-            <Field id="di-colors" label="Color preferences (HEX codes optional)" max={500} value={value.colors} onChange={(v) => set("colors", v)}
-              placeholder="e.g. deep navy #1B2A4A and warm gold #C9A227, no bright red" />
-            {hex.length > 0 && (
-              <div className="flex flex-wrap gap-2 pt-1" aria-label="HEX colors found">
-                {hex.map((h) => (
-                  <span key={h} className="inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-xs">
-                    <span className="h-3 w-3 rounded-sm border" style={{ backgroundColor: h }} /> {h}
-                  </span>
-                ))}
-              </div>
-            )}
+            <p className="text-sm font-medium">Colors</p>
+            <ColorChooser value={value.colors} onChange={(v) => set("colors", v)} />
+            <Field id="di-colors" label="Describe colors in your own words or type HEX codes (optional)" max={500} value={value.colors} onChange={(v) => set("colors", v)}
+              placeholder="e.g. warm and inviting, nothing too bright" />
           </div>
           <div className="sm:col-span-2">
             <Field id="di-functional" label="Functional requirements" area max={2000} value={value.functional} onChange={(v) => set("functional", v)} />

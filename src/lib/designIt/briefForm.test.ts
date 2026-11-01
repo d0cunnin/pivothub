@@ -21,6 +21,8 @@ describe('Design It forms render', () => {
         .filter((d) => !c.details.some((x) => x.label === d.label))
         .forEach((d) => expect(html).not.toContain(`>${d.label}<`));
       expect(html).toContain('Design concept or idea');
+      expect(html).toContain('Choose a ready-made palette');
+      expect(html).toContain('type="color"');
     }
   });
 
