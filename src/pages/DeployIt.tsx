@@ -355,14 +355,14 @@ const DeployIt = () => {
                       <div>
                         <p className="font-semibold text-foreground">Education:</p>
                         <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Tutor Agent: Answers student questions and creates practice quizzes</li>
+                          <li>Tutor Assistant: Answers student questions and creates practice quizzes</li>
                           <li>Research Assistant: Finds and summarizes academic papers</li>
                         </ul>
                       </div>
                       <div>
                         <p className="font-semibold text-foreground">Business:</p>
                         <ul className="list-disc pl-6 mt-2 space-y-1">
-                          <li>Customer Service Agent: Handles support tickets automatically</li>
+                          <li>Customer Service Assistant: Handles support tickets automatically</li>
                           <li>Sales Assistant: Schedules meetings and follows up with leads</li>
                         </ul>
                       </div>
