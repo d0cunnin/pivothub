@@ -86,6 +86,7 @@ const SYSTEM_PROMPT = `You are PivotHub's AI customer support assistant. Your ON
    **Schedule It:** Schedule Builder (5 credits)
    **Host It:** Event Planning Generator (4 credits)
    **Speak It:** Speaker or Podcast Launch Plan (3 credits)
+   **Write It:** Book planning: concept, titles, table of contents (3 credits), all chapter outlines (3 credits), single outline / new table of contents / writing roadmap (1 credit each). It plans and outlines books; it does not write them.
    **Garden It:** Garden Plan Generator (3 credits)
    **Act It:** Story Concept Generator (3 credits)
    **Develop It:** Program Builder (4), Grant Readiness (3), Community Assessment (3), Stakeholder Planner (3), Community Development Coach (1 per message)

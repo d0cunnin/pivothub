@@ -36,6 +36,11 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'Speaker Launch Plan', credits: 3, note: 'Complete launch plan + PDF' },
     { name: 'Podcast Launch Plan', credits: 3, note: 'Complete launch plan + PDF' },
   ],
+  'Write It (Book Planning)': [
+    { name: 'Book Development Plan', credits: 3, note: 'Concept, title ideas, structure and table of contents' },
+    { name: 'All Chapter Outlines', credits: 3 },
+    { name: 'One Chapter Outline, New Table of Contents, or Writing Roadmap', credits: 1, note: 'each' },
+  ],
   'Garden It (Gardening)': [
     { name: 'Garden Plan Generator', credits: 3, note: 'Complete garden plan + shopping list' },
   ],
@@ -104,7 +109,7 @@ const getCostLabel = (credits: number): string => {
 
 const desktopColumns: string[][] = [
   ['Build It (Business Tools)', 'Launch It (Go-to-Market)', 'Schedule It (Time Management)', 'Host It (Event Planning)', 'Garden It (Gardening)'],
-  ['Teach It (Education Tools)', 'Develop It (Community Programs)', 'Speak It (Voice & Content)', 'Earn It (Side Income)', 'Create It (Platform Blueprint)', 'Fund It (Grant Tools)'],
+  ['Teach It (Education Tools)', 'Develop It (Community Programs)', 'Speak It (Voice & Content)', 'Write It (Book Planning)', 'Earn It (Side Income)', 'Create It (Platform Blueprint)', 'Fund It (Grant Tools)'],
   ['Prep It (Career Tools)', 'Learn It (Tech & AI Tools)', 'Assess It (Self-Discovery)', 'Contract It (Government Contracting)', 'Act It (Story Studio)'],
 ];
 

@@ -40,6 +40,7 @@ import ScheduleIt from "./pages/ScheduleIt";
 import HostIt from "./pages/HostIt";
 import GardenIt from "./pages/GardenIt";
 import SpeakIt from "./pages/SpeakIt";
+import WriteIt from "./pages/WriteIt";
 import ActIt from "./pages/ActIt";
 import StudyIt from "./pages/StudyIt";
 import BeforeYouStart from "./pages/BeforeYouStart";
@@ -85,6 +86,7 @@ const App = () => (
           <Route path="/hostit" element={<ToolPageAppearance><HostIt /></ToolPageAppearance>} />
           <Route path="/gardenit" element={<ToolPageAppearance><GardenIt /></ToolPageAppearance>} />
           <Route path="/speakit" element={<ToolPageAppearance><SpeakIt /></ToolPageAppearance>} />
+          <Route path="/writeit" element={<ToolPageAppearance><WriteIt /></ToolPageAppearance>} />
             <Route path="/actit" element={<ToolPageAppearance><ActIt /></ToolPageAppearance>} />
             <Route path="/studyit" element={<ToolPageAppearance><StudyIt /></ToolPageAppearance>} />
             <Route path="/before-you-start" element={<BeforeYouStart />} />

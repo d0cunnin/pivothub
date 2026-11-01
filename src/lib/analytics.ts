@@ -255,7 +255,7 @@ export function trackSignUp(method: 'email' | 'google', accountKey: string) {
 const TOOL_PAGES: Record<string, string> = {
   '/assessit': 'assess_it', '/prepit': 'prep_it', '/buildit': 'build_it', '/earnit': 'earn_it',
   '/fundit': 'fund_it', '/launchit': 'launch_it', '/teachit': 'teach_it', '/scheduleit': 'schedule_it',
-  '/hostit': 'host_it', '/gardenit': 'garden_it', '/speakit': 'speak_it', '/actit': 'act_it',
+  '/hostit': 'host_it', '/gardenit': 'garden_it', '/speakit': 'speak_it', '/writeit': 'write_it', '/actit': 'act_it',
   '/studyit': 'study_it', '/promptit': 'prompt_it', '/codeit': 'code_it', '/deployit': 'deploy_it',
   '/createit': 'create_it', '/contractit': 'contract_it', '/developit': 'develop_it',
 };
@@ -278,7 +278,7 @@ const TOOL_FUNCTIONS: Record<string, string> = {
   'generate-side-income-report': 'earn_it', 'generate-grant-content': 'fund_it', 'generate-launch-strategy': 'launch_it',
   'generate-teaching-content': 'teach_it', 'lesson-plan': 'teach_it', 'quiz-generator': 'teach_it', 'rubric-builder': 'teach_it',
   'generate-schedule': 'schedule_it', 'generate-event-plan': 'host_it', 'generate-garden-plan': 'garden_it',
-  'speak-it': 'speak_it', 'act-it': 'act_it', 'study-it': 'study_it', 'prompt-it': 'prompt_it', 'code-it': 'code_it',
+  'speak-it': 'speak_it', 'write-it': 'write_it', 'act-it': 'act_it', 'study-it': 'study_it', 'prompt-it': 'prompt_it', 'code-it': 'code_it',
   'deploy-it': 'deploy_it', 'generate-create-it-blueprint': 'create_it',
   'generate-capability-statement': 'contract_it', 'generate-contract-readiness': 'contract_it',
   'community-dev-coach': 'develop_it', 'generate-community-assessment': 'develop_it', 'generate-grant-readiness': 'develop_it',
