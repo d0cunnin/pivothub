@@ -28,7 +28,7 @@ export const useAIRateMonitor = (refreshInterval: number = 5000) => {
   // Subscribe to real-time updates
   useEffect(() => {
     const channel = supabase
-      .channel('ai-usage-monitor')
+      .channel(`ai-usage-monitor-${Math.random().toString(36).slice(2)}`)
       .on(
         'postgres_changes',
         {
