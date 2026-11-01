@@ -204,7 +204,7 @@ export interface PublishProject {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const table = () => (supabase as any).from("publish_it_projects");
 
-const normalize = (row: any): PublishProject => ({
+export const normalizePublishProject = (row: any): PublishProject => ({
   ...row,
   assessment: { ...EMPTY_ASSESSMENT, ...(row?.assessment ?? {}), book: { ...EMPTY_ASSESSMENT.book, ...(row?.assessment?.book ?? {}) } },
   progress: row?.progress ?? {},
@@ -215,23 +215,10 @@ const normalize = (row: any): PublishProject => ({
 export async function listPublishProjects(): Promise<PublishProject[]> {
   const { data, error } = await table().select("*").order("updated_at", { ascending: false });
   if (error) throw error;
-  return (data ?? []).map(normalize);
+  return (data ?? []).map(normalizePublishProject);
 }
 
-export async function createPublishProject(userId: string, p: Partial<PublishProject>): Promise<PublishProject> {
-  const { data, error } = await table().insert({
-    user_id: userId,
-    project_name: p.project_name || p.assessment?.book.title || "Untitled book",
-    assessment: p.assessment ?? EMPTY_ASSESSMENT,
-    progress: p.progress ?? {},
-    isbn_records: p.isbn_records ?? [],
-    costs: p.costs ?? {},
-    ai_summary: p.ai_summary ?? null,
-    write_it_project_id: p.write_it_project_id ?? null,
-  }).select("*").single();
-  if (error) throw error;
-  return normalize(data);
-}
+// New plans are created (and charged) by the publish-it edge function.
 
 export async function savePublishProject(p: PublishProject): Promise<PublishProject> {
   const { data, error } = await table().update({
@@ -239,7 +226,7 @@ export async function savePublishProject(p: PublishProject): Promise<PublishProj
     costs: p.costs, ai_summary: p.ai_summary, write_it_project_id: p.write_it_project_id,
   }).eq("id", p.id).select("*").single();
   if (error) throw error;
-  return normalize(data);
+  return normalizePublishProject(data);
 }
 
 export async function deletePublishProject(id: string): Promise<void> {

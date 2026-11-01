@@ -43,7 +43,7 @@ const toolsByCategory: Record<string, Tool[]> = {
     { name: 'One Chapter Outline, New Table of Contents, or Writing Roadmap', credits: 1, note: 'each' },
   ],
   'Publish It (Publishing Guide)': [
-    { name: 'Publishing Plan, Roadmap & Platform Guides', credits: 0, note: 'Free' },
+    { name: 'Publishing Plan, Roadmap & Platform Guides', credits: 2, note: 'Updating and reopening your plan is free' },
     { name: 'Personalized Publishing Summary', credits: 2, note: 'Optional' },
   ],
   'Design It (Design Concepts)': [

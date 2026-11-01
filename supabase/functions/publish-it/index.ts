@@ -1,27 +1,74 @@
 import { withCreditRequest } from '../_shared/guard.ts';
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { guard, corsHeaders, deductCreditsOnSuccess } from '../_shared/guard.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { guard, corsHeaders, assertCredits, deductCreditsOnSuccess } from '../_shared/guard.ts';
 import { generateText, systemUser } from '../_shared/aiGenerate.ts';
 import { moderateContent } from '../_shared/moderation.ts';
 
 /**
- * PUBLISH IT: personalized publishing summary (2 credits).
+ * PUBLISH IT
+ *   action "create": create a publishing plan project (PLAN_COST credits).
+ *     Projects can only be created here (users have no INSERT permission),
+ *     so a plan cannot be created without being charged.
+ *   default: personalized publishing summary (COST credits).
+ * Reopening, updating progress and downloading PDFs are free.
  * Platform instructions, fees and requirements are NOT generated here; they
  * come from PivotHub's maintained guide with official links. This summary
  * only explains the author's own situation and priorities.
  */
 const COST = 2;
+const PLAN_COST = 2;
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 const str = (v: unknown, max = 2000) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 const list = (v: unknown) => (Array.isArray(v) ? v.filter((x) => typeof x === 'string').map((x) => (x as string).slice(0, 200)).slice(0, 30) : []);
 
+const isObj = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Create a publishing plan project, charging PLAN_COST only once it is saved. */
+async function createPlan(body: any, supabase: any, userId: string): Promise<Response> {
+  const a = body?.assessment;
+  if (!isObj(a) || !isObj(a.book) || !str(a.book.title) || !str(a.book.author)) {
+    return json({ error: 'Please complete the assessment first.' }, 400);
+  }
+  if (JSON.stringify(a).length > 60_000) return json({ error: 'Your answers are too long. Please shorten them.' }, 400);
+  const title = str(a.book.title, 200);
+  const svc = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+
+  // A double-click or retry within a minute returns the plan already created (no second charge).
+  const since = new Date(Date.now() - 60_000).toISOString();
+  const { data: recent } = await svc.from('publish_it_projects').select('*').eq('user_id', userId)
+    .eq('project_name', title).gte('created_at', since).order('created_at', { ascending: false }).limit(1);
+  if (recent?.[0] && JSON.stringify(recent[0].assessment) === JSON.stringify(a)) {
+    return json({ project: recent[0], creditsUsed: 0, duplicate: true });
+  }
+
+  await assertCredits(userId, PLAN_COST);
+  const writeItId = UUID_RE.test(str(body?.writeItProjectId, 40)) ? str(body.writeItProjectId, 40) : null;
+  const { data: project, error } = await svc.from('publish_it_projects').insert({
+    user_id: userId, project_name: title, assessment: a, write_it_project_id: writeItId,
+  }).select('*').single();
+  if (error || !project) {
+    console.error('[publish-it] create failed', error);
+    return json({ error: 'We could not create your plan. Please try again. You were not charged.' });
+  }
+  try {
+    await deductCreditsOnSuccess(supabase, userId, 'publish-it:plan', PLAN_COST);
+  } catch (e) {
+    // Never keep a plan that was not paid for.
+    await svc.from('publish_it_projects').delete().eq('id', project.id);
+    throw e;
+  }
+  return json({ project, creditsUsed: PLAN_COST });
+}
+
 serve(withCreditRequest(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
   let g;
   try {
-    g = await guard(req, { endpoint: 'publish-it', cost: COST, requireAuth: true, maxReqsPerMinute: 6 });
+    g = await guard(req, { endpoint: 'publish-it', cost: 0, requireAuth: true, maxReqsPerMinute: 6 });
   } catch (err) {
     if (err instanceof Response) return err;
     return json({ error: 'Please sign in and try again.' }, 401);
@@ -30,6 +77,8 @@ serve(withCreditRequest(async (req) => {
 
   try {
     const body = await req.json();
+    if (body?.action === 'create') return await createPlan(body, supabase, userId!);
+    await assertCredits(userId!, COST);
     const a = body?.assessment ?? {};
     const book = a.book ?? {};
     const readiness = Array.isArray(body?.readiness) ? body.readiness.slice(0, 20).map((r: any) => `${str(r?.label, 100)}: ${str(r?.status, 30)}`) : [];
@@ -80,6 +129,6 @@ Only the choices that apply to them (for example owning an ISBN vs a free one, o
   } catch (error: any) {
     if (error instanceof Response) return error;
     console.error('[publish-it] error:', error?.message ?? error);
-    return json({ error: 'We could not create your summary. Please try again. You were not charged.' });
+    return json({ error: 'We could not complete this request. Please try again. You were not charged.' });
   }
 }));

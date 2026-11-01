@@ -81,3 +81,21 @@ describe('Publish It scenarios', () => {
     for (const step of [...INGRAM_STEPS, ...KDP_STEPS]) expect(step.sources.length).toBeGreaterThan(0);
   });
 });
+
+describe('Publish It plan pricing', () => {
+  it('plans are created and charged only by the server, and never kept unpaid', async () => {
+    const { readFileSync } = await import('fs');
+    const path = await import('path');
+    const root = path.resolve(__dirname, '../../..');
+    const sql = readFileSync(path.join(root, 'supabase/migrations/20261102000000_publish_it_paid_plans.sql'), 'utf8');
+    expect(sql).toContain('DROP POLICY IF EXISTS "Users insert own publish_it_projects"');
+    expect(sql).toContain('REVOKE INSERT ON public.publish_it_projects FROM authenticated');
+    const fn = readFileSync(path.join(root, 'supabase/functions/publish-it/index.ts'), 'utf8');
+    expect(fn).toContain('const PLAN_COST = 2;');
+    expect(fn.indexOf('await assertCredits(userId, PLAN_COST)')).toBeLessThan(fn.indexOf(".from('publish_it_projects').insert("));
+    expect(fn).toMatch(/deductCreditsOnSuccess\(supabase, userId, 'publish-it:plan', PLAN_COST\)[\s\S]*delete\(\)\.eq\('id', project\.id\)/);
+    const page = readFileSync(path.join(root, 'src/pages/PublishIt.tsx'), 'utf8');
+    expect(page).not.toMatch(/Plan \(free\)|Free publishing plan/);
+    expect(page).not.toContain('createPublishProject');
+  });
+});

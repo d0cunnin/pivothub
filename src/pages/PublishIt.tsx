@@ -23,6 +23,8 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUsage } from "@/contexts/UsageContext";
+import { ChargeDialog } from "@/components/design-it/ChargeDialog";
 import { invokeFunction } from "@/lib/invokeFunction";
 import { AssessmentForm } from "@/components/publish-it/AssessmentForm";
 import { BulletList, ComparisonTable, SourceLink, StepGuide, VerifiedNote } from "@/components/publish-it/Guides";
@@ -32,7 +34,7 @@ import {
   INGRAM_STEPS, ISBN_GUIDE, KDP_STEPS, VERIFIED_FEES, VERIFIED_ON,
 } from "@/lib/publishIt/content";
 import {
-  EMPTY_ASSESSMENT, TASK_STATUSES, bookFromWriteIt, buildRoadmap, createPublishProject, deletePublishProject, evaluateReadiness, hasPrint,
+  EMPTY_ASSESSMENT, TASK_STATUSES, bookFromWriteIt, buildRoadmap, normalizePublishProject, deletePublishProject, evaluateReadiness, hasPrint,
   listPublishProjects, missingAssessment, readinessPercent, savePublishProject, storageError,
   type Assessment, type IsbnRecord, type PublishProject, type ReadinessStatus, type TaskStatus,
 } from "@/lib/publishIt/logic";
@@ -41,6 +43,7 @@ import heroImage from "@/assets/hero-image.jpg";
 
 type View = "list" | "new" | "workspace";
 const SUMMARY_COST = 2;
+const PLAN_COST = 2;
 
 const readinessBadge = (s: ReadinessStatus | TaskStatus) =>
   s === "Complete" || s === "Completed" ? "default" : s === "In Progress" ? "secondary" : s === "Needs Attention" ? "destructive" : "outline";
@@ -48,7 +51,9 @@ const readinessBadge = (s: ReadinessStatus | TaskStatus) =>
 const EMPTY_ISBN: IsbnRecord = { isbn: "", title: "", format: "", imprint: "", obtained: "", status: "" };
 
 const PublishIt = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const { remainingRequests } = useUsage();
+  const [confirmPlan, setConfirmPlan] = useState(false);
   const [view, setView] = useState<View>("list");
   const [projects, setProjects] = useState<PublishProject[]>([]);
   const [writeItProjects, setWriteItProjects] = useState<WriteItProject[]>([]);
@@ -111,20 +116,32 @@ const PublishIt = () => {
     const problem = missingAssessment(assessment);
     if (problem) { toast.error(problem); return; }
     if (!user) { toast.error("Please sign in to save your publishing plan."); return; }
+    if (!isAdmin && remainingRequests < PLAN_COST) {
+      toast.error(`Creating a publishing plan needs ${PLAN_COST} credits and you have ${remainingRequests}. Add credits on the Pricing page to continue.`);
+      return;
+    }
+    setConfirmPlan(true);
+  };
+
+  const confirmCreatePlan = async () => {
+    if (busy === "create" || !user) return;
     setBusy("create");
-    const fields = { project_name: assessment.book.title, assessment, write_it_project_id: importedFrom };
     try {
-      const created = await createPublishProject(user.id, fields);
-      setProjects((list) => [created, ...list]);
+      const { data, error } = await invokeFunction<any>("publish-it", {
+        body: { action: "create", assessment, writeItProjectId: importedFrom },
+      });
+      if (error || !data?.project) throw new Error(error?.message || "We could not create your plan. Please try again. You were not charged.");
+      const created = normalizePublishProject(data.project);
+      setProjects((list) => [created, ...list.filter((x) => x.id !== created.id)]);
       setProject(created);
+      setDirty(false); setTab("overview"); setView("workspace");
+      toast.success(isAdmin || !data.creditsUsed ? "Your publishing plan is ready" : `Your publishing plan is ready. ${data.creditsUsed} credits used.`);
     } catch (e) {
-      setStorageNote(storageError(e));
-      const now = new Date().toISOString();
-      setProject({ id: `local-${Date.now()}`, ...fields, progress: {}, isbn_records: [], costs: {}, ai_summary: null, created_at: now, updated_at: now });
+      toast.error((e as Error).message);
     } finally {
       setBusy(null);
+      setConfirmPlan(false);
     }
-    setDirty(false); setTab("overview"); setView("workspace");
   };
 
   const getSummary = async () => {
@@ -223,7 +240,7 @@ const PublishIt = () => {
         )}
         <AssessmentForm value={assessment} onChange={setAssessment} />
         <Button size="lg" className="w-full" disabled={busy === "create"} onClick={createPlan}>
-          {busy === "create" ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Building your plan...</> : "Create My Publishing Plan (free)"}
+          {busy === "create" ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Building your plan...</> : `Create My Publishing Plan (${PLAN_COST} credits)`}
         </Button>
       </CardContent>
     </Card>
@@ -539,7 +556,7 @@ const PublishIt = () => {
         />
 
         <main className="flex-grow container mx-auto px-4 py-10 max-w-5xl">
-          <ToolCreditBar cost={`Free publishing plan and guides · ${SUMMARY_COST} credits for an optional personalized summary`} />
+          <ToolCreditBar cost={`Publishing plan ${PLAN_COST} credits · updating and reopening your plan is free · optional personalized summary ${SUMMARY_COST} credits`} />
           <ToolGuard toolName="publish-it" showCreditInfo={false}>
             {view === "list" && listView}
             {view === "new" && newView}
@@ -548,6 +565,10 @@ const PublishIt = () => {
         </main>
         <Footer />
       </div>
+
+      <ChargeDialog
+        pending={confirmPlan ? { title: "Create your publishing plan", description: "You'll get your readiness report, publishing roadmap and the platform instructions that fit your answers. Reopening and updating your plan afterwards is free.", cost: PLAN_COST, run: confirmCreatePlan } : null}
+        balance={remainingRequests} isAdmin={isAdmin} running={busy === "create"} onCancel={() => setConfirmPlan(false)} onConfirm={confirmCreatePlan} />
 
       <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
         <AlertDialogContent>
