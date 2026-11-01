@@ -584,8 +584,8 @@ export default function CreateIt() {
         </section>
 
         <ToolIntro
-          about="Design a complete, build-ready blueprint for your AI-powered platform. Answer guided questions and get a plan you can hand to a developer, agency, or AI builder."
-          forWho="Founders and creators planning an AI app or platform."
+          about="Turn your app or platform idea into a complete, step-by-step blueprint you can build from yourself. Answer guided questions and get your plan, the recommended tools, and a ready-to-paste prompt for AI app builders like Lovable."
+          forWho="Founders and creators preparing to build an AI app or platform."
           items={[
             { icon: Sparkles, name: "Platform blueprint", description: "Your idea, audience, and core features laid out clearly." },
             { icon: Zap, name: "Tech stack & architecture", description: "Recommended tools and how the pieces fit together." },
