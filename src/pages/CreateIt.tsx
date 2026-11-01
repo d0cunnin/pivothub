@@ -49,7 +49,7 @@ const PRIMARY_PURPOSES = [
 ];
 
 const CORE_FEATURES = [
-  "Authentication", "Dashboard", "User Profiles", "AI Chatbots", "Knowledge Base",
+  "Authentication", "Dashboard", "User Profiles", "In-App AI Chat", "Knowledge Base",
   "File Storage", "Notifications", "Messaging", "Community Forum", "Analytics",
   "Calendar", "Payments", "Subscriptions", "Marketplace", "Booking System",
   "Courses", "Video Content", "CRM", "Reports", "Admin Panel",
@@ -64,7 +64,7 @@ const MONETIZATION_TYPES = [
 ];
 
 const INTEGRATIONS = [
-  "Stripe", "Supabase", "Clerk", "Firebase", "OpenAI", "Anthropic", "Gemini",
+  "Not sure — recommend the best tools for me", "Stripe", "Supabase", "Clerk", "Firebase", "OpenAI", "Anthropic", "Gemini",
   "Resend", "Twilio", "Zapier", "Make", "Airtable", "Notion", "Webflow",
   "Lovable", "GitHub", "Claude Code",
 ];
@@ -384,9 +384,9 @@ export default function CreateIt() {
       case 5:
         return (
           <div className="space-y-3">
-            <Label>Describe the User Journey</Label>
+            <Label>Describe the User Journey (optional)</Label>
             <p className="text-sm text-muted-foreground">
-              How do users move through your platform from start to value?
+              How do users move through your platform from start to value? Not sure? Leave it blank and your blueprint will map a recommended journey for you.
             </p>
             <Textarea
               value={form.userJourney}
@@ -401,7 +401,7 @@ export default function CreateIt() {
           <div className="space-y-5">
             <div>
               <Label className="mb-2 block">Integrations</Label>
-              <p className="text-sm text-muted-foreground mb-3">Select the services you want to connect.</p>
+              <p className="text-sm text-muted-foreground mb-3">Select the services you want to connect. Not sure? Pick the first option and your blueprint will recommend them.</p>
               {renderCheckboxGrid(INTEGRATIONS, form.integrations, "integrations")}
             </div>
             <div>
