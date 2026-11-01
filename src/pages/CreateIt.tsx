@@ -1,7 +1,6 @@
 import { ToolIntro, ToolAbout } from "@/components/tool-layout/ToolIntro";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ToolCreditBar } from "@/components/tool-layout/ToolCreditBar";
-import { TabSwitchHint } from "@/components/tool-layout/TabSwitchHint";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -14,12 +13,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
-  Loader2, Zap, ChevronRight, ChevronLeft, Download, RefreshCw, Save,
-  Sparkles, Rocket, FileText, Trash2, Copy, Check, ArrowRight,
+  Loader2, Zap, ChevronRight, ChevronLeft, Download, RefreshCw,
+  Sparkles, Rocket, FileText, Copy, Check, ArrowRight,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -79,15 +77,6 @@ const SKILL_LEVELS = [
   { value: "Enterprise", description: "Scale, security, compliance, and observability." },
 ];
 
-interface SavedBlueprint {
-  id: string;
-  platform_name: string;
-  platform_description: string | null;
-  industry: string | null;
-  platform_type: string | null;
-  blueprint_json: CreateItBlueprint;
-  created_at: string;
-}
 
 const STEP_TITLES = [
   "Platform Overview", "Core Features", "Platform Type", "Monetization",
@@ -198,7 +187,6 @@ export default function CreateIt() {
       setBlueprint(data.blueprint as CreateItBlueprint);
       setView("result");
       await refreshUsage();
-      await loadHistory();
       toast.success("Your AI platform blueprint is ready!");
     } catch (err) {
       console.error("Error generating blueprint:", err);
