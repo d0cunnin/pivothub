@@ -7,14 +7,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUsage } from "@/contexts/UsageContext";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Activity, BarChart3, Calendar, CreditCard, TrendingUp, Zap, Award, Rocket, Download, ArrowRight } from "lucide-react";
+import { Activity, BarChart3, Calendar, CreditCard, TrendingUp, Zap, Award, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { getPackageDisplayName } from "@/utils/packageAccess";
-import { CreateItBlueprint, EMPTY_FORM } from "@/types/createit";
-import { downloadCreateItBlueprintPDF } from "@/lib/CreateItBlueprintPDF";
-import { toast } from "sonner";
 
 interface ToolUsage {
   tool_name: string;
@@ -26,16 +23,6 @@ interface UserProgress {
   assessment_type: string;
   achieved_at: string;
   milestone?: string;
-}
-
-interface CreateItProject {
-  id: string;
-  platform_name: string;
-  platform_description: string | null;
-  industry: string | null;
-  platform_type: string | null;
-  blueprint_json: CreateItBlueprint;
-  created_at: string;
 }
 
 const Dashboard = () => {
