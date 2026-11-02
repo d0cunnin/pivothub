@@ -42,11 +42,13 @@ export interface BookInputs {
   length: string;
   completionDate: string;
   instructions: string;
+  /** Author name or pen name, as it should appear on the book. */
+  author: string;
 }
 
 export const EMPTY_INPUTS: BookInputs = {
   idea: "", category: "", purposes: [], audience: "", message: "", devStatus: "",
-  title: "", subtitle: "", style: "", length: "", completionDate: "", instructions: "",
+  title: "", subtitle: "", style: "", length: "", completionDate: "", instructions: "", author: "",
 };
 
 export interface BookConcept {

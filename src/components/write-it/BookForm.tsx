@@ -16,6 +16,13 @@ export function BookForm({ value, onChange }: { value: BookInputs; onChange: (v:
   return (
     <div className="space-y-6">
       <div className="space-y-2">
+        <Label htmlFor="wi-author">Author name or pen name *</Label>
+        <Input id="wi-author" maxLength={200} value={value.author} onChange={(e) => set("author", e.target.value)}
+          placeholder="Name as it should appear on the book" className="sm:w-96" />
+        <p className="text-xs text-muted-foreground">Carried over to Publish It when you send your book there.</p>
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="wi-idea">What is your book about? *</Label>
         <Textarea id="wi-idea" rows={5} maxLength={4000} value={value.idea} onChange={(e) => set("idea", e.target.value)}
           placeholder="Describe your idea, subject, experience or concept. Rough notes are fine." />
@@ -110,6 +117,7 @@ export function BookForm({ value, onChange }: { value: BookInputs; onChange: (v:
 }
 
 export function missingRequired(v: BookInputs): string | null {
+  if (!v.author?.trim()) return "Please enter the author name or pen name.";
   if (!v.idea.trim()) return "Please describe what your book is about.";
   if (!v.category) return "Please choose a book category.";
   if (!v.purposes.length) return "Please choose at least one purpose.";

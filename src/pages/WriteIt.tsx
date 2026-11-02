@@ -253,8 +253,9 @@ const WriteIt = () => {
 
   const sendToPublish = async () => {
     if (!project) return;
-    const pkg = buildPublishPackage(project, authorName.trim());
-    const next = { ...project, publish_package: pkg, sent_to_publish_at: new Date().toISOString() };
+    const author = authorName.trim();
+    const pkg = buildPublishPackage(project, author);
+    const next = { ...project, inputs: { ...project.inputs, author }, publish_package: pkg, sent_to_publish_at: new Date().toISOString() };
     setProject(next);
     await persist(next, true);
     setPublishOpen(false);
@@ -375,7 +376,7 @@ const WriteIt = () => {
                 <SelectItem value="roadmap">Writing Roadmap</SelectItem>
               </SelectContent>
             </Select>
-            <Button size="sm" variant="outline" onClick={() => setPublishOpen(true)}><Send className="h-4 w-4 mr-1" /> Send to Publish It</Button>
+            <Button size="sm" variant="outline" onClick={() => { setAuthorName(project.inputs.author || project.publish_package?.authorName || ""); setPublishOpen(true); }}><Send className="h-4 w-4 mr-1" /> Send to Publish It</Button>
           </div>
           {project.sent_to_publish_at && (
             <p className="text-xs text-muted-foreground flex items-center gap-1"><Check className="h-3 w-3" /> Book details saved for Publish It on {new Date(project.sent_to_publish_at).toLocaleDateString()}.</p>

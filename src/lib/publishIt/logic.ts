@@ -255,7 +255,7 @@ export function bookFromWriteIt(w: any): BookInfo {
     ...EMPTY_ASSESSMENT.book,
     title: pkg?.title || plan.selectedTitle || inputs.title || w?.project_name || "",
     subtitle: pkg?.subtitle || plan.selectedSubtitle || inputs.subtitle || "",
-    author: pkg?.authorName || "",
+    author: pkg?.authorName || inputs.author || "",
     category: pkg?.category || inputs.category || "",
     audience: pkg?.audience || plan.concept?.intendedAudience || inputs.audience || "",
     description: pkg?.description || plan.concept?.refinedConcept || inputs.idea || "",

@@ -37,9 +37,21 @@ describe('Write It helpers', () => {
     expect(pkg.tableOfContents).toHaveLength(3);
   });
 
-  it('requires the six required answers and nothing else', () => {
-    expect(missingRequired(EMPTY_INPUTS)).toMatch(/what your book is about/);
-    const filled = { ...EMPTY_INPUTS, idea: 'x', category: 'Fiction', purposes: ['Entertain'], audience: 'Teens', message: 'Hope', devStatus: 'I have several ideas and notes.' };
+  it('requires the seven required answers and nothing else', () => {
+    expect(missingRequired(EMPTY_INPUTS)).toMatch(/author name/);
+    expect(missingRequired({ ...EMPTY_INPUTS, author: 'A' })).toMatch(/what your book is about/);
+    const filled = { ...EMPTY_INPUTS, author: 'A', idea: 'x', category: 'Fiction', purposes: ['Entertain'], audience: 'Teens', message: 'Hope', devStatus: 'I have several ideas and notes.' };
     expect(missingRequired(filled)).toBeNull();
+  });
+});
+
+describe('Write It author name', () => {
+  it('asks for the author name and carries it to Publish It', async () => {
+    const full = { ...EMPTY_INPUTS, idea: 'x', category: 'Memoir/Autobiography', purposes: ['Teach'], audience: 'a', message: 'm', devStatus: 's' };
+    expect(missingRequired(full)).toMatch(/author name/);
+    expect(missingRequired({ ...full, author: 'Dana Lee' })).toBeNull();
+    const { bookFromWriteIt } = await import('./publishIt/logic');
+    // Even before "Send to Publish It", importing picks up the author from the brief.
+    expect(bookFromWriteIt({ project_name: 'P', inputs: { ...full, author: 'Dana Lee' }, plan: {}, chapters: [] } as any).author).toBe('Dana Lee');
   });
 });

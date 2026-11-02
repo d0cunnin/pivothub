@@ -51,7 +51,7 @@ function outlinesMarkdown(p: WriteItProject): string {
 export function generateWriteItPDF(p: WriteItProject, kind: WriteItExport): jsPDF {
   const w = new PdfWriter();
   const title = p.plan.selectedTitle || p.inputs.title || p.project_name;
-  const subtitle = [p.plan.selectedSubtitle || p.inputs.subtitle, p.inputs.category].filter(Boolean).join('  |  ');
+  const subtitle = [p.plan.selectedSubtitle || p.inputs.subtitle, p.inputs.author && `by ${p.inputs.author}`, p.inputs.category].filter(Boolean).join('  |  ');
   wrappedHeader(w, TITLES[kind], [title, subtitle].filter(Boolean).join('  -  ') || 'Your book');
 
   const parts: string[] = [];
