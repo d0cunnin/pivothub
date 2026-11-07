@@ -19,3 +19,5 @@
 # Design It
 - Design It AI results are immutable versions written only by the service-role edge function after verifying project ownership; each paid request carries a client request id logged in design_it_operations so repeats never run or charge twice, and credits are consumed only after the result is saved.
 - Saved-project storage is never promised as permanent or unlimited; optional limits come from configuration and only block new images, never existing work or downloads.
+# Security
+- SECURITY DEFINER functions that take a user id are service-role only (or check auth.uid() against it); edge functions derive user ids from verified authentication, never from the request body.

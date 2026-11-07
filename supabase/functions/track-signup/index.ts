@@ -21,14 +21,30 @@ Deno.serve(async (req) => {
                'unknown';
     const userAgent = req.headers.get('user-agent') || null;
 
-    // Get user info from request
-    const { userId, email } = await req.json();
+    // The request only names the new account. Everything recorded is checked
+    // against the real account, so nobody can create or alter audit entries
+    // for another person.
+    let body: any = null;
+    try { body = await req.json(); } catch { /* handled below */ }
+    const claimedId = typeof body?.userId === 'string' ? body.userId : '';
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(claimedId)) {
+      return new Response(JSON.stringify({ error: 'Invalid request' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    const { data: account } = await supabase.auth.admin.getUserById(claimedId);
+    const user = account?.user;
+    const ageMs = user?.created_at ? Date.now() - new Date(user.created_at).getTime() : Infinity;
+    const claimedEmail = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
+    // Only a genuine account created in the last 15 minutes, with the matching email.
+    if (!user?.email || ageMs > 15 * 60 * 1000 || (claimedEmail && claimedEmail !== user.email.toLowerCase())) {
+      return new Response(JSON.stringify({ error: 'Signup not found' }), { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+    const userId = user.id;
+    const email = user.email;
 
-    if (!userId || !email) {
-      return new Response(
-        JSON.stringify({ error: 'Missing userId or email' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    // Record each signup once.
+    const { data: already } = await supabase.from('signup_audit').select('user_id').eq('user_id', userId).limit(1);
+    if (already?.length) {
+      return new Response(JSON.stringify({ success: true, alreadyTracked: true }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
 
     // Check for existing signups from this IP
@@ -79,7 +95,7 @@ Deno.serve(async (req) => {
   } catch (error) {
     console.error('Error in track-signup function:', error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
