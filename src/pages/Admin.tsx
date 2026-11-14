@@ -31,6 +31,7 @@ import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
 import { AIUsageMonitor } from "@/components/admin/AIUsageMonitor";
 import { AdminTwoStepGate } from "@/components/admin/AdminTwoStepGate";
 import { BanManager } from "@/components/admin/BanManager";
+import { UserBanPanel } from "@/components/admin/UserBanPanel";
 import { AIUsageAlerts } from "@/components/admin/AIUsageAlerts";
 import { useAuth } from "@/contexts/AuthContext";
 import { monthlyAdminCredits } from "../../supabase/functions/_shared/adminCreditPolicy";
@@ -60,9 +61,19 @@ const Admin = () => {
   const [grantRequestId, setGrantRequestId] = useState(() => crypto.randomUUID());
   const [notes, setNotes] = useState("");
   const [userDetailModalOpen, setUserDetailModalOpen] = useState(false);
+  const [manageTab, setManageTab] = useState<"credits" | "ban">("credits");
   const [selectedUserDetail, setSelectedUserDetail] = useState<{ id: string; email: string } | null>(null);
 
   // Fetch all users with subscription data
+  const { data: bannedIds } = useQuery({
+    queryKey: ["admin-banned-users"],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any).from("user_bans").select("user_id").is("lifted_at", null);
+      if (error) return new Set<string>();
+      return new Set<string>((data ?? []).map((b: { user_id: string }) => b.user_id));
+    },
+  });
+
   const { data: users, isLoading } = useQuery({
     queryKey: ["admin-users"],
     queryFn: async () => {
@@ -167,6 +178,7 @@ const Admin = () => {
     setDuration("1");
     setCustomCredits("40");
     setNotes("");
+    setManageTab("credits");
     setGrantModalOpen(true);
   };
 
@@ -366,7 +378,9 @@ const Admin = () => {
                               <TableCell className="font-medium">{user.email}</TableCell>
                               <TableCell>{user.display_name || "-"}</TableCell>
                               <TableCell>
-                                {user.subscribed ? (
+                                {bannedIds?.has(user.id) ? (
+                                  <Badge variant="destructive">Banned</Badge>
+                                ) : user.subscribed ? (
                                   <Badge>Active</Badge>
                                 ) : (
                                   <Badge variant="secondary">Free</Badge>
@@ -438,14 +452,23 @@ const Admin = () => {
       )}
 
       {/* Grant Access Modal */}
-      <Dialog open={grantModalOpen} onOpenChange={setGrantModalOpen}>
-        <DialogContent>
+      <Dialog open={grantModalOpen} onOpenChange={(o) => { setGrantModalOpen(o); if (!o) queryClient.invalidateQueries({ queryKey: ["admin-banned-users"] }); }}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Grant Complimentary Tool Credits</DialogTitle>
-            <DialogDescription>
-              Grant credits to {selectedUser?.display_name || selectedUser?.email || selectedUser?.id}. No paid subscription or charge is created.
-            </DialogDescription>
+            <DialogTitle>Manage Access</DialogTitle>
+            <DialogDescription>{selectedUser?.display_name || selectedUser?.email || selectedUser?.id}</DialogDescription>
           </DialogHeader>
+          <Tabs value={manageTab} onValueChange={(v) => setManageTab(v as "credits" | "ban")}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="credits">Grant credits</TabsTrigger>
+              <TabsTrigger value="ban">Ban / revoke access</TabsTrigger>
+            </TabsList>
+            <TabsContent value="ban" className="pt-2">
+              <p className="text-sm text-muted-foreground mb-3">Banning revokes all access: the person can't sign in or use any tool, starting immediately. You can unban them at any time.</p>
+              {selectedUser && <UserBanPanel userId={selectedUser.id} userEmail={selectedUser.email} />}
+            </TabsContent>
+            <TabsContent value="credits" className="pt-2">
+          <p className="text-sm text-muted-foreground mb-3">Grant complimentary credits. No paid subscription or charge is created.</p>
 
           <div className="space-y-4">
             <AdminTwoStepGate onVerifiedChange={setMfaVerified} />
@@ -509,7 +532,7 @@ const Admin = () => {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="mt-4">
             <Button variant="outline" onClick={() => setGrantModalOpen(false)}>
               Cancel
             </Button>
@@ -517,6 +540,8 @@ const Admin = () => {
               {grantAccessMutation.isPending ? "Granting..." : grantType === "one-time" ? "Add Tool Credits" : "Grant Access"}
             </Button>
           </DialogFooter>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     </AdminGuard>
