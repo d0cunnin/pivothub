@@ -1,10 +1,10 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { z } from 'npm:zod@3.23.8';
-import { requireAdminMfa } from '../_shared/adminMfaGuard.ts';
+import { requireAdmin } from '../_shared/adminGuard.ts';
 
 /**
- * ADMIN BANS (admin + two-step verification required)
+ * ADMIN BANS (admin role required)
  *   list                 active user bans and IP bans
  *   user-ips   {userId}  IPs this user signed up from or used recently
  *   ban-user   {userId, reason, ips[]}  block sign-in and every tool; optionally ban IPs
@@ -37,12 +37,8 @@ Deno.serve(async (req) => {
     const { data: { user }, error: authError } = await client.auth.getUser();
     if (authError || !user) return json({ error: 'Invalid authentication.' }, 401);
     const admin = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
-    const gate = await requireAdminMfa(admin, user.id);
+    const gate = await requireAdmin(admin, user.id);
     if (gate.error) return json({ error: gate.error }, 403);
-    const { data: verified, error: claimsError } = await client.auth.getClaims(authHeader.slice(7));
-    if (claimsError || verified?.claims.sub !== user.id || verified.claims.aal !== 'aal2') {
-      return json({ error: 'Complete two-step verification first.' }, 403);
-    }
 
     let raw: unknown;
     try { raw = await req.json(); } catch { return json({ error: 'Invalid request.' }, 400); }

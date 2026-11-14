@@ -4,7 +4,7 @@ export interface UserBan { id: string; user_id: string; email: string | null; re
 export interface IpBan { ip: string; reason: string; user_id: string | null; banned_at: string; expires_at: string | null }
 export interface UserIp { ip: string; source: string; lastSeen: string; count: number; banned: boolean }
 
-/** Call the admin-ban function (admin + two-step verification required). */
+/** Call the admin-ban function (admin role required). */
 export async function adminBan<T = any>(body: Record<string, unknown>): Promise<T> {
   const { data, error } = await supabase.functions.invoke("admin-ban", { body });
   if (error) {

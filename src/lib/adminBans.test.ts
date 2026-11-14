@@ -24,10 +24,10 @@ describe('bans', () => {
     expect(sql).toMatch(/has_role\(auth\.uid\(\), 'admin'\)/);
   });
 
-  it('banning requires an admin with two-step verification and cannot target admins or yourself', () => {
+  it('banning requires an admin and cannot target admins or yourself', () => {
     const fn = read('supabase/functions/admin-ban/index.ts');
-    expect(fn).toContain('requireAdminMfa(admin, user.id)');
-    expect(fn).toContain("verified.claims.aal !== 'aal2'");
+    expect(fn).toContain('requireAdmin(admin, user.id)');
+    expect(read('supabase/functions/_shared/adminGuard.ts')).toContain(".eq('role', 'admin')");
     expect(fn).toContain("'You cannot ban yourself.'");
     expect(fn).toContain("'Administrator accounts cannot be banned here.'");
     expect(fn).toContain("ban_duration: BAN_DURATION");

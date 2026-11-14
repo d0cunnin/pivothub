@@ -29,7 +29,6 @@ import { DesignItStorageMonitor } from "@/components/admin/DesignItStorageMonito
 import { SignupAuditViewer } from "@/components/admin/SignupAuditViewer";
 import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
 import { AIUsageMonitor } from "@/components/admin/AIUsageMonitor";
-import { AdminTwoStepGate } from "@/components/admin/AdminTwoStepGate";
 import { BanManager } from "@/components/admin/BanManager";
 import { UserBanPanel } from "@/components/admin/UserBanPanel";
 import { AIUsageAlerts } from "@/components/admin/AIUsageAlerts";
@@ -53,7 +52,6 @@ const Admin = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserWithSubscription | null>(null);
   const [grantModalOpen, setGrantModalOpen] = useState(false);
-  const [mfaVerified, setMfaVerified] = useState(false);
   const [tier, setTier] = useState("starter");
   const [grantType, setGrantType] = useState("one-time");
   const [duration, setDuration] = useState("1");
@@ -174,7 +172,6 @@ const Admin = () => {
     setGrantRequestId(crypto.randomUUID());
     setTier("starter");
     setGrantType("one-time");
-    setMfaVerified(false);
     setDuration("1");
     setCustomCredits("40");
     setNotes("");
@@ -471,7 +468,6 @@ const Admin = () => {
           <p className="text-sm text-muted-foreground mb-3">Grant complimentary credits. No paid subscription or charge is created.</p>
 
           <div className="space-y-4">
-            <AdminTwoStepGate onVerifiedChange={setMfaVerified} />
             <div>
               <Label htmlFor="grant-type">Grant type</Label>
               <Select value={grantType} onValueChange={value => { setGrantType(value); setGrantRequestId(crypto.randomUUID()); }}>
@@ -536,7 +532,7 @@ const Admin = () => {
             <Button variant="outline" onClick={() => setGrantModalOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleGrantAccess} disabled={grantAccessMutation.isPending || !mfaVerified || (grantType === "one-time" && (!Number.isInteger(Number(customCredits)) || Number(customCredits) < 1 || Number(customCredits) > 100000))}>
+            <Button onClick={handleGrantAccess} disabled={grantAccessMutation.isPending || (grantType === "one-time" && (!Number.isInteger(Number(customCredits)) || Number(customCredits) < 1 || Number(customCredits) > 100000))}>
               {grantAccessMutation.isPending ? "Granting..." : grantType === "one-time" ? "Add Tool Credits" : "Grant Access"}
             </Button>
           </DialogFooter>

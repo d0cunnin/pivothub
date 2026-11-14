@@ -6,12 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { AdminTwoStepGate } from "./AdminTwoStepGate";
 import { adminBan, validIp, type IpBan, type UserBan } from "@/lib/adminBans";
 
 /** Admin: see and lift bans, and ban an IP address by hand. */
 export function BanManager() {
-  const [verified, setVerified] = useState(false);
+  const verified = true; // admin role is checked by the server
   const [users, setUsers] = useState<UserBan[]>([]);
   const [ips, setIps] = useState<IpBan[]>([]);
   const [loading, setLoading] = useState(false);
@@ -40,7 +39,6 @@ export function BanManager() {
         <CardDescription>Banned accounts can't sign in or use any tool. Banned IP addresses can't use tools or the contact form, and new accounts from them are banned automatically. To ban a specific person, open them from the Users tab.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <AdminTwoStepGate onVerifiedChange={setVerified} />
         {verified && (
           <>
             <div className="space-y-2">
