@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.53.0';
+import { isIpBanned } from '../_shared/ipBan.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -40,6 +41,13 @@ Deno.serve(async (req) => {
     }
     const userId = user.id;
     const email = user.email;
+
+    // New account from a banned IP: ban it straight away.
+    if (await isIpBanned(ip)) {
+      await supabase.auth.admin.updateUserById(userId, { ban_duration: '876000h' });
+      await supabase.from('subscribers_public').update({ account_status: 'suspended' }).eq('user_id', userId);
+      await supabase.from('user_bans').insert({ user_id: userId, email, reason: `Signed up from banned IP ${ip}`, ips: [ip] });
+    }
 
     // Record each signup once.
     const { data: already } = await supabase.from('signup_audit').select('user_id').eq('user_id', userId).limit(1);

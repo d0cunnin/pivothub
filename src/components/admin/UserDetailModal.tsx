@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { UserBanPanel } from "./UserBanPanel";
 import { format } from "date-fns";
 import { User, Activity, FileText, Calendar } from "lucide-react";
 
@@ -156,6 +157,8 @@ export const UserDetailModal = ({ userId, userEmail, isOpen, onClose }: UserDeta
               {!assessments?.length && <p className="text-sm text-muted-foreground">No assessment results completed</p>}
             </div>
           </div>
+          <Separator />
+          <UserBanPanel userId={userId} userEmail={userEmail} />
         </div>
       </DialogContent>
     </Dialog>

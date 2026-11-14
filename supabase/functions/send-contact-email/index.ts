@@ -2,6 +2,12 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { moderateContent } from "../_shared/moderation.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { clientIp, isIpBanned, BANNED_MESSAGE } from "../_shared/ipBan.ts";
+
+// Spam limits per IP address.
+const MAX_PER_HOUR = 3;
+const MAX_PER_DAY = 10;
 
 const resend = new Resend(Deno.env.get("resendemail-key"));
 
@@ -43,6 +49,21 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    const ip = clientIp(req);
+    const jsonHeaders = { "Content-Type": "application/json", ...corsHeaders };
+    if (await isIpBanned(ip)) {
+      return new Response(JSON.stringify({ error: BANNED_MESSAGE }), { status: 403, headers: jsonHeaders });
+    }
+    const svc = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    if (ip !== "unknown") {
+      const dayAgo = new Date(Date.now() - 24 * 3600_000).toISOString();
+      const { data: recent } = await svc.from("contact_form_log").select("created_at").eq("ip", ip).gte("created_at", dayAgo);
+      const lastHour = (recent ?? []).filter((r: any) => Date.now() - new Date(r.created_at).getTime() < 3600_000).length;
+      if (lastHour >= MAX_PER_HOUR || (recent?.length ?? 0) >= MAX_PER_DAY) {
+        return new Response(JSON.stringify({ error: "Too many messages from your connection. Please try again later." }), { status: 429, headers: jsonHeaders });
+      }
+    }
+
     const requestBody = await req.json();
     
     // Validate input
@@ -82,6 +103,8 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    if (ip !== "unknown") await svc.from("contact_form_log").insert({ ip });
+
     const emailResponse = await resend.emails.send({
       from: "PivotHub Contact <noreply@pivothub.io>",
       to: ["support@pivothub.io"],
@@ -92,6 +115,7 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Name:</strong> ${escapeHtml(name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(email)}</p>
         <p><strong>Subject:</strong> ${escapeHtml(subject)}</p>
+        <p><strong>Sender IP:</strong> ${escapeHtml(ip)}</p>
         <p><strong>Message:</strong></p>
         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin: 10px 0;">
           ${escapeHtml(message).replace(/\n/g, '<br>')}

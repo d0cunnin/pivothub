@@ -249,6 +249,16 @@ const Auth = () => {
         options:{captchaToken:turnstileToken},
       });
 
+      if (error && /banned/i.test(error.message)) {
+        toast({
+          title: "Account Suspended",
+          description: "This account has been suspended. If you think this is a mistake, contact support@pivothub.io.",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
       if (error) {
         // Record failed attempt
         await supabase.rpc('record_failed_login', {

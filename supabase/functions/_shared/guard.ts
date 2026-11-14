@@ -12,6 +12,7 @@ export function withCreditRequest(handler:(req:Request)=>Promise<Response>) {
 }
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
+import { isIpBanned, BANNED_MESSAGE } from './ipBan.ts';
 
 export interface GuardConfig {
   endpoint: string;
@@ -72,6 +73,12 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
       { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
+  // Banned IP addresses are refused before anything else runs.
+  if (await isIpBanned(ip)) {
+    throw new Response(JSON.stringify({ error: BANNED_MESSAGE, code: 'BANNED' }),
+      { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+
   // Content-Type check
   if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
     const contentType = req.headers.get('content-type') || '';
@@ -153,6 +160,11 @@ export async function guard(req: Request, config: GuardConfig): Promise<GuardRes
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
       );
+    }
+    // Banned accounts are refused immediately, even with a still-valid login.
+    if (user.banned_until && new Date(user.banned_until).getTime() > Date.now()) {
+      throw new Response(JSON.stringify({ error: 'This account has been suspended. Contact support@pivothub.io if you think this is a mistake.', code: 'BANNED' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
     userId = user.id;
   }

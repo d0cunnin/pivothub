@@ -30,6 +30,7 @@ import { SignupAuditViewer } from "@/components/admin/SignupAuditViewer";
 import { FraudDetectionPanel } from "@/components/admin/FraudDetectionPanel";
 import { AIUsageMonitor } from "@/components/admin/AIUsageMonitor";
 import { AdminTwoStepGate } from "@/components/admin/AdminTwoStepGate";
+import { BanManager } from "@/components/admin/BanManager";
 import { AIUsageAlerts } from "@/components/admin/AIUsageAlerts";
 import { useAuth } from "@/contexts/AuthContext";
 import { monthlyAdminCredits } from "../../supabase/functions/_shared/adminCreditPolicy";
@@ -411,6 +412,7 @@ const Admin = () => {
             </TabsContent>
 
             <TabsContent value="security" className="space-y-6">
+              <BanManager />
               <FraudDetectionPanel />
               <SignupAuditViewer />
             </TabsContent>
