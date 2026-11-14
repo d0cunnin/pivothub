@@ -433,6 +433,24 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_form_log: {
+        Row: {
+          created_at: string
+          id: number
+          ip: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          ip: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          ip?: string
+        }
+        Relationships: []
+      }
       conversation_context: {
         Row: {
           context_data: Json
@@ -777,6 +795,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ip_bans: {
+        Row: {
+          banned_at: string
+          banned_by: string | null
+          expires_at: string | null
+          ip: string
+          reason: string
+          user_id: string | null
+        }
+        Insert: {
+          banned_at?: string
+          banned_by?: string | null
+          expires_at?: string | null
+          ip: string
+          reason?: string
+          user_id?: string | null
+        }
+        Update: {
+          banned_at?: string
+          banned_by?: string | null
+          expires_at?: string | null
+          ip?: string
+          reason?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       lesson_progress: {
         Row: {
@@ -1506,6 +1551,42 @@ export type Database = {
           id?: string
           month_year?: string | null
           tool_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_bans: {
+        Row: {
+          banned_at: string
+          banned_by: string | null
+          email: string | null
+          id: string
+          ips: string[]
+          lifted_at: string | null
+          lifted_by: string | null
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          banned_at?: string
+          banned_by?: string | null
+          email?: string | null
+          id?: string
+          ips?: string[]
+          lifted_at?: string | null
+          lifted_by?: string | null
+          reason?: string
+          user_id: string
+        }
+        Update: {
+          banned_at?: string
+          banned_by?: string | null
+          email?: string | null
+          id?: string
+          ips?: string[]
+          lifted_at?: string | null
+          lifted_by?: string | null
+          reason?: string
           user_id?: string
         }
         Relationships: []
